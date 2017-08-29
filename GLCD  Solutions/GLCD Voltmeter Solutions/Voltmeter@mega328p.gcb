@@ -1,0 +1,117 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demonstrates the basic primatives a voltmeter on a Graphical LCD (GLCD)
+''':
+'''You can change the microcontroller, the GLCD and the analogue port.
+'''
+'''To change the microcontroller simply change the #chip statement
+'''To change the GLCD replace GLCD definition
+'''To change the analogue port change the ADCChannelSelected constant
+'''
+''':
+'''@author  StanC
+'''@licence GPL
+'''@version 1.01a
+'''@date    13.07.2017
+'''********************************************************************************
+
+
+
+;analogue 5V voltmeter and DVM. DVM and update display on volt change idea by Anobium
+#chip mega328p, 16
+    #option explicit
+    #include <glcd.h>
+    #INCLUDE <TRIG2PLACES.H>
+;
+'GLCD selection
+    #define HI2C_BAUD_RATE 400
+    #define HI2C_DATA
+    HI2CMode Master
+    #define GLCD_TYPE GLCD_TYPE_SSD1306
+    #define GLCD_I2C_Address 0x78
+    GLCDfntDefaultsize=1
+
+
+
+'analogue port selection
+        #define ADCChannelSelected AN0
+        dir portc.0 in
+        #define ADSpeed LowSpeed
+
+dim radius,xcentre,ycentre,xend,old_xend,yend,old_yend as byte
+dim angle,old_angle,adcval as word
+dim volts as string * 4
+xcentre=63
+ycentre=58
+;draw dial
+GLCDCLS
+box 0,0,127,63
+for radius=144 to 141
+  dial
+next radius
+GLCDDrawChar (5,40,asc("0")):GLCDDrawChar (115,40,asc("5"))
+radius=120
+angle=1
+anglecheck
+;main
+do
+  old_angle=angle
+;--- DVM
+  adcval=ReadAD(ADCChannelSelected)
+  angle=adcval/2
+;
+  adcval=adcval*100
+  adcval=adcval/51
+  volts=str(adcval)
+  if adcval<10 then
+    volts="0.0"+left(volts,1,1)
+    goto volt_format_done
+  end if
+  if adcval<100 then
+    volts="0."+mid(volts,1,2)
+  else
+    volts=left(volts,1,1)+"."+mid(volts,2,2)
+  end if
+  volt_format_done:
+;---
+  anglecheck
+  old_xend = xcentre + radius  * sin (old_angle)/255
+  old_yend = ycentre - radius  * cos (old_angle)/255
+  xend = xcentre + radius  * sin (angle)/255
+  yend = ycentre - radius  * cos (angle)/255
+  if old_angle<>angle then ;-- update screen if volts has changed
+;   erase old needle
+    line (xcentre,ycentre,old_xend,old_yend,0)
+;   draw V
+    line (55,22,63,38):line (63,38,71,22)
+;   print new voltage
+    GLCDPrint (50,10,volts,1) ;print Voltage
+;   draw new needle
+    line (xcentre,ycentre,xend,yend,1)
+    wait 20 ms
+  end if
+loop
+;end main
+sub plotdial
+  xend = 63 + radius  * sin (angle)/255
+  yend = 58 - radius  * cos (angle)/255
+  pset (xend,yend,1)
+end sub
+;
+sub dial
+  for angle= 296 to 359
+    plotdial
+  next angle
+;
+  for angle= 0 to 63
+    plotdial
+  next angle
+end sub
+;
+sub anglecheck
+  if angle>127 then
+    angle =angle-127
+  else
+    angle =296+angle
+  end if
+end sub

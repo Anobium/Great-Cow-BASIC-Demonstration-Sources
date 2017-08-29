@@ -1,0 +1,344 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a simple GLCD demonstration of the Touch Screen adapater working with the SSD1289 GLCD display.
+'''The ADS7843 is a 12-bit sampling Analog-to-Digital Converter (ADC) with a synchronous serial interface and low
+'''on-resistance switches for driving touch screens.
+''':
+'''It is a low power, high speed devcie with onboard switches make the ADS7843 ideal for battery-operated systems
+'''such as personal digital assistants with resistive touch screens and other portable equipment.
+'''The ADS7843 is available in an SSOP-16 package and is specified over the –40°C to +85°C temperature range.
+''':
+''':Revised 1.1. To ensure the rotation and commands complies with v0.95
+''':
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+'''@author 	DimiK
+'''@licence	GPL
+'''@version	1.1
+'''@date   	05.12.2015
+'''********************************************************************************
+
+'Chip Settings
+#chip mega2560, 16
+#option explicit
+
+'Include files
+#include <glcd.h>
+#include <ADS7843.h>
+
+'GLCD Device Selection
+#define GLCD_TYPE GLCD_TYPE_SSD1289
+#define GLCD_EXTENDEDFONTSET1
+
+'Define ports for the SSD1289 display
+#define GLCD_WR   PORTG.2
+#define GLCD_CS   PORTG.1
+#define GLCD_RS   PORTD.7
+#define GLCD_RST  PORTG.0
+#define GLCD_DB0  PORTC.0
+#define GLCD_DB1  PORTC.1
+#define GLCD_DB2  PORTC.2
+#define GLCD_DB3  PORTC.3
+#define GLCD_DB4  PORTC.4
+#define GLCD_DB5  PORTC.5
+#define GLCD_DB6  PORTC.6
+#define GLCD_DB7  PORTC.7
+#define GLCD_DB8  PORTA.0
+#define GLCD_DB9  PORTA.1
+#define GLCD_DB10 PORTA.2
+#define GLCD_DB11 PORTA.3
+#define GLCD_DB12 PORTA.4
+#define GLCD_DB13 PORTA.5
+#define GLCD_DB14 PORTA.6
+#define GLCD_DB15 PORTA.7
+
+
+'Define ports for ADS7843
+#define ADS7843_DOUT   PORTE.5  ' Arduino Mega D3
+#define ADS7843_IRQ    PORTE.4  ' Arduino Mega D2
+#define ADS7843_CS     PORTE.3  ' Arduino Mega D5
+#define ADS7843_CLK    PORTH.3  ' Arduino Mega D6
+#define ADS7843_DIN    PORTG.5  ' Arduino Mega D4
+#define ADS7843_BUSY   PORTH.4  ' Arduino Mega D7
+
+  Dim text1 , text2 , Temptext , Restext as string
+  Dim Val1 , Val2 , ResVal as Long
+  Dim DIG, CALC as Byte
+
+
+  GLCDBackground = SSD1289_BLUE
+  GLCDRotate LANDSCAPE_REV
+
+  CreateButton 20 , 10, SSD1289_GLCD_WIDTH-20 , 50, SSD1289_BLUE, SSD1289_YELLOW , "Great Cow Basic v0.95" ,SSD1289_YELLOW , 2
+
+
+  CreateButton 20 , 60, 70, 90, SSD1289_BLUE, SSD1289_YELLOW , "7" ,SSD1289_YELLOW , 2
+  CreateButton 80 , 60, 130, 90, SSD1289_BLUE, SSD1289_YELLOW , "8" ,SSD1289_YELLOW , 2
+  CreateButton 140 , 60, 190, 90, SSD1289_BLUE, SSD1289_YELLOW , "9" ,SSD1289_YELLOW , 2
+  CreateButton 200 , 60, 250, 90, SSD1289_BLUE, SSD1289_YELLOW , "/" ,SSD1289_YELLOW , 2
+  CreateButton 20 , 100, 70, 130, SSD1289_BLUE, SSD1289_YELLOW , "4" ,SSD1289_YELLOW , 2
+  CreateButton 80 , 100, 130, 130, SSD1289_BLUE, SSD1289_YELLOW , "5" ,SSD1289_YELLOW , 2
+  CreateButton 140 , 100, 190, 130, SSD1289_BLUE, SSD1289_YELLOW , "6" ,SSD1289_YELLOW , 2
+  CreateButton 200 , 100, 250, 130, SSD1289_BLUE, SSD1289_YELLOW , "*" ,SSD1289_YELLOW , 2
+  CreateButton 20 , 140, 70, 170, SSD1289_BLUE, SSD1289_YELLOW , "1" ,SSD1289_YELLOW , 2
+  CreateButton 80 , 140, 130, 170, SSD1289_BLUE, SSD1289_YELLOW , "2" ,SSD1289_YELLOW , 2
+  CreateButton 140 , 140, 190, 170, SSD1289_BLUE, SSD1289_YELLOW , "3" ,SSD1289_YELLOW , 2
+  CreateButton 200 , 140, 250, 170, SSD1289_BLUE, SSD1289_YELLOW , "-" ,SSD1289_YELLOW , 2
+  CreateButton 20 , 180, 130, 210, SSD1289_BLUE, SSD1289_YELLOW , "0" ,SSD1289_YELLOW , 2
+  CreateButton 140 , 180, 190, 210, SSD1289_BLUE, SSD1289_YELLOW , "." ,SSD1289_YELLOW , 2
+  CreateButton 200 , 180, 250, 210, SSD1289_BLUE, SSD1289_YELLOW , "+" ,SSD1289_YELLOW , 2
+  CreateButton 260 , 60, 299, 130, SSD1289_BLUE, SSD1289_YELLOW , "C" ,SSD1289_YELLOW , 2
+  CreateButton 260 , 140, 299, 210, SSD1289_BLUE, SSD1289_YELLOW , "=" ,SSD1289_YELLOW , 2
+
+  CreateButton 20 , 10, SSD1289_GLCD_WIDTH-20 , 50, SSD1289_BLUE, SSD1289_YELLOW , "@Dimitris Katsaounis" ,SSD1289_YELLOW , 2
+  Wait 1 s
+
+  CreateButton 20 , 10, SSD1289_GLCD_WIDTH-20 , 50, SSD1289_BLUE, SSD1289_YELLOW , "GCBasic Calculator" ,SSD1289_YELLOW , 2
+
+  dig=0
+  Calc=0
+  Restext=""
+  Temptext="                    "
+  Do Forever
+
+    if ADS7843_IRQ=0 then
+       ADS7843_GetXY ( TP_X , TP_Y )
+       'Numbers
+       if (TP_X>=20 and TP_X<=70) and (TP_Y>=60 and TP_Y<=90) Then
+           RoundRect 20 , 60 , 70 , 90  , SSD1289_RED
+           wait 100 ms
+           RoundRect 20 , 60 , 70 , 90 , SSD1289_YELLOW
+           Temptext= Temptext+"7"
+           dig++
+           Temptext=Right(Temptext,20)
+           FilledBox 22, 12, 297, 48, SSD1289_BLUE
+           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+       end if
+       if (TP_X>=80 and TP_X<=130) and (TP_Y>=60 and TP_Y<=90) Then
+           RoundRect 80 , 60 , 130 , 90  , SSD1289_RED
+           wait 100 ms
+           RoundRect 80 , 60 , 130 , 90 , SSD1289_YELLOW
+           Temptext= Temptext+"8"
+           dig++
+           Temptext=Right(Temptext,20)
+           FilledBox 22, 12, 297, 48, SSD1289_BLUE
+           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+       end if
+       if (TP_X>=140 and TP_X<=190) and (TP_Y>=60 and TP_Y<=90) Then
+           RoundRect 140 , 60 , 190 , 90  , SSD1289_RED
+           wait 100 ms
+           RoundRect 140 , 60 , 190 , 90 , SSD1289_YELLOW
+           Temptext= Temptext+"9"
+           dig++
+           Temptext=Right(Temptext,20)
+           FilledBox 22, 12, 297, 48, SSD1289_BLUE
+           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+       end if
+       if (TP_X>=20 and TP_X<=70) and (TP_Y>=100 and TP_Y<=130) Then
+           RoundRect 20 , 100 , 70 , 130  , SSD1289_RED
+           wait 100 ms
+           RoundRect 20 , 100 , 70 , 130 , SSD1289_YELLOW
+           Temptext= Temptext+"4"
+           dig++
+           Temptext=Right(Temptext,20)
+           FilledBox 22, 12, 297, 48, SSD1289_BLUE
+           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+       end if
+       if (TP_X>=80 and TP_X<=130) and (TP_Y>=100 and TP_Y<=130) Then
+           RoundRect 80 , 100 , 130 , 130  , SSD1289_RED
+           wait 100 ms
+           RoundRect 80 , 100 , 130 , 130 , SSD1289_YELLOW
+           Temptext= Temptext+"5"
+           dig++
+           Temptext=Right(Temptext,20)
+           FilledBox 22, 12, 297, 48, SSD1289_BLUE
+           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+       end if
+       if (TP_X>=140 and TP_X<=190) and (TP_Y>=100 and TP_Y<=130) Then
+           RoundRect 140 , 100 , 190 , 130  , SSD1289_RED
+           wait 100 ms
+           RoundRect 140 , 100 , 190 , 130 , SSD1289_YELLOW
+           Temptext= Temptext+"6"
+           dig++
+           Temptext=Right(Temptext,20)
+           FilledBox 22, 12, 297, 48, SSD1289_BLUE
+           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+       end if
+       if (TP_X>=20 and TP_X<=70) and (TP_Y>=140 and TP_Y<=170) Then
+           RoundRect 20 , 140 , 70 , 170  , SSD1289_RED
+           wait 100 ms
+           RoundRect 20 , 140 , 70 , 170 , SSD1289_YELLOW
+           Temptext= Temptext+"1"
+           dig++
+           Temptext=Right(Temptext,20)
+           FilledBox 22, 12, 297, 48, SSD1289_BLUE
+           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+       end if
+       if (TP_X>=80 and TP_X<=130) and (TP_Y>=140 and TP_Y<=170) Then
+           RoundRect 80 , 140 , 130 , 170  , SSD1289_RED
+           wait 100 ms
+           RoundRect 80 , 140 , 130 , 170 , SSD1289_YELLOW
+           Temptext= Temptext+"2"
+           dig++
+           Temptext=Right(Temptext,20)
+           FilledBox 22, 12, 297, 48, SSD1289_BLUE
+           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+       end if
+       if (TP_X>=140 and TP_X<=190) and (TP_Y>=140 and TP_Y<=170) Then
+           RoundRect 140 , 140 , 190 , 170  , SSD1289_RED
+           wait 100 ms
+           RoundRect 140 , 140 , 190 , 170 , SSD1289_YELLOW
+           Temptext= Temptext+"3"
+           dig++
+           Temptext=Right(Temptext,20)
+           FilledBox 22, 12, 297, 48, SSD1289_BLUE
+           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+       end if
+       if (TP_X>=20 and TP_X<=130) and (TP_Y>=180 and TP_Y<=210) Then
+           RoundRect 20 , 180 , 130 , 210  , SSD1289_RED
+           wait 100 ms
+           RoundRect 20 , 180 , 130 , 210 , SSD1289_YELLOW
+           Temptext= Temptext+"0"
+           dig++
+           Temptext=Right(Temptext,20)
+           FilledBox 22, 12, 297, 48, SSD1289_BLUE
+           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+       end if
+       'praxeis
+       if (TP_X>=200 and TP_X<=250) and (TP_Y>=180 and TP_Y<=210) Then
+          RoundRect 200 , 180 , 250 , 210  , SSD1289_RED
+          wait 100 ms
+          RoundRect 200 , 180 , 250 , 210 , SSD1289_YELLOW
+          if calc=0 Then
+            if len(Restext)=0 Then
+               Text1=Right (Temptext, dig)
+               dig=0
+               Temptext="                    "
+            else
+               Text1=Restext
+               Restext(0)=0
+            end if
+            calc=1
+          end if
+       end if
+       if (TP_X>=200 and TP_X<=250) and (TP_Y>=140 and TP_Y<=170) Then
+          RoundRect 200 , 140 , 250 , 170  , SSD1289_RED
+          wait 100 ms
+          RoundRect 200 , 140 , 250 , 170 , SSD1289_YELLOW
+          if calc=0 Then
+            if len(Restext)=0 Then
+               Text1=Right (Temptext, dig)
+               dig=0
+               Temptext="                    "
+            else
+               Text1=Restext
+               Restext(0)=0
+            end if
+            calc=2
+          end if
+       end if
+       if (TP_X>=200 and TP_X<=250) and (TP_Y>=100 and TP_Y<=130) Then
+          RoundRect 200 , 100 , 250 , 130  , SSD1289_RED
+          wait 100 ms
+          RoundRect 200 , 100 , 250 , 130 , SSD1289_YELLOW
+          if calc=0 Then
+            if len(Restext)=0 Then
+               Text1=Right (Temptext, dig)
+               dig=0
+               Temptext="                    "
+            else
+               Text1=Restext
+               Restext(0)=0
+            end if
+            calc=3
+          end if
+       end if
+       if (TP_X>=200 and TP_X<=250) and (TP_Y>=60 and TP_Y<=90) Then
+          RoundRect 200 , 60 , 250 , 90  , SSD1289_RED
+          wait 100 ms
+          RoundRect 200 , 60 , 250 , 90 , SSD1289_YELLOW
+          if calc=0 Then
+            if len(Restext)=0 Then
+               Text1=Right (Temptext, dig)
+               dig=0
+               Temptext="                    "
+            else
+               Text1=Restext
+               Restext(0)=0
+            end if
+            calc=4
+          end if
+       end if
+       'C
+       if (TP_X>=260 and TP_X<=299) and (TP_Y>=60 and TP_Y<=130) Then
+          RoundRect 260 , 60 , 299 , 130  , SSD1289_RED
+          wait 100 ms
+          RoundRect 260 , 60 , 299 , 130 , SSD1289_YELLOW
+          Text1=""
+          Text2=""
+          calc=0
+          dig=0
+          val1=0
+          val2=0
+          Temptext="                   0"
+          GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+          Temptext="                    "
+          Restext(0)=0
+       end if
+       '=
+        if (TP_X>=260 and TP_X<=299) and (TP_Y>=140 and TP_Y<=210) Then
+          RoundRect 260 , 140 , 299 , 210  , SSD1289_RED
+          wait 100 ms
+          RoundRect 260 , 140 , 299 , 210  , SSD1289_YELLOW
+          if calc<>0 then
+             Text2=Right (Temptext, dig)
+             dig=0
+             val1=val(Text1)
+             val2=val(Text2)
+             Temptext="                    "
+             Select case calc
+                case 1
+                     ResVal=val1+val2
+                     Restext=str(ResVal)
+                     Temptext= Temptext+Restext
+                     Temptext=Right(Temptext,20)
+                     FilledBox 22, 12, 297, 48, SSD1289_BLUE
+                     GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+                case 2
+                     if val1>val2 Then
+                        ResVal=val1-val2
+                        Restext=str(ResVal)
+                     Else
+                        ResVal=val2-val1
+                        Restext="-"+str(ResVal)
+                     end if
+                     Temptext= Temptext+Restext
+                     Temptext=Right(Temptext,20)
+                     FilledBox 22, 12, 297, 48, SSD1289_BLUE
+                     GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+                 case 3
+                     ResVal=val1*val2
+                     Restext=str(ResVal)
+                     Temptext= Temptext+Restext
+                     Temptext=Right(Temptext,20)
+                     FilledBox 22, 12, 297, 48, SSD1289_BLUE
+                     GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+                 case 4
+                     ResVal=val1/val2
+                     Restext=str(ResVal)
+                     Temptext= Temptext+Restext
+                     Temptext=Right(Temptext,20)
+                     FilledBox 22, 12, 297, 48, SSD1289_BLUE
+                     GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+             end Select
+             Temptext="                    "
+             calc=0
+             Restext(0)=0
+          end if
+        end if
+
+
+    end if
+    Wait 1 ms
+
+  Loop
+

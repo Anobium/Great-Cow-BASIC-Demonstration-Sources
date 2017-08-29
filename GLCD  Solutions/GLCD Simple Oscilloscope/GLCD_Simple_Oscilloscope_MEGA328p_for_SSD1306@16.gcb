@@ -1,0 +1,126 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a very basic simple GLCD demonstration of the SSD1306 GLCD capabilities as a very simple scope.
+'''This program updates the GLCD using XOR via a
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+'''@author  StanC and EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    22.2.17
+'''********************************************************************************
+
+  #chip mega328p,16
+  #option explicit
+  #include <UNO_mega328p.h>
+  #include <glcd.h>
+  #define HI2C_BAUD_RATE 400
+  #define HI2C_DATA
+  HI2CMode Master
+  #define GLCD_TYPE GLCD_TYPE_SSD1306
+  #define GLCD_I2C_Address 0x78
+  #define ADSpeed LowSpeed
+
+  'Redirect the standard PSET routine to the XOR routine
+  #define PSet_SSD1306 xorPSet_SSD1306
+
+  dim GLCDDATATEMP as word
+  dim GLCDBITNO as byte
+  dim GLCDCHANGE as byte
+  ;
+  dir portc.0 in
+  dim volt as byte
+  dim xpos as byte
+  dim buffer1 (128)
+  dim buffer2 (128)
+
+
+'Main code to set the screen up
+
+  for xpos=0 to 127 ;init read 128 samples 1st time
+    volt = READAD (an0)
+    buffer1 (xpos)=volt/4
+    buffer2 (xpos)=volt/4
+  next xpos
+
+  glcdcls
+
+  'Draw the grid
+  line 0,31,128,32
+  line 63,0,63,63
+  '
+  for xpos=0 to 127
+    pset xpos,buffer1(xpos),1 ;plot data 1st time for xor
+  next xpos
+  '
+
+  'Main loop
+  do
+  for xpos=0 to 127
+    pset xpos,buffer1(xpos),1 ;erase old data
+    pset xpos,buffer2(xpos),1 ;plot new data
+  next xpos
+  ;
+  for xpos=0 to 127
+    buffer1 (xpos)=buffer2 (xpos) ;copy new data to old data
+    volt = READAD (an0)
+    Repeat 2
+      set c off
+      rotate volt right
+    End Repeat
+   buffer2 (xpos)=volt ;save new data
+  next xpos
+  ;
+  loop
+; end of main
+
+
+;
+; redirected glcd library function to XOR GLCD
+'''Draws a pixel on the GLCD
+'''@param GLCDX X coordinate of pixel
+'''@param GLCDY Y coordinate of pixel
+'''@param GLCDColour State of pixel ( GLCDBackground | GLCDForeground )
+Sub xorPSet_SSD1306(In GLCDX, In GLCDY, In GLCDColour As Word)
+    'Set pixel at X, Y on LCD to State
+    'X is 0 to 127
+    'Y is 0 to 63
+    'Origin in top left
+  #if GLCD_TYPE = GLCD_TYPE_SSD1306
+          'SSD1306_BufferLocationCalc = ( GLCDY / 8 )* GLCD_WIDTH
+          'faster than /8
+          SSD1306_BufferLocationCalc = GLCDY
+          Repeat 3
+            Set C Off
+            Rotate SSD1306_BufferLocationCalc Right
+          End Repeat
+          SSD1306_BufferLocationCalc = SSD1306_BufferLocationCalc * GLCD_WIDTH
+
+          SSD1306_BufferLocationCalc = GLCDX + SSD1306_BufferLocationCalc+1
+          GLCDDataTemp = SSD1306_BufferAlias(SSD1306_BufferLocationCalc)
+
+          'Change data to set/clear pixel
+          GLCDBitNo = GLCDY And 7
+          If GLCDColour.0 = 0 Then
+            GLCDChange = 254
+            Set C On
+          Else
+            GLCDChange = 1
+            Set C Off
+          End If
+          Repeat GLCDBitNo
+            Rotate GLCDChange Left
+          End Repeat
+
+          If GLCDColour.0 = 0 Then
+             GLCDDataTemp = GLCDDataTemp And GLCDChange
+          Else
+             GLCDDataTemp = GLCDDataTemp xOr GLCDChange
+          End If
+
+          SSD1306_BufferAlias(SSD1306_BufferLocationCalc) = GLCDDataTemp
+          Cursor_Position_SSD1306 ( GLCDX, GLCDY )
+          Write_Data_SSD1306 ( GLCDDataTemp )
+
+  #endif
+
+End Sub

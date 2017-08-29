@@ -1,0 +1,85 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demonstrates the rotation capabilities of the SSD1289 GLCD capabilities.
+'''It is a nice graphical LCD, suitable for a lot of various projects.
+'''This program draws lines, boxes, circles and prints strings and numbers.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+'''@author 	DimiK & EvanV
+'''@licence	GPL
+'''@version	1.2
+'''@date   	05.12.2015
+'''**********
+
+'Chip Settings
+#chip mega2560, 16
+
+'Include
+#include <glcd.h>
+
+'GLCD Device Selection
+#define GLCD_TYPE GLCD_TYPE_SSD1289
+
+#define GLCD_EXTENDEDFONTSET1
+
+'Define ports for the SSD1289 display
+#define GLCD_WR   PORTG.2
+#define GLCD_CS   PORTG.1
+#define GLCD_RS   PORTD.7
+#define GLCD_RST  PORTG.0
+#define GLCD_DB0  PORTC.0
+#define GLCD_DB1  PORTC.1
+#define GLCD_DB2  PORTC.2
+#define GLCD_DB3  PORTC.3
+#define GLCD_DB4  PORTC.4
+#define GLCD_DB5  PORTC.5
+#define GLCD_DB6  PORTC.6
+#define GLCD_DB7  PORTC.7
+#define GLCD_DB8  PORTA.0
+#define GLCD_DB9  PORTA.1
+#define GLCD_DB10 PORTA.2
+#define GLCD_DB11 PORTA.3
+#define GLCD_DB12 PORTA.4
+#define GLCD_DB13 PORTA.5
+#define GLCD_DB14 PORTA.6
+#define GLCD_DB15 PORTA.7
+
+'You can set these parameters are global or
+' pass as parameter to the SDD1289 GLCD commands as shown on the first GLCDPrint command below:
+GLCDfntDefaultSize = 2
+GLCDForeground = SSD1289_YELLOW
+
+GLCDCLS SSD1289_BLUE
+
+Do
+		GLCDCLS
+    GLCDRotate PORTRAIT
+    GLCDPrint  2, 2,  "GCBasic", SSD1289_YELLOW, 2
+    GLCDPrint  2 , 30 ,  "PORTRAIT"
+    GLCDPrint  20 , 60 ,  "Orientation"
+    Wait 2 s
+
+
+		GLCDCLS
+    GLCDRotate LANDSCAPE
+    GLCDPrint  2, 2, "GCBasic"
+    GLCDPrint  2 , 30 ,  "LANDSCAPE"
+    GLCDPrint  20 , 60 ,  "Orientation"
+    Wait 2 s
+
+		GLCDCLS
+    GLCDRotate PORTRAIT_REV
+    GLCDPrint  2, 2,  "GCBasic"
+    GLCDPrint  2 , 30 , "PORTRAIT_REV"
+    GLCDPrint  20 , 60 ,  "Orientation"
+    Wait 2 s
+
+		GLCDCLS
+    GLCDRotate LANDSCAPE_REV
+    GLCDPrint  2, 2,  "GCBasic"
+    GLCDPrint  2 , 30 ,  "LANDSCAPE_REV"
+    GLCDPrint  20 , 60 ,  "Orientation"
+    Wait 2 s
+Loop
+
+
+
