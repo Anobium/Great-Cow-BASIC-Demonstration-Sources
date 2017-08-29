@@ -33,7 +33,7 @@
 
     do
         wait 1000 ms
-        'An alternative Great Cow BASIC method.
+        'Use a useful alternative Great Cow BASIC method called SetWith
         SetWith ( portb.1, FnNotBit (portb.1) )
 
     loop
