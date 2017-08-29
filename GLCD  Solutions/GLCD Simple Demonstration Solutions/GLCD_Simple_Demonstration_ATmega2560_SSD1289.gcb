@@ -1,0 +1,199 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demonstrates the rotation capabilities of the SSD1289 GLCD capabilities.
+'''It is a nice graphical LCD, suitable for a lot of various projects.
+'''This program draws lines, boxes, circles and prints strings and numbers.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+'''@author 	DimiK
+'''@licence	GPL
+'''@version	1.1
+'''@date   	05.12.2015
+'''**********
+
+'Chip Settings
+#chip mega2560, 16
+#option explicit
+
+'Include
+#include <glcd.h>
+
+'GLCD Device Selection
+#define GLCD_TYPE GLCD_TYPE_SSD1289
+#define GLCD_EXTENDEDFONTSET1
+'Define ports for the SSD1289 display
+#define GLCD_WR   PORTG.2
+#define GLCD_CS   PORTG.1
+#define GLCD_RS   PORTD.7
+#define GLCD_RST  PORTG.0
+#define GLCD_DB0  PORTC.0
+#define GLCD_DB1  PORTC.1
+#define GLCD_DB2  PORTC.2
+#define GLCD_DB3  PORTC.3
+#define GLCD_DB4  PORTC.4
+#define GLCD_DB5  PORTC.5
+#define GLCD_DB6  PORTC.6
+#define GLCD_DB7  PORTC.7
+#define GLCD_DB8  PORTA.0
+#define GLCD_DB9  PORTA.1
+#define GLCD_DB10 PORTA.2
+#define GLCD_DB11 PORTA.3
+#define GLCD_DB12 PORTA.4
+#define GLCD_DB13 PORTA.5
+#define GLCD_DB14 PORTA.6
+#define GLCD_DB15 PORTA.7
+
+GLCDCLS SSD1289_blue
+
+  'Set font size, in this demo this also set the demonstration to execute.
+  GLCDfntDefaultsize = 2
+
+  Dim BYTENUMBER, OLDFONT, CCOUNT, OLDFONT, CCOUNT as Byte
+  dim longNumber as Long
+  dim wordNumber as Word
+
+  longNumber = 0 ' max value = 4294967290
+  wordNumber = 0
+  byteNumber = 0
+
+		'Using the global variable GLCDfntDefaultsize to show the different capabilities
+		Select Case GLCDfntDefaultsize
+
+		Case 1
+
+    	ShowCase1
+
+    Case 2
+
+			ShowCase2
+
+  	Case 3
+
+      GLCDDrawString (2, 1, "GLCD font")
+      GLCDDrawString (2, 25, "size = 3")
+      box 0,0,SSD1289_GLCD_WIDTH-1, SSD1289_GLCD_HEIGHT-1, SSD1289_BLUE
+      box SSD1289_GLCD_WIDTH-5, SSD1289_GLCD_HEIGHT-5,SSD1289_GLCD_WIDTH-1, SSD1289_GLCD_HEIGHT-1, SSD1289_WHITE
+
+	End Select
+
+end
+
+
+sub ShowCase1
+
+				GLCDRotate ( Portrait )
+
+ 				GLCDDrawString (2, 1, "GCB", SSD1289_WHITE )
+        GLCDDrawString (56,1,"v.95", SSD1289_YELLOW )
+        GLCDDrawString (2, 16, "DrawStr", SSD1289_WHITE )
+
+        GLCDDrawString ( 60, 31, "Long Number" )
+        GLCDDrawString ( 60, 39, "Word Number" )
+        GLCDDrawString ( 60, 47, "Byte Number" )
+
+        GLCDDrawString ( 74, 16, "Asc:" )
+
+        box 0,0,SSD1289_GLCD_WIDTH-1, SSD1289_GLCD_HEIGHT-1, SSD1289_YELLOW
+        box SSD1289_GLCD_WIDTH-5, SSD1289_GLCD_HEIGHT-5,SSD1289_GLCD_WIDTH-1, SSD1289_GLCD_HEIGHT-1, SSD1289_WHITE
+
+        Circle( SSD1289_GLCD_WIDTH/2, SSD1289_GLCD_HEIGHT/2, 50, SSD1289_SILVER )            ;center
+        FilledCircle( SSD1289_GLCD_WIDTH/2, SSD1289_GLCD_HEIGHT/2, 25, SSD1289_D_GRAY  )
+
+        line 0,  SSD1289_GLCD_HEIGHT-1 , SSD1289_GLCD_WIDTH/2 +100,  (SSD1289_GLCD_HEIGHT /2) - 50, SSD1289_CYAN
+        line  0, (SSD1289_GLCD_HEIGHT /2) - 50, SSD1289_GLCD_WIDTH/2 +100, (SSD1289_GLCD_HEIGHT /2) - 50, SSD1289_CYAN
+
+				filledbox 2,SSD1289_GLCD_HEIGHT/2+10,42,SSD1289_GLCD_HEIGHT/2+50, SSD1289_RED
+
+        oldfont = GLCDfntDefaultsize
+        GLCDfntDefaultsize = 3
+        GLCDDrawString ( 42, SSD1289_GLCD_HEIGHT - 30 , "SSD1289" , SSD1289_WHITE )
+
+        GLCDfntDefaultsize = 1
+        GLCDDrawString ( SSD1289_GLCD_WIDTH - 60, 2 , " Dec 2015" , SSD1289_WHITE )
+
+
+        'Revert the font size
+        GLCDfntDefaultsize = oldfont
+        GLCDForeground = SSD1289_WHITE
+
+        DO forever
+
+            GLCDPrint ( 144 , 31, longNumber)
+            GLCDPrint ( 144 , 39, pad( str(wordnumber),5))
+            GLCDPrint ( 144 , 47, pad( str(bytenumber),3))
+
+						GLCDDrawChar(54, 16, CCount )
+            Box 52,15,62,26, SSD1289_WHITE								'Draw a box around the Char below
+
+            GLCDDrawString ( 100, 16 , pad( str(CCount),3) )
+
+            CCount++
+            if CCount = 0 then CCount = 31
+            if CCount = 128 then CCount = 192
+            longNumber = longNumber + 7
+
+            wordNumber = wordNumber + 3
+            byteNumber++
+
+        LOOP
+
+end sub
+
+sub ShowCase2
+
+				GLCDRotate ( Landscape_rev )
+
+        GLCDDrawString (2, 1, "GCB",SSD1289_WHITE)
+        GLCDDrawString (56,1,"v.95",SSD1289_YELLOW)
+        GLCDDrawString (2, 18, "DrawStr",SSD1289_WHITE)
+
+        GLCDDrawString ( 2, 52, "Long:" )
+        GLCDDrawString ( 2, 70, "Word:" )
+        GLCDDrawString ( 2, 88, "Byte:" )
+
+        GLCDDrawString ( 128, 18, "Asc:"+"  " )
+
+        box 0,0,SSD1289_GLCD_WIDTH-1, SSD1289_GLCD_HEIGHT-1, SSD1289_YELLOW
+        box SSD1289_GLCD_WIDTH-5, SSD1289_GLCD_HEIGHT-5,SSD1289_GLCD_WIDTH-1, SSD1289_GLCD_HEIGHT-1, SSD1289_WHITE
+
+        Circle( SSD1289_GLCD_WIDTH/2, SSD1289_GLCD_HEIGHT/2, 50, SSD1289_SILVER )            ;center
+        FilledCircle( SSD1289_GLCD_WIDTH/2, SSD1289_GLCD_HEIGHT/2, 25, SSD1289_D_GRAY  )
+
+        line 0,  SSD1289_GLCD_HEIGHT-1 , SSD1289_GLCD_WIDTH/2 +100,  (SSD1289_GLCD_HEIGHT /2) - 50, SSD1289_CYAN
+        line  0, (SSD1289_GLCD_HEIGHT /2) - 50, SSD1289_GLCD_WIDTH/2 +100, (SSD1289_GLCD_HEIGHT /2) - 50, SSD1289_CYAN
+
+        filledbox 2,SSD1289_GLCD_HEIGHT/2+10,42,SSD1289_GLCD_HEIGHT/2+50, SSD1289_RED
+
+        oldfont = GLCDfntDefaultsize
+        GLCDfntDefaultsize = 3
+        GLCDDrawString ( 50, SSD1289_GLCD_HEIGHT - 30 , "SSD1289 Driver" , SSD1289_WHITE )
+
+        GLCDfntDefaultsize = 1
+        GLCDDrawString ( SSD1289_GLCD_WIDTH - 60, 2 , "Dec 2015" , SSD1289_WHITE )
+
+        'Revert the font size
+        GLCDfntDefaultsize = oldfont
+        GLCDForeground = SSD1289_WHITE
+				BigPrint_SSD1289 ( 100 , SSD1289_GLCD_HEIGHT - 60 , "Great Cow Basic" )
+
+        DO forever
+
+          GLCDPrint ( 62 , 52, longNumber)
+
+          GLCDPrint ( 62 , 70, pad( str(wordnumber),5 ))
+          GLCDPrint ( 62 , 88, pad( str(bytenumber),3  ))
+
+
+          GLCDDrawChar(99, 18, CCount )
+          Box 98,18,117,42, SSD1289_WHITE								'Draw a box around the Char below
+
+          GLCDDrawString ( 180, 18 , pad( str(CCount),3) )
+
+          CCount++
+          if CCount = 0 then CCount = 31
+          if CCount = 128 then CCount = 192
+          longNumber = longNumber + 7
+          wordNumber = wordNumber + 3
+          byteNumber++
+
+        LOOP
+end sub
