@@ -1,0 +1,80 @@
+'  See the .h file for documenatation
+
+    #chip 16f18855, 4
+    #Config   FEXTOSC_OFF, RSTOSC_HFINT32
+    #Config   WRT_OFF, CPD_ON, MCLRE_ON
+
+    '' -------------------LATA-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
+    ''-----------------------------------------
+    ''
+    #define LEDD2 PORTA.0
+    #define LEDD3 PORTA.1
+    #define LEDD4 PORTA.2
+    #define LEDD5 PORTA.3
+    #define Potentiometer   PORTA.4
+
+    Dir     LEDD2 OUT
+    Dir     LEDD3 OUT
+    Dir     LEDD4 OUT
+    Dir     LEDD5 OUT
+    DIR   Potentiometer In
+
+
+
+
+    '---------------- TASK's DEFINITIONS -------------------
+    '------------------------------------------------
+    #include "Time_Based_Task_Switcher_Library001.h"
+
+    #define base_time 500          'base_time in us
+
+    #define Task1      read_input
+    #define Task1_us   500         'Task period in us
+    #define LTask1     led1        'Task subroutine
+    #define LTask1_s   1           'Task will run every 1 s
+    #define Run_LTask1             'Run Task inside interrupt subroutine
+
+    #define Task2      led2
+    #define Task2_ms   100        'task will run every 100 ms
+
+    #define Task3      led3       'we will have the time delay for the LED read from ReadAD function
+
+    '--------------------- MAIN -----------------------
+    '------------------------------------------------
+
+    'Setup the timer for 16f18855 - the key is TimerInitValue.  The TimerInitValue is calculated in the .h file.
+    'You to ensure the InitTimer0 is correct for your microcontroller.
+    '   Options are:
+    '
+    '   InitTimer0 Osc, TimerInitValue for standard 8-bit timer0's
+    '   InitTimer0 Osc,    TimerInitValue + TMR0_HFINTOSC   , POST0_1 for advanced 8-bit timer0's
+    '
+    ' TimerInitValue is a calculated value to give you the time base specified.
+    InitTimer0 Osc,    TimerInitValue + TMR0_HFINTOSC   , POST0_1
+
+
+    do
+        Do_Task1
+        Do_Task3
+        Do_Task2
+    loop
+
+    '------------------- TASK's SUBs ---------------------
+    '-----------------------------------------------------
+    Sub read_input
+        time_Task3 = ReadAD(AN4)    'set LEDD4 period to the AD value
+    End Sub
+
+    Sub led1
+        LEDD2 = !LEDD2
+    End Sub
+
+    Sub led2
+        LEDD3 = !LEDD3
+    End Sub
+
+    Sub led3
+        LEDD4 = !LEDD4
+    End Sub

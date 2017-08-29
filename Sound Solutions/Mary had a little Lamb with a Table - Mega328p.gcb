@@ -1,0 +1,92 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program plays 'Mary had a little lamb' on portd.5 connected to Piezo speaker.
+'''This uses the Chipino shield
+'''
+'''This uses a GCB table as the data source.
+'''@author 	EvanV plus works of ChuckH
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	17.06.2016
+'''********************************************************************************
+
+; ----- Configuration
+  #chip mega328p
+  #option explicit
+
+; ----- Define Hardware settings
+  #define SWX PORTb.1               ; input pin from pushbutton/switch
+  Dir SWX in                        ; set port as input for pushbutton/switch
+
+; ----- Constants
+  #define SoundOut PORTd.5          ; output pin for tone
+
+; ----- Variables
+  'Requires word size to hold note frequencies
+  dim note as word
+  Dim CNT as Byte
+
+
+; ----- Main body of program commences here.
+    Do
+        for cnt = 1 to 32
+        readtable mary, cnt, note ' Read notes from table
+        tone note, 50							' Play notes
+        next
+        wait 2 S
+        hold:
+        If SWX = 1 Then goto hold		' play music when switch is pressed
+
+    Loop
+
+    Table MARY
+    554 'C#
+    494 'B
+    440 'A
+    494 'B
+    554 'C#
+    0 	'SILENT
+    554 'C#
+    554 'C#
+    494 'B
+    0 	'SILENT
+    494 'B
+    0 	'SILENT
+    494 'B
+    554 'C#
+    659 'E
+    0 	'SILENT
+    659 'E
+    554 'C#
+    494 'B
+    440 'A
+    494 'B
+    554 'C#
+    0 	'SILENT
+    554 'C#
+    0 	'SILENT
+    554 'C#
+    494 'B
+    0 	'SILENT
+    494 'B
+    554 'C#
+    494 'B
+    440 'A
+
+    end table
+
+
+'Tone.gcb
+
+'440 	' A
+'466 	' A#
+'494	' B
+'523	' C
+'554	' C#
+'587	' D
+'622	' D#
+'659	' E
+'699	' F
+'740	' F#
+'784	' G
+'831	' G#

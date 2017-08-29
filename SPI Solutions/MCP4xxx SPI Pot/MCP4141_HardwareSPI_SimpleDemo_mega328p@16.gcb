@@ -1,0 +1,135 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is for the Digital potentiometer 2.7 to 5.5V 7-bit linear digital potentiometer with SPI interface.
+'''Wiper commands can be write or read. This program is write and reads commands.
+'''MOSI/MISO are multiplexed in the Digital potentiometer side.
+'''
+'''This library is broadly compatible with the other devices in this series.
+'''They are: Microchip MCP4131, MCP4132, MCP4231, MCP4232, MCP4141, MCP4142, MCP4241, MCP4242, MCP4151, MCP4152, MCP4251, MCP4252, MCP4161, MCP4162, MCP4261, MCP4262.
+''':
+'''This example shows how to read and write from and to the device.
+'''This also shows all commands including how to set the wiper position.
+''':
+'''Commands are:
+'''			DigitalPotIncrement
+'''			DigitalPotDecrement
+'''			DigitalReadMemory ( RAM or EEProm address [0-15] )
+'''			DigitalWriteMemory ( 9bit number [0-511], EEProm address [6-15] )
+'''			DigitalPotSetWiperPosition  ( 0 to 128 | 0 to 256 )
+''':
+'''Warning: Do not DigitalWriteMemory ( 4 ) without refering to the DataSheet.  Writing to this address may stop the device from operating as expected.
+''':
+
+'''@author 		EvanV
+'''@licence		GPL
+'''@version		1.00
+'''@date   		May 2015
+'''********************************************************************************
+
+; ----- Configuration
+  #chip mega328p, 16
+  #option explicit
+  #include <UNO_mega328p.h>
+  #include <MCP4XXXDigitalPot.h>
+
+; ----- Constants
+
+  #define _ShowDialog
+
+	' SPI SETUP
+  #define DigitalPot_CS DIGITAL_10
+  #define DigitalPot_SCK DIGITAL_13
+  #define DigitalPot_DO DIGITAL_11
+  #define DigitalPot_DI DIGITAL_12
+
+; ----- Define Hardware settings
+	' None
+; ----- Variables
+  dim loopx as word
+  Dim DD as Byte
+
+
+
+; ------ Start of main Program
+
+
+  ' Setup MCP Device using hardware SPI
+   #define _MCP4XXXHardwareSPI
+	'Required to initialise the device
+   MCP4XXXInit
+   SPIMode MasterFast, 0
+
+; ----- Example code
+
+	HSerPrintCRLF 2
+
+  'Write to EEProme
+  'DigitalWriteMemory ( 9bit number [0-511], EEProm address [6-9] )
+      DigitalWriteMemory ( (511) , 6 )
+      DigitalWriteMemory ( ( 7  ) , 7 )
+      DigitalWriteMemory ( ( 256 ) , 8 )
+      DigitalWriteMemory ( (  0 ) , 9 )
+      DigitalWriteMemory ( (  85 ) , 10 )
+      DigitalWriteMemory ( (  341 ) , 11 )
+      DigitalWriteMemory ( (  170 ) , 12 )
+      DigitalWriteMemory ( (  55 ) , 13 )
+      DigitalWriteMemory ( (  1 ) , 14 )
+      DigitalWriteMemory ( (  511 ) , 15 )
+
+	'Display EEProm Values
+  for dd = 0 to 15
+		HSerPrint Pad( str(dd)+") ", 5 )
+  	HSerPrint DigitalReadMemory ( dd )
+		HSerPrintCRLF
+  next
+
+	'Example square wave
+
+  		'SPI Settings gives a square wave as follows
+      '							Hardware		MasterFast			32khz			4mhz
+      '							Hardware		Master					18khz			1mhz
+      '						  Hardware		MasterSlow			8.6khz		250khz
+      '							Software		NotApplicable		10.9khz		444khz
+'      do Forever
+'          DigitalPotSetWiperPosition(0, 0)    ' Set wiper to 0/128 = 0 Rab
+'          DigitalPotSetWiperPosition(128, 0)    ' Set wiper to 128/128 = 1 Rab
+'      loop
+
+	'Example setup of pot wiper
+      do Forever
+
+              DigitalPotSetWiperPosition(0, 0)    ' Set wiper to 0/128 = 0 Rab
+              wait 50 ms
+
+              DigitalPotSetWiperPosition(32, 0)    ' Set wiper to 32/128 = 1/4 Rab
+              wait 50 ms
+
+
+              DigitalPotSetWiperPosition(64, 0)    ' Set wiper to 64/128 = 1/2 Rab
+              wait 50 ms
+
+
+              DigitalPotSetWiperPosition(96, 0)    ' Set wiper to 96/128 = 3/4 Rab
+              wait 50 ms
+
+
+              DigitalPotSetWiperPosition(128, 0)    ' Set wiper to 128/128 = 1 Rab
+              wait 50 ms
+
+
+
+              ' Decrement wiper 129 times
+              for loopx =0 to 128
+                  DigitalPotDecrement
+                  wait 1 ms
+              next
+              wait 8 ms
+
+              ' Increment wiper 129 times
+              for loopx =0 to 128
+                  DigitalPotIncrement
+                  wait 1 ms
+              next
+              wait 8 ms
+
+      Loop

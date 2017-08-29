@@ -1,0 +1,47 @@
+''' A most simple sample for GCGB and GCB.
+''' ------------------------------------------------------------------------
+''' This program turn the onboard LED of a microcontroller when the AMS312 detects movement.
+'''
+''' This sample file can be adapted to any of the supported microcontrollers by simply changing the #chip.
+'''
+''' Attached the AM312 sensor to AN0 (which is A0 on an UNO board)
+'''
+''' Description from the datasheet!
+''' AM312 body sensors modules: a passive body based on the digital intelligent infrared technology, automatic control products. High sensitivity, high reliability. Widely used in various auto-sensing electrical equipment.
+''' Immunity enhancement, internal use of digital signal processing, direct high-low output.
+''' Repeatable trigger: the sensor output high after, the delay period, if there is human activity in its sensing range, the output will remain high until the 'body' left after the delay, it becomes low (sensor module detects the human body every activity will be automatically extended a period of time delay, and to the last activity time as the starting point of the delay time)
+''' Working voltage: DC 2.7-12V
+''' Static power consumption: <0.1mA
+''' Delay time: 2 seconds
+''' The blocking time: 2 seconds
+''' Trigger: can be repeated
+''' Sensing range: < =100 degree cone angle, 3-5 m (required depending on the lens)
+''' Working temperature: -20 - 60 celcius
+''' PCB Dimensions: 10mm x 8mm
+''' Module Lens: Small lens
+''' Package Weight: 10(g) / 0.35(oz)
+''' Package Dimensions(Length*Width*High): 30(mm)*20(mm)*20(mm) / 1.18(in)*0.79(in)*0.79(in)
+''' Package Including:
+''' 1 x Mini IR Infrared Pyroelectric PIR Body Motion Human Sensor Detector Module
+'''
+'''
+'''************************************************************************
+
+  #chip mega328p, 16
+
+  #define LED portb.5
+  dir LED out
+
+  do Forever
+
+    'Read Sensor value
+    ADVal = ReadAD(an0)
+
+    'Is the sensor greater than 127 then turn LED on
+    if ADVal  > 127 then
+      LED = 1
+    else
+      LED = 0
+    end if
+
+  loop

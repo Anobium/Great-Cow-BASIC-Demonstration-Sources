@@ -1,0 +1,121 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program shows the humidity and the temperature of a DHT11 on the LCD.
+'''This program shows an LCD being driven using the GCB AXE133 emulator.
+'''@author 	EvanV
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	14.02.15
+'''********************************************************************************
+
+; ----- Configuration
+  #chip mega168, 16
+  #include <DHT.H>
+
+
+; ----- Define Hardware settings
+  'Set up the Serial Port for ONEWIRE LCD
+   #define USART_BAUD_RATE 9600
+   Dir PORTD.1 Out
+   Dir PORTD.0 In
+   ' A delay is required to enable to AXE133 Emulator to process
+   #define USART_DELAY 1 ms
+   #define USART_BLOCKING
+   wait 500 ms
+
+
+
+; ----- Constants
+  #define DHT_type    22
+  #define DHT_PIN PORTB.4
+
+  #define degree      223             ;ASCII code for degree mark
+  #define period      2 S             ;update period
+
+  'Set up LCD - Change to suit your configuration
+  #define LCD_IO 0
+  'Redirection to support LCD_IO 0
+  'You should delete the LCD support routines from this demonstration if you use an alternative LCD connectivity method.
+  #define LCDWriteByte MySendToLCD
+  #define LCD_NO_RW
+
+
+; ----- Define Hardware settings
+
+
+; ----- Variables
+
+  'required for DHT
+  dim msg, whole, tenths as byte
+  dim rh, cels, fahr as integer
+
+; ----- Quick Command Reference:
+;       The humidity and temperatures are signed integers, the error
+;       indicator a byte. For the DHT11, the numerical results are
+;       simply whole numbers. For the DHT22 numerical results
+;       are fixed pointed numbers, with the decimal point assumed one
+;       digit from the right. In other words, the values are scaled up
+;       by 10. For example, a return value of 657 for the relative
+;       humidity would be interpreted as 65.7%.
+
+; ----- Main body of program commences here.
+
+
+  cls
+  print "Initializing..."
+  'let sensor stabilize
+  wait period
+
+  do
+        'get current values
+        readDHT(rh, cels, fahr, msg)
+        cls
+        select case msg
+          'all okay, so proceed
+          case 0:
+            'print relative humidity
+            print "Humidity: "
+            print rh / 10
+            print "%"
+            'print temperature in Celsius
+            locate 1,0
+            print "C:"
+            print cels / 10
+            'print degree mark
+            print chr(degree)
+            print " "
+            'print temperature in Fahrenheit
+            print "F:"
+            print fahr / 10
+            'print degree mark
+            print chr(degree)
+          'unit not responding
+          case 1:
+            print "No response..."
+          'checksum error
+          case 2:
+            print "Bad checksum..."
+        end select
+        'between readings
+        wait period
+  loop
+  end
+
+; ----- Support methods.  Subroutines and Functions
+
+  'Required to support LCD_IO 0
+  Sub MySendToLCD(In MyLCDByte)
+
+     If LCD_RS = Off then
+        HSerSend 254
+     end if
+     HSerSend MyLCDByte
+
+  end sub
+
+  'The AXE133 specific commands to the LCD
+  sub OneWireLCDcmd ( In LCDCmd, LCDValue )
+      HSerSend LCDCmd
+      HSerSend LCDValue
+
+  end sub

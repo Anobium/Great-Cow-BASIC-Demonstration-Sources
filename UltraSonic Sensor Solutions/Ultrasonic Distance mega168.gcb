@@ -1,0 +1,51 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a Distance measuring program
+'''Turns on an LED if an object comes to close to the SRF04 ultrasonic sensor
+'''
+'''@author 	EvanV plus works of HughC
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	31.01.2015
+'''********************************************************************************
+
+
+; ----- Configuration
+  #chip mega168, 16
+  ;Include files (Libraries)
+  #include <srf04.h>
+
+; ----- hardware
+  dir PORTB.0 out
+
+; ----- Constants
+  #define US1Ping PORTB.4
+  #define US1Echo PORTB.7
+  #define AlarmDistance 50
+
+
+; ----- Variables
+  Dim Distance As word
+
+
+; ----- Main body of program commences here.
+
+  Do Forever
+
+            'Take a distance reading
+            Distance = USDistance(1)
+
+            'Check the reading, is the object too close?
+            if Distance < AlarmDistance then
+                      Set PORTB.0 On
+            Else
+                      Set PORTB.0 Off
+            end if
+  	
+            'Delay for a few milliseconds before taking the next reading
+            Wait 10 ms
+  Loop
+
+
+end
+
