@@ -1,0 +1,97 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a Traffic light demo program.
+'''
+'''
+'''@author  Evan R. Venn based on works of Hugh Considine
+'''@licence GPL
+'''@version 1.0a
+'''@date    31.01.2015
+'''********************************************************************************
+
+
+; ----- Configuration
+  #chip 16F886,16
+  #option explicit
+
+
+; ----- Constants
+  #define RED_EW PORTA.0
+  #define AMBER_EW PORTA.1
+  #define GREEN_EW PORTA.2
+  #define RED_NS PORTA.3
+  #define AMBER_NS PORTA.4
+  #define GREEN_NS PORTA.5
+  #define RED_TIME 1
+  #define AMBER_TIME 2
+  #define GREEN_TIME 5
+  #define RED 1
+  #define AMBER 2
+  #define GREEN 3
+
+
+; ----- Variables
+  ' No Variables specified in this example. All byte variables are defined upon use.
+
+
+
+
+; ----- Main body of program commences here.
+'    First, set all lights to red
+  LightNS RED
+  LightEW RED
+  Do Forever
+
+            'Cycle for NS (EW remains red)
+            LightNS GREEN
+            Wait GREEN_TIME s
+            LightNS AMBER
+            Wait AMBER_TIME s
+            LightNS RED
+            Wait RED_TIME s
+
+            'Cycle for EW (NS remains red)
+            LightEW GREEN
+            Wait GREEN_TIME s
+            LightEW AMBER
+            Wait AMBER_TIME s
+            LightEW RED
+            Wait RED_TIME s
+  Loop
+  end
+
+; ----- Support methods.  Subroutines and Functions
+
+  '''Set the North/South lights
+  '''@param Colour Colour to show
+  Sub LightNS (In Colour)
+            Set RED_NS Off
+            Set AMBER_NS Off
+            Set GREEN_NS Off
+            if Colour = RED then
+                      Set RED_NS On
+            end if
+            if Colour = AMBER then
+                      Set AMBER_NS On
+            end if
+            if Colour = GREEN then
+                      Set GREEN_NS On
+            end if
+  End Sub
+
+  '''Set the East/West lights
+  '''@param Colour Colour to show
+  Sub LightEW (In Colour)
+            Set RED_EW Off
+            Set AMBER_EW Off
+            Set GREEN_EW Off
+            if Colour = RED then
+                      Set RED_EW On
+            end if
+            if Colour = AMBER then
+                      Set AMBER_EW On
+            end if
+            if Colour = GREEN then
+                      Set GREEN_EW On
+            end if
+  End Sub

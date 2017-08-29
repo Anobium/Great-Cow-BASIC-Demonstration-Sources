@@ -1,0 +1,42 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+'''This program uses the SoftSerial library for serial sending.
+''' SoftSerial uses ASM routines for minimal overhead.
+''':
+'''@author  Frank Steinberg
+'''@licence GPL
+'''@version 1.1
+'''@date    29.01.2017
+'''********************************************************************************
+
+; ----- Configuration
+#chip 16F886, 16
+#option Explicit
+
+; ----- Include library
+#include <SoftSerial.h>
+
+; ----- Config Serial UART :
+#define SER1_BAUD 115200   ; baudrate must be defined
+#define SER1_DATABITS 8    ; databits optional (default = 8)
+#define SER1_STOPBITS 1    ; stopbits optional (default = 1)
+#define SER1_INVERT Off    ; inverted polarity optional (default = Off)
+; Config I/O ports for transmitting:
+#define SER1_TXPORT PORTB  ; I/O port (without .bit) must be defined
+#define SER1_TXPIN 1       ; portbit  must be defined
+
+; ----- Variables
+Dim xx As Word
+xx = 1000
+
+; ----- Main body of program commences here.
+ Do Forever
+
+  Wait 1 s       'time to enjoy the result
+  Ser1Send  13   'new line in Terminal
+  Ser1Send  10
+  Ser1Print "Software-UART: "  'send a text
+  Ser1Print xx   'send the value of xx
+  xx += 1
+
+ Loop            'jump back to the start of the program

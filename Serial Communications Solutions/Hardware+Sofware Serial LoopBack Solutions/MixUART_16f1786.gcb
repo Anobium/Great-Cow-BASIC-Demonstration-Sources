@@ -1,0 +1,52 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This example code receive a character from Software-UART and send it back using Hardware-UART.
+'''@author 	EvanV plus works of others
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	31.01.2015
+'''********************************************************************************
+
+
+; ----- Configuration
+  #chip 16f1786, 4
+  #option explicit
+
+; ----- Define Hardware settings
+  ' see uart for critical port settings
+
+
+  'Config Hardware-UART to send with
+  #define USART_BAUD_RATE 2400
+  #define USART_BLOCKING
+  'Invert UART Tx polarity to connect without max232
+  Set SCKP ON
+  'Set UART transmit pin to output (Tx)
+  Dir PORTC.6 Out  'Pin 17
+
+  'Config Software-UART to receive with
+  #define RecAHigh PORTB.7 ON
+  #define RecALow PORTB.7 OFF
+  InitSer 1, r2400, 1+WaitForStart, 8, 1, None, Invert
+  'Set the pin direction
+  Dir PORTB.7 In    'receive on Pin 40 (RB7/PGD)
+  Wait 100 Ms
+
+
+; ----- Variables
+  Dim INCHAR as Byte
+
+; ----- Main body of program commences here.
+    'Message after reset
+    HSerPrint " PIC 16f1786"
+    HSerSend 13  ' "Carriage Return"
+    HSerSend 10  ' "Line Feed"
+
+    Start:
+      SerReceive 1, InChar  'wait for char from Software-UART
+      HSerSend InChar       'send back char to Hardware-UART
+    Goto Start
+
+
+
+

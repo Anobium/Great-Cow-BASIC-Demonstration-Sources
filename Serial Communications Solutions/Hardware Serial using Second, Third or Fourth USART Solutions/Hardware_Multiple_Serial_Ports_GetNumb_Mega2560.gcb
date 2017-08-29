@@ -1,0 +1,103 @@
+'''A demonstration program for EUSART testing two usarts
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program receive a character from Software-UART and sends it back.
+'''Typically, this sending device is a PC terminal program.
+''':
+'''When using serial commands it essential to  set the following:
+'''		Set the baudrate
+'''		Set the port directions, and
+'''		Set up USART blocking or TX__BLOCKING, if required.
+''':
+'''The initialisation of the serial port will occur based upon the baudrate, port directions and blocking automatically.
+'''The automatical setup will occur by the use of any HSER* command in your program.
+''':
+'''@author 	Mike Otte
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	13.1.2016
+'''********************************************************************************
+
+; ----- Configuration
+#chip mega2560, 16
+#option explicit
+
+; ----- Define USART settings
+  #define USART_BAUD_RATE 9600
+  '#define USART_BLOCKING					'Optionally you can set receive on USART1 to blocking
+  #define USART_TX_BLOCKING
+  #define USART2_BAUD_RATE 9600
+  '#define USART2_BLOCKING				'Optionally you can set receive on USART2 to blocking
+  #define USART2_TX_BLOCKING
+  #define USART3_BAUD_RATE 9600
+  #define USART3_TX_BLOCKING
+  '#define USART3_BLOCKING				'Optionally you can set receive on USART3 to blocking
+  #define USART4_BAUD_RATE 9600
+  '#define USART4_BLOCKING				'Optionally you can set receive on USART4 to blocking
+  #define USART4_TX_BLOCKING
+
+; ----- Define Hardware settings
+  'Set pin directions
+  Dir PortE.1 Out	'com1   USART0
+  Dir PortE.0 In
+  Dir PORTD.3 Out	'com2		USART1
+  Dir PORTD.2 In
+	Dir PORTH.1 Out	'com3		USART2
+  Dir PORTH.0 In
+  Dir PORTJ.1 Out	'com4		USART3
+  Dir PORTJ.0 In
+
+; ----- Variables
+  Dim myNum as word
+  Dim MyString as String
+  Dim INCHAR as Byte
+
+
+; ----- Main body of program commences here.
+		Wait 1 s
+
+   'Message after reset
+    HSerPrint "Mega2560  com test"
+    HSerPrintCRLF
+
+    'Main routine
+    Do Forever
+        HSerPrint "SEND AnyKey 5 times",4	' Sends message on USART4 to terminal
+        HSerSend(13, 4 )									'Sends CR on USART4
+        Repeat 5
+
+            Inchar = HSerReceiveFrom( 4 ) 'Receives a byte char  on USART4
+
+            HSerSend InChar,1		' Sends the byte back out on USART1
+            HSerSend InChar,2		' Sends the byte back out on USART2
+            HSerSend InChar,3		' Sends the byte back out on USART3
+            HSerSend InChar,4		' Sends the byte back out on USART4
+            HSerSend(13, 1 )		' Sends a Carriage Return CR to jump to next line on terminal
+            HSerPrintCRLF 1, 4	' Ssend one CRLF out usart 4
+
+        End Repeat
+
+        HSerPrint "Enter any number 0 to  65500 press enter to send", 4
+        HSerPrintCRLF, 4
+
+        repeat 5
+
+          HSerGetNum myNum,4 		'from usart 4
+          HSerPrint myNum,4		'send out usart 4
+          HSerPrint myNum,2		'send out usart 2
+          HSerPrintCRLF 1,2		'send one CRLF out usart 2
+          HSerPrintCRLF	1,4		'send one CRLF out usart 4
+
+        end repeat
+
+        HSerPrint "SEND Any string 5 times with enter at the end of string", 4
+        HSerSend(13, 4)
+        Repeat 5
+            HSerGetString MyString,4
+            HSerPrint MyString,4
+            HSerSend(13,4)
+            HSerPrint MyString,2
+            HSerSend(13,2)
+        End Repeat
+
+    Loop
+

@@ -1,0 +1,96 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program shows the trigonometric values to two decimal places shows TANgetSINe and COSine.
+'''
+'''
+'''@author 		EvanV based on works of ThomasH
+'''@licence		GPL
+'''@version		1.0a
+'''@date   		01.04.2015
+'''********************************************************************************
+
+; ----- Configuration
+
+ #chip 16F88, 8                  
+ #option explicit
+ #config mclr=off                ;reset handled internally
+ #config osc=int                 ;use internal clock
+
+ #include <Trig2Places.h>
+
+
+; ----- Constants
+ #define LCD_IO      4           ;4-bit mode
+ #define LCD_RS      PortB.2
+ #define LCD_Enable  PortB.3
+ #define LCD_DB4     PortB.4
+ #define LCD_DB5     PortB.5
+ #define LCD_DB6     PortB.6
+ #define LCD_DB7     PortB.7
+ #define LCD_NO_RW
+
+; ----- Define Hardware settings
+ dir PortB out                   ;all outputs to the LCD 
+
+; ----- Variables
+ dim ii as integer
+ dim outStr, valStr as string
+ Dim LENGTH as Byte
+
+
+; ----- Main body of program commences here.
+
+  for ii = -720 to 720            ;arguments from -720 to 720
+    cls
+    print "sin("                  ;print the label
+    print ii                      ;and the argument
+    print ")="                    ;and closing parenthesis
+    locate 1,0
+    printTrig(sin(ii))            ;print value of the sine
+    wait 500 mS                   ;pause to view
+
+    cls                           ;do likewise for cosine
+    print "cos("
+    print ii
+    print ")="
+    locate 1,0
+    printTrig(cos(ii))
+    wait 500 mS                   ;pause to view
+   
+    cls                           ;do likewise for tangent
+    print "tan("
+    print ii
+    print ")="
+    locate 1,0
+    printTrig(tan(ii))
+    wait 500 mS                   ;pause to view 
+  next ii
+
+
+
+; ----- Support methods.  Subroutines and Functions
+
+  sub printTrig(in value as integer)
+    ;print decently formatted trig results
+
+    outStr = ""                   ;assume positive (no sign)
+
+    if value < 0 then             ;handle negatives
+      outStr = "-"                ;prefix a minus sign
+      value = -1 * value          ;but work with positives
+    end if
+
+    valStr = str(value)
+    length = len(valStr)
+    select case length
+      case 1:
+        outStr = outStr + "0.0" + valStr
+      case 2:
+        outStr = outStr + "0." + valStr
+      case 3:
+        outStr = outStr + left(valStr,1) + "." + right(valStr,2)
+      case 4:
+        outStr = outStr + left(valStr,2) + "." + right(valStr,2)      
+    end select    
+   print outStr
+  end sub

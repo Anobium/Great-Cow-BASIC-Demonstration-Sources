@@ -1,0 +1,82 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program shows the trigonometric values to four decimal places shows SINe and COSine.
+'''As Tangent cannot be represented at this 4 places of precision with the Great Cow Basic Integer type, and so, is not displayed.
+'''
+'''
+'''@author 		EvanV based on works of ThomasH
+'''@licence		GPL
+'''@version		1.0a
+'''@date   		01.04.2015
+'''********************************************************************************
+
+; ----- Configuration
+
+ #chip mega8,8
+ #option explicit
+
+ #include <Trig4Places.h>
+
+ 'Use LCD in 2-wire mode with 74LS164 / 74HC164
+  #define LCD_IO 2
+  #define LCD_DB PORTC.0            ; databit
+  #define LCD_CB PORTC.1            ; clockbit
+  #define LCD_NO_RW
+
+
+; ----- Variables
+ dim ii as integer
+ dim outStr, valStr as string
+ Dim LENGTH as Byte
+
+; ----- Main body of program commences here.
+
+  for ii = -720 to 720             ;arguments from -720 to 720
+    cls
+    print "sin("                  ;print the label
+    print ii                       ;and the argument
+    print ")="                    ;and closing parenthesis
+    locate 1,0
+    printTrig(sin(ii))             ;print value of the sine
+    wait 500 mS                   ;pause to view
+
+    cls                           ;do likewise for cosine
+    print "cos("
+    print ii
+    print ")="
+    locate 1,0
+    printTrig(cos(ii))
+    wait 500 mS                   ;pause to view
+  next ii
+  end
+; ----- Support methods.  Subroutines and Functions
+  sub printTrig(in value as integer)
+    'print decently formatted trig results
+
+    'assume positive (no sign)
+    outStr = ""
+
+    'handle negatives
+    if value < 0 then
+      'prefix a minus sign
+      outStr = "-"
+      'but work with positives
+      value = -1 * value
+    end if
+
+    valStr = str(value)
+    length = len(valStr)
+    select case length
+      case 1:
+        outStr = outStr + "0.000" + valStr
+      case 2:
+        outStr = outStr + "0.00" + valStr
+      case 3:
+        outStr = outStr + "0.0" + valStr
+      case 4:
+        outStr = outStr + "0." + valStr
+      case 5:
+        outStr = outStr + left(valStr,1) + "." + right(valStr,4)
+    end select
+    print outStr
+  end sub

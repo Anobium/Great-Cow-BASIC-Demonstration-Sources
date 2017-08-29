@@ -1,0 +1,52 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program shows a function to raise a base to a power.
+'''Remember, powers can easily become huge, so it is up to the
+'''calling program to make certain your numbers remain within
+'''range. The base and exponent are Byte sized numbers in any
+'''event. The returned result is a Long. Non-negative numbers are
+'''assumed throughout.
+
+'''Keep in mind that 0 raised to 0 is meaningless and should be
+'''avoided. But any other non-zero base raised to 0 is handled.
+
+'''@author 		EvanV based on works of ThomasH
+'''@licence		GPL
+'''@version		1.0a
+'''@date   		01.04.2015
+'''********************************************************************************
+
+; ----- Configuration
+
+  #chip mega8,8
+
+  #include <maths.h>
+
+ 'Use LCD in 2-wire mode with 74LS164 / 74HC164
+  #define LCD_IO 2
+  #define LCD_DB PORTC.0            ; databit
+  #define LCD_CB PORTC.1            ; clockbit
+  #define LCD_NO_RW
+
+
+; ----- Variables
+ dim ii, jj as byte
+
+; ----- Main body of program commences here.
+
+ for ii = 1 to 10                 ;do all the way from
+   for jj = 0 to 9                ;1^0 on up to 10^9
+     cls
+     print ii
+     print"^"
+     print jj
+     print "="
+
+     locate 1,0
+     print power(ii,jj)            ;here's the invocation
+     wait 1 S
+   next jj
+ next ii
+
+
+; ----- Support methods.  Subroutines and Functions
