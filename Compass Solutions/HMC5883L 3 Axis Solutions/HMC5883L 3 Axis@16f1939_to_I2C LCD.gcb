@@ -1,0 +1,161 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demonstrates the basic primatives of the Compass Module 3-Axis HMC5883L
+'''It is a low-field magnetic sensing device with a digital interface.
+'''The compass module converts any magnetic field to a differential voltage output on 3 axes.
+'''This voltage shift is the raw digital output value, which can then be used to calculate headings or sense magnetic fields coming from different directions.
+'''The module is designed for use with a large variety of microcontrollers with different voltage requirements.
+''':
+'''Connect power and 0v to the device and the Data/Clock lines as per specification for I2C.
+'''The DataReady (called the DRDY) is not required as the driver polls the status.
+'''You can connect the DataReady and use an event/Interrupt to read the data from device.
+''':
+''':
+'''@author	EvanV
+'''@licence	GPL
+'''@version	1.03a
+'''@date   	11.10.2015
+'''********************************************************************************
+
+; ----- Configuration
+' Change chip and speed
+  #chip 16f1939,32
+  #option explicit
+  #config Osc = INT, VCAPEN_OFF, MCLRE_ON, PLLEN_ON, CLKOUTEN_OFF
+
+	' Initialise HMC5883L device is automatic
+  #include <HMC5883L.h>
+
+  ; ----- Define Hardware settings
+
+  ' Define I2C settings - CHANGE PORTS if required for AVR or Software I2C
+  #define HI2C_BAUD_RATE 400
+  #define HI2C_DATA PORTC.4
+  #define HI2C_CLOCK PORTC.3
+  'HI2C pins need to be input for SSP module
+  Dir HI2C_DATA in
+  Dir HI2C_CLOCK in
+ 'MASTER MODE - this is required for this device.
+  HI2CMode Master
+
+	'''Set up LCD - change the parameters
+   #define LCD_IO 10
+   #define LCD_I2C_Address_1 0x4C
+
+
+; ----- Variables
+  ' These word varaibles will have the values assigned after the read operation has completed.
+  dim device_x as word
+  dim device_y as word
+  dim device_z as word
+
+  dim temp as Integer
+  dim RawWordValue as word
+
+; ----- Main body of program commences here
+
+		'Initialise device - this is mandated in the main program.
+		HMC5883L_Init
+
+    'This define instructs the device to wait 6 ms after a read.  You do not have to wait for the ReadReady to be completed
+'    #define HMC5883L_getDataReady_override 0
+
+
+		'This assumes you are using an ANSI compatible terminal.  Use PUTTY.EXE it is very easy.
+		CLS
+    Print "HMC5883L"
+    Locate 1,0
+    Print "Initialised"
+		wait 1 s
+
+		'Start continous reading
+		HMC5883L_StartContinousRead
+    Locate 1,0
+    Print "Continous mode demo"
+		Wait 1 s
+		CLS
+
+		' Display raw readings, see below for single readings.
+    DO Forever
+
+				'Note: change the delay or use the interrupt on the device to call the functions.
+        'But, no less than 67 ms
+        HMC5883L_ContinousRead ( device_x, device_y, device_z )
+
+				locate 0,0
+				'Note: This uses HEX() to ensure you only address the low byte of the word address.  If you want to both bytes use
+    		' Print hex(device_x_h): Print hex(device_x) 'this will display 0000. Four hex digits.
+        Print "X:"
+        Print hex(device_x_h):Print hex(device_x)
+        Print " Y:"
+        Print Hex(device_y_h):Print hex(device_y)
+        Print " Z:"
+        Print Hex(device_z_h):Print hex(device_z)
+
+        Locate 1,0
+        Print "X:"
+        temp = TwoCompliment( device_x )
+        if temp < 0 then
+        	Print "-"
+        	Print pad(str(abs(temp)), 4, " ")
+        Else
+        	Print pad(str(abs(temp)), 5, " ")
+        end if
+
+        Print "Y:"
+        temp = TwoCompliment( device_y )
+        if temp < 0 then
+        	Print "-"
+        	Print pad(str(abs(temp)), 4, " ")
+        Else
+        	Print pad(str(abs(temp)), 5, " ")
+        end if
+
+        Print "Z:"
+        temp = TwoCompliment( device_z)
+        if temp < 0 then
+        	Print "-"
+        	Print pad(str(abs(temp)), 4, " ")
+				else
+        	Print pad(str(abs(temp)), 5, " ")
+        end if
+
+    Loop
+		'Stop continous reading
+    HMC5883L_StopContinousRead
+
+
+
+		'You can/should adapt this code to be Interrupt driven for the DataReady line.
+		CLS
+    Print "HMC5883L single mode"
+		wait 1 s
+    do Forever
+
+    	HMC5883L_ReadXYZ ( device_x, device_y, device_z )
+      Print "x:"
+      Print TwoCompliment( device_x )
+
+      Print " y:"
+      Print TwoCompliment( device_y  )
+
+      Print " z:"
+      Print TwoCompliment( device_z )
+      Print "  "
+    Loop
+
+
+End
+
+function   TwoCompliment( in RawWordValue as long ) as Integer
+
+    ' Is this a negative value?
+    ' XOR with 65535 and add oneto get 2's compliment
+    If RawWordValue.15 = 1 then
+    	RawWordValue = (RawWordValue XOR 65535) + 1       'convert twos complement to decimal by xor'ing with 65535 and adding 1
+      TwoCompliment = 0 - RawWordValue
+    else
+			TwoCompliment = RawWordValue
+    end if
+
+end function

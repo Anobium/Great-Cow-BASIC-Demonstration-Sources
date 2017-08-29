@@ -1,0 +1,58 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program will display the value of a potentiometer, respresenting a light sensor, on a 7 Segment display.
+'''The 7 Segment display is connected to connection D7-D0 for segments A-G respectively.
+'''The 7 Segment display enable pin connected to connection D8.
+'''A potentiometer is connected to port A0.
+'''@author  EvanV plus works of HughC
+'''@licence GPL
+'''@version 2.0a
+'''@date    02.10.2016
+'''********************************************************************************
+
+; ----- Configuration
+
+  #chip 16F886, 16
+  #option explicit
+  #config HS_OSC, WDT_OFF, LVP_OFF
+  ' Define CHIPINO I/O pins
+  #include <chipino.h>
+
+; ----- Define Hardware settings
+  Dir PORTC Out
+  DIR PORTA.0 in
+  DIR PORTA.1 out
+
+; ----- Constants
+  ; You need to specify the port settings
+  #define DISP_COUNT 1
+
+  #define DISP_SEG_A D7
+  #define DISP_SEG_B D6
+  #define DISP_SEG_C D5
+  #define DISP_SEG_D D4
+  #define DISP_SEG_E D3
+  #define DISP_SEG_F D2
+  #define DISP_SEG_G D1
+
+  #define DISP_SEG_DOT D0
+
+  #define DISP_SEL_1 D8
+
+; ----- Variables
+  Dim Value  as Byte
+
+
+; ----- Main body of program commences her
+
+  Do Forever
+
+    Value = ReadAD(AN0)/26
+    DisplayValue 1, Value
+    wait 10 ms
+
+  Loop
+
+
+
+

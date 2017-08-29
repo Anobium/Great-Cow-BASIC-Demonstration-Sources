@@ -1,0 +1,46 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program will display the value of a potentiometer, respresenting a light sensor, on a 7 Segment display.
+'''The 7 Segment display is connected to port.b7-b0 for segments A-G respectively.
+'''The 7 Segment display enable pin connected to portd.1.
+'''The potentiometer is connected to port A0
+'''@author  EvanV plus works of HughC
+'''@licence GPL
+'''@version 2.0a
+'''@date    02.10.2016
+'''********************************************************************************
+
+; ----- Configuration
+
+  #chip mega328p, 16
+  #option explicit
+
+
+; ----- Define Hardware settings
+  Dir PORTB Out
+  DIR PORTD.1 out
+
+; ----- Constants
+  ; You need to specify the port settings
+  #define DisplayPortA PORTB
+
+  #define DISP_SEL_1 PORTD.1
+
+; ----- Variables
+  Dim Value as Byte
+
+
+; ----- Main body of program commences her
+
+  Do Forever
+
+    ' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
+    Value = ReadAD( 0 )/26
+    DisplayValue 1, Value
+    wait 10 ms
+
+  Loop
+
+
+
+
