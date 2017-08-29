@@ -1,0 +1,85 @@
+'''
+''' This shows how to read the A2D converter and display the
+''' a proportioanal delay value by changing/inverting the LEDs state.
+''' The pot on the board varies the voltage coming in from the A2D.
+'''
+''' The A2D is referenced to the same Vdd as the device, which
+''' is nominally is 5V.  The A2D returns the ratio of the voltage
+''' on Pin RA0 to 5V.  The A2D has a resolution of 10 bits, with 1023
+''' representing 5V and 0 representing 0V.
+'''
+'''
+''' Rotate the potentiometer to change the LEDs displayed.
+'''
+'''************************************************************************
+'''
+'''  PIC: 18f26k22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: SmartPIC 18 Board
+'''  Date: 29.8.17
+'''
+' ----- Configuration
+    'Chip Settings.
+    #chip 18f26k22, 16
+
+    '' -------------------LATB-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   -------| X | ----------| X |-----
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTB-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' SWITCH:---------------------------| X |-
+    ''-----------------------------------------
+    ''
+
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTA.4
+    #define LDR             PORTA.4
+    #define SwitchIn        PORTB.4
+
+    Dir     LEDD1 OUT
+    Dir     LEDD2 OUT
+    Dir     Potentiometer In   'this is AN17 port
+    Dir     LDR           In
+    Dir     SwitchIn      In
+
+
+    'Set the LED states
+    LEDD1 = 0
+    LEDD2 = 0
+
+
+    do
+
+        ADCVal =  ReadAD10 ( AN17 )
+
+        if ADCVal > 768 then
+
+          LEDD1 = 1
+          LEDD2 = 1
+
+        else
+          if ADCVal  > 368 then
+
+              LEDD1 = 0
+              LEDD2 = 1
+
+          else
+
+              LEDD1 = 0
+              LEDD2 = 0
+
+
+          end if
+
+        end if
+        'always wait 5 ms... just to make things look nice.
+        wait 5 ms
+
+
+    loop

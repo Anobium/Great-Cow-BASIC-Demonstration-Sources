@@ -1,0 +1,40 @@
+'''
+'''  This lesson will introduce shifting instructions as well as bit-oriented skip operations to
+'''  change the LEDs displayed.
+'''
+'''  LEDs rotate from right to left at a rate of 1.0s.
+'''
+'''************************************************************************
+'''
+'''  PIC: 18f26k22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: SmartPIC 18 Board
+'''  Date: 29.8.17
+'''
+' ----- Configuration
+    'Chip Settings.
+    #chip 18f26k22, 16
+
+    '' -------------------LATB-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   -------| X | ----------| X |-----
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTB-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' SWITCH:---------------------------| X |-
+    ''-----------------------------------------
+    ''
+
+    dir porta out
+    porta = 0b0001000
+
+    do
+        wait 1000 ms
+        Set C off
+        Rotate porta right
+        if C = 1 then porta.3 = 1
+    loop
