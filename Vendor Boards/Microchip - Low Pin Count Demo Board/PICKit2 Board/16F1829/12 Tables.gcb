@@ -1,0 +1,79 @@
+'''
+'''******************************************************************
+''' Lesson 12 - "LookupTable"
+'''
+''' This shows using a table lookup function to implement a
+''' binary to gray code conversion.  The POT is read by the A2D,
+''' The high order 4 bits then are converted to Gray Code and
+''' displayed on the LEDs.
+
+''' The ADC value is used as the offset into reading the gray code equivalent inside of
+''' a constant data array.
+'''
+''' Gray coded binary will be reflected on the LEDs in accordance with the POT reading
+'''
+'''
+'''  PIC: 16F1829
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: PICkit 2 Low Pin Count Demo Board
+'''  Date: 10.4.2015
+'''
+''''''******************************************************************
+''' See Low Pin Count Demo Board User's Guide for Lesson Information*
+''''''*****************************************************************
+'''
+
+
+ 'This script allows for the voltage drop and compensates of any losses.
+ #script
+        'reference voltage                        5v
+        'actual voltage at port when 100% Pot     4.15
+        'adc max                                  1023
+        'number of graduations requried           16
+        reference_voltage = 4.15
+        vcc = 5
+        numberofgrads = 16
+        maxADC = 1023
+        ADC_adjustment = int((reference_voltage*100)/(vcc*10))
+        ADC_adjustment = int(ADC_adjustment * maxADC / numberofgrads / 10 )
+
+ #endscript
+
+
+ #chip 16f1829,8
+ #config FOSC_INTOSC , WDTE_OFF , PWRTE_OFF , MCLRE_OFF , CP_OFF , CPD_OFF , BOREN_ON , CLKOUTEN_OFF , IESO_OFF
+ #config WRT_OFF , PLLEN_OFF , STVREN_OFF , LVP_OFF
+
+    '' -------------------LATC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|DS4|DS3|DS2|DS1|-
+    ''-----------------------------------------
+    ''
+ table gray_code
+    0
+    1
+    3
+    2
+    6
+    7
+    5
+    4
+    12
+    13
+    15
+    14
+    10
+    11
+    9
+    8
+ end table
+
+    dir portc out
+
+    do
+        wait 5 ms
+        readtable gray_code, ( ReadAD10 ( AN0 )  / ADC_adjustment ), portc     ' calcualtion to ensure max value 15, equates to all 4 LEDS on
+
+    loop

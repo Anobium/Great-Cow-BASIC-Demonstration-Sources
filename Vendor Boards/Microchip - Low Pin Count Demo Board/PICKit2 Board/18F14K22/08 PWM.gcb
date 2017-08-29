@@ -1,0 +1,61 @@
+'''
+'''******************************************************************
+''' Lesson 8 - "PWM"
+'''
+''' Pulse-Width Modulation (PWM) is a scheme that provides power to a load by switching
+''' quickly between fully on and fully off states. The PWM signal resembles a square wave
+''' where the high portion of the signal is considered the on state and the low portion of
+''' the signal is considered the off state. The high portion, also known as the pulse width,
+''' can vary in time and is defined in steps. A longer, high on time will illuminate the LED
+''' brighter. The frequency or period of the PWM does not change. A larger number of
+''' steps applied, which lengthens the pulse width, also supplies more power to the load.
+''' Lowering the number of steps applied, which shortens the pulse width, supplies less
+''' power. The PWM period is defined as the duration of one complete cycle or the total
+''' amount of on and off time combined.
+'''
+''' You will have to attach a suitable resistor and LED to the board to shpw the results of this demonstration.
+''' or, attach a link wire between portc.5 and the portc.0 - this will then show results on LED DS1.
+
+''' Demo1.  Rotating the POT will adjust the brightness of a single LED attached to portc.5/CCP1
+'''
+'''  PIC: 18F14K22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: PICkit 2 Low Pin Count Demo Board
+'''  Date: 29.5.2015
+'''
+''''''******************************************************************
+''' See Low Pin Count Demo Board User's Guide for Lesson Information*
+''''''*****************************************************************
+'''
+
+
+ #Chip 18F14K22, 8
+ #config MCLRE_OFF
+
+ #script
+        'This script provides PWM results!
+
+        'reference voltage                        5v
+        'actual voltage at port when 100% Pot     4.15
+        'adc max                                  1023
+        'number of graduations requried           255
+        reference_voltage = 4.15
+        vcc = 5
+        numberofgrads = 255
+        maxADC = 1023
+        ADC_adjustment = int((reference_voltage*100)/(vcc*10))
+        ADC_adjustment = int(ADC_adjustment * maxADC / numberofgrads )
+
+ #endscript
+
+  dir portc.5 out
+  dim calculatedPWM as word
+
+  do
+      wait 5 ms
+      calculatedPWM = ( ( ReadAD10 ( AN0 ) * 10  ) / ADC_adjustment   )
+      if calculatedPWM > 255 then calculatedPWM = 255
+      HPWM 1, 40, calculatedPWM
+  loop

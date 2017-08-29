@@ -1,0 +1,33 @@
+'''
+'''******************************************************************
+''' Lesson 3 - "Rotate"
+'''
+''' This lesson will introduce shifting instructions as well as bit-oriented skip operations to
+''' move the LED display.
+'''
+''' LEDs rotate from right to left at a rate of 1.5s.
+'''
+'''  PIC: 18F14K22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: PICkit 2 Low Pin Count Demo Board
+'''  Date: 29.5.2015
+'''
+''''''******************************************************************
+''' See Low Pin Count Demo Board User's Guide for Lesson Information*
+''''''*****************************************************************
+'''
+
+ #Chip 18F14K22, 8
+ #config MCLRE_OFF
+
+    dir portc out
+    portc = 0b0001000
+
+    do
+        wait 1500 ms
+        Set C off
+        Rotate portc right
+        if C = 1 then portc.3 = 1
+    loop
