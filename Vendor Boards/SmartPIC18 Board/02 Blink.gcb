@@ -1,0 +1,44 @@
+'''
+'''******************************************************************
+'''
+'''  One way to create a delay is to spend time decrementing a value. In Great Cow BASIC the timing
+'''  can be accurately programmed since the user has control on how the
+'''  time delays are executed.
+'''
+'''
+'''  We set one of the LEDs, you can try setting the other LED.
+'''
+'''************************************************************************
+'''
+'''  PIC: 18f26k22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: Xpress Evaluation Board
+'''  Date: 29.8.17
+'''
+' ----- Configuration
+    'Chip Settings.
+    #chip 18f26k22, 16
+
+    '' -------------------LATB-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   -------| X | ----------| X |-----
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTB-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' SWITCH:---------------------------| X |-
+    ''-----------------------------------------
+    ''
+
+    Dim CURRENTSTATE as Byte
+
+    dir portb.1 out
+
+    do
+        wait 1000 ms
+        'Set the port bit to NOT, the inverted, value from previous
+        portb.1 = NOT  portb.1
+    loop

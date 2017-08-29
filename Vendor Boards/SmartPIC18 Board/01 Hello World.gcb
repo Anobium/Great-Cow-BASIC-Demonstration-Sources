@@ -1,0 +1,42 @@
+'''
+''' The  most simple sample for GCGB and GCB.
+'''
+''' This simply set one of the LEDs on.
+'''
+'''
+'''************************************************************************
+'''
+'''  PIC: 18f26k22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: Xpress Evaluation Board
+'''  Date: 29.8.17
+'''
+' ----- Configuration
+    'Chip Settings.
+    #chip 18f26k22, 16
+
+    '' -------------------LATB-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   -------| X | ----------| X |-----
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTB-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' SWITCH:---------------------------| X |-
+    ''-----------------------------------------
+    ''
+
+    'Set the whole port as an output, we will use only one BIT to connect to the LED
+    dir portb out
+
+    'Ensure the whole port is set off by setting to Zero
+    portb = 0
+
+    'Set one bit of the port on.
+    portb.5 = 1       ' You can try set portb.0 - the other LED!
+
+    'End
+    end
