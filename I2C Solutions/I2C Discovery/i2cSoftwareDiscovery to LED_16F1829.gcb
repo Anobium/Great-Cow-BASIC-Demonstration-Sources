@@ -1,0 +1,89 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program searches for I2C devices and display their adresses to the attached LEDs.
+'''This program uses the software implementation of I2C for the Microchip microprocessors.
+'''The hardware serial connections are shown in the program.
+'''Attach the LEDs to portc via an apppropiate resistors.
+''':
+'''This will flash the LEDs for the address.  Two sets of flashes for the hex address. Deduct one per flash.
+'''Flashes of 5 and 15 equates to 0x4E when ()(5 - 1 ) * 16 )+ (15 - 1)
+''':
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    30.05.15
+'''********************************************************************************
+
+; ----- Configuration
+  #Chip 16f1829, 16
+  #option explicit
+  #config Osc = intOSC, MCLRE_ON
+
+   ; ----- Define Hardware settings
+'  ' Define I2C settings - CHANGE PORTS
+'   #define HI2C_BAUD_RATE 100
+'   #define HI2C_DATA PORTB.4
+'   #define HI2C_CLOCK PORTB.6
+'
+'   Dir HI2C_DATA in
+'   Dir HI2C_CLOCK in
+'
+'   HI2CMode Master
+
+ ; ----- Define Hardware settings
+  ' Define I2C settings - CHANGE PORTS
+   #define I2C_MODE Master
+   #define I2C_DATA PORTB.4
+   #define I2C_CLOCK PORTB.6
+   #define I2C_DISABLE_INTERRUPTS ON
+   #define I2C_BIT_DELAY 0 us 'width of data bit on SDA
+   #define I2C_CLOCK_DELAY 0 us 'width of clock pulse on SCL
+   #define I2C_END_DELAY 0 us 'interval between clock pulses
+
+;----- Variables
+  Dim LOOPX as Byte
+
+; ----- Main body of program commences here.
+  dir portc out
+
+  dim DeviceID as byte
+
+      for DeviceID = 0x00 to 0xff
+
+
+        I2CStart
+        I2CSend ( deviceID )
+        I2CSend ( 0 )
+        i2cstop
+
+        if I2CSendState = True  then
+
+          for loopx = 1 to 4
+              portc = 255
+              wait 50 ms
+              portc = 0
+              wait 50 ms
+          next
+          wait 2 s
+
+
+           Repeat ( ( deviceID / 16 )+1)
+              portc = 255
+              wait 300 ms
+              portc = 0
+              wait 300 ms
+           end Repeat
+           wait 2 s
+           Repeat (( deviceID & 0X0f )+1 )
+              portc = 255
+              wait 300 ms
+              portc = 0
+              wait 300 ms
+           end repeat
+           wait 2 s
+
+        end if
+
+      next
+
+  END

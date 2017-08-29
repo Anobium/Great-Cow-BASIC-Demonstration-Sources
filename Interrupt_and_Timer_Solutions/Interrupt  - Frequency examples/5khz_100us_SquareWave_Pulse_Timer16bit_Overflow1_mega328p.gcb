@@ -1,0 +1,66 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program provides a 100us squareware.  This shows how the timer overflow operates.
+'''
+'''This can be used to drive an LED via a suitable resistor or you can view via an oscilloscope.
+'''
+'''0xF9F1 = 63985decimal, and, 0xFFFF-0xF9F1+1 = 0x60E (1550decimal)
+'''and, 1550 * 0.000000125 (per tick) = 0.00019375, or, ~200us squareware with the processing overhead in the interrupt routine at these high interrupt levels
+'''
+'''try settting to 0x601 which will give a more accurate 4.000ms square wave width and the calcualate above is:
+''' (0xFFFF-0x601)* 0.000000125  = 3.9999875ms
+'''
+'''@author
+'''@licence GPL
+'''@version
+'''@date    01.11.2015
+'''********************************************************************************
+
+; ----- Configuration
+
+  'Always specify the frequency! this is very good practice
+  #chip mega328p, 16
+  #option explicit
+
+; ----- Constants
+  #define OutPort portb.5
+
+; ----- Define Hardware settings
+  dir OutPort out
+
+; ----- Variables
+  ' No Variables specified in this demonstration.
+
+
+; ----- Main body of program commences here.
+
+  ' Add the handler for the interrupt
+  On Interrupt Timer1Overflow Call PWMHandler
+  ' Initialise the timer - this is required
+  ' Set prescaler and then start the timer
+  InitTimer1 Osc, PS_1_1
+  ' Start the timer - this is required
+  StartTimer 1
+  Settimer 1,0xF9F1
+
+  'Main routine
+  Do
+
+    'ADD YOUR CODE HERE
+
+  Loop
+  end
+
+  end
+
+; ----- Support methods.  Subroutines and Functions
+
+  'This method will be called when the Timer overflows
+  Sub PWMHandler
+
+    ' Reload the timer
+    Settimer 1,0xF9F0
+
+    ' Create a squarewave on the output port to show the frequency
+    OutPort = not OutPort
+  End Sub

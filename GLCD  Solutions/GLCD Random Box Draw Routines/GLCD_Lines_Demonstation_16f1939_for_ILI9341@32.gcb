@@ -1,0 +1,71 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a simple GLCD demonstration of the ILI9341 GLCD capabilities.
+'''It is a nice graphical LCD, suitable for a lot of various projects.
+'''This program draws lines, boxes, circles and prints strings and numbers.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+'''@author
+'''@licence GPL
+'''@version 1.0
+'''@date
+'''********************************************************************************
+
+  'Chip Settings.
+  #chip 16f1939,32
+  #option explicit
+  #config Osc = INT, VCAPEN_OFF, MCLRE_ON, PLLEN_ON, CLKOUTEN_OFF
+
+    #include <glcd.h>
+
+    #define GLCD_TYPE GLCD_TYPE_ILI9341
+
+    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+
+    ' #define GLCD_DI  portc.4        '  Data in | MISO   Not required
+    #define GLCD_DO  portc.5        ' Data out | MOSI
+    #define GLCD_SCK portc.3       ' Clock Line
+
+    #define GLCD_DC porta.0       ' Data command line
+    #define GLCD_CS portc.1        ' Chip select line
+    #define GLCD_RESET portc.0     ' Reset line
+
+
+    #define ILI9341_HardwareSPI    ' remove/comment out if you want to use software SPI.
+
+
+
+
+
+  dim scalefactor as Word
+
+  if GLCD_WIDTH > GLCD_HEIGHT then
+    scalefactor = GLCD_HEIGHT * 100
+  else
+    scalefactor = GLCD_WIDTH * 100
+  end if
+  scalefactor = scalefactor / 255
+
+  GLCDBackground = ILI9341_BLUE
+  GLCDCLS
+
+  GLCDPrint 0,0, "Scalefactor = "+ str(scalefactor)
+
+  dim ccc, xpos, ypos, xpos1, ypos1 as word
+  do Forever
+
+              repeat 500
+                xpos = (random * scalefactor  ):xpos = xpos/100
+                ypos = (random * scalefactor ):ypos = ypos/100
+                xpos1 = (random * scalefactor ):xpos1 = xpos1/100
+                ypos1 = (random * scalefactor ):ypos1 = ypos1/100
+
+                ccc = Random
+                ccc_h = Random
+
+                box(xpos,ypos,(xpos+xpos1),(ypos+ypos1),ccc)
+
+                end repeat
+          GLCDCLS
+
+
+  loop

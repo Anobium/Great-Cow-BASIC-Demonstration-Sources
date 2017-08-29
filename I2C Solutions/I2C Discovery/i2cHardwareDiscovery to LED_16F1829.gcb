@@ -1,0 +1,79 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program searches for I2C devices and display their adresses to the attached LEDs.
+'''This program uses the software implementation of I2C for the Microchip microprocessors.
+'''The hardware serial connections are shown in the program.
+'''Attach the LEDs to portc via an apppropiate resistors.
+''':
+'''This will flash the LEDs for the address.  Two sets of flashes for the hex address. Deduct one per flash.
+'''Flashes of 5 and 15 equates to 0x4E when ()(5 - 1 ) * 16 )+ (15 - 1)
+''':
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    30.05.15
+'''********************************************************************************
+
+; ----- Configuration
+  #Chip 16f1829, 32
+  #option explicit
+  #config Osc = intOSC, MCLRE_ON
+
+   ; ----- Define Hardware settings
+'  ' Define I2C settings - CHANGE PORTS
+   #define HI2C_BAUD_RATE 100
+   #define HI2C_DATA PORTB.4
+   #define HI2C_CLOCK PORTB.6
+
+   Dir HI2C_DATA in
+   Dir HI2C_CLOCK in
+
+   HI2CMode Master
+
+; ----- Variables
+  Dim LOOPX as Byte
+
+; ----- Main body of program commences here.
+  dir portc out
+
+  dim DeviceID as byte
+
+      for DeviceID = 0x00 to 0xff
+
+
+        HI2CStart
+        HI2CSend ( deviceID )
+        HI2CSend ( 0 )
+        Hi2cstop
+
+        if HI2CAckPollState = FALSE  then
+
+          for loopx = 1 to 4
+              portc = 255
+              wait 50 ms
+              portc = 0
+              wait 50 ms
+          next
+          wait 2 s
+
+
+           Repeat ( ( deviceID / 16 )+1)
+              portc = 255
+              wait 300 ms
+              portc = 0
+              wait 300 ms
+           end Repeat
+           wait 2 s
+           Repeat (( deviceID & 0X0f )+1 )
+              portc = 255
+              wait 300 ms
+              portc = 0
+              wait 300 ms
+           end repeat
+           wait 2 s
+
+        end if
+
+      next
+
+  END

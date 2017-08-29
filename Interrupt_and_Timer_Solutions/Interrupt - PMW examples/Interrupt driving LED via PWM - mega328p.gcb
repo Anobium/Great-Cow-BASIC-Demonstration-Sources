@@ -1,0 +1,90 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program adjusts the power to a LED over 2.5 seconds, from 100% then to 0% power again over 2.5 seconds with a hold of 1 second between each ramp up/down.
+'''The LED is connected to Portb.5 via appropiate resistors.
+''' See http://eleccelerator.com/avr-timer-calculator/ for a simple calculator.
+'''
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    20.02.2015
+'''********************************************************************************
+
+; ----- Configuration
+
+  #chip mega328p, 16
+  #option explicit
+  #config osc = Ext
+
+
+; ----- Define Hardware settings
+  dir PortB.5 out
+
+; ----- Constants
+  #define led Portb.5
+
+;----- Variables
+  Dim LEDSpeed, LEDPOWER, LEDLUM, PWMCOUNTER, PWMCOUNTER as Byte
+
+; ----- Main body of program commences here.
+
+  ;Call the initialisation routine
+  InitLEDControl
+
+  Do
+      ;Increase LED to full over 2.5 seconds
+      For LEDPower = 0 to 100
+          LEDSpeed = LEDPower
+          Wait 25 ms
+      Next
+      ;Hold LEDPower
+      Wait 1 s
+      ;Decrease LED to zero over 2.5 seconds
+      For LEDPower = 100 to 0 step - 1
+          LEDSpeed = LEDPower
+          Wait 25 ms
+      Next
+      ;Hold LEDPower
+      Wait 1 s
+  Loop
+  end
+
+  ;Setup routine
+  Sub InitLEDControl
+      set LED off
+      'Clear variables
+      LEDSpeed = 0
+      PWMCounter = 0
+
+      ;Add a handler for the interrupt
+      On Interrupt Timer0Overflow Call PWMHandler
+
+      ;Set up the timer
+      InitTimer0 Osc, PS_1
+      StartTimer 0
+
+  End Sub
+
+
+  ;PWM sub
+  ;This will be called when Timer 0 overflows
+  Sub PWMHandler
+      If LEDSpeed > PWMCounter Then
+          Set LED On
+      Else
+          Set LED Off
+      End If
+      PWMCounter += 1
+      If PWMCounter = 100 Then PWMCounter = 0
+  End Sub
+
+    end
+
+  ; ----- Support methods.  Subroutines and Functions
+  'none
+
+
+
+
+
+

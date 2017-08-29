@@ -1,0 +1,135 @@
+'''A demonstration program for GCGB and GCB.
+'''The program shows how the I2C bus can be used to extend the number of IO lines.
+'''A frequently used chip for this is the PCF8574 which offers 8 IO lines.
+'''The PCF8474 has multiple address lines so different I2C devices can be addressed on the same I2C bus.
+''':
+''':This demonstration shows set four LEDs attached to bit0, bit1, bit2 and bit3 of the PCF8574. The LEDs are attached via a suitable LED.  The PCF8474 is sinking the current from the LEDS.
+''':This demonstration also shows to read read the status of four switches attached bit4, bit5, bit6 and bit7.
+''':This demonstration also shows how the switch raise an event within the PCF8574 is passed to the microcontroller for handling.  This uses an interrupt to support this type event.
+''':
+''':
+'''@author 	EvanV
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	June 2015
+'''********************************************************************************
+
+#chip mega328p, 16
+#option explicit
+
+ #INCLUDE <PCF8574.h>
+ 'Used the Serial port/terminal as an LCD emulator.  The output device should be changed to any suitable device.
+ #include <LCD2SerialRedirect.h>
+
+; ----- Define Hardware settings - choose hardware or software I2C - NOT BOTH!!
+'  ' Define I2C settings
+'  #define HI2C_BAUD_RATE 400
+'  HI2CMode Master
+'  #define HI2C_DATA					' This is required when using hardware I2C
+
+
+  ' Define I2C settings - CHANGE PORTS
+   #define I2C_MODE Master
+   #define I2C_DATA PORTC.4
+   #define I2C_CLOCK PORTC.5
+   #define I2C_DISABLE_INTERRUPTS ON
+   'Optionally, you can reduce the I2C timings.
+   #define I2C_BIT_DELAY 0 us
+   #define I2C_CLOCK_DELAY 1 us
+   #define I2C_END_DELAY 0 us
+
+
+   ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
+   ' USART settings - CHANGE PORTS if required
+   #define USART_BAUD_RATE 9600
+   Dir PORTc.6 Out
+   Dir PORTc.7 In
+   #define USART_DELAY 5 ms
+   #define SerSendDelayms 10
+   #define USART_BLOCKING
+   wait 500 ms
+
+
+; ----- Constants
+	#define PCF8574_DEVICE_1 0x70
+
+; ----- Constants
+
+  'Required for switch_event method
+  #define check_switch PORTb.0
+  dir check_switch in
+
+; ----- Variables
+  Dim ButtonPressedEvent as byte
+  ButtonPressedEvent = false
+  Dim LEDSTATUS, PORTSTATUS as Byte
+
+
+; ----- Main body of program commences here.
+
+	'Initialise the LEDs variable
+	LEDStatus = 0b00010000
+
+  'Enable portb.0 as the source of the interrupt. See the datasheet for more information for the microchip.
+  'Trigger on change of PB0
+  PCINT0 = 1
+  On Interrupt PinChange0  Call InterruptHandler
+  cls
+
+    do
+				'wait to show the status of the LED
+        wait 500 ms
+
+				'print the current status on the output device
+        locate 0,0
+        print ByteToBin( LEDStatus )
+
+				'send the led variable to the I2C device
+        PCF8574_sendbyte(PCF8574_DEVICE_1, LEDStatus )
+
+				'rotate the variable one bit to the left
+        Set C off
+        Rotate LEDStatus left
+        'reset the variable when required
+        if C = 1 then LEDStatus.4 = 1
+
+				'read the status of the port
+        PCF8574_readbyte(PCF8574_DEVICE_1, PortStatus )
+
+				'print the current status of port on the output device
+        locate 1,0
+        print ByteToBin( PortStatus )
+
+				'if the device has raised event  it will set the variable ButtonPressedEvent. See the InterruptHandler for more details.
+        if ButtonPressedEvent = true Then
+          'print a silly alarm
+          print "!"
+
+          ' Add your button handler code here
+
+          'Clear event
+          ButtonPressedEvent = false
+        else
+        	'clear silly message
+					print " "
+        end if
+
+    loop
+
+end
+
+
+
+; ----- Support methods.  Subroutines and Functions
+
+'''Handle event
+ sub InterruptHandler
+
+     'Check the event has happened on correct port and, an event is not pending, if the event is a new event set ButtonPressedEvent to true
+     if check_switch = off Then
+     	if  ButtonPressedEvent = false then
+         ButtonPressedEvent = true
+      end if
+     end if
+
+ end sub

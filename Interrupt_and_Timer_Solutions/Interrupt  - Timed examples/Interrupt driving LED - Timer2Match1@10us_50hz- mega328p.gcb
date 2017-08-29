@@ -1,0 +1,108 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''    Description. Interrupt driving LED using Timer2 match.
+'''    This calls the Timer2Match1 every 10us.
+'''     You can use the #define SimulatePWM to either control an LED with PWM or Toggle the LED
+'''    The SimulatePWM adjusts the power to the LED over 2.5 seconds, then to zero power again over 2.5 seconds with a hold of 1 second between each ramp up/down.
+'''    The LED is connected to port via appropiate resistors.
+''':
+'''
+'''
+'''
+
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    31.03.2017
+
+' ----- Configuration
+  #chip mega328p,16
+  #option explicit
+
+'  #define SimulatePWM 'comment this to just toggle the LED
+
+  'hardware
+  #define LED PORTB.5
+  dir LED out
+
+  'Call the initialisation routine
+  InitLEDControl
+
+  ;----- Variables
+    Dim LEDSPEED, PWMCOUNTER, PWMCOUNTER as Byte
+
+
+'Main routine
+  Do
+
+      #ifdef SimulatePWM
+          ;Increase LED to full over 2.5 seconds
+          For LEDSpeed = 0 to 100
+              Wait 25 ms
+          Next
+          ;Hold LEDPower
+          Wait 1 s
+          ;Decrease LED to zero over 2.5 seconds
+          For LEDSpeed = 100 to 0 step - 1
+              Wait 25 ms
+          Next
+          ;Hold LEDPower
+          Wait 1 s
+      #endif
+
+  Loop
+  end
+
+
+
+'Setup routine
+Sub InitLEDControl
+
+    set LED off
+
+    'Clear variables
+    LEDSpeed = 0
+    PWMCounter = 0
+
+    Dim OCR2  AS byte alias OCR2A
+    Dim TCCR2 AS  byte alias TCCR2B
+    WGM21 = 1                'Timer in CTC mode - required
+
+    ' Add the handler for the interrupt
+    On Interrupt Timer2Match1 Call InterruptHandler
+    ' Initialise the timer - this is required
+    ' Set prescaler and then start the timer
+    InitTimer2 Osc, PS_2_0
+    ' Start the timer - this is required
+    StartTimer 2
+    ' Set the correct regsisters.  These registers give us the corrent timed Interrupt.
+    ' Use the TimerCalculator from MikroElectronika to obtain the correct values for this four registers.
+    ' When using the TimerCalculator from MikroElectronika paste the four registers ignoring the *_Bit registers
+
+    'Timer2 Prescaler = 0; Preload = 159; Actual Interrupt Time = 10 us
+    OCR2 = 159
+    TCCR2 = 0x28
+    TCCR2 = TCCR2 or 0x01
+
+End Sub
+
+
+'This will be called when the Timer matches
+Sub InterruptHandler
+
+  #ifdef SimulatePWM
+
+    If LEDSpeed > PWMCounter Then
+        Set LED On
+    Else
+        Set LED Off
+    End If
+    PWMCounter += 1
+    If PWMCounter = 100 Then PWMCounter = 0
+  #endif
+
+  #ifndef SimulatePWM
+    LED = !LED
+  #endif
+
+End Sub

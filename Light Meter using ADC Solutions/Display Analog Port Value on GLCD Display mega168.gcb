@@ -1,0 +1,55 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program monitors the value of the Analog Port on an GLCD.
+'''The analog device is connected to Analog port O.
+'''See the hardare section for the GCLD connections.
+'''@author 	EvanV plus works of HughC
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	14.02.2015
+'''********************************************************************************
+
+; ----- Configuration
+ #chip mega168, 16
+
+ #include <GLCD.h>
+
+
+; ----- Define Hardware settings
+  ' No hardware settings are specified in this example.
+  ' All hardware is defined with respect to GLCD in the support methods.
+
+; ----- Constants
+  #define GLCD_RW PORTB.1
+  #define GLCD_RESET PORTB.5
+  #define GLCD_CS1 PORTB.3
+  #define GLCD_CS2 PORTB.4
+  #define GLCD_RS PORTB.0
+  #define GLCD_ENABLE PORTB.2
+  #define GLCD_DB0 PORTD.0
+  #define GLCD_DB1 PORTD.1
+  #define GLCD_DB2 PORTD.2
+  #define GLCD_DB3 PORTD.3
+  #define GLCD_DB4 PORTD.4
+  #define GLCD_DB5 PORTD.5
+  #define GLCD_DB6 PORTD.6
+  #define GLCD_DB7 PORTD.7
+
+
+; ----- Variables
+; none specified in this example. All byte variables are defined upon use.
+
+
+; ----- Main body of program commences here.
+  GLCDCLS
+  GLCDPrint 0,0,   "GCBASIC 2015"
+  GLCDPrint 0,8,   "Demonstation Code"
+  GLCDPrint 0,32,  "Light Level:"
+  do while true
+
+      'Take a measurement and display on LCD.
+      ' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
+      'Uses the method STR to convert a number to a string.
+      GLCDPrint 72,32, pad( str(ReadAD( 0 ) ), 3 )
+  loop
+  end

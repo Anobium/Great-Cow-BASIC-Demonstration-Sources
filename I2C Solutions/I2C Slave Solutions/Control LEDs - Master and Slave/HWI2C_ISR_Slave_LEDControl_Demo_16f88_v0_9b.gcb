@@ -1,0 +1,163 @@
+'''A demonstration program for GCGB and GCB.
+'''------------------------------------------------------------------------------------------------------------------------------
+''' Description: this library provides an ISR to implement
+''' a stateful i2c hardware slave.
+''' This is a GCB implementation of Microchip Application Note AN734.
+'''
+'''
+''' This demonstration responds to a write of 4 bytes to I2C address 0x4C (which is really Read Address 0x4D)
+''' This example requires two pots and terminal to show the results.
+'''
+'''
+''' According to AN734, there are 5 possible i2c states. During ISR, each
+''' of this states are detected. This ISR provides a standard skeleton to implement
+''' an i2c hardware slaves, while client code must implement several callbacks
+''' the ISR is expecting to call while processing states.
+'''
+''' Callbacks:
+''' - HI2C_Process_In_Message ( in HI2CMESSAGESIZE as byte )
+'''      called when slave has a full buffer
+'''
+''' - HI2C_Process_Out_Message
+'''      called when slave is requested to respond to a masters request
+'''
+''' - You can redirect any of the standard callbacks like HI2CSlave_State_Error, HI2CSlave_State_1-5
+'''   Use a define to call your own specific routine. like #define HI2CSlave_State_Error  MyHI2CSlave_State_Error
+'''
+'''
+'''
+
+'''@author  EvanV
+'''@licence GPL
+'''@version 0.9b
+'''@date    30.12.2015
+'''********************************************************************************
+
+; ---'''Configuration
+
+  #chip 16f88, 8
+  #option explicit
+  #config INTRC_IO,MCLR_OFF
+
+   #include <HWI2C_MessageInterface.h>  'Defines a set of callbacks - you do NOT need to define HI2CSlave_State_1-5
+
+    'Buffer size
+    #define HI2CBUFFERSIZE 16
+
+ ' Required I2C settings - CHANGE PORTS if required
+    #define hi2c_BAUD_RATE 400
+    #define hi2c_DATA PORTb.1
+    #define hi2c_CLOCK PORTb.4
+    'Initialise I2C Master
+    'I2C pins need to be input for SSP module
+    Dir hi2c_DATA in
+    Dir hi2c_CLOCK in
+
+ ' THIS CONFIG OF THE SERIAL PORT WORKS WITH max232 THEN TO PC
+ ' USART settings
+    #define USART_BAUD_RATE 19200
+    #define USART_TX_BLOCKING
+    dir portb.5 out
+
+
+
+; ---'''Define Hardware settings
+
+    #define LED0  porta.2          ;pin 1
+    #define LED1  porta.3          ;pin 2
+    #define LED2  porta.4          ;pin 3
+
+    dir LED0 out                  ;0, 1 and 2 are outputs (LEDs)
+    dir LED1 out                  ;0, 1 and 2 are outputs (LEDs)
+    dir LED2 out                  ;0, 1 and 2 are outputs (LEDs
+
+; ---'''Variables
+    dim HI2CForLoop as byte
+
+
+; ---'''Main body of program commences here.
+
+    Repeat 20
+
+        LED0 = !LED0
+        LED1 = !LED1
+        LED2 = !LED2
+        wait 100 ms
+
+    end Repeat
+
+    'Now set up the I2C slave library - four commands needed
+    HI2CSetAddress 0x40
+    HI2CMode Slave
+    HI2CSlave_ISR_Init
+    On Interrupt  SSP1Ready call HI2CSlave_ISR_Handler
+    'end of I2C slave library setup
+
+
+    do Forever
+
+      'This terminal output WILL cause timing issues. This NOT a Recommend method to show the data stream - use HserSend in HEX!
+
+        'Do stuff
+    Loop
+
+    sub HI2C_Process_In_Message ( in HI2CMESSAGESIZE )
+
+    'We have data!!
+       Select CASE HI2CBUFFER(0)
+
+             Case 0x00
+                LED0 = HI2CBUFFER(1)
+             Case 0x01
+                LED1 = HI2CBUFFER(1)
+             Case 0x02
+                LED2 = HI2CBUFFER(1)
+
+        end Select
+
+    end sub
+
+
+    sub HI2C_Process_Out_Message
+      'Want to post process the data? do it here.
+
+    end sub
+
+    sub MyHI2CSlave_State_Error ( in HI2CErrorCode )
+
+        dim I2Ctemp as byte
+        ' HI2CErrorCode = What caused the error...
+        ' SSPSTAT will tell you the status
+        'Recommend to consume the Buffer
+        Do While  BF = 1
+            I2Ctemp = SSPBUF
+        Loop
+        HSerSend 0
+        Select Case HI2CErrorCode
+          #ifdef HI2CSlaveSSPOVOverflowErrorLED
+            Case HI2CSlaveSSPOVOverflowError
+                HSerSend 1
+          #endif
+          #ifdef HI2CSlaveStateNotHandledErrorLED
+            Case HI2CSlaveStateNotHandledError
+                HSerSend 2
+          #endif
+        End Select
+
+    end Sub
+
+    #define  HI2CMessageHandler_State_On_Start myHI2CMessageHandler_State_On_Start
+    sub myHI2CMessageHandler_State_On_Start
+
+       ' let user process buffer
+
+
+    end sub
+
+
+    #define  HI2CMessageHandler_State_On_Stop myHI2CMessageHandler_State_On_Stop
+    sub myHI2CMessageHandler_State_On_Stop
+
+       ' let user process buffer
+
+    end sub
