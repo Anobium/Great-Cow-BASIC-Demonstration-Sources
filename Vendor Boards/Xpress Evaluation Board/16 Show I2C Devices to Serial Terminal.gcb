@@ -106,7 +106,6 @@
           'Did device fail to respond?
           if HI2CAckPollState = false then
             HI2CSend ( 0 )
-            HI2CSend ( 0 )
             HSerPrint   hex(deviceID)
           Else
             HSerPrint "--"
