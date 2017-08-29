@@ -1,0 +1,245 @@
+'''A demonstration program for GCGB and GCB
+'''This program will test the LCD panel and the buttons of the LCD Keypad Shield.
+'''Requires  LCD Keypad Shield attached to a Arduino UNO.
+'''The LCD Keypad shield is developed for Arduino compatible boards, to provide a user-friendly interface that allows users to go through the menu, make selections etc.
+'''It consists of a 1602 white character blue backlight LCD.
+'''The keypad consists of 5 keys — select, up, right, down and left. To save the digital IO pins, the keypad interface uses only one ADC channel. The key value is read through a 5 stage voltage divider.
+'''@author 	EvanV
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	16 March 2015
+'''********************************************************************************
+
+; ----- Configuration
+  #chip mega328p, 16
+  #option explicit
+  #include <UNO_mega328p.h>
+
+; ----- Constants
+  ;Setup LCD Parameters
+  #define LCD_IO 4
+  #define LCD_NO_RW
+  #define LCD_Speed slow
+
+
+  #define LCD_RS         Digital_8
+  #define LCD_Enable     Digital_9
+  #define LCD_DB4        Digital_4
+  #define LCD_DB5        Digital_5
+  #define LCD_DB6        Digital_6
+  #define LCD_DB7        Digital_7
+
+
+  #define btnRIGHT  0
+  #define btnUP     1
+  #define btnDOWN   2
+  #define btnLEFT   3
+  #define btnSELECT 4
+  #define btnNONE   5
+
+
+; ----- Define Hardware settings
+  #define Resetbtn         Reset
+  dir Resetbtn in
+  #define LCDBacklite      Digital_10
+  dir LCDBacklite out
+
+
+; ----- Variables
+  Dim COUNTERVALUE, SELECT_STATUS, PWMLEVEL, BTNRESET, PWMCOUNTER, PWMCOUNTER as Byte
+  select_status = !true
+  dim adc_key_in as Word
+
+; ----- Quick Command Reference:
+  'The LCD Keypad shield is developed for Arduino compatible boards, to provide a user-friendly interface that allows users to go through the menu, make selections etc.
+  'It consists of a 1602 white character blue backlight LCD.
+  'The keypad consists of 5 keys — select, up, right, down and left. To save the digital IO pins, the keypad interface uses only one ADC channel. The key value is read through a 5 stage voltage divider.
+
+
+
+; ----- Main body of program commences here.
+
+  'Call the initialisation routine
+  InitPWM
+  InitClock
+  InitChars
+
+  cls
+  wait 100 ms
+  print "LCD KeypadShield"
+  locate 1,0
+  print "Version for AVR"
+  wait 1 s
+  cls
+
+
+  do forever
+
+     ; Flasf bit of the LCD every second
+     Locate 0,15
+     if  CounterValue.0 = 0 then
+         LCDWriteChar 0
+     else
+         LCDWriteChar 1
+     end if
+
+     Locate 1,0
+     select case read_LCD_buttons
+            case btnRIGHT and !select_status
+                 Print "Right   "
+            case btnUP
+
+                 if select_status = true  then
+                   PWMLevel = PWMLevel + 5
+                   if PWMLevel > 100 then
+                      PWMLevel = 100
+                      locate 1,0
+                      Print pad("Level Max", 16)
+                   else
+                      Print pad("Level " +STR(PWMLevel), 16)
+                   end if
+                   WAIT 100 MS
+                 else
+                   Print "Up      "
+                 end if
+
+            case btnDOWN
+
+                 if select_status = true  then
+
+
+                   if PWMLevel > 0 then
+                      PWMLevel = PWMLevel - 5
+                      if PWMLevel = 0 then
+                         locate 1,0
+                         Print pad("Level Min", 16)
+                      else
+                         Print pad("Level " +STR(PWMLevel), 16)
+                      end if
+                      WAIT 100 MS
+                   end if
+                 else
+                   Print "Down    "
+                 end if
+
+            case btnLEFT and !select_status
+                 Print "Left    "
+            case btnSELECT
+                 Print "Select  "
+                 select_status = !select_status
+                 if select_status = true then
+                   LOCATE 0,0
+                   Print "Set"
+                 else
+                   CLS
+                 end if
+                 do while btnSELECT = read_LCD_buttons
+                 loop
+
+            case else
+                 if select_status = true then
+                       Print pad("Level " +STR(PWMLevel), 16)
+                 else
+                       Print "None    "
+                 end if
+     end select
+
+  loop
+
+
+  end
+
+; ----- Support methods.  Subroutines and Functions
+
+
+
+
+  function read_LCD_buttons            'read the buttons
+      read_LCD_buttons =   btnNONE
+      if Resetbtn = 1 then
+         read_LCD_buttons = btnReset
+         exit function
+      end if
+      adc_key_in = ReadAD10( AN0 )      ' read the value from the sensor
+      ' Buttons when read are centered at these valies: 0, 144, 329, 504, 741
+      ' we add approx 50 to those values and check to see if we are close
+      ' We make this the 1st option for speed reasons since it will be the most likely result
+
+      select case adc_key_in
+             case < 50
+                  read_LCD_buttons = btnRIGHT
+             case < 150
+                  read_LCD_buttons = btnUP
+             case < 400
+                  read_LCD_buttons = btnDOWN
+             case < 550
+                  read_LCD_buttons = btnLEFT
+             case < 700
+                  read_LCD_buttons = btnSelect
+      end select
+
+  end function
+
+  sub InitClock
+      InitTimer1 Osc, PS_256
+      StartTimer 1
+      CounterValue = 0
+      On Interrupt Timer1Overflow Call IncCounter
+  End Sub
+
+
+  Sub IncCounter
+      CounterValue ++
+  End Sub
+
+  'Setup routine
+  Sub InitPWM
+      'Clear variables
+      PWMLevel = 100
+      PWMCounter = 0
+
+      'Add a handler for the interrupt
+      On Interrupt Timer0Overflow Call PWMHandler
+
+      'Set up the timer
+      InitTimer0 Osc, PS_1
+      StartTimer 0
+
+  End Sub
+
+  'This will be called when Timer 0 overflows
+  Sub PWMHandler
+      If PWMLevel > PWMCounter Then
+          Set LCDBacklite On
+      Else
+          Set LCDBacklite Off
+      End If
+      PWMCounter -= 1
+      If PWMCounter = 0 Then
+         PWMCounter = 100
+      END IF
+  End Sub
+
+
+  sub InitChars
+
+      'Create an array to store the character until it is copied
+      Dim LCDCharData(8)
+
+      'Set the array to hold the character
+      'Binary has been used to improve the readability of the code, but is not essential
+      LCDCharData(1) = b'00000001'
+      LCDCharData(2) = b'00000000'
+      LCDCharData(3) = b'00000000'
+      LCDCharData(4) = b'00000000'
+      LCDCharData(5) = b'00000000'
+      LCDCharData(6) = b'00000000'
+      LCDCharData(7) = b'00000000'
+      LCDCharData(8) = b'00000000'
+
+      'Copy the character from the array to the LCD
+      LCDCreateChar(0,LCDCharData())
+      LCDCharData(1) = b'00000000'
+      LCDCreateChar(1,LCDCharData())
+
+  end sub

@@ -1,0 +1,45 @@
+'LCD connection settings
+ #define LCD_IO 0
+ #define LCD_NO_RW
+ #define LCDWriteByte MySendToLCD
+
+; ----- Define Hardware settings
+  [todo]
+
+
+; ----- Variables
+  ' No Variables specified in this example. All byte variables are defined upon use.
+  [todo]
+
+; ----- Quick Command Reference:
+  [todo]
+
+
+
+; ----- Main body of program commences here.
+cls
+print "Hello World."
+
+end
+
+; ----- Support methods.  Subroutines and Functions
+Sub MySendToLCD(In MyLCDByte)
+
+    'Uses I2C
+    'Sends an address byte (128)
+    'Then a control byte, where bit 4 is the state of the RS pin
+    'Then a data byte, which is sent to the LCD data pins.
+
+    ControlByte = 0
+    If LCD_RS = On Then ControlByte.4 = On
+
+    I2CStart
+    I2CSend 128
+    I2CSend ControlByte
+    I2CSend MyLCDByte
+    I2CStop
+
+    'Need to allow time for receiver of message to update LCD
+    Wait 5 ms
+
+End Sub

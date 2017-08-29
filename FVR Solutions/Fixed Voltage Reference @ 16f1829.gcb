@@ -1,0 +1,145 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program shows the Fixed Voltage Reference capabilities of Great Cow Basic
+'''The Fixed Voltage Reference, or FVR, is a stable voltage reference, independent of VDD, with 1.024V,
+'''2.048V or 4.096V selectable output levels. The output of the FVR can be configured to supply a reference
+'''voltage to the ADC positive reference
+''':
+''':
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    17.7.2017
+'''********************************************************************************
+
+; ----- Configuration
+    #Chip 16f1829, 16
+    #config osc=int , pllen=on
+
+    ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
+    ' USART settings - CHANGE PORTS if required
+    #define USART_BAUD_RATE 19200
+    #define USART_TX_BLOCKING
+
+    #include  <LCD2SerialRedirect.h>
+    ; Required to LCD to Serial redirection
+    #define LCD_IO 0
+
+     CLS
+
+     Locate 4,0 : Print "Fixed Voltage Reference"
+
+     Do
+
+           '// Use VCC as Reference
+           FVRInitialize ( FVR_off )
+           wait while FVRIsOutputReady = false
+           ADVal = ReadAd(AN0)
+           Locate 0,0 : Print AdVal : LCDSpace 3
+           Locate 0,6 : Print "VREF = Vdd"
+
+           '// use FVR 4096 as Reference
+           FVRInitialize ( FVR_4x )
+           wait while FVRIsOutputReady = false
+           ADVal = ReadAd(AN0)
+           Locate 1,0 : Print AdVal : LCDSpace 3
+           Locate 1,6 : Print "VREF = 4.096"
+           Wait 100 ms
+
+           '// Change to 2.048 and enable
+           FVRInitialize ( FVR_2x )
+           wait while FVRIsOutputReady = false
+           ADVal = ReadAd(AN0)
+           Locate 2,0 : Print AdVal : LCDSpace 3
+           Locate 2,6 : Print "VREF = 2.048"
+           Wait 100 ms
+
+           '// Change to 1.024 and enable
+           FVRInitialize ( FVR_1x )
+           wait while FVRIsOutputReady = false
+           ADVal = ReadAd(AN0)
+           Locate 3,0 : Print AdVal : LCDSpace 3
+           Locate 3,6 : Print "VREF = 1.024"
+           Wait 100 ms
+
+        Loop
+
+
+''' GCB Optimisation file
+
+
+'Optimise A-d.h
+    'Standard family chips
+    #define USE_AD0 TRUE
+    #define USE_AD1 FALSE
+    #define USE_AD2 FALSE
+    #define USE_AD2 FALSE
+    #define USE_AD3 FALSE
+    #define USE_AD4 FALSE
+    #define USE_AD5 FALSE
+    #define USE_AD6 FALSE
+    #define USE_AD7 FALSE
+    #define USE_AD8 FALSE
+    #define USE_AD9 FALSE
+    #define USE_AD10 FALSE
+    #define USE_AD11 FALSE
+    #define USE_AD12 FALSE
+    #define USE_AD13 FALSE
+    #define USE_AD14 FALSE
+    #define USE_AD15 FALSE
+    #define USE_AD16 FALSE
+    #define USE_AD17 FALSE
+    #define USE_AD18 FALSE
+    #define USE_AD19 FALSE
+    #define USE_AD20 FALSE
+    #define USE_AD21 FALSE
+    #define USE_AD22 FALSE
+    #define USE_AD23 FALSE
+    #define USE_AD24 FALSE
+    #define USE_AD25 FALSE
+    #define USE_AD26 FALSE
+    #define USE_AD27 FALSE
+    #define USE_AD28 FALSE
+    #define USE_AD29 FALSE
+    #define USE_AD30 FALSE
+    #define USE_AD31 FALSE
+    #define USE_AD32 FALSE
+    #define USE_AD33 FALSE
+    #define USE_AD34 FALSE
+
+    'Family of chips based on 16f1688x with ADCON3 register
+    #define USE_ADA0 FALSE
+    #define USE_ADA1 FALSE
+    #define USE_ADA2 FALSE
+    #define USE_ADA3 FALSE
+    #define USE_ADA4 FALSE
+    #define USE_ADA5 FALSE
+    #define USE_ADA6 FALSE
+    #define USE_ADA7 FALSE
+    #define USE_ADB0 FALSE
+    #define USE_ADB1 FALSE
+    #define USE_ADB2 FALSE
+    #define USE_ADB3 FALSE
+    #define USE_ADB4 FALSE
+    #define USE_ADB5 FALSE
+    #define USE_ADB6 FALSE
+    #define USE_ADB7 FALSE
+    #define USE_ADC0 FALSE
+    #define USE_ADC1 FALSE
+    #define USE_ADC2 FALSE
+    #define USE_ADC3 FALSE
+    #define USE_ADC4 FALSE
+    #define USE_ADC5 FALSE
+    #define USE_ADC6 FALSE
+    #define USE_ADC7 FALSE
+    #define USE_ADD0 FALSE
+    #define USE_ADD1 FALSE
+    #define USE_ADD2 FALSE
+    #define USE_ADD3 FALSE
+    #define USE_ADD4 FALSE
+    #define USE_ADD5 FALSE
+    #define USE_ADD6 FALSE
+    #define USE_ADD7 FALSE
+    #define USE_ADE0 FALSE
+    #define USE_ADE1 FALSE
+    #define USE_ADE2 FALSE

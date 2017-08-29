@@ -1,0 +1,59 @@
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''A Debug Program for SMTTimers.h
+''' WilliamR
+'
+ #chip 16f18855, 32
+ #config FEXTOSC = OFF, RSTOSC = HFINT32
+ #config MCLRE = ON, WDTE=OFF
+ #CONFIG CSWEN = ON, BOREN = Off
+
+ #option explicit
+
+ #Include <SMT_Timers.h>
+
+ WAIT 500 MS
+
+
+  DIR PortC.3 OUT 'LED
+
+
+ 'Tune internal OSC for best accuracy so
+ 'that 1,000,000 timer ticks = 1,000,000 us
+ OSCTUNE = 0b11111100
+
+ 'FOSC4 = 8MHz / 8 =  1MHz
+  InitSMT1(SMT_FOSC4,SMTPres_8)  '1 MHz
+
+ 'Period = 1,000,000 microseconds (1 Second)
+ SETSMT1PERIOD(1000391)  'Fine tune here as necessary
+
+ 'Interrupt every second and  blink LED for 100 ms
+ On Interrupt SMT1Overflow Call BlinkLED
+
+ 'Start the 24-bit SMT1 timer
+ STARTSMT1
+
+'// After making changes,  Chip must run for at least
+'// 1 minute after POR or Reset before an accuraate measurement
+'// can be taken. This Particular chip seems to slowing increase in
+'// speed over the first 30 sec to 1 minute
+
+
+
+
+MAIN:
+
+  Do
+
+  '// waiting for interrupt...
+
+  Loop
+
+ENDMAIN:
+
+
+Sub BlinkLED
+   Set PORTC.3 On
+   Wait 100 ms
+   Set PortC.3 Off
+End sub

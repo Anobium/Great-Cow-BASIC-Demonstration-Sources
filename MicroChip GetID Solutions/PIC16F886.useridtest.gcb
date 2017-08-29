@@ -1,0 +1,57 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a implements a library to read the Microchip ID.
+'''This program will work or not work depending on the type of chip and having the correct configuration.
+'''Please refer to the datasheet for the correct addresses to be used.
+
+''' Usage:
+'''
+''' Dim UserIDRegister as Word
+''' UserIDRegister = GetUserID( Index )
+'''
+''' Reads the memory location 0x8000 + Index and returns it as a Word value.
+'''
+''' where Index = 0x0 to 0xB as follows:
+'''
+'''    Address      Function            Read  Write
+'''    8000h-8003h  User IDs              Yes   Yes
+'''    8006h/8005h  Device ID/Revision ID         Yes   No
+'''    8007h-800Bh  Configuration Words 1 through 5   Yes   No
+'''
+''' Refer to your particular Device Datasheet to confirm the address table
+
+
+'''@author  ChrisR published by EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    22.02.17
+'''********************************************************************************
+
+
+  #chip 16F886
+  #Config WRT_OFF, MCLRE_ON
+
+  #include <GetUserID.h>
+
+  #define USART_BAUD_RATE 19200
+  #define USART_TX_BLOCKING
+
+  'Implement ANSI escaope code for serial terminal NOT using a LCD!
+  #define ESC   chr(27)
+  #define CLS   HSerPrint(ESC+"[2J")
+  #define HOME  HSerPrint(ESC+"[H")
+  #define Print HSerPrint
+
+  CLS
+  HOME
+
+  For Index = 0 to 0xF
+    UserIDRegister = GetUserID(Index)
+    print "80" + hex(Index)
+    print " : "
+    print hex( UserIDRegister_H )
+    print hex( UserIDRegister )
+    HserPrintCRLF
+  Next Index
+
+End
