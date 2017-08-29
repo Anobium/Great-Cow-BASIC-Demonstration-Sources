@@ -1,0 +1,150 @@
+''' A demonstration program for GCGB and GCB.
+'''
+'''******************************************************************
+''' Lesson "EEPROM"
+'''
+''' This lesson will provide code for writing and reading a single byte onto
+''' the on-board EEPROM. EEPROM is non-volatile memory, meaning that it does
+''' not lose its value when power is shut off. This is unlike RAM, which will
+''' lose its value when no power is applied. The EEPROM is useful for storing
+''' variables that must still be present during no power.
+''' It is also convenient to use if the entire RAM space is used up.
+''' Writes and reads to the EEPROM are practically instant and are much faster
+''' than program memory operations.
+
+''' This will show the value of the EEPROM on the serial Terminal.
+''' You can experiment by changing the variable 'Outdata' from Random function to a specific range.  Enjoy.
+'''
+'''   You need four LEDs connnect to PORTD.0, PORTD.1, PORTD.2 and PORTD.3 connected via suitable resistors.
+'''   You will also need to connect a serial Terminal to PORTD.4.  Using PUTTY.EXE for an excellent terminal program.  Also, you msy need to connect the microcontroller via a TTL converter.
+'''  You will a switch connect to porta.1.  The needs to be connected the supply voltage via a 1-k pullup resistor.
+'''  ************************************************************************************************************************************************************************************
+'''  PIC: 16f18877
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''
+'''@author   EvanV
+'''@licence  GPL
+'''@version  1.1
+'''@date     04.12.2016
+
+
+  'Chip Settings.
+  #chip 16f18877,32
+  #option explicit
+  #Config MCLRE_ON, FEXTOSC_OFF, CLKOUTEN_OFF    'These configs = MCLR pin function enablesd, External oscillator not enabled and clockout function is disables ( enable I/O port).
+
+
+  'Set the RS232 ports.
+  'Set the PPS for this solution.
+  #startup InitPPS, 85
+
+  Sub InitPPS
+    UNLOCKPPS
+      RXPPS  = 0x15 'Pin RC5 source is an input for RX
+      RC4PPS = 0x10 'Pin RC4 source is TX/CK
+    LOCKPPS
+  End sub
+
+
+  #define USART_BAUD_RATE 19200
+  #define USART_TX_BLOCKING
+
+   '' -------------------LATD-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
+    ''-----------------------------------------
+    ''
+    #define LEDD2  PORTD.0
+    #define LEDD3  PORTD.1
+    #define LEDD4  PORTD.2
+    #define LEDD5  PORTD.3
+    #define LEDBANK PORTD
+    #define SWITCH      PORTA.1
+
+    Dir     LEDD2 OUT
+    Dir     LEDD3 OUT
+    Dir     LEDD4 OUT
+    Dir     LEDD5 OUT
+    Dir      SWITCH IN
+
+'    Set LEDS off
+    LEDBANK = 0
+'    Set the first LED on
+    Set LEDD5 on
+
+
+    #define SWITCH_DOWN         1
+    #define SWITCH_UP           0
+
+
+    ' Now assumes Serial Terminal is operational
+    dim EEPromAddress as byte
+    dim EEPROMArray(255)
+
+
+    Dim OUTDATA, DISPLAYNEWLINE as Byte
+
+
+    HSerPrintCRLF
+    HSerPrint "EEPROM Test and Show EEProm Results"
+    HSerPrintCRLF 2
+
+    HSerPrint "Initial Values"
+    HSerPrintCRLF
+    ShowEEprom
+    HSerPrintCRLF 2
+
+
+    Do Forever
+          Set LEDD2 off
+          Set LEDD3 off
+          Set LEDD4 off
+          Set LEDD5 off
+          Outdata = Random
+
+          For EEPromAddress = 0 to 255
+            Outdata++
+            EPWrite ( EEPromAddress, Outdata )
+            EPRead  ( EEPromAddress, EEPROMArray(EEPromAddress) )
+          Next
+
+          ShowEEprom
+
+          HSerPrint   "End of EEProm Program and Display"
+          HSerPrintCRLF 2
+          HSerPrint   "Press the button!"
+          HSerPrintCRLF 2
+          Set LEDD2 on
+          Set LEDD3 on
+          Set LEDD4 on
+          Set LEDD5 on
+
+          wait while SWITCH = Off
+    Loop
+    END
+
+
+Sub ShowEEprom
+
+          HSerPrint "     "
+          for EEPromAddress = 0 to 15
+            HSerPrint hex(EEPromAddress)
+            HSerPrint " "
+          next
+
+          for EEPromAddress = 0 to 255
+            DisplayNewLine = EEPromAddress % 16
+            if DisplayNewLine = 0 Then
+              HSerPrintCRLF
+              HserPrint hex(EEPromAddress)
+              HSerPrint ": "
+            end if
+            HSerPrint " "
+            HSerPrint  hex(EEPROMArray(EEPromAddress))
+          next
+
+          HSerPrintCRLF 2
+
+End Sub

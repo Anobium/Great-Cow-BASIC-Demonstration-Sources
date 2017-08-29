@@ -1,0 +1,78 @@
+''' A demonstration program for GCGB and GCB.
+'''
+'''
+''' Pulse-Width Modulation (PWM) is a scheme that provides power to a load by switching
+''' quickly between fully on and fully off states. The PWM signal resembles a square wave
+''' where the high portion of the signal is considered the on state and the low portion of
+''' the signal is considered the off state. The high portion, also known as the pulse width,
+''' can vary in time and is defined in steps. A longer, high on time will illuminate the LED
+''' brighter. The frequency or period of the PWM does not change. A larger number of
+''' steps applied, which lengthens the pulse width, also supplies more power to the load.
+''' Lowering the number of steps applied, which shortens the pulse width, supplies less
+''' power. The PWM period is defined as the duration of one complete cycle or the total
+''' amount of on and off time combined.
+'''
+''' This demonstation shows a how the changing PWM values via connnector RC1
+'''
+'''
+'''   You need four LEDs connnect to portc.1 connected via a suitable resistor.
+'''  ************************************************************************************************************************************************************************************
+'''
+'''  PIC: 16F18326
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''
+'''@author   EvanV
+'''@licence  GPL
+'''@version  1.0
+'''@date     29.07.2016
+
+
+
+
+    #chip 16F18326, 32
+    #option explicit
+    #Config WRT_OFF, CPD_ON, MCLRE_ON, FEXTOSC_OFF, CLKOUTEN_OFF    'These configs = User non-votatile protection off (WRT), Data non-votatile protection off (CPD), MCLR pin function enablesd, External oscillator not enabled and clockout function is disables ( enable portc.5 to I/O port).
+
+
+    'Set the PPS for this solution.
+  #startup InitPPS, 85
+
+  Sub InitPPS
+    UNLOCKPPS
+      'Setting the port in PPS VERY important... CCP will not work if you do not set correctly
+      RC1PPS = 0x0F        'RC1->CCP4:CCP4;
+      '----------------------------------------------------------------------
+      RXPPS  = 0x15 'Pin RC5 source is an input for RX
+      RC4PPS = 0x14 'Pin RC4 source is TX/CK
+      '----------------------------------------------------------------------
+      LOCKPPS
+  End sub
+
+    #define USART_BAUD_RATE 19200
+    #define USART_TX_BLOCKING
+
+    'This will optimise the CCP/PWM code... try removing these defines and look at the code size!
+    #define USE_HPWMCCP1 FALSE       ' This is not used, so, optimise
+    #define USE_HPWMCCP2 FALSE       ' This is not used, so, optimise
+    #define USE_HPWMCCP3 FALSE       ' This is not used, so, optimise
+    #define USE_HPWMCCP4 True        ' This is used, so, include in the compiled code
+
+    'Setting the port an output is VERY important... LED will not work if you do not set as an output.
+    dir portC.1 out    ; CCP4
+
+    Dim BRIGHT as Byte
+
+
+    do forever
+            For Bright = 0 to 255
+                HPWM 4, 40, Bright
+                wait 25 ms
+            next
+            For Bright = 255 to 0 step -1
+                HPWM 4, 40, Bright
+                wait 25 ms
+            next
+
+    loop

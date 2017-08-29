@@ -1,0 +1,60 @@
+''' A demonstration program for GCGB and GCB.
+'''
+''' This program redirects the normal LCD output to an ANSI serial terminal.
+''' On a suitable test board/setup.
+'''
+'''
+'''   You need four LEDs connnect to PORTC.0, PORTC.1, PORTC.2 and PORTC.3 connected via suitable resistors.
+'''  You will to connect a pot to porta.0.  The needs to be connected the supply voltage and 0v using an appropiate method.
+'''   You will also need to connect a serial Terminal to PORTC.4.  Using PUTTY.EXE for an excellent terminal program.  Also, you may need to connect the microcontroller via a TTL converter.
+'''  ************************************************************************************************************************************************************************************
+'''
+'''
+'''@author   EvanV
+'''@licence  GPL
+'''@version  1.0
+'''@date     04.12.2016
+
+'''********************************************************************************
+
+; ----- Configuration
+  #chip     16f15355,32
+  #option explicit
+  #Config  MCLRE_ON, FEXTOSC_OFF, CLKOUTEN_OFF    'These configs = MCLR pin function enablesd, External oscillator not enabled and clockout function is disables ( enable I/O port).
+
+
+  ; ----- Define Hardware settings
+      'Set the ports.
+    'Set the PPS for this solution.
+  #startup InitPPS, 85
+
+  Sub InitPPS
+    UNLOCKPPS
+      RX1DTPPS = 0x15     'RC5->EUSART1:RX1;
+      RC4PPS = 0x0F     'RC4->EUSART1:TX1;
+      LOCKPPS
+  End sub
+
+  #define USART_BAUD_RATE 19200
+  #define USART_TX_BLOCKING
+  #define USART_BLOCKING
+
+
+  Dim INCHAR as Byte
+
+
+   wait 500 ms
+   hserprint "Loop Back Test Program"
+   HSerPrintCRLF
+
+
+; ----- Main body of program commences here.
+
+    Do Forever
+
+        'wait for char from USART
+        HSerReceive InChar
+        'send back char to USART
+        HSerSend InChar
+
+    loop

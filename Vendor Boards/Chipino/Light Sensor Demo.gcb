@@ -1,0 +1,78 @@
+ '''A demonstration program for GCGB and GCB.
+ '''--------------------------------------------------------------------------------------------------------------------------------
+ '''This program ia a demonstration sound, ADC (light meter) and an Interrupt.
+ '''
+ '''@author 	 EvanV
+ '''@licence	 GPL
+ '''@version	 1.0a
+ '''@date   	 19.03.2016
+ '''********************************************************************************
+'********************************************************************************
+
+ ; ----- Configuration
+'Chip model
+#chip 16F886, 8
+#option explicit
+#config MCLRE_ON
+#define SoundOut PORTc.2
+
+Dim LL as Byte
+
+dim timedelay1 as word
+
+dir b0 in
+dir b1 in
+on Interrupt  portbchange call InterruptHandler
+IOCB0 = 1
+IOCB1 = 1
+
+repeat 4
+       tone 110, 10
+       wait 10 ms
+end repeat
+
+dir portb.2 Out
+dir portb.3 Out
+dir portb.4 Out
+dir portb.5 Out
+
+dir porta.0 in
+dir porta.1 in
+
+
+
+'Main routine
+Start:
+
+      ll = ReadAD(AN0)
+      if ll < 51 then
+          portb = portb and 195
+      end if
+      if ll > 51 and ll < 101 then
+         portb = portb or 4
+      end if
+      if ll > 102 and ll < 152  then
+         portb = portb or 12
+      end if
+      if ll > 153 and ll < 203 then
+         portb = portb or 28
+      end if
+      if ll > 204 then
+         portb = portb or 60
+      end if
+
+goto Start
+
+
+sub InterruptHandler
+    IntOff
+    RBIF = 0
+    if portb.0 = 1 then
+        Tone 220, 5
+    end if
+
+    if portb.1 = 1 then
+        Tone 880, 5
+    end if
+    inton
+end sub

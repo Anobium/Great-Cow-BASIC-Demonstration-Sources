@@ -1,0 +1,150 @@
+''' A demonstration program for GCGB and GCB.
+'''
+'''  This demonstration produces a variable speed rotating LED display that is proportional to the ADC value.
+'''  The ADC value and LED rotate speed are inversely proportional to each other.
+'''
+'''  Rotate the POT counterclockwise to see the LEDs shift faster.
+'''
+'''  Press the switch to reverse the direction of the LEDs.
+'''
+'''  The four LSbs of the ADC are mirrored onto the LEDs. Rotate the potentiometer
+'''  to change the display.
+'''
+'''
+'''  PIC: 16F18326
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''   You need four LEDs connnect to portc.0, portc.1, portc.2 and portc.3 connected via suitable resistors.
+'''  You will to connect a pot to porta.0.  The needs to be connected the supply voltage and 0v using an appropiate method.
+'''  You will a switch connect to porta.1.  The needs to be connected the supply voltage via a 1-k pullup resistor.
+'''
+'''@author   EvanV
+'''@licence  GPL
+'''@version  1.0
+'''@date     29.07.2016
+
+'''
+' ----- Configuration
+    #chip 16F18326,32
+    #option explicit
+    #Config WRT_OFF, CPD_ON, MCLRE_ON, FEXTOSC_OFF, CLKOUTEN_OFF    'These configs = User non-votatile protection off (WRT), Data non-votatile protection off (CPD), MCLR pin function enablesd, External oscillator not enabled and clockout function is disables ( enable portc.5 to I/O port).
+
+
+    '' -------------------LATC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
+    ''-----------------------------------------
+    ''
+    #define LEDD2  PORTC.0
+    #define LEDD3  PORTC.1
+    #define LEDD4  PORTC.2
+    #define LEDD5  PORTC.3
+    #define LEDBANK portc
+
+    #define SWITCH_DOWN         0
+    #define SWITCH_UP           1
+
+    #define LED_RIGHT           TRUE
+    #define LED_LEFT            FAlSE
+
+    #define SWITCH              PORTA.1
+
+    dim mydelay, leds  as byte
+    Dim DIRECTION as Byte
+
+    'start from the right to left
+    direction = LED_RIGHT
+
+    dir LEDBANK out
+    leds = 8
+
+    'Potentitor is connected to RA0...set as input
+    dir porta.0 in
+
+    'setup switch (SW1)
+    dir SWITCH in
+
+    do
+
+        mydelay = ReadAD10( AN0 ) / 4
+
+   ' Factor the ADC reading to delay steps
+        mydelay = mydelay / 16
+
+       ' decrement the 4 LSbs of the ADC and delay 20ms for each
+        do while ( mydelay <> 0 )
+              mydelay--
+              wait 20 ms
+              if check_switch = true then
+                  ' toggle the direction
+                  direction = !direction
+              end if
+        loop
+
+        LEDBANK = leds
+
+        if  direction = LED_RIGHT  then
+            'shift to the right by 1
+
+            Rotate leds right simple
+
+            ' when the ROTATE moves the bit to bit 7, restart the pattern
+            if leds = 128 then
+               leds = 8
+            end if
+
+        else
+            'Set C off to ensure the carry bit does not impact
+            Set C off
+            Rotate leds left
+
+            'when the last LED is lit, restart the pattern
+            if  leds = 16 then
+                leds = 1
+            end if
+        end if
+
+    loop
+
+
+
+  'global variable - if button is held down, we don't want to keep on switching directions
+  dim previous_state as bit
+  previous_state = SWITCH_UP
+
+  function  check_switch
+      'switch is normally open to 5V ...when pressed, RA3 is connected to GND
+      if (SWITCH = SWITCH_DOWN) then
+          'debounce by delaying and checking if switch is still pressed
+          wait 1 ms
+          if ( (previous_state =  SWITCH_DOWN) & (SWITCH = SWITCH_DOWN) ) then
+              ' don't toggle
+              check_switch = false
+              exit function
+          else
+              ' check if still down
+              if (SWITCH = SWITCH_DOWN) then
+                 previous_state = SWITCH_DOWN
+                 ' reverse the LEDs
+                 check_switch = true
+                 exit function
+             else
+              'switch not properly held down
+              previous_state = SWITCH_UP
+              ' don't reverse
+              check_switch = false
+              exit function
+             end if
+          end if
+      else
+         'switch not pressed
+          previous_state = SWITCH_UP
+          'don't reverse
+          check_switch = false
+          exit function
+      end if
+
+  end Function
+
+

@@ -1,0 +1,43 @@
+''' A demonstration program for GCGB and GCB.
+''' The  most simple demonstration for GCGB and GCB.
+'''
+''' This simply set one of the LEDs on PORTC.0 to ON.
+'''
+''' This demonstration use an LED attached to PORTC.0 via a suitable resistor.
+''':***********************************************************************
+'''
+'''  PIC: 16f15355
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''@author   EvanV
+'''@licence  GPL
+'''@version  1.0
+'''@date     04.12.2016
+
+' ----- Configuration
+    'Chip Settings.
+    #chip 16f15355,32
+    #Config  MCLRE_ON, FEXTOSC_OFF, CLKOUTEN_OFF    'These configs = MCLR pin function enablesd, External oscillator not enabled and clockout function is disables ( enable I/O port).
+
+
+    '' -------------------LATC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
+    ''-----------------------------------------
+    ''
+
+    'Set the whole port as an output, we will use only one BIT
+    dir PORTC out
+
+    'Ensure the whole port is set off by setting to OFF
+    PORTC = 0
+
+    'Set one bit of the port ON.
+    PORTC.0 = 1
+
+    Do Forever
+    Loop
+
+    'End
+    end
