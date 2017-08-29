@@ -1,0 +1,104 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a demonstration of a simple dimmer.
+'''The LED array must be attached via appropiate resistors.
+'''The pot on port ANO contros the value of the dimmer state.
+'''An LED array of 8 LEDS is connected to PortC.
+'''A single LED is connect to Portb.2 to show active state.
+'''A push button is connected to PortB.1 to activate the control, this should be pulled high by a suitable resisitor.
+'''@author 	EvanV plus works of HughC
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	31.01.2015
+'''********************************************************************************
+
+; ----- Configuration
+
+  #chip 16F886,16
+  #option explicit
+  #config HS_OSC, WDT_OFF, LVP_OFF
+
+; ----- Define Hardware settings
+  ' AN0
+  dir portA.0 in
+  ' Switch pulled high with 10k resistor
+  dir portB.1 in
+  ' Single LED
+  dir portB.2 out
+  ' LED Array
+  dir portC out
+
+; ----- Constants
+  #define button PORTB.1
+  #define LED PORTB.2
+
+  #define PulsePeriod 1 10us
+
+  #define Peak 0xdd 'Highest value recorded from potentiometer
+  #define GraphStep 27
+
+; ----- Variables
+  Counter = 0
+  Dim COUNTER, CONTROLVALUE, TEMP, STOPFLICKER, TEMP3, TEMP2 as Byte
+
+
+; ----- Main body of program commences here.
+  Main:
+     Counter = Counter + 1
+     ControlValue = ReadAD(AN0)
+     if Counter > ControlValue then set led off
+     if Counter => Peak then set led on: Counter = 0
+     Temp = ControlValue/GraphStep
+     BarGraph Temp
+     Wait PulsePeriod
+     if button off then Flicker
+  goto Main
+
+  end
+
+; ----- Support methods.  Subroutines and Functions
+
+  sub Flicker
+   wait until button on
+   wait 10 ms
+   StopFlicker = 0
+
+  FlickerStart:
+   for Temp = 1 to 100
+    for Temp3 = 1 to 20
+     if button off then goto EndFlicker
+     for Temp2 = 1 to 100
+      set led off
+      if Temp > Temp2 then set led on
+      wait PulsePeriod
+     next
+    next
+   next
+   for Temp = 1 to 100
+    for Temp3 = 1 to 20
+     if button off then goto EndFlicker
+     for Temp2 = 1 to 100
+      set led on
+      if Temp > Temp2 then set led off
+      wait PulsePeriod
+     next
+    next
+   next
+  goto FlickerStart
+
+  EndFlicker:
+  wait until button on
+  wait 10 ms
+  end sub
+
+  sub BarGraph (level)
+   PORTC = 0
+   if level >= 1 then set PORTC.0 ON
+   if level >= 2 then set PORTC.1 ON
+   if level >= 3 then set PORTC.2 ON
+   if level >= 4 then set PORTC.3 ON
+   if level >= 5 then set PORTC.4 ON
+   if level >= 6 then set PORTC.5 ON
+   if level >= 7 then set PORTC.6 ON
+   if level >= 8 then set PORTC.7 ON
+  end sub

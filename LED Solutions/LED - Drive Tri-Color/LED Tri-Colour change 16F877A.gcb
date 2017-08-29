@@ -1,0 +1,94 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a demonstration of controling a color of Tri-colour LED based upon the value of ANO.
+'''A LCD is attached to show introduction text only.  See the program for the LCD configuration.
+'''The LED is connected to Portb.0,1 and 2 via a resistor .
+'''@author 	EvanV plus works of HughC
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	31.01.2015
+'''********************************************************************************
+
+; ----- Configuration
+
+  #chip 16F877A,16
+  #option explicit
+
+
+; ----- Define Hardware settings
+  'LED port directions
+  dir Red out
+  dir green out
+  dir blue out
+
+; ----- Constants
+  ; LCD setup
+  #define LCD_IO 8
+  #define LCD_DATA_PORT PORTC
+  #define LCD_RS PORTD.0
+  #define LCD_RW PORTD.1
+  #define LCD_Enable PORTD.2
+
+  #define Red PORTB.2
+  #define Green PORTB.1
+  #define Blue PORTB.0
+
+; ----- Variables
+  Dim REDLEVEL, GREENLEVEL, BLUELEVEL, FLASHRATE, PULSELOOP, LEVEL, RLTEMP as Byte
+
+
+
+; ----- Main body of program commences here.
+  'Intro message
+  PRINT "Tri-colour LED:"
+  Locate 1, 1
+  PRINT "A GCBASIC Demo"
+  Wait 2 sec
+  Main:
+      For RedLevel = 1 to 200
+          ShowColour Smooth(RedLevel), 1, 1
+      next
+      For GreenLevel = 1 to 200
+          ShowColour 1, Smooth(GreenLevel), 1
+      next
+      For BlueLevel = 1 to 200
+          ShowColour 1, 1, Smooth(BlueLevel)
+      next
+  goto Main
+  end
+
+; ----- Support methods.  Subroutines and Functions
+
+
+sub ShowColour(RL, GL, BL)
+   RLTemp = RL+RL
+   ' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
+   FlashRate = ReadAD(AN0)
+   for PulseLoop = 1 to FlashRate
+      set red on
+      set green on
+      set blue on
+      for Level = 1 to 200
+         if Level > RLTemp then
+            set red off
+         end if
+         if Level > GL then
+            set green off
+         end if
+         if Level > BL then
+            set blue off
+         end if
+      next
+   next
+end sub
+
+function Smooth(temp)
+   if temp < 100 then
+      Smooth = temp
+   end if
+   if temp >= 100 then
+      Smooth = 200-temp
+   end if
+end function
+
+

@@ -1,0 +1,104 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a demonstration of controling a color of Tri-colour LED based upon the value of ANO.
+'''A LCD is attached to show introduction text only.  See the program for the LCD configuration.
+'''The LED is connected to Portb.2,3 and 4 via a resistor .
+'''@author 	EvanV plus works of HughC
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	31.01.2015
+'''********************************************************************************
+
+; ----- Configuration
+
+
+  #chip mega328p,16
+  #option explicit
+
+
+; ----- Define Hardware settings
+  'LED port directions
+  dir Red out
+  dir green out
+  dir blue out
+
+  ;Setup LCD Parameters
+  #define LCD_IO 4
+  #define LCD_NO_RW
+  #define LCD_Speed SLOW
+
+  'Change as necessary
+  #define LCD_RS PortB.0
+  #define LCD_Enable PortB.1
+  #define LCD_DB4 PortC.3
+  #define LCD_DB5 PortC.2
+  #define LCD_DB6 PortC.1
+  #define LCD_DB7 PortC.0
+
+; ----- Constants
+
+  #define Red PORTB.2
+  #define Green PORTB.3
+  #define Blue PORTB.4
+
+; ----- Variables
+  'Calculation Variable
+  Dim CalcTemp As Word
+  Dim HUE, RINT, GINT, BINT, FLASHRATE, PULSELOOP, LEVEL, RLTEMP as Byte
+
+
+; ----- Main body of program commences here.
+  'Intro message
+  ; LCD Layout
+  '      1234567890123456
+  PRINT "Tri-colour LED"
+  locate 1,0
+  PRINT "A GCBASIC Demo"
+  Wait 2 sec
+
+  Main:
+   ' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
+   Hue = ReadAD( 0 )
+   If Hue < 20 Then Hue = 20
+   If Hue > 240 Then Hue = 240
+   Hue = Hue - 20
+   RInt = 0
+   GInt = 0
+   BInt = 0
+   If Hue < 220 And Hue > 150 Then
+      CalcTemp = ((220 - Hue) * 171) / 100
+      BInt = CalcTemp
+      CalcTemp = ((Hue - 150) * 286) / 100
+      RInt = CalcTemp
+   End If
+   If Hue < 150 And Hue > 120 Then
+      GInt = (150 - Hue) * 4
+      BInt = (Hue - 120) * 4
+   End If
+   If Hue < 120 Then
+      CalcTemp = ((120 - Hue) * 167)/100
+      RInt = CalcTemp
+      GInt = Hue
+   End If
+   ShowColour(RInt,GInt,BInt)
+  goto Main
+
+  end
+
+; ----- Support methods.  Subroutines and Functions
+
+  sub ShowColour(RL, GL, BL)
+   RLTemp = RL+RL
+   ' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
+   FlashRate = ReadAD( 0 )
+   for PulseLoop = 1 to FlashRate
+      set red on
+      set green on
+      set blue on
+      for Level = 1 to 200
+         if Level > RLTemp then set red off
+         if Level > GL then set green off
+         if Level > BL then set blue off
+      next
+   next
+  end sub

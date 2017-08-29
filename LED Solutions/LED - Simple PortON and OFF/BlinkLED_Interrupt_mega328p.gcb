@@ -1,0 +1,41 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program blinks the LED with timer match interrupt
+'''The LED is connected to Portb.5 via appropiate resistors.
+'''
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    07.03.2017
+'''********************************************************************************
+
+; ----- Configuration
+  #chip mega328p
+
+  #define  led portB.5
+  dir led out
+
+  #option Explicit
+
+  '@v0.97.00 the SetTimer method is not supported, so, let us set in the main code, as shown below
+  'Timer1 Prescaler = 256; Actual Interrupt Time = 1
+  Inittimer1 Osc, PS_256
+
+  'Timer1 Preload = 62499; Actual Interrupt Time = 1s
+  '62499 = 0xF423 which are the Hi and Lo bytes
+  OCR1AH = 0xF4
+  OCR1AL = 0x23
+  On Interrupt Timer1Match1 call ISR
+  StartTimer 1
+  led = !led
+
+
+  do
+
+  loop
+
+sub ISR
+
+  led = !led
+
+end sub

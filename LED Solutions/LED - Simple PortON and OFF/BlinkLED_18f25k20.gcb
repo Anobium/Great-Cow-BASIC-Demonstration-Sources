@@ -1,0 +1,41 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program blink one LED on PORTC.4 using the ON and OFF commands.
+'''The LED must be attached via appropiate resistors.
+'''
+'''@author 	EvanV plus works of others
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	31.01.2015
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 18F25k20, 2
+  'Switch Low-Volt-Programming:
+  #config LVP = Off
+
+  ' #include
+  ' no solution specifc includes, default includes are always included                                  ; no solution specifc includes, default includes are always included
+
+
+; ----- Define Hardware settings
+  ' this is required to tell the microprocessor the port is an output
+  ' (PORTC.4 = Pin 15 on PIC18F25k20)
+  Dir PORTC.4 Out
+  'Set internal clock speed to 2 MHz:
+  Set IRCF0 = 0
+  Set IRCF1 = 0
+  Set IRCF2 = 1
+
+
+; ----- Variables
+' none specified in the example. All byte variables are defined upon use.
+
+; ----- Main body of program commences here.
+
+  Do Forever
+    Set PORTC.4 ON   'turn LED on
+    Wait 100 Ms      'wait 100 milliseconds
+    Set PORTC.4 OFF  'turn LED off
+    Wait 900 Ms      'wait 900 milliseconds
+  Loop			         'jump back to the start of the program

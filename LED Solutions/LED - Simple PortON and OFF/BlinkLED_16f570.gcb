@@ -1,0 +1,33 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program blink one LED on PORTB.3 using the ON and OFF commands.
+'''The LED must be attached via appropiate resistors.
+'''
+'''@author  EvanV plus works of others
+'''@licence GPL
+'''@version 1.0a
+'''@date    19.10.2015
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 16F570, 4
+  #config CP_OFF, WDTE_OFF, INTRC_IO, DRTEN_OFF, BOREN_OFF, IOSCFS_8MHZ
+
+  ' #include
+  ' no solution specifc includes, default includes are always included
+
+; ----- Define Hardware settings
+  ' this is required to tell the microprocessor the port is an output
+  Dir PORTB.3 Out
+
+; ----- Variables
+' none specified in the example. All byte variables are defined upon use.
+
+; ----- Main body of program commences here.
+
+  Start:
+    Set PORTB.3 ON   'turn LED on
+    Wait 100 Ms      'wait 100 milliseconds
+    Set PORTB.3 OFF  'turn LED off
+    Wait 900 Ms      'wait 900 milliseconds
+  Goto Start         'jump back to the start of the program
