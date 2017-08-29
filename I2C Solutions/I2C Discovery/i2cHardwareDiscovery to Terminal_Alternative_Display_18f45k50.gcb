@@ -4,10 +4,10 @@
 '''This program uses the hardware implementation of I2C and TWI for the Microchip and ATMEL microprocessors.  The microprocessor must have a suitable I2C or TWI module.
 '''The hardware serial connections are shown in the program.
 
-'''@author 	EvanV
-'''@licence	GPL
-'''@version	1.0a
-'''@date   	13/2/2016
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    13/2/2016
 '''********************************************************************************
 
 ; ----- Configuration
@@ -47,18 +47,18 @@
   HSerPrintCRLF 2
 
   HSerPrint "     "
-	for DeviceID = 0 to 15
-  	HSerPrint hex(deviceID)
+  for DeviceID = 0 to 15
+    HSerPrint hex(deviceID)
     HSerPrint " "
   next
   for DeviceID = 0 to 255
-  	DisplayNewLine = DeviceID % 16
-  	if DisplayNewLine = 0 Then
-    	HSerPrintCRLF
-    	HserPrint hex(DeviceID)
+    DisplayNewLine = DeviceID % 16
+    if DisplayNewLine = 0 Then
+      HSerPrintCRLF
+      HserPrint hex(DeviceID)
       HSerPrint ": "
     end if
-		HSerPrint " "
+    HSerPrint " "
     HI2CStart
     if HI2CWaitMSSPTimeout <> True then
 
@@ -70,14 +70,13 @@
         HSerPrint "--"
       end if
       HI2CSend ( 0)
-      HI2CSend ( 0)
 
     end if
-		HI2CStop
+    HI2CStop
 
   next
 
-	HSerPrintCRLF 2
+  HSerPrintCRLF 2
   HSerPrint   "End of Search"
   HSerPrintCRLF 2
   wait 1 s
