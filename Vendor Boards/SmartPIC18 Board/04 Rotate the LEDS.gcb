@@ -29,12 +29,13 @@
     ''-----------------------------------------
     ''
 
-    dir porta out
-    porta = 0b0001000
+
+    dir portb out
+    portb = 0b10000000
 
     do
-        wait 1000 ms
+        wait 100 ms
         Set C off
-        Rotate porta right
-        if C = 1 then porta.3 = 1
+        Rotate portb right
+        if C = 1 then portb.7 = 1
     loop
