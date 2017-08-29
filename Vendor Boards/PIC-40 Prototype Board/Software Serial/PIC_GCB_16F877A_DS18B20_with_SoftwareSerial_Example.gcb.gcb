@@ -1,0 +1,92 @@
+'  FILE:    PIC_GCB_16F877A_DS18B20_with_SoftwareSerial_Example.gcb
+'  DATE:    07/08/14
+'  VERSION: 0.1a
+'  AUTHOR:  Anobium
+'
+'This program was written using the Great Cow Basic IDE for use with the PIC
+'16F8777A development board (HCDVBD0003) and a 1602 parallel LCD module
+'(HCMODU0013 or HCMODU0038) to display the value of the a DS18B20 sensor to a serial terminal using the GCB software for RS232 communications.
+
+
+'Chip Settings. Assumes the development board with with a 16F877A
+#chip 16F877A,20
+#option explicit
+#include <DS18B20.h>
+
+'Serial settings
+  #define SerOutPort PORTC.6
+  #define SerInPort PORTC.7
+  #define SendAHigh Set SerOutPort Off
+  #define SendALow Set SerOutPort On
+  #define RecAHigh SerInPort Off
+  #define RecALow SerInPort On
+'Set pin directions
+  Dir SerOutPort Out
+  Dir SerInPort In
+
+'Set up serial connection
+  InitSer 1, r9600, 1 + WaitForStart, 8, 1, none, invert
+
+  ' DS18B20 port settings - this is required
+  #define DQ PortC.3
+
+  Dim CCOUNT, SIGNBIT, WHOLE, FRACT, DIG as Byte
+  dim TempC_100 as word   ' a variabler to handle the temperature calculations
+  ccount = 0
+
+do forever
+   ' The function readtemp returns the integer value of the sensor
+   DSdata = readtemp
+
+   ' Display the integer value of the sensor on the Terminal, ANSI codes.
+
+   SerPrint 1, hex(ccount)
+   SerPrint 1, " Ceil"
+   SerSend 1, 9
+   SerPrint 1, DSdata
+   SerPrint 1, chr(223)+"C"
+   SerSend 1, 10:SerSend 1, 13
+
+
+   ' Display the integer and decimal value of the sensor on the terminal
+
+   ' The function readtemp12 returns the raw value of the sensor.
+   ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
+   DSdata = readtemp12
+   SignBit = DSdata / 256 / 128
+   If SignBit = 0 Then goto Positive
+   ' its negative!
+   DSdata = ( DSdata # 0xffff ) + 1 ' take twos comp
+
+Positive:
+
+   ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
+   TempC_100 =  DSdata * 6
+   DSdata = ( DSdata * 25 ) / 100
+   TempC_100 = TempC_100 + DSdata
+
+   Whole = TempC_100 / 100
+   Fract = TempC_100 % 100
+   If SignBit = 0 Then goto DisplayTemp
+   SerPrint 1, "-"
+
+DisplayTemp:
+
+   SerPrint 1, hex(ccount)
+   SerPrint 1, " Real"
+   SerSend 1, 9
+   SerPrint 1, str(Whole)
+   SerPrint 1, "."
+  ' To ensure the decimal part is two digits
+   Dig = Fract / 10
+   SerPrint 1, Dig
+   Dig = Fract % 10
+   SerPrint 1, Dig
+   SerPrint 1, chr(223)
+   SerPrint 1, "C"
+   SerSend 1, 10:SerSend 1, 13
+   SerSend 1, 10:SerSend 1, 13
+   wait 2 s
+   ccount++
+
+loop

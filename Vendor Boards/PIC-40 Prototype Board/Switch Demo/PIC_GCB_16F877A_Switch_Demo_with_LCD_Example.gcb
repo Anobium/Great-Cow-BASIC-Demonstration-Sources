@@ -1,0 +1,84 @@
+'  FILE:    PIC_GCB_16F877A_Switch_Demo_with_LCD_Example.gcb
+'  DATE:    07/08/14
+'  VERSION: 0.1a
+'  AUTHOR:  Anobium
+'
+'This program was written using the Great Cow Basic IDE for use with the PIC
+'16F8777A development board (HCDVBD0003) and a 1602 parallel LCD module
+'(HCMODU0013 or HCMODU0038) to display the status of the PortB switches.
+
+
+'Chip Settings. Assumes the development board with with a 16F877A
+#chip 16F877A,20
+
+
+'Use LCD in 4 pin mode and define LCD pins
+ #define LCD_IO 4
+ #define LCD_RW PORTE.1
+ #define LCD_RS PORTE.0
+ #define LCD_Enable PORTE.2
+ #define LCD_DB4 PORTD.4
+ #define LCD_DB5 PORTD.5
+ #define LCD_DB6 PORTD.6
+ #define LCD_DB7 PORTD.7
+ #define LCD_Speed slow
+
+'Define ports
+ dir portb.0 in
+ dir portb.1 in
+ dir portb.2 in
+ dir portb.4 in
+
+ ' Enable enable weak pull-up function on portB.  This IS required.
+ OPTION_REG.NOT_RBPU = 0
+
+
+ CLS
+ Print "Reset"
+ wait 500 ms
+ CLS
+
+do forever
+
+   locate 0,0
+   print "PortB"
+
+   locate 0,6
+   print "0"
+
+   locate 1,6
+   if portb.0 = 0 then
+      print on
+   else
+      print off
+   end if
+
+   locate 0,9
+   print "1"
+   locate 1,9
+   if portb.1 = 0 then
+      print on
+   else
+      print off
+   end if
+
+   locate 0,12
+   print "2"
+   locate 1,12
+   if portb.2 = 0 then
+      print on
+   else
+      print off
+   end if
+
+   locate 0,15
+   print "3"
+   locate 1,15
+   if portb.3 = 0 then
+      print on
+   else
+      print off
+   end if
+
+
+loop
