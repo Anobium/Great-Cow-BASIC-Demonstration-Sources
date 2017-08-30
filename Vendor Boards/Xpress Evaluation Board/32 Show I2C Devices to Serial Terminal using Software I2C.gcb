@@ -94,7 +94,7 @@
       end if
 
       I2CSend ( 0 )
-      I2CSend ( 0 )
+
       i2cstop
 
 
