@@ -115,7 +115,7 @@
               HSerPrint "--"
             end if
             HI2C2Send ( 0)
-            HI2C2Send ( 0)
+
 
           end if
           HI2C2Stop
