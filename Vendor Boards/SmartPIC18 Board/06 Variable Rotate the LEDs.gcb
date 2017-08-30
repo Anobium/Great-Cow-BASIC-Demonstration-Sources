@@ -8,7 +8,6 @@
 ''' on Pin RA0 to 5V.  The ADC has a resolution of 10 bits, with 1023
 ''' representing 5V and 0 representing 0V.
 '''
-'''
 ''' Rotate the potentiometer to change the LEDs displayed.
 '''
 '''************************************************************************
@@ -23,50 +22,59 @@
 ' ----- Configuration
     'Chip Settings.
     #chip 18f26k22, 16
+    #option Explicit
 
-    '' -------------------LATB-----------------
+    '' -------------------PORTA----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   -------| X | ----------| X |-----
+    '' IO:    -----------| A |-----------------
     ''-----------------------------------------
     ''
 
-    '' ------------------PORTB-----------------
+    '' -------------------PORTB----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' SWITCH:---------------------------| X |-
+    '' IO:    -------| O | ----------| O | I |-
     ''-----------------------------------------
     ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------------------| X |---------
+    ''-----------------------------------------
+    ''
+
 
     #define LEDD1 PORTB.1
     #define LEDD2 PORTB.5
     #define Potentiometer   PORTA.4
-    #define LDR             PORTA.4
-    #define SwitchIn        PORTB.4
+    #define LCDControl      PORTC.2
 
-    Dir     LEDD1 OUT
-    Dir     LEDD2 OUT
-    Dir     Potentiometer In   'this is AN17 port
-    Dir     LDR           In
-    Dir     SwitchIn      In
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the AN17 port
+    Dir     LCDControl    Out
+
+    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+    LCDControl = 1
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
 
 
-    'Set the LED states
+   'Set the LED states
     LEDD1 = 1
     LEDD2 = 0
 
+    dim ADCVal as word   'we have change to a larger variable to hold the range of 0 to 1023
 
     do
 
         ADCVal =  ReadAD10 ( AN17 )
-
-        'Wait for the value of the potentiometer in terms of milliseconds
+        'Wait for the number of milliseconds
         Wait ADCVal ms
 
         'Flip the state of the LEDs
-        LED1 = NOT LED1
-        LED2 = NOT LED2
-
-        'always wait 5 ms... just to make things look nice.
-        wait 5 ms
+        LEDD1 = NOT LEDD1
+        LEDD2 = NOT LEDD2
 
 
     loop

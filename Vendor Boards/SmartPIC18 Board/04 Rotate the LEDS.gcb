@@ -1,8 +1,8 @@
 '''
 '''  This lesson will introduce shifting instructions as well as bit-oriented skip operations to
-'''  move the LED display.
+'''  update the LEDs.
 '''
-'''  LEDs rotate from right to left at a rate of 1.0s, when to rotation of the bits happens the LED is turned on!
+'''  LEDs change at a rate of 1.0s, the bit are set ON or equal to 1 when the LED is turned on!
 '''
 '''
 '''************************************************************************
@@ -17,27 +17,57 @@
 ' ----- Configuration
     'Chip Settings.
     #chip 18f26k22, 16
+    #option Explicit
 
-    '' -------------------LATB-----------------
+    '' -------------------PORTA----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   -------| X | ----------| X |-----
+    '' IO:    -----------| A |-----------------
     ''-----------------------------------------
     ''
 
-    '' ------------------PORTB-----------------
+    '' -------------------PORTB----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' SWITCH:---------------------------| X |-
+    '' IO:    -------| O | ----------| O | I |-
     ''-----------------------------------------
     ''
 
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------------------| X |---------
+    ''-----------------------------------------
+    ''
 
-    dir portb out
-    portb = 0b10000000
+    'Define constants to make things easier. We can reuse these at any time.
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTA.4
+    #define LCDControl      PORTC.2
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the AN17 port
+    Dir     LCDControl    Out
+
+    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+    LCDControl = 1
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+
+   'Set the LED states
+    LEDD1 = 1
+    LEDD2 = 0
+
 
     do
-        wait 100 ms
-        Set C off
-        Rotate portb right
-        if C = 1 then portb.7 = 1
-    loop
 
+        'Wait for milliseconds
+        Wait 100 ms
+
+        'Flip the state of the LEDs
+        LEDD1 = NOT LEDD1
+        LEDD2 = NOT LEDD2
+
+
+    loop

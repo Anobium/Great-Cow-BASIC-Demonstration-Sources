@@ -1,49 +1,101 @@
 '''
-''' This demonstration uses a simple software delay routine to avoid the initial noise on the switch
-''' pin. The code will delay for only 5 ms, but should overcome most of the noise. The
-''' required delay amount differs with the switch being used. Some switches are worse
-''' than others.
+''' This demonstration uses a simple software routine to avoid the initial noise on the switch
+''' pin. The code will inspect the switch status, but should overcome most of the noise from a switch.
+'''  Some switches are worse than others.
 '''
-''' When the switch is held down, D1 will be lit. When the switch is not held down, all
-''' LEDs are OFF.
+''' When the switch is held down, one LED will be lit. When the switch is not held down, the other will be lit.
 '''
 '''
-'''  PIC: 16F18855
+'''************************************************************************
+'''
+'''  PIC: 18f26k22
 '''  Compiler: GCB
 '''  IDE: GCB@SYN
 '''
-'''  Board: Xpress Evaluation Board
-'''  Date: 13.3.2016
+'''  Board: SmartPIC 18 Board
+'''  Date: 29.8.17
 '''
 ' ----- Configuration
     'Chip Settings.
-    #chip 16f18855,32
-    #config RSTOSC_HFINT32
+    #chip 18f26k22, 16
+    #option Explicit
 
-    '' -------------------LATA-----------------
+    '' -------------------PORTA----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D1 |-
+    '' IO:    ---------------------------------
     ''-----------------------------------------
-    '''
+    ''
 
-    #define DOWN        0
-    #define UP          1
-    #define SWITCH      PORTA.5
-    #define LED         PortA.0
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | ----------| O | I |-
+    ''-----------------------------------------
+    ''
 
-    dir LED out
-    LED = 0
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------------------| X |---------
+    ''-----------------------------------------
+    ''
 
-    'setup switch (SW1)
-    dir SWITCH in
 
-    do
-        if ( SWITCH = DOWN ) then
-           wait 10 ms
-           if ( SWITCH = DOWN ) Then
-              Set LED on
-           end if
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTA.4
+    #define SwitchIn        PORTB.0
+    #define LCDControl      PORTC.2
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the AN17 port
+    Dir     SwitchIn      In
+    Dir     LCDControl    Out
+
+    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+    LCDControl = 1
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+     dim lastKeyDown as Byte
+
+    'Debouncing a switch
+
+      Do forever
+                wait 10 ms
+
+                if  keyPressed( lastKeyDown ) = true then
+
+                    'push button pressed
+                    LEDD1 = !LEDD1
+
+                end if
+
+      loop
+
+
+  function  keyPressed ( in lastKeyDown )
+
+      dim actKeyDown as byte
+
+        if ( !SwitchIn ) then
+
+            actKeyDown = true
+LEDD1 = 1
+LEDD2 = 0
         else
-           Set LED off
-       end if
-    loop
+LEDD1 = 0
+LEDD2 = 1
+
+            actKeyDown = false
+
+        end if
+
+        if (actKeyDown <> lastKeyDown) then
+            lastKeyDown = actKeyDown
+            keyPressed =  actKeyDown
+        end if
+
+        keyPressed = 0
+
+  end function

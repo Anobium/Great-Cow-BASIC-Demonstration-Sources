@@ -17,26 +17,40 @@
     'Chip Settings.
     #chip 18f26k22, 16
 
-    '' -------------------LATB-----------------
+    '' -------------------PORTA----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   -------| X | ----------| X |-----
+    '' IO:    ---------------------------------
     ''-----------------------------------------
     ''
 
-    '' ------------------PORTB-----------------
+    '' -------------------PORTB----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' SWITCH:---------------------------| X |-
+    '' IO:    -------| O | ----------| O | I |-
     ''-----------------------------------------
     ''
 
-    'Set the whole port as an output, we will use only one BIT to connect to the LED
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------------------| X |---------
+    ''-----------------------------------------
+    ''
+
+
+    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+    PORTC.2 = 1
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+
+    'Set the a whole port as an output, we will use only one BIT to connect to the LED
     dir portb out
 
     'Ensure the whole port is set off by setting to Zero
     portb = 0
 
     'Set one bit of the port on.
-    portb.5 = 1       ' You can try set portb.0 - the other LED!
+    portb.5 = 1       ' You can try set portb.1 - the other LED!
 
     'End
     end
