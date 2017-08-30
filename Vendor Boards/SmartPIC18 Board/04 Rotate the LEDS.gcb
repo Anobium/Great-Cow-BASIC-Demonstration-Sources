@@ -1,8 +1,9 @@
 '''
 '''  This lesson will introduce shifting instructions as well as bit-oriented skip operations to
-'''  change the LEDs displayed.
+'''  move the LED display.
 '''
-'''  LEDs rotate from right to left at a rate of 1.0s.
+'''  LEDs rotate from right to left at a rate of 1.0s, when to rotation of the bits happens the LED is turned on!
+'''
 '''
 '''************************************************************************
 '''
@@ -10,7 +11,7 @@
 '''  Compiler: GCB
 '''  IDE: GCB@SYN
 '''
-'''  Board: SmartPIC 18 Board
+'''  Board: Xpress Evaluation Board
 '''  Date: 29.8.17
 '''
 ' ----- Configuration
@@ -39,3 +40,4 @@
         Rotate portb right
         if C = 1 then portb.7 = 1
     loop
+

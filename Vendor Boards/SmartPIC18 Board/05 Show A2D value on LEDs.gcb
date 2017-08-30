@@ -1,7 +1,7 @@
 '''
 ''' This shows how to read the A2D converter and display the
-''' a proportioanal delay value by changing/inverting the LEDs state.
-''' The pot on the board varies the voltage coming in from the A2D.
+''' A proportioanal value on the 4 bit LED display.
+''' The pot on the board varies the voltage coming in on in A0.
 '''
 ''' The A2D is referenced to the same Vdd as the device, which
 ''' is nominally is 5V.  The A2D returns the ratio of the voltage
@@ -9,77 +9,41 @@
 ''' representing 5V and 0 representing 0V.
 '''
 '''
+''' The four LSbs of the ADC are mirrored onto the LEDs.
 ''' Rotate the potentiometer to change the LEDs displayed.
 '''
-'''************************************************************************
-'''
-'''  PIC: 18f26k22
+'''  PIC: 16F18855
 '''  Compiler: GCB
 '''  IDE: GCB@SYN
 '''
-'''  Board: SmartPIC 18 Board
-'''  Date: 29.8.17
+'''  Board: Xpress Evaluation Board
+'''  Date: 13.3.2016
 '''
 ' ----- Configuration
-    'Chip Settings.
-    #chip 18f26k22, 16
+		#chip 16f18855, 32
+    #Config FEXTOSC_OFF, RSTOSC_HFINT32
+    #Config WRT_OFF, CPD_ON, MCLRE_ON
 
-    '' -------------------LATB-----------------
+    '' -------------------LATA-----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   -------| X | ----------| X |-----
+    '' LED:   ---------------|D5 |D4 |D3 |D1 |-
     ''-----------------------------------------
     ''
+    #define LEDD2	PORTA.0
+    #define LEDD3	PORTA.1
+    #define LEDD4	PORTA.2
+    #define LEDD5	PORTA.3
+    #define Potentiometer 	PORTA.4
 
-    '' ------------------PORTB-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' SWITCH:---------------------------| X |-
-    ''-----------------------------------------
-    ''
-
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define Potentiometer   PORTA.4
-    #define LDR             PORTA.4
-    #define SwitchIn        PORTB.4
-
-    Dir     LEDD1 OUT
-    Dir     LEDD2 OUT
-    Dir     Potentiometer In   'this is AN17 port
-    Dir     LDR           In
-    Dir     SwitchIn      In
-
-
-    'Set the LED states
-    LEDD1 = 0
-    LEDD2 = 0
-
+    Dir 		LEDD2 OUT
+    Dir 		LEDD3 OUT
+    Dir 		LEDD4 OUT
+    Dir 		LEDD5 OUT
+    DIR		Potentiometer In
 
     do
 
-        ADCVal =  ReadAD10 ( AN17 )
-
-        if ADCVal > 768 then
-
-          LEDD1 = 1
-          LEDD2 = 1
-
-        else
-          if ADCVal  > 368 then
-
-              LEDD1 = 0
-              LEDD2 = 1
-
-          else
-
-              LEDD1 = 0
-              LEDD2 = 0
-
-
-          end if
-
-        end if
-        'always wait 5 ms... just to make things look nice.
-        wait 5 ms
-
+        Wait 100 ms
+        porta =  ReadAD10 ( AN4 ) / 64
 
     loop

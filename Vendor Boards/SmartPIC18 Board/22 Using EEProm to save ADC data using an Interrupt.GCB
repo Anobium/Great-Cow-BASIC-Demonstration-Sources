@@ -1,0 +1,96 @@
+'''
+'''******************************************************************
+'''
+''' This demonstration will provide code for writing and reading a single byte onto
+''' the on-board EEPROM. EEPROM is non-volatile memory, meaning that it does
+''' not lose its value when power is shut off. This is unlike RAM, which will
+''' lose its value when no power is applied. The EEPROM is useful for storing
+''' variables that must still be present during no power.
+''' It is also convenient to use if the entire RAM space is used up.
+''' Writes and reads to the EEPROM are practically instant and are much faster
+''' than program memory operations.
+
+''' Press the switch to save the LED state and then disconnect the power. When
+''' power is then applied again, the program will start with that same LED lit.
+
+''' When the demonstration is first programmed, no LEDs will light up even with movement
+''' of the POT. When the switch is pressed, the corresponding LED will be lit and
+''' then the PIC will go to sleep until the switch is pressed again. Each press of
+''' the switch saves the ADC value into EEPROM. The PIC uses interrupts to wake up
+''' from sleep, take an ADC reading, save to EEPROM, and then goes back to sleep.
+'''
+'''
+'''  PIC: 16F18855
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: Xpress Evaluation Board
+'''  Date: 13.3.2016
+'''
+
+
+    'Chip Settings.
+    #chip 16f18855,32
+    #option explicit
+    #Config FEXTOSC_OFF, RSTOSC_HFINT32
+    #Config WRT_OFF, CPD_ON, MCLRE_ON
+
+    '' -------------------LATA-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|D5 |D4 |D3 |D1 |-
+    ''-----------------------------------------
+    ''
+
+    #define USART_BAUD_RATE 19200
+    #define USART_TX_BLOCKING
+
+    #define LEDD2 PORTA.0
+    #define LEDD3 PORTA.1
+    #define LEDD4 PORTA.2
+    #define LEDD5 PORTA.3
+    Dir     LEDD2 OUT
+    Dir     LEDD3 OUT
+    Dir     LEDD4 OUT
+    Dir     LEDD5 OUT
+
+    #define SWITCH_DOWN         0
+    #define SWITCH_UP           1
+
+    #define SWITCH              PORTA.5
+
+    Dim OUTVALUE, DOWN, ADC_VALUE as Byte
+
+    'Setup an Interrupt event when porta.5 goes negative.
+    IOCAN5 = 1
+    On Interrupt PORTChange  Call InterruptHandler
+
+    do
+
+     'Read the value from the EEPROM from register Zero in the EEPROM
+      EPRead ( 0, OutValue )
+
+      'Leave the Top Bytes alone and set the lower four bits
+      PortA = ( PortA & 0XF0 ) OR ( OutValue / 16 )
+      Sleep
+
+    loop
+
+
+sub InterruptHandler
+
+    if IOCAF5 = 1 then                         'S2 was just pressed
+        IOCAN5 = 0                             'Prevent the event from reentering the InterruptHandler routine
+        IOCAF5 = 0                             'We must clear the flag in software
+
+        wait 5 ms                              'debounce by waiting and seeing if still held down
+        if ( SWITCH = DOWN ) then
+            'Read the ADC
+            adc_value = readad ( AN4 )
+            'Write the value to register Zero in the EEPROM
+            EPWrite ( 0, adc_value )
+        end if
+        IOCAN5 = 1                              'ReEnable the InterruptHandler routine
+
+    end if
+
+end sub

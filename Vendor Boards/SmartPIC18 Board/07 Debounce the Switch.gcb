@@ -4,60 +4,46 @@
 ''' required delay amount differs with the switch being used. Some switches are worse
 ''' than others.
 '''
-''' When the switch is held down, LEDD1 will be lit. When the switch is not held down, all
+''' When the switch is held down, D1 will be lit. When the switch is not held down, all
 ''' LEDs are OFF.
 '''
 '''
-'''************************************************************************
-'''
-'''  PIC: 18f26k22
+'''  PIC: 16F18855
 '''  Compiler: GCB
 '''  IDE: GCB@SYN
 '''
-'''  Board: SmartPIC 18 Board
-'''  Date: 29.8.17
+'''  Board: Xpress Evaluation Board
+'''  Date: 13.3.2016
 '''
 ' ----- Configuration
     'Chip Settings.
-    #chip 18f26k22, 16
+    #chip 16f18855,32
+    #config RSTOSC_HFINT32
 
-    '' -------------------LATB-----------------
+    '' -------------------LATA-----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   -------| X | ----------| X |-----
+    '' LED:   ---------------|D5 |D4 |D3 |D1 |-
     ''-----------------------------------------
-    ''
-
-    '' ------------------PORTB-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' SWITCH:---------------------------| X |-
-    ''-----------------------------------------
-    ''
-
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define Potentiometer   PORTA.4
-    #define LDR             PORTA.4
-    #define SwitchIn        PORTB.4
-
-    Dir     LEDD1 OUT
-    Dir     LEDD2 OUT
-    Dir     Potentiometer In   'this is AN17 port
-    Dir     LDR           In
-    Dir     SwitchIn      In
+    '''
 
     #define DOWN        0
     #define UP          1
+    #define SWITCH      PORTA.5
+    #define LED         PortA.0
 
-    LEDD1 = 0
+    dir LED out
+    LED = 0
+
+    'setup switch (SW1)
+    dir SWITCH in
 
     do
-        if ( SWITCHin = DOWN ) then
+        if ( SWITCH = DOWN ) then
            wait 10 ms
-           'A positive press of the switch must have happened
-           if ( SWITCHin = DOWN ) Then
-              Set LEDD1 on
+           if ( SWITCH = DOWN ) Then
+              Set LED on
            end if
         else
-           Set LEDD1 off
+           Set LED off
        end if
     loop
