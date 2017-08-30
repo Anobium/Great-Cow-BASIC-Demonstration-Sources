@@ -1,15 +1,12 @@
 '''
-''' This shows how to read the ADC converter and display the
-''' a proportional delay value by changing/inverting the LEDs state.
-''' The pot on the board varies the voltage coming in from the ADC.
+''' This demonstration uses a simple software delay routine to avoid the initial noise on the switch
+''' pin. The code will delay for only 5 ms, but should overcome most of the noise. The
+''' required delay amount differs with the switch being used. Some switches are worse
+''' than others.
 '''
-''' The ADC is referenced to the same Vdd as the device, which
-''' is nominally is 5V.  The ADC returns the ratio of the voltage
-''' on Pin RA0 to 5V.  The ADC has a resolution of 10 bits, with 1023
-''' representing 5V and 0 representing 0V.
+''' When the switch is held down, LEDD1 will be lit. When the switch is not held down, all
+''' LEDs are OFF.
 '''
-'''
-''' Rotate the potentiometer to change the LEDs displayed.
 '''
 '''************************************************************************
 '''
@@ -48,25 +45,19 @@
     Dir     LDR           In
     Dir     SwitchIn      In
 
+    #define DOWN        0
+    #define UP          1
 
-    'Set the LED states
-    LEDD1 = 1
-    LEDD2 = 0
-
+    LEDD1 = 0
 
     do
-
-        ADCVal =  ReadAD10 ( AN17 )
-
-        'Wait for the value of the potentiometer in terms of milliseconds
-        Wait ADCVal ms
-
-        'Flip the state of the LEDs
-        LED1 = NOT LED1
-        LED2 = NOT LED2
-
-        'always wait 5 ms... just to make things look nice.
-        wait 5 ms
-
-
+        if ( SWITCHin = DOWN ) then
+           wait 10 ms
+           'A positive press of the switch must have happened
+           if ( SWITCHin = DOWN ) Then
+              Set LEDD1 on
+           end if
+        else
+           Set LEDD1 off
+       end if
     loop
