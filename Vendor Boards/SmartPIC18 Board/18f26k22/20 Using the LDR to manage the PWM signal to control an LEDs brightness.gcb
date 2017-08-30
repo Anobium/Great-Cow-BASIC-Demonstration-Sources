@@ -6,80 +6,87 @@
 ''' where the high portion of the signal is considered the on state and the low portion of
 ''' the signal is considered the off state. The high portion, also known as the pulse width,
 ''' can vary in time and is defined in steps. A longer, high on time will illuminate the LED
-''' brighter. The frequency or period of the PWM does not change. A larger number of
-''' steps applied, which lengthens the pulse width, also supplies more power to the load.
-''' Lowering the number of steps applied, which shortens the pulse width, supplies less
-''' power. The PWM period is defined as the duration of one complete cycle or the total
-''' amount of on and off time combined.
+''' brighter. The frequency or period of the PWM does not change.
 '''
-''' This demonstation shows a how the changing PWM values can dim the LEDs
+''' This program demostrates a method where the number of steps applied,
+''' which lengthens the pulse width are calculated in an Interrupt routine.
+''' The PWM period defined as the duration of one complete cycle or the total
+''' amount of on and off time combined is based on a simple counter.
 '''
-''' This demonstration uses CCP5 that is then redirected via PPS to the output LEDs
+''' The demo varies the PWM to the LED based upon the light level failing on the LDR.
+'''  The duty cycle is set by the returned value from the LDR.
 '''
+'''************************************************************************
 '''
-'''
-'''  PIC: 16F18855
+'''  PIC: 18f26k22
 '''  Compiler: GCB
 '''  IDE: GCB@SYN
 '''
-'''  Board: Xpress Evaluation Board
-'''  Date: 06.3.2017
+'''  Board: SmartPIC 18 Board
+'''  Date: 29.8.17
 '''
+' ----- Configuration
+    'Chip Settings.
+    #chip 18f26k22, 16
+    #option Explicit
 
-#chip 16f18855,32
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
 
-  'Set the PPS for this solution.
-  #startup InitPPS, 85
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | A |-------| O | I |-
+    ''-----------------------------------------
+    ''
 
-  Sub InitPPS
-    UNLOCKPPS
-
-    'Module: CCP5
-    RA0PPS = 0x000D    'CCP5 > RA0
-    CCP5PPS = 0x0000    'RA0 > CCP5 (bi-directional)
-    RA1PPS = 0x000D    'CCP5 > RA1
-    CCP5PPS = 0x0001    'RA1 > CCP5 (bi-directional)
-    RA2PPS = 0x000D    'CCP5 > RA2
-    CCP5PPS = 0x0002    'RA2 > CCP5 (bi-directional)
-    RA3PPS = 0x000D    'CCP5 > RA3
-    CCP5PPS = 0x0003    'RA3 > CCP5 (bi-directional)
-
-    LOCKPPS
-  End sub
-
-  '' -------------------LATA-----------------
-  '' Bit#:  -7---6---5---4---3---2---1---0---
-  '' LED:   ---------------|D5 |D4 |D3 |D1 |-
-  ''-----------------------------------------
-  ''
-  #define LEDD2 PORTA.0
-  #define LEDD3 PORTA.1
-  #define LEDD4 PORTA.2
-  #define LEDD5 PORTA.3
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---| TX|-----------| X |---------
+    ''-----------------------------------------
+    ''
 
 
-  Dir     LEDD2 OUT
-  Dir     LEDD3 OUT
-  Dir     LEDD4 OUT
-  Dir     LEDD5 OUT
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTA.4
+    #define LDR             PORTB.4
+    #define SwitchIn        PORTB.0
+    #define LCDControl      PORTC.2
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the AN17 port
+    Dir     LDR           In   'this is the AN11 port
+    Dir     SwitchIn      In
+    Dir     LCDControl    Out
+
+    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+    LCDControl = 1
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
 
 
-  'Using ADC value to the CCP/PWM
-  do
+    'Using ADC value to the CCP/PWM
+    do
 
-      HPWM 5, 40, ReadAD( AN4 )
-      wait 10 ms
+        'HPWM channel, frequency, duty cycle
+        HPWM 3, 40, ReadAD( AN11 )
+        wait 10 ms
 
-  loop
+    loop
 
 
   'Code optimisation
 
   #define USE_HPWMCCP1 FALSE       ' This is not used so optimise
   #define USE_HPWMCCP2 FALSE       ' This is not used so optimise
-  #define USE_HPWMCCP3 FALSE       ' This is not used so optimise
+  #define USE_HPWMCCP3 TRUE        ' This is used so include in the compiled code
   #define USE_HPWMCCP4 FALSE       ' This is not used so optimise
-  #define USE_HPWMCCP5 TRUE        ' This is used so include in the compiled code
+  #define USE_HPWMCCP5 FALSE       ' This is not used so optimise
 
   #define USE_HPWM_TIMER2 TRUE     ' This is used so include in the compiled code
   #define USE_HPWM_TIMER4 FALSE
@@ -93,20 +100,20 @@
     #define USE_AD2 FALSE
     #define USE_AD2 FALSE
     #define USE_AD3 FALSE
-    #define USE_AD4 TRUE            ' This is used so include in the compiled code
+    #define USE_AD4 FALSE
     #define USE_AD5 FALSE
     #define USE_AD6 FALSE
     #define USE_AD7 FALSE
     #define USE_AD8 FALSE
     #define USE_AD9 FALSE
     #define USE_AD10 FALSE
-    #define USE_AD11 FALSE
+    #define USE_AD11 TRUE            ' This is used so include in the compiled code
     #define USE_AD12 FALSE
     #define USE_AD13 FALSE
     #define USE_AD14 FALSE
     #define USE_AD15 FALSE
     #define USE_AD16 FALSE
-    #define USE_AD17 FALSE
+    #define USE_AD17 TRUE            ' This is used so include in the compiled code
     #define USE_AD18 FALSE
     #define USE_AD19 FALSE
     #define USE_AD20 FALSE

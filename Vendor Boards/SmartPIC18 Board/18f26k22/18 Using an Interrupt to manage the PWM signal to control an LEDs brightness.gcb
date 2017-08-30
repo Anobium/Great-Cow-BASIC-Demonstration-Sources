@@ -13,22 +13,63 @@
 ''' The PWM period defined as the duration of one complete cycle or the total
 ''' amount of on and off time combined is based on a simple counter.
 '''
-''' The demo vary the PWM to the LED.
+''' The demo varies the PWM to the LED.
 '''
+'''************************************************************************
 '''
-'''  PIC: 16F18855
+'''  PIC: 18f26k22
 '''  Compiler: GCB
 '''  IDE: GCB@SYN
 '''
-'''  Board: Xpress Evaluation Board
-'''  Date: 13.3.2016
+'''  Board: SmartPIC 18 Board
+'''  Date: 29.8.17
 '''
-    #chip 16f18855,32
+' ----- Configuration
+    'Chip Settings.
+    #chip 18f26k22, 16
     #option Explicit
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | ----------| O | I |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---| TX|-----------| X |---------
+    ''-----------------------------------------
+    ''
+
+
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTA.4
+    #define SwitchIn        PORTB.0
+    #define LCDControl      PORTC.2
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the AN17 port
+    Dir     SwitchIn      In
+    Dir     LCDControl    Out
+
+    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+    LCDControl = 1
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
 
     dim speed, MotorSpeed, PWMCounter as byte
 
-    #define MOTOR PORTA.0
+    #define MOTOR LEDD1
     dir MOTOR out
 
     'Call the initialisation routine
@@ -60,7 +101,7 @@
 
         'Add a handler for the interrupt
         On Interrupt Timer0Overflow Call PWMHandler
-        InitTimer0(Osc, TMR0_FOSC4 + PRE0_1 , POST0_1)
+        InitTimer0(Osc,  PRE0_1 )
         StartTimer 0
 
     End Sub
@@ -78,4 +119,3 @@
         If PWMCounter = 100 Then PWMCounter = 0
 
     End Sub
-
