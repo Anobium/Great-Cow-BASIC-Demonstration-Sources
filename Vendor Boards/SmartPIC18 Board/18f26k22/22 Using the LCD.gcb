@@ -1,9 +1,6 @@
 '''
-''' This demonstration uses a simple software routine to avoid the initial noise on the switch
-''' pin. The code will inspect the switch status, but should overcome most of the noise from a switch.
-'''  Some switches are worse than others.
+'''******************************************************************
 '''
-''' When the switch is held down, one LED will be lit. When the switch is not held down, the other will be lit.
 '''
 '''
 '''************************************************************************
@@ -18,23 +15,24 @@
 ' ----- Configuration
     'Chip Settings.
     #chip 18f26k22, 16
+    #config mclre=on
     #option Explicit
 
     '' -------------------PORTA----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
+    '' IO:    ---|RS |RW | E |D7 |D6 |D5 |D4
     ''-----------------------------------------
     ''
 
     '' -------------------PORTB----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | ----------| O | I |-
+    '' IO:    -------| O | A |-------| O | I |-
     ''-----------------------------------------
     ''
 
     '' ------------------PORTC-----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------------------| X |---------
+    '' IO:    ---| TX|-----------| X |---------
     ''-----------------------------------------
     ''
 
@@ -42,12 +40,14 @@
     #define LEDD1 PORTB.1
     #define LEDD2 PORTB.5
     #define Potentiometer   PORTA.4
+    #define LDR             PORTB.4
     #define SwitchIn        PORTB.0
     #define LCDControl      PORTC.2
 
     Dir     LEDD1         Out
     Dir     LEDD2         Out
     Dir     Potentiometer In   'this is the AN17 port
+    Dir     LDR           In   'this is the AN11 port
     Dir     SwitchIn      In
     Dir     LCDControl    Out
 
@@ -57,42 +57,3 @@
     '*****************************************************************************************************
     'Main program commences here.. everything before this is setup for the board.
 
-     dim lastKeyDown as Byte
-
-    'Debouncing a switch
-
-      Do forever
-                wait 10 ms
-
-                if  keyPressed( lastKeyDown ) = true then
-
-                    'push button pressed
-                    LEDD1 = !LEDD1
-
-                end if
-
-      loop
-
-
-  function  keyPressed ( in lastKeyDown )
-
-      dim actKeyDown as byte
-
-        if ( !SwitchIn ) then
-
-            actKeyDown = true
-
-        else
-
-            actKeyDown = false
-
-        end if
-
-        if (actKeyDown <> lastKeyDown) then
-            lastKeyDown = actKeyDown
-            keyPressed =  actKeyDown
-        end if
-
-        keyPressed = 0
-
-  end function

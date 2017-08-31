@@ -30,7 +30,7 @@
 
     '' ------------------PORTC-----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---| TX|-----------| X |---------
+    '' IO:    ---| TX|---|SDA|CLK| X |---------
     ''-----------------------------------------
     ''
 
@@ -59,7 +59,7 @@
     #define USART_TX_BLOCKING
 
 
-    ' Define I2C settings - CHANGE PORTS
+    ' Define I2C settings
     #define HI2C_BAUD_RATE 400
     #define HI2C_DATA PORTC.4
     #define HI2C_CLOCK PORTC.3

@@ -3,7 +3,8 @@
 ''' pin. The code will inspect the switch status, but should overcome most of the noise from a switch.
 '''  Some switches are worse than others.
 '''
-''' When the switch is held down, one LED will be lit. When the switch is not held down, the other will be lit.
+''' When the switch is held down, one LED will be lit.
+''' This time we are using the RESET button as an input switch.
 '''
 '''
 '''************************************************************************
@@ -18,6 +19,8 @@
 ' ----- Configuration
     'Chip Settings.
     #chip 18f26k22, 16
+    'Ensure the reset switch is an input.  This will NOT reset the chip now!
+    #config mclre=off
     #option Explicit
 
     '' -------------------PORTA----------------
@@ -38,18 +41,25 @@
     ''-----------------------------------------
     ''
 
+    '' ------------------PORTE-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------| I |-------------
+    ''-----------------------------------------
+    ''
 
     #define LEDD1 PORTB.1
     #define LEDD2 PORTB.5
     #define Potentiometer   PORTA.4
     #define SwitchIn        PORTB.0
     #define LCDControl      PORTC.2
+    #define RSTButton       PORTE.3
 
     Dir     LEDD1         Out
     Dir     LEDD2         Out
     Dir     Potentiometer In   'this is the AN17 port
     Dir     SwitchIn      In
     Dir     LCDControl    Out
+    Dir     RSTButton     In
 
     'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
     LCDControl = 1
@@ -64,35 +74,31 @@
       Do forever
                 wait 10 ms
 
-                if  keyPressed( lastKeyDown ) = true then
+                'This line is normally HIGH, so, we have to test when the line goes low.
+                if  SwitchIn = 0 then
 
                     'push button pressed
-                    LEDD1 = !LEDD1
+                    LEDD1 = 1
+
+                Else
+
+                    LEDD1 = 0
 
                 end if
 
+
+                'The reset line is always HIGH, so, we have to test when the line goes low.
+                if  RSTButton = 0 then
+
+                    'push button pressed
+                    LEDD2 = 1
+
+                else
+
+                    LEDD2 = 0
+
+                end if
+
+
       loop
 
-
-  function  keyPressed ( in lastKeyDown )
-
-      dim actKeyDown as byte
-
-        if ( !SwitchIn ) then
-
-            actKeyDown = true
-
-        else
-
-            actKeyDown = false
-
-        end if
-
-        if (actKeyDown <> lastKeyDown) then
-            lastKeyDown = actKeyDown
-            keyPressed =  actKeyDown
-        end if
-
-        keyPressed = 0
-
-  end function
