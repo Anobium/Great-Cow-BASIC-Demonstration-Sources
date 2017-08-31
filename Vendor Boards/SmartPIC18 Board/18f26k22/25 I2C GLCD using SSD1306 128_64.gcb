@@ -9,6 +9,7 @@
 '''
 '''This version is compatible will all version of Great Cow BASIC as this demonstration uses Full Memory GLCD mode only.  This can be adapted to Low Memory GLCD mode.
 '''
+'''************************************************************************
 '''@author  EvanV
 '''@licence GPL
 '''@version 2.1

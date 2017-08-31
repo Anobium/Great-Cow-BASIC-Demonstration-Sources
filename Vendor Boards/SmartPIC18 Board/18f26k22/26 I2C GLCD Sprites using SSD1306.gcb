@@ -1,0 +1,428 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program shows how to draw sprites on an SSD1306 I2C device.
+'''Only support I2C and Full GLCD Mode - supported from v0.98 onwards
+'''
+'''The #define 'spritechoice' defines the sprite to be managed.
+'''You can define your own in the sprite tables. Each table is 8 pixles vertical - col1 to col8 in each table.
+'''
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 2.1
+'''@date    27.8.17
+'''************************************************************************
+'''
+'''  PIC: 18f26k22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: SmartPIC 18 Board
+'''  Date: 29.8.17
+'''
+' ----- Configuration
+    'Chip Settings.
+    #chip 18f26k22, 16
+    #config mclre=on
+    #option Explicit
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | A |-------| O | I |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---| TX|---|SDA|CLK| X |---------
+    ''-----------------------------------------
+    ''
+
+
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTA.4
+    #define LDR             PORTB.4
+    #define SwitchIn        PORTB.0
+    #define LCDControl      PORTC.2
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the AN17 port
+    Dir     LDR           In   'this is the AN11 port
+    Dir     SwitchIn      In
+    Dir     LCDControl    Out
+
+    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+    LCDControl = 1
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+    ' Define I2C settings
+    #define HI2C_BAUD_RATE 400
+    #define HI2C_DATA PORTC.4
+    #define HI2C_CLOCK PORTC.3
+    'Initialise I2C Slave
+    'I2C pins need to be input for SSP module - this is not an option
+    Dir HI2C_DATA in
+    Dir HI2C_CLOCK in
+    'MASTER
+    HI2CMode Master
+
+    #include <glcd.h>
+    #define GLCD_TYPE GLCD_TYPE_SSD1306
+    #define GLCD_I2C_Address 0x78
+
+; ----- Define variables
+
+    'These constants allow you to change the GLCD memory usage.
+    #define GLCD_PROTECTOVERRUN
+'*******************************************************************************************
+    'Select the sprite and the user delay
+    #define spritechoice 2
+    #define spritedelay 3 ms  '3ms is limit of user visual perception
+
+'*******************************************************************************************
+    'Draw initial screen
+    Box 0,0,127,63
+    GLCDPrint ( 1, 36, "Great Cow BASIC")
+    GLCDPrint ( 1, 46, "GLCD Library 2017")
+    GLCDPrint ( 1, 54, "Sprite Support")
+    wait 1 s
+    GLCDCLS
+    Box 0,0,127,63
+
+
+    'dimension and initialise variables
+    dim oldx, oldy as byte
+    dim curx, cury as byte
+    dim dirx, diry as byte
+
+    curx = 63
+    cury = 31
+    oldx = curx
+    oldy = cury
+
+    'Draw initial sprite
+    GLCDDrawSprite_SSD1306 curx,cury, spritechoice, GLCDForeground
+
+    'Set initial direction
+    if Random > 127 then
+        dirx=1
+    Else
+        dirx=255
+    end if
+
+    if Random > 127 then
+        diry=1
+    Else
+        diry=255
+    end if
+
+
+    dir portc.0 out
+
+    do
+
+      ' handle bounce
+      if  curx>0 and curx<119  then
+          oldx = curx
+          curx=curx+dirx
+
+      else
+
+          if dirx = 1 Then
+            dirx=255
+          Else
+            dirx=1
+          end if
+          oldx = curx
+          curx=curx+dirx
+
+      end if
+
+
+      if cury >1 and cury<55 Then
+          oldy = cury
+          cury=cury+diry
+
+      else
+
+          if diry = 1 Then
+            diry=255
+          Else
+            diry=1
+          end if
+          oldy = cury
+          cury=cury+diry
+
+      end if
+      ' end of handle bounce
+
+
+      'draw sprite
+      GLCDDrawSprite_SSD1306 oldx,oldy, spritechoice
+      GLCDDrawSprite_SSD1306 curx,cury, spritechoice
+      'pulse output for scope
+      portc.0 = !portc.0
+'      'user delay
+      wait spritedelay  'so you can see it!
+
+    loop
+
+
+
+  end
+
+
+Sub GLCDDrawSprite_SSD1306(In GLCDX as byte, In GLCDY as byte, In CharCode )
+
+  Dim CurrCharVal, CurrCharCol, SSD1306_Page, GLCDHiChange, GLCDLoChange, GLCDRotateBits, GLCDTemp as byte
+
+   'Calculate device row
+   SSD1306_Page = GLCDY
+   Repeat 3
+     Set C Off
+     Rotate SSD1306_Page Right
+   End Repeat
+   ' SSD1306_Page is now the correct ROW
+
+   'Calculate buffer element
+   SSD1306_BufferLocationCalc = GLCDY And 0xF8
+   repeat 4
+     set c off
+     rotate SSD1306_BufferLocationCalc left
+   end repeat
+   SSD1306_BufferLocationCalc = (SSD1306_BufferLocationCalc or GLCDX)
+   SSD1306_BufferLocationCalc++  'Increment as we do not use element 0 in the array
+   'SSD1306_BufferLocationCalc is now the correct buffer element
+
+   'is the y position of Sprite on a ROW positin 0?
+   if ( GLCDY mod 8 ) = 0 then
+
+      Cursor_Position_SSD1306_Fast  'uses GLDX and SS1306_Page variables
+
+      'Read 8 pixels value into CurrCharVal then write to display
+      Open_Transaction_SSD1306
+      For CurrCharCol = 1 to 8
+        Select Case CurrCharCol
+          Case 1: ReadTable sprite1, CharCode, CurrCharVal
+          Case 2: ReadTable sprite2, CharCode, CurrCharVal
+          Case 3: ReadTable sprite3, CharCode, CurrCharVal
+          Case 4: ReadTable sprite4, CharCode, CurrCharVal
+          Case 5: ReadTable sprite5, CharCode, CurrCharVal
+          Case 6: ReadTable sprite6, CharCode, CurrCharVal
+          Case 7: ReadTable sprite7, CharCode, CurrCharVal
+          Case 8: ReadTable sprite8, CharCode, CurrCharVal
+        End Select
+
+        'Xor pixels into buffer
+        GLCDTemp = SSD1306_BufferAlias(SSD1306_BufferLocationCalc) xor CurrCharVal
+        SSD1306_BufferAlias(SSD1306_BufferLocationCalc) = GLCDTemp
+        'Write buffer this will Increment the device point as part of the write operation
+        Write_Transaction_Data_SSD1306(GLCDTemp)
+        'Increment buffer by 1 to match device Increment
+        SSD1306_BufferLocationCalc++
+      Next
+      Close_Transaction_SSD1306
+
+   else
+      'handle TOP portion of the sprite as we are NOT at 0 pixel of a ROW
+      'send the TOP pixels
+      Cursor_Position_SSD1306_Fast
+
+      Open_Transaction_SSD1306
+      For CurrCharCol = 1 to 8
+        Select Case CurrCharCol
+          Case 1: ReadTable sprite1, CharCode, GLCDHiChange
+          Case 2: ReadTable sprite2, CharCode, GLCDHiChange
+          Case 3: ReadTable sprite3, CharCode, GLCDHiChange
+          Case 4: ReadTable sprite4, CharCode, GLCDHiChange
+          Case 5: ReadTable sprite5, CharCode, GLCDHiChange
+          Case 6: ReadTable sprite6, CharCode, GLCDHiChange
+          Case 7: ReadTable sprite7, CharCode, GLCDHiChange
+          Case 8: ReadTable sprite8, CharCode, GLCDHiChange
+        End Select
+
+        'handle top row
+        GLCDRotateBits = GLCDY And 7
+        repeat GLCDRotateBits
+          set c off
+          rotate GLCDHiChange left
+        end repeat
+
+        GLCDTemp = SSD1306_BufferAlias(SSD1306_BufferLocationCalc) XOR GLCDHiChange
+        SSD1306_BufferAlias(SSD1306_BufferLocationCalc) = GLCDTemp
+        Write_Transaction_Data_SSD1306(GLCDTemp)
+
+        SSD1306_BufferLocationCalc++
+
+      next
+      Close_Transaction_SSD1306
+
+      'handle BOTTOM pixels of the sprite
+
+      'Increment to the next ROW
+      SSD1306_Page++
+      Cursor_Position_SSD1306_Fast
+
+      'Move buffer pointet to the next row/buffer which is 128 bytes, but, the top half of the buffer has been write... 8 bytes.
+      'So 128-8 = 120
+      SSD1306_BufferLocationCalc = SSD1306_BufferLocationCalc  + 120
+
+      Open_Transaction_SSD1306
+      For CurrCharCol = 1 to 8
+        Select Case CurrCharCol
+          Case 1: ReadTable sprite1, CharCode, GLCDHiChange
+          Case 2: ReadTable sprite2, CharCode, GLCDHiChange
+          Case 3: ReadTable sprite3, CharCode, GLCDHiChange
+          Case 4: ReadTable sprite4, CharCode, GLCDHiChange
+          Case 5: ReadTable sprite5, CharCode, GLCDHiChange
+          Case 6: ReadTable sprite6, CharCode, GLCDHiChange
+          Case 7: ReadTable sprite7, CharCode, GLCDHiChange
+          Case 8: ReadTable sprite8, CharCode, GLCDHiChange
+        End Select
+
+        GLCDLoChange = 0
+        repeat GLCDRotateBits
+          set c off
+          rotate GLCDHiChange left  'as bits move to left C is set... moving in GLCDLoChange in the next command
+          rotate GLCDLoChange left
+        end repeat
+
+        GLCDTemp = SSD1306_BufferAlias(SSD1306_BufferLocationCalc) XOR GLCDLoChange
+        SSD1306_BufferAlias(SSD1306_BufferLocationCalc) = GLCDTemp
+        Write_Transaction_Data_SSD1306(GLCDTemp)
+        SSD1306_BufferLocationCalc++
+      next
+      Close_Transaction_SSD1306
+
+   end if
+
+End Sub
+
+
+  table sprite1 ;sprite shape data
+    b'00000000'
+    b'00000000'
+    b'10000000'
+    b'11111111'
+    b'00111000'
+    b'00000000'
+    b'00000000'
+    b'11111111'
+
+
+  end Table
+
+  table sprite2 ;sprite shape data
+    b'00000000'
+    b'00111100'
+    b'01000000'
+    b'11111111'
+    b'01000100'
+    b'00000000'
+    b'00111100'
+    b'11000011'
+  end Table
+
+  table sprite3 ;sprite shape data
+    b'00000000'
+    b'01011010'
+    b'00100000'
+    b'11111111'
+    b'10000010'
+    b'00111100'
+    b'01100110'
+    b'10100101'
+  end Table
+
+  table sprite4 ;sprite shape data
+    b'00000000'
+    b'01011010'
+    b'00010000'
+    b'11111111'
+    b'00011000'
+    b'00111100'
+    b'01011010'
+    b'10100101'
+  end Table
+
+  table sprite5 ;sprite shape data
+    b'00000000'
+    b'01011010'
+    b'00001000'
+    b'11111111'
+    b'10000010'
+    b'00111100'
+    b'01011010'
+    b'10100101'
+  end Table
+
+  table sprite6 ;sprite shape data
+    b'00000000'
+    b'01011010'
+    b'00000100'
+    b'11111111'
+    b'01000100'
+    b'00111100'
+    b'01100110'
+    b'10100101'
+  end Table
+
+  table sprite7 ;sprite shape data
+    b'00000000'
+    b'00111100'
+    b'00000010'
+    b'11111111'
+    b'00111000'
+    b'00000000'
+    b'00111100'
+    b'11000011'
+  end Table
+
+  table sprite8 ;sprite shape data
+    b'00000000'
+    b'00000000'
+    b'00000001'
+    b'11111111'
+    b'00000000'
+    b'00000000'
+    b'00000000'
+    b'11111111'
+  end Table
+
+
+Macro Cursor_Position_SSD1306_Fast
+
+    dim I2CByte as byte
+
+    HI2CStart
+    HI2CSend GLCD_I2C_Address
+    HI2CSend 0x00
+    HI2CSend 0xB0 + SSD1306_Page
+
+    HI2CStop
+    HI2CStart
+    HI2CSend GLCD_I2C_Address
+    HI2CSend 0x00
+             I2CByte = ( GLCDX  & 0x0f )  ' lower nibble
+    HI2CSend I2CByte
+    HI2CStop
+
+    HI2CStart
+    HI2CSend GLCD_I2C_Address
+    HI2CSend 0x00
+             I2CByte = ( SWAP4(GLCDX) & 0x0F ) + 0x10
+    HI2CSend I2CByte
+    HI2CStop
+
+end Macro
