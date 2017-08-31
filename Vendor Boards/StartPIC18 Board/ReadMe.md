@@ -1,0 +1,1 @@
+The StartPIC18 Board is a low budget development board. The board is for beginners as well as for advanced users. Please find the documentation of the StartPIC18 board [here](https://pic-projekte.de/blog/startpic18/).
