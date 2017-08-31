@@ -1,6 +1,6 @@
 '''A program  for GCGB and GCB.
 '''--------------------------------------------------------------------------------------------------------------------------------
-'''This program is a SNAKE game on 1" SDD1306 GLCD for an UNO/Arduino/Mega328p
+'''This program is a SNAKE game on 1" SSD1306 GLCD for an UNO/Arduino/Mega328p
 ''':
 ''':This game reserves the rights of any orginal works.
 ''':
