@@ -1,0 +1,3 @@
+A quite versatile Dev Board created for Programming in C but also very good suitable for Great Cow Bais
+Origin:
+https://pic-projekte.de/blog/startpic18/
