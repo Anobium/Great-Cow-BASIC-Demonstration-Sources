@@ -45,7 +45,7 @@
 
     #define LEDD1 PORTB.1
     #define LEDD2 PORTB.5
-    #define Potentiometer   PORTA.4
+    #define Potentiometer   PORTC.5
     #define LCDControl      PORTC.2
 
     Dir     LEDD1         Out

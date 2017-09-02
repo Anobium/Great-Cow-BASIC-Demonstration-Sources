@@ -49,7 +49,7 @@
     'Define constants to make things easier. We can reuse these at any time.
     #define LEDD1 PORTB.1
     #define LEDD2 PORTB.5
-    #define Potentiometer   PORTA.4
+    #define Potentiometer   PORTC.5
     #define LDR             PORTA.4
     #define SwitchIn        PORTB.1
     #define LCDControl      PORTC.2
