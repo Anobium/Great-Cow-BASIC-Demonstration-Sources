@@ -3,7 +3,7 @@
 ''' LCD demonstration for the board. We have added the LCD section to specific the ports.
 ''' All the LCD commands are standard Great Cow BASIC LCD commands.
 '''
-''' Set the section "Setup LCD Parameters" for the specification of the LCD commands.
+''' See the section "Setup LCD Parameters" for the specification of the LCD commands.
 '''
 '''************************************************************************
 '''
@@ -184,4 +184,3 @@
         WAIT 3 s
 
     loop
-
