@@ -43,11 +43,8 @@
     'Main program commences here.. everything before this is setup for the board.
 
 
-    'Set the a whole port as an output, we will use only one BIT to connect to the LED
-    dir portb out
-
-    'Ensure the whole port is set off by setting to Zero
-    portb = 0
+    'Set the a port as an output, we will use only one BIT to connect to the LED
+    dir portb.5 out
 
     'Set one bit of the port on.
     portb.5 = 1       ' You can try set portb.1 - the other LED!
