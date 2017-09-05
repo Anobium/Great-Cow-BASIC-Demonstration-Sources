@@ -155,7 +155,7 @@
             adcval = readad ( an17 )
             ldrval = readad ( an11 )
 
-            SetContrast ( ldrval )
+            GLCDSetContrast ( ldrval )
             ' Prepare the static components of the screen
             #ifdef GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
               GLCD_Open_PageTransaction 0,3
