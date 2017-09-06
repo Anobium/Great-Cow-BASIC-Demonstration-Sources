@@ -1,14 +1,12 @@
 '''
-''' This demonstration uses a simple software routine to avoid the initial noise on the switch
-''' pin. The code will inspect the switch status, but should overcome most of the noise from a switch.
-'''  Some switches are worse than others.
+'''  One way to create a delay is to spend time decrementing to a value.
+'''  The demonstration will use a Great Cow BASIC method to toggle the LED.
 '''
-''' When the switch is held down, one LED will be lit. When the switch is not held down, the other will be lit.
-'''
+'''  LED blinks at a rate of approximately 1.0 seconds.
 '''
 '''************************************************************************
 '''
-'''  PIC: 18f26k22
+'''  PIC: 18f25k22
 '''  Compiler: GCB
 '''  IDE: GCB@SYN
 '''
@@ -17,8 +15,7 @@
 '''
 ' ----- Configuration
     'Chip Settings.
-    #chip 18f26k22, 16
-    #option Explicit
+    #chip 18f25k22, 16
 
     '' -------------------PORTA----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
@@ -38,17 +35,13 @@
     ''-----------------------------------------
     ''
 
-
+    'Define constants to make things easier. We can reuse these at any time.
     #define LEDD1 PORTB.1
     #define LEDD2 PORTB.5
-    #define Potentiometer   PORTC.5
-    #define SwitchIn        PORTB.0
     #define LCDControl      PORTC.2
 
     Dir     LEDD1         Out
     Dir     LEDD2         Out
-    Dir     Potentiometer In   'this is the AN17 port
-    Dir     SwitchIn      In
     Dir     LCDControl    Out
 
     'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
@@ -57,44 +50,14 @@
     '*****************************************************************************************************
     'Main program commences here.. everything before this is setup for the board.
 
-     dim lastKeyDown as Byte
+    'Use a constant
+    dir LEDD1 out
 
-    'Debouncing a switch
+    do
 
-      Do forever
-                wait 10 ms
+        'wait for 1 second which is 1000 ms
+        wait 1000 ms
+        'Set the port bit to NOT value from previous state but using the ! as an alternative to NOT
+        LEDD1 = !LEDD1
 
-                if  keyPressed( lastKeyDown ) = true then
-
-                    'push button pressed
-                    LEDD1 = !LEDD1
-
-                end if
-
-      loop
-
-
-  function  keyPressed ( in lastKeyDown )
-
-      dim actKeyDown as byte
-
-        if ( !SwitchIn ) then
-
-            actKeyDown = true
-
-        else
-
-            actKeyDown = false
-
-        end if
-
-        if (actKeyDown <> lastKeyDown) then
-            lastKeyDown = actKeyDown
-            keyPressed =  actKeyDown
-        else
-            keyPressed = false
-        end if
-
-
-
-  end function
+    loop

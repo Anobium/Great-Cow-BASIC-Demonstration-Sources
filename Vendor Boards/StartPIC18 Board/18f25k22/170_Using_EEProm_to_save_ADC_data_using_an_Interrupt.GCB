@@ -1,14 +1,14 @@
 '''
-''' This demonstration uses a simple software routine to avoid the initial noise on the switch
-''' pin. The code will inspect the switch status, but should overcome most of the noise from a switch.
-'''  Some switches are worse than others.
+'''******************************************************************
 '''
-''' When the switch is held down, one LED will be lit. When the switch is not held down, the other will be lit.
+''' This demonstration will provide code for raising an event when a port changes.
+''' The port that is being set then inspected in portb.7. Why? Because we can use the Pickit IO utility to change the state of the port by pressing the Letter S in the Pickit 2 IO Utility
 '''
+''' When the event happens the LED is toggled.  The LED will toggle when the Signal value is 0.
 '''
 '''************************************************************************
 '''
-'''  PIC: 18f26k22
+'''  PIC: 18f25k22
 '''  Compiler: GCB
 '''  IDE: GCB@SYN
 '''
@@ -17,24 +17,23 @@
 '''
 ' ----- Configuration
     'Chip Settings.
-    #chip 18f26k22, 16
-    #option Explicit
+    #chip 18f25k22, 16
 
     '' -------------------PORTA----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
+    '' IO:    ---|RS |RW | E |D7 |D6 |D5 |D4
     ''-----------------------------------------
     ''
 
     '' -------------------PORTB----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | ----------| O | I |-
+    '' IO:    -------| O | A |-------| O | I |-
     ''-----------------------------------------
     ''
 
     '' ------------------PORTC-----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------------------| X |---------
+    '' IO:    ---| TX| A |-------| X |---------
     ''-----------------------------------------
     ''
 
@@ -44,6 +43,7 @@
     #define Potentiometer   PORTC.5
     #define SwitchIn        PORTB.0
     #define LCDControl      PORTC.2
+    #define EventPort       PORTB.7
 
     Dir     LEDD1         Out
     Dir     LEDD2         Out
@@ -57,44 +57,26 @@
     '*****************************************************************************************************
     'Main program commences here.. everything before this is setup for the board.
 
-     dim lastKeyDown as Byte
-
-    'Debouncing a switch
-
-      Do forever
-                wait 10 ms
-
-                if  keyPressed( lastKeyDown ) = true then
-
-                    'push button pressed
-                    LEDD1 = !LEDD1
-
-                end if
-
-      loop
 
 
-  function  keyPressed ( in lastKeyDown )
+    'Setup an Interrupt event when portb.7 goes negative.
+    IOCB7 = 1
+    On Interrupt PORTChange  Call InterruptHandler
+    do
 
-      dim actKeyDown as byte
-
-        if ( !SwitchIn ) then
-
-            actKeyDown = true
-
-        else
-
-            actKeyDown = false
-
-        end if
-
-        if (actKeyDown <> lastKeyDown) then
-            lastKeyDown = actKeyDown
-            keyPressed =  actKeyDown
-        else
-            keyPressed = false
-        end if
+    loop
 
 
+sub InterruptHandler
 
-  end function
+    if EventPort = 0 then                     'Is this our event?
+        IOCB7 = 0                             'Prevent the event from reentering the InterruptHandler routine
+        RBIF  = 0                             'We must clear the flag in software
+
+        LEDD1 = !LEDD1                        'Toogle the LED
+
+        IOCB7 = 1                             'ReEnable the InterruptHandler routine
+
+    end if
+
+end sub

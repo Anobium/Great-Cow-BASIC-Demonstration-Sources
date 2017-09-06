@@ -1,14 +1,18 @@
 '''
-''' This demonstration uses a simple software routine to avoid the initial noise on the switch
-''' pin. The code will inspect the switch status, but should overcome most of the noise from a switch.
-'''  Some switches are worse than others.
+''' This shows how to read the ADC converter and display the
+''' a proportional delay value by changing/inverting the LEDs state.
+''' The pot on the board varies the voltage coming in from the ADC.
 '''
-''' When the switch is held down, one LED will be lit. When the switch is not held down, the other will be lit.
+''' The ADC is referenced to the same Vdd as the device, which
+''' is nominally is 5V.  The ADC returns the ratio of the voltage
+''' on Pin RA0 to 5V.  The ADC has a resolution of 10 bits, with 1023
+''' representing 5V and 0 representing 0V.
 '''
+''' Rotate the potentiometer to change the LEDs displayed.
 '''
 '''************************************************************************
 '''
-'''  PIC: 18f26k22
+'''  PIC: 18f25k22
 '''  Compiler: GCB
 '''  IDE: GCB@SYN
 '''
@@ -17,12 +21,12 @@
 '''
 ' ----- Configuration
     'Chip Settings.
-    #chip 18f26k22, 16
+    #chip 18f25k22, 16
     #option Explicit
 
     '' -------------------PORTA----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
+    '' IO:    -----------| A |-----------------
     ''-----------------------------------------
     ''
 
@@ -42,13 +46,11 @@
     #define LEDD1 PORTB.1
     #define LEDD2 PORTB.5
     #define Potentiometer   PORTC.5
-    #define SwitchIn        PORTB.0
     #define LCDControl      PORTC.2
 
     Dir     LEDD1         Out
     Dir     LEDD2         Out
     Dir     Potentiometer In   'this is the AN17 port
-    Dir     SwitchIn      In
     Dir     LCDControl    Out
 
     'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
@@ -57,44 +59,22 @@
     '*****************************************************************************************************
     'Main program commences here.. everything before this is setup for the board.
 
-     dim lastKeyDown as Byte
 
-    'Debouncing a switch
+   'Set the LED states
+    LEDD1 = 1
+    LEDD2 = 0
 
-      Do forever
-                wait 10 ms
+    dim ADCVal as word   'we have change to a larger variable to hold the range of 0 to 1023
 
-                if  keyPressed( lastKeyDown ) = true then
+    do
 
-                    'push button pressed
-                    LEDD1 = !LEDD1
+        ADCVal =  ReadAD10 ( AN17 )
+        'Wait for the number of milliseconds
+        Wait ADCVal ms
 
-                end if
-
-      loop
-
-
-  function  keyPressed ( in lastKeyDown )
-
-      dim actKeyDown as byte
-
-        if ( !SwitchIn ) then
-
-            actKeyDown = true
-
-        else
-
-            actKeyDown = false
-
-        end if
-
-        if (actKeyDown <> lastKeyDown) then
-            lastKeyDown = actKeyDown
-            keyPressed =  actKeyDown
-        else
-            keyPressed = false
-        end if
+        'Flip the state of the LEDs
+        LEDD1 = NOT LEDD1
+        LEDD2 = NOT LEDD2
 
 
-
-  end function
+    loop

@@ -1,28 +1,27 @@
 '''
-''' This demonstration uses a simple software routine to avoid the initial noise on the switch
-''' pin. The code will inspect the switch status, but should overcome most of the noise from a switch.
-'''  Some switches are worse than others.
+'''  This lesson will introduce shifting instructions as well as bit-oriented skip operations to
+'''  update the LEDs.
 '''
-''' When the switch is held down, one LED will be lit. When the switch is not held down, the other will be lit.
+'''  LEDs change at a rate of 1.0s, the bit are set ON or equal to 1 when the LED is turned on!
 '''
 '''
 '''************************************************************************
 '''
-'''  PIC: 18f26k22
+'''  PIC: 18f25k22
 '''  Compiler: GCB
 '''  IDE: GCB@SYN
 '''
-'''  Board: SmartPIC 18 Board
+'''  Board: Xpress Evaluation Board
 '''  Date: 29.8.17
 '''
 ' ----- Configuration
     'Chip Settings.
-    #chip 18f26k22, 16
+    #chip 18f25k22, 16
     #option Explicit
 
     '' -------------------PORTA----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
+    '' IO:    -----------| A |-----------------
     ''-----------------------------------------
     ''
 
@@ -38,17 +37,15 @@
     ''-----------------------------------------
     ''
 
-
+    'Define constants to make things easier. We can reuse these at any time.
     #define LEDD1 PORTB.1
     #define LEDD2 PORTB.5
     #define Potentiometer   PORTC.5
-    #define SwitchIn        PORTB.0
     #define LCDControl      PORTC.2
 
     Dir     LEDD1         Out
     Dir     LEDD2         Out
     Dir     Potentiometer In   'this is the AN17 port
-    Dir     SwitchIn      In
     Dir     LCDControl    Out
 
     'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
@@ -57,44 +54,20 @@
     '*****************************************************************************************************
     'Main program commences here.. everything before this is setup for the board.
 
-     dim lastKeyDown as Byte
 
-    'Debouncing a switch
-
-      Do forever
-                wait 10 ms
-
-                if  keyPressed( lastKeyDown ) = true then
-
-                    'push button pressed
-                    LEDD1 = !LEDD1
-
-                end if
-
-      loop
+   'Set the LED states
+    LEDD1 = 1
+    LEDD2 = 0
 
 
-  function  keyPressed ( in lastKeyDown )
+    do
 
-      dim actKeyDown as byte
+        'Wait for milliseconds
+        Wait 100 ms
 
-        if ( !SwitchIn ) then
-
-            actKeyDown = true
-
-        else
-
-            actKeyDown = false
-
-        end if
-
-        if (actKeyDown <> lastKeyDown) then
-            lastKeyDown = actKeyDown
-            keyPressed =  actKeyDown
-        else
-            keyPressed = false
-        end if
+        'Flip the state of the LEDs
+        LEDD1 = NOT LEDD1
+        LEDD2 = NOT LEDD2
 
 
-
-  end function
+    loop
