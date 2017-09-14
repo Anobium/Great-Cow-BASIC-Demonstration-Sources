@@ -3,12 +3,14 @@
 '''
 ''' This demonstration will provide code for raising an event when a port changes.
 ''' The port that is being set then inspected in portb.7. Why? Because we can use the Pickit IO utility to change the state of the port by pressing the Letter S in the Pickit 2 IO Utility
+''' In the Pickit 2 IO Utility, select Poweer from the Pickit 2, the select Pickit 2 IO Utility, then, enable IO
+'''  then, set PIN 4 as an output - and, press S. The LED will toggle on the event.
 '''
 ''' When the event happens the LED is toggled.  The LED will toggle when the Signal value is 0.
 '''
 '''************************************************************************
 '''
-'''  PIC: 18f25k22
+'''  PIC: 18f26k22
 '''  Compiler: GCB
 '''  IDE: GCB@SYN
 '''
@@ -17,7 +19,7 @@
 '''
 ' ----- Configuration
     'Chip Settings.
-    #chip 18f25k22, 16
+    #chip 18f26k22, 16
 
     '' -------------------PORTA----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---

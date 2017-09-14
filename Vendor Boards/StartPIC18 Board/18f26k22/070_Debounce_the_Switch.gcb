@@ -3,7 +3,7 @@
 ''' pin. The code will inspect the switch status, but should overcome most of the noise from a switch.
 '''  Some switches are worse than others.
 '''
-''' When the switch is held down, one LED will be lit. When the switch is not held down, the other will be lit.
+''' When the switch is held down, one LED will toggle.
 '''
 '''
 '''************************************************************************
