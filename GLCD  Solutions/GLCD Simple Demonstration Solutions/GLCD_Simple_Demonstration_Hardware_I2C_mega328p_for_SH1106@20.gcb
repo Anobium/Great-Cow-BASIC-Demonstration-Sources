@@ -9,10 +9,10 @@
 '''
 '''Recommended to operate at 3.3v
 '''
-'''@author 	MarcoC&EvanV
-'''@licence	GPL
-'''@version	1.0
-'''@date   	08.16.2016
+'''@author  MarcoC&EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date    08.16.2016
 '''********************************************************************************
 
 ; ----- Configuration
@@ -51,7 +51,7 @@
 
   'First display a BMP file
 
-	dim lengthofpicture, ram_index as word
+  dim lengthofpicture, ram_index as word
 
   GLCDCLS
 
@@ -199,5 +199,4 @@
       GLCDCLS
 
   Loop
-
 

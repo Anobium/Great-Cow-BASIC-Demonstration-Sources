@@ -15,8 +15,8 @@
 ''':
 '''@author  EvanV
 '''@licence GPL
-'''@version 1.01a
-'''@date    03.09.2017
+'''@version 1.02a includes OLED Fonts
+'''@date    13.09.2017
 '''********************************************************************************
 '''  PIC: 18f26k22
 '''  Compiler: GCB
@@ -88,22 +88,31 @@
     'These constants allow you to change the GLCD memory usage.
     #define GLCD_PROTECTOVERRUN
 '*******************************************************************************************
-
+    #define GLCD_OLED_FONT
     #define GLCD_TYPE_SSD1306_CHARACTER_MODE_ONLY
     #define GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+
+    DIM myString as string * 28
+    myString = "Great Cow BASIC 2017"
+
 
     'Open GLCD page mode of operations. The SSD1306 has 8 pages, so, we use the pages 0 and 7
     GLCD_Open_PageTransaction ( 0, 7 )
 
         GLCDfntDefaultSize = 2
-        GLCDFontWidth = 6
-        GLCDPrint(45, 0,"OLED")
-        GLCDPrint(30, 18,"SSD1306")
-        GLCDPrint(36, 34,"128x64")
+        GLCDFontWidth = 5
+        GLCDPrint(24, 2,"GCBASIC")
+        GLCDDrawString(20, 15,"Extensive")
+        GLCDDrawString(20, 28,"Libraries")
+
+        FilledCircle 120, 8, 5
+        Line 10, 0, 0, 10
+
 
         GLCDfntDefaultSize = 1
-        GLCDFontWidth = 5
-        GLCDPrint(14, 54,"http://goo.gl/gjrxkp")
+        GLCDPrint(20, 48,"https://goo.gl/gjrxkp")
+        GLCDDrawString(20, 56,myString)
+
 
         Box (0, 0, 127 , 63 )
 

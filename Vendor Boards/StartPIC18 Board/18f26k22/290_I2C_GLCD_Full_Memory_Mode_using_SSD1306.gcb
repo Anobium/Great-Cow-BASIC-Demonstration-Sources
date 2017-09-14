@@ -11,8 +11,8 @@
 ''':
 '''@author  EvanV
 '''@licence GPL
-'''@version 1.01a
-'''@date    03.09.2017
+'''@version 1.02a includes OLED Fonts
+'''@date    13.09.2017
 '''********************************************************************************
 '''  PIC: 18f26k22
 '''  Compiler: GCB
@@ -83,20 +83,27 @@
 
     'These constants allow you to change the GLCD memory usage.
     #define GLCD_PROTECTOVERRUN
+
+    #define GLCD_OLED_FONT
+
 '*******************************************************************************************
+   DIM myString as string * 28
+   myString = "Great Cow BASIC 2017"
 
    GLCDfntDefaultSize = 2
-   GLCDFontWidth = 6
-   GLCDPrint(45, 0,"OLED")
-   GLCDPrint(30, 18,"SSD1306")
-   GLCDPrint(36, 34,"128x64")
+   GLCDFontWidth = 5
+   GLCDPrint(24, 2,"GCBASIC")
+   GLCDDrawString(20, 15,"Extensive")
+   GLCDDrawString(20, 28,"Libraries")
 
    GLCDfntDefaultSize = 1
-   GLCDFontWidth = 5
-   GLCDPrint(14, 54,"http://goo.gl/gjrxkp")
+   GLCDPrint(20, 48,"https://goo.gl/gjrxkp")
+   GLCDDrawString(20, 56,myString)
 
    Box (0, 0, 127 , 63 )
 
+   FilledCircle 8, 8, 5
+   Triangle 127, 0, 117, 0, 127, 10, 1
 
    Do Forever
    Loop
