@@ -15,7 +15,7 @@
   #chip 16f1939, 32
   #config mclr_on
   #include <glcd.h>
-  #include <DHT.H>
+  #include <DHT.h>
 
   #define GLCD_TYPE GLCD_TYPE_KS0108               ' This is the Default value, not required.
 
