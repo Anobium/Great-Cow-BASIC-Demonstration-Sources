@@ -20,7 +20,7 @@
 ;analogue 5V voltmeter
 #chip 16f1939,32
     #option explicit
-    #INCLUDE <TRIG2PLACES.H>
+    #INCLUDE <trig2places.h>
     ;
      #include <glcd.h>
 
