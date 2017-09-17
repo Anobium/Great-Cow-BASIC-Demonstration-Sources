@@ -1,0 +1,114 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program saves a 12-bit variable to EEPROM. The program logs these values to the microprocessors internal EEPROM memory.
+'''The process shown below can be adapted for Word, Long and Integer variables.
+'''
+'''This program uses a SubRoutine to return the value to the main program.
+'''
+'''@author  EvanV plus works of BillR
+'''@licence GPL
+'''@version 1.0a
+'''@date    17.09.2017
+'''********************************************************************************
+
+; ----- Configuration
+  #Chip 16F877a,4
+
+ #option explicit
+
+
+  'LCD connection settings
+  #Define LCD_IO 4
+  #Define LCD_SPEED FAST
+
+  #Define LCD_NO_RW
+
+  #Define LCD_RS        PortA.0
+  #Define LCD_Enable    PortA.1
+
+  #Define LCD_DB4       PortA.2
+  #Define LCD_DB5       PortC.0
+  #Define LCD_DB6       PortC.1
+  #Define LCD_DB7       PortC.2
+
+
+'Create an array to store the character until it is copied
+  Dim CharArray(8)
+
+  'Set the array to hold the character - we will use a TICK and a CROSS to show test results.
+  'Binary has been used to improve the readability of the code, but is not essential
+  CharArray(1) = b'00000000'
+  CharArray(2) = b'00000000'
+  CharArray(3) = b'00000001'
+  CharArray(4) = b'00010010'
+  CharArray(5) = b'00010100'
+  CharArray(6) = b'00011000'
+  CharArray(7) = b'00010000'
+  CharArray(8) = b'00000000'
+ 'Copy the character from the array to the LCD
+  LCDCreateChar 0, CharArray()
+  CharArray(1) = b'00000000'
+  CharArray(2) = b'00000000'
+  CharArray(3) = b'00010001'
+  CharArray(4) = b'00001010'
+  CharArray(5) = b'00000100'
+  CharArray(6) = b'00001010'
+  CharArray(7) = b'00010001'
+  CharArray(8) = b'00000000'
+ 'Copy the character from the array to the LCD
+  LCDCreateChar 1, CharArray()
+
+
+  CLS
+  Wait 1 s
+
+   '// declare variables
+  DIM Var1 as Long
+  DIM Var2 as Long
+  DIM Var3 as Long
+
+  ' // set values to test
+  Var1 = 11476222
+  Var2 = 14777810
+  Var3 = 0'clear
+
+  '// write 24 bits Vales to EEPRPoM
+  EPWRITE_24 0, Var1
+  EPWRITE_24 3, Var2
+
+  '// read stored Var1 back into var3
+  EPREAD_24 0, Var3
+  Locate 0,0 : Print Var3
+  if Var3 =  11476222 then
+    'Draw the custom character
+    LCDWriteChar 0
+  else
+    'Draw the custom character
+    LCDWriteChar 1
+  end if
+
+  'read stored var2 back into Var3
+  Var3 = 0  '//clear variable
+  EPREAD_24 3, Var3
+  Locate 1,0 : Print Var3
+  if Var3 =  14777810 then
+    'Draw the custom character
+    LCDWriteChar 0
+  else
+    'Draw the custom character
+    LCDWriteChar 1
+  end if
+
+  End
+
+  Sub EPWRITE_24 (IN Mem_Loc as Byte, in TMP_LONG as LONG)
+        EPWRITE Mem_Loc, TMP_LONG
+        EPWRITE Mem_Loc + 1, TMP_LONG_H
+        EPWRITE Mem_Loc + 2, TMP_LONG_U
+  END SUB
+
+  SUB EPREAD_24 (IN Mem_Loc as Byte, OUT NewVal as LONG)
+       EPREAD Mem_Loc, NewVal
+       EPREAD Mem_Loc + 1, NewVal_H
+       EPREAD Mem_Loc + 2, NewVal_U
+  End SUB
