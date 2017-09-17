@@ -1,6 +1,6 @@
 '''A demonstration program for GCGB and GCB.
 '''--------------------------------------------------------------------------------------------------------------------------------
-'''This program saves a 12-bit variable to EEPROM. The program logs these values to the microprocessors internal EEPROM memory.
+'''This program saves a 24-bit variable to EEPROM. The program logs these values to the microprocessors internal EEPROM memory.
 '''The process shown below can be adapted for Word, Long and Integer variables.
 '''
 '''This program uses a SubRoutine to return the value to the main program.
