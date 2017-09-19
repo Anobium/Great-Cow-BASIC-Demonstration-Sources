@@ -1,0 +1,142 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program shows some very simple maths and the method to handle the scope of variables.
+'''  This shows the reults on a simple GLCD SSD1306.
+'''
+'''1) Change the following and see the result. Try other types
+'''     Sub MyCalc ( in wordvarsub as word , in intvarsub as integer).
+'''2) Remove the following variable definitionsand see the result
+'''
+'''    dim wordvarsub as word
+'''
+'''    dim intvarsub as Integer
+'''
+'''3) Change the casting on this line subcalculation = [word]wordvarsub + [integer]intvarsub
+'''
+'''4) And, create you own tests to see the results.
+'''
+'''The answer should alway be 95 if it not - try to figure why after thinking about the scope of variables.
+'''
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code, change to LCD or Serial for you own needs
+'''
+'''
+'''@author  EvanV
+'''@licence GPL
+'''@version 2.1
+'''@date    27.8.17
+'''************************************************************************
+'''
+'''  PIC: 18f26k22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: SmartPIC 18 Board
+'''  Date: 29.8.17
+'''
+' ----- Configuration
+    'Chip Settings.
+    #chip 18f26k22, 16
+    #config mclre=on
+    #option Explicit
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | A |-------| O | I |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---| TX|---|SDA|CLK| X |---------
+    ''-----------------------------------------
+    ''
+
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTC.5
+    #define LDR             PORTB.4
+    #define SwitchIn        PORTB.0
+    #define LCDControl      PORTC.2
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the AN17 port
+    Dir     LDR           In   'this is the AN11 port
+    Dir     SwitchIn      In
+    Dir     LCDControl    Out
+
+    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+    LCDControl = 1
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+    ' Define I2C settings
+    #define HI2C_BAUD_RATE 400
+    #define HI2C_DATA PORTC.4
+    #define HI2C_CLOCK PORTC.3
+    'Initialise I2C Slave
+    'I2C pins need to be input for SSP module - this is not an option
+    Dir HI2C_DATA in
+    Dir HI2C_CLOCK in
+    'MASTER
+    HI2CMode Master
+
+
+    #include <glcd.h>
+    #define GLCD_TYPE GLCD_TYPE_SSD1306_32
+    #define GLCD_I2C_Address 0x78
+    #define GLCD_PROTECTOVERRUN
+    #define GLCD_OLED_FONT
+
+
+'************************************** EVERYTHING FOR HERE IS SETUP AND PREABLE ***************************************************************
+
+
+ 'See Variable Lifecycle in the HELP
+    dim myString as string * 28
+    myString = "Great Cow BASIC 2017"
+    GLCDDrawString(2, 24, myString)
+
+    dim signedvar as Integer
+    dim wordvar, wordresult as word
+    'loop through doing some calculations
+    for wordvar = 300 to 5
+       signedvar= -5
+
+       wordresult = signedvar + wordvar
+       'filledbox 0, 0, 16, 7, 0
+       GLCDPrint(0,  0, pad(str(wordresult),4) )
+
+
+       MyCalc ( wordvar, signedvar )
+    next
+
+    end
+
+sub MyCalc ( in wordvarsub , in intvarsub )  'you want to define you input variable types here to support overloading of the same method
+
+    'Ensure the variable type is correct in this method
+    dim wordvarsub as word
+    'Ensure the variable type is correct in this method
+    dim intvarsub as Integer
+
+    'Define the assignment variable
+    dim subcalculation as word
+
+    subcalculation = wordvarsub + intvarsub
+
+    'filledbox 0, 8, 16, 15, 0
+    GLCDPrint(0,  8, pad(str(subcalculation), 4) )
+
+    'filledbox 24, 8, 40, 15, 0
+    GLCDPrint(24, 8, pad(str(wordvarsub),4))
+    GLCDPrint(48, 8, intvarsub )
+
+end sub
