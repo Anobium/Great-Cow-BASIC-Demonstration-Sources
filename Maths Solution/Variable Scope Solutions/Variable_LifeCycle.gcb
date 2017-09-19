@@ -96,7 +96,7 @@
     #define GLCD_OLED_FONT
 
 
-'************************************** EVERYTHING FOR HERE IS SETUP AND PREABLE ***************************************************************
+'************************************** EVERYTHING ABOVE HERE IS SETUP AND PREABLE *** CHANGE TO MEET YOUR OWN NEEDS ******************************************
 
 
  'See Variable Lifecycle in the HELP
@@ -110,11 +110,13 @@
     for wordvar = 300 to 5
        signedvar= -5
 
+       'Complete the calculation 
        wordresult = signedvar + wordvar
-       'filledbox 0, 0, 16, 7, 0
-       GLCDPrint(0,  0, pad(str(wordresult),4) )
+       
+       'Show the result
+       GLCDPrint(0,  0, pad(str(wordresult),4) )  'Padding a string to improve the display only... you can print the just the number
 
-
+       'Call a method to complete the same calculation 
        MyCalc ( wordvar, signedvar )
     next
 
@@ -130,12 +132,12 @@ sub MyCalc ( in wordvarsub , in intvarsub )  'you want to define you input varia
     'Define the assignment variable
     dim subcalculation as word
 
+    'Complete the calculation 
     subcalculation = wordvarsub + intvarsub
 
-    'filledbox 0, 8, 16, 15, 0
+    'Show the results    
     GLCDPrint(0,  8, pad(str(subcalculation), 4) )
 
-    'filledbox 24, 8, 40, 15, 0
     GLCDPrint(24, 8, pad(str(wordvarsub),4))
     GLCDPrint(48, 8, intvarsub )
 
