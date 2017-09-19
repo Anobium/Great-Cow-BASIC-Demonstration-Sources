@@ -22,8 +22,8 @@
 '''
 '''@author  EvanV
 '''@licence GPL
-'''@version 2.1
-'''@date    27.8.17
+'''@version 1.1
+'''@date    19.9.17
 '''************************************************************************
 '''
 '''  PIC: 18f26k22
@@ -106,19 +106,19 @@
 
     dim signedvar as Integer
     dim wordvar, wordresult as word
-    'loop through doing some calculations
-    for wordvar = 300 to 5
-       signedvar= -5
 
-       'Complete the calculation 
-       wordresult = signedvar + wordvar
-       
-       'Show the result
-       GLCDPrint(0,  0, pad(str(wordresult),4) )  'Padding a string to improve the display only... you can print the just the number
+     wordvar = 300
+     signedvar= -5
 
-       'Call a method to complete the same calculation 
-       MyCalc ( wordvar, signedvar )
-    next
+     'Complete the calculation
+     wordresult = signedvar + wordvar
+
+     'Show the result
+     GLCDPrint(0,  0, pad(str(wordresult),4) )  'Padding a string to improve the display only... you can print the just the number
+
+     'Call a method to complete the same calculation
+     MyCalc ( wordvar, signedvar )
+
 
     end
 
@@ -132,13 +132,25 @@ sub MyCalc ( in wordvarsub , in intvarsub )  'you want to define you input varia
     'Define the assignment variable
     dim subcalculation as word
 
-    'Complete the calculation 
+    'Define a string for the output
+    dim subcalculationstring as string * 16
+
+    'Complete the calculation - this is where the real maths are done!
     subcalculation = wordvarsub + intvarsub
 
-    'Show the results    
+    'Show the maths results
     GLCDPrint(0,  8, pad(str(subcalculation), 4) )
 
-    GLCDPrint(24, 8, pad(str(wordvarsub),4))
-    GLCDPrint(48, 8, intvarsub )
+    'Build up a string to show the full maths results
+    subcalculationstring = str(wordvarsub) + "+"
+    if intvarsub => 0 then
+       subcalculationstring = subcalculationstring + str(abs(intvarsub ))
+    else
+      subcalculationstring = subcalculationstring + "-" + str(abs(intvarsub ))
+    end if
+
+    subcalculationstring = subcalculationstring + "=" + str(subcalculation)
+
+    GLCDPrint(24,  8, subcalculationstring  )
 
 end sub
