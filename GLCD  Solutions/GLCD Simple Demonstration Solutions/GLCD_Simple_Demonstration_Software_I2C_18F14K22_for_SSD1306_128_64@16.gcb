@@ -92,7 +92,7 @@
 
   DO forever
 
-     for CCount = 31 to 127
+     for CCount = 32 to 127
 
           outString = str( CCount )                                  ; Prepare a string
 

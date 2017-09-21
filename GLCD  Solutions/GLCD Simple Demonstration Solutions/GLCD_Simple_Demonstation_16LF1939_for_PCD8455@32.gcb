@@ -133,7 +133,7 @@
 
 
           DO forever
-             for CCount = 31 to 127
+             for CCount = 32 to 127
                   GLCDPrint (0, 0, "PrintStr")
                   GLCDDrawString (0, 9, "DrawStr")
                   GLCDPrint ( 44 ,  21, "     ")

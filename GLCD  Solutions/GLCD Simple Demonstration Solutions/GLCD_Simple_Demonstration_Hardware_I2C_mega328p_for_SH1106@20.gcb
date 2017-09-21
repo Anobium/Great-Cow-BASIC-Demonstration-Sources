@@ -125,7 +125,7 @@
 
 
       repeat 2
-         for CCount = 31 to 127
+         for CCount = 32 to 127
               GLCDPrint ( 64 ,  36,  hex(longNumber_E ) )                 ; Print a HEX string
               GLCDPrint ( 76 ,  36,  hex(longNumber_U ) )                 ; Print a HEX string
               GLCDPrint ( 88 ,  36,  hex(longNumber_H ) )                 ; Print a HEX string
@@ -199,4 +199,3 @@
       GLCDCLS
 
   Loop
-

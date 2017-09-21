@@ -3,10 +3,10 @@
 '''This program is a simple GLCD demonstration of the KS0108 GLCD capabilities.
 '''This program draws lines, boxes, circles and prints strings and numbers.
 '''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
-'''@author 	EvanV with works of ChuckH
-'''@licence	GPL
-'''@version	1.2c
-'''@date   	22.12.14
+'''@author  EvanV with works of ChuckH
+'''@licence GPL
+'''@version 1.2c
+'''@date    22.12.14
 '''********************************************************************************
 
   #chip 16f1939,32
@@ -60,7 +60,7 @@
       line 64,31,0,31                                                ; Draw a line
 
       DO forever
-         for CCount = 31 to 127
+         for CCount = 32 to 127
               GLCDPrint ( 64 ,  36,  hex(longNumber_E ) )                 ; Print a HEX string
               GLCDPrint ( 76 ,  36,  hex(longNumber_U ) )                 ; Print a HEX string
               GLCDPrint ( 88 ,  36,  hex(longNumber_H ) )                 ; Print a HEX string
@@ -88,5 +88,4 @@
       LOOP
 
   end
-
 

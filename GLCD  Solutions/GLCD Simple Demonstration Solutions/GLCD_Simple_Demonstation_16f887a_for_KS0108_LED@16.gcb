@@ -3,10 +3,10 @@
 '''This program is a simple GLCD demonstration of the KS0108 GLCD capabilities.
 '''This program draws lines, boxes, circles and prints strings and numbers.
 '''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
-'''@author 	EvanV with works of ChuckH
-'''@licence	GPL
-'''@version	1.2c
-'''@date   	22.12.14
+'''@author  EvanV with works of ChuckH
+'''@licence GPL
+'''@version 1.2c
+'''@date    22.12.14
 '''********************************************************************************
 
   #chip 16f877a,16
@@ -14,7 +14,7 @@
 
   #include <glcd.h>
   #define GLCD_TYPE GLCD_TYPE_KS0108               ' This is the Default value, not required.
-'	#define GLCDDirection 1													 ' Invert display, not always required
+' #define GLCDDirection 1                          ' Invert display, not always required
 
   #define GLCD_CS1 PORTC.1    'D12 to actually since CS1, CS2 can be reversed on some devices
   #define GLCD_CS2 PORTC.0
@@ -49,7 +49,7 @@
       wordNumber = 0
       byteNumber = 0
 
-			box 0,0,GLCD_WIDTH-1, LED_GLCD_HEIGHT-1
+      box 0,0,GLCD_WIDTH-1, LED_GLCD_HEIGHT-1
       GLCDfntDefaultsize = 2
       GLCDPrint ( 0,   0, "Great Cow")                                ; Print some texT
       GLCDPrint ( 0,   18, "BASIC 2016")                                ; Print some text
@@ -71,7 +71,7 @@
       line LED_GLCD_HEIGHT,31,0,31                                                ; Draw a line
 
       DO forever
-         for CCount = 31 to 127
+         for CCount = 32 to 127
               GLCDPrint ( LED_GLCD_HEIGHT ,  36,  hex(longNumber_E ) )                 ; Print a HEX string
               GLCDPrint ( 76 ,  36,  hex(longNumber_U ) )                 ; Print a HEX string
               GLCDPrint ( 88 ,  36,  hex(longNumber_H ) )                 ; Print a HEX string
@@ -87,7 +87,7 @@
               outString = str( CCount )                                  ; Prepare a string
               GLCDfntDefaultsize = 2
               GLCDDrawString(LED_GLCD_HEIGHT, 8, pad(outString,3) )                   ; Draw a string
-							GLCDfntDefaultsize = 1
+              GLCDfntDefaultsize = 1
               filledbox 3,43,11,51, wordNumber                           ; Draw a filled box
 
               FilledCircle( 44,41,9, longNumber xor 1)                   ; Draw a filled box
@@ -99,5 +99,4 @@
       LOOP
 
   end
-
 

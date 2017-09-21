@@ -8,10 +8,10 @@
 '''The display is 38*35 mm, with an active display surface of 0.96inches , and a 128*64 pixel resolution.
 '''The display is easy to interface, using an I2C type of communication.
 '''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
-'''@author 	EvanV
-'''@licence	GPL
-'''@version	1.4
-'''@date   	25.5.15
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.4
+'''@date    25.5.15
 '''********************************************************************************
 
 ; ----- Configuration
@@ -67,7 +67,7 @@
   line 64,31,0,31                                                ; Draw a line
 
   DO forever
-     for CCount = 31 to 127
+     for CCount = 32 to 127
           GLCDPrint ( 64 ,  36,  hex(longNumber_E ) )                 ; Print a HEX string
           GLCDPrint ( 76 ,  36,  hex(longNumber_U ) )                 ; Print a HEX string
           GLCDPrint ( 88 ,  36,  hex(longNumber_H ) )                 ; Print a HEX string
