@@ -83,7 +83,7 @@
 
   DO forever
 
-     for CCount = 31 to 127
+     for CCount = 32 to 127
 
           GLCDPrint ( 64 ,  36,  hex(longNumber_E ) )                 ; Print a HEX string
 

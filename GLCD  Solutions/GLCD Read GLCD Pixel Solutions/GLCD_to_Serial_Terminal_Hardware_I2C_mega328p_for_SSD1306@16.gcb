@@ -40,9 +40,9 @@
    #define LCD_IO 0
    #DEFINE LCD_SPEED  FAST
 
-	'USART settings
-	#define USART_BAUD_RATE 115200	'Initializes USART port
-	#define USART_TX_BLOCKING	' wait for tx register to be empty
+  'USART settings
+  #define USART_BAUD_RATE 115200  'Initializes USART port
+  #define USART_TX_BLOCKING ' wait for tx register to be empty
   #define USART_DELAY 0 ms
 
 ; ----- Define variables
@@ -92,7 +92,7 @@
       line LED_GLCD_HEIGHT,31,0,31                                                ; Draw a line
 
       DO forever
-         for CCount = 31 to 127
+         for CCount = 32 to 127
               GLCDPrint ( LED_GLCD_HEIGHT ,  36,  hex(longNumber_E ) )                 ; Print a HEX string
               GLCDPrint ( 76 ,  36,  hex(longNumber_U ) )                 ; Print a HEX string
               GLCDPrint ( 88 ,  36,  hex(longNumber_H ) )                 ; Print a HEX string
@@ -177,4 +177,3 @@ Function ReadPixel_SSD1306(In GLCDX, In GLCDY, Optional In GLCDColour As Word = 
 
   #endif
 end function
-
