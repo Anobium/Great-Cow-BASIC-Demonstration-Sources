@@ -16,6 +16,7 @@
   #define GLCD_TYPE GLCD_TYPE_KS0108               ' This is the Default value, not required.
 ' #define GLCDDirection 1                          ' Invert display, not always required
 
+
   #define GLCD_CS1 PORTC.1    'D12 to actually since CS1, CS2 can be reversed on some devices
   #define GLCD_CS2 PORTC.0
   #define GLCD_DB0 PORTD.0 'D0 to pin 7 on LCD
@@ -49,22 +50,30 @@
       wordNumber = 0
       byteNumber = 0
 
-      box 0,0,GLCD_WIDTH-1, LED_GLCD_HEIGHT-1
-      GLCDfntDefaultsize = 2
-      GLCDPrint ( 0,   0, "Great Cow")                                ; Print some texT
-      GLCDPrint ( 0,   18, "BASIC 2016")                                ; Print some text
-      GLCDfntDefaultsize = 1
+'      #define GLCD_OLED_FONT
+'      #define GLCD_Disable_OLED_FONT2
 
-      GLCDPrint ( 0,   52, "@Evan R. Venn")                                ; Print some text
+      Line 0, 26, 127, 26
+
+      GLCDfntDefaultsize = 2
+      GLCDFontWidth = 4
+      GLCDPrint ( 2,   0, "Great Cow")                                ; Print some texT
+      GLCDPrint ( 2,   18, "BASIC 2017")                                ; Print some text
+      box 0,0,GLCD_WIDTH-1, LED_GLCD_HEIGHT-1
+
+
+      Line 0, 58, 127, 58
+      GLCDfntDefaultsize = 1
+      GLCDPrint ( 2,   52, "@Evan R. Venn")                                ; Print some text
       wait 4 s
       GLCDCLS
 
       ' Prepare the static components of the screen
-      GLCDPrint ( 0,   0, "PrintStr")                                ; Print some text
-      GLCDPrint ( 64,  0, "LAT@")                                    ; Print some more text
-      GLCDPrint ( 88,  0, ChipMhz)                                   ; Print chip speed
-      GLCDPrint ( 100, 0, "Mhz")                                     ; Print some text
-      GLCDDrawString( 0,8,"DrawStr")                                 ; Draw some text
+      GLCDPrint ( 2,   1, "PrintStr")                                ; Print some text
+      GLCDPrint ( 64,  1, "LAT@")                                    ; Print some more text
+      GLCDPrint ( 88,  1, ChipMhz)                                   ; Print chip speed
+      GLCDPrint ( 100, 1, "Mhz")                                     ; Print some text
+      GLCDDrawString( 2,9,"DrawStr")                                 ; Draw some text
       box 0,0,GLCD_WIDTH-1, LED_GLCD_HEIGHT-1                        ; Draw a box
       box GLCD_WIDTH-5, LED_GLCD_HEIGHT-5,GLCD_WIDTH-1, LED_GLCD_HEIGHT-1    ; Draw a box
       Circle( 44,41,15)                                              ; Draw a circle
@@ -72,21 +81,25 @@
 
       DO forever
          for CCount = 32 to 127
-              GLCDPrint ( LED_GLCD_HEIGHT ,  36,  hex(longNumber_E ) )                 ; Print a HEX string
-              GLCDPrint ( 76 ,  36,  hex(longNumber_U ) )                 ; Print a HEX string
-              GLCDPrint ( 88 ,  36,  hex(longNumber_H ) )                 ; Print a HEX string
-              GLCDPrint ( 100 ,  36, hex(longNumber   ) )                 ; Print a HEX string
-              GLCDPrint ( 112 ,  36, "h" )                                ; Print a HEX string
+'              'build our outString
+              outString = hex(longNumber_E )
+              outString = outString + hex(longNumber_U )
+              outString = outString + hex(longNumber_H )
+              outString = outString + hex(longNumber )
+              outString = outString + "h  "
 
+              GLCDPrint ( 64 ,  36,  outstring )                          ; Print a HEX string
 
-              GLCDPrint ( LED_GLCD_HEIGHT ,  44, pad(str(wordNumber), 5 ) )           ; Print a padded string
-              GLCDPrint ( LED_GLCD_HEIGHT ,  52, pad(str(byteNumber), 3 ) )           ; Print a padded string
+              GLCDPrint ( 64 ,  44, pad(str(wordNumber), 5 ) )           ; Print a padded string
+              GLCDPrint ( 64 ,  52, pad(str(byteNumber), 3 ) )           ; Print a padded string
 
               box (46,9,56,19)                                           ; Draw a Box
-              GLCDDrawChar(48, 9, CCount )                               ; Draw a character
-              outString = str( CCount )                                  ; Prepare a string
+              FilledBox(47, 10, 55, 18, 0 )
+              GLCDPrint(48, 10, chr(CCount) )                             ; Draw a character
+              outString = pad(str( CCount ), 5)                          ; Prepare a string
               GLCDfntDefaultsize = 2
-              GLCDDrawString(LED_GLCD_HEIGHT, 8, pad(outString,3) )                   ; Draw a string
+
+              GLCDPrint( 64, 9, outString )                               ; Draw a string
               GLCDfntDefaultsize = 1
               filledbox 3,43,11,51, wordNumber                           ; Draw a filled box
 
@@ -95,8 +108,8 @@
 
                                                                          ; Do some simple maths
               longNumber = longNumber + 7 : wordNumber = wordNumber + 3 : byteNumber++
+
           NEXT
       LOOP
 
   end
-
