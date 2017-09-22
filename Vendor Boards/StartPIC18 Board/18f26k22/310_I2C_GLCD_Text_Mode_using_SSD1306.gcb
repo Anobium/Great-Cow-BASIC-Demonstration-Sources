@@ -96,12 +96,10 @@
    DIM myString as string * 28
    myString = "Great Cow BASIC 2017"
 
-   GLCDFontWidth = 5
    GLCDfntDefaultSize = 2
    GLCDPrint(24, 0,"GCBASIC")
    GLCDDrawString(20, 16,"Extensive")
    GLCDDrawString(20, 32,"Libraries")
-
    GLCDfntDefaultSize = 1
    GLCDPrint(20, 48,"https://goo.gl/gjrxkp")
    GLCDDrawString(20, 56,myString)
