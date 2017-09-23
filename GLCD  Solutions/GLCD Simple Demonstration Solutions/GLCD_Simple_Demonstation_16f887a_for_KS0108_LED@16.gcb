@@ -50,7 +50,7 @@
       wordNumber = 0
       byteNumber = 0
 
-'      #define GLCD_OLED_FONT
+      #define GLCD_OLED_FONT
 '      #define GLCD_Disable_OLED_FONT2
 
       Line 0, 26, 127, 26
