@@ -1,0 +1,37 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program shows how to use Fixed Mode PWM for CCP/PWM and PWM modules.
+'''
+'''An important note is that timer 2 is ALWAYS used by CCP/PWM.
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.01
+'''@date       10.10.17
+'''********************************************************************************
+    #chip 18f26k22, 16
+
+'This is the setup section for fixed mode PWM
+
+
+main:
+
+    'Do NOT forget to set the port direction... setting everything to out!
+    dir porta Out
+    dir portb Out
+    dir portc Out
+
+    'Enable CCP channels
+    PWMOn
+    PWMOn ( 2 )
+    PWMOn ( 3 )
+    PWMOn ( 4 )
+    PWMOn ( 5 )
+
+
+    do
+    loop
+
+End
+
+
