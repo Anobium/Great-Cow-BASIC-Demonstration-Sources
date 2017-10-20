@@ -1,0 +1,89 @@
+'''
+'''  This demonstration flashes an LED to show the use of an 8Bit Timer 0
+'''
+'''  Timer0 is a counter implemented in the processor. It may be used to count instruction
+'''  cycles or external events, that occur at or below the instruction cycle rate.
+'''  In the PIC18, Timer0 can be used as either an 8-bit or 16-bit counter, or timer. The
+'''  enhanced mid-range core implements only an 8-bit counter.
+'''
+'''  This lesson configures Timer0 to count instruction cycles and to set a flag when it rolls
+'''  over. This frees up the processor to do meaningful work rather than wasting instruction
+'''  cycles in a timing loop.
+'''  Using a counter provides a convenient method of measuring time or delay loops as it
+'''  allows the processor to work on other tasks rather than counting instruction cycles.
+'''
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    22.10.2017
+' ----- Configuration
+
+    'Chip Settings.
+    #chip 18f25k42, 16
+    #option Explicit
+    'This Configuration change is needed to enable programming in Low Voltage Programming Mode
+    #config LVP=on
+
+
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTC.5
+    #define SwitchIn        PORTB.0
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the ANC5 port
+    Dir     SwitchIn      In
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+
+
+'     For this we need the following:
+'       Prescaler with the FOSC/4
+'       Prescaler with the FOSC/4 with a post scaler
+'           1:256
+'           1:1 which is the constant POST0_1
+
+    InitTimer0 Osc, PRE0_256 + TMR0_FOSC4 ,  POST0_1
+
+'   Start the Timer
+    StartTimer 0
+
+    'Every 100 msec, we will count 100 to make 1 second
+    Settimer ( 0 , 0xB1  )
+
+    'Set the LED states
+    LEDD1 = 0
+    LEDD2 = 1
+
+    dim TimerCounter as byte 'we will use this to count the number of times the event happens
+    TimerCounter = 0
+
+    do
+            'wait for the event
+            wait while TMR0IF = 0
+            ' Clearing Timer flag will reset event
+            TMR0IF = 0
+
+            TimerCounter = TimerCounter + 1
+
+            'when at 100 we are at 1 s
+            if TimerCounter = 100 then
+
+              'Set the LED states
+              LEDD1 = !LEDD1
+              LEDD2 = !LEDD2
+
+              'restart our event counter
+              TimerCounter = 0
+
+             end if
+
+            ' Set the Timer start value
+            Settimer ( 0 , 0xB1  )
+
+        loop

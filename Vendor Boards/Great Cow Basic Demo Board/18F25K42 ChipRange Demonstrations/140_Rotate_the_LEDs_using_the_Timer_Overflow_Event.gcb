@@ -1,0 +1,108 @@
+'''
+'''  This demonstration flashes an LED to show the use of a Timer 0 overflow event
+'''
+'''  Timer0 is a counter implemented in the processor. It may be used to count instruction
+'''  cycles or external events, that occur at or below the instruction cycle rate.
+'''  In thE pic, Timer0 can be used as either an 8-bit or 16-bit counter, or timer. The
+'''  enhanced mid-range core implements only an 8-bit counter.
+'''  This lesson configures Timer0 to count instruction cycles and to set a flag when it rolls
+'''  over. This frees up the processor to do meaningful work rather than wasting instruction
+'''  cycles in a timing loop.
+'''  Using a counter provides a convenient method of measuring time or delay loops as it
+'''  allows the processor to work on other tasks rather than counting instruction cycles.
+'''
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    22.10.2017
+' ----- Configuration
+
+    'Chip Settings.
+    #chip 18f25k42, 16
+    #option Explicit
+    'This Configuration change is needed to enable programming in Low Voltage Programming Mode
+    #config LVP=on
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | ----------| O | I |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------------------| X |---------
+    ''-----------------------------------------
+    ''
+
+
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTC.5
+    #define SwitchIn        PORTB.0
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the ANC5 port
+    Dir     SwitchIn      In
+
+
+    '*****************************************************************************************************
+     'Main program commences here.. everything before this is setup for the board.
+
+    Dim TIMEOUT as Byte
+
+
+'   Initialise the timer.
+'   Firstly tell the compiler to use a 16bit timer for this demonstration
+    #define TMR0_16BIT
+
+'     For this we need the following:
+'       Prescaler with the FOSC/4 with no post scaler
+'           1:64
+    InitTimer0 Osc, PRE0_64 + TMR0_FOSC4 ,  POST0_1
+
+    'Every 1 sec.  0x0bdc is calculated value using a tool like Mr E. Timer Helper
+    Settimer ( 0 , 0x0bdc  )
+
+'   Set the type of event
+    On Interrupt Timer0Overflow call blink
+
+'   Start the Timer - you need to start this Timer0!
+    StartTimer 0
+
+    'Set the LED states
+    LEDD1 = 0
+    LEDD2 = 1
+
+
+    Do Forever
+
+          if TimeOut = 1 then
+
+            'Set the LED states
+            LEDD1 = !LEDD1
+            LEDD2 = !LEDD2
+
+            TimeOut= 0
+            SetTimer ( 0, 0x0bdc ) ' Set timer to 1 second - there is some processing time to be included here... so, your scope will show you the exact period.
+
+          end if
+
+
+    Loop
+
+
+    Sub blink
+          TimeOut = 1
+          'Clear the Timer0 overflow event
+          TMR0IF = 0
+    End Sub
