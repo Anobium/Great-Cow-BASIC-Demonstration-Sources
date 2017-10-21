@@ -81,6 +81,8 @@
     Dir HI2C_CLOCK out
     RC3I2C.TH0=1
     RC4I2C.TH0=1
+    'For this solution we can set the TSCL period to 70 as the Stop condition must be held for TSCL after Stop transition.
+    #define HI2CITSCLWaitPeriod 70
 
     'MASTER
     HI2CMode Master
