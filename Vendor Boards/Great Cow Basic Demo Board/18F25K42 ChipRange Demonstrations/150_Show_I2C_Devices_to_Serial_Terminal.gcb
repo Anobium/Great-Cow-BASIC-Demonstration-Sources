@@ -1,5 +1,5 @@
 '''
-'''  This demonstration shows the I2C devices attached the microcontroller.
+'''  This demonstration shows the I2C devices attached the microcontroller, this program support the Microchip I2C module.
 '''
 '''  I2C device required a data bus and a clock bus, devices also required an input voltage and 0v.
 '''   I2C data bus is connected to PortC.4
@@ -11,7 +11,7 @@
 '''************************************************************************
 '''@author  EvanV
 '''@licence GPL
-'''@version 1.01
+'''@version 1.02
 '''@date    22.10.2017
 ' ----- Configuration
 
@@ -79,11 +79,13 @@
     'Initialise I2C - note for the I2C module the ports need to be set to Output.
     Dir HI2C_DATA out
     Dir HI2C_CLOCK out
-    RC3I2C.TH0=1   'Port specific controls may be required - see the datasheet
-    RC4I2C.TH0=1   'Port specific controls may be required - see the datasheet
+    RC3I2C.TH0=0   'Port specific controls may be required - see the datasheet
+    RC4I2C.TH0=0   'Port specific controls may be required - see the datasheet
+    ODCC4=1        'Port specific controls may be required - see the datasheet
+    ODCC3=1        'Port specific controls may be required - see the datasheet
 
     'For this solution we can set the TSCL period to Zero as the Stop condition must be held for TSCL after Stop transition
-    #define HI2CITSCLWaitPeriod 0
+'    #define HI2CITSCLWaitPeriod 0
 
     '*****************************************************************************************************
     'Main program commences here.. everything before this is setup for the board.
@@ -119,21 +121,18 @@
             HSerPrint " "
 
             'Do an initial Start
-            HI2CStart
-            if HI2CWaitMSSPTimeout <> True then
+            SI2CDiscovery ( DeviceID )
 
-              'Send to address to device
-              HI2CSend ( deviceID )
+            if HI2CWaitMSSPTimeout <> True then
 
               'Did device fail to respond?
               if HI2CAckPollState = false then
-                HI2CSend ( 0 )
                 HSerPrint   hex(deviceID)
               Else
                 HSerPrint "--"
               end if
               'Do a stop.
-              HI2CStop
+
 
             Else
               HSerPrint "! "
