@@ -77,7 +77,7 @@
               Print "TICKET #"
               locate 1, 0
               Print "00258560"
-              wait 1 s
+              wait 5 s
               cls
               locate 0, 0
               Print "TICKET OPENED"
