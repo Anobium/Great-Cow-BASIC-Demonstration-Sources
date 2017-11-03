@@ -1,7 +1,7 @@
 ;   FILE:           DisplayDevices.h
 ;   DATE:           3/11/2017
 ;   VERSION:        1.1a
-;   AUTHOR:         Evan and PeeR
+;   AUTHOR:         Evan and PeteR
 ;
 ;    Description.
 '    A support method for GCGB and GCB.
@@ -94,6 +94,5 @@ Sub DisplayDevices
           Hserprint "Unknown_Device"
   end select
 end sub
-
 
 
