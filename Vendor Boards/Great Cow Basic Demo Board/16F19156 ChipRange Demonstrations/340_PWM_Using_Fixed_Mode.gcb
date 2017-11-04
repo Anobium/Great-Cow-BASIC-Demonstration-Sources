@@ -74,7 +74,7 @@
 
     'The only options are PWM_Timer2_Freq nn|PWM_Timer4_Freq nn|PWM_Timer6_Freq nn. These are the PWM timers
     'The PWM_yy_Duty xx' where yy is between 1 and 9 and is a valid PWM module, and, xx is the Duty cycle for specific channels
-    'The PMW_zz_Clock_Source tt.  Where zz is channel and tt is the PWM clock source.
+    'The PWM_zz_Clock_Source tt.  Where zz is channel and tt is the PWM clock source.
     'You do not need to define all the timers and channels, just define the constants you need.
     'The minimum is
     '   A timer with a frequency
@@ -83,17 +83,17 @@
     '   For PWM channel 2 with a frequency of 38Khz with a duty of 50% with a clock source of timer 2, use
     '     #define PWM_Timer2_Freq 38
     '     #define PWM_7_Duty 50
-    '     #define PMW_7_Clock_Source 2
+    '     #define PWM_7_Clock_Source 2
 
     #define PWM_Freq 76    'Set frequency in KHz, on chips where CCP/PWM and PWM share the same timer  the frequencies MUST MATCH.
     #define PWM_Duty 80    'Set duty cycle to 80 %
     #define PWM_Timer2_Freq 76        'Set frequency in KHz, just change the number
 
     #define PWM_3_Duty 30
-    #define PMW_3_Clock_Source 2
+    #define PWM_3_Clock_Source 2
 '
 '    #define PWM_4_Duty 40
-'    #define PMW_4_Clock_Source 2
+'    #define PWM_4_Clock_Source 2
 
 
 
