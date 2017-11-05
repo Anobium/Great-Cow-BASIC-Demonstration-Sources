@@ -14,10 +14,9 @@
 
     Dir PORTA Out
 
-    HPWM16(1, 10, 16384)   '1 kHz, 25% duty cycle (16384/65535)
-    HPWM16(2, 20, 16384)   '1 kHz, 25% duty cycle (16384/65535)
-    HPWM16(3, 30, 16384)   '1 kHz, 25% duty cycle (16384/65535)
+    HPWM16(1, 10, 16384)   '10 kHz, 25% duty cycle (16384/65535)
+    HPWM16(2, 20, 16384)   '20 kHz, 25% duty cycle (16384/65535)
+    HPWM16(3, 30, 16384)   '30 kHz, 25% duty cycle (16384/65535)
 
     do Forever
     loop
-
