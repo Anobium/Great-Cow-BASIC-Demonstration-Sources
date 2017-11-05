@@ -1,0 +1,19 @@
+
+' This program will enable fix mode PWM signals
+'
+' The default is 38 Khz PWM signal, with a 50% on duty cycle channel 1
+' To changge this set the following constants.
+'
+' #define PWM_Freq 38       'Frequency of PWM in KHz
+' #define PWM_Duty 50       'Duty cycle of PWM
+
+    #chip 12F1572, 32
+    #config mclr=on
+
+    Dir PORTA Out
+
+    HPWM16On ( 1 )
+
+    do Forever
+    loop
+
