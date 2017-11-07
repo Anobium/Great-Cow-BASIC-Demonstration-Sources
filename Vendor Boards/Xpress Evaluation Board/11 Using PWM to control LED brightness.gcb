@@ -20,7 +20,7 @@
 '''  IDE: GCB@SYN
 '''
 '''  Board: Xpress Evaluation Board
-'''  Date: 13.3.2016
+'''  Date: 06.11.2017
 '''
 
   #chip 16f18855,32
@@ -73,12 +73,12 @@
   #define myFrequency 60
   #define myTimerSelected 2
   dim myDuty as byte
-      myDuty = 50 'start at 50%
+  myDuty = 50 'start at 50%
 
   HPWM ( HPWM6, myFrequency, myDuty , myTimerSelected  )
 
   Do Forever
-        for myDuty = 0 to 100
+        for myDuty = 0 to 255
             wait 10 ms
             HPWM ( HPWM6, myFrequency, myDuty, myTimerSelected  )
       next
