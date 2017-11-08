@@ -1,4 +1,4 @@
-' This program will enable fix mode PWM signals
+' This program will enable dynamic mode PWM signals
 '
 ' All the 12 PWM16 channels can configured at seperate dynamic frequencies  dynamic duty, the syntax is:
 '
