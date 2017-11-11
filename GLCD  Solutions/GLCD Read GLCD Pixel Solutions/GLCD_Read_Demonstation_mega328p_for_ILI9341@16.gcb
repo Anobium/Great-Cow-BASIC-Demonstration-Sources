@@ -1,0 +1,79 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a simple GLCD demonstration of the ILI9341 GLCD read pixel capabilities.
+'''The read pixel routine only supports hardware SPI.
+'''It is a nice graphical LCD, suitable for a lot of various projects.
+'''This program draws lines, boxes, circles and prints strings and numbers.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+''':
+'''This has been tested using the hardware SPI option.
+''':
+'''Note: for the correct operation of this display you MUST connect via a CD4050, see http://forum.arduino.cc/index.php?topic=181679.90
+''':
+'''@author
+'''@licence GPL
+'''@version 1.0
+'''@date
+'''********************************************************************************
+
+  'Chip Settings.
+  #chip mega328p, 16
+  #option explicit
+
+    #include <glcd.h>
+    #include <UNO_mega328p.h >
+
+    #define GLCD_TYPE GLCD_TYPE_ILI9341
+
+    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+    #define GLCD_DC       DIGITAL_8         ' Data command line
+    #define GLCD_CS       DIGITAL_10          ' Chip select line
+    #define GLCD_RESET    DIGITAL_9         ' Reset line
+
+    #define GLCD_DI       DIGITAL_12          ' Data in | MISO    - Not used therefore not really required
+    #define GLCD_DO       DIGITAL_11          ' Data out | MOSI
+    #define GLCD_SCK      DIGITAL_13          ' Clock Line
+
+    #define ILI9341_HardwareSPI    ' remove/comment out if you want to use software SPI.
+
+    dim pixcol as long
+    dim setpixcol as word
+
+
+
+    GLCDRotate ( Landscape_rev )     ' optionally you can rotate the screen.
+    GLCDCLS ILI9341_BLACK
+
+      'Setup above here
+      Pset 0,0, ILI9341_RED
+      Pset 1,1, ILI9341_WHITE
+      Pset 2,2, ILI9341_RED
+
+    do
+
+      pixcol = ReadPixel_ILI9341( 0,0 )
+      GLCDPrint 10, 10, hex( pixcol_U )
+      GLCDPrint 26, 10, hex( pixcol_H )
+      GLCDPrint 42, 10, hex( pixcol )
+
+
+      pixcol = ReadPixel_ILI9341( 1,1 )
+      GLCDPrint 10, 20, hex( pixcol_U )
+      GLCDPrint 26, 20, hex( pixcol_H )
+      GLCDPrint 42, 20, hex( pixcol )
+
+      pixcol = ReadPixel_ILI9341( 2,2 )
+      GLCDPrint 10, 30, hex( pixcol_U )
+      GLCDPrint 26, 30, hex( pixcol_H )
+      GLCDPrint 42, 30, hex( pixcol )
+
+      Pset 3, 3, setpixcol: setpixcol = setpixcol + 16
+      pixcol = ReadPixel_ILI9341( 3,3 )
+      GLCDPrint 10, 40, hex( pixcol_U )
+      GLCDPrint 26, 40, hex( pixcol_H )
+      GLCDPrint 42, 40, hex( pixcol )
+
+
+    loop
+
+    end
