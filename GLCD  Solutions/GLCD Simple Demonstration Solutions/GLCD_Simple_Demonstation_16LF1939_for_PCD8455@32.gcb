@@ -12,8 +12,8 @@
 ''':
 '''@author  EvanV
 '''@licence GPL
-'''@version 1.5
-'''@date    06.05.17
+'''@version 1.6
+'''@date    15.11.17
 '''********************************************************************************
 
     ;Chip Settings.
@@ -25,6 +25,7 @@
 
     #DEFINE GLCD_TYPE GLCD_TYPE_PCD8544
 '    #DEFINE GLCD_TYPE_PCD8544_CHARACTER_MODE_ONLY
+'    #define PCD8544_HardwareSPI     'comment out to use Software SPI
 
 ' Pin mappings for SPI for Nokia 3310 Device
 ' None LAT configurations
@@ -127,6 +128,13 @@
               wait 1 s
               GLCDCLS
               GLCDPrint (0, 0, "Clear Screen")
+              #ifndef PCD8544_HardwareSPI
+                  GLCDPrint (0, 8, "Software SPI")
+              #endif
+              #ifdef PCD8544_HardwareSPI
+                  GLCDPrint (0, 8, "Hardware SPI")
+              #endif
+
               Wait 1 s
               GLCDCLS
           End Repeat
