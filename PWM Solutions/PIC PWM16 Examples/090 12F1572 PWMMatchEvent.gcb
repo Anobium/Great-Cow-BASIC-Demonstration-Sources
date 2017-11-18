@@ -14,11 +14,8 @@
     #define LEDD0 PortA.0
     Dir LEDD0 Out '' LED
 
-
-
     PWM1PRIE = 1  'MUST be included to enable PWMMatchEvent Interrupts
     On Interrupt PWM1MatchEvent call BlinkLEDD2 ' call this when PWM1Timer Matches
-
 
     Do
         'waiting for interrupt
@@ -35,4 +32,3 @@
             ccount = 0
         end if
     End Sub
-

@@ -51,12 +51,12 @@
     GLCDPrintStringLn ( "2.Second Ln" )
     GLCDPrintStringLn ( "" )
     GLCDPrintStringLn ( "4.Forth Ln" )
-    GLCDPrintLocate( 0, 5 )
-    GLCDPrintString ( "5." )
+    GLCDLocateString  ( 0, 5 )
+    GLCDPrintString  (  "5." )
     GLCDPrintStringLn ( "Fifth Ln" )
 
     GLCDPrintStringLn ( "6.Sixth Ln" )
-    GLCDPrintLocate( 0, 3 )
+    GLCDLocateString  ( 0, 3 )
     dim val3 as Byte
     val3 = 3
     GLCDPrintStringLn ( str( val3 ) + ".Third Ln" )
