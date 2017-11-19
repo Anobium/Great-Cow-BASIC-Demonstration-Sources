@@ -1,4 +1,4 @@
-''' A flying sprrint demonstration of the HX8347G GLCD.  Attach the GLCD to the microntroller - see the section on port assignments but this GCLD is typically a shield.
+''' A flying sprite demonstration of the HX8347G GLCD.  Attach the GLCD to the microntroller - see the section on port assignments but this GCLD is typically a shield.
 ''' Nothing special about the setup.
 ''' The demonstration uses arrays and table to create the sprite and then GLCD specific methods to control the position of the sprites.
 '''
