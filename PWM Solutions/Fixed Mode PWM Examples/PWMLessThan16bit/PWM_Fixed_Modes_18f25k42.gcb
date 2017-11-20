@@ -1,8 +1,12 @@
 '''A program  for GCGB and GCB.
 '''--------------------------------------------------------------------------------------------------------------------------------
-'''This program shows how to use Fixed Mode PWM for CCP/PWM and PWM modules.
+'''This program shows how to use Fixed Mode PWM for CCP/PWM and PWM modules - therefore both PWM in this chip.
 '''
-'''An important note is that timer 2 is ALWAYS used by CCP/PWM and therefore there is NO idependence between the timer 2 PWM module and CCP/PWM channel frequency.  If you set #define PWM_Timer2_Freq then will be the frequency of CCP/PWM
+'''We will set up CCP/PWM on PortB ports - examine with a scope.
+'''We will also set up PWM on the PWM module on the PortA ports - also, examine with a scope.
+'''
+'''An important note is that timer 2 is ALWAYS used by CCP/PWM and therefore CCP/PWM is dependent on timer 2 PWM module.
+'''Therefore, f you set #define PWM_Timer2_Freq then will be the frequency of CCP/PWM
 '''
 '''@author     EvanV
 '''@licence    GPL
@@ -43,6 +47,12 @@
 
     End Sub
 
+'Details on setup for fixed mode CCP/PWM for the CCP module - these happen to be the defaults aslo - this is shown here for clarity
+  'For the CCP/PWM module the frequency and the duty is the same across all the channels - this is a limitation of the microcontroller not the program.
+  #define PWM_Freq 38      'Frequency of PWM in KHz
+  #define PWM_Duty 50      'Duty cycle of PWM (%)
+
+
 'This is the setup section for fixed mode PWM
 
     'The only options are PWM_Timer2_Freq nn|PWM_Timer4_Freq nn|PWM_Timer6_Freq nn. These are the PWM timers
@@ -58,21 +68,9 @@
     '     #define PWM_7_Duty 50
     '     #define PWM_7_Clock_Source 2
 
-'    #define PWM_Timer2_Freq 20        'Set frequency in KHz, just change the number
     #define PWM_Timer4_Freq 40        'Set frequency in KHz, just change the number
     #define PWM_Timer6_Freq 60        'Set frequency in KHz, just change the number
 
-'    #define PWM_1_Duty 10            'Set duty cycle as percentage 0-100%, just change the number
-'    #define PWM_1_Clock_Source 2
-'
-'    #define PWM_2_Duty 20
-'    #define PWM_2_Clock_Source 4
-'
-'    #define PWM_3_Duty 30
-'    #define PWM_3_Clock_Source 6
-'
-'    #define PWM_4_Duty 40
-'    #define PWM_4_Clock_Source 2
 
     #define PWM_5_Duty 50
     #define PWM_5_Clock_Source 6
@@ -86,8 +84,6 @@
     #define PWM_8_Duty 80
     #define PWM_8_Clock_Source 4
 
-'    #define PWM_9_Duty 90
-'    #define PWM_9_Clock_Source 6
 
 
 
@@ -114,4 +110,3 @@ main:
     loop
 
 End
-
