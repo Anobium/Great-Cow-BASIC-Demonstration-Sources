@@ -1,0 +1,147 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a simple GLCD demonstration of the SSD1331 GLCD capabilities.
+'''It is a nice graphical LCD, suitable for a lot of various projects.
+'''This program draws lines, boxes, circles and prints strings and numbers.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+'''
+'''This has been tested using the hardware SPI option.
+'''
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date    10.12.2017
+'''********************************************************************************
+
+    'Chip Settings.
+    #chip mega328p, 16
+    #option explicit
+
+    #include <glcd.h>
+    #include <UNO_mega328p.h >
+
+    #define GLCD_TYPE GLCD_TYPE_SSD1331
+
+    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+    #define GLCD_DC       DIGITAL_8         ' Data command line
+    #define GLCD_CS       DIGITAL_10          ' Chip select line
+    #define GLCD_RESET    DIGITAL_9         ' Reset line
+
+    #define GLCD_DO       DIGITAL_11          ' Data out | MOSI
+    #define GLCD_SCK      DIGITAL_13          ' Clock Line
+
+    #define SSD1331_HardwareSPI    ' remove/comment out if you want to use software SPI.0
+
+    'GLCD selected OLED font set.
+    #define GLCD_OLED_FONT
+    #define GLCD_PROTECTOVERRUN
+    GLCDfntDefaultsize = 1
+
+    GLCDCLS  ' supports GLCDBackground as default
+    'GLCDCLS  also support passing color parameter.
+    'GLCDCLS [color]
+'    GLCDRotate ( Landscape )
+
+    Dim CCOUNT, BYTENUMBER, OLDFONT, OLDFONT as Byte
+
+    CCount = 31
+    dim longNumber as long
+    longNumber = 0 ' max value = 4294967290
+    dim AnobiumTableAddres, wordNumber as Word
+    dim outstring as string
+    wordNumber = 0
+    byteNumber = 0
+
+    GLCDPrintStringLN "Great Cow BASIC"
+    GLCDPrintStringLN ""
+    GLCDPrintStringLN "November 2017"
+    GLCDPrintStringLN "SSD1331 GLCD"
+    GLCDPrintStringLN ""
+    GLCDPrintStringLN "by Anobium"
+    wait 5 s
+
+
+    repeat 2
+
+            GLCDRotate ( Landscape )
+            GLCDCLS SSD1331_BLUE
+
+            GLCDForeground = SSD1331_MAROON
+            GLCDPrint ( 2, 2, "GLCDPrint String" )
+
+            GLCDForeground = SSD1331_WHITE
+            GLCDPrint ( 2, 12, "GLCDPrint String" )
+
+            GLCDForeground = SSD1331_GREEN
+            GLCDPrint ( 2,30, "GLCDPrint String" )
+
+
+            FilledBox 50,40,55,45,SSD1331_RED
+
+            wait 2 s
+
+            longNumber = 0xFFFFFFFF
+            wordNumber = 0xFFFF
+            byteNumber = 0xFF
+
+            GLCDRotate ( Portrait )
+            GLCDCLS SSD1331_GREEN
+            line 0,0,63,95,0
+            GLCDForeground = SSD1331_MAROON
+            GLCDPrint ( 2, 2, bytenumber )
+
+
+            GLCDForeground = SSD1331_BLACK
+            GLCDPrint ( 2, 12, wordNumber )
+
+
+            GLCDForeground = SSD1331_CYAN
+            GLCDPrint ( 2,30, longnumber )
+
+            wait 2 s
+
+    end Repeat
+
+
+  GLCDCLS SSD1331_BLUE
+  GLCDRotate ( Landscape )
+
+  ' Prepare the static components of the screen
+  GLCDPrint ( 2,   1, "PrintStr")                                ; Print some text
+  GLCDPrint ( 64,  1, "@")                                    ; Print some more text
+  GLCDPrint ( 72,  1, ChipMhz)                                   ; Print chip speed
+  GLCDPrint ( 80,  1, "Mhz")                                     ; Print some text
+  GLCDDrawString( 2,9,"DrawStr")                                 ; Draw some text
+  box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1                            ; Draw a box
+  box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1    ; Draw a box
+  Circle( 32,41,10)                                              ; Draw a circle
+  line 50,31,0,31                                                ; Draw a line
+
+  DO forever
+     for CCount = 32 to 127
+          outstring = hex(longNumber_E )
+          outstring = outstring+hex(longNumber_E )
+          outstring = outstring+hex(longNumber_H )
+          outstring = outstring+hex(longNumber )
+          outstring = outstring+"h"
+
+          GLCDPrint ( 46 ,  36,  Outstring  )                        ; Print a HEX string
+          GLCDPrint ( 46 ,  44, pad(str(wordNumber), 5 ) )           ; Print a padded string
+          GLCDPrint ( 46 ,  52, pad(str(byteNumber), 4 ) )           ; Print a padded string
+
+
+          box (46,9,56,19)                                           ; Draw a Box
+          GLCDDrawChar(49, 11, CCount )                               ; Draw a character
+          outString = str( CCount )                                  ; Prepare a string
+          GLCDDrawString(64, 9, pad(outString,3) )                   ; Draw a string
+
+          filledbox 3,43,11,51, wordNumber                           ; Draw a filled box
+
+          FilledCircle( 32,41,8, longNumber xor 1)                   ; Draw a filled box
+          line 0,63,50,31                                            ; Draw a line
+
+                                                                     ; Do some simple maths
+          longNumber = longNumber + 7 : wordNumber = wordNumber + 3 : byteNumber++
+      NEXT
+  LOOP
+  end
