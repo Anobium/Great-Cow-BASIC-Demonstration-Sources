@@ -52,6 +52,10 @@
     wordNumber = 0
     byteNumber = 0
 
+    GLCDSetContrast ( 0x80 )
+    SetPowerMode_SSD1331(0x1A)                    'Explicit commmands for this device
+    SetBrightness_SSD1331( 0xFF )                 'Explicit commmands for this device - full brightness
+
     GLCDPrintStringLN "Great Cow BASIC"
     GLCDPrintStringLN ""
     GLCDPrintStringLN "November 2017"
@@ -105,13 +109,14 @@
 
   GLCDCLS SSD1331_BLUE
   GLCDRotate ( Landscape )
-
+  GLCDForeground = SSD1331_White
   ' Prepare the static components of the screen
-  GLCDPrint ( 2,   1, "PrintStr")                                ; Print some text
-  GLCDPrint ( 64,  1, "@")                                    ; Print some more text
-  GLCDPrint ( 72,  1, ChipMhz)                                   ; Print chip speed
-  GLCDPrint ( 80,  1, "Mhz")                                     ; Print some text
-  GLCDDrawString( 2,9,"DrawStr")                                 ; Draw some text
+  GLCDPrint ( 2,   2, "SSD1331 Library")                                ; Print some text
+  GLCDPrint ( 2,   9, "PrintStr")                                ; Print some text
+  GLCDPrint ( 64,  2, "@")                                    ; Print some more text
+  GLCDPrint ( 72,  2, ChipMhz)                                   ; Print chip speed
+  GLCDPrint ( 80,  2, "Mhz")                                     ; Print some text
+  GLCDDrawString( 2,18,"DrawStr")                                 ; Draw some text
   box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1                            ; Draw a box
   box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1    ; Draw a box
   Circle( 32,41,10)                                              ; Draw a circle
@@ -126,22 +131,23 @@
           outstring = outstring+"h"
 
           GLCDPrint ( 46 ,  36,  Outstring  )                        ; Print a HEX string
-          GLCDPrint ( 46 ,  44, pad(str(wordNumber), 5 ) )           ; Print a padded string
+          GLCDPrint ( 46 ,  44, pad(str(wordNumber), 6 ) )           ; Print a padded string
           GLCDPrint ( 46 ,  52, pad(str(byteNumber), 4 ) )           ; Print a padded string
 
 
-          box (46,9,56,19)                                           ; Draw a Box
-          GLCDDrawChar(49, 11, CCount )                               ; Draw a character
+          box (46,19,56,28)                                           ; Draw a Box
+          GLCDDrawChar(49, 20, CCount )                               ; Draw a character
           outString = str( CCount )                                  ; Prepare a string
-          GLCDDrawString(64, 9, pad(outString,3) )                   ; Draw a string
+          GLCDDrawString(64, 19, pad(outString,5) )                   ; Draw a string
 
           filledbox 3,43,11,51, wordNumber                           ; Draw a filled box
 
-          FilledCircle( 32,41,8, longNumber xor 1)                   ; Draw a filled box
+          FilledCircle( 32,41,8, longNumber )                   ; Draw a filled box
           line 0,63,50,31                                            ; Draw a line
 
                                                                      ; Do some simple maths
           longNumber = longNumber + 7 : wordNumber = wordNumber + 3 : byteNumber++
       NEXT
+
   LOOP
   end
