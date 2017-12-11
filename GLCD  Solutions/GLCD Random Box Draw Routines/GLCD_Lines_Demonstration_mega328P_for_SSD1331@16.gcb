@@ -37,7 +37,7 @@
     end if
     scalefactor = scalefactor / 255
 
-    GLCDBackground = SSD1331_BLUE
+    GLCDBackground = TFT_BLUE
     GLCDCLS
 
     GLCDPrint 0,0, "Scalefactor = "+ str(scalefactor)
