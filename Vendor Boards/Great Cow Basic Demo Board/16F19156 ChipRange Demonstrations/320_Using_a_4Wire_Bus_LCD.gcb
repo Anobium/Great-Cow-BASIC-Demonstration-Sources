@@ -18,8 +18,8 @@
   #define LCD_Speed Medium
 
 ; ----- Define Hardware settings
-  #define LCD_RS PORTc.0
-  #define LCD_Enable PORTc.2
+  #define LCD_RS PORTB.2
+  #define LCD_Enable PORTB.3
   #define LCD_DB4 PORTb.4
   #define LCD_DB5 PORTb.5
   #define LCD_DB6 PORTb.6
