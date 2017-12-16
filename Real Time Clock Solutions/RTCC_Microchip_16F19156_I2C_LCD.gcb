@@ -45,7 +45,8 @@
             SSP1CLKPPS = 0x0013    'RC3 > SCL1 (bi-directional)
             RC4PPS = 0x0014    'SDA1 > RC4
             SSP1DATPPS = 0x0014    'RC4 > SDA1 (bi-directional)
-
+            'Module: RTCC - clock output
+            RA1PPS = 0x0018    'RTCC > RA1
 
     End Sub
     'Template comment at the end of the config file
