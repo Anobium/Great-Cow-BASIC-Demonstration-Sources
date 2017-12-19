@@ -38,10 +38,11 @@
                 for xx = 255 to 150
                     PWMOut 1, xx, 1
                 next
+                wait 5 ms
                 for xx = 150 to 255
                     PWMOut 1, xx, 1
                 next
-
+                wait 5 ms
             end repeat
             Repeat 2
                 for xx = 255 to 10
@@ -57,6 +58,5 @@
 
 ; ----- Support methods.  Subroutines and Functions
   ' None
-
 
 
