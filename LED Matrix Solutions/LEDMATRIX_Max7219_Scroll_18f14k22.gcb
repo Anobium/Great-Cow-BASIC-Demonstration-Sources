@@ -1,0 +1,53 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program scroll text on the LED Matrix.
+''':
+'''The parameters are text and delay in milliseconds
+''':
+'''@author  Evan R. Venn
+'''@licence GPL
+'''@version 1.00
+'''@date    27.01.2017
+'''********************************************************************************
+; ----- Configuration
+  #chip 18f14k22,64
+  #config MCLRE=on
+  #include <Max7219_LEDMATRIX_Driver.h>
+  #option Explicit
+
+
+
+; ----- Constants
+  'Set SPI pins for the Max7219
+  #define Max7219_DI    porta.0
+  #define Max7219_DO    porta.0
+  #define Max7219_SCK   porta.2
+  #define Max7219_CS    porta.1
+
+
+  'Specifics for device configuration
+  #define MAX7219_X_Devices 4
+'  #define MAX7219_LEDMatrix_HardwareSPI     ' remove and make a comment out if you want to use Software SPI for this device
+
+'; ----- Main body of program commences here.
+
+  dim myString as string  * 100
+  Max7219_LEDMatrix_Brightness ( 15 )
+
+  do Forever
+
+      GLCDCLS
+      myString = "Hello      "
+      Max7219_LEDMatrix_ScrollMessage ( myString, 0 )
+
+      myString = "world      "
+      Max7219_LEDMatrix_ScrollMessage ( myString, 0 )
+      wait 2 s
+
+
+      GLCDCLS
+      myString = "made by Great Cow BASIC Signs Ltd.  2018       "
+      Max7219_LEDMatrix_ScrollMessage ( myString, 0 )
+      wait 1 s
+
+  loop
