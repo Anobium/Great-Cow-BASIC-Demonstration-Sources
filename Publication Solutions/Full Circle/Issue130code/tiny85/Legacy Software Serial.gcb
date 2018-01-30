@@ -1,0 +1,24 @@
+#CHIP tiny85, 16
+#DEFINE RS232Out PORTB.2
+#DEFINE RS232In  PORTB.1
+#DEFINE ADSpeed MediumSpeed
+
+'Config Software-UART
+#DEFINE SendAHigh Set RS232Out ON
+#DEFINE SendALow Set RS232Out OFF
+#DEFINE RecAHigh Set RS232In ON
+#DEFINE RecALow Set RS232In OFF
+DIR RS232Out OUT
+DIR RS232In IN
+DIR PortB.4 IN
+DIM POTI AS BYTE
+InitSer 1, r9600, 1+WaitForStart, 8, 1, none, normal
+
+  DO
+      POTI = READAD(ADC2)
+      SerPrint 1, str(POTI)
+      SerSend 1, 13		'send new line to terminal
+      SerSend 1, 10		'send line feed to terminal
+      WAIT 100 MS
+  LOOP
+

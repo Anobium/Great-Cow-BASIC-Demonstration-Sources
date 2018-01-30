@@ -1,0 +1,33 @@
+#chip mega328p, 16
+#DEFINE USART_BAUD_RATE 9600
+#DEFINE USART_BLOCKING	       'optional, see non blocking mode in help file
+DIR PORTD.1 OUT		             'Transmitting line of USART
+DIR PORTD.0 IN			           'Receiving line of USART
+DIM beer AS INTEGER
+
+WAIT 500 ms
+HSerSend 7			               'Send char 7 (bell) to the terminal
+beer = 99
+
+'Main program
+DO
+   HSerPrint str(beer) + " bottles of beer on the wall, "
+   HSerPrint str(beer) + " bottles of beer."
+   HserPrintCRLF
+   beer = beer - 1
+   HSerPrint "Take one down ... " + str(beer) + " bottles of beer on the wall."
+   HserPrintCRLF
+   WAIT 500 MS
+   IF beer = 1 THEN
+      HSerPrint "1 bottle of beer on the wall, 1 bottle of beer."
+      HserPrintCRLF
+      WAIT 500 MS
+      HSerPrint "No more left."
+      HserPrintCRLF
+      beer = 99
+   END IF
+   HSerPrint "Went to the store..."
+   HSerPrintCRLF
+   WAIT 500 MS
+LOOP
+
