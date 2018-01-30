@@ -1,0 +1,20 @@
+; ----- Configuration
+  #chip tiny85, 16
+
+    'The fixed mode hardware PWM:
+    #OPTION EXPLICIT
+    #DEFINE RANDOMIZE_SEED Timer0
+    #DEFINE LED1 PortB.1 'the hardware pin used
+    #OPTION VOLATILE LED1 'avoid glitches
+    #DEFINE PWM_FREQ 1 'Frequency: 1 KHZ should be ok
+    #DEFINE PWM_Duty 10 'Duty or brightness: 10 dim, 50 brighter [...]
+    DIR LED1 OUT 'define the PIN as output
+
+    'The main program:
+    DO
+        RANDOMIZE
+        PWMON
+        WAIT RANDOM MS 'short pulses in random length
+        PWMOFF 'switching the PWM off
+        WAIT RANDOM MS
+    LOOP
