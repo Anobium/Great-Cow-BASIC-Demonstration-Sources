@@ -1,17 +1,19 @@
-#chip tiny13a, 1.2
+#CHIP tiny13a, 1.2
 #DEFINE RS232Out PORTB.1
-#DEFINE ADSpeed MediumSpeed
 
 'Config Software-UART
-#DEFINE SendAHigh SET RS232Out ON
-#DEFINE SendLow SET RS232Out OFF
+#DEFINE SendAHigh Set RS232Out ON
+#DEFINE SendALow Set RS232Out OFF
+#DEFINE SerPrintCR
+#DEFINE SerPrintLF
+
 DIR RS232Out OUT
-DIR PORTB.4 IN
-InitSer 1, r9600, 1+WaitForStart, 8, 1, nine, normal
-'Main program:
+DIR PortB.4 IN
+InitSer 1, r9600, 1+WaitForStart, 8, 1, none, normal
+DIM POTI AS BYTE
+
 DO
-  SerSend 1, READAD(ADC2)
-  SerSend 1, 13     'send new line to terminal
-  SerSend 1, 10     'send line feed to terminal
-  WAIT 100 MS
+    POTI = READAD(ADC2)
+    Sersend 1, POTI
+	WAIT 500 MS
 LOOP
