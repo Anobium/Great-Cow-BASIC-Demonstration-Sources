@@ -1,4 +1,4 @@
-'''A demonstration program for GCGB and GCB.
+<'''A demonstration program for GCGB and GCB.
 '''--------------------------------------------------------------------------------------------------------------------------------
 '''This program displays text on the LED Matrix
 ''':
@@ -39,13 +39,9 @@
   #define MAX7219_X_Devices 4
   #define MAX7219_LEDMatrix_HardwareSPI     ' remove and make a comment out if you want to use Software SPI for this device
 
-'; ----- Quick Command Reference:
-  '[todo]
-
 '; ----- Main body of program commences here.
 
-  dim myString as string  * 100
-  dim xpos, xx, yy, px as byte
+  dim
 
   Do
 

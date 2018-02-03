@@ -19,11 +19,12 @@
   Sub InitPPS
     #ifdef MAX7219_LEDMatrix_HardwareSPI
       UNLOCKPPS
-              SSP1DATPPS = 0x0C;   //RB4->MSSP1:SDI1;
-              RB5PPS = 0x15;   //RB5->MSSP1:SDO1;
-              RB3PPS = 0x14;   //RB3->MSSP1:SCK1;
+            RB5PPS = 0x0015    'SDO1 > RB5
+            RB3PPS = 0x0014    'SCK1 > RB3
+            SSP1CLKPPS = 0x000B    'RB3 > SCK1
       LOCKPPS
     #endif
+
   End sub
 
 
@@ -42,7 +43,8 @@
 '; ----- Main body of program commences here.
 
   dim myString as string  * 100
-  Max7219_LEDMatrix_Brightness ( 15 )
+
+  Max7219_LEDMatrix_Brightness ( 7 )
 
   do Forever
 
