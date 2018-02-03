@@ -11,9 +11,19 @@
 '''********************************************************************************
 
 ; ----- Configuration
- #chip 16F886, 16
+ #chip 18f25k42, 16
  #option explicit
  #include <DS18B20MulltiPort.h>
+
+
+    #startup InitPPS, 85
+
+    Sub InitPPS
+
+          'Module: UART1
+          RC6PPS = 0x0013     'TX1 > RC6
+
+    End Sub
 
 ; ----- Define Hardware settings
   'Config UART
@@ -22,8 +32,8 @@
 
 ; ----- Constants
   ' DS18B20 port settings
-  #define DQ1 PortC.3
-  #define DQ2 PortC.4
+  #define DQ1 PortA.1
+  #define DQ2 PortA.0
 
 ; ----- Variables
   'TempC_100 required to support temp sensor
@@ -38,12 +48,26 @@
   HSerPrint "Temperature Sensor"
   HSerPrintCRLF 2
 
+  dim dqErrorCheck as byte
+
   do forever
 
-' The readtempfromPort method returns the integer value of the sensor in readTemp and raw data is dsData
+' The readtempfromPort method returns the integer value of the sensor in readTemp and raw data is readTemp
+       #define DS18B20MaxReads 3
+       dqErrorCheck=0
        do
-            readtempfromPort ( DQ1 )    'readTemp is now set.. or, should be set.
-       loop while DS18B20DeviceReadBusy = true 'you should add an exit here to ensure this IS NOT BLOCKING
+            readtempfromPort ( DQ1 )    'readTemp and readTemp12 is now set.. or, should be set.
+            if DS18B20DeviceReadBusy = true then
+              dqErrorCheck++
+            else
+              exit do
+            end if
+       loop while dqErrorCheck <> DS18B20MaxReads 'to ensure this IS NOT BLOCKING
+
+       if DS18B20DeviceReadBusy = true  then
+          HSerPrint "Error Reading DS18B20"
+          HSerSend 9
+       end if
 
        'Serial print the event count
        hserprint hex(ccount)
@@ -57,9 +81,20 @@
        HSerSend 9
 
        ' The readtempfromPort method returns the integer value of the sensor in readTemp
+       dqErrorCheck=0
        do
-            readtempfromPort ( DQ2 )            'readTemp is now set.. or, should be set.
-       loop while DS18B20DeviceReadBusy = true  'you should add an exit here to ensure this IS NOT BLOCKING
+            readtempfromPort ( DQ2 )    'readTemp and readTemp12 is now set.. or, should be set.
+            if DS18B20DeviceReadBusy = true then
+              dqErrorCheck++
+            else
+              exit do
+            end if
+       loop while dqErrorCheck <> DS18B20MaxReads 'to ensure this IS NOT BLOCKING
+
+       if DS18B20DeviceReadBusy = true  then
+          HSerPrint "Error Reading DS18B20"
+          HSerSend 9
+       end if
 
        'Serial print the event count
        hserprint hex(ccount)
@@ -71,12 +106,13 @@
        'Serial print a special character
        hserprint chr(0xB0)+"C"
 
-       HSerPrintCRLF
+       HSerSend 9
 
-' Now display the decimal value of the last sensor read using dsData variable
+' Now display the decimal value of the last sensor read using readTemp12 variable
 
-       ' The method readtempfromPort returns the raw value of the sensor as dsData.
+       ' The method readtempfromPort returns the raw value of the sensor as readTemp12.
        ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
+       DSdata = readtemp12
        SignBit = DSdata / 256 / 128
        If SignBit = 0 Then goto Positive
        ' its negative!
