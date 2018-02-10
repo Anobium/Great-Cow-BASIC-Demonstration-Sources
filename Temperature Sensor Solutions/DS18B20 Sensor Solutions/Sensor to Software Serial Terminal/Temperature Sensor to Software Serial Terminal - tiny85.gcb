@@ -1,0 +1,38 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program reads the value of a DS18B20 connected to Portc.3.  The DS18B20 must be setup to correctly.
+'''The serial terminal connection must be to the correct RX port and to a common ground.
+'''The receiving serial terminal must be set to 4800 bps.
+'''@author  EvanV plus works of others
+'''@licence GPL
+'''@version 1.0a
+'''@date    20.02.2015
+'''********************************************************************************
+
+; ----- Configuration
+  #chip tiny85, 16
+  #option explicit
+
+  #include <DS18B20.h>
+
+; ----- Define Hardware settings
+  #INCLUDE <SoftSerial.h>	'include the library. This is required.
+
+  'Config Serial UART:
+  #DEFINE SER1_BAUD 9600   	'baudrate must be defined
+  #DEFINE SER1_TXPORT PORTB  	'I/O port (without .bit) must be defined
+  #DEFINE SER1_TXPIN 1   	        'portbit  must be defined
+
+; ----- Constants
+  ' DS18B20 port settings
+  #define DQ PortC.3
+
+; ----- Main body of program commences here.
+
+
+  do forever
+    Ser1Send 13: Ser1Send 10
+    ' Serial print the  value of the sensor
+     Ser1Print [byte]readtemp
+     wait 2 s
+  loop
