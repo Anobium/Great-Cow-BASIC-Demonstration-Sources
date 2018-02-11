@@ -5,8 +5,8 @@
 
 'Config Serial UART:
 #DEFINE SER1_BAUD 9600    'baudrate must be defined
-#DEFINE SER1_TXPORT       'I/O port (without .bit) must be defined
-#DEFINE SER1_TXPIN        'portbit must be defined
+#DEFINE SER1_TXPORT PORTB      'I/O port (without .bit) must be defined
+#DEFINE SER1_TXPIN  2      'portbit must be defined
 
 DIR PortB.4 IN
 DIM POTI AS BYTE
