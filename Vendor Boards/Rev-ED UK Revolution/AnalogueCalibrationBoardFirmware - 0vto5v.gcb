@@ -1,0 +1,78 @@
+  '''A program  for GCGB and GCB.
+  '''--------------------------------------------------------------------------------------------------------------------------------
+  ''' This program is replacement firmware for the PICAXE ANALOGUE CALIBRATION BOARD.
+  '''
+  ''' This version support 10bit ADC read - from 0 to 1023 in hex which is 0 to 0x3FF
+  '''
+  ''' See  http://www.picaxe.com/docs/BAS810.pdf
+  '''
+  ''' Compiler: GCB
+  ''' IDE: GCB@SYN
+  '''
+  ''' This is new firmware for the PICAXE ANALOGUE CALIBRATION BOARD.
+  '''
+  ''' Why? I removed the original 16C710 as this had failed.
+  '''
+  ''' Solution?  Rewrite using Great Cow BASIC.  Compile, program and enjoy.
+  '''            The responsiveness can now be set by set the ADC value and applying power.  The higher the ADC value the slower the response.
+  '''
+  '''@author    EvanV
+  '''@licence   GPL
+  '''@version   1.0
+  '''@date      23.4.2018
+
+    #chip 16lf1847, 4
+    #config osc=HS
+
+    '''You can adapt the 10bit maximim value for devices - some chips can be adjusted to show full range.
+    #define MAXADCVALUE 0x3FF
+
+    #define ADSpeed LowSpeed
+
+    '''Define individual port pins for segments and selects forthe three 7Segment LEDs
+    #define DISP_SEG_A PORTB.6
+    #define DISP_SEG_B PORTB.2
+    #define DISP_SEG_C PORTB.1
+    #define DISP_SEG_D PORTB.4
+    #define DISP_SEG_E PORTB.5
+    #define DISP_SEG_F PORTB.0
+    #define DISP_SEG_G PORTB.7
+
+    #define DISP_SEL_1 PORTA.2
+    #define DISP_SEL_2 PORTA.3
+    #define DISP_SEL_3 PORTB.3
+
+    Dim Message As String * 3
+    Dim ADCValue, InitialADC as Word
+
+    'Read the ADC for the sensitivity (time) of the board
+    InitialADC = ReadAD(AN0)
+    if InitialADC  = 0 Then
+      InitialADC = 1
+    End if
+
+
+    'Loop forever
+    Do Forever
+        'read the ADC
+        ADCValue = ReadAD10(AN0)
+
+        'You can adjust the scale to suit the specifics of your configuration
+        ADCValue = scale( ADCValue, 0, MAXADCVALUE, 0, 500)
+
+
+        'convert to a string
+        Message = LeftPad (str(ADCValue), 3, "0")
+'        Optionally, use a pseudo pulse width modulation to reduce current to the 7segments
+        Repeat InitialADC
+
+          'display the value of the ADC
+          Displaychar 1, Message(1)
+          wait 3 ms
+          DisplayChar 2, Message(2)
+          wait 3 ms
+          DisplayChar 3, Message(3)
+          wait 3 ms
+
+        end Repeat
+    Loop
