@@ -1,5 +1,5 @@
 '''
-'''This demonstration program is a GLCD demonstration of the SPI capabilities.
+'''This demonstration program is a demonstration of the SPI capabilities.
 '''
 '''This example shows how to read and write from and to the MCP4141 SPI Digital device.
 '''This also shows all commands including how to set the wiper position.
