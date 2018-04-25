@@ -58,7 +58,7 @@
 
     GLCDPrintStringLN "Great Cow BASIC"
     GLCDPrintStringLN ""
-    GLCDPrintStringLN "November 2017"
+    GLCDPrintStringLN "April 2018"
     GLCDPrintStringLN "SSD1331 GLCD"
     GLCDPrintStringLN ""
     GLCDPrintStringLN "by Anobium"
