@@ -14,7 +14,7 @@ This folder contains Great Cow BASIC demonstrations, source HMI from Nexion and 
 
 For the Nextion instruction set, see here https://nextion.itead.cc/resources/documents/instruction-set/
 
-For the Nextion instruction set, see here https://www.itead.cc/wiki/Nextion_HMI_Solution#Related_Downloads   Select the correct *Demo for basic Nextion displays* for the Nexion display.  Use the demo as the starting pointing for your adventure with the Nexion display.
+For the Nextion stock demonstrations, see here https://www.itead.cc/wiki/Nextion_HMI_Solution#Related_Downloads   Select the correct *Demo for basic Nextion displays* for the Nexion display.  Use the demo as the starting pointing for your adventure with the Nexion display.
 
 
 Enjoy
