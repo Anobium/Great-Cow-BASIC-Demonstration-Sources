@@ -1,24 +1,30 @@
 '''A most simple sample for GCGB and GCB.
 '''------------------------------------------------------------------------
-'''This program blinks the onboard LED of a microcontroller.
+'''This program blinks the onboard LED of a microcontroller - simple.
 '''
 '''This sample file can be adapted to any of the supported microcontrollers
 '''by simply changing the #chip creating and removing the comment.
 '''
-'''To make your programmer/bootloader work, click menu
-''' GCBasic -> Edit AVR programmer batchfile
-'''or, for the a Microchip PIC
+'''To make your programmer or your bootload work, simply do the following.
 '''
-'''To make your programmer/bootloader work, click menu
-''' GCBasic -> Edit PIC programmer batchfile
+'''From within this IDE, select from the menu 'IDE Tools/GCB Tools/Edit Programmer Preferences'
+'''this will show you the 'Programmer Preferences', select the 'Programmer' tab.
 '''
-'''Click button "view Demos" for more sample programs.
+'''For PIC:  Typically, if you are using a PICKIT2 then 'Microchip PICKit 2 CLI - Default' will work for you.
+'''For AVR:  Typically, for an UNO the programmer 'Arduino UNO/328p@115200' will work - but, please edit the commication 'PORT'.
+'''then, select OK to save your changes.
+'''
+'''For futher adventure with Great Cow BASIC .... Click button "view Demos" for 1000's of sample programs.
+'''
+'''
+'''Enjoy.
+'''
 '''
 '''************************************************************************
 
 ' ----- Configuration
-  #chip 16f877a						'Make into a comment to use the AVR chipset
-'  #chip mega328p					'Uncomment to simply use the AVR chipset
+  #chip 16f877a           'Make into a comment to use the AVR chipset
+'  #chip mega328p         'Uncomment to simply use the AVR chipset
 
 
 ' ----- Main body of program commences here.
@@ -31,4 +37,3 @@
      Wait 900 ms
 
   Loop
-
