@@ -93,9 +93,9 @@ The Great Cow BASIC demonstration must provide a description for each of the fol
 
 Variables should be defined to respresent the variable type such as myADCValueByte, myOutPutString etc.
 
-Place a `Do forever-loop` priot to the end of of program is a good practice.  Serial transmission can be messed up if we got straight to an ‘end’.  
+Place a `Do forever-loop` priot to the end of of program is a good practice.  Serial transmission can be messed up the program execues ‘end’ prior to completion of transmssion.
 
-All serial communications need to 9600 BPS. Assume a standard dump terminal with no suport for ANSI etc.
+All serial communications need to 9600 BPS. Assume a standard dumb terminal with no suport for ANSI etc.
 
 
 Enjoy
