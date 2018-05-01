@@ -19,7 +19,7 @@ Use the basic guidelines in this document as appropriate for the Great Cow BASIC
 
 This page also does not cover libraries.   The style suggestions below may be useful to keep in mind while documenting Great Cow BASIC demonstrations.
 
-#Overall Program Layout
+# Overall Program Layout
 
 This is the standard program. This is included in every Great Cow BASIC installation.  See Snippets.
 
@@ -63,7 +63,7 @@ This is the standard program. This is included in every Great Cow BASIC installa
 
 The template should be completed with the sections marked `[todo]` being updated as appropiate.
 
-#Language Style
+# Language Style
 
 It is *Great Cow BASIC* always not any variant. 
 
@@ -73,7 +73,7 @@ Do not use slang - for example use `do not` do not use `don't`.  Great Cow BASIC
 
 Use microcontroller not `part`, `chip`, `pic` or any other variant.
 
-#Method Support for Peripheral Programming Support (PPS)
+# Method Support for Peripheral Programming Support (PPS)
 
 The PPS method needs to go at the top of the program .
 
@@ -81,7 +81,7 @@ The PPS method should must show the version of the PPSTool used to generate the 
 
 Porting to another microcontroller is easier as the user can locate the PPS method and removed.
 
-#Coding Good Practice
+# Coding Good Practice
 
 The Great Cow BASIC demonstration must provide a description for each of the following:
  - Every constant, variable,  etc.
