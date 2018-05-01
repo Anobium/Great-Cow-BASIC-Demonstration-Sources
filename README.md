@@ -2,7 +2,7 @@
 
 This GIT contains the latest user contributed demonstrations. 
 
-The baseline set of demonstrations was created at version 0.98.00 of the Great Cow BASIC distrubution.
+The baseline set of demonstrations was created at version 0.98.xx of the Great Cow BASIC distrubution.
 
 Please add you demonstrations and improve those that have been posted.
 
@@ -13,20 +13,20 @@ Enjoy
 
 Key Point: Try to provide a complete reference, describing all relevant aspects of the demonstration, and putting code-related terms in code font.
 
-When you are documenting a demonstration, provide a complete references for another methods, typically generated from source code using doc comments that describe all public constants, methods, local constants, and other variables.
+When you are documenting a demonstration, provide a complete references for another methods, typically generated from source code using documentation comments that describe all public constants, methods, local constants, and other variables.
 
 Use the basic guidelines in this document as appropriate for the Great Cow BASIC language.
 
-This page also does not cover libraries.   The style suggestions below may be useful to keep in mind while documenting Great Cow BASIC demonstrations.
+This page also does not cover libraries.   The style suggestions below may be useful to keep in mind while documenting Great Cow BASIC demonstrations.   Libraries are covered a Library Developer Guide.
 
 # Overall Program Layout
 
-This is the standard program. This is included in every Great Cow BASIC installation.  See Snippets.
+This is the standard program. This is included in every Great Cow BASIC installation.  See IDE/Snippets.
 
 ----
     '''A program  for GCGB and GCB the demonsations......
     '''--------------------------------------------------------------------------------------------------------------------------------
-    '''This program [todo]
+    '''This program [todo] a decription of the demonstration
     '''
     '''@author     [todo]
     '''@licence    GPL
@@ -62,6 +62,8 @@ This is the standard program. This is included in every Great Cow BASIC installa
 ----
 
 The template should be completed with the sections marked `[todo]` being updated as appropiate.
+
+The header is strict.  Great Cow Graphical BASIC and  Great Cow BASIC test routines use the header to determine parameters and key information.
 
 # Language Style
 
@@ -101,6 +103,6 @@ Enjoy
 
 Change log.
 1.  First release.  A dump of an email to this document.
-
+2.  Added Strict header
 
 
