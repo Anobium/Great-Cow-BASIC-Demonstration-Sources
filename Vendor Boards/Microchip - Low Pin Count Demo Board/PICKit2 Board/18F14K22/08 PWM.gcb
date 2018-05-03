@@ -23,7 +23,7 @@
 '''  IDE: GCB@SYN
 '''
 '''  Board: PICkit 2 Low Pin Count Demo Board
-'''  Date: 29.5.2015
+'''  Date: 04/05/18
 '''
 ''''''******************************************************************
 ''' See Low Pin Count Demo Board User's Guide for Lesson Information*
@@ -34,28 +34,25 @@
  #Chip 18F14K22, 8
  #config MCLRE_OFF
 
- #script
-        'This script provides PWM results!
-
-        'reference voltage                        5v
-        'actual voltage at port when 100% Pot     4.15
-        'adc max                                  1023
-        'number of graduations requried           255
-        reference_voltage = 4.15
-        vcc = 5
-        numberofgrads = 255
-        maxADC = 1023
-        ADC_adjustment = int((reference_voltage*100)/(vcc*10))
-        ADC_adjustment = int(ADC_adjustment * maxADC / numberofgrads )
-
- #endscript
 
   dir portc.5 out
   dim calculatedPWM as word
 
   do
+
       wait 5 ms
-      calculatedPWM = ( ( ReadAD10 ( AN0 ) * 10  ) / ADC_adjustment   )
-      if calculatedPWM > 255 then calculatedPWM = 255
+
+      'Read the ADC  and store the result in the variable
+      myDelay = ReadAD ( AN0 , true )
+
+      'Store the maximum value of the ADC in the variable.  We are showing this to ensure the ADC has a dynamic range.
+      if myDelay > maxADCReading Then
+          maxADCReading = myDelay
+      end if
+
+      'This scale will range from 0 to 255 this equate to 0% to 100%
+      calculatedPWM =  scale ( myDelay,  1, maxADCReading, 0, 255 )
+
       HPWM 1, 40, calculatedPWM
+
   loop

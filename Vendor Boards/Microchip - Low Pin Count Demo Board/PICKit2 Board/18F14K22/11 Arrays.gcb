@@ -21,7 +21,7 @@
 '''  IDE: GCB@SYN
 '''
 '''  Board: PICkit 2 Low Pin Count Demo Board
-'''  Date: 29.5.2015
+'''  Date: 04/05/18
 '''
 ''''''******************************************************************
 ''' See Low Pin Count Demo Board User's Guide for Lesson Information*
@@ -63,4 +63,3 @@ function average_reading ( in analyze_queue() ) as word
     average_reading = _sum / NUM_READINGS
 
 end Function
-

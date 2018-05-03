@@ -18,29 +18,12 @@
 '''  IDE: GCB@SYN
 '''
 '''  Board: PICkit 2 Low Pin Count Demo Board
-'''  Date: 29.5.2015
+'''  Date: 04/05/18
 '''
 ''''''******************************************************************
 ''' See Low Pin Count Demo Board User's Guide for Lesson Information*
 ''''''*****************************************************************
 '''
-
-
- 'This script allows for the voltage drop and compensates of any losses.
- #script
-        'reference voltage                        5v
-        'actual voltage at port when 100% Pot     4.15
-        'adc max                                  1023
-        'number of graduations requried           16
-        reference_voltage = 4.15
-        vcc = 5
-        numberofgrads = 16
-        maxADC = 1023
-        ADC_adjustment = int((reference_voltage*100)/(vcc*10))
-        ADC_adjustment = int(ADC_adjustment * maxADC / numberofgrads / 10 )
-
- #endscript
-
 
  #chip 18F14K22,8
  #config MCLRE_OFF
@@ -66,8 +49,24 @@
 
     dir portc out
 
+
+    dim maxADCReading, myArrayIndex, myADCReading as Word
+    maxADCReading = 0
+
+
     do
         wait 5 ms
-        readtable gray_code, ( ReadAD10 ( AN0 )  / ADC_adjustment ), portc     ' calcualtion to ensure max value 15, equates to all 4 LEDS on
+
+        'Read the ADC  and store the result in the variable
+        myADCReading = ReadAD10 ( AN0 , true )
+
+        'Store the maximum value of the ADC in the variable.  We are showing this to ensure the ADC has a dynamic range.
+        if myADCReading > maxADCReading Then
+            maxADCReading = myADCReading
+        end if
+
+        myArrayIndex = scale ( myADCReading, 0, maxADCReading, 1, 16 )
+
+        readtable gray_code, myArrayIndex , portc  ' calcualtion to ensure max value 15, equates to all 4 LEDS on
 
     loop

@@ -19,7 +19,7 @@
 '''  IDE: GCB@SYN
 '''
 '''  Board: PICkit 2 Low Pin Count Demo Board
-'''  Date: 29.5.2015
+'''  Date: 04/05/18
 '''
 ''''''******************************************************************
 ''' See Low Pin Count Demo Board User's Guide for Lesson Information*
@@ -31,8 +31,9 @@
  #config MCLRE_OFF
 
     dir portc out
-    portc = 0
-    portc.3 = 1
+    'Set the whole port, all 8 bits to OFF-OFF-OFF-OFF-ON-OFF-OFF-OFF
+    'This will turn one specific LED on. Our startings LEDs
+    portc = 0b00001000
 
     do
         wait  ( ( ReadAD10 ( AN0 )  / 4 ) + 1 ) ms
@@ -40,5 +41,5 @@
         wait 5 ms
         Set C off
         Rotate portc right
-        if C = 1 then portc.3 = 1
+        if C = 1 then portc = 0b00001000
     loop

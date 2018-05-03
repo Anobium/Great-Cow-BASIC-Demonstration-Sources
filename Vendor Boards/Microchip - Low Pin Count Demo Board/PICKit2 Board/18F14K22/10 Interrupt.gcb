@@ -21,7 +21,7 @@
 '''  IDE: GCB@SYN
 '''
 '''  Board: PICkit 2 Low Pin Count Demo Board
-'''  Date: 29.5.2015
+'''  Date: 04/05/18
 '''
 ''''''******************************************************************
 ''' See Low Pin Count Demo Board User's Guide for Lesson Information*
@@ -60,10 +60,12 @@
     WPUA2 = 1
   #endif
 
+  'Set up timer to overflow then call the subroutine to reset the timer for us
   TMR0IE = 1
   InitTimer0 Osc, PS0_256
   On Interrupt Timer0Overflow Call InterruptHandler
 
+  'Set up the button event and call the subroutine to handler the button press
   IOCA3 = 1
   On Interrupt PORTChange  Call InterruptHandler
 

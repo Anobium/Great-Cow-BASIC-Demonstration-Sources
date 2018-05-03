@@ -16,7 +16,7 @@
 '''  IDE: GCB@SYN
 '''
 '''  Board: PICkit 2 Low Pin Count Demo Board
-'''  Date: 29.5.2015
+'''  Date: 04/05/18
 '''
 ''''''******************************************************************
 ''' See Low Pin Count Demo Board User's Guide for Lesson Information*
@@ -26,8 +26,10 @@
  #chip 18F14K22,16
  #config MCLRE_OFF
 
-    dir portc out
-    portc = 0
+    'Set the while port DIRection as out
+    DIR portc out
+
+    'Simply set the port to 1 to turn the LED on
     portc.0 = 1
-    do
-    loop
+
+    end

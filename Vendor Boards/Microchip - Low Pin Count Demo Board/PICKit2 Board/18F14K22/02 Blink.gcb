@@ -15,24 +15,20 @@
 '''  IDE: GCB@SYN
 '''
 '''  Board: PICkit 2 Low Pin Count Demo Board
-'''  Date: 29.5.2015
+'''  Date: 04/05/18
 '''
 ''''''******************************************************************
 ''' See Low Pin Count Demo Board User's Guide for Lesson Information*
 ''''''*****************************************************************
 '''
 
- #Chip 18F14K22, 8
- #option explicit
- #config MCLRE_OFF
+    #Chip 18F14K22, 8
 
-    Dim CURRENTSTATE as Byte
-
-
-    dir portc.0 out
+    'Set the while port DIRection as out
+    DIR portc out
 
     do
+        'Toggle port by using the NOT statement
+        portc.0 = NOT portc.0
         wait 1500 ms
-        currentstate = 1 XOR portc.0
-        portc.0 = currentstate
     loop

@@ -21,7 +21,7 @@
 '''  IDE: GCB@SYN
 '''
 '''  Board: PICkit 2 Low Pin Count Demo Board
-'''  Date: 29.5.2015
+'''  Date: 04/05/18
 '''
 ''''''******************************************************************
 ''' See Low Pin Count Demo Board User's Guide for Lesson Information*
@@ -37,20 +37,20 @@
   #define SWITCH      PORTA.3
   #define LED         PortC.0
 
-    dir portc out
-    portc = 0
+  dir portc out
+  portc = 0
 
-    'setup switch (SW1)
-    dir porta.3 in
+  'setup switch (SW1)
+  dir porta.3 in
 
-    do
-        if ( SWITCH = DOWN ) then
-           wait 10 ms
+  do
+      if ( SWITCH = DOWN ) then
+         wait 10 ms
 
-           if ( SWITCH = DOWN ) Then
-              Set LED on
-           end if
-        else
-           Set LED off
-       end if
-    loop
+         if ( SWITCH = DOWN ) Then
+            Set LED on
+         end if
+      else
+         Set LED off
+     end if
+  loop
