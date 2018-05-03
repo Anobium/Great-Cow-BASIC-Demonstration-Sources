@@ -7,15 +7,14 @@
 ''' But, this time we are using the RESET button as an input switch!!
 '''
 '''
-'''************************************************************************
 '''
-'''  PIC: 16F19156
-'''  Compiler: GCB
-'''  IDE: GCB@SYN
+'''Great Cow  BASIC Header block
 '''
-'''  Board: Great Cow BASIC Board
-'''  Date: 29.10.2017
-'''
+'''@author  Evan R. Venn
+'''@licence GPL
+'''@version 1.00
+'''@date    03/05/2018
+'''****
 ' ----- Configuration
     'Chip Settings.
     #chip 16F19156, 32
@@ -23,8 +22,7 @@
 
     'Change the MCLRE to be an input by setting this Configuration Switch
     #config mclre=off
-'    'You cannot use LowVoltageProgramming, so, we make sure it is turned off.
-    #config LVP=off
+
 
     '' -------------------PORTA----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
@@ -47,7 +45,7 @@
     'Define constants to make things easier. We can reuse these at any time.
     #define LEDD1 PORTB.1
     #define LEDD2 PORTB.5
-    #define LDR             PORTA.4
+    #define LDR             PORTB.4
     #define SwitchIn        PORTB.0
     #define RSTButton       PORTE.3
 

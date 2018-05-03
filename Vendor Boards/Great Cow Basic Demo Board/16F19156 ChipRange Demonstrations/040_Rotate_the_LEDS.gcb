@@ -5,19 +5,19 @@
 '''  LEDs change at a rate of 1.0s, the bit are set ON or equal to 1 when the LED is turned on!
 '''
 '''
-'''************************************************************************
 '''
-'''  PIC: 16F19156
-'''  Compiler: GCB
-'''  IDE: GCB@SYN
+'''Great Cow  BASIC Header block
 '''
-'''  Board: Great Cow BASIC Board
-'''  Date: 29.10.2017
-'''
+'''@author  Evan R. Venn
+'''@licence GPL
+'''@version 1.00
+'''@date    03/05/2018
+'''****
 ' ----- Configuration
+
     'Chip Settings.
     #chip 16F19156, 32
-    #config LVP=on
+
     #option Explicit
 
     '' -------------------PORTA----------------

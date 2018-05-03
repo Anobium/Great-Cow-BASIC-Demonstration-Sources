@@ -7,24 +7,21 @@
 '''  enhanced mid-range core implements only an 8-bit counter.
 '''  This lesson configures Timer0 to count instruction cycles and to set a flag when it rolls
 '''  over. This frees up the processor to do meaningful work rather than wasting instruction
-'''  cycles in a timing loop.
+'''  cycles in a timing loop of 1s.
 '''  Using a counter provides a convenient method of measuring time or delay loops as it
 '''  allows the processor to work on other tasks rather than counting instruction cycles.
 '''
 '''
-'''************************************************************************
+'''Great Cow  BASIC Header block
 '''
-'''  PIC: 16F19156
-'''  Compiler: GCB
-'''  IDE: GCB@SYN
-'''
-'''  Board: Great Cow BASIC Board
-'''  Date: 29.10.2017
-'''
+'''@author  Evan R. Venn
+'''@licence GPL
+'''@version 1.00
+'''@date    03/05/2018
+'''****
 ' ----- Configuration
     'Chip Settings.
     #chip 16F19156, 32
-    #config LVP=on
     #option Explicit
 
 
@@ -77,6 +74,7 @@
 
     On Interrupt Timer0Overflow call blink
 
+    'Set timer to 1 second`
     SetTimer ( 0, 0x0bdc )
 
 '     Start the Timer - you need to start this Timer0!

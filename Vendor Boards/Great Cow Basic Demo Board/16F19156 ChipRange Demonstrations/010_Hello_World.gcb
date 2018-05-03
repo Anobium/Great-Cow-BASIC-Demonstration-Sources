@@ -4,19 +4,17 @@
 ''' This simply set one of the LEDs on - the LED is attached to Portb.5 via a suitable resistor
 '''
 '''
-'''************************************************************************
+''' Great Cow  BASIC Header block
 '''
-'''  PIC: 16F19156
-'''  Compiler: GCB
-'''  IDE: GCB@SYN
-'''
-'''  Board: Great Cow BASIC Board
-'''  Date: 29.10.2017
-'''
+'''@author  Evan R. Venn
+'''@licence GPL
+'''@version 1.00
+'''@date    03/05/2018
+'''****
+
 ' ----- Configuration
     'Chip Settings.
     #chip 16F19156, 32
-    #config LVP=on
 
     '' -------------------PORTA----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
