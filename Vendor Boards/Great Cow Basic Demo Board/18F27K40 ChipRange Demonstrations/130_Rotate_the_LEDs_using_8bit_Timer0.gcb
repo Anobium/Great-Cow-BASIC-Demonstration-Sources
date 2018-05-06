@@ -1,0 +1,131 @@
+'''
+'''******************************************************************
+'''
+'''  Timer0 is a counter implemented in the processor. It may be used to count instruction
+'''  cycles or external events, that occur at or below the instruction cycle rate.
+'''  In the PIC16, Timer0 can be used as either an 8-bit or 16-bit counter, or timer. The
+'''  enhanced mid-range core implements only an 8-bit counter.
+'''
+'''  This lesson configures Timer0 to count instruction cycles and to set a flag when it rolls
+'''  over. This frees up the processor to do meaningful work rather than wasting instruction
+'''  cycles in a timing loop of 1 s.
+'''  Using a counter provides a convenient method of measuring time or delay loops as it
+'''  allows the processor to work on other tasks rather than counting instruction cycles.
+'''
+'''
+'''Great Cow  BASIC Header block
+'''
+'''@author  Evan R. Venn
+'''@licence GPL
+'''@version 1.00
+'''@date    03/05/2018
+'''****
+' ----- Configuration
+    'Chip Settings.
+    #chip 18F27K40, 32
+    #option Explicit
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -----------| A |-----------------
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | ----------| O | I |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---|TX1|-------|CCP|-------------
+    ''----------------------------------------
+
+    'Define constants to make things easier. We can reuse these at any time.
+    #define LEDPORT PORTB
+    #define LEDD1   LEDPORT.0
+    #define LEDD2   LEDPORT.1
+    #define LEDD3   LEDPORT.2
+    #define LEDD4   LEDPORT.3
+
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     LEDD3         Out
+    Dir     LEDD4         Out
+
+    #define SWITCHPORT    PORTA
+    #define SwitchIn      SWITCHPORT.2
+    Dir     SwitchIn      In
+
+    #define RSTButton     PORTE.3
+
+    #define PWMCCP1       PORTC.2
+
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+
+
+    'Setup the timer.
+    'params    Source, Prescaler                , Postscaler
+    InitTimer0 Osc, PRE0_32 + TMR0_FOSC4,       POST0_11
+
+    ' Start the Timer by writing to TMR0ON bit
+    StartTimer 0
+
+    ' Set the Timer start value at 100 ms
+    SetTimer ( 0, 0xE2 )
+
+    StartTimer 0
+
+    'Set the LED states
+    LEDD1 = 0
+    LEDD2 = 0
+    LEDD3 = 0
+    LEDD4 = 1
+
+    dim TimerCounter as byte 'we will use this to count the number of times the event happens
+    TimerCounter = 0
+
+    Dim     LEDState as Byte
+    'We are only interested in the lower four bits, so, use a mask to extract the state of these bits.
+    LEDState = LEDPORT AND 0B00001111
+
+
+    do
+            'wait for the event
+            wait while TMR0IF = 0
+            ' Clearing Timer flag will reset event
+            TMR0IF = 0
+
+            TimerCounter = TimerCounter + 1
+
+            'we need 100 events to get to 1 s, so when at 100 we are at 1 s
+            if TimerCounter = 100 then
+
+                'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
+                'Clear the C register bit, rotate the LEDState variable, check if the C register bit is set and set the LEDState variable.
+                Set C off                 ' Clear the carry flag
+                Rotate LEDState right        ' and shift the contents of LEDState
+                ' If the Carry is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
+                If C = 1 then
+                   'Set the initial LED states
+                    LEDD1 = 0
+                    LEDD2 = 0
+                    LEDD3 = 0
+                    LEDD4 = 1
+                    LEDState = LEDPORT AND 0B00001111
+                else
+                    'Set the port
+                    LEDPORT = LEDState
+                end if
+
+             end if
+
+          ' Set the Timer start value
+          SetTimer ( 0, 0xE2 )
+
+        loop
