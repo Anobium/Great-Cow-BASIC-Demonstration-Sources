@@ -1,5 +1,5 @@
 ; ----- Configuration
-  #chip tiny85, 16
+  #chip tiny85, 8
 
   #OPTION EXPLICIT                    'Provide that variables are dimensioned before use
   #DEFINE RANDOMIZE_SEED Timer0       'Timer0 gives random values to the Random function
@@ -14,4 +14,3 @@
       PWMOUT 1, RANDOM, 100     'Use Soft-PWM chan. 1 @random
       WAIT RANDOM MS            'Wait some time
   LOOP
-

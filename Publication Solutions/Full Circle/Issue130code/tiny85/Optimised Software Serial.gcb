@@ -1,4 +1,4 @@
-#CHIP tiny85, 16
+#CHIP tiny85, 8
 #OPTION Explicit
 #INCLUDE <SoftSerial.h> ‘include the library. This is required.
 #DEFINE ADSpeed MediumSpeed
@@ -15,8 +15,7 @@ DIM POTI AS BYTE
   DO
       POTI = READAD(ADC2)
       Ser1Print str(POTI)
-      Ser1Send 10		'send line feed to terminal
-      Ser1Send 13		'send new line to terminal
+      Ser1Send 10   'send line feed to terminal
+      Ser1Send 13   'send new line to terminal
       WAIT 100 MS
   LOOP
-

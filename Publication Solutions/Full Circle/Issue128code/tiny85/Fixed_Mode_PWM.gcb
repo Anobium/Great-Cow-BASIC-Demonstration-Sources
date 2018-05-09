@@ -1,5 +1,5 @@
 ; ----- Configuration
-  #chip tiny85, 16
+  #chip tiny85, 8
 
     'The fixed mode hardware PWM:
     #OPTION EXPLICIT

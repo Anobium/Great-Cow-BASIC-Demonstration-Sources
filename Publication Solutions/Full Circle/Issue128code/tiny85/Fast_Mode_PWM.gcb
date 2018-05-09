@@ -1,6 +1,6 @@
 
 ; ----- Configuration
-  #chip tiny85, 16
+  #chip tiny85, 8
 
   #OPTION EXPLICIT
   #RANDOMIZE_SEED Timer0
@@ -19,4 +19,3 @@
       HPWM 2, FREQ, RANDOM
       WAIT RANDOM MS
   LOOP
-

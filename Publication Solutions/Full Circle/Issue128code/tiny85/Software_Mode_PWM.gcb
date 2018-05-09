@@ -1,5 +1,5 @@
 ; ----- Configuration
-  #chip tiny85, 16
+  #chip tiny85, 8
 
   #OPTION EXPLICIT 'provide that variables are dimensioned before use
   #DEFINE PWM_Out1 PortB.1 'Great Cow BASIC Software PWM channel 1
