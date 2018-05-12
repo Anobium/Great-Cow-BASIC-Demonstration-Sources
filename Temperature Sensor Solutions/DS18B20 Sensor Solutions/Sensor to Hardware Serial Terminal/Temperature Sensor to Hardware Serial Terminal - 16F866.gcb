@@ -3,10 +3,10 @@
 '''This program reads the value of a DS18B20 connected to Portc.3.  The DS18B20 must be setup to correctly.
 '''The serial connection must be to the hardware RX port and to a common ground.
 '''The receiving serial terminal must be set to 4800 bps.n.
-'''@author 	EvanV plus works of others
-'''@licence	GPL
-'''@version	1.0a
-'''@date   	14.02.2015
+'''@author  EvanV plus works of others
+'''@licence GPL
+'''@version 1.0a
+'''@date    14.02.2015
 '''********************************************************************************
 
 ; ----- Configuration
@@ -65,7 +65,7 @@
     Positive:
 
        ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
-       TempC_100 =  DSdata * 6		
+       TempC_100 =  DSdata * 6
        DSdata = ( DSdata * 25 ) / 100
        TempC_100 = TempC_100 + DSdata
 
@@ -89,3 +89,5 @@
        wait 2 s
 
      ccount++
+
+  Loop
