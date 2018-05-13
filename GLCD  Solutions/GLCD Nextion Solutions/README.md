@@ -1,6 +1,6 @@
 # Great-Cow-BASIC
 
-This GIT contains the latest Nexion demonstrations. 
+This GIT contains the latest Nextion demonstrations. 
 
 
 
@@ -10,7 +10,7 @@ The baseline set of demonstrations was created at version 0.98.02 of the Great C
 
 For more information on Great Cow BASIC see http://gcbasic.sourceforge.net/Typesetter/index.php/Home
 
-This folder contains Great Cow BASIC demonstrations, source HMI from Nexion and source HMI used to for these demontrations.
+This folder contains Great Cow BASIC demonstrations, source HMI from Nextion and source HMI used to for these demontrations.
 
 For the Nextion instruction set, see here https://nextion.itead.cc/resources/documents/instruction-set/
 
