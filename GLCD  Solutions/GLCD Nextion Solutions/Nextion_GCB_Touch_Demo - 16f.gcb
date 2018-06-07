@@ -19,8 +19,8 @@
 '''
 '''@author     EvanV
 '''@licence    GPL
-'''@version    2.00
-'''@date       04.06.18
+'''@version    3.00
+'''@date       07.06.18
 '''********************************************************************************
 
 
@@ -70,16 +70,12 @@
 
             'Module: EUSART
             RC0PPS = 0x0010    'TX > RC0
-            TXPPS = 0x0010    'RC0 > TX (bi-directional)
+            TXPPS = 0x0010     'RC0 > TX (bi-directional)
             RC5PPS = 0x0010    'TX > RC5
-            TXPPS = 0x0015    'RC5 > TX (bi-directional)
+            TXPPS = 0x0015     'RC5 > TX (bi-directional)
 
     End Sub
     'Template comment at the end of the config file
-
-
-
-
 
 ' ----- Main program
     wait 1 s
@@ -94,15 +90,16 @@
     GLCDCLS TFT_BLACK
 
 
+    GLCDUpdateObject_Nextion( "t0.txt", "GCB Demo" )
     'Start of read touch functionality
     'A string variable to hold our results
     Dim myReturnedString as string * 7
     do
           ' "tch2" is the read X touch value
-          myReturnedString  = GLCDGetTouch_Nextion( "tch2")
+          myReturnedString  = str(GLCDGetTouch_Nextion( "tch2"))
           myReturnedString  = myReturnedString  + ":"
           ' "tch3" is the read Y touch value
-          myReturnedString  = myReturnedString  + GLCDGetTouch_Nextion( "tch3")
+          myReturnedString  = myReturnedString  + str(GLCDGetTouch_Nextion( "tch3"))
 
           GLCDUpdateObject_Nextion( "t0.txt", myReturnedString )    ' a string for a .txt object
 
