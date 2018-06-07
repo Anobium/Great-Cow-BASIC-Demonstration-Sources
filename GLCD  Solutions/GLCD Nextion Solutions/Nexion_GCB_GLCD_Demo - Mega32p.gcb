@@ -1,0 +1,155 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demonstrates the basic Great Cow BASIC GLCD commands plus the Nextion specifics to use Nextion fonts.
+'''
+'''The setup is:
+'''     Include the <glcd.h>
+'''     Specify the Nextion.  #define GLCD_TYPE GLCD_TYPE_Nextion
+'''     Set the device size. #define GLCD_WIDTH xxx and #define GLCD_HEIGHT yyy
+'''     Specify the fonts:
+'''        #define NextionFont0      0, 8, 16    'Arial 8x16
+'''        #define NextionFont1      1, 12, 24   '24point 12x24 charset
+'''        #define NextionFont2      2, 16, 32   '32point 16x32 charset
+'''     Specify hardware or software serial.
+'''
+'''     Then, enjoy.
+'''
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.00
+'''@date       24.04.18
+'''********************************************************************************
+
+
+' ----- Configuration
+    'Chip Settings.
+    #chip mega328p, 16
+    #option explicit
+
+' ----- Set up the Nextion GLCD
+    #include <glcd.h>
+    #define GLCD_TYPE GLCD_TYPE_Nextion
+
+
+    ;VERY IMPORTANT!!
+    ;Change the width and height to match the rotation in the Nextion Editor
+    #define GLCD_WIDTH  320   'could be 320 | 400 | 272 | 480 but any valid dimension will work.
+    #define GLCD_HEIGHT 240  'could be 240 | 480 | 800 but any valid dimension will work.
+
+
+    ;VERY IMPORTANT!!
+    ;Fonts installed in the Nextion MUST match the fonts parameters loading to the GLCD.
+    ;Obtain parameters from Nextion Editor/Font dialog.
+    #define NextionFont0      0, 8, 16    'Arial 8x16
+    #define NextionFont1      1, 12, 24   '24point 12x24 charset
+    #define NextionFont2      2, 16, 32   '32point 16x32 charset
+
+' ----- End of set up for Nextion GLCD
+
+' ----- Set up for Hardware Serial
+    ;VERY IMPORTANT!!
+    ;The Nextion MUST be setup for 9600 bps.
+    #define USART_BAUD_RATE 9600
+    #define USART_BLOCKING
+
+    ;VERY IMPORTANT!!
+    ;These two are optional. These constants are set in the library.
+    #define GLCD_NextionSerialPrint HSerPrint
+    #define GLCD_NextionSerialSend  HSerSend
+
+
+' ----- Set up for Software Serial - this is optional - shown to explain the method.
+'    ;Remove Hardware Serial before using Software serial
+'    #include <SoftSerial.h>
+'
+'    ; ----- Config Serial UART for sending:
+'    #define SER1_BAUD 9600     ; baudrate must be defined
+'    #define SER1_TXPORT PORTC ; I/O port (without .bit) must be defined
+'    #define SER1_TXPIN 5       ; portbit  must be defined
+'
+'    ;VERY IMPORTANT!!
+'    ;These two constants are required to support the the library.
+'    #define GLCD_NextionSerialPrint        Ser1Print
+'    #define GLCD_NextionSerialSend         Ser1Send
+'
+' ----- End of set up for Serial
+
+' ----- Main program
+
+    'show front screen
+    wait 3 s
+
+    dim adcval as word
+    dim ScaledValue as Integer
+    dim myString as string * 32
+
+    dim CCount, byteNumber as Byte
+
+    CCount = 32
+    dim longNumber as long
+    longNumber = 0 ' max value = 4294967290
+    dim wordNumber as Word
+    wordNumber = 0
+    byteNumber = 0
+
+    wait 1 s
+    GLCDCLS TFT_BLACK
+
+    GLCDLocateString_Nextion 1,1
+    GLCDPrintDefaultFont_Nextion ( NextionFont0 )
+    GLCDPrintString_Nextion ( "Great Cow BASIC " )
+    GLCDLocateString_Nextion 130,1
+    GLCDPrintStringLn_Nextion ( "v0.98.02" )
+
+    GLCDPrint_Nextion ( 60, GLCD_HEIGHT - 40 , "Great Cow BASIC" , TFT_WHITE, NextionFont2 )
+
+    GLCDPrintDefaultFont_Nextion ( NextionFont0 )
+    GLCDPrint_Nextion ( 2, 18, "DrawStr",TFT_YELLOW)
+    GLCDPrint_Nextion ( 2, 52, "Long:", TFT_WHITE )
+    GLCDPrint_Nextion ( 2, 72, "Word:" )
+    GLCDPrint_Nextion ( 2, 92, "Byte:" )
+
+    GLCDPrint_Nextion ( 128, 18, "Asc:"+"  " )
+
+    box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1, TFT_YELLOW
+    box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1, TFT_WHITE
+
+    Circle( GLCD_WIDTH/2, GLCD_HEIGHT/2, 50, TFT_WHITE )            ;center
+    FilledCircle( GLCD_WIDTH/2, GLCD_HEIGHT/2, 25, TFT_DARKGREY  )
+
+
+    line 0,  GLCD_HEIGHT-1 , GLCD_WIDTH/2 +100,  (GLCD_HEIGHT /2) - 50, TFT_CYAN
+    line  0, (GLCD_HEIGHT /2) - 50, GLCD_WIDTH/2 +100, (GLCD_HEIGHT /2) - 50, TFT_CYAN
+
+    filledbox 2,GLCD_HEIGHT/2+10,42,GLCD_HEIGHT/2+50, TFT_RED
+
+    GLCDPrint_Nextion ( GLCD_WIDTH - 78, 2 , "Feb 2018" , TFT_WHITE, NextionFont0 )
+
+    GLCDForeground = TFT_WHITE
+    GLCDPrint_Nextion ( 100 , GLCD_HEIGHT - 60 , "Nextion Driver", NextionFont1 )
+
+    DO forever
+
+      GLCDPrint_Nextion ( 64 , 52, longNumber, TFT_WHITE, NextionFont0 )
+      GLCDPrint_Nextion ( 124 , 52, longNumber, TFT_Yellow )
+
+      'Change the colour via the global GLCD variable
+      GLCDForeground = TFT_WHITE
+      GLCDPrint_Nextion ( 184 , 52, longNumber )
+
+      GLCDPrint_Nextion ( 64 , 72, pad( str(wordnumber),5))
+      GLCDPrint_Nextion ( 64 , 92, pad( str(bytenumber),3))
+
+      GLCDPrint_Nextion ( 101, 19, chr(CCount) )
+      Box 98,17,117,42, TFT_WHITE                                   'Draw a box around the Char below
+
+      GLCDPrint_Nextion ( 180, 18 , pad( str(CCount),3) )
+      CCount++
+      if CCount = 0 then CCount = 32
+      if CCount = 128 then CCount = 32
+      longNumber = longNumber + 7
+      wordNumber = wordNumber + 3
+      byteNumber++
+
+    LOOP
