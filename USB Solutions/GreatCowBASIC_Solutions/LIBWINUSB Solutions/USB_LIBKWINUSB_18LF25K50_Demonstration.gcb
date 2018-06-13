@@ -1,0 +1,147 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is the very first program for Great Cow BASICUSB
+'''
+'''@author     HughC and EvanV
+'''@licence    GPL
+'''@version    1.04
+'''@date       10/06/2018
+'''********************************************************************************
+
+' ----- Configuration
+    #chip 18LF25K50, 48
+    #include <usb.h>
+    #option Explicit
+
+
+    ' ----- Constants for the usb.h
+
+
+    'Define a name - 30 chars max long
+    #define USB_PRODUCT_NAME "Great Cow BASIC LibK/WinUSB"
+    #define USB_VID 0x1209      'MUST not be changed unless you have your own Vendor Identity - this VID is allocate to Great Cow BASIC Lib/WinUSB Solutions.
+    #define USB_PID 0x2006      'MUST not be changed unless you have your own Vendor Identity - this PID is allocate to Great Cow BASIC Lib/WinUSB Solutions.
+
+    'The USB_REV MUST be registered and MUST match your host computer applications USB_REV constant
+    #define USB_REV 0x0000      'You MUST obtain a REV number from https://github.com/Anobium/GreatCowBASICpidcodes1209_2006 to develop your own Open Source USB solutions
+                                'DO NOT USE REUSE A USB_REV IF YOU WANT TO PUBLISH OR RELEASE. THIS INCLUDES PUBLISHING TO THE FORUM.  See https://sourceforge.net/p/gcbasic/discussion/579125/thread/1e7daf8a/#0034/d2d3
+
+
+
+
+    #define USBDeviceReadPortb5LEDStatus  130
+    #define USBDeviceSetPortb5StatusOn    131
+    #define USBDeviceSetPortb5StatusOff   132
+    #define USBDeviceReadADCValues        133
+
+
+    'define specific callback handlers
+
+    'MANDATED to handle your solution
+    #define USB_SETUP_HANDLER           SetupHandler_CallBack
+
+    'optional callback handlers for error and descriptor call.
+    #define USB_ERROR_HANDLER           ErrorHandler_CallBack
+    #define USB_DESCRIPTOR_HANDLER      DescriptorHandler_CallBack
+
+
+
+    'Solution specific configuration
+        ' ----- Define Hardware settings
+        'USART
+        #define USART_BAUD_RATE 115200
+        #define USART_BLOCKING
+
+        'ADC
+        #define ADSpeed LowSpeed
+
+
+
+
+        ' ------ Ports
+        #define LED1 PORTB.5
+        Dir LED1 out    'controlled from PC Host application
+        #define HeartBeatLED PORTB.4
+        Dir HeartBeatLED out    'keepalive not controlled from PC Host application
+
+
+        ' ------ Version Control - optional
+
+        #include "GCBVersionNumber.cnt"
+        'Include the GCBVersionNumber.cnt to increment versionString and create the build time string called GCBBuildTimeStr.
+        ' versionString a string is created automatically.
+        ' GCBBuildTimeStr is a string that is also created automatically.
+        ' use "GCBVersionNumber.cnt" as this will create a local copy of the versionString tracker.
+        ' if you use <GCBVersionNumber.cnt> this is a system wide versionString tracker.
+
+        dim versionString as string * 40
+        versionString = "Build"+GCBBuildStr
+        versionString = versionString + "@"+GCBBuildTimeStr
+        HSerPrint "USB CGB  "
+        HSerPrint versionString
+        HSerPrintCRLF
+
+        ' ------ End of Version Control - optional
+
+
+        ' ----- Main body of program commences here
+        Do
+
+        Loop
+
+        end
+
+
+        ' ----- Support methods.  User call backs
+        Sub ErrorHandler_CallBack
+              HSerPrint "Error: "
+              HSerPrint Hex(UEIR)
+              HSerPrintCRLF
+        End Sub
+
+        Sub SetupHandler_CallBack
+
+              Select Case USBRequest
+
+                'Response to control request: Transfer USBDeviceReadPortb5LEDStatus, send status of port
+                Case USBDeviceReadPortb5LEDStatus
+                  USBBufferWrite( LED1 )
+
+                'Response to control request: Transfer USBDeviceSetPortb5StatusOn, turn on LED
+                Case USBDeviceSetPortb5StatusOn
+                  Set LED1 On
+
+                'Response to control request: Transfer USBDeviceSetPortb5StatusOff, turn off LED
+                Case USBDeviceSetPortb5StatusOff
+                  Set LED1 Off
+
+                'Response to control request: Transfer USBDeviceReadADCValues, send back ADC readings
+                Case USBDeviceReadADCValues
+
+                  USBBufferWrite( ReadAD10(AN0) )
+                  USBBufferWrite( ReadAD10(AN1) )
+                  USBBufferWrite( ReadAD10(AN2) )
+                  USBBufferWrite( ReadAD10(AN3) )
+
+                'Response to control request: Transfer 255, keep alive
+                Case USBDeviceKeepAlive
+                  USBBufferWrite( USBDeviceKeepAlive )
+                  HeartBeatLED = !HeartBeatLED
+
+                'Handle the others via the serial port as we do not know what they are
+                Case Else
+                  HSerPrint "Req "
+                  HSerPrint USBTempBuffer(1)
+                  HSerPrintCRLF
+              End Select
+
+        End Sub
+
+
+
+
+        Sub DescriptorHandler_Callback
+              HSerPrint "Desc: "
+              HSerPrint USBDescType
+              HSerPrintCRLF
+        End Sub
