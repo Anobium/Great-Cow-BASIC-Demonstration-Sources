@@ -58,11 +58,12 @@
 
     Dim switchState as bit      'A tracker to control serial output, only needed to ensure we do not constantly send data
     switchState = LEDOn         'Set the initial state
-    do forever
+
+    wait 1 s
     HSerPrintCRLF
     HSerPrint "Great Cow BASIC Demonstration for the MPLAB® Xpress PIC16F18446 Evaluation Board"
     HSerPrintCRLF
-    loop
+
     do forever
         'the switch has change state
         if SW0 <> switchState then
