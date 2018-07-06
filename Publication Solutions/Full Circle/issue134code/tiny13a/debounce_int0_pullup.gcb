@@ -1,0 +1,33 @@
+#CHIP tiny13a, 1.2
+#OPTION EXPLICIT
+#DEFINE LED PORTB.0
+#DEFINE TOGGLE PINB.0
+#DEFINE SWITCH PORTB.1
+
+DIM BUTTON AS BYTE
+DIR LED OUT	
+DIR SWITCH IN   'necessary for all input methods where the switch is at PB4
+SET SWITCH = 1	'comment if you want to use an external 10 kOhm resistor
+SET LED = 0
+
+MCUCR = 0b00000010	'INT0 reacts to the falling edge of the signal
+INT0 = 1			'Enables the INT0 interrupt
+
+ON INTERRUPT ExtInt0 CALL checkSwitch
+BUTTON = 0
+
+'Main program:
+DO
+IF BUTTON > 3 THEN
+	TOGGLE =! LED
+	BUTTON = 0
+END IF
+LOOP
+
+'Interrupt service routine:
+SUB checkSwitch
+	DO WHILE SWITCH = 0
+		WAIT 1 US
+		BUTTON += 1
+	LOOP
+END SUB
