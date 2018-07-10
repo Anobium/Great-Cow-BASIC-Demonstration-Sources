@@ -29,7 +29,7 @@
 
 
     'Chip Settings.
-    #chip 16F19156, 0.03267
+    #chip 16F19156, 8
     #option Explicit
     #config BOREN = OFF, VBATEN=On, LPBOREN=OFF, RSTOSC = SOSC, FEXTOSC=OFF  'for the battery support
 
@@ -58,6 +58,11 @@
 
     End Sub
 
+    dir portb.7 out
+    Repeat 20
+      portb.7 = ! portb.7
+      wait 50 ms
+    end Repeat
 
     #define LEDD1 PORTB.1
     #define LEDD2 PORTB.5
