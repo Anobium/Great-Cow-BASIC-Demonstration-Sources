@@ -44,7 +44,7 @@
 
 
 
-    do forever              'loop forever.... there is not code... but the Interrupt is executed when you push the switch
+    do forever              'loop forever.... there is no code... but the Interrupt is executed when you push the switch
 
     loop
 
