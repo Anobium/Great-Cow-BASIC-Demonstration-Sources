@@ -26,7 +26,7 @@
 ' ----- Configuration
     'Chip Settings.
     #chip 16f18855,32
-    #include "PCA9685.h"
+    #include <PCA9685.h>
     #option explicit
 
 
