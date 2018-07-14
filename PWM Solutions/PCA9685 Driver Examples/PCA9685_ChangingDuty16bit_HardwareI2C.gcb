@@ -9,7 +9,7 @@
 '''All outputs are set to the same PWM frequency.  The demonstration uses hardware I2C.
 '''
 '''You must call PCA9685_Initialise to initialise the device.
-'''The demonstration sets all channels to 16bit Duty therefore 0 to 4095
+'''The demonstration sets all channels to 12bit Duty therefore 0 to 4095
 '''
 '''Uses public methods:
 ''' PCA9685_Initialise
@@ -114,7 +114,7 @@
 
 
     Do Forever
-        'Show complete range of DUTY using word value therefore a 16bit value
+        'Show complete range of DUTY using word value therefore a 12bit value
 
             for myLocalVariable = 0 to 4095
                 PCA9685_WriteChannel ( PCA9685_ALL_CHANNELS, 0x0000, myLocalVariable )

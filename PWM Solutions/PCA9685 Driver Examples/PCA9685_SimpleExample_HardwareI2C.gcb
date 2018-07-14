@@ -107,7 +107,7 @@
     'The call IS required to setup the device
     PCA9685_Initialise
 
-    'Set the 16bit duty value
+    'Set the 12bit duty value
     myLocalVariable = 2048 'equates to 50%
     PCA9685_WriteChannel(PCA9685_ALL_CHANNELS , PCA9685_LED_OFF , myLocalVariable )
 
