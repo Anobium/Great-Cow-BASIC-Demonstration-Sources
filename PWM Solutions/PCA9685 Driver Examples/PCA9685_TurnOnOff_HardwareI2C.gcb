@@ -18,8 +18,8 @@
 '''
 '''@author     EvanV
 '''@licence    GPL
-'''@version    1.00
-'''@date       14.07.18
+'''@version    1.01
+'''@date       23.08.18
 '''********************************************************************************
 
 ' ----- Configuration
@@ -93,7 +93,7 @@
 ;User Program starts here with solution specific constants
 ;User Program starts here with solution specific constants
 
-    #define PCA9685_ADDRESS 0x80
+    #define PCA9685_ADDRESS_1 0x80
 
     'Set the frequency using the Great Cow BASIC PWM constant
     #define PWM_Freq 38

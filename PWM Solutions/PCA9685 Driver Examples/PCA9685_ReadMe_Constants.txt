@@ -1,6 +1,10 @@
 ; Solution Specific constants can be replaced by user constants
 
-    #define PCA9685_ADDRESS 0x80
+    #define PCA9685_ADDRESS_1 0x80
+    '#define PCA9685_ADDRESS_2 0x82
+    '#define PCA9685_ADDRESS_3 0x84
+    '#define PCA9685_ADDRESS_4 0x86
+
 
     ' Set the frequency using the Great Cow BASIC PWM constant
     #define PWM_Freq 38
@@ -11,12 +15,12 @@
 
 ' Public methods
 
-'    PCA9685_SetFreqency ( frequency_wordvalue ) a value from 24 to 1526
-'    PCA9685_SetPrescaler ( byte_value)
-'    PCA9685_SetChannelDuty(  channel as byte , duty as word )  where duty is 0 to 100%
-'    PCA9685_SetChannelOnOnly ( channel as byte , OnValue as word ) where Onvalue is 0 to 4095
-'    PCA9685_SetChannelOffOnly ( channel as byte , OffValue as word ) where Offvalue is 0 to 4095
-'    PCA9685_WriteChannel( channel as byte, OnValue as word, OffValue  as word ) ranges of 0 to 4095
+'    PCA9685_SetFreqency ( frequency_wordvalue[, I2C_Device_Address] ) a value from 24 to 1526
+'    PCA9685_SetPrescaler ( byte_value[, I2C_Device_Address])
+'    PCA9685_SetChannelDuty(  channel as byte , duty as word[, I2C_Device_Address] )  where duty is 0 to 100%
+'    PCA9685_SetChannelOnOnly ( channel as byte , OnValue as word[, I2C_Device_Address] ) where Onvalue is 0 to 4095
+'    PCA9685_SetChannelOffOnly ( channel as byte , OffValue as word[, I2C_Device_Address] ) where Offvalue is 0 to 4095
+'    PCA9685_WriteChannel( channel as byte, OnValue as word, OffValue  as word[, I2C_Device_Address] ) ranges of 0 to 4095
 
 '      PCA9685_EnableServoMode
 '      PCA9685_SetServoAnglePulseLimits
@@ -26,7 +30,7 @@
 '      PCA9685_SetChannelAngle
 
 ' Key Constants
-'        PCA9685_ADDRESS    device address
+'        PCA9685_ADDRESS_1  device address
 '        PWM_DUTY           default pwm
 
 '        PCA9685_ALL_CHANNELS   address all channels
