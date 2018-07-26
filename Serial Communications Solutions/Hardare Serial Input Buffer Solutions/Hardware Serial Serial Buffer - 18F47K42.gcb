@@ -1,7 +1,21 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This example code implements a serial buffer ring.
+'''This means the incoming serial port data is placed into a buffer that can be read at anytime.
+'''This example uses an interrupt and a buffer.
+'''
+'''All characters recieved from the serial are returned to the serial terminal.
+'''Connections are shown in the program.
+'''
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    26.07.2018
+'
     #chip pic18f47k42, 64
 
 
-#startup InitPPS, 85
+    #startup InitPPS, 85
 
     Sub InitPPS
 
@@ -15,51 +29,40 @@
   #define USART_TX_BLOCKING
   #define USART_BLOCKING
 
-
-  dir porta out
-  dir portb out
-  'dir portc out
-  dir portd out
-  dir porte out
   dir portc.7 in
   dir portc.6 out
-  'dir portd.4 in
 
-  dim temp as long
-  dim temp1 as string
+  'Interrupt Handlers
+  On Interrupt UART1ReceiveInterrupt Call readUSART
 
-    'Interrupt Handlers
-    On Interrupt UART1ReceiveInterrupt Call readUSART
+  ' Constants etc required for Buffer Ring
+  #define BUFFER_SIZE 8
+  #define bkbhit (next_in <> next_out)
+  ;Variables
+  Dim buffer( BUFFER_SIZE - 1 ) 'we will use element 0 in the array as part of out buffer
+  Dim next_in as byte: next_in = 0
+  Dim next_out as byte: next_out = 0
 
-    ' Constants etc required for Buffer Ring
-    #define BUFFER_SIZE 8
-    #define bkbhit (next_in <> next_out)
-    ;Variables
-    Dim buffer( BUFFER_SIZE - 1 ) 'we will use element 0 in the array as part of out buffer
-    Dim next_in as byte: next_in = 0
-    Dim next_out as byte: next_out = 0
-    Dim syncbyte as Byte
 
-    syncbyte = 0x55 ' you can use 255 - your choice
+  Do
+      do while bkbhit  'have got data?
+          HSerPrint chr(bgetc)  'get data and show
+      Loop
+  Loop
 
-    Do
+  end
 
-        do while bkbhit  'havewe got data?
-            HSerPrint chr(bgetc)  'get data and show
-        Loop
-    Loop
+  Sub readUSART
+      buffer(next_in) = HSerReceive
+      temppnt = next_in
+      next_in = ( next_in + 1 ) % BUFFER_SIZE
+      if ( next_in = next_out ) then  ' buffer is full!!
+          next_in = temppnt
+      end if
+  End Sub
 
-    Sub readUSART
-        buffer(next_in) = HSerReceive
-        temppnt = next_in
-        next_in = ( next_in + 1 ) % BUFFER_SIZE
-        if ( next_in = next_out ) then  ' buffer is full!!
-            next_in = temppnt
-        end if
-    End Sub
-
-    function bgetc
-        wait while !(bkbhit)
-        bgetc = buffer(next_out)
-        next_out=(next_out+1) % BUFFER_SIZE
-    end Function
+  function bgetc
+      wait while !(bkbhit)
+      bgetc = buffer(next_out)
+      next_out=(next_out+1) % BUFFER_SIZE
+  end Function
