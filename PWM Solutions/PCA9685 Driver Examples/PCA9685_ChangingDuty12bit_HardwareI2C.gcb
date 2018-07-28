@@ -16,10 +16,27 @@
 ''' PCA9685_WriteChannel( channel as byte, OnValue as word, OffValue  as word ) ranges of 0 to 4095
 ''' PCA9685_SetFreqency ( frequency_wordvalue ) a value from 24 to 1526
 '''
+'''The library support up to four PCA9685 devices.  They are enables and controlled via the constants shown below.
+'''     You can specify your own addresses for the hex value.  The constant name is the critical component.
+'''     #define PCA9685_ADDRESS_1 0x80
+'''     #define PCA9685_ADDRESS_2 0x82
+'''     #define PCA9685_ADDRESS_3 0x84
+'''     #define PCA9685_ADDRESS_4 0x86
+'''
+'''There are many Arduino guides for this board. These guides DO NOT always discuss the READ address for a specific device.
+'''The advice for a device board is:
+'''For one board:
+'''     Solder links is first extra board solder A0.
+'''For two boards:
+'''     First board do not solder any links
+'''     Second board solder A0.
+'''     then, connect both boards and use i2c Discover to find addresses of both boards and use those values.
+'''     or you will be on a fools errand.
+'''
 '''@author     EvanV
 '''@licence    GPL
-'''@version    1.01
-'''@date       23.08.18
+'''@version    1.02
+'''@date       28.08.18
 '''********************************************************************************
 
 ' ----- Configuration
