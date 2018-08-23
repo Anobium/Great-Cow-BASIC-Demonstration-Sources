@@ -14,7 +14,7 @@
 '''*************************************************************************
 
     'Chip Settings
-    #chip 16f690, 16
+    #chip 16f690, 8
 
     'Set the direction of the CCP1/PWM port
     DIR portc.5 Out
