@@ -44,10 +44,12 @@
 
 
     DIR portb Out
-
-    HPWM_CCPTimerN ( 2, 48, 104, 4 )    'CCP/PWM channel 2, at 48kzm, 40% duty using timer source 4
+    Dim myduty as byte
 
     do
+      for myduty = 0 to 255
+          HPWM_CCPTimerN ( 2, 48,myduty , 4 )    'CCP/PWM channel 2, at 48kzm, 40% duty using timer source 4
+          wait 10 ms
+      next
     loop
-
 
