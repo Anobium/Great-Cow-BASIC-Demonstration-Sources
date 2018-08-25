@@ -1,0 +1,4 @@
+#CHIP tiny13a, 1.2
+DIR PORTB IN
+SET PORTB = b’11111111’ ‘enables pull-ups for the whole PORTB
+SET PORTB.4 = 1 ‘enables the pull-up of single PIN (SWITCH)
