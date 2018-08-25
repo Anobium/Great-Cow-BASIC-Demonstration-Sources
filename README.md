@@ -81,7 +81,7 @@ The PPS method needs to go at the top of the program.
 
 The PPS method must show the version of the PPSTool used to generate the method.
 
-Porting to another microcontroller is easier as the user can locate the PPS method.
+Porting to another microcontroller is easier as the user can locate the PPS method and modify or remove.
 
 # Coding Good Practice
 
