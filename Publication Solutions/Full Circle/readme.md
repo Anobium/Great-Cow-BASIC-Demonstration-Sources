@@ -1,4 +1,4 @@
-This code was first publshed in the Full Circle magazine.
+This code was first published in the Full Circle magazine.
 
 The author is Boris Breuer, you can visit his website https://evil-publishing.de
 
