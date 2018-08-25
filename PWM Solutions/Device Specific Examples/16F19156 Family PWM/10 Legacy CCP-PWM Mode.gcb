@@ -77,14 +77,18 @@
     #define USE_HPWMCCP4 false
     #define USE_HPWMCCP5 false
 
-    #define USE_HPWM5 false
-    #define USE_HPWM6 false
-    #define USE_HPWM7 false
+    #define USE_HPWM1 TRUE
+    #define USE_HPWM2 TRUE
+    #define USE_HPWM3 TRUE
+    #define USE_HPWM4 TRUE
+    #define USE_HPWM5 TRUE
+    #define USE_HPWM6 TRUE
+    #define USE_HPWM7 TRUE
 
     #define USE_HPWM_TIMER2 true
     #define USE_HPWM_TIMER4 false
     #define USE_HPWM_TIMER6 false
-    #define USE_HPWM_TIMER7 false
+
 
 'Optimise A-d.h
     'Standard family chips

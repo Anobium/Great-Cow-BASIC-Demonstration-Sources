@@ -57,21 +57,3 @@
     loop
 
 
-
-''' GCB Optimisation file
-
-'Optmise PWM.h
-    #define USE_HPWMCCP1 false
-    #define USE_HPWMCCP2 false
-    #define USE_HPWMCCP3 false
-    #define USE_HPWMCCP4 false
-    #define USE_HPWMCCP5 false
-
-    #define USE_HPWM5 true
-    #define USE_HPWM6 true
-    #define USE_HPWM7 true
-
-    #define USE_HPWM_TIMER2 true
-    #define USE_HPWM_TIMER4 true
-    #define USE_HPWM_TIMER6 true
-

@@ -35,19 +35,3 @@
     do
     loop
 
-
-
-''' GCB Optimisation file
-
-'Optmise PWM.h
-    #define USE_HPWMCCP1 true
-    #define USE_HPWMCCP2 true
-    #define USE_HPWMCCP3 false
-    #define USE_HPWMCCP4 false
-    #define USE_HPWMCCP5 false
-
-    #define USE_HPWM5 false
-    #define USE_HPWM6 false
-    #define USE_HPWM7 false
-
-    #define USE_HPWM_TIMER2 true
