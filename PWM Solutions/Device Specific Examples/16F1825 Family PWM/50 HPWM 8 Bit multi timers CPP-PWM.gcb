@@ -50,8 +50,8 @@
 
     #define USE_HPWM_TIMER2 true
     #define USE_HPWM_TIMER4 true
-    #define USE_HPWM_TIMER6 false
-    #define USE_HPWM_TIMER7 false
+    #define USE_HPWM_TIMER6 true
+
 
 'Optimise A-d.h
     'Standard family chips
