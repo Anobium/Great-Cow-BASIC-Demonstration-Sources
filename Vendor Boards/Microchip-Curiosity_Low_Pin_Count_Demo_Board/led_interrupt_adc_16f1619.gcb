@@ -1,7 +1,7 @@
 '''Program    led_interrupt_adc_16f1619
 '''Compiler   gcbasic v0.98.02 2018-05-16 (UNIX)
 '''
-'''Microchip Curiosity 8/12/14/20 pin 8 bit demo board
+'''Microchip Curiosity 8/14/20 pin 8 bit demo board
 '''o PIC16F1619 (http://microchip.com/pic16f1619)
 '''o LEDs D4-D7 on RA5, RA1/PGEC, RA2, RC5
 '''o Switch S1 on RC4
@@ -13,11 +13,11 @@
 '''Changing POT1 varies speed at which LED D4 flashes
 '''Pressing and releasing S1 toggles LED D1 on/off
 '''
+'''@author  Trevor B Roydhouse
+'''@licence Public Domain Unlicense (see https://unlicense.org/)
+'''@version 1.0
+'''@date    24 August 2018 
 '''***************************************************************************************
-'@author  Trevor B Roydhouse
-'@licence Public Domain Unlicense (see https://unlicense.org/)
-'@version 1.0
-'@date    24 August 2018 
 
 ; ---- Configuration
 
