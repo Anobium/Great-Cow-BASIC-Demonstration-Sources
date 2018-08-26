@@ -37,17 +37,10 @@
     End Sub
     'Template comment at the end of the config file
 
+    dutyvalue = 127
 
     DIR portb Out
+    HPWM 4, 40, dutyvalue, 2
 
     do
-
-        'use for-loop to show the duty changing a 10bit value
-        dim dutyvalue as word
-        for dutyvalue = 0 to 1023
-            HPWM 4, 40, dutyvalue, 2
-            wait 10 ms
-        next
-
     loop
-

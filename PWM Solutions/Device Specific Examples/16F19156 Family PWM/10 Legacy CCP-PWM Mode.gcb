@@ -46,16 +46,12 @@
     'Main code
 
     #define PWM_Freq 38      'Frequency of PWM in KHz
-    #define PWM_Duty 50      'Duty cycle of PWM (%)
+    #define PWM_Duty 10      'Duty cycle of PWM (%)
+
+    PWMOn    'Will enable CCP1/PWM Only
 
     do
-        PWMOn    'Will enable CCP1/PWM Only
 
-        wait 1 s
-
-        PWMOff   'Will disable CCP1/PWM Only
-
-        wait 1 s
     loop
 
 

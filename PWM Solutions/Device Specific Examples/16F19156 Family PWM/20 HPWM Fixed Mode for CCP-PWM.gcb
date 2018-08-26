@@ -44,21 +44,22 @@
 
     DIR portb Out
 
-    #define PWM_Timer2_Freq  20        'Set frequency in KHz, just change the value
+'    #define PWM_Timer2_Freq  20        'Set frequency in KHz, just change the value
     #define PWM_Timer4_Freq  40        'Set frequency in KHz, just change the value
 
-    #define PWM_1_Duty 10
-    #define PWM_1_Clock_Source 2
+'    #define PWM_1_Duty 10
+'    #define PWM_1_Clock_Source 2
+'    PWMOn (1)    'Will enable CCP/PWM channel, remember to set PPS!!! to port
+
 
     #define PWM_2_Duty 20
     #define PWM_2_Clock_Source 4
-
-'    PWMOn (1)    'Will enable CCP/PWM channel, remember to set PPS!!! to port
-
     PWMOn (2)    'Will enable CCP/PWM channel
 
     do
     loop
+
+
 
 
 
