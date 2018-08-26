@@ -95,7 +95,7 @@ Set LED4 = 0
 'Program loop
 DO FOREVER
    'Read ADC
-   ADCvalueWord = ReadAD12(POT1)
+   ADCvalueWord = ReadAD10(POT1)
    'preserve minMsDelay delay
    if ADCvalueWord < minMsDelay then ADCvalueWord = minMsDelay
 
