@@ -1,8 +1,9 @@
 '''A demonstration program for GCGB and GCB.
 '''The program shows PWM options for this device
 ''':
-'''This demonstration how use the PWM 10 bit Module but with this method you can change the parameters.
+'''This demonstration how use the Fixed Mode PWM 10 bit Module
 ''':
+'''As this device is a PPS device we need to set the PPS, this mode can use all the PWM modules
 '''Change the PPS to test different module, but, remember to change the CONSTANTS!!
 '''This default to PWM but you can change the PWM and/or change the timer source
 '''
@@ -37,10 +38,19 @@
     End Sub
     'Template comment at the end of the config file
 
-    dutyvalue = 127
 
     DIR portb Out
-    HPWM 4, 40, dutyvalue, 2
+
+'    #define PWM_Timer2_Freq  20        'Set frequency in KHz, just change the value
+    #define PWM_Timer4_Freq  144        'Set frequency in KHz, just change the value
+
+'    #define PWM_3_Duty 30
+'    #define PWM_3_Clock_Source 2
+'    PWMOn (3, PWMModule )    'Will enable PWM channel, remember to set PPS!!! to port
+
+    #define PWM_4_Duty 50
+    #define PWM_4_Clock_Source 4
+    PWMOn (4, PWMModule )     'Will enable PWM channel
 
     do
     loop
