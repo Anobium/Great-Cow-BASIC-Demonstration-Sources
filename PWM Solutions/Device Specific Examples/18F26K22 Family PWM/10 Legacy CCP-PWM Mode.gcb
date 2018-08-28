@@ -1,0 +1,43 @@
+'''A demonstration program for GCGB and GCB.
+'''The program shows PWM options for this device
+''':
+'''This demonstration how use the GCB Legacy CCP/PWM
+''':
+'''As this device is a PPS device we need to set the PPS, legacy mode only use CCP1/PWM.
+'''This mode uses timer 2 only.
+''':
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    22.08.2018
+'''*************************************************************************
+
+    'Chip Settings
+    #chip 18F26K22, 64
+
+
+    DIR portc.1 Out  'CCP2
+
+
+    'Main code
+
+    #define PWM_Freq 38      'Frequency of PWM in KHz
+    #define PWM_Duty 50      'Duty cycle of PWM (%)
+
+    do
+        PWMOn    'Will enable CCP1/PWM Only
+
+        wait 1 s
+
+        PWMOff   'Will disable CCP1/PWM Only
+
+        wait 1 s
+    loop
+
+
+    end
+
+
+
+
+
