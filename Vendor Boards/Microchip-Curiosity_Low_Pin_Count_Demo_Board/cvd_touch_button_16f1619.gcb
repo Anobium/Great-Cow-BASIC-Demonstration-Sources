@@ -1,0 +1,134 @@
+'''Program    cvd_touch_button_16f1619
+'''Compiler   gcbasic v0.98.02 2018-05-16 (UNIX)
+'''
+'''Microchip Curiosity 8/14/20 pin 8 bit demo board
+'''o PIC16F1619 (http://microchip.com/pic16f1619)
+'''o LEDs D4-D7 on RA5, RA1/PGEC, RA2, RC5
+'''o Switch S1 on RC4
+'''o Switch S2 on RA3/MCLRE
+'''o Touch Switch S3 on RC1/AN5
+'''o Potentiometer POT1 on RC0/AN4
+'''
+'''An Implementation of Microchip Application Note AN1298
+'''- Capacitive Touch Using Only an ADC ("CVD")
+'''(http://ww1.microchip.com/downloads/en/AppNotes/01298A.pdf)
+'''
+'''On startup LEDs D4-D7 turn on and off
+'''LED D1 turns on while S3 touch sensor is touched
+'''LED D1 turns off when S3 touch sensor is not touched
+'''
+'''@author  Trevor B Roydhouse
+'''@licence Public Domain Unlicense (see https://unlicense.org/)
+'''@version 1.0
+'''@date    10 September 2018 
+'''***************************************************************************************
+
+; ---- Configuration
+
+'Microcontroller @ 32MHz
+#chip 16F1619, 32
+
+'Use the internal oscillator
+#config OSC = INTOSC
+
+'MCLRE set on so that switch S2 can reset microcontroller
+#config MCLRE_ON
+
+'Ensure LVP is enabled to allow use of onboard programmer
+#config LVP_ON
+
+'Ensure all variables are explicitly defined
+#option explicit
+
+; ---- Define hardware settings
+
+#define S1 PORTC.4
+Dir S1 In
+
+#define Led1 PORTA.5
+DIR PORTA.5 OUT
+
+#define Led2 PORTA.1
+DIR PORTA.1 OUT
+
+#define Led3 PORTA.2
+DIR PORTA.2 OUT
+
+#define Led4 PORTC.5
+DIR PORTC.5 OUT
+
+#define POT1 AN4
+DIR PORTC.0 IN
+
+#define SensorChannel PORTC.1	 ' AN5/RC1 - sensor channel
+DIR SensorChannel IN
+
+#define SecondaryChannel PORTC.2 ' AN6/RC2 - secondary (dummy) channel
+DIR SecondaryChannel OUT
+
+; ---- Constants
+
+'startup wait in seconds
+#define waitSecs 1
+
+; ---- Variables
+
+Dim ADCvalueWord as Word
+
+; ---- Main body of program
+
+'LED init on program startup
+WAIT waitSecs S
+Set LED1 = 1
+Set LED2 = 1
+Set LED3 = 1
+Set LED4 = 1
+WAIT waitSecs S
+Set LED1 = 0
+Set LED2 = 0
+Set LED3 = 0
+Set LED4 = 0
+
+Set ADCvalueWord = 0
+
+'Program infinite loop
+Do Forever
+
+   'AN1298 - Step 1: Set secondary (dummy) channel high (VDD)
+   Dir SecondaryChannel OUT	 	'set as output
+   Set ODCONC.2 = 1		'set as open drain
+   Set ANSELC.2 = 0		'set as digital
+   Set SecondaryChannel = 1   	'set high (VDD)
+
+   'AN1298 - Step 2: Select secondary channel on ADC (charge CHOLD to VDD)
+   Set ADCON0 = 0b00011000      'ADC channel select -> AN6/RC2 (bits 2-6)
+			
+   'AN1298 - Step 3: Set sensor pin as output, low (GND) to eliminate any charge
+   Dir SensorChannel OUT	'Set as output
+   Set ANSELC.1 = 0		'Set as digital
+   Set SensorChannel = 0     	'set low (ground)
+
+   'AN1298 - Step 4: Set sensor pin as input
+   Dir SensorChannel IN	    	'Set as input
+   Set ANSELC.1 = 1		'Set as analog
+
+   'AN1298 - Step 5: Select sensor channel on ADC (V-div sensor:CHOLD)
+   Set ADCON0 = 0b00010101	'ADC channel select -> AN5/RC1 (bits 2-6)
+    	     		   	'Enable ADC (bit 0)
+   Wait 10 US 		   	'Delay to allow ADC voltage to stabilise
+
+   'AN1298 - Step 6: Start ADC conversion			
+   Set ADCON0.1 = 1  	       	'Start ADC conversion (set go/done bit 1 = 1)
+   Wait While ADCON0.1 = 1     	'Wait for ADC conversion (done bit 1 = 0)
+
+   'AN1298 - Step 7: Read ADC result
+   ADCvalueWord = ReadAD10(AN5)
+
+   'Action result
+   If ADCvalueWord > 5 then	'If touching S3 touch button
+	    LED1 = 1
+   Else
+	    LED1 = 0
+   End if
+	 
+LOOP
