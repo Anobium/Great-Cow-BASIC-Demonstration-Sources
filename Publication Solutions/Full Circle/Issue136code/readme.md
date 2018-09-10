@@ -1,3 +1,3 @@
-Put a copy from #136 in here. Code comes any time soon...
+Put a copy from #136 in here.
 
 -- Boris Breuer
