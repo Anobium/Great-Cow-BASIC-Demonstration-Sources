@@ -14,8 +14,8 @@
 '''(http://ww1.microchip.com/downloads/en/AppNotes/01298A.pdf)
 '''
 '''On startup LEDs D4-D7 turn on and off
-'''LED D1 turns on while S3 touch sensor is touched
-'''LED D1 turns off when S3 touch sensor is not touched
+'''LED D4 turns on while S3 touch sensor is touched
+'''LED D4 turns off when S3 touch sensor is not touched
 '''
 '''@author  Trevor B Roydhouse
 '''@licence Public Domain Unlicense (see https://unlicense.org/)
