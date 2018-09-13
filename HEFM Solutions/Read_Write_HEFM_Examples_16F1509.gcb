@@ -30,7 +30,7 @@
 
 wait 1 s
 
-; This subroutine display the High Extended Flash Memory on a terminal
+; This subroutine displays the High Endurance Flash Memory on a terminal
 
 sub HEFM_Dump
 dim MemLocation,row as word
