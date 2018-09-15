@@ -1,4 +1,4 @@
-# Great-Cow-BASIC
+# Welcome to Great Cow BASIC
 
 This GIT contains the latest user contributed demonstrations that are focused on introducting you to Great Cow BASIC.
 
