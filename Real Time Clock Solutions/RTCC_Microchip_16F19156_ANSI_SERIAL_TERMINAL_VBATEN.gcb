@@ -102,6 +102,9 @@
 '    rtcc_SetAlarmMark ( rtcc_AlarmAssertion_EverySecond )
 '    on Interrupt RTCAlarmTrigger call rttc_Interrupt
 
+;----- Adjust the clock, if required.   See section 24.1.7 CALIBRATION of the datasheet for usage
+  #define rtcc_Calibration_Offset 0
+
 
 ;----- Program
 
