@@ -34,8 +34,8 @@
   '''
   '''********************************************************************************
   'Chip Settings.
-#chip 16f18855,32
-#config RSTOSC_HFINT32
+    #chip 16f18855,32
+    #Config MCLRE_ON
 
     #define ADCTimeDelay 10       'this is in milliseconds - this therefore reads the ADC every... ms.
                                   'There is a small processing overhead so the actual delay may a tiny bit out.

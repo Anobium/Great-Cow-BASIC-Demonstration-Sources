@@ -26,8 +26,7 @@
 
     'Chip Settings.
     #chip 16f18855, 32
-    #Config FEXTOSC_OFF, RSTOSC_HFINT32
-    #Config WRT_OFF, CPD_ON, MCLRE_ON
+    #Config MCLRE_ON
 
     '' -------------------LATA-----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
@@ -35,47 +34,47 @@
     ''-----------------------------------------
     ''
 
-    #define LEDD2	PORTA.0
-    #define LEDD3	PORTA.1
-    #define LEDD4	PORTA.2
-    #define LEDD5	PORTA.3
-    Dir 		LEDD2 OUT
-    Dir 		LEDD3 OUT
-    Dir 		LEDD4 OUT
-    Dir 		LEDD5 OUT
+    #define LEDD2 PORTA.0
+    #define LEDD3 PORTA.1
+    #define LEDD4 PORTA.2
+    #define LEDD5 PORTA.3
+    Dir     LEDD2 OUT
+    Dir     LEDD3 OUT
+    Dir     LEDD4 OUT
+    Dir     LEDD5 OUT
 
-'		Set the port as an ouput
+'   Set the port as an ouput
     dir porta out
-'		Set the first LED on
+'   Set the first LED on
     Set LEDD2 on
 
 
-'		Initialise the timer.
-'		Firstly tell the compiler to use a 16bit timer for this demonstration
-		#define TMR0_16BIT
+'   Initialise the timer.
+'   Firstly tell the compiler to use a 16bit timer for this demonstration
+    #define TMR0_16BIT
 
 '     For this we need the following:
-'    		Prescaler
-'        		1:256
+'       Prescaler
+'           1:256
 '            HF int Osc, and
 '            NOT to sync Timer
 '       Post scaler
-'        		1:2
-		InitTimer0 Osc, PRE0_256 + TMR0_HFINTOSC ,  POST0_2
+'           1:2
+    InitTimer0 Osc, PRE0_256 + TMR0_HFINTOSC ,  POST0_2
 '     Start the Timer
-		StartTimer 0
+    StartTimer 0
 
-		'Every 1 sec
-		Settimer ( 0 , 0x0bdc  )
+    'Every 1 sec
+    Settimer ( 0 , 0x0bdc  )
 
 
     do
-						'wait for the event
+            'wait for the event
             wait while TMR0IF = 0
 
             ' Clearing Timer flag will reset event
             TMR0IF = 0
-						Set C off
+            Set C off
             Rotate porta right
             if C = 1 then porta.3 = 1
 

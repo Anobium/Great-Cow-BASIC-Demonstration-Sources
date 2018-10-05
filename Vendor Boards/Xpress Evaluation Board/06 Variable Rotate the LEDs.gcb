@@ -19,40 +19,40 @@
 
 
 ' ----- Configuration
-		#chip 16f18855
-    #config RSTOSC_HFINT32
+    #chip 16f18855
+    #Config MCLRE_ON
 
     '' -------------------LATA-----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
     '' LED:   ---------------|D5 |D4 |D3 |D1 |-
     ''-----------------------------------------
     ''
-    #define LEDD2	PORTA.0
-    #define LEDD3	PORTA.1
-    #define LEDD4	PORTA.2
-    #define LEDD5	PORTA.3
-    #define Potentiometer 	PORTA.4
+    #define LEDD2 PORTA.0
+    #define LEDD3 PORTA.1
+    #define LEDD4 PORTA.2
+    #define LEDD5 PORTA.3
+    #define Potentiometer   PORTA.4
 
-    Dir 		LEDD2 OUT
-    Dir 		LEDD3 OUT
-    Dir 		LEDD4 OUT
-    Dir 		LEDD5 OUT
-    DIR			Potentiometer In
+    Dir     LEDD2 OUT
+    Dir     LEDD3 OUT
+    Dir     LEDD4 OUT
+    Dir     LEDD5 OUT
+    DIR     Potentiometer In
 
 
     do Forever
 
 
-    	'Clear the LEDS
-	    Porta = 0
+      'Clear the LEDS
+      Porta = 0
       'Set the first value
-  	  LEDD2 = 1
+      LEDD2 = 1
 
-    	repeat 4
+      repeat 4
 
         wait  ( ReadAD10 ( AN4 ) + 32 / 32 ) ms
         wait 5 ms
         Rotate porta left
 
-			end Repeat
+      end Repeat
     loop

@@ -13,8 +13,7 @@
 ; ----- Configuration
   #chip     16f18855,32
   #option explicit
-  #Config   FEXTOSC_OFF, RSTOSC_HFINT32
-  #Config   WRT_OFF, CPD_ON, MCLRE_ON
+  #Config MCLRE_ON
 
   #include  <LCD2SerialRedirect.h>
 

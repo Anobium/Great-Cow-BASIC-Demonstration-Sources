@@ -20,8 +20,7 @@
 ' ----- Configuration
     #chip 16f18855
     #option explicit
-    #Config FEXTOSC_OFF, RSTOSC_HFINT32
-    #Config WRT_OFF, CPD_ON, MCLRE_ON
+    #Config MCLRE_ON
 
     #define SWITCH_DOWN         0
     #define SWITCH_UP           1
@@ -29,7 +28,7 @@
     #define LED_RIGHT           TRUE
     #define LED_LEFT            FAlSE
 
-    #define SWITCH      	  PORTA.5
+    #define SWITCH          PORTA.5
 
     Dim DIRECTION as Byte
     dim mydelay, leds  as byte
@@ -50,7 +49,7 @@
 
         mydelay = ReadAD10( AN4 ) / 4
 
-	 ' Factor the ADC reading to delay steps
+   ' Factor the ADC reading to delay steps
         mydelay = mydelay / 16
 
        ' decrement the 4 LSbs of the ADC and delay 20ms for each
@@ -87,7 +86,7 @@
             end if
 
         else
-        		'Set C off to ensure the carry bit does not impact
+            'Set C off to ensure the carry bit does not impact
             Set C off
             Rotate leds left
 
@@ -138,5 +137,4 @@
       end if
 
   end Function
-
 

@@ -20,8 +20,7 @@
 ' ----- Configuration
     #chip 16f18855
     #option explicit
-    #Config FEXTOSC_OFF, RSTOSC_HFINT32
-    #Config WRT_OFF, CPD_ON, MCLRE_ON
+    #Config MCLRE_ON
 
     'Required to ensure 16F18855 device is fully supported
     #script
@@ -113,4 +112,3 @@
       direction = !direction
     end if
   end sub
-

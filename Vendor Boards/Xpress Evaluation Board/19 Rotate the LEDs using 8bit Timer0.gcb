@@ -26,8 +26,7 @@
 
     'Chip Settings.
     #chip 16f18855, 32
-    #Config FEXTOSC_OFF, RSTOSC_HFINT32
-    #Config WRT_OFF, CPD_ON, MCLRE_ON
+    #Config MCLRE_ON
 
     '' -------------------LATA-----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---

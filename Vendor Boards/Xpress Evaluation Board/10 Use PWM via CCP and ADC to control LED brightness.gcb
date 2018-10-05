@@ -26,7 +26,9 @@
 '''  Date: 06.3.2017
 '''
 
-#chip 16f18855,32
+  #chip 16f18855,32
+  #Config MCLRE_ON
+
 
   'Set the PPS for this solution.
   #startup InitPPS, 85

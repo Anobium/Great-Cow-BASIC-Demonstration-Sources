@@ -26,8 +26,7 @@
 
     #chip 16f18855,32
     #option explicit
-    #Config FEXTOSC_OFF, RSTOSC_HFINT32
-    #Config WRT_OFF, CPD_ON, MCLRE_ON
+    #Config MCLRE_ON
 
     'Set the PPS of the PWM and the RS232 ports.
     'Set the PPS for this solution.
@@ -74,4 +73,3 @@
 '        wait 10 ms
 do Forever
     Loop
-
