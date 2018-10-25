@@ -1,0 +1,87 @@
+'''
+''' This shows how to read the A2D converter and display the results on the LEDs.
+'''
+''' The pot on the board varies the voltage coming in on the microcontroller.
+'''
+''' Adjust the rotate the POT (depends what you have fitted) to see the LEDs change from one to the other.
+'''
+''' The A2D is referenced to the same Vdd as the device, which
+''' is nominally is 5V.  The A2D returns the ratio of the voltage
+''' on Pin RA0 to 5V.  The A2D has a resolution of 8 bits, with 255
+''' representing 5V and 0 representing 0V.
+'''
+'''
+''' The four LSbs of the ADC are mirrored onto the LEDs.
+''' Rotate the potentiometer to change the LEDs displayed.
+'''
+''' You will have to rotatethe potentiometer through the complete range, but, do this once and you have a full range!!
+'''
+'''Great Cow  BASIC Header block
+'''
+'''@author  Evan R. Venn
+'''@licence GPL
+'''@version 1.00
+'''@date    03/05/2018
+'''****
+' ----- Configuration
+    'Chip Settings.
+    #chip 18F25Q10, 32
+    #option Explicit
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -----------------------| A |-----
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------| O | O | O | O |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
+
+    'Define constants to make things easier. We can reuse these at any time.
+    #define LEDPORT PORTB
+    #define LEDD1   LEDPORT.0
+    #define LEDD2   LEDPORT.1
+    #define LEDD3   LEDPORT.2
+    #define LEDD4   LEDPORT.3
+
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     LEDD3         Out
+    Dir     LEDD4         Out
+
+    'Define the potentiometer port
+    #define ADCPort PORTA.1
+    Dir     ADCPort       In
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+    dim ADCVal, MaxADCVal as byte
+    MaxADCVal = 0
+
+    do
+
+        'Read the AD port, to ensure the value is between we add the second parameter 'true'
+        ADCVal =  ReadAD ( ANA1, true )
+
+        'Ensure the ADC value supports the widest range.
+        'Use the MaxADCVal as the top range measure then scale from 0 to the MaxADCVal
+        'You will have to swing the potentiometer through the complete range, but, do this once and you have a full range!
+        if ( ADCVal > MaxADCVal ) Then
+            MaxADCVal = ADCVal
+        end if
+
+        'Set PORTB to a value between 0 and 15 with is proportional to the input value of between 0 and 255.
+        PortB = Scale (  ADCVal , 0, MaxADCVal, 0, 15 )
+
+    loop
