@@ -87,6 +87,8 @@
 
     dim ADCVal, MaxADCVal, ADCWait as word   'we have change to a larger variable to hold the range of 0 to 1023
 
+    MaxADCVal = 0
+
     do
 
         'Read the ADC for the cuttent value
@@ -101,16 +103,6 @@
 
         'Adapt the ADCVal to be representative delay between 20ms and 400ms
         ADCWait = scale ( ADCVal, 0 , MaxADCVal, 2, 400 )
-
-        'Show state
-        if direction = LED_RIGHT then
-          HSerPrint ">> "
-        Else
-          HSerPrint "<< "
-        end if
-
-        HSerPrint ADCWait
-        HSerPrintCRLF
 
         'Set the LEDs
         if  direction = LED_RIGHT  then

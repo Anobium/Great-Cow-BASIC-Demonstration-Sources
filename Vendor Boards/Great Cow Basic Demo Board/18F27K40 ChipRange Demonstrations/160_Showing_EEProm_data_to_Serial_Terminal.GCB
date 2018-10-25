@@ -44,7 +44,7 @@
     'Template comment at the end of the config file
 
     'Setup Serial port
-    #define USART_BAUD_RATE 9600
+    #define USART_BAUD_RATE 19200
     #define USART_TX_BLOCKING
 
 

@@ -61,9 +61,6 @@
 
     #define RSTButton     PORTE.3
 
-    #define PWMCCP1       PORTC.2
-
-
     '*****************************************************************************************************
     'Main program commences here.. everything before this is setup for the board.
 
@@ -73,12 +70,10 @@
     'params    Source, Prescaler                , Postscaler
     InitTimer0 Osc, PRE0_32 + TMR0_FOSC4,       POST0_11
 
-    ' Start the Timer by writing to TMR0ON bit
-    StartTimer 0
-
     ' Set the Timer start value at 100 ms
     SetTimer ( 0, 0xE2 )
 
+    ' Start the Timer by writing to TMR0ON bit
     StartTimer 0
 
     'Set the LED states

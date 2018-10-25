@@ -91,7 +91,6 @@
 
     #define RSTButton     PORTE.3
 
-    #define PWMCCP1       PORTC.2
 
     '*****************************************************************************************************
     'Main program commences here.. everything before this is setup for the board.

@@ -74,6 +74,8 @@
     'We are only interested in the lower four bits, so, use a mask to extract the state of these bits.
     LEDState = LEDPORT AND 0B00001111
 
+    MaxADCVal = 0
+
     do
 
         'Read the ADC for the cuttent value
