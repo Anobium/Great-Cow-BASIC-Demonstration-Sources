@@ -1,0 +1,37 @@
+'''
+''' The  most simple sample for GCGB and GCB.
+'''
+''' This simply set one of the LEDs on.
+'''
+'''
+'''************************************************************************
+'''
+'''  PIC: 16F18855
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: Xpress Evaluation Board
+'''  Date: 13.3.2016
+'''
+' ----- Configuration
+    'Chip Settings.
+    #chip 16f18855,32
+    #Config MCLRE_ON
+
+    '' -------------------LATA-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|D5 |D4 |D3 |D1 |-
+    ''-----------------------------------------
+    ''
+
+    'Set the whole port as an output, we will use only one BIT
+    dir porta out
+
+    'Ensure the whole port is set off by setting to o
+    porta = 0
+
+    'Set one bit of the port on.
+    porta.0 = 1
+
+    'End
+    end
