@@ -6,12 +6,10 @@
 '''
 '''  The demonstration setup CCP/PWM channel 2 and the PWM module 3. These are initial setup in the PPS configuration and using fixed mode PWM.
 '''
-'''  PIC: 18F25Q10
-'''  Compiler: GCB
-'''  IDE: GCB@SYN
-'''
-'''  Board: Great Cow BASIC Board
-'''  Date: 29.10.2017
+'''@author  Evan R. Venn
+'''@licence GPL
+'''@version 1.00
+'''@date    27/10/2018
 '''
 ' ----- Configuration
     'Chip Settings.
