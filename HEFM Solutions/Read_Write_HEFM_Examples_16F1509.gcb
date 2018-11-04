@@ -21,18 +21,12 @@
     #define USART_BAUD_RATE 19200
 
     ; Define serial port addresses
-    #define SerInPort  PORTB.5    ' RX
-    #define SerOutPort PORTB.7    ' TX
-
 
     Wait 100 ms
     HSerPrintCRLF 2
     HSerPrintStringCRLF "Welcome"
 
-
-
     wait 2 s
-
 
     ;
     ; --- Main test Program
@@ -151,4 +145,3 @@
 
     HSerPrintCRLF
     end sub
-
