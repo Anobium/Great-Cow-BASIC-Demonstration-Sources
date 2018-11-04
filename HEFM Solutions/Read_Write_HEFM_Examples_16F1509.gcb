@@ -20,8 +20,6 @@
     #define USART_BLOCKING true
     #define USART_BAUD_RATE 19200
 
-    ; Define serial port addresses
-
     Wait 100 ms
     HSerPrintCRLF 2
     HSerPrintStringCRLF "Welcome"
