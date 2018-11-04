@@ -1,130 +1,154 @@
-'''A test program of the heflash.h library routines
+'''A test program of the hefsaf.h library routines
 '''-----------------------------------------------------------------------------
 '''This is using the heflash function to read/write data or strings
 '''to HEFM. The HEFM is then dumped on a serial terminal
-'''Be sure to use one of the chip listed in heflash.h init routine which
-'''have an UART module
+'''Be sure to use one of the chip listed in hefsaf.h init routine which
+'''have an UART module.  This is a revised demonstation to support the latest library.
 '''
-'''@author 	Jacques Nilo
-'''@licence	GPL
-'''@version	1.1
-'''@date   	05.06.2015
+'''@author  Jacques Nilo
+'''@licence GPL
+'''@version 2.0
+'''@date    04.11.2018
 '''
-'''Revision log :
-'''1.1 Adapted to 1.3 new heflash.h library and dat files
 '''*****************************************************************************
 
 ; Chip Settings
 #chip 16F1509, 8
-#option explicit
-#include <heflash.h>
+    #option explicit
+
+    ; Config UART
+    #define USART_BLOCKING true
+    #define USART_BAUD_RATE 19200
+
+    ; Define serial port addresses
+    #define SerInPort  PORTB.5    ' RX
+    #define SerOutPort PORTB.7    ' TX
 
 
-; Config UART
-#define USART_BLOCKING true
-#define USART_BAUD_RATE 19200
+    Wait 100 ms
+    HSerPrintCRLF 2
+    HSerPrintStringCRLF "Welcome"
 
-; Define serial port addresses
-#define SerInPort  PORTB.5    ' RX
-#define SerOutPort PORTB.7    ' TX
 
-wait 1 s
 
-; This subroutine displays the High Endurance Flash Memory on a terminal
+    wait 2 s
 
-sub HEFM_Dump
-dim MemLocation,row as word
-for index = 0 to 127
-  test=index%8
-  test1=index%HEFLASH_ROWSIZE
-  row=HEFLASH_START+index
-  if test1 = 0 then
-      HSerPrintCRLF
-      hserprint "        0"
-      hserprint "     1"
-      hserprint "     2"
-      hserprint "     3"
-      hserprint "     4"
-      hserprint "     5"
-      hserprint "     6"
-      hserprint "     7"
-  end if
-  if test = 0 then
-      HSerPrintCRLF
-      hserprint hex(row_h)
-      hserprint hex(row)
+
+    ;
+    ; --- Main test Program
+    ;
+
+    Dim INDEX, TEST1, TEST, ROW_H, MEMLOCATION_H, INDEX1, NUMBYTE, TEMP as Byte
+
+    dim Hello as string
+    dim data(33)
+
+    HSerPrintCRLF
+    HSerPrint "Initial HEFM state :"
+    HEFM_Dump
+
+    ;
+    ; Test 1: fill block 0 and 2 with structured data then dump HEFM to terminal
+    ;
+    HSerPrintCRLF
+
+    for index1=1 to HEF_ROWSIZE_BYTES
+     data(index1)=index1 - 1                         'Fill Data array : 1 --> 32
+
+    next
+    HEFwriteBlock(0,data,HEF_ROWSIZE_BYTES)      'Data 1-->32 written to row 0
+
+    for index1=1 to HEF_ROWSIZE_BYTES
+     data(index1)=HEF_ROWSIZE_BYTES - index1                     'Fill Data array : 32 --> 1
+
+    next
+    HEFwriteBlock(2,data,HEF_ROWSIZE_BYTES)       'Data 32-->1 written to row 2
+    HSerPrint "Results of Test 1 :  Update Block 0 and block 2"
+    HEFM_Dump
+
+
+
+    ;
+    ; Test 2: read block 0 into data, move it to block 1, erase block 0 & dump
+    ;
+    HSerPrintCRLF
+    HSerPrint "Test 2 : Read Block 0, relocate to Block 1 and erase Block 0"
+    HEFreadBlock( 0,data,HEF_ROWSIZE_BYTES)     'Row 0 loaded in data
+    HEFwriteBlock(1,data,HEF_ROWSIZE_BYTES)    'Data copied to row 1
+    HEFEraseBlock( 0 )                         'Row 0 erased
+    HEFM_Dump                                 'Dump HEFM on terminal
+    HSerPrint "Result of Test 2 : Read Block 0, relocate to Block 1 and erase Block 0 @ 0x"
+    HserPrint hex(HEF_BLOCK0_ADDR/256)
+    HserPrint hex(HEF_BLOCK0_ADDR & 0xFF)
+    HSerPrintCRLF
+
+
+    ;
+    ; Test 3: write a string and a byte to row 2 then dump
+    ;
+    HSerPrintCRLF
+    HSerPrint "Test 3 : Write a string to block 2"
+    Dim Hello as String
+    Hello="Hello GCB World!"
+    Numbyte=99
+    HEFwriteBlock(2,Hello,len(Hello))      'Hello string copied to row 2
+    HEFWrite(95,Numbyte)                   'Numbyte copied at end of block 2
+    HEFM_Dump
+    ;
+    ; Test 4: test of the read bytes routines
+    ;
+    HSerPrintCRLF
+    HSerPrint "Test 4 : Read string back and verify the byte"
+    HSerPrintCRLF
+    ; Test HEFRead
+    HEFRead(95, temp)
+    HSerPrint "Value in temp from HEFRead(95,temp) is "
+    HSerPrint temp
+    HSerPrintCRLF
+
+    ; Test HEFreadBlock
+    Hello="                "
+    HEFreadBlock(2,Hello,len(Hello))
+    HSerPrint "In Block 2 I read : "
+    HSerPrint Hello     '
+    HSerPrintCRLF
+    HSerPrint "Tests completed"
+    HSerPrintCRLF
+
+    End
+
+    ; This subroutine displays the High Endurance Flash Memory on a terminal
+
+    sub HEFM_Dump
+    dim MemLocation,row, index as word
+
+    for index = 0 to HEF_BYTES - 1
+      test=index%8
+      test1=index%HEF_ROWSIZE_BYTES
+      row=HEF_START_ADDR+index
+      if test1 = 0 then
+          HSerPrintCRLF
+          hserprint "        0"
+          hserprint "     1"
+          hserprint "     2"
+          hserprint "     3"
+          hserprint "     4"
+          hserprint "     5"
+          hserprint "     6"
+          hserprint "     7"
+      end if
+      if test = 0 then
+          HSerPrintCRLF
+          hserprint hex(row_h)
+          hserprint hex(row)
+          hserprint "  "
+      end if
+      MemLocation = HEFRead(row)
+      hserprint hex(MemLocation_H)
+      hserprint hex(MemLocation)
       hserprint "  "
-  end if
-  MemLocation = FLASH_Read(row)
-  hserprint hex(MemLocation_H)
-  hserprint hex(MemLocation)
-  hserprint "  "
-next
-HSerPrintCRLF
-end sub
-;
-; --- Main test Program
-;
+    next
 
-Dim INDEX, TEST1, TEST, ROW_H, MEMLOCATION_H, INDEX1, NUMBYTE, TEMP as Byte
+    HSerPrintCRLF
+    end sub
 
-dim Hello as string
-dim data(32)
-
-HSerPrintCRLF
-HSerPrint "Initial HEFM state :"
-HEFM_Dump
-;
-; Test 1: fill block 0 and 2 with some data then dump HEFM to terminal
-;
-HSerPrintCRLF
-HSerPrint "Test 1 :"
-for index1=1 to 32
- data(index1)=index1                         'Fill Data array : 1 --> 32
-next
-HEFwriteBlock(0,data,HEFLASH_ROWSIZE)     'Data 1-->32 copied to row 0
-for index1=1 to 32
- Data(index1)=33-index1                      'Fill Data array : 32 --> 1
-next
-HEFwriteBlock(2,data,20)                'Data 32-->12 copied to row 2
-HEFM_Dump
-;
-; Test 2: read block 0 into data, move it to block 1, erase block 0 & dump
-;
-HSerPrintCRLF
-HSerPrint "Test 2 :"
-HEFreadBlock(data,0,HEFLASH_ROWSIZE)     'Row 0 loaded in data
-HEFwriteBlock(1,data,HEFLASH_ROWSIZE)    'Data copied to row 1
-FLASH_erase(0x1F80)                      'Row 0 erased
-HEFM_Dump                                'Dump HEFM on terminal
-;
-; Test 3: write a string and a byte to row 2 then dump
-;
-HSerPrintCRLF
-HSerPrint "Test 3 :"
-Dim Hello as String
-Hello="Hello GCB World!"
-Numbyte=99
-HEFwriteBlock(2,Hello,len(Hello))      'Hello string copied to row 2
-HEFWrite(95,Numbyte)                   'Numbyte copied at end of block 2
-HEFM_Dump
-;
-; Test 4: test of the read bytes routines
-;
-HSerPrintCRLF
-HSerPrint "Test 4 :"
-HSerPrintCRLF
-; Test HEFRead
-HEFRead(95, temp)
-HSerPrint "Value in temp from HEFRead(95,temp) is "
-HSerPrint temp
-HSerPrintCRLF
-; Test HEFreaByte
-Hserprint "and should equal HEFreadByte(2,31) : "
-HserPrint HEFreadByte(2,31)
-HSerPrintCRLF
-; Test HEFreadBlock
-Hello="                "
-HEFreadBlock(Hello,2,len(Hello))
-HSerPrint "In Block 2 I read : "
-HSerPrint Hello     '
