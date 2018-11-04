@@ -5,7 +5,7 @@
 '''Be sure to use one of the chip listed in hefsaf.h init routine which
 '''have an UART module.  This is a revised demonstation to support the latest library.
 '''
-'''@author  Jacques Nilo
+'''@author  Evan Venn and works of Jacques Nilo
 '''@licence GPL
 '''@version 2.0
 '''@date    04.11.2018
