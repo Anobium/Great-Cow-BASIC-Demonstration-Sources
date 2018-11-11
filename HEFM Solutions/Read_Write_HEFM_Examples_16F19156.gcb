@@ -13,10 +13,18 @@
 '''*****************************************************************************
 
 ; Chip Settings
- #chip 16F1509, 8
- #Config FOSC = INTOSC, MCLRE = ON
- #Config LVP = ON, WDTE = OFF
+ #chip 16F19156, 16
+ #Config FEXTOSC = OFF, RSTOSC = HFINT32
+ #Config MCLRE = ON, LVP = ON, WDTE = OFF
  #option explicit
+
+ #startup InitPPS, 85
+ #define PPSToolPart 16F19156
+
+    Sub InitPPS
+            'Module: EUSART1
+            RC6PPS = 0x000D    'TX1 > RC6
+    End Sub
 
   ; Config UART
   #define USART_BLOCKING true
@@ -35,30 +43,30 @@
   Dim Rel_Address,DataByte, Index as Byte
   Dim NVM_Address as Long  ' Absolute Address
   Dim  DataWord, as Word
-  Dim MyBuffer(HEF_ROWSIZE_BYTES)
+  Dim MyBuffer(SAF_ROWSIZE_BYTES)
   ;
   ; --- Main test Program
   ;
-  HSerPrint "Initial HEFM state :"
+  HSerPrint "Initial SAFM state :"
   HSerPrintCRLF
   HEFM_Dump
 
-  ; Test 1: fill block 0 and 1 with structured data then dump HEFM to terminal
+  ; Test 1: fill block 0 and 1 with structured data then dump SAFM to terminal
   HSerprintCRLF
   HSerPrint "Test 1: Fill block 0 and 1 with data then dump to terminal"
   HSerPrintCRLF
 
   'incremmenting data
-  for Index = 1 to HEF_ROWSIZE_BYTES
+  for Index = 1 to SAF_ROWSIZE_BYTES
     MyBuffer(index) = Index - 1
   next
-  HEFWriteBlock(0, MyBuffer, HEF_ROWSIZE_BYTES)
+  SAFWriteBlock(0, MyBuffer, SAF_ROWSIZE_BYTES)
 
   'decrementing data
-  for Index = 1 to HEF_ROWSIZE_BYTES
-     MyBuffer(index) = HEF_ROWSIZE_BYTES -Index
+  for Index = 1 to SAF_ROWSIZE_BYTES
+     MyBuffer(index) = SAF_ROWSIZE_BYTES -Index
   next
-  HEFWriteBlock(1, MyBuffer, HEF_ROWSIZE_BYTES)
+  SAFWriteBlock(1, MyBuffer, SAF_ROWSIZE_BYTES)
 
   HSerprintCRLF
   HSerPrint "Results of Test 1 Below"
@@ -68,22 +76,22 @@
   ' Test 2: read block 0 into data, move it to block 1, erase block 0 & dump
   HSerPrintCRLF
   HSerPrint "Test 2: Read Block 0, relocate to Block 1 and erase Block 0"
-  HEFReadBlock( 0, MyBuffer, HEF_ROWSIZE_BYTES)     'Row 0 loaded in data
-  HEFWriteBlock(1, MyBuffer, HEF_ROWSIZE_BYTES)    'Data copied to row 1
-  HEFEraseBlock( 0 )            'Row 0 erased
+  SAFReadBlock( 0, MyBuffer, SAF_ROWSIZE_BYTES)     'Row 0 loaded in data
+  SAFWriteBlock(1, MyBuffer, SAF_ROWSIZE_BYTES)    'Data copied to row 1
+  SAFEraseBlock( 0 )            'Row 0 erased
   HSerPrintCRLF
   HSerPrint "Results of Test 2 Below"
   HSerprintCRLF
-  HEFM_Dump                     'Dump HEFM on terminal
+  HEFM_Dump                     'Dump SAFM on terminal
 
   ; Test 3:  Write a single byte to last addrr in row 0
   HSerPrintCRLF
   HSerPrint "Test 3: Write a byte of data to last address in block 0 "
 
  'Calculate rel address of last addr in block2
-  Rel_Address  =  HEF_ROWSIZE_BYTES - 1
+  Rel_Address  =  SAF_ROWSIZE_BYTES - 1
   DataByte  = 88
-  HEFWrite(Rel_Address, DataByte)
+  SAFWrite(Rel_Address, DataByte)
 
   HSerprintCRLF
   HSerPrint "Results of Test 3 Below"
@@ -99,30 +107,30 @@
   HserprintCRLF 2
 
   'Calculate rel address of last addr in block 1
-  Rel_Address  =  HEF_ROWSIZE_BYTES - 1
+  Rel_Address  =  SAF_ROWSIZE_BYTES - 1
   DataByte = 0   'Clear the Variable
 
-  'test HEFRead  Sub
-  NVM_Address = Rel_Address + HEF_START_ADDR
+  'test SAFRead  Sub
+  NVM_Address = Rel_Address + SAF_START_ADDR
   HSerPrint "  Review value at location 0x"+hex(NVM_Address_h)
   HSerPrint hex(NVM_Address)
   HSerPrintCRLF 2
 
-  HEFRead(Rel_Address, DataByte)
+  SAFRead(Rel_Address, DataByte)
   HSerPrint "  Value in DataByte using subroutine:"
   HserprintCRLF
-  Hserprint "  HEFRead( Rel_Address, DataByte )"
+  Hserprint "  SAFRead( Rel_Address, DataByte )"
   HSerPrint " = "
   HSerPrint DataByte
   HSerPrint " equates to 0x"+hex(DataByte)
   HSerPrintCRLF
 
-  'test HEFRead Function
-  DataByte = HEFRead(rel_Address)
+  'test SAFRead Function
+  DataByte = SAFRead(rel_Address)
   HSerprintCRLF
   HSerPrint "  Value in DataByte using function:"
   hserprintCRLF
-  Hserprint "  DataByte = HEFRead( Rel_Address )"
+  Hserprint "  DataByte = SAFRead( Rel_Address )"
   Hserprint " = "
   HSerPrint DataByte
   HSerPrint " equates to 0x"+hex(DataByte)
@@ -132,17 +140,18 @@
 
   End
 
+
 ; This subroutine displays the High Endurance Flash Memory on a terminal
 ; Words in reverse byte order relative to address
 sub HEFM_Dump
 
     Dim Blocknum as Byte
-    NVM_Address  = HEF_START_ADDR
+    NVM_Address  = SAF_START_ADDR
     BlockNum = 0
 
-    Repeat  HEF_WORDS  ;128
+    Repeat  SAF_WORDS  ;128
 
-        If NVM_Address % HEF_ROWSIZE_BYTES = 0 then
+        If NVM_Address % SAF_ROWSIZE_BYTES = 0 then
             If BlockNum > 0 then   HSERPRINTCRLF
            HSerprintCRLF
            HserPrint "Block"
@@ -158,8 +167,8 @@ sub HEFM_Dump
            hserprint "     "
         end if
 
-        Rel_Address = (NVM_ADDRESS - HEF_START_ADDR)
-        HEFRead(Rel_Address, DataWord)
+        Rel_Address = (NVM_ADDRESS - SAF_START_ADDR)
+        SAFRead(Rel_Address, DataWord)
 
         hserprint hex(DataWord_H)
         hserprint hex(DataWord)

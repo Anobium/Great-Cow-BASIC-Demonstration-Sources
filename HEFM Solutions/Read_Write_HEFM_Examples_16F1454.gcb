@@ -1,7 +1,7 @@
 '''A test program of the hefsaf.h library routines
 '''-----------------------------------------------------------------------------
 '''This is using the hef/saf routines to read/write data or strings
-'''to HEF or SAF memory. The HEF/ SAF Memory Block is then dumped to a serial terminal
+'''to HEF or SAF memory. The HEF/SAF Memory Block is then dumped to a serial terminal
 '''Be sure to use one of the chip listed in hefsaf.h init routine which
 '''have an UART module.  This is a revised demonstation to support the latest library.
 '''
@@ -13,7 +13,7 @@
 '''*****************************************************************************
 
 ; Chip Settings
- #chip 16F1509, 8
+ #chip 16F1454, 16
  #Config FOSC = INTOSC, MCLRE = ON
  #Config LVP = ON, WDTE = OFF
  #option explicit
