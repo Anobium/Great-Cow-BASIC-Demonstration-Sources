@@ -75,14 +75,13 @@
     Dim myReturnedString as string * 7
     do
           ' "tch2" is the read X touch value
-          myReturnedString  = GLCDGetTouch_Nextion( "tch2")
+          myReturnedString  = str(GLCDGetTouch_Nextion( "tch2"))
           myReturnedString  = myReturnedString  + ":"
           ' "tch3" is the read Y touch value
-          myReturnedString  = myReturnedString  + GLCDGetTouch_Nextion( "tch3")
+          myReturnedString  = myReturnedString  + str(GLCDGetTouch_Nextion( "tch3"))
 
           GLCDUpdateObject_Nextion( "t0.txt", myReturnedString )    ' a string for a .txt object
 
     loop
 
     end
-

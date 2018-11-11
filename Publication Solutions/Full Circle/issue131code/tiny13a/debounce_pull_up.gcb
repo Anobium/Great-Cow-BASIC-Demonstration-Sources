@@ -35,6 +35,6 @@ DO 'check if switch is pressed (0 = ON):
 
   IF BUTTON > 3 THEN
     TOGGLE = !LED
-    Ser1Print "." ‘if something is wrong with the LED when pressing the ‘button, the dots should appear on the serial monitor
+    Ser1Print "." 'if something is wrong with the LED when pressing the 'button, the dots should appear on the serial monitor
   END IF
 LOOP

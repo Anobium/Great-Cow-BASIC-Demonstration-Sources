@@ -1,6 +1,6 @@
 #CHIP tiny85, 8
 #OPTION Explicit
-#INCLUDE <SoftSerial.h> ‘include the library. This is required.
+#INCLUDE <SoftSerial.h> 'include the library. This is required.
 #DEFINE ADSpeed MediumSpeed
 
 'Config Serial UART:
