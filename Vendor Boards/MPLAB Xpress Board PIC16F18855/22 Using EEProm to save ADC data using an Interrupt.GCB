@@ -82,7 +82,7 @@ sub InterruptHandler
         IOCAF5 = 0                             'We must clear the flag in software
 
         wait 5 ms                              'debounce by waiting and seeing if still held down
-        if ( SWITCH = DOWN ) then
+        if ( SWITCH = SWITCH_DOWN ) then
             'Read the ADC
             adc_value = readad ( AN4 )
             'Write the value to register Zero in the EEPROM
