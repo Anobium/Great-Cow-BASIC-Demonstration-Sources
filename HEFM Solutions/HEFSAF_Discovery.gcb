@@ -28,24 +28,21 @@
 '********************************************************************************
 ;
 
-#Chip 16F1518, 16
+#chip 18F25K42, 16
+#config LVP = ON, MCLRE = ON, WDTE = OFF
 
-'#chip 16F1454, 32
-'#Config FOSC_INTOSC
-'#config MCLRE=ON, LVP = ON
-'#config WDTE=OFF
+'#chip 16F1769, 16
+'#config LVP = ON, MCLRE = ON, WDTE = OFF
 
-'#chip 18F26K83, 32
-'#config FEXTOSC = OFF, RSTOSC = HFINTOSC_64MHZ, LVP = ON
-'#config XINST = OFF,  DEBUG = OFF, MCLRE = ON
-'
+'#Chip 16F1518, 16
+'#Config LVP = ON, MCLRE = ON. WDTE = OFF
 
-'#chip 18F25K42, 32
-'#config FEXTOSC = OFF, RSTOSC = HFINTOSC_64MHZ, LVP = ON
-'#config XINST = OFF,  DEBUG = OFF, MCLRE = ON
+'#chip 16F1454, 16
+'#Config FOSC_INTOSC,MCLRE=ON, LVP = ON, WDTE=OFF
 
+'#chip 18F26K83, 16
+'#config LVP = ON,  MCLRE = ON, WDTE = OFF
 
-#define Programmer PK3mpec  ' *** Do not use -R ***
 #option explicit
 #startup InitPPS, 85  '// Use with PPS Chips
 
@@ -57,12 +54,14 @@
 '--- Variables ---
 DIM TMP_LONG as LONG
 
-
 '----- Main Code
-Wait 1 s
+Wait 500 ms
+
+HserPrintCRLF 2
+Hserprint "HEF - SAF Discovery"
+HserPrintCRLF 2
 Call HEF_SAF_DISCOVER   'Based upon constants read from Chipdata and HEFLASH.h
 end
-'---------------
 
 
 '-------------- Sub Routines -----
@@ -70,10 +69,9 @@ end
 Sub HEF_SAF_DISCOVER
 
  #SCRIPT
-
    ChipHEFMemWords = ChipHEFMemWords + 0 'Necessary if missing from datfile
    ChipSAFMemWords = ChipSAFMemWords + 0 'Necessary if missing from datfile
-   ChipBytes = ChipWords * 2
+
 
     If ChipHEFMemWords = 128 and ChipFamily = 15 then '16F with HEF
          '16F with HEF and PMCON instead of NVMCON
@@ -87,7 +85,7 @@ Sub HEF_SAF_DISCOVER
          F_START_ADDR = Chipwords - ChipHEFMemWords
          F_NUM_BLOCKS = ChipHEFMemWords / ChipEraseRowSizeWords
 
-         If F_NUM_BLOCKS = 4  then
+        If F_NUM_BLOCKS = 4  then
             F_BLOCK0_ADDR = F_START_ADDR
             F_BLOCK1_ADDR = F_START_ADDR + 32
             F_BLOCK2_ADDR = F_START_ADDR + 64
@@ -179,7 +177,7 @@ Sub HEF_SAF_DISCOVER
      HSerprint "No"
   #ENDIF
   HSerprintCRLF 2
-  
+
   #IF ChipHEFMemWords <> 128 AND ChipSAFMemWords <> 128
      HSerprint ChipNameStr
      Hserprint " Does Not Support HEF Or SAF"
@@ -215,7 +213,7 @@ Sub HEF_SAF_DISCOVER
        HSerprint Hex(TMP_LONG)
        HSerprintCRLF
 
-      #If F_NUM_BLOCKS > 2  then
+      #If F_NUM_BLOCKS > 2
           HserPrint "HEF_BLOCK2_ADDR: "
           TMP_LONG = F_Block2_Addr
           HSerprint Hex(TMP_LONG_H)
@@ -229,7 +227,7 @@ Sub HEF_SAF_DISCOVER
           HSerprintCRLF
       #ENDIF
 
-      #IF F_NUM_BLOCKS > 4 Then
+      #IF F_NUM_BLOCKS > 4
           HserPrint "HEF_BLOCK4_ADDR: "
           TMP_LONG = F_Block4_Addr
           HSerprint Hex(TMP_LONG_H)
@@ -258,6 +256,10 @@ Sub HEF_SAF_DISCOVER
   #ENDIF
 
   #IFDEF ChipSAFMemWords 128
+
+     HSerprint "---- Constants ----"
+     HSerprintCRLF 2
+
      Hserprint "SAF_BYTES: "
      Hserprint F_BYTES
      HSerprintCRLF
@@ -268,9 +270,6 @@ Sub HEF_SAF_DISCOVER
 
      HserPrint "SAF_BLOCKS: "
      Hserprint F_NUM_BLOCKS
-     HSerprintCRLF 2
-
-     HSerprint "---- Constants ----"
      HSerprintCRLF 2
 
      HserPrint "SAF_BLOCK0_ADDR: "
@@ -285,7 +284,7 @@ Sub HEF_SAF_DISCOVER
      HSerprint Hex(TMP_LONG)
      HSerprintCRLF
 
-      #If F_NUM_BLOCKS > 2  then
+      #If F_NUM_BLOCKS > 2
           HserPrint "SAF_BLOCK2_ADDR: "
           TMP_LONG = F_Block2_Addr
           HSerprint Hex(TMP_LONG_H)
@@ -305,7 +304,7 @@ End SUB
 
 Sub InitPPS
 
-  #IFDEF Chipname 18F25K83, 18F26K83, 18F25K42, 18F26K42, 18F24K42
+  #IFDEF Chipname 18F25K83, 18F26K83, 18F25K42, 18F26K42
     RC4PPS = 0x0013     'TX1 > RC4
     Dir PORTC.4 Out     'Clear TRIS control bit
   #ENDIF
