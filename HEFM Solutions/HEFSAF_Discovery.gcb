@@ -179,8 +179,8 @@ Sub HEF_SAF_DISCOVER
      HSerprint "No"
   #ENDIF
   HSerprintCRLF 2
-
-  #IF ChipHEFMemWords <> 128 and  ChipSAFMemWords <> 128 then
+  
+  #IF ChipHEFMemWords <> 128 AND ChipSAFMemWords <> 128
      HSerprint ChipNameStr
      Hserprint " Does Not Support HEF Or SAF"
      HSerprintCRLF 2
