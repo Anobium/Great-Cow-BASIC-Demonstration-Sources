@@ -1,6 +1,6 @@
 '''A demonstration program for GCGB and GCB.
 '''--------------------------------------------------------------------------------------------------------------------------------
-'''This program receive a character from Software-UART and sends it back.
+'''This program receive a character from Hardware-UART and sends it back.
 '''Typically, this sending device is a PC terminal program.
 '''
 '''@author 	Evan R. Venn plus works of others
