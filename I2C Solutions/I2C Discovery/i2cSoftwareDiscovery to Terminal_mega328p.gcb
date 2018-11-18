@@ -14,7 +14,7 @@
   #chip mega328p,16
   #option explicit
 
-  #include "DisplayDevices.h"
+  #include "displaydevices.h"
 
 
 ; ----- Define Hardware settings

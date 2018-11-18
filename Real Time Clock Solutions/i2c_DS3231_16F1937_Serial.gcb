@@ -35,8 +35,8 @@
  #option explicit
  #config Osc = intOSC, MCLRE_ON, PLLEN_ON, VCAPEN_OFF
 
- #include <DS3231.h>
- #include <I2CEEPROM.h>                  ; Memory chips: AT24C32 (storage capacity 32K)
+ #include <ds3231.h>
+ #include <i2ceeprom.h>                  ; memory chips: at24c32 (storage capacity 32k)
 
 
  #define    AT24C32  0xAE                  ;Eeprom address

@@ -71,7 +71,7 @@
     #define LCD_DB7     PORTA.3
 
     'DS18B20 setup section
-    #include <DS18B20.h>
+    #include <ds18b20.h>
 
     ; ----- Constants
     ' DS18B20 port settings

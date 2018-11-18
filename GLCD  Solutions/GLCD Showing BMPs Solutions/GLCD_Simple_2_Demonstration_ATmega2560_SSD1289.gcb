@@ -17,8 +17,8 @@
 
 'Include
 #include <glcd.h>
-#include "SampleImage001.h"
-#include "SampleBMP001.h"
+#include "sampleimage001.h"
+#include "samplebmp001.h"
 
 
 

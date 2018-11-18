@@ -3,7 +3,7 @@
 
 #chip mega328p, 16
 
-#include "Time_Based_Task_Switcher_Library002.h"      'In GcBasic includes folder
+#include "time_based_task_switcher_library002.h"      'in gcbasic includes folder
 
 #define base_time 100          ' Base time or "tick" = 100 uS
 

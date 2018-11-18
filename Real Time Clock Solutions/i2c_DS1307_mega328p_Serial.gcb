@@ -33,7 +33,7 @@
 ; ----- Configuration
   #chip mega328p, 16
   #option explicit
-  #include <Ds1307.h>
+  #include <ds1307.h>
 
 
 ; ----- Define Hardware settings

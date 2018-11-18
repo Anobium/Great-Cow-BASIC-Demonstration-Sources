@@ -69,7 +69,7 @@
 
     'Template comment at the end of the config file
 
-    #include <HWI2C_MessageInterfaceKMode.h>  'Defines a set of callbacks - you do NOT need to define HI2CSlave_State_1-5
+    #include <hwi2c_messageinterfacekmode.h>  'defines a set of callbacks - you do not need to define hi2cslave_state_1-5
     'Buffer size
     #define HI2CBUFFERSIZE 16
 

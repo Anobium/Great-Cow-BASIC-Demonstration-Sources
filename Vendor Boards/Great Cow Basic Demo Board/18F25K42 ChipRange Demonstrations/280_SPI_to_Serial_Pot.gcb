@@ -80,7 +80,7 @@
 
     '******* BOARD SPECIFIC ABOVE HERE **********************
 
-    #include <MCP4XXXDigitalPot.h>
+    #include <mcp4xxxdigitalpot.h>
     #define DigitalPot_CS   Porta.5           ' Chip select line
     #define DigitalPot_SCK  portc.3           ' Clock Line
     #define DigitalPot_DO   portc.5           ' Data out | MOSI

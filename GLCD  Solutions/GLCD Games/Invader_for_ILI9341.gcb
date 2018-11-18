@@ -1,7 +1,7 @@
 ;ILI9341 Arduino UNO game demo
 ;buttons pulled low
 #chip mega328p, 16
-#include <UNO_mega328p.h >
+#include <uno_mega328p.h >
 #option explicit
 #include <glcd.h>
 ;

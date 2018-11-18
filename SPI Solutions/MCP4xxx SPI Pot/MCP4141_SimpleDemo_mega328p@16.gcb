@@ -29,8 +29,8 @@
 ; ----- Configuration
   #chip mega328p, 16
   #option explicit
-  #include <UNO_mega328p.h>
-  #include <MCP4XXXDigitalPot.h>
+  #include <uno_mega328p.h>
+  #include <mcp4xxxdigitalpot.h>
 
 ; ----- Constants
 

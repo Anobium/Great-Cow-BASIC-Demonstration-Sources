@@ -20,7 +20,7 @@
     #option explicit
 
     #include <glcd.h>
-    #include <..\converters\GCB.BMP>
+    #include <..\converters\gcb.bmp>
 
   ; ----- Define Software settings
     #define HI2C_BAUD_RATE 400

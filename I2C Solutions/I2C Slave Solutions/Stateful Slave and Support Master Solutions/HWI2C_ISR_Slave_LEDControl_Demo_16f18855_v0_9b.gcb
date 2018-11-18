@@ -51,7 +51,7 @@
     RC4PPS = 0x14         'RC4->MSSP1:SDA1;
   End Sub
 
-   #include <HWI2C_MessageInterface.h>  'Defines a set of callbacks - you do NOT need to define HI2CSlave_State_1-5
+   #include <hwi2c_messageinterface.h>  'defines a set of callbacks - you do not need to define hi2cslave_state_1-5
    'Buffer size
    #define HI2CBUFFERSIZE 16
 

@@ -12,7 +12,7 @@
 ; ----- Configuration
   #chip 16f18855,32
   #config MCLRE=on
-  #include <Max7219_LEDMATRIX_Driver.h>
+  #include <max7219_ledmatrix_driver.h>
   #option Explicit
 
   #startup InitPPS, 85

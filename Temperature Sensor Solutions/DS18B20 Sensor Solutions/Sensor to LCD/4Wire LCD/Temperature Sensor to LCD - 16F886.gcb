@@ -14,13 +14,13 @@
  #chip 16F886, 16
  #option explicit
  #config MCLRE_ON
- #include <DS18B20.h>
+ #include <ds18b20.h>
 
  ; or
 
  ;#chip 16F1938, 32
  ;#config INTOSC, VCAPEN_OFF, MCLRE_ON, PLLEN_ON, CLKOUTEN_OFF
- ;#include <DS18B20.h>
+ ;#include <ds18b20.h>
 
   ;Setup LCD Parameters
   #define LCD_IO 4

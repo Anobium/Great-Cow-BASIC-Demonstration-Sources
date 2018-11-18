@@ -14,7 +14,7 @@
 #option Explicit
 
 ; ----- Include library
-#include <SoftSerial.h>
+#include <softserial.h>
 
 ; ----- Config Serial UART (we use the onboard USB-serial converter):
 #define SER1_BAUD 256000   ; baudrate must be defined

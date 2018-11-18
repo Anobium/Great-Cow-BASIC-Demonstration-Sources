@@ -13,8 +13,8 @@
  #chip 16F877a,20
  #option explicit
 
-    #include <DS18B20.h>
-    #include <GLCD.h>
+    #include <ds18b20.h>
+    #include <glcd.h>
 
 
     #define GLCD_TYPE GLCD_TYPE_ST7920

@@ -25,7 +25,7 @@
   #chip 18F45k80, 8
 
 	' Load encoder header file
-  #include <ALPS-EC11.h>
+  #include <alps-ec11.h>
 
 ; ----- Define Hardware settings
    #define LCD_SPEED fast

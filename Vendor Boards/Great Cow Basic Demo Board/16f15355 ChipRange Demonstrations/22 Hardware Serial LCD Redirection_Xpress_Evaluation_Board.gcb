@@ -25,7 +25,7 @@
 
 
 
-  #include   <LCD2SerialRedirect.h>
+  #include   <lcd2serialredirect.h>
 
   ; ----- Define Hardware settings
       'Set the PPS of the RS232 port to USB.

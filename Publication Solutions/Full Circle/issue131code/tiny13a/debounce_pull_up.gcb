@@ -2,7 +2,7 @@
 #Option Explicit
 #Option Volatile LED
 
-#INCLUDE <SoftSerial.h>
+#include <softserial.h>
 
 #DEFINE SER1_BAUD 9600
 #DEFINE SER1_TXPORT PORTB

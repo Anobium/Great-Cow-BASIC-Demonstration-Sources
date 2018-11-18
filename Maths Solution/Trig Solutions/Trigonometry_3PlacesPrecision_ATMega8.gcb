@@ -14,7 +14,7 @@
  #chip mega8,8
  #option explicit
 
- #include <Trig3Places.h>
+ #include <trig3places.h>
 
  'Use LCD in 2-wire mode with 74LS164 / 74HC164
   #define LCD_IO 2

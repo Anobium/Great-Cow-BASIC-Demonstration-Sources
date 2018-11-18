@@ -37,7 +37,7 @@
     #Config MCLRE_ON
 
     #include <lowlevel\hwi2c2.h>
-    #include <EMC1001.h>
+    #include <emc1001.h>
 
 
     #define SWITCH_DOWN         0

@@ -8,7 +8,7 @@
  #CONFIG CSWEN = ON, BOREN = Off
 
  #option explicit
- #Include <SMT_Timers.h>
+ #include <smt_timers.h>
 
  WAIT 500 MS
 

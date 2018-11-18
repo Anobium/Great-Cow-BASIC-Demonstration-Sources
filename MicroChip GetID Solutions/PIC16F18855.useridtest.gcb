@@ -32,7 +32,7 @@
   #Config FEXTOSC_OFF, RSTOSC_HFINT32
   #Config WRT_OFF, CPD_ON, MCLRE_ON
 
-  #include <GetUserID.h>
+  #include <getuserid.h>
 
 ' --- USB Serial Bridge
   UNLOCKPPS

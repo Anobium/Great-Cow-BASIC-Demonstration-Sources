@@ -23,10 +23,10 @@
 ; ----- Configuration
   #chip mega328p,16
   #option explicit
-  #include <UNO_mega328p.h>
+  #include <uno_mega328p.h>
 
 	' Load encoder header file
-  #include <ALPS-EC11.h>
+  #include <alps-ec11.h>
 
   ;Setup LCD Parameters
   #define LCD_IO 4

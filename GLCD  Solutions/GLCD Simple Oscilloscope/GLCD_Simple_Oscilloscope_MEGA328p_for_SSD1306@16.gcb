@@ -11,7 +11,7 @@
 
   #chip mega328p,16
   #option explicit
-  #include <UNO_mega328p.h>
+  #include <uno_mega328p.h>
   #include <glcd.h>
   #define HI2C_BAUD_RATE 400
   #define HI2C_DATA

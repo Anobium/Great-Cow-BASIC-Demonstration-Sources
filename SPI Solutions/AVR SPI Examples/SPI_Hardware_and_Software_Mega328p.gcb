@@ -28,7 +28,7 @@
 
     #chip mega328p, 16
     #option explicit
-    #include <UNO_mega328p.h >
+    #include <uno_mega328p.h >
 
     #define SPI_HardwareSPI  'comment this out to make into Software SPI but, you may have to change clock lines
 

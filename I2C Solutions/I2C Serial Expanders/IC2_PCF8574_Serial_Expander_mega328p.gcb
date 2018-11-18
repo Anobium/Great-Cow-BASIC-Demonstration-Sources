@@ -17,9 +17,9 @@
 #chip mega328p, 16
 #option explicit
 
- #INCLUDE <PCF8574.h>
+ #include <pcf8574.h>
  'Used the Serial port/terminal as an LCD emulator.  The output device should be changed to any suitable device.
- #include <LCD2SerialRedirect.h>
+ #include <lcd2serialredirect.h>
 
 ; ----- Define Hardware settings - choose hardware or software I2C - NOT BOTH!!
 '  ' Define I2C settings

@@ -13,7 +13,7 @@
 #chip tiny85, 1
 
 ; ----- Include library
-#include <SoftSerial.h>
+#include <softserial.h>
 
 ; ----- Config Serial UART for sending:
 #define SER1_BAUD 19200     ; baudrate must be defined

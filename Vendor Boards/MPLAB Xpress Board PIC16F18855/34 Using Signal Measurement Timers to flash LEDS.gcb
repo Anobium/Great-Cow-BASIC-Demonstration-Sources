@@ -74,7 +74,7 @@
   #Chip 16F18855, 32
 
   #option explicit
-  #Include <SMT_Timers.h>
+  #include <smt_timers.h>
   #config CLKOUTEN_ON
 
 

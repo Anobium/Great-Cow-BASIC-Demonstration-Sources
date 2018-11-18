@@ -21,7 +21,7 @@
 #chip mega328p, 16
     #option explicit
     #include <glcd.h>
-    #INCLUDE <TRIG2PLACES.H>
+    #include <trig2places.h>
 ;
 'GLCD selection
     #define HI2C_BAUD_RATE 400

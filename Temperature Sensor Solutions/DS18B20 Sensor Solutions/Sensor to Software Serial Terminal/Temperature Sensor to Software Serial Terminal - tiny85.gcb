@@ -13,10 +13,10 @@
   #chip tiny85, 16
   #option explicit
 
-  #include <DS18B20.h>
+  #include <ds18b20.h>
 
 ; ----- Define Hardware settings
-  #INCLUDE <SoftSerial.h>	'include the library. This is required.
+  #include <softserial.h>	'include the library. this is required.
 
   'Config Serial UART:
   #DEFINE SER1_BAUD 9600   	'baudrate must be defined

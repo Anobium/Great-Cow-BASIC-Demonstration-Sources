@@ -23,7 +23,7 @@
 
 'Include files
 #include <glcd.h>
-#include <ADS7843.h>
+#include <ads7843.h>
 
 'GLCD Device Selection
 #define GLCD_TYPE GLCD_TYPE_SSD1289

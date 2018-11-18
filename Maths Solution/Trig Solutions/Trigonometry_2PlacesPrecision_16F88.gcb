@@ -16,7 +16,7 @@
  #config mclr=off                ;reset handled internally
  #config osc=int                 ;use internal clock
 
- #include <Trig2Places.h>
+ #include <trig2places.h>
 
 
 ; ----- Constants

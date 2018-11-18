@@ -35,7 +35,7 @@
   #chip 16f1938, 16
   #option explicit
   #config mclr_on
-  #include <Ds1307.h>
+  #include <ds1307.h>
 
 
 ; ----- Define Hardware settings

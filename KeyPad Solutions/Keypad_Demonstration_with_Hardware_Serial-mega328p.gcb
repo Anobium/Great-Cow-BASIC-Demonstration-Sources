@@ -20,7 +20,7 @@
 
 ; ----- Configuration
 
-  #include <UNO_mega328p.h>
+  #include <uno_mega328p.h>
 
 ; ----- Constants
   #define KEYPAD_ROW_1 DIGITAL_11

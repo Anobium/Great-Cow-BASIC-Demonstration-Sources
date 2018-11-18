@@ -12,7 +12,7 @@
 ; ----- Configuration
   #chip mega328p, 16
   #config MCLRE=on
-  #include <Max7219_LEDMATRIX_Driver.h>
+  #include <max7219_ledmatrix_driver.h>
   #option Explicit
 
 

@@ -13,7 +13,7 @@
 
  #chip 16F886,16
  #option explicit
- #include <GLCD.h>
+ #include <glcd.h>
 
 
 ; ----- Define Hardware settings

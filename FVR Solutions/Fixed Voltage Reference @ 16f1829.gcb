@@ -21,7 +21,7 @@
     #define USART_BAUD_RATE 19200
     #define USART_TX_BLOCKING
 
-    #include  <LCD2SerialRedirect.h>
+    #include  <lcd2serialredirect.h>
     ; Required to LCD to Serial redirection
     #define LCD_IO 0
 

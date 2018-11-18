@@ -12,7 +12,7 @@
 ; ----- Configuration
   #chip mega168, 16
   #option explicit
-  #include <LCD2SerialRedirect.h>
+  #include <lcd2serialredirect.h>
 
 
   ; ----- Define Hardware settings

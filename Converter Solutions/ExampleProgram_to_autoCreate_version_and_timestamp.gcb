@@ -23,7 +23,7 @@
 
 ; ----- Main body of program commences here.
 
-  #include "GCBVersionNumber.cnt"
+  #include "gcbversionnumber.cnt"
   'Include the GCBVersionNumber.cnt to increment versionString and create the build time string called GCBBuildTimeStr.
   ' versionString a string is created automatically.
   ' GCBBuildTimeStr is a string that is also created automatically.

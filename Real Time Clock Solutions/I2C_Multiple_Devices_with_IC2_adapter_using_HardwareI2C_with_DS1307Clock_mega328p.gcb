@@ -37,7 +37,7 @@
   #chip mega328p, 16
   #option explicit
   #config mclr_on
-  #include <Ds1307.h>
+  #include <ds1307.h>
 
 
 ; ----- Define Hardware settings

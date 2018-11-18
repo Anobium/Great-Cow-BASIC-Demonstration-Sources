@@ -1,6 +1,6 @@
 #CHIP tiny13a, 1.2
 #OPTION Explicit
-#INCLUDE <SoftSerial.h>	'include the library. This is required.
+#include <softserial.h>	'include the library. this is required.
 #DEFINE ADSpeed MediumSpeed	
 
 'Config Serial UART:

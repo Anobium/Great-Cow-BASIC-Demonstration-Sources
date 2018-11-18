@@ -12,7 +12,7 @@
 ; ----- Configuration
  #chip 16F886, 16
  #option explicit
- #include <DS18B20.h>
+ #include <ds18b20.h>
 
 ; ----- Define Hardware settings
   'Config UART

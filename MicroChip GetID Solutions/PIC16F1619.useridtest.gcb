@@ -31,7 +31,7 @@
   #chip 16F1619
   #Config WRT_OFF, MCLRE_ON
 
-  #include <GetUserID.h>
+  #include <getuserid.h>
 
 ' --- USB Serial Bridge
   UNLOCKPPS

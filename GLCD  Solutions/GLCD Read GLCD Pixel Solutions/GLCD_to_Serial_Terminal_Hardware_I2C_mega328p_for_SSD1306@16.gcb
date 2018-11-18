@@ -33,7 +33,7 @@
   #define GLCD_TYPE GLCD_TYPE_SSD1306
   #define GLCD_I2C_Address 0x78
 
-  #include <LCD2SerialRedirect.h>
+  #include <lcd2serialredirect.h>
 
   ; ----- Define Hardware settings
   ; Required to LCD to Serial redirection

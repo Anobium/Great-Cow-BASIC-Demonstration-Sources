@@ -13,7 +13,7 @@
 
  #chip mega328p,16
  #option explicit
- #include <GLCD.h>
+ #include <glcd.h>
 
 
 ; ----- Define Hardware settings

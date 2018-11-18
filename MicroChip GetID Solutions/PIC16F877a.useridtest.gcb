@@ -31,7 +31,7 @@
   #chip 16F877a
   #Config WRT_OFF
 
-  #include <GetUserID.h>
+  #include <getuserid.h>
 
 
   dim NVIndex as byte

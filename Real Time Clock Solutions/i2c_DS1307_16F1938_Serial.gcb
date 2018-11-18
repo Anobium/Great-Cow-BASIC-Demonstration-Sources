@@ -31,7 +31,7 @@
  #option explicit
  #config Osc = intOSC, MCLRE_ON, PLLEN_ON, VCAPEN_OFF
 
- #include <DS1307.h>
+ #include <ds1307.h>
 
 
 ; ----- Define Hardware settings

@@ -10,7 +10,7 @@
 
 ; ----- Configuration
   #chip mega168, 16
-  #include <DHT.H>
+  #include <dht.h>
 
 
 ; ----- Define Hardware settings

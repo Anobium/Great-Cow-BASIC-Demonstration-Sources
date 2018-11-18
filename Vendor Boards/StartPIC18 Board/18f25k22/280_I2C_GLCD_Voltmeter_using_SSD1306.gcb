@@ -81,7 +81,7 @@
     #define GLCD_TYPE GLCD_TYPE_SSD1306
     #define GLCD_I2C_Address 0x78
 
-    #include <TRIG2PLACES.H>
+    #include <trig2places.h>
 
 
     'These constants allow you to change the GLCD memory usage.

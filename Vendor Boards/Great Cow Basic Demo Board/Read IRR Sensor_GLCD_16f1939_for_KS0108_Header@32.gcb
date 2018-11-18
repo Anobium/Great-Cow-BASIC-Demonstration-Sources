@@ -40,7 +40,7 @@
   #config Osc = INT, VCAPEN_OFF, MCLRE_On, PLLEN_ON, CLKOUTEN_OFF, WDTE_SWDTEN
 
   #include <glcd.h>
-  #include <SonyRemote.h>           							 ' include the header file
+  #include <sonyremote.h>           							 ' include the header file
 
 	#define GLCD_TYPE GLCD_TYPE_KS0108               ' This is the Default value, not really required.
 	#define GLCDDirection 1													 ' Invert display, not always required

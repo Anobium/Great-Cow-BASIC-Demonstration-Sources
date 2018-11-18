@@ -11,7 +11,7 @@
 ; ----- Configuration
   #chip mega168, 16
   #option explicit
-  #include <DS18B20.h>
+  #include <ds18b20.h>
 
   ; ----- Define Hardware settings
   'Set up the Serial Port for ONEWIRE LCD

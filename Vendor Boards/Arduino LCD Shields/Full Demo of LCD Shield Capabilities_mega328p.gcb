@@ -19,7 +19,7 @@
   'Chip model
   #chip mega328p, 16
   #option explicit
-  #INCLUDE <UNO_mega328p.h>
+  #include <uno_mega328p.h>
 
   ;Setup LCD Parameters
   #define LCD_IO 4

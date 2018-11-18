@@ -24,7 +24,7 @@
   #config Osc = INT, VCAPEN_OFF, MCLRE_ON, PLLEN_ON, CLKOUTEN_OFF
 
 	' Initialise HMC5883L device is automatic
-  #include <HMC5883L.h>
+  #include <hmc5883l.h>
 
   ; ----- Define Hardware settings
 

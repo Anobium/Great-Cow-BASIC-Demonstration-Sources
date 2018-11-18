@@ -31,7 +31,7 @@
   #chip 16F1455
   #Config WRT_OFF, MCLRE_ON
 
-  #include <GetUserID.h>
+  #include <getuserid.h>
 
   #define USART_BAUD_RATE 19200
   #define USART_TX_BLOCKING

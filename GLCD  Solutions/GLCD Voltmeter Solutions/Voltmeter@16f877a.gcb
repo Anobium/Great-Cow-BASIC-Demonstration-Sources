@@ -19,7 +19,7 @@
 
  #chip 16f877a,16
   #option explicit
-  #INCLUDE <trig2places.h>
+  #include <trig2places.h>
   #include <glcd.h>
 
 'GLCD selection

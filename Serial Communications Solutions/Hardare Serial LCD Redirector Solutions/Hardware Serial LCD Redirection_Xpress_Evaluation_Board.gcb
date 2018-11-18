@@ -16,7 +16,7 @@
   #Config   FEXTOSC_OFF, RSTOSC_HFINT32
   #Config   WRT_OFF, CPD_ON, MCLRE_ON
 
-  #include  <LCD2SerialRedirect.h>
+  #include  <lcd2serialredirect.h>
 
   ; ----- Define Hardware settings
       'Set the PPS of the RS232 port to USB.

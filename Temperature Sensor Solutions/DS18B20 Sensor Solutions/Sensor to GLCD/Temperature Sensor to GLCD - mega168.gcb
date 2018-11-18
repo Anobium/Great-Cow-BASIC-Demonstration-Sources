@@ -12,8 +12,8 @@
 ; ----- Configuration
  #chip mega168,16
  #option explicit
- #include <GLCD.h>
- #include <DS18B20.h>
+ #include <glcd.h>
+ #include <ds18b20.h>
 
 
 ; ----- Define Hardware settings

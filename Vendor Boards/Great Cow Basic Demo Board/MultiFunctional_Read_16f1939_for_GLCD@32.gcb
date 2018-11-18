@@ -14,9 +14,9 @@
   #config Osc = INT, VCAPEN_OFF, MCLRE_On, PLLEN_ON, CLKOUTEN_OFF, WDTE_SWDTEN
 
   #include <glcd.h>
-  #include <DS18B20.h>
-  #include <SonyRemote.h>                          ' include the header file
-  #include <DHT.h>
+  #include <ds18b20.h>
+  #include <sonyremote.h>                          ' include the header file
+  #include <dht.h>
   #define GLCD_TYPE GLCD_TYPE_KS0108               ' This is the Default value, not required.
 
   #DEFINE DHT22                                    'Comment out if you do not have DHT22 attached

@@ -17,7 +17,7 @@
  #option explicit
 
  ; This is the source data file that will be converted into a GCB table by the external converter program.
- #include <..\converters\InfraRedPatterns.TXT>
+ #include <..\converters\infraredpatterns.txt>
 
 ; ----- Constants
   ' No Constants specified in this example.

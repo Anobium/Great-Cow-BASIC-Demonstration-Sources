@@ -40,7 +40,7 @@
   #define Max7219_SCK   portb.3
   #define Max7219_CS    portc.3
 
-  #include <LCD2SerialRedirect.h>
+  #include <lcd2serialredirect.h>
   ' ----- Define Hardware settings
   ' Required to LCD to Serial redirection
   #define LCD_IO 0

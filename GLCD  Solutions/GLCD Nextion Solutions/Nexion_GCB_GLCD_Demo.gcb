@@ -62,7 +62,7 @@
 ' ----- Set up for Software Serial - this is optional - shown to explain the method.
 '    ;Remove Hardware Serial before using Software serial
 '    ;You MUST also remove PPS setup, for hardware serial, when using Software serial
-'    #include <SoftSerial.h>
+'    #include <softserial.h>
 '
 '    ; ----- Config Serial UART for sending:
 '    #define SER1_BAUD 9600     ; baudrate must be defined

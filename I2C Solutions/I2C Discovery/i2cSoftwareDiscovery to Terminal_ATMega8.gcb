@@ -14,7 +14,7 @@
   #chip mega8,8
   #option explicit
 
-  #include "DisplayDevices.h"
+  #include "displaydevices.h"
 
 
 ; ----- Define Hardware settings

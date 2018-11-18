@@ -13,7 +13,7 @@
 ; ----- Configuration
  #chip 18f25k42, 16
  #option explicit
- #include <DS18B20MulltiPort.h>
+ #include <ds18b20mulltiport.h>
 
 
     #startup InitPPS, 85

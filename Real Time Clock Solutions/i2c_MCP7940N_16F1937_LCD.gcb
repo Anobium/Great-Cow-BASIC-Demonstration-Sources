@@ -33,7 +33,7 @@
  #option explicit
  #config Osc = intOSC, MCLRE_ON, PLLEN_ON, VCAPEN_OFF
 
- #include <MCP7940N.h>
+ #include <mcp7940n.h>
 
 
 ; ----- Define Hardware settings

@@ -27,7 +27,7 @@
  #chip 18F2520, 8
 
  'load encoder header file
- #include <ALPS-EC11.h>
+ #include <alps-ec11.h>
 
  ; ---- Define Hardware settings
  #define TRISB 0

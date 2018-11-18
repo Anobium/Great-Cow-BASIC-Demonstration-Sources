@@ -12,7 +12,7 @@
 ; ----- Configuration
  #chip mega168, 16
  #option explicit
- #include <DS18B20.h>
+ #include <ds18b20.h>
 
   ;Setup LCD Parameters
   #define LCD_IO 4

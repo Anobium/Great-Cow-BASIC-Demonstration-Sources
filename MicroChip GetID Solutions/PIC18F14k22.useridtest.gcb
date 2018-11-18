@@ -31,7 +31,7 @@
   #chip PIC18F14k22
   #Config MCLRE_ON
 
-  #include <GetUserID.h>
+  #include <getuserid.h>
 
 
   #define USART_BAUD_RATE 19200

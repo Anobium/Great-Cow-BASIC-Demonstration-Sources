@@ -14,8 +14,8 @@
 #option explicit
 #config Osc = INT, VCAPEN_OFF, MCLRE_On, PLLEN_ON, CLKOUTEN_OFF
 
-#include <DS18B20.h>
-#include <GLCD.h>
+#include <ds18b20.h>
+#include <glcd.h>
 
 
 #define GLCD_TYPE GLCD_TYPE_ST7920

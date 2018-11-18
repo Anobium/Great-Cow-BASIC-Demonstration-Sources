@@ -1,7 +1,7 @@
   ' i2cHardwareDiscovery_16F1939_for_test_bed.gcb
   #chip 18f14k22, 4
   #option explicit
-  #include "DisplayDevices.h"
+  #include "displaydevices.h"
 
 
   ' Define I2C settings - CHANGE PORTS

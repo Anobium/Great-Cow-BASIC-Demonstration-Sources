@@ -57,7 +57,7 @@
 
 
 ; ----- Quick Command Reference:
-  #include <..\converters\Anobium.BMP>
+  #include <..\converters\anobium.bmp>
   ' define the BMP here to minimise any changes to code.  Simply change this define your specific filename
   '
   ' If the include statement has the file specific of Anobium then define TestDataSource as Anobium. And, therefore if the file specific of BatteryMon then define TestDataSource as BatteryMon.

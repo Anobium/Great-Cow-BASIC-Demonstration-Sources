@@ -51,7 +51,7 @@
 #chip 16F877a, 20                   ;PIC16F887a running at 20 Mhz
 #option explicit
 
-#include <DS1307.h>
+#include <ds1307.h>
 
 ;----- Constants
 

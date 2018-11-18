@@ -11,7 +11,7 @@
 'Chip Settings. Assumes the development board with with a 16F877A
 #chip 16F877A,20
 #option explicit
-#include <DS18B20.h>
+#include <ds18b20.h>
 
  'Use LCD in 4 pin mode and define LCD pins
  #define LCD_IO 4

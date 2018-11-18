@@ -12,7 +12,7 @@
 ; ----- Configuration
  #chip 16f1937,16
  #option explicit
- #include <DS18B20.h>
+ #include <ds18b20.h>
  #config MCLRE_ON
 
   ;Setup LCD Parameters
