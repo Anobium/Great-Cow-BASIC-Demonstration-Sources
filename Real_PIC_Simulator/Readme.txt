@@ -1,1 +1,0 @@
-These are conversions of the Real PIC Simulator examples to Great Cow BASIC.

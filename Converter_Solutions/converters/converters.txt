@@ -1,3 +1,0 @@
-Converters allow GCGB to read files from other programs. They'll convert the files into GCBASIC libraries (.h files).
-
-Please see the Help File for more details.

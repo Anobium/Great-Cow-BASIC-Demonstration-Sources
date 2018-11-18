@@ -1,3 +1,0 @@
-#138 of the FullCircleMagazine
-
-Sourcecode will be delivered soon...

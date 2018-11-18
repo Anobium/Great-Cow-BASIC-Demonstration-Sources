@@ -1,8 +1,0 @@
-I can't get the script (LCDCURSOR_2WIRE_TEST (with atmega8)) running
- with the original code in 2 wire mode.
- The only way to get it running is the use of the existing LCDCMD command,
- simply by using LCDCMD 8 to 15.
- The result is the same effect with much lesser code.
-
-In this manner a considerable part of the extra code in the LCD.h may disappear.
- Also the subs LCDDisplayOff and LCDDisplayOn may disappear.
