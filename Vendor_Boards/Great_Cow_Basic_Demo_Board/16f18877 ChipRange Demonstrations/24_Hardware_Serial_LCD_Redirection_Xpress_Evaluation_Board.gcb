@@ -1,0 +1,83 @@
+''' A demonstration program for GCGB and GCB.
+'''
+''' This program redirects the normal LCD output to an ANSI serial terminal.
+''' On a suitable test board/setup.
+''' It requires the inclusion of the support file "LCD2SerialRedirect.h".
+'''
+'''
+'''   You need four LEDs connnect to PORTD.0, PORTD.1, PORTD.2 and PORTD.3 connected via suitable resistors.
+'''  You will to connect a pot to porta.0.  The needs to be connected the supply voltage and 0v using an appropiate method.
+'''   You will also need to connect a serial Terminal to PORTD.4.  Using PUTTY.EXE for an excellent terminal program.  Also, you msy need to connect the microcontroller via a TTL converter.
+'''  ************************************************************************************************************************************************************************************
+'''
+'''
+'''@author   EvanV
+'''@licence  GPL
+'''@version  1.0
+'''@date     04.12.2016
+
+'''********************************************************************************
+
+; ----- Configuration
+  #chip     16f18877
+  #option explicit
+  #Config WRT_OFF, CPD_ON, MCLRE_ON, FEXTOSC_OFF, CLKOUTEN_OFF    'These configs = User non-votatile protection off (WRT), Data non-votatile protection off (CPD), MCLR pin function enablesd, External oscillator not enabled and clockout function is disables ( enable I/O port).
+
+
+  #include   <lcd2serialredirect.h>
+
+  ; ----- Define Hardware settings
+      'Set the PPS of the RS232 port to USB.
+    'Set the PPS for this solution.
+  #startup InitPPS, 85
+
+  Sub InitPPS
+    UNLOCKPPS
+      RXPPS  = 0x15 'Pin RC5 source is an input for RX
+      RC4PPS = 0x10 'Pin RC4 source is TX/CK
+      LOCKPPS
+  End sub
+
+  #define USART_BAUD_RATE 19200
+  #define USART_TX_BLOCKING
+
+  ; Required to LCD to Serial redirection
+   #define LCD_IO 0
+
+  Dim YPOS, XPOS as Byte
+
+   wait 500 ms
+
+; ----- Main body of program commences here.
+
+    Do Forever
+
+        PRINT chr(7)  ' Bell Character
+        CLS
+        PRINT "START TEST"
+
+        locate 1,0
+
+        PRINT "DISPLAY ON"
+        wait 3 s
+
+        locate 0,0
+
+        for ypos = 0 to 1
+            for xpos = 0 to 16
+               locate ypos, xpos
+               print "*"
+               ' flush HSerPrint buffer
+               print ""
+               wait 100 ms
+            next
+        next
+
+
+        CLS
+        Locate 0,0
+        LCDCURSOR LCDON
+        Print "END TEST"
+        wait 3 s
+
+    loop

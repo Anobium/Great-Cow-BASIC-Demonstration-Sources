@@ -1,0 +1,115 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''
+'''     Description. Interrupt driving LED using Timer1 overflow.
+''':
+'''     This calls the Timer1 overflow every 10us. You can use the #define SimulatePWM to control an LED with PWM or Toggle the LED
+'''     The SimulatePWM adjusts the power to the LED over 2.5 seconds, then to zero power again over 2.5 seconds with a hold of 1 second between each ramp up/down.
+'''     The LED is connected to port via appropiate resistors.
+''':
+''':
+'''     You can also adjust this to support a 10us square wave, see within code.
+''':
+'''   Use the Timer Calc' application that is part of Mister E PIC Mutl-calc tookset to calculate the value.
+'''   Ensure you set the Prescaler in the InitTimer0 and the Interrupt handling routine - you need to this for Overflow timers.
+
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    31.03.2017
+
+' ----- Configuration
+  #chip mega328p
+  #option explicit
+
+  'Make the line below a comment this to just toggle the LED to a square wave.
+'  #define SimulatePWM
+
+  'Hardware attached
+  #define LED PORTB.5
+  dir LED out
+
+  'Call the initialisation routine
+  InitLEDControl
+
+  ;----- Variables
+    Dim LEDSPEED, PWMCOUNTER, PWMCOUNTER as Byte
+
+
+'Main routine
+  Do
+
+      #ifdef SimulatePWM
+          ;Increase LED to full over 2.5 seconds
+          For LEDSpeed = 0 to 100
+              Wait 25 ms
+          Next
+          ;Hold LEDPower
+          Wait 1 s
+          ;Decrease LED to zero over 2.5 seconds
+          For LEDSpeed = 100 to 0 step - 1
+              Wait 25 ms
+          Next
+          ;Hold LEDPower
+          Wait 1 s
+      #endif
+
+  Loop
+  end
+
+
+
+'Setup routine
+Sub InitLEDControl
+
+    set LED off
+
+    'Clear variables
+    LEDSpeed = 0
+    PWMCounter = 0
+
+    ' Add the handler for the interrupt
+    On Interrupt Timer1Overflow Call InterruptHandler
+    ' Initialise the timer - this is required
+    ' Set prescaler and then start the timer
+    InitTimer1 Osc, PS_1_1
+    ' Start the timer - this is required
+    StartTimer 1
+  ' Use the Timer Calc' application that is part of Mister E PIC Mutl-calc tookset to calculate the value.
+  ' Ensure you set the Prescaler in the InitTimer1 shown above
+    Settimer 1, 0xFF94 '~10us
+
+
+End Sub
+
+
+'PWM sub
+'This will be called when the Timer overflows
+Sub InterruptHandler
+
+
+  ' Use Settimer to set the TIMER register to give us the timed Interrupt.
+  ' This means we need to adjust the timing parameter to allow for the internal microcontroller overhead.
+  ' An unadjused calculation would be 0xFF6F
+  ' Use the Timer Calc' application that is part of Mister E PIC Mutl-calc tookset to calculate the value.
+  ' Ensure you set the Prescaler in the InitTimer1 shown above
+  Settimer 1, 0xFF94 '~10us
+
+
+
+  #ifdef SimulatePWM
+
+    If LEDSpeed > PWMCounter Then
+        Set LED On
+    Else
+        Set LED Off
+    End If
+    PWMCounter += 1
+    If PWMCounter = 100 Then PWMCounter = 0
+  #endif
+
+  #ifndef SimulatePWM
+    LED = !LED
+  #endif
+
+End Sub

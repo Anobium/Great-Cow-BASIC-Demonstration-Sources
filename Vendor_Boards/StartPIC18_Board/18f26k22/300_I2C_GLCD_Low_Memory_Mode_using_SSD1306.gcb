@@ -1,0 +1,123 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demonstrates the basic primatives of a Graphical LCD (GLCD)
+'''
+'''
+'''This program uses the Low Memory Mode GLCD - this means the microcontroller does not require a large amount of RAM.
+'''There are two other demonstration programs that show how memory usage is is used when using GLCD.
+'''
+'''This program when compiles uses about ~246 bytes (total), including a GLCD buffer of 128 bytes,  of RAM. Compare this to the other GLCD modes of operation.
+'''
+'''To support this mode of GLCD, you need to start the GLCD page with GLCD_Open_PageTransaction and close the page with GLCD_Close_PageTransaction.
+'''See the code below for the full syntax.
+'''
+'''
+''':
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.02a includes OLED Fonts
+'''@date    13.09.2017
+'''********************************************************************************
+'''  PIC: 18f26k22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: SmartPIC 18 Board
+'''  Date: 29.8.17
+'''
+' ----- Configuration
+    'Chip Settings.
+    #chip 18f26k22, 16
+    #config mclre=on
+    #option Explicit
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | A |-------| O | I |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---| TX|---|SDA|CLK| X |---------
+    ''-----------------------------------------
+    ''
+
+
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTC.5
+    #define LDR             PORTB.4
+    #define SwitchIn        PORTB.0
+    #define LCDControl      PORTC.2
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the AN17 port
+    Dir     LDR           In   'this is the AN11 port
+    Dir     SwitchIn      In
+    Dir     LCDControl    Out
+
+    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+    LCDControl = 1
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+    ' Define I2C settings
+    #define HI2C_BAUD_RATE 400
+    #define HI2C_DATA PORTC.4
+    #define HI2C_CLOCK PORTC.3
+    'Initialise I2C Slave
+    'I2C pins need to be input for SSP module - this is not an option
+    Dir HI2C_DATA in
+    Dir HI2C_CLOCK in
+    'MASTER
+    HI2CMode Master
+
+    #include <glcd.h>
+    #define GLCD_TYPE GLCD_TYPE_SSD1306
+    #define GLCD_I2C_Address 0x78
+
+    'These constants allow you to change the GLCD memory usage.
+    #define GLCD_PROTECTOVERRUN
+'*******************************************************************************************
+    #define GLCD_OLED_FONT
+    #define GLCD_TYPE_SSD1306_CHARACTER_MODE_ONLY
+    #define GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+
+    DIM myString as string * 28
+    myString = "Great Cow BASIC 2017"
+
+
+    'Open GLCD page mode of operations. The SSD1306 has 8 pages, so, we use the pages 0 and 7
+    GLCD_Open_PageTransaction ( 0, 7 )
+
+        GLCDfntDefaultSize = 2
+        GLCDFontWidth = 5
+        GLCDPrint(24, 2,"GCBASIC")
+        GLCDDrawString(20, 15,"Extensive")
+        GLCDDrawString(20, 28,"Libraries")
+
+        FilledCircle 120, 8, 5
+        Line 10, 0, 0, 10
+
+
+        GLCDfntDefaultSize = 1
+        GLCDPrint(20, 48,"https://goo.gl/gjrxkp")
+        GLCDDrawString(20, 56,myString)
+
+
+        Box (0, 0, 127 , 63 )
+
+    'Close GLCD page mode of operations.
+    GLCD_Close_PageTransaction
+
+    Do Forever
+    Loop

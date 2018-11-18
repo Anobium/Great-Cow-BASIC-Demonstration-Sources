@@ -1,0 +1,34 @@
+'''
+'''******************************************************************
+''' Lesson 2 - "Blink"
+'''
+'''  One way to create a delay is to spend time decrementing a value. In assembly, the timing
+'''  can be accurately programmed since the user will have direct control on how the
+'''  code is executed. In 'C', the compiler takes the 'C' and compiles it into assembly before
+'''  creating the file to program to the actual PIC MCU (HEX file). Because of this, it is hard
+'''  to predict exactly how many instructions it takes for a line of 'C' to execute.
+'''
+'''  DS1 blinks at a rate of approximately 1.5 seconds.
+'''
+'''  PIC: 18F14K22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: PICkit 2 Low Pin Count Demo Board
+'''  Date: 04/05/18
+'''
+''''''******************************************************************
+''' See Low Pin Count Demo Board User's Guide for Lesson Information*
+''''''*****************************************************************
+'''
+
+    #Chip 18F14K22, 8
+
+    'Set the while port DIRection as out
+    DIR portc out
+
+    do
+        'Toggle port by using the NOT statement
+        portc.0 = NOT portc.0
+        wait 1500 ms
+    loop

@@ -1,0 +1,42 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program
+'''
+'''
+'''@author
+'''@licence	GPL
+'''@version
+'''@date   	31.01.2015
+'''********************************************************************************
+
+; ----- Configuration
+
+ #chip mega8
+' #config  :'[todo]
+
+' #include :'[todo]
+
+
+
+; ----- Constants
+  ' No Constants specified in this example.
+'  [todo]
+
+; ----- Define Hardware settings
+'  [todo]
+
+
+; ----- Variables
+  ' No Variables specified in this example. All byte variables are defined upon use.
+'  [todo]
+
+; ----- Quick Command Reference:
+'  [todo]
+
+
+
+; ----- Main body of program commences here.
+
+end
+
+; ----- Support methods.  Subroutines and Functions

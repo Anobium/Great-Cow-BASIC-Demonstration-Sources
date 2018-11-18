@@ -1,0 +1,84 @@
+'''
+''' This shows how to read the A2D converter and display the
+''' A proportioanal value on the LEDs.
+''' The pot on the board varies the voltage coming in on the microcontroller.
+'''
+''' Rotate the POT to see the LEDs change.
+'''
+''' The A2D is referenced to the same Vdd as the device, which
+''' is nominally is 5V.  The A2D returns the ratio of the voltage
+''' on Pin RA0 to 5V.  The A2D has a resolution of 8 bits, with 255
+''' representing 5V and 0 representing 0V.
+'''
+'''
+''' The four LSbs of the ADC are mirrored onto the LEDs.
+''' Rotate the potentiometer to change the LEDs displayed.
+'''
+'''************************************************************************
+'''
+'''  PIC: 18f26k22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: SmartPIC 18 Board
+'''  Date: 29.8.17
+'''
+' ----- Configuration
+    'Chip Settings.
+    #chip 18f26k22, 16
+    #option Explicit
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -----------| A |-----------------
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | ----------| O | I |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------------------| X |---------
+    ''-----------------------------------------
+    ''
+
+    'Define constants to make things easier. We can reuse these at any time.
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTC.5
+    #define LDR             PORTA.4
+    #define SwitchIn        PORTB.1
+    #define LCDControl      PORTC.2
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the AN17 port
+    Dir     LDR           In   'this is the AN11 port
+    Dir     SwitchIn      In
+    Dir     LCDControl    Out
+
+    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+    LCDControl = 1
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+    dim ADCVal as byte
+
+    do
+
+        ADCVal =  ReadAD ( AN17 )
+
+        if ADCVal > 127 then
+            LEDD1 = 1
+            LEDD2 = 0
+        else
+            LEDD1 = 0
+            LEDD2 = 1
+        end if
+
+    loop

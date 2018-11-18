@@ -1,0 +1,78 @@
+'''
+'''******************************************************************
+''' Lesson 13 - "EEPROM"
+'''
+''' This lesson will provide code for writing and reading a single byte onto
+''' the on-board EEPROM. EEPROM is non-volatile memory, meaning that it does
+''' not lose its value when power is shut off. This is unlike RAM, which will
+''' lose its value when no power is applied. The EEPROM is useful for storing
+''' variables that must still be present during no power.
+''' It is also convenient to use if the entire RAM space is used up.
+''' Writes and reads to the EEPROM are practically instant and are much faster
+''' than program memory operations.
+
+''' Press the switch to save the LED state and then disconnect the power. When
+''' power is then applied again, the program will start with that same LED lit.
+
+''' When the lesson is first programmed, no LEDs will light up even with movement
+''' of the POT. When the switch is pressed, the corresponding LED will be lit and
+''' then the PIC will go to sleep until the switch is pressed again. Each press of
+''' the switch saves the ADC value into EEPROM. The PIC uses interrupts to wake up
+''' from sleep, take an ADC reading, save to EEPROM, and then goes back to sleep.
+'''
+'''
+'''  PIC: 18F14K22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: PICkit 2 Low Pin Count Demo Board
+'''  Date: 04/05/18
+'''
+''''''******************************************************************
+''' See Low Pin Count Demo Board User's Guide for Lesson Information*
+''''''*****************************************************************
+'''
+
+
+ #chip 18F14K22,8
+ #option explicit
+ #config MCLRE_OFF
+
+ #define DOWN                0
+ #define UP                  1
+
+ #define SWITCH              PORTA.3
+
+
+    Dim RESTORED_VALUE, ADC_VALUE as Byte
+
+    dir portc out
+    portc = 0
+    dir porta.3 in
+
+
+    IOCA3 = 1
+    On Interrupt PORTChange  Call InterruptHandler
+
+    do
+         EPRead ( 0, restored_value)
+         portc = restored_value
+         Sleep
+
+    loop
+
+
+sub InterruptHandler
+
+    if  RABIF = 1 then                         ' SW1 was just pressed
+        RABIF = 0                              ' must clear the flag in software
+        wait 5 ms                              'debounce by waiting and seeing if still held down
+        if ( SWITCH = DOWN ) then
+            adc_value = readad ( AN0 )
+            PORTC = adc_value
+            EPWrite ( 0, adc_value )
+
+        end if
+    end if
+
+end sub

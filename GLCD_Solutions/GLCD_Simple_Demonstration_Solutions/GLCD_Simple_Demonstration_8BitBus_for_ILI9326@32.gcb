@@ -1,0 +1,257 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a simple GLCD demonstration of the ILI9326 GLCD capabilities.  It is a nice graphical LCD, suitable for a lot of various projects.
+'''This program draws lines, boxes, circles and prints strings and numbers.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.   This use an 8-bit bus.  All the dataport connection must be on one port.
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date    27.09.2018
+'''********************************************************************************
+
+  'Chip Settings
+    #chip 16F1789,32
+
+    #config MCLRE=on
+    #option explicit
+    #include <glcd.h>
+    #define GLCD_TYPE GLCD_TYPE_ILI9326
+
+    #define GLCD_RD       porta.3        ' read command line
+    #define GLCD_WR       porta.2         ' write command line
+    #define GLCD_RS       porta.1         ' Command/Data line
+    #define GLCD_CS       porta.0         ' Chip select line
+    #define GLCD_RST      porta.5         ' Reset line
+    #define GLCD_DataPort portD
+
+'   You can try BigPrint_ILI9326 - this is an alternative font set.  See the library for lots details.
+'    BigPrint_ILI9326 ( 10, ILI9326_GLCD_HEIGHT - 20 , "BigPrint ILI9326" )
+'    wait 4 s
+
+    'GLCD selected extension font set. ASCII characters 31-254, the extended font uses 1358 bytes of program memory
+'    #define GLCD_EXTENDEDFONTSET1
+    GLCDfntDefaultsize = 1
+
+    'GLCDCLS  supports GLCDBackground as default
+    'GLCDCLS  also support passing color parameter.
+    'GLCDCLS [color]
+
+    'Available colors
+    '      TFT_WHITE
+    '      TFT_BLACK
+    '      TFT_RED
+    '      ILI9326_GREEN
+    '      TFT_BLUE
+    '      TFT_YELLOW
+    '      TFT_CYAN
+    '      TFT_MAGENTA
+    '      ILI9326_NAVY
+    '      ILI9326_DARKGREEN
+    '      ILI9326_DARKCYAN
+    '      ILI9326_MAROON
+    '      ILI9326_PURPLE
+    '      ILI9326_OLIVE
+    '      TFT_LIGHTGREY
+    '      TFT_DARKGREY
+    '      ILI9326_ORANGE
+    '      ILI9326_GREENYELLOW
+    '      ILI9326_PINK
+
+    Dim CCOUNT, BYTENUMBER, OLDFONT, OLDFONT as Byte
+
+    CCount = 31
+    dim longNumber as long
+    longNumber = 0 ' max value = 4294967290
+    dim wordNumber as Word
+    wordNumber = 0
+    byteNumber = 0
+
+    repeat 2
+
+            GLCDCLS TFT_BLUE
+
+            GLCDForeground = TFT_MAGENTA
+            GLCDfntDefaultsize = 1
+            GLCDPrint ( 2, 2, "GLCDPrint String" )
+
+
+            GLCDForeground = TFT_WHITE
+            GLCDfntDefaultsize = 2
+            GLCDPrint ( 2, 12, "GLCDPrint String" )
+
+
+            GLCDForeground = TFT_YELLOW
+            GLCDfntDefaultsize = 3
+            GLCDPrint ( 2,30, "GLCDPrint String" )
+
+            longNumber = 0xFFFFFFFF
+            wordNumber = 0xFFFF
+            byteNumber = 0xFF
+
+            GLCDCLS TFT_WHITE
+
+            GLCDForeground = TFT_MAGENTA
+            GLCDfntDefaultsize = 1
+            GLCDPrint ( 2, 2, bytenumber )
+
+
+            GLCDForeground = TFT_BLACK
+            GLCDfntDefaultsize = 2
+            GLCDPrint ( 2, 12, wordNumber )
+
+
+            GLCDForeground = TFT_CYAN
+            GLCDfntDefaultsize = 3
+            GLCDPrint ( 2,30, longnumber )
+
+            GLCDRotate ( Portrait_Rev )
+
+    end Repeat
+
+  GLCDRotate ( Portrait )
+  GLCDCLS TFT_BLUE
+  'Set font size.
+  GLCDfntDefaultsize = 2
+  longNumber = 0 ' max value = 4294967290
+  wordNumber = 0
+  byteNumber = 0
+
+    'Using the global variable GLCDfntDefaultsize to show the different capabilities
+    Select Case GLCDfntDefaultsize
+
+    Case 1
+
+      ShowCase1
+
+    Case 2
+
+      ShowCase2
+
+    Case 3
+
+      GLCDDrawString (2, 1, "GLCD font")
+      GLCDDrawString (2, 25, "size = 3")
+      box 0,0,ILI9326_GLCD_WIDTH-1, ILI9326_GLCD_HEIGHT-1, TFT_BLUE
+      box ILI9326_GLCD_WIDTH-5, ILI9326_GLCD_HEIGHT-5,ILI9326_GLCD_WIDTH-1, ILI9326_GLCD_HEIGHT-1, TFT_WHITE
+
+  End Select
+
+end
+
+
+sub ShowCase1
+
+        GLCDDrawString (2, 1, "GCB", TFT_WHITE )
+        GLCDDrawString (56,1,"v.98", TFT_YELLOW )
+        GLCDDrawString (2, 16, "DrawStr", TFT_WHITE )
+
+        GLCDDrawString ( 60, 31, "Long Number" )
+        GLCDDrawString ( 60, 39, "Word Number" )
+        GLCDDrawString ( 60, 47, "Byte Number" )
+
+        GLCDDrawString ( 74, 16, "Asc:" )
+
+        box 0,0,ILI9326_GLCD_WIDTH-1, ILI9326_GLCD_HEIGHT-1, TFT_YELLOW
+        box ILI9326_GLCD_WIDTH-5, ILI9326_GLCD_HEIGHT-5,ILI9326_GLCD_WIDTH-1, ILI9326_GLCD_HEIGHT-1, TFT_WHITE
+
+        Circle( ILI9326_GLCD_WIDTH/2, ILI9326_GLCD_HEIGHT/2, 50, TFT_LIGHTGREY )            ;center
+        FilledCircle( ILI9326_GLCD_WIDTH/2, ILI9326_GLCD_HEIGHT/2, 25, TFT_DARKGREY  )
+
+        line 0,  ILI9326_GLCD_HEIGHT-1 , ILI9326_GLCD_WIDTH/2 +100,  (ILI9326_GLCD_HEIGHT /2) - 50, TFT_CYAN
+        line  0, (ILI9326_GLCD_HEIGHT /2) - 50, ILI9326_GLCD_WIDTH/2 +100, (ILI9326_GLCD_HEIGHT /2) - 50, TFT_CYAN
+
+        filledbox 2,ILI9326_GLCD_HEIGHT/2+10,42,ILI9326_GLCD_HEIGHT/2+50, TFT_RED
+
+        oldfont = GLCDfntDefaultsize
+        GLCDfntDefaultsize = 3
+        GLCDDrawString ( 42, ILI9326_GLCD_HEIGHT - 30 , "ILI9326" , TFT_WHITE )
+
+        GLCDfntDefaultsize = 1
+        GLCDDrawString ( ILI9326_GLCD_WIDTH - 32, 2 , "2018" , TFT_WHITE )
+
+        GLCDDrawString ( ILI9326_GLCD_WIDTH - 66, 10 , "8 bit bus" , TFT_WHITE )
+
+        'Revert the font size
+        GLCDfntDefaultsize = oldfont
+        GLCDForeground = TFT_WHITE
+
+        DO forever
+
+            GLCDPrint ( 144 , 31, longNumber)
+            GLCDPrint ( 144 , 39, pad( str(wordnumber),5))
+            GLCDPrint ( 144 , 47, pad( str(bytenumber),3))
+
+            GLCDDrawChar(54, 16, CCount )
+            Box 52,15,62,26, TFT_WHITE                'Draw a box around the Char below
+
+            GLCDDrawString ( 100, 16 , pad( str(CCount),3) )
+
+            CCount++
+            if CCount = 0 then CCount = 31
+            if CCount = 128 then CCount = 192
+            longNumber = longNumber + 7
+
+            wordNumber = wordNumber + 3
+            byteNumber++
+
+        LOOP
+
+end sub
+
+sub ShowCase2
+
+        GLCDDrawString (2, 1,  "GCB",TFT_WHITE)
+        GLCDDrawString (56,1,  "v.98",TFT_YELLOW)
+        GLCDDrawString (2, 20, "DrawStr",TFT_WHITE)
+
+        GLCDDrawString ( 2, 52, "Long:" )
+        GLCDDrawString ( 2, 70, "Word:" )
+        GLCDDrawString ( 2, 88, "Byte:" )
+
+        GLCDDrawString ( 128, 20, "Asc:"+"  " )
+
+        box 0,0,ILI9326_GLCD_WIDTH-1, ILI9326_GLCD_HEIGHT-1, TFT_RED
+        box ILI9326_GLCD_WIDTH-5, ILI9326_GLCD_HEIGHT-5,ILI9326_GLCD_WIDTH-1, ILI9326_GLCD_HEIGHT-1, TFT_WHITE
+
+        Circle( ILI9326_GLCD_WIDTH/2, ILI9326_GLCD_HEIGHT/2, 50, TFT_LIGHTGREY )            ;center
+        FilledCircle( ILI9326_GLCD_WIDTH/2, ILI9326_GLCD_HEIGHT/2, 25, TFT_DARKGREY  )
+
+        line 0,  ILI9326_GLCD_HEIGHT-1 , ILI9326_GLCD_WIDTH/2 +100,  (ILI9326_GLCD_HEIGHT /2) - 50, TFT_CYAN
+        line  0, (ILI9326_GLCD_HEIGHT /2) - 50, ILI9326_GLCD_WIDTH/2 +100, (ILI9326_GLCD_HEIGHT /2) - 50, TFT_CYAN
+
+        filledbox 2,ILI9326_GLCD_HEIGHT/2+10,42,ILI9326_GLCD_HEIGHT/2+50, TFT_RED
+
+        oldfont = GLCDfntDefaultsize
+        GLCDfntDefaultsize = 3
+        GLCDDrawString ( 42, ILI9326_GLCD_HEIGHT - 30 , "ILI9326" , TFT_WHITE )
+
+        GLCDfntDefaultsize = 1
+        GLCDDrawString ( ILI9326_GLCD_WIDTH - 32, 2 , "2018" , TFT_WHITE )
+
+        GLCDDrawString ( ILI9326_GLCD_WIDTH - 66, 10 , "8 bit bus" , TFT_WHITE )
+
+        'Revert the font size
+        GLCDfntDefaultsize = oldfont
+        GLCDForeground = TFT_RED
+        GLCDPrint ( 25, ILI9326_GLCD_HEIGHT - 60 , "Great Cow BASIC" )
+        GLCDForeground = TFT_WHITE
+        DO forever
+
+          GLCDPrint ( 64 , 52, longNumber)
+          GLCDPrint ( 64 , 70, pad( str(wordnumber),5))
+          GLCDPrint ( 64 , 88, pad( str(bytenumber),3))
+
+          GLCDDrawChar(99, 20, CCount )
+          Box 98,20,117,44, TFT_WHITE               'Draw a box around the Char below
+
+          GLCDDrawString ( 180, 20 , pad( str(CCount),3) )
+
+          CCount++
+          if CCount = 0 then CCount = 31
+          if CCount = 128 then CCount = 192
+          longNumber = longNumber + 7
+          wordNumber = wordNumber + 3
+          byteNumber++
+
+        LOOP
+end sub

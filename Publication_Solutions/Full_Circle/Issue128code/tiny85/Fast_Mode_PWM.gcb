@@ -1,0 +1,21 @@
+
+; ----- Configuration
+  #chip tiny85, 8
+
+  #OPTION EXPLICIT
+  #RANDOMIZE_SEED Timer0
+  #DEFINE AVRTC0 'Timer0 Compare Match B Output is used
+  #DEFINE AVRCHAN2 'declare Timer0 chan. 2 to be used
+  #DEFINE LED1 PortB.1 'the hardware pin used
+  #OPTION VOLATILE LED1 'avoid glitches
+  DIM FREQ AS BYTE
+  'Set initial PIN direction and state:
+  DIR LED1 OUT
+  FREQ = 1 '1 KHZ looks good, maybe try 4 (kHz)
+
+  'The main program:
+  DO
+      RANDOMIZE
+      HPWM 2, FREQ, RANDOM
+      WAIT RANDOM MS
+  LOOP

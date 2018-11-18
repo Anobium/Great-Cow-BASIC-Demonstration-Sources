@@ -1,0 +1,117 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program reads the value of a DS18B20 connected to Portc.3.  The DS18B20 must be setup to correctly.
+'''The LCD display connection must be to the correct ports as shown in the hardware section.
+'''The LCD shows the integer value and the decimal value of the temperature
+'''@author 	EvanV plus works of others
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	14.02.2015
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 16f1938, 16
+  #option explicit
+  #config Osc = intOSC, MCLRE_ON, PLLEN_OFF, VCAPEN_OFF
+  #include <ds18b20.h>
+
+  ; ----- Define Hardware settings
+  ' Define I2C settings - CHANGE PORTS
+       #define I2C_MODE Master
+       #define I2C_DATA PORTC.4
+       #define I2C_CLOCK PORTC.3
+       #define I2C_DISABLE_INTERRUPTS ON
+       'Optionally, you can reduce the I2C timings.
+    '   #define I2C_BIT_DELAY 0 us
+    '   #define I2C_CLOCK_DELAY 1 us
+    '   #define I2C_END_DELAY 0 us
+
+
+  '''Set up LCD
+   #define LCD_IO 10
+   #define LCD_I2C_Address_1 0x4C ; default to 0x4E
+
+   'You may need to use SLOW or MEDIUM if your LCD is a slower device.
+   #define LCD_SPEED FAST
+   'You may need to invert these states. Dependent of LCD I2C adapter.
+   #define LCD_Backlight_On_State  1
+   #define LCD_Backlight_Off_State 0
+
+; ----- Constants
+  ' DS18B20 port settings - this is required
+     #define DQ PortC.0
+
+; ----- Quick Command Reference:
+
+ '''Set LCD_10 to 10 for the YwRobot LCD1602 IIC V1 or the Sainsmart LCD_PIC I2C adapter
+ '''Set LCD_10 to 12 for the Ywmjkdz I2C adapter with pot bent over top of chip
+
+; ----- Variables
+  dim TempC_100 as word   ' a variabler to handle the temperature calculations
+  Dim CCOUNT, SIGNBIT, WHOLE, FRACT, DIG as Byte
+
+
+; ----- Main body of program commences here.
+
+    ccount = 0
+    CLS
+    print "GCBasic 2015"
+    locate 1,0
+    print "DS18B20 Demo"
+    wait 2 s
+    CLS
+
+    do forever
+       ' The function readtemp returns the integer value of the sensor
+       DSdata = readtemp
+
+       ' Display the integer value of the sensor on the LCD
+       locate 0,0
+       print hex(ccount)
+       print " Ceil"
+       locate 0,8
+       print DSdata
+       print chr(223)+"C"
+
+
+
+       ' Display the integer and decimal value of the sensor on the LCD
+
+       ' The function readtemp12 returns the raw value of the sensor.
+       ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
+       DSdata = readtemp12
+       SignBit = DSdata / 256 / 128
+       If SignBit = 0 Then goto Positive
+       ' its negative!
+       DSdata = ( DSdata # 0xffff ) + 1 ' take twos comp
+
+    Positive:
+
+       ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
+       TempC_100 =  DSdata * 6		
+       DSdata = ( DSdata * 25 ) / 100
+       TempC_100 = TempC_100 + DSdata
+
+       Whole = TempC_100 / 100
+       Fract = TempC_100 % 100
+       If SignBit = 0 Then goto DisplayTemp
+       Print "-"
+
+    DisplayTemp:
+       locate 1,0
+       print hex(ccount)
+       print " Real"
+       locate 1,8
+       print str(Whole)
+       print "."
+      ' To ensure the decimal part is two digits
+       Dig = Fract / 10
+       print Dig
+       Dig = Fract % 10
+       print Dig
+       print chr(223)
+       print "C"
+       wait 2 s
+       ccount++
+
+    loop

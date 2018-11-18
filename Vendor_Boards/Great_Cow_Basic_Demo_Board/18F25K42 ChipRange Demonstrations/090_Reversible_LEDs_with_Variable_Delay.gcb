@@ -1,0 +1,144 @@
+'''
+'''  This demonstration shows the impact of the time delay to manage the debouncing of a switch.
+'''  The ADC value creates a delay and LEDs switch between each other when the switch is depressed.
+'''
+'''
+'''  Press the switch to reverse the direction of the LEDs, increase the ADC value to increase the debounce check.
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    22.10.2017
+' ----- Configuration
+
+    'Chip Settings.
+    #chip 18f25k42, 16
+    #option Explicit
+    'This Configuration change is needed to enable programming in Low Voltage Programming Mode
+    #config LVP=on
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | ----------| O | I |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------------------| X |---------
+    ''-----------------------------------------
+    ''
+
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTC.5
+    #define SwitchIn        PORTB.0
+    #define LCDControl      PORTC.2
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the ANC5 port
+    Dir     SwitchIn      In
+
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+    #define DOWN        0
+    #define UP          1
+
+
+    Dim DIRECTION as Byte
+    Dim mydelay, leds  as byte
+    #define LED_RIGHT 0
+    #define LED_LEFT  1
+
+    'start from the right to left
+    direction = LED_RIGHT
+
+    'Initialise the value
+    leds = 8
+
+    do
+
+        'Turn the LEDS off so we can see them Flash
+        LEDD1 = 0
+        LEDD2 = 0
+
+        'Get a value for the debounce period (the time)
+        mydelay = ReadAD( ANC5 )
+
+        'Set the LEDs
+        if  direction = LED_RIGHT  then
+
+            LEDD1 = 1
+            LEDD2 = 0
+
+        else
+
+            LEDD1 = 0
+            LEDD2 = 1
+
+        end if
+
+        'wait for our debounce time, and then check the switch is DOWN
+        if mydelay > 0 then
+              wait mydelay ms
+              if check_switch = true then
+                  ' toggle the direction
+                  direction = !direction
+              end if
+        end if
+
+
+    loop
+
+
+
+  'global variable - if button is held down, we don't want to keep on switching directions
+  #define SWITCH_UP   1
+  #define SWITCH_DOWN 0
+
+  dim previous_state as bit
+  previous_state = SWITCH_UP
+
+  function  check_switch
+      'switch is normally open to 5V ...when pressed, RA3 is connected to GND
+      if (SwitchIn = SWITCH_DOWN) then
+          'debounce by delaying and checking if switch is still pressed
+          wait 1 ms
+          if ( (previous_state =  SWITCH_DOWN) & (SwitchIn = SWITCH_DOWN) ) then
+              ' don't toggle
+              check_switch = false
+              exit function
+          else
+              ' check if still down
+              if (SwitchIn = SWITCH_DOWN) then
+                 previous_state = SWITCH_DOWN
+                 ' reverse the LEDs
+                 check_switch = true
+                 exit function
+             else
+              'switch not properly held down
+              previous_state = SWITCH_UP
+              ' don't reverse
+              check_switch = false
+              exit function
+             end if
+          end if
+      else
+         'switch not pressed
+          previous_state = SWITCH_UP
+          'don't reverse
+          check_switch = false
+          exit function
+      end if
+
+  end Function

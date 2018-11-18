@@ -1,0 +1,43 @@
+' Use program uses the Great Cow BASIC CCP/PWM.
+' This enables you to change the frequency and duty dynanically.
+' This example uses  CCP2/PWM set the PWM parameters and optimises subsequent PWM calls to use the fast method.
+' Use HPWM_FAST to enable optimisation.
+' You must only change the Duty to enable the optimisation.
+'
+' The first call to setup the PWM module is much slower then the second and subsequent calls.
+'
+#chip 16f886,8
+#Config WRT_OFF, MCLRE_ON
+
+
+    'Set the CCP2 pin to output mode
+    DIR PORTC.1 out
+
+    Dim Bright as word
+
+    'Main code
+    'freq 40khz
+    'variable duty from 0% to 100%
+    'hpwm3 using timer 2 with optimisation
+
+    #define HPWM_FAST
+    'First call is slower as all subsequent - try timing it
+
+
+    'Main code
+    'freq 40khz
+    'variable duty from 0% to 100%
+    do
+        'Turn up brightness over 2.5 seconds
+        For Bright = 1 to 255
+            HPWM 2, 40, Bright
+            wait 10 ms
+        next
+        'Turn down brightness over 2.5 seconds
+        For Bright = 255 to 1
+            HPWM 2, 40, Bright
+            wait 10 ms
+        next
+    loop
+
+end

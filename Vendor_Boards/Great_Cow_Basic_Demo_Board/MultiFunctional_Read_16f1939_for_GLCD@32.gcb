@@ -1,0 +1,351 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a GLCD demonstration multifunctional capabilities.
+'''This program reads the Sony Remote, reads DS18B20 and reads the DHT22 device.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.2c
+'''@date    31.1.16
+'''********************************************************************************
+
+  #chip 16f1939,32
+  #option explicit
+  #config Osc = INT, VCAPEN_OFF, MCLRE_On, PLLEN_ON, CLKOUTEN_OFF, WDTE_SWDTEN
+
+  #include <glcd.h>
+  #include <ds18b20.h>
+  #include <sonyremote.h>                          ' include the header file
+  #include <dht.h>
+  #define GLCD_TYPE GLCD_TYPE_KS0108               ' This is the Default value, not required.
+
+  #DEFINE DHT22                                    'Comment out if you do not have DHT22 attached
+  #define DHT_type    22
+
+  #define GLCDDirection 1
+
+   #define GLCD_CS1 PORTC.1    'D12 to actually since CS1, CS2 can be reversed on some devices
+   #define GLCD_CS2 PORTC.0
+   #define GLCD_DB0 PORTD.0 'D0 to pin 7 on LCD
+   #define GLCD_DB1 PORTD.1 'D1 to pin 8 on LCD
+   #define GLCD_DB2 PORTD.2 'D2 to pin 9 on LCD
+   #define GLCD_DB3 PORTD.3 'D3 to pin 10 on LCD
+   #define GLCD_DB4 PORTD.4 'D4 to pin 11 on LCD
+   #define GLCD_DB5 PORTD.5 'D5 to pin 12 on LCD
+   #define GLCD_DB6 PORTD.6 'D6 to pin 13 on LCD
+   #define GLCD_DB7 PORTD.7 'D7 to pin 14 on LCD
+
+   #define GLCD_RS PORTe.0
+   #define GLCD_Enable PORTe.2
+   #define GLCD_RW PORTe.1
+   #define GLCD_RESET PORTC.2
+
+   ' Timing for 32 mhz
+   #define KS0108ReadDelay    3
+   #define KS0108WriteDelay   0
+   #define KS0108ClockDelay   0
+
+
+
+; ----- Constants
+  ' DS18B20 port settings
+  #define DQ Portc.7
+  #define LED1 portb.3
+  dir LED1 Out
+
+  ' IRR specific configuration
+  #define IR_DATA_PIN PortB.0       ;sensor on pin 17
+  dir IR_DATA_PIN in                      ; IR input
+
+  'DHT22 specific configuration
+  #define DHT_PIN PORTC.6
+
+; ----- Variables
+  dim TempC_100 as word   ' a variabler to handle the temperature calculations
+  Dim CCOUNT, OLDINTVALUE, SIGNBIT, FRACT, DIG, R8, R13, CLEARIRR, TEMPWD as Byte
+
+
+  ' IRR specific variables
+  dim device, button as byte
+  device = 255
+
+  'DHT22 specific variables
+  dim msg, whole, tenths as byte
+  dim rh, cels, fahr as integer
+
+; ----- Main body of program commences here.
+
+    ccount = 0
+    GLCDCLS
+    glcdprint 0,   0, "GCBasic 2016"
+    glcdprint 0,   8, "Multifunctional Demo"
+    glcdprint 0,   24,"DS18B20, Sony Remote,"
+    glcdprint 0,   32,"DHT22, Pots and GLCD "
+    wait 2 s
+
+
+
+    IF NOT_TO = 0 THEN
+        pset 1, 0, 1
+        glcdprint 0,24, "Check the DS18B20"
+        glcdprint 0,32, "connectivity!!"
+        Wait 2 s
+        pset 1, 0, 1
+    ELSE
+      wait 2 s
+    END IF
+
+
+
+
+    GLCDCLS
+
+    glcdprint 0,  44,"Device "
+    glcdprint 52, 44,"*"
+    glcdprint 0,  52, "Button "
+    glcdprint 52, 52, "*"
+
+    oldIntValue = 0xff
+    dim oldRealValue as word: oldRealValue = 0xfff
+    #IFDEF DHT22
+      dim OldCels, OldRh as Integer
+        OldCels = 0xfff
+        OldRh = 0xfff
+    #ENDIF
+
+    IOCBN0 = 1
+    On Interrupt PortBChange call readIRR
+    On Interrupt Timer1Overflow call ReadthePots
+    StartTimer 1
+
+    InitTimer2 PS2_1/64 , PS2_1/1
+    On Interrupt Timer2Match call IRRTimerOut
+    SetTimer 2, 1
+    StopTimer 2
+    ClearIRR = 0
+
+
+    do forever
+
+       ' The function readtemp returns the integer value of the sensor
+        pset 0, 0, 1
+        DSdata = readtemp
+
+        pset 0, 0, 0
+        if DSdata <> oldIntValue then
+           ' Display the integer value of the sensor on the LCD
+
+           glcdprint 0,0,hex(ccount)
+           glcdprint 20,0,"Ceil"
+           dim outstring as String
+
+           outstring = str(DSdata)+"C "
+           glcdprint 52,0, outString
+           oldIntValue = DSdata
+
+           #IFDEF DHT22
+             'get DHT22 current values
+             Intoff
+             readDHT(rh, cels, fahr, msg)
+             IntOn
+           #ENDIF
+
+
+        end if
+
+        #IFDEF DHT22
+
+          'Check for error state of DHT22
+          ;0 = no error
+          ;1 = no response from the sensor
+          ;2 = bad checksum from the sensor
+          if msg = 0 then
+
+            if Cels <> OldCels then
+
+              'print temperature in Celsius
+              outstring = str(cels / 10)+"C  "
+              glcdprint 80, 0, outstring
+
+              'print temperature in Fahrenheit
+              outstring = trim(str(fahr / 10),2)+"F"
+              glcdprint 104, 0, outstring
+
+              OldCels = cels
+            end if
+
+            if rh <> OldRh then
+              'print relative humidity
+              outstring = trim(str(rh / 10,3))+"%Rh"
+              glcdprint 96, 30, outstring
+
+              OldRh = Rh
+            end if
+
+          Else
+
+              glcdprint 80, 0, fill(3)
+              glcdprint 104, 0, fill(3)
+              glcdprint 96, 30, fill(5)
+
+          end if
+
+        #ENDIF
+
+       ' Display the integer and decimal value of the sensor on the LCD
+
+       ' The function readtemp12 returns the raw value of the sensor.
+       ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
+       pset 0, 0, 1
+       DSdata = readtemp12
+       pset 0, 0, 0
+
+        if DSdata <> oldRealValue then
+           oldRealValue = DSdata
+           SignBit = DSdata / 256 / 128
+           If SignBit = 0 Then goto Positive
+           ' its negative!
+           DSdata = ( DSdata # 0xffff ) + 1 ' take twos comp
+
+        Positive:
+
+           ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
+           TempC_100 =  DSdata * 6
+           DSdata = ( DSdata * 25 ) / 100
+           TempC_100 = TempC_100 + DSdata
+
+           Whole = TempC_100 / 100
+           Fract = TempC_100 % 100
+           outstring = ""
+           If SignBit = 0 Then goto DisplayTemp
+           outstring = "-"
+
+        DisplayTemp:
+
+           glcdprint 0,  8, hex(ccount)
+           glcdprint 20, 8, "Real"
+           outstring = outstring + str(whole)
+           outstring = outstring + "."
+
+          ' To ensure the decimal part is two digits
+           Dig = Fract / 10
+           outstring = outstring +str(Dig)
+           Dig = Fract % 10
+           outstring = outstring +str(Dig)
+           outstring = outstring+"C  "
+           GLCDPrint 52, 8,outstring
+       end if
+
+
+      outString = pad( str( R8 ),3)
+      GLCDPrint 0, 22, "An8"
+      GLCDPrint 52, 22, outstring
+
+      outString = pad( str( R13 ),3)
+      GLCDPrint 0, 30, "An13"
+      GLCDPrint 52, 30, outString
+
+      'Handle IRR
+      if  device <> 255 then
+
+            'show device code on glcd
+            glcdprint 0, 44, "Device "
+            glcdprint 52, 44, pad( str(device), 3 )
+
+            'show button code on glcd
+            glcdprint 0, 52, "Button "
+            glcdprint 52, 52, pad( str(button), 3 )
+
+            'Set these variables to ensure GLCD is only updated on change
+            device = 255
+
+            SetTimer 2, 1
+            StartTimer 2
+
+            'Restore our Interrupt
+            IOCBN0 = 1
+
+        end if
+
+        if  ClearIRR = 1 then
+
+          glcdprint 52, 44, "* "
+          glcdprint 52, 52, "* "
+          ClearIRR =  0
+
+        end if
+
+'      if IR_DATA_PIN = 0 then
+'
+'      readIR_Remote(device, button)   ;wait for button press
+'      wait 10 mS                      ;ignore any repeats
+'
+'      end if
+
+      ccount++
+
+    loop
+
+
+  end
+
+
+sub ReadthePots
+
+  intoff
+        TMR1IF = 0
+        R8 = ReadAD( AN8 )
+        R13 = ReadAD( AN13 )
+        SetWith ( LED1, FnNotBit ( LED1 ) )
+  inton
+
+
+end sub
+
+
+sub readIRR
+  'Handle Interrupt
+
+  'Clear the Interrupt On Change Event
+  IOCIF = 0
+
+  'Is this event the one we are lookinf for?
+  if IOCBF0 = 1 then
+
+    'Stop recursion by ceasing Interrupt
+    IOCBN0 = 0
+
+    'Save the current state of the WDT
+    tempWD  = SWDTEN
+    if SWDTEN = 1 then
+        SWDTEN = 0
+    end if
+
+    'Read the IRR
+    readIR_Remote(device, button)   ;wait for button press
+
+    'Restore WDT
+    if tempWD = 1 then
+      Set SWDTEN on
+    Else
+      Set SWDTEN off
+    end if
+
+    'Clear flag
+    IOCBF0 = 0
+
+    'We restore the Interrupt after the value has been dislayed
+
+  end if
+
+end sub
+
+sub IRRTimerOut
+
+  StopTimer 2
+  TMR2IF = 0
+  ClearIRR = 1
+
+
+
+end sub

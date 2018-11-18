@@ -1,0 +1,102 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program reads the value of a DS18B20 connected to Portc.3.  The DS18B20 must be setup to correctly.
+'''The LCD display connection must be to the correct ports as shown in the hardware section.
+'''The LCD shows the integer value and the decimal value of the temperature
+'''@author 	EvanV plus works of others
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	14.02.2015
+'''********************************************************************************
+
+; ----- Configuration
+ #chip mega168, 16
+ #option explicit
+ #include <ds18b20.h>
+
+  ;Setup LCD Parameters
+  #define LCD_IO 4
+  #define LCD_NO_RW
+  #define LCD_Speed MEDIUM
+
+  'Change as necessary
+  #define LCD_RS PortC.0
+  #define LCD_Enable PortC.1
+  #define LCD_DB4 Portd.4
+  #define LCD_DB5 Portd.5
+  #define LCD_DB6 Portd.6
+  #define LCD_DB7 Portd.7
+
+; ----- Constants
+  ' DS18B20 port settings
+  #define DQ PortC.3
+
+; ----- Variables
+  ' a variable to handle the temperature calculations
+  dim TempC_100 as word
+  Dim CCOUNT, SIGNBIT, WHOLE, FRACT, DIG as Byte
+
+
+; ----- Main body of program commences here.
+
+    ccount = 0
+    CLS
+    print "GCBasic 2015"
+    locate 1,0
+    print "DS18B20 Demo"
+  '  wait 2 s
+    CLS
+
+    do forever
+       ' The function readtemp returns the integer value of the sensor
+       DSdata = readtemp
+       ' Display the integer value of the sensor on the LCD
+       locate 0,0
+       print hex(ccount)
+       print " Ceil"
+       locate 0,8
+       print DSdata
+       print chr(223)+"C"
+
+
+
+       ' Display the integer and decimal value of the sensor on the LCD
+
+       ' The function readtemp12 returns the raw value of the sensor.
+       ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
+       DSdata = readtemp12
+       SignBit = DSdata / 256 / 128
+       If SignBit = 0 Then goto Positive
+       ' its negative!
+       DSdata = ( DSdata # 0xffff ) + 1 ' take twos comp
+
+    Positive:
+
+       ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
+       TempC_100 =  DSdata * 6		
+       DSdata = ( DSdata * 25 ) / 100
+       TempC_100 = TempC_100 + DSdata
+
+       Whole = TempC_100 / 100
+       Fract = TempC_100 % 100
+       If SignBit = 0 Then goto DisplayTemp
+       Print "-"
+
+    DisplayTemp:
+       locate 1,0
+       print hex(ccount)
+       print " Real"
+       locate 1,8
+       print str(Whole)
+       print "."
+      ' To ensure the decimal part is two digits
+       Dig = Fract / 10
+       print Dig
+       Dig = Fract % 10
+       print Dig
+       print chr(223)
+       print "C"
+       wait 2 s
+       ccount++
+
+    loop

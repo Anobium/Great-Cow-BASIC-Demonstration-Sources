@@ -1,0 +1,30 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a demonstration of a Flashing LED.
+'''The LED array must be attached via appropiate resistors.
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 16f1459, 48
+  #option bootloader 0x200   'must for usb Bootloader
+  #option NoConfig           'Tells compiler not to set config bits
+  #option explicit           'All variables must be declared!
+
+  #define timerWait 500
+
+; ----- Define Hardware settings
+  dir PORTa out
+
+
+;----- Variables
+'  Dim PWMCOUNT, PWMLEVEL as Byte   ' to do
+
+; ----- Main body of program commences here.
+ Main:
+
+
+  PulseOut PORTa.5, timerWait ms
+  wait timerWait ms
+
+ goto Main
+ end

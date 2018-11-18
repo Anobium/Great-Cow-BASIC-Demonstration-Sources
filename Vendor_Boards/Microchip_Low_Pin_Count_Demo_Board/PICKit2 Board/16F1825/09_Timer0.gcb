@@ -1,0 +1,51 @@
+'''
+'''******************************************************************
+'''  Lesson 9 - "Timer0"
+'''
+'''  Timer0 is a counter implemented in the processor. It may be used to count instruction
+'''  cycles or external events, that occur at or below the instruction cycle rate.
+'''  In the PIC18, Timer0 can be used as either an 8-bit or 16-bit counter, or timer. The
+'''  enhanced mid-range core implements only an 8-bit counter.
+'''  This lesson configures Timer0 to count instruction cycles and to set a flag when it rolls
+'''  over. This frees up the processor to do meaningful work rather than wasting instruction
+'''  cycles in a timing loop.
+'''  Using a counter provides a convenient method of measuring time or delay loops as it
+'''  allows the processor to work on other tasks rather than counting instruction cycles.
+'''
+'''
+'''  LEDs rotate from right to left, similar to Lesson 3, at a rate of ~.5 seconds.
+'''
+'''  PIC: 16F1825
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: PICkit 2 Low Pin Count Demo Board
+'''  Date: 10.4.2015
+'''
+''''''******************************************************************
+''' See Low Pin Count Demo Board User's Guide for Lesson Information*
+''''''*****************************************************************
+'''
+
+ #chip 16f1825,2
+ #config FOSC_INTOSC , WDTE_OFF , PWRTE_OFF , MCLRE_ON , CP_OFF , CPD_OFF , BOREN_ON , CLKOUTEN_OFF , IESO_OFF
+ #config WRT_OFF , PLLEN_OFF , STVREN_OFF , LVP_OFF
+
+    '' -------------------LATC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|DS4|DS3|DS2|DS1|-
+    ''-----------------------------------------
+    ''
+
+    dir portc out
+    portc = 0
+    portc.5 = 1
+
+    InitTimer0 Osc, PS0_256
+    do
+        wait while !TMR0IF
+        T0IF = 0
+        Set C off
+        Rotate portc right
+        if C = 1 then portc.3 = 1
+    loop

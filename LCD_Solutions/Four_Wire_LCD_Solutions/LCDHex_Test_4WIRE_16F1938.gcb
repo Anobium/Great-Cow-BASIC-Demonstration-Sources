@@ -1,0 +1,65 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demonstrates the capabilities of a LCD display.
+'''The LCD is using an 4-bit bus for connectivity.
+'''For the LCD connection - please refer to the program.
+'''@author 	WilliamR
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	23.01.2015
+'''********************************************************************************
+
+;Set chip model required:
+ ;#chip 16F886, 8
+ ;#config MCLRE_ON
+
+ ; or
+
+ #chip 16F1938, 16
+ #option explicit
+ #config INTOSC, VCAPEN_OFF, MCLRE_ON, PLLEN_ON, CLKOUTEN_OFF
+
+
+  ;Setup LCD Parameters
+  #define LCD_IO 4
+  #define LCD_NO_RW
+  #define LCD_Speed slow
+
+; ----- Define Hardware settings
+  #define LCD_RS PORTB.0
+  #define LCD_Enable PORTB.1
+  #define LCD_DB4 PORTC.3
+  #define LCD_DB5 PORTC.2
+  #define LCD_DB6 PORTC.1
+  #define LCD_DB7 PORTC.0
+
+;----- Variables
+  Dim BV as Byte
+
+
+'Program Start
+
+  DO Forever
+       CLS
+       WAIT 2 s
+       PRINT "Test LCDHex "
+       wait 3 s
+       CLS
+       wait 1 s
+
+
+       for bv = 0 to 255
+          locate 0,0
+          Print "DEC " : Print BV
+          locate 1,0
+          Print "HEX "
+          LCDHex BV, LeadingZeroActive ; dislay leading Zero
+          locate 1,8
+          Print "HEX "
+          LCDHex BV         ; do not display leading zero
+          wait 1 s
+       next
+       CLS
+       wait 1 s
+       Print "END TEST"
+  LOOP

@@ -1,0 +1,31 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program shows how to use Fixed Mode PWM for CCP/PWM and PWM modules.
+'''
+'''An important note is that timer 2 is ALWAYS used by CCP/PWM and therefore there is NO idependence between the timer 2 PWM module and CCP/PWM channel frequency.  If you set #define PWM_Timer2_Freq then will be the frequency of CCP/PWM
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.01
+'''@date       10.10.17
+'''********************************************************************************
+#chip 16f1939,4      'Use a chip with the correct operating frequency!
+
+'This chip only support CCP
+
+
+main:
+
+    'Do NOT forget to set the port direction... setting everything to out!
+    dir portc Out
+
+
+
+    'Enable CCP/PWM channels 1 and 2
+    PWMOn
+    PWMOn ( 2 )
+
+
+    do
+    loop
+

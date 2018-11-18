@@ -1,0 +1,205 @@
+'''A demonstration program for GCGB and GCB.
+'''------------------------------------------------------------------------------------------------------------------------------
+''' Description: this library provides an ISR to implement
+''' A stateful I2C hardware slave.
+''' This is a GCB implementation of Microchip Application Note AN734 and TB3159
+'''
+'''
+''' This demonstration responds to a write and reads of bytes to I2C address.
+''' This example requires two pots and terminal to show the results.
+'''
+'''
+''' According to AN734, there are 5+1 possible I2C states. During ISR, each
+''' of this states are detected. This ISR provides a standard skeleton to implement
+''' an I2C hardware slaves, while client code must implement several callbacks
+''' the ISR is expecting to call while processing states.
+'''
+''' Callbacks:
+''' - HI2C_Process_In_Message ( in HI2CMESSAGESIZE as byte )
+'''      called when slave has recieved a complete I2C write packet
+'''
+''' - HI2C_Process_Out_Message
+'''      called when slave is requested to respond to a masters request, the slave needs to send an I2C packet.
+'''
+'''
+''' We have a Pot attached and 4 LEDS. The Master will request the value of the Pot and then,
+''' the Master will set 3 LEDs to the proportional value of the Pot - and, the Master will set the LEDS to the same value - these LEDs are attached the Master microcontroller.
+'''
+''' The demonstration supports two transactions but this can be easily expanded to support 100s of transaction types.
+''' Transaction #1.  Master send I2C packet to address, address, value. as follows to set the LEDs:
+'''   0x70, 0x23, 0x00 - turn off all the LEDS
+'''   0x70, 0x23, 0x01 - turn on one LED
+'''   0x70, 0x23, 0x02 - turn on one LED
+'''   0x70, 0x23, 0x03 - turn on two LEDs
+'''   0x70, 0x23, 0x04..0xff - turn on LEDs
+'''
+''' Transaction #2.  Master wants to read the value of the ADC
+'''   0x70, 0x81, 0x04, 0x71, 0xNN.   Where 0x81 will instruct this slave to read the ADC, where 0x04 equates to ADC4 and then the READ operation will return the single byte value of the Slave ADC to the Master.
+'''   any other ADC port will be returned as 0x00.
+'''
+'''   To add your own slave commands - simply expand these two methids.
+'''
+'''   You can also redirect any of the standard callbacks like SI2CSlave_State_Error, SI2CSlave_State_1-6
+'''   Use a define to call your own specific routine. like #define SI2CSlave_State_Error  MyHI2CSlave_State_Error
+'''
+'''
+'''
+
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    30.12.2017
+'''********************************************************************************
+
+; ---'''Configuration
+
+    #chip 18f25k42, 64
+    #option explicit
+
+    #startup InitPPS, 85
+
+    Sub InitPPS
+
+          RC4PPS =      0x22   'RC4->I2C1:SDA1
+          RC3PPS =      0x21   'RC3->I2C1:SCL1
+          I2C1SCLPPS =  0x13   'RC3->I2C1:SCL1
+          I2C1SDAPPS =  0x14   'RC4->I2C1:SDA1
+
+    End Sub
+
+    'Template comment at the end of the config file
+
+    #include <hwi2c_messageinterfacekmode.h>  'defines a set of callbacks - you do not need to define hi2cslave_state_1-5
+    'Buffer size
+    #define HI2CBUFFERSIZE 16
+
+    'Required I2C settings
+    #define HI2C_BAUD_RATE 100  'As we are a slave and the clock is controlled by the Master
+    #define HI2C_DATA PORTC.4
+    #define HI2C_CLOCK PORTC.3
+    ' Configure these ports as output - the K-Mode I2C devices are outputs!
+    Dir HI2C_DATA out
+    Dir HI2C_CLOCK out
+
+    'Set the I2C levels for these specific ports
+    RC3I2C.TH0=1
+    RC4I2C.TH0=1
+    'Configure these ports as Open-drain
+    ODCONC.ODCC4 = 1
+    ODCONC.ODCC3 = 1
+
+    'Now set up the I2C slave library - four commands needed
+    HI2CSetAddress 0x70
+    HI2CMode Slave
+    SI2CSlave_ISR_Init
+    On Interrupt I2C1Interrupt call SI2CSlave_ISR_Handler
+
+
+   'Define Hardware settings for this demonstration - we are flashing the LEDs
+   'These LEDs reflect the state of the Pot
+    #define LED0  porta.1
+    #define LED1  porta.2
+    #define LED2  porta.3
+
+    'This LED is to show we are alive and in the main loop
+    #define LED3  portb.1
+
+    dir LED0 out                  ;0, 1 and 2 are outputs (LEDs)
+    dir LED1 out                  ;0, 1 and 2 are outputs (LEDs)
+    dir LED2 out                  ;0, 1 and 2 are outputs (LEDs
+    dir LED3 out                  ;0, 1 and 2 are outputs (LEDs
+
+
+   'Main body of program commences here.
+    dir portb.1 out
+    do Forever
+       portb.1 = ! portb.1    'flash this LED to show that we are alive
+       wait 1 s
+      'Do other stuff
+
+    Loop
+
+    'User call back #1 - this will be called after each packet is received for Writes to this Slave from the Master.
+sub HI2C_Process_In_Message ( in HI2CMESSAGESIZE )
+
+    'The Variable HI2CMESSAGESIZE is the length of the incoming packet.
+    'A package cannot exceed the buffer size.
+    'The first byte of the packet is at element zero
+    'All subsequent elements are other values extracted from the incoming packet.
+    'The packet is in the buffer array called HI2CBUFFER(nn)
+    '
+
+    'Variables for these user methods
+    dim ADCValue, lastHI2CInstruction as byte
+
+    lastHI2CInstruction = HI2CBUFFER(0)
+
+    'We have incoming data!!
+     if HI2CBUFFER(0) = 0x23 then
+       Select CASE HI2CBUFFER(1)
+
+             Case 0x00
+                LED0 = 0
+                LED1 = 0
+                LED2 = 0
+
+             Case 0x01
+                LED0 = 1
+                LED1 = 0
+                LED2 = 0
+
+             Case 0x02
+                LED0 = 0
+                LED1 = 1
+                LED2 = 0
+
+             Case 0x03
+                LED0 = 1
+                LED1 = 1
+                LED2 = 0
+             Case Else
+                porta = HI2CBUFFER(1) * 2
+
+        end Select
+     end if
+
+     if HI2CBUFFER(0) = 0x81 then
+       Select CASE HI2CBUFFER(1)
+
+             Case 0x04
+                ADCValue = ReadAD(ANA4)  'connect Pot to the correct Port on the microcontroller.
+
+             Case Else
+                ADCValue = 0x00          ' return zero if another port is requested.
+
+        end Select
+     end if
+
+    end sub
+
+    'User call back #2 - this is called when the Master wants data.  The buffer needs to handle the calls appropiately.
+sub HI2C_Process_Out_Message
+
+    'Variables
+    dim ADCValue, lastHI2CInstruction as byte
+
+      'WARNING - placing time driven calls here may cause i2c buffer overruns. Move calls to I2C_Process_In_Message.
+      'WARNING - changing the Interrupts, stop or starting the Interrupts may cause i2c buffer overruns. Do not do this.
+
+      'Values to be sent to the Master are loaded into the buffer array called HI2CBUFFER()
+      'The first value is at element zero.
+      'Value are returned are relative to the write operation.  Write need to control the values returned.
+
+
+      'Want to post process the data. Do it here.
+     Select CASE lastHI2CInstruction
+        case 0x81
+          HI2CBUFFER(0) = ADCValue  'Place read value into Output Buffer
+
+        'add more cases
+        'case NN
+
+     end Select
+
+    end sub
+

@@ -1,0 +1,186 @@
+'''
+'''******************************************************************
+''' LCD demonstration for the board. We have added the LCD section to specific the ports.
+''' All the LCD commands are standard Great Cow BASIC LCD commands.
+'''
+''' See the section "Setup LCD Parameters" for the specification of the LCD commands.
+'''
+'''************************************************************************
+'''
+'''  PIC: 18f26k22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: SmartPIC 18 Board
+'''  Date: 29.8.17
+'''
+' ----- Configuration
+    'Chip Settings.
+    #chip 18f26k22, 16
+    #config mclre=on
+    #option Explicit
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---|RS |RW | E |D7 |D6 |D5 |D4
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | A |-------| O | I |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---| TX| A |-------| X |---------
+    ''-----------------------------------------
+    ''
+
+
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTC.5
+    #define LDR             PORTB.4
+    #define SwitchIn        PORTB.0
+    #define LCDControl      PORTC.2
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the AN17 port
+    Dir     LDR           In   'this is the AN11 port
+    Dir     SwitchIn      In
+    Dir     LCDControl    Out
+
+    LCDControl = 0
+
+    ;Setup LCD Parameters
+    #define LCD_IO 4
+    #define LCD_Speed fast
+
+    ;Define LCD Hardware settings
+    #define LCD_RS      PORTA.6
+    #define LCD_RW      PORTA.5
+    #define LCD_Enable  PORTA.4
+    #define LCD_DB4     PORTA.0
+    #define LCD_DB5     PORTA.1
+    #define LCD_DB6     PORTA.2
+    #define LCD_DB7     PORTA.3
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+   CLS
+   PRINT "GREAT"
+   lOCATE 1, 0
+   PRINT "COW"
+   WAIT 1 s
+   LOCATE 0, 0
+   PRINT "COW  "
+   LOCATE 1, 0
+   PRINT "BASIC"
+   WAIT 1 s
+   LOCATE 0, 0
+   PRINT "BASIC"
+   LOCATE 1, 0
+   PRINT "2017  "
+   WAIT 2 s
+   cls
+
+    Do Forever
+        LEDD2 = !LEDD2
+        CLS
+        PRINT "START"
+        LOCATE 1,0
+        PRINT "TEST"
+        WAIT 3 s
+
+        CLS
+        PRINT "DISPLAY"
+        LOCATE 1,0
+        PRINT "ON"
+        WAIT 3 s
+
+        CLS
+        LOCATE 0,0
+        PRINT "Cursor"
+        LOCATE 1,0
+        PRINT "ON"
+        LCDCURSOR CursorOn
+        WAIT 3 S
+
+        CLS
+        LCDCURSOR CursorOFF
+        LOCATE 0,0
+        PRINT "Cursor"
+        LOCATE 1,0
+        PRINT "OFF"
+        WAIT 3 s
+
+        CLS
+        LOCATE 0,0
+        PRINT "FLASH"
+        LOCATE 1,0
+        PRINT "ON"
+
+        LCDCURSOR FLASHON
+        WAIT 3 s
+
+        CLS
+        LOCATE 0,0
+        PRINT "FLASH"
+        LOCATE 1,0
+        PRINT "OFF"
+
+        LCDCURSOR FLASHOFF
+        WAIT 3 sec
+
+        LOCATE 0,0
+        PRINT "CURSOR &"
+        LOCATE 1,0
+        PRINT "FLASHON"
+        LCDCURSOR CURSORON
+        LCDCURSOR FLASHON
+        LOCATE 0,0
+        WAIT 3 sec
+
+        LOCATE 0,0
+        PRINT "CURSOR &"
+        LOCATE 1,0
+        PRINT "FLASHOFF"
+        LCDCURSOR CursorOFF
+        LCDCURSOR FLASHOFF
+        LOCATE 0,0
+        WAIT 3 sec
+
+        CLS
+        LOCATE 0,0
+        PRINT "Flashing"
+        LOCATE 1,0
+        PRINT "Display"
+        WAIT 500 ms
+
+        repeat 10
+            LCDCURSOR LCDOFF
+            WAIT 500 ms
+            LCDCURSOR LCDON
+            WAIT 500 ms
+        end repeat
+
+        CLS
+        LOCATE 0,0
+        PRINT "DISPLAY"
+        LOCATE 1,0
+        PRINT "OFF 5s"
+        WAIT 2 SEC
+        LCDCURSOR LCDOFF
+        WAIT 5 s
+
+        CLS
+        LOCATE 0,0
+        LCDCURSOR LCDON
+        PRINT "END TEST"
+        WAIT 3 s
+
+    loop

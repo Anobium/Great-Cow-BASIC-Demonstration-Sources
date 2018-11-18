@@ -1,0 +1,81 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program saves a long variable to EEPROM. The program logs these values to the microprocessors internal EEPROM memory.
+'''The process shown below can be used for Word and Integer variables.
+'''
+'''This program uses a SubRoutine to return the value to the main program.
+'''
+'''@author  EvanV plus works of SteveV
+'''@licence GPL
+'''@version 1.0a
+'''@date    17.09.2017
+'''********************************************************************************
+
+; ----- Configuration
+    #Chip 16F877a,4
+
+    #Option Explicit
+
+    'LCD connection settings
+    #Define LCD_IO 4
+    #Define LCD_SPEED FAST
+
+    #Define LCD_NO_RW
+
+    #Define LCD_RS        PortA.0
+    #Define LCD_Enable    PortA.1
+
+    #Define LCD_DB4       PortA.2
+    #Define LCD_DB5       PortC.0
+    #Define LCD_DB6       PortC.1
+    #Define LCD_DB7       PortC.2
+
+    'Eeprom location
+    #Define E_Save        10 'Start of Long(ish) Eeprom locations
+
+    Dim     Long_Saved    As Long
+    Dim     Long_Returned As Long
+    Dim     Temp          As Byte
+
+    Long_Saved = 0
+
+    Do
+
+        CLS
+        Let Long_Saved = Long_Saved + 125
+        PutLEeprom( E_Save, Long_Saved )
+
+        Locate 0, 0
+        Print Long_Saved
+        Print " "
+
+        GetLEeprom( E_Save, Long_Returned )
+        Locate 1, 0
+        Print Long_Returned
+
+        wait 1 s
+    Loop
+
+    Sub PutLEeprom (HiAddr As Byte, Save_Long As Long) 'Places a Long(ish) into three bytes of
+                                                    'Eeprom, HiAddr is the first Byte
+                                                    'location in Eeprom, the lower Bytes
+                                                    'are placed into the adjacent bytes
+            EpWrite (HiAddr,  Save_Long_E)      'The highest byte
+            EpWrite (HiAddr+1,Save_Long_U)      'The higher  byte
+            EpWrite (HiAddr+2,Save_Long_H)      'The high byte
+            EpWrite (HiAddr+3,Save_Long)        'The byte
+
+
+
+    End Sub
+
+    Sub GetLEeprom(HiAddr, out EepromVal as long ) 'Takes the address of the High Byte and returns
+                                                    'a Long(ish) made from the HiAddr and the adjacent
+                                                    'bytes in Eeprom
+        EpRead HiAddr+3, EepromVal
+        EpRead HiAddr+2, EepromVal_H
+        EpRead HiAddr+1, EepromVal_U
+        EpRead HiAddr,   EepromVal_E
+
+
+    End Sub

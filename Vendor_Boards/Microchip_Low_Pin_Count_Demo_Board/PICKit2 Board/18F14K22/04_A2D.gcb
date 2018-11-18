@@ -1,0 +1,60 @@
+'''
+'''******************************************************************
+''' Lesson 4 - "Analog to Digital"
+'''
+''' This shows how to read the A2D converter and display the
+''' High order parts on the 4 bit LED display.
+''' The pot on the Low Pin Count Demo board varies the voltage
+''' coming in on in A0.
+'''
+''' The A2D is referenced to the same Vdd as the device, which
+''' is nominally is 5V.  The A2D returns the ratio of the voltage
+''' on Pin RA0 to 5V.  The A2D has a resolution of 10 bits, with 1023
+''' representing 5V and 0 representing 0V.
+'''
+'''
+''' The top four MSbs of the ADC are mirrored onto the LEDs. Rotate the potentiometer
+''' to change the display.
+'''
+'''
+'''  PIC: 18F14K22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: PICkit 2 Low Pin Count Demo Board
+'''  Date: 04/05/18
+'''
+''''''******************************************************************
+''' See Low Pin Count Demo Board User's Guide for Lesson Information*
+''''''*****************************************************************
+'''
+
+
+
+
+ #Chip 18F14K22, 8
+ #config MCLRE_OFF
+ #option Explicit
+
+
+    dir portc out
+
+    dim maxADCReading, myDelay as Word
+    maxADCReading = 0
+
+
+    do
+
+        'Read the ADC  and store the result in the variable
+        myDelay = ReadAD ( AN0 , true )
+
+        'Store the maximum value of the ADC in the variable.  We are showing this to ensure the ADC has a dynamic range.
+        if myDelay > maxADCReading Then
+            maxADCReading = myDelay
+        end if
+
+        portc =  scale ( myDelay,  0, maxADCReading, 0, 15 )
+
+        wait 30 ms
+
+    loop

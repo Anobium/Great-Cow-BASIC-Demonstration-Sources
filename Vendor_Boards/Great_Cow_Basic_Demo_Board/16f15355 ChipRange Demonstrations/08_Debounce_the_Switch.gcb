@@ -1,0 +1,54 @@
+'''
+''' This demonstration uses a simple software delay routine to avoid the initial noise on the switch
+''' pin. The code will delay for only 5 ms, but should overcome most of the noise. The
+''' required delay amount differs with the switch being used. Some switches are worse
+''' than others.
+'''
+''' When the switch is held down, D1 will be lit. When the switch is not held down, all
+''' LEDs are OFF.
+'''
+'''
+'''  PIC: 16f15355
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: Xpress Evaluation Board
+'''  Date: 04.12.2016
+'''
+' ----- Configuration
+    'Chip Settings.
+    #chip 16f15355,32
+    #Config  MCLRE_ON, FEXTOSC_OFF, CLKOUTEN_OFF    'These configs = MCLR pin function enablesd, External oscillator not enabled and clockout function is disables ( enable I/O port).
+
+
+
+
+    '' -------------------LATC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
+    ''-----------------------------------------
+    ''
+
+    #define DOWN        0
+    #define UP          1
+    #define SWITCH      PORTA.1
+    #define LED         PORTC.0
+
+    dir LED out
+    LED = 0
+
+    'setup switch (SW1)
+    dir SWITCH in
+
+    do
+
+        if ( SWITCH = DOWN ) then
+           wait 10 ms
+           if ( SWITCH = DOWN ) Then
+              Set LED on
+           end if
+        else
+           Set LED off
+       end if
+
+    loop

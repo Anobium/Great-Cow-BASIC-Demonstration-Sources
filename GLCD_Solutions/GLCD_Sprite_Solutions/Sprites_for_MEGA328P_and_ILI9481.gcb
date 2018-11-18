@@ -1,0 +1,204 @@
+  #chip mega328p, 16
+  #option explicit
+
+    #include <glcd.h>
+    #include <uno_mega328p.h >
+
+    #define GLCD_TYPE GLCD_TYPE_ILI9481
+    #define GLCD_OLED_FONT
+
+    GLCDfntDefaultSize = 2
+
+    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+    #define GLCD_RD       ANALOG_0          ' read command line
+    #define GLCD_WR       ANALOG_1          ' write command line
+    #define GLCD_RS       ANALOG_2          ' Command/Data line
+    #define GLCD_CS       ANALOG_3          ' Chip select line
+    #define GLCD_RST      ANALOG_4          ' Reset line
+
+
+
+    #define GLCD_DB0       DIGITAL_8
+    #define GLCD_DB1       DIGITAL_9
+    #define GLCD_DB2       DIGITAL_2
+    #define GLCD_DB3       DIGITAL_3
+    #define GLCD_DB4       DIGITAL_4
+    #define GLCD_DB5       DIGITAL_5
+    #define GLCD_DB6       DIGITAL_6
+    #define GLCD_DB7       DIGITAL_7
+
+
+    ;define the frame_refresh
+    #define frame_refresh 5  '1 to 5 is advised
+    ;
+    ;now rename colours to make it easier to set up sprite data
+    #define bk ILI9481_BLACK
+    #define re ILI9481_RED
+    #define gr ILI9481_GREEN
+    #define bl ILI9481_BLUE
+    #define wh ILI9481_WHITE
+    #define pu ILI9481_PURPLE
+    #define ye ILI9481_YELLOW
+    #define cy ILI9481_CYAN
+    #define dg ILI9481_D_GRAY
+    #define lg ILI9481_L_GRAY
+    #define si ILI9481_SILVER
+    #define ma ILI9481_MAROON
+    #define ol ILI9481_OLIVE
+    #define li ILI9481_LIME
+    #define aq ILI9481_AQUA
+    #define te ILI9481_TEAL
+    #define na ILI9481_NAVY
+    #define fu ILI9481_FUCHSIA
+    ;backgroung color
+    #define bg bk
+
+    GLCDRotate Portrait
+    GLCDCLS bg
+    ;
+    dim sprite_height,sprite_width as byte ;height and width of sprite in pixels
+    ;dim spritedata as byte;data to make sprite
+    dim sprite_x,sprite_y as Word
+    dim ptr,spritedata_ptr,pixel as word
+    ;
+    ;demo vars
+    dim temp,frame,frame_count as byte
+    dim dx(8),dy(8) as word
+    dim spy(8),oldspy(8) as word
+    dim spx(8),oldspx(8) as word
+    ;set up start sprite positions and directions
+    dx(1)=2:dx(2)=3:dx(3)=65536-4:dx(4)=6
+    dx(5)=65536-8:dx(6)=65536-8:dx(7)=65536-8:dx(8)=65536-8
+    dy(1)=65536-5:dy(2)=65536-3:dy(3)=65536-8:dy(4)=3
+    dy(5)=2:dy(6)=7:dy(7)=2:dy(8)=8
+    ;
+    spx(1)=30:spx(2)=100:spx(3)=150:spx(4)=50
+    spx(5)=160:spx(6)=100:spx(7)=80:spx(8)=30
+    spy(1)=20:spy(2)=20:spy(3)=16:spy(4)=50:spy(5)=60:spy(6)=40
+    spy(5)=20:spy(6)=30:spy(7)=24:spy(8)=36
+    sprite_height=16:sprite_width=16
+    spritedata_ptr=1
+    frame=0:frame_count=0
+    ;
+    #define  ScreenW  GLCD_Width - 11
+    #define  ScreenH  GLCD_HEIGHT - 5
+
+    dim started as Byte
+    started = 0
+    restart:
+    do ;demo moving sprite
+      for temp=1 to 8
+        if spx(temp)> (ScreenW-sprite_width) then ;check right edge
+          dx(temp)= 65536-dx(temp)
+        end if
+        if spx(temp)<8 then ;check left edge
+          dx(temp)= 65536-dx(temp)
+        end if
+        if spy(temp)> (ScreenH-sprite_height) then ;check bottom edge
+          dy(temp)= 65536-dy(temp)
+        end if
+        if spy(temp)<8 then ;check top edge
+          dy(temp)= 65536-dy(temp)
+        end if
+      ;
+        oldspx(temp)=spx(temp):oldspy(temp)=spy(temp) ;get last position for erase
+        spx(temp)=spx(temp)+dx(temp):spy(temp)=spy(temp)+dy(temp) ;get new position for draw
+      ;
+        if frame=0 then;which sprite to draw
+          erase_sprite (oldspx(temp),oldspy(temp)) ;erase sprite at last position
+          ' 1 ;pointer to sprite 1 in table
+          sprite (spx(temp),spy(temp), 1 ) ;draw sprite1 at new position
+        else
+          erase_sprite (oldspx(temp),oldspy(temp)) ;erase sprite at last position
+          ' 257 ;pointer to sprite 2 in table
+          sprite (spx(temp),spy(temp), 257) ;draw sprite2 at new position
+        end if
+      ;
+      next temp
+      frame_count++ ;when to change spritedata_ptr
+      if frame_count=frame_refresh then
+        frame=!frame
+        frame_count=0
+      end if
+
+    if started = 0 then
+
+      GLCDfntDefaultSize = 2
+      GLCDLocateString 0,24
+
+      GLCDPrintStringLN "Sprite Demonstration"
+'      GLCDPrintStringLN str(GLCDfntDefaultSize)
+'      GLCDPrintStringLN ""
+      GLCDPrintStringLN "ILI9481     Nov 2017"
+'      GLCDPrintStringLN ""
+      GLCDPrintStringLN "Great Cow BASIC"
+      wait 3 s
+      glcdcls
+      started = 1
+
+    end if
+
+    if started = 1 then
+        started = 2
+        goto restart
+    end if
+    loop ;end demo
+    ;
+
+    sub sprite ( in sprite_x, in sprite_y, in spritedata_ptr ) ;fills box with sprite data
+      SetAddressWindow_ILI9481 ( sprite_x,sprite_y,sprite_x +15,sprite_y +15 )
+      set ILI9481_GLCD_CS OFF
+      for ptr=spritedata_ptr to spritedata_ptr+255
+        ReadTable spritedata,ptr,pixel
+
+        SendData_ILI9481 pixel
+
+      next ptr
+    end sub
+    ;
+    sub erase_sprite (sprite_x,sprite_y) ;write a box of 0's
+      SetAddressWindow_ILI9481 ( sprite_x,sprite_y,sprite_x +15,sprite_y +15 )
+      set ILI9481_GLCD_CS OFF
+      repeat 256
+
+        SendData_ILI9481 bg
+
+      end repeat
+    end sub
+    ;
+    table spritedata ;sprite 1
+    wh,bl,bl,bl,bl,bg,bg,bg,bg,bg,bg,bl,bl,bl,bl,wh
+    bg,bl,re,re,re,bl,bl,bg,bg,bl,bl,re,re,re,bl,bg
+    bg,bg,bl,re,re,re,bl,bg,bg,bl,re,re,re,bl,bg,bg
+    bg,bg,bg,bl,re,wh,bl,bg,bg,bl,wh,re,bl,bg,bg,bg
+    bg,bg,bg,bg,bl,wh,bl,bg,bg,bl,wh,bl,bg,bg,bg,bg
+    bg,bg,bg,bg,bg,bl,bl,bg,bg,bl,bl,bg,bg,bg,bg,bg
+    bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg
+    bg,bg,bg,bg,ye,ye,ye,bg,bg,ye,ye,ye,bg,bg,bg,bg
+    bg,bg,bg,ye,bg,bg,bg,bg,bg,bg,bg,bg,ye,bg,bg,bg
+    bg,ye,ye,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,ye,ye,bg
+    bg,ye,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,ye,bg
+    ye,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bl,ye
+    ye,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,ye
+    ye,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,ye
+    bg,ye,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,ye,bg
+    bg,bg,ye,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,ye,bg,bg
+    ;
+    ;sprite 2
+    bl,bl,bl,bl,bl,bg,bg,bg,bg,bg,bg,bl,bl,bl,bl,bl
+    bg,bl,re,re,re,bl,bl,bg,bg,bl,bl,re,re,re,bl,bg
+    bg,bg,bl,wh,wh,re,bl,bg,bg,bl,re,wh,wh,bl,bg,bg
+    bg,bg,bg,bl,re,wh,bl,bg,bg,bl,wh,re,bl,bg,bg,bg
+    bg,bg,bg,bg,bl,wh,bl,bg,bg,bl,wh,bl,bg,bg,bg,bg
+    bg,bg,bg,bg,bg,bl,bl,bg,bg,bl,bl,bg,bg,bg,bg,bg
+    bg,bg,bg,bg,bg,bg,bg,ye,ye,bg,bg,bg,bg,bg,bg,bg
+    bg,bg,bg,bg,bg,ye,ye,bg,bg,ye,ye,bg,bg,bg,bg,bg
+    bg,bg,bg,bg,ye,ye,bg,bg,bg,bg,ye,ye,bg,bg,bg,bg
+    bg,bg,bg,bg,ye,bg,bg,bg,bg,bg,bg,ye,bg,bg,bg,bg
+    bg,bg,bg,ye,bg,bg,bg,bg,bg,bg,bg,bg,ye,bg,bg,bg
+    bg,bg,ye,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,ye,bg,bg
+    bg,bg,bg,ye,ye,bg,bg,bg,bg,bg,bg,ye,ye,bg,bg,bg
+    bg,bg,bg,bg,ye,ye,bg,bg,bg,bg,ye,ye,bg,bg,bg,bg
+    bg,bg,bg,bg,bg,ye,bg,bg,bg,bg,ye,bg,bg,bg,bg,bg
+    bg,bg,bg,bg,bg,bg,ye,bg,bg,ye,bg,bg,bg,bg,bg,bg
+    end table

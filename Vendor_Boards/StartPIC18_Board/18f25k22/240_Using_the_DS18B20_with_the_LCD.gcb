@@ -1,0 +1,150 @@
+'''
+'''******************************************************************
+''' DS18B20 demonstration for the board. We have added the DS18B20  section to specift the DS18B20 port.
+''' All the DS18B20 commands are standard Great Cow BASIC LCD commands.
+'''
+''' Set the section "DS18B20 setup section" for the specification of the setup Configuration.
+'''
+''' This demonstration show the tempature on the LCD as an Integer value and a Decimal Value.
+'''
+'''************************************************************************
+'''
+'''  PIC: 18f25k22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: SmartPIC 18 Board
+'''  Date: 29.8.17
+'''
+' ----- Configuration
+    'Chip Settings.
+    #chip 18f25k22, 16
+    #config mclre=on
+    #option Explicit
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---|RS |RW | E |D7 |D6 |D5 |D4
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | A |-------| O | I |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---| TX| A |-------| X |---------
+    ''-----------------------------------------
+    ''
+
+
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTC.5
+    #define LDR             PORTB.4
+    #define SwitchIn        PORTB.0
+    #define LCDControl      PORTC.2
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the AN17 port
+    Dir     LDR           In   'this is the AN11 port
+    Dir     SwitchIn      In
+    Dir     LCDControl    Out
+
+    LCDControl = 0
+
+    ;Setup LCD Parameters
+    #define LCD_IO 4
+    #define LCD_Speed fast
+
+    ;Define LCD Hardware settings
+    #define LCD_RS      PORTA.6
+    #define LCD_RW      PORTA.5
+    #define LCD_Enable  PORTA.4
+    #define LCD_DB4     PORTA.0
+    #define LCD_DB5     PORTA.1
+    #define LCD_DB6     PORTA.2
+    #define LCD_DB7     PORTA.3
+
+    'DS18B20 setup section
+    #include <ds18b20.h>
+
+    ; ----- Constants
+    ' DS18B20 port settings
+    #define DQ PortA.7
+
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+    ; ----- Variables
+      dim TempC_100 as word   ' a variabler to handle the temperature calculations
+      Dim CCOUNT, SIGNBIT, WHOLE, FRACT, DIG as Byte
+
+
+; ----- Main body of program commences here.
+
+    ccount = 0
+    CLS
+    print "GCBASIC 2017"
+    locate 1,0
+    print "DS18B20 Demo"
+    wait 2 s
+    CLS
+
+    do forever
+       ' The function readtemp returns the integer value of the sensor
+       DSdata = readtemp()
+
+       ' Display the integer value of the sensor on the LCD
+       locate 0,0
+       print hex(ccount)
+       print ":"
+       print DSdata
+       print chr(223)+"C"
+
+
+
+       ' Display the integer and decimal value of the sensor on the LCD
+
+       ' The function readtemp12 returns the raw value of the sensor.
+       ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
+       DSdata = readtemp12()
+       SignBit = DSdata / 256 / 128
+       If SignBit = 0 Then goto Positive
+       ' its negative!
+       DSdata = ( DSdata # 0xffff ) + 1 ' take twos comp
+
+    Positive:
+
+       ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
+       TempC_100 =  DSdata * 6
+       DSdata = ( DSdata * 25 ) / 100
+       TempC_100 = TempC_100 + DSdata
+
+       Whole = TempC_100 / 100
+       Fract = TempC_100 % 100
+       If SignBit = 0 Then goto DisplayTemp
+       Print "-"
+
+    DisplayTemp:
+       locate 1,0
+       print hex(ccount)
+       print ":"
+       print str(Whole)
+       print "."
+      ' To ensure the decimal part is two digits
+       Dig = Fract / 10
+       print Dig
+       Dig = Fract % 10
+       print Dig
+       print chr(223)
+       print "C"
+       wait 2 s
+       ccount++
+
+    loop

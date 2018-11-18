@@ -1,0 +1,39 @@
+''' A demonstration program for GCGB and GCB.
+'''
+'''  One way to create a delay is to spend time decrementing a value. In Great Cow BASIC the timing
+'''  can be accurately programmed since the user has control on how the
+'''  time delays are executed.
+'''
+'''  This demonstration blinks LED attached to porta.0 at a rate of approximately 1.0 seconds.
+'''
+''' This demonstration use an LED attached to PORTD.0 via a suitable resistor.
+''':***********************************************************************
+'''  PIC: 16F18877
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''
+'''@author   EvanV
+'''@licence  GPL
+'''@version  1.0
+'''@date     04.12.2016
+
+' ----- Configuration
+    'Chip Settings.
+    #chip 16F18877,32
+    #Config WRT_OFF, CPD_ON, MCLRE_ON, FEXTOSC_OFF, CLKOUTEN_OFF    'These configs = User non-votatile protection off (WRT), Data non-votatile protection off (CPD), MCLR pin function enablesd, External oscillator not enabled and clockout function is disables ( enable I/O port).
+
+    '' -------------------LATD-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
+    ''-----------------------------------------
+    ''
+
+    dir portD.0 out
+
+    do
+        wait 1000 ms
+        'Set Current state to the NOT the current status
+        portD.0 = !portD.0
+
+    loop

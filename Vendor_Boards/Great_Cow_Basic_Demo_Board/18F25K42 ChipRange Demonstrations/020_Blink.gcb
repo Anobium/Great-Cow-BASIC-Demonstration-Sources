@@ -1,0 +1,54 @@
+'''
+'''******************************************************************
+'''
+'''  One way to create a delay is to spend time decrementing a value. In Great Cow BASIC the timing
+'''  can be accurately programmed since the user has control on how the
+'''  time delays are executed.
+'''
+'''  The LED is attached to portb.1 via a suitable resistor to 0v.  Another LED  is also attached to portb.5 via a suitable resistor to 0v.
+'''
+'''  We set one of the LEDs, you can try setting the other LED..  do not forget those appropiate resistors
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    22.10.2017
+' ----- Configuration
+
+    'Chip Settings.
+     #chip 18f25k42, 16
+    'This Configuration change is needed to enable programming in Low Voltage Programming Mode
+    #config LVP=on
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | ----------| O | I |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------------------| X |---------
+    ''-----------------------------------------
+    ''
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+
+    dir portb.1 out
+
+    do
+        'wait for 1 second
+        wait 1 s
+        'Set the port bit to NOT ( invert the current value) value from previous state
+        portb.1 = NOT  portb.1
+    loop
+

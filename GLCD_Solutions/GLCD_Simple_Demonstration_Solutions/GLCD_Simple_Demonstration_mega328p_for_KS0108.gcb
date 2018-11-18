@@ -1,0 +1,69 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a simple GLCD demonstration of the KS0108 GLCD capabilities.
+'''This program draws lines, boxes, circles and prints strings and numbers.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+'''@author 	EvanV plus works of ChuckH
+'''@licence	GPL
+'''@version	1.0A
+'''@date   	31.01.15
+'''********************************************************************************
+
+; ----- Configuration
+
+ #chip mega328p,16
+ #option explicit
+ #include <glcd.h>
+
+
+; ----- Define Hardware settings
+  ' No hardware settings are specified in this example.
+  ' All hardware is defined with respect to GLCD in the support methods.
+
+; ----- Constants
+  #define GLCD_RW PORTB.1
+  #define GLCD_RESET PORTB.5
+  #define GLCD_CS1 PORTB.3
+  #define GLCD_CS2 PORTB.4
+  #define GLCD_RS PORTB.0
+  #define GLCD_ENABLE PORTB.2
+  #define GLCD_DB0 PORTC.0
+  #define GLCD_DB1 PORTC.1
+  #define GLCD_DB2 PORTC.2
+  #define GLCD_DB3 PORTC.3
+  #define GLCD_DB4 PORTC.4
+  #define GLCD_DB5 PORTC.5
+  #define GLCD_DB6 PORTC.6
+  #define GLCD_DB7 PORTC.7
+
+
+; ----- Variables
+  Dim CHAR, XVAR as Byte
+
+; ----- Main body of program commences here.
+  Start:
+    GLCDCLS
+    'Print Hello
+    GLCDPrint 0,10,"Hello"
+    wait 5 s
+    'Print ASCII #:
+    GLCDPrint 0,10, "ASCII #:"
+    'Draw Box Around ASCII Character
+    Box 18,30,28,40	
+    'Print 0 through 9
+    for char = 15 to 129
+        GLCDPrint 17, 20 , Str(char)
+        GLCDdrawCHAR 20,30, char
+        wait 1 s
+    next
+    'Draw Line using line command
+    line 0,50,127,50
+    for xvar = 0 to 80
+        'draw line using Pset command
+        pset xvar,63,on
+    next	
+    Wait 10 s
+  Goto Start
+end
+
+; ----- Support methods.  Subroutines and Functions

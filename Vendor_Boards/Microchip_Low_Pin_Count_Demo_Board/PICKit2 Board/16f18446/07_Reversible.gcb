@@ -1,0 +1,107 @@
+'''
+''' Great Cow BASIC Header block Header block
+'''
+'''@author  Chris Roper
+'''@licence GPL
+'''@version 1.00
+'''@date    03/05/2018
+'''********************************************************************
+
+  #Chip 16F18446
+  #config MCLRE_OFF          ' Allow RA3 to be used as an Input
+  #Define ADC_Fudge 0x0739   ' as found by A2D example
+
+' Declare constants and Aliases
+  #define SWITCH_DOWN   0
+  #define SWITCH_UP     1
+
+  #define LED_RIGHT     TRUE
+  #define LED_LEFT      FAlSE
+
+  #define SW1           PORTA.3       ' Push button Switch
+  #define VR1           PORTA.0       ' Potentiometer
+
+' Declare Variables
+  #option explicit
+  Dim Direction as Byte
+
+  'start from the right to left
+  Direction = LED_RIGHT
+
+  Dir PortC OUT
+  PortC.3 = 1     ' LED D4 ON
+
+  Dir VR1 IN
+  Dir SW1 IN
+
+  do
+
+      wait Scale( ReadAD12 ( AN0 ), 0, ADC_Fudge, 100, 1000) ms
+
+      if check_switch = true then
+          ' toggle the direction
+          direction = !direction
+      end if
+
+      if  direction = LED_RIGHT  then
+          'shift to the right by 1
+          Set C off
+          Rotate portc right
+
+          ' when the last LED is lit, restart the pattern
+          if C = 1 then
+             portc.3 = 1
+          end if
+
+      else
+          'shift to the left by 1
+          Set C off
+          Rotate portc left
+
+          'when the last LED is lit, restart the pattern
+          if  portC.4 = 1 then
+                portC.0 = 1
+                portC.4 = 0
+          end if
+      end if
+
+  loop
+
+End
+
+'global variable - if button is held down, we don't want to keep on switching directions
+dim previous_state as bit
+previous_state = SWITCH_UP
+
+function  check_switch
+'switch is normally open to Vdd ...when pressed, RA3 is connected to GND
+  if (SW1 = SWITCH_DOWN) then
+    'debounce by delaying and checking if switch is still pressed
+    wait 5 ms
+    if ( (previous_state =  SWITCH_DOWN) & (SW1 = SWITCH_DOWN) ) then
+      ' don't toggle
+      check_switch = false
+      exit function
+    else
+      ' check if still down
+      if (SW1 = SWITCH_DOWN) then
+         previous_state = SWITCH_DOWN
+         ' reverse the LEDs
+         check_switch = true
+         exit function
+      else
+        'switch not properly held down
+        previous_state = SWITCH_UP
+        ' don't reverse
+        check_switch = false
+        exit function
+      end if
+    end if
+  else
+   'switch not pressed
+    previous_state = SWITCH_UP
+    'don't reverse
+    check_switch = false
+    exit function
+  end if
+end Function

@@ -1,0 +1,70 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program reads the value of a DS18B20 connected to Portc.3.  The DS18B20 must be setup to correctly.
+'''The serial terminal connection must be to the correct RX port and to a common ground.
+'''The receiving serial terminal must be set to 4800 bps.
+'''@author 	EvanV plus works of others
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	31.01.2015
+'''********************************************************************************
+
+; ----- Configuration
+ #chip mega328p, 16
+ #option explicit
+ #include <ds18b20.h>
+
+; ----- Define Hardware settings
+  'Set pin directions
+  Dir SerOutPort Out
+  Dir SerInPort In
+
+
+; ----- Constants
+  ' DS18B20 port settings
+  #define DQ PortC.3
+
+
+  'Setup Serial Port via Max232
+  #define SerInPort PORTD.3
+  #define SerOutPort PORTD.2
+  #define SendAHigh Set SerOutPort off
+  #define SendALow Set SerOutPort on
+  #define RecAHigh SerInPort off
+  #define RecALow SerInPort on
+
+; ----- Variables
+  Dim CCOUNT as Byte
+
+; ----- Main body of program commences here.
+  InitSer 1, r4800, 1+WaitForStart, 8, 1, none, invert
+  wait 500 ms
+
+  ccount = 1
+
+  'Serial print two new line commands
+  SerSend 1, 13: SerSend 1, 10
+  SerSend 1, 13: SerSend 1, 10
+  'Serial print a start messagr
+  SerPrint 1, "Temperature Sensor"
+  SerSend 1, 13: SerSend 1, 10
+  SerSend 1, 13: SerSend 1, 10
+  do forever
+     ' The Readtemp function returns the integer value of the sensor
+     DSdata = readtemp
+
+     'Serial print the event count
+     SerPrint 1, hex(ccount)
+     SerPrint 1, ":"
+     'Serial print a tab
+     SerSend 1, 9
+     ' Serial print the integer value of the sensor on the LCD
+     SerPrint 1, DSdata
+     'Serial print a special character
+     SerPrint 1, chr(0xB0)+"C"
+     SerSend 1, 13: SerSend 1, 10
+     wait 2 s
+     ccount++
+
+  loop
+

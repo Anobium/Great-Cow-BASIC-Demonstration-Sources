@@ -1,0 +1,27 @@
+' Use program uses the Great Cow BASIC Fixed Mode PWM
+' This uses two constants to fix the PWM parameters.
+' This method can ONLY use CCP1
+
+#chip 16f886,8
+
+
+    'Set the CCP1 pin to output mode
+    DIR PORTC.2 out
+
+    'Main code
+    #define PWM_Freq 87      'Frequency of PWM in KHz
+    #define PWM_Duty 50      'Duty cycle of PWM (%)
+
+    do
+
+      PWMOn
+      wait 5 s                'Wait 5s, could any user code. This wait is purely for the analysis of this demonstration.
+
+      'add lots and lots of user code and the PWM signal will remain until PWMOff
+
+      PWMOff
+      wait 1 s                'Wait 1s
+
+    loop
+
+end

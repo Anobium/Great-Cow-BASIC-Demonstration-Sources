@@ -1,0 +1,57 @@
+'''
+'''******************************************************************
+''' LCD demonstration for the board. We have added the LCD section to specific the ports.
+''' All the LCD commands are standard Great Cow BASIC LCD commands.
+'''
+''' See the section "Setup LCD Parameters" for the specification of the LCD commands.
+'''
+'''************************************************************************
+
+
+ #chip 16F19156, 32
+ #option explicit
+ #config LVP=on
+
+  ;Setup LCD Parameters
+  #define LCD_IO 4
+  #define LCD_NO_RW
+  #define LCD_Speed Medium
+
+; ----- Define Hardware settings
+  #define LCD_RS PORTB.2
+  #define LCD_Enable PORTB.3
+  #define LCD_DB4 PORTb.4
+  #define LCD_DB5 PORTb.5
+  #define LCD_DB6 PORTb.6
+  #define LCD_DB7 PORTb.7
+
+;----- Variables
+  Dim BV as Byte
+
+
+'Program Start
+
+  DO Forever
+       CLS
+       WAIT 2 s
+       PRINT "Test LCDHex "
+       wait 3 s
+       CLS
+       wait 1 s
+
+
+       for bv = 0 to 255
+          locate 0,0
+          Print "DEC " : Print BV
+          locate 1,0
+          Print "HEX "
+          LCDHex BV, LeadingZeroActive ; dislay leading Zero
+          locate 1,8
+          Print "HEX "
+          LCDHex BV         ; do not display leading zero
+          wait 1 s
+       next
+       CLS
+       wait 1 s
+       Print "END TEST"
+  LOOP

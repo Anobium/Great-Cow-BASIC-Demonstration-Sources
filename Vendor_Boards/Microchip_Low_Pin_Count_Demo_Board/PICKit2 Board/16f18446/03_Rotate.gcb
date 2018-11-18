@@ -1,0 +1,21 @@
+'''
+''' Great Cow BASIC Header block Header block
+'''
+'''@author  Chris Roper
+'''@licence GPL
+'''@version 1.00
+'''@date    03/05/2018
+'''********************************************************************
+
+  #Chip 16F18446      ' Specify the Device you are compiling for
+
+  Dir PortC OUT       ' Set the Port that has LED's as an output
+  portc.3 = 1         ' LED D4 ON
+
+  do
+    wait 500 ms               ' Pause to show display
+    Set C off                 ' Clear the carry flag
+    Rotate portc right        ' and shift the contents of PortC
+    ' If the Carry is equal to 1 the then set LED D4 again, the same operation as above.
+    if C = 1 then portc.3 = 1
+  loop

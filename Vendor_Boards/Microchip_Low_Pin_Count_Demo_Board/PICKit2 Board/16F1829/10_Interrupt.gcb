@@ -1,0 +1,124 @@
+'''
+'''******************************************************************
+'''  Lesson 10 - "Interrupts and Pull-ups"
+'''
+'''  This lesson will introduce interrupts and how they are useful. It will
+'''  also introduce internal weak pull-ups that are available on most PICs.
+'''
+'''  It should be noted that this lesson is more efficent than the last
+'''  one, "Timer0". Notice how the processor is no longer waiting for
+'''  Timer0 to roll over. Instead, we let the hardware modules do the work,
+'''  freeing the CPU to do other things in the main loop
+'''
+'''  The switch is no longer continuously polled for a button press. Instead,
+'''  an interrupt will occur which will automically place the program counter
+'''  inside of the ISR where we can change directions outisde of normal code execution
+'''
+'''  LEDs rotate at a constant speed and the switch reverses their direction
+'''
+'''  PIC: 16F1829
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: PICkit 2 Low Pin Count Demo Board
+'''  Date: 10.4.2015
+'''
+''''''******************************************************************
+''' See Low Pin Count Demo Board User's Guide for Lesson Information*
+''''''*****************************************************************
+'''
+
+ #chip 16f1829,2
+ #option explicit
+ #config FOSC_INTOSC , WDTE_OFF , PWRTE_OFF , MCLRE_OFF , CP_OFF , CPD_OFF , BOREN_ON , CLKOUTEN_OFF , IESO_OFF
+ #config WRT_OFF , PLLEN_OFF , STVREN_OFF , LVP_OFF
+
+
+  #define DOWN                0
+  #define UP                  1
+
+  #define SWITCH              PORTA.3
+
+  #define LED_RIGHT           1
+  #define LED_LEFT            0
+
+  #define PULL_UPS                                  'if this is uncommented, the trace under JP5 can be cut
+                                                    'with no affect on the output
+    '' -------------------LATC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|DS4|DS3|DS2|DS1|-
+    ''-----------------------------------------
+    ''
+
+    Dim _DIRECTION as Byte
+
+
+    dir portc out
+    portc = 0
+    portc.3 = 1
+    'start with LEDs rotating from right to left
+    _direction = LED_RIGHT
+
+    'setup switch (SW1)
+    dir switch in
+
+
+    #ifdef PULL_UPS
+      'enable the weak pull-up for the switch
+      WPUA2 = 1
+      'enable the global weak pull-up bit
+      NOT_WPUEN = 0
+    #endif
+
+    TMR0IE = 1
+    InitTimer0 Osc, PS0_256
+    On Interrupt Timer0Overflow Call InterruptHandler
+
+    IOCAN3 = 1
+    IOCIE = 1
+    On Interrupt PORTChange  Call InterruptHandler
+
+
+    do
+
+    loop
+
+
+
+sub InterruptHandler
+
+    if IOCAF3 = 1 then                          ' SW1 was just pressed
+        IOCAF3 = 0                              ' must clear the flag in software
+        wait 5 ms                              ' debounce by waiting and seeing if still held down
+        if ( SWITCH = DOWN ) then
+            _direction = 1 XOR _direction     ' change directions
+        end if
+    end if
+
+    if T0IF = 1 then                           ' Timer has overflowed
+        T0IF = 0
+        if  _direction.0 = LED_RIGHT  then
+            'shift to the right by 1
+            Set C off
+            Rotate portc right
+
+            ' when the last LED is lit, restart the pattern
+            if C = 1 then
+               portc.3 = 1
+            end if
+
+        else
+            'shift to the left by 1
+            Set C off
+            Rotate portc left
+
+            'when the last LED is lit, restart the pattern
+            if  portC.4 = 1 then
+                  portC.0 = 1
+                  portC.4 = 0
+            end if
+        end if
+    end if
+
+
+end sub

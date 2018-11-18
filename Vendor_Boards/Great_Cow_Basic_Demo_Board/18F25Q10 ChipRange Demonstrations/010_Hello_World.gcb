@@ -1,0 +1,49 @@
+'''
+''' The  most simple sample for GCGB and GCB.
+'''
+''' This simply set one of the LEDs on - the LED is attached to Portb.0 via a suitable resistor
+'''
+'''
+''' Great Cow  BASIC Header block
+'''
+'''@author  Evan R. Venn
+'''@licence GPL
+'''@version 1.00
+'''@date    27/10/2018
+'''****
+
+' ----- Configuration
+    'Chip Settings.
+    #chip 18F25Q10, 32
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------| O |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
+
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+
+    'Set the a port as an output, we will use only one BIT to connect to the LED
+    dir portb.0 out
+
+    'Set one bit of the port on.
+    portb.0 = 1       ' You can try set portb.4 attach another LED! But, do set the chosen port as an output.
+
+    'End
+    end

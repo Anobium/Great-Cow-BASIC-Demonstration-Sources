@@ -1,0 +1,134 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a demonstration of the SPI capabilities for the mega328p
+'''
+'''This has been tested using the hardware SPI option and a sofware SPI option.
+''':
+''':This shows how the MEGA328p can support hardware and software SPI.
+''':To use hardware SPI mode make sure the #define SPI_HardwareSPI is not commented out.
+''':To use software SPI mode comment out #define SPI_HardwareSPI.
+''':
+''':To use
+''':  Hardware SPI mode the Data Out, Data In and Clock (DO/DI and SCK) cannot be moved but the optional Data Command, Chip Select and Reset are all moveable.
+''':  Software SPI mode the Data Out, Data In and Clock (DO/DI and SCK), Data Command, Chip Select and Reset are all moveable.
+''':
+''':Code:
+''':InitSPIMode calls SPIMode if needed, when hardware mode, and set the lines.
+''':
+''':The sub SendByteviaSPI is called to handle whether to call the Hardware or use Software (bit-banging) SPI.
+''':
+''':
+'''@author    EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date      04.04.2017
+'''********************************************************************************
+
+
+
+    #chip mega328p, 16
+    #option explicit
+    #include <uno_mega328p.h >
+
+    #define SPI_HardwareSPI  'comment this out to make into Software SPI but, you may have to change clock lines
+
+    'Pin mappings for SPI - this SPI driver supports Hardware SPI
+    #define SPI_DC       DIGITAL_8          ' Data command line
+    #define SPI_CS       DIGITAL_4          ' Chip select line
+    #define SPI_RESET    DIGITAL_9          ' Reset line
+
+    #define SPI_DI       DIGITAL_12          ' Data in | MISO
+    #define SPI_DO       DIGITAL_11          ' Data out | MOSI
+    #define SPI_SCK      DIGITAL_13          ' Clock Line
+
+    dir SPI_DC    out
+    dir SPI_CS    out
+    dir SPI_RESET out
+    dir SPI_DO    Out
+    dir SPI_DI    In
+    dir SPI_SCK   Out
+
+    'If DIGITAL_10 is NOT used as the SPI_CS (sometimes called SS) the port must and output or set as input/pulled high with a 10k resistor.
+    'As follows:
+    'If CS is configured as an input, it must be held high to ensure Master SPI operation.
+    'If the CS pin is driven low by peripheral circuitry when the SPI is configured as a Master with the SS pin defined as an input, the
+    'SPI system interprets this as another master selecting the SPI as a slave and starting to send data to it!
+    'If CS is an output SPI communications will commence with no flow control.
+    dir DIGITAL_10 Out
+
+    DIM byte1 As byte
+    DIM byte2 As byte
+    DIM byte3 As byte
+
+    byte1 = 100 ' temp values (will come from potentiometer later)
+    byte2 = 150
+    byte3 = 200
+
+    InitSPIMode
+
+
+    do forever
+        set SPI_CS OFF;
+        set SPI_DC OFF;
+        SendByteviaSPI (byte1)
+        set SPI_CS ON;
+        set SPI_DC ON
+
+        set SPI_CS OFF;
+        set SPI_DC OFF;
+        SendByteviaSPI (byte2)
+        set SPI_CS ON;
+        set SPI_DC ON
+
+        set SPI_CS OFF;
+        set SPI_DC OFF;
+        SendByteviaSPI (byte3)
+        set SPI_CS ON;
+        set SPI_DC ON
+
+        wait 10 ms
+    loop
+
+
+
+sub InitSPIMode
+
+      #ifdef SPI_HardwareSPI
+          SPIMode ( MasterFast, SPI_CPOL_0 + SPI_CPHA_0 )
+      #endif
+
+      set SPI_DO OFF;
+      set SPI_CS ON;   therefore CPOL=0
+      set SPI_DC ON;   deselect
+
+End sub
+
+sub  SendByteviaSPI( in SPISendByte as byte )
+
+  set SPI_CS OFF
+  set SPI_DC OFF;
+
+  #ifdef SPI_HardwareSPI
+     FastHWSPITransfer  SPISendByte
+     set SPI_CS ON;
+     exit sub
+  #endif
+
+  #ifndef SPI_HardwareSPI
+  repeat 8
+
+    if SPISendByte.7 = ON  then
+      set SPI_DO ON;
+    else
+      set SPI_DO OFF;
+    end if
+    SET SPI_SCK On;           ; therefore CPOL=0 ==ON, and, where CPOL=1==ON
+    rotate SPISendByte left
+    set SPI_SCK Off;          ; therefore CPOL=0  =OFF, and, where CPOL=1==OFF
+
+  end repeat
+  set SPI_CS ON;
+  set SPI_DO OFF;
+  #endif
+
+end Sub

@@ -1,0 +1,16 @@
+''' Great Cow BASIC Header block
+'''
+'''@author  Chris Roper
+'''@licence GPL
+'''@version 1.00
+'''@date    03/05/2018
+'''********************************************************************
+
+#chip 16F18446    ' Specify the Device you are compiling for
+
+Dir PortC OUT     ' Set Port C that has LED's attached to as an output
+
+PortC = 0b0001111 ' Turn on the LEDs attached the four output ports PortC.0, PortC.1 ,PortC.2 and PortC.3
+                  ' This also clears, or, set to 0 the other ports.
+
+End

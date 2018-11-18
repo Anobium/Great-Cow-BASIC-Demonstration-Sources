@@ -1,0 +1,33 @@
+'''
+'''  One way to create a delay is to spend time decrementing to a value.
+'''  The demonstration will use a Great Cow BASIC method to toggle the LED.
+'''
+'''  LED DS1 blinks at a rate of approximately 1.0 seconds.
+'''
+'''  PIC: 16F18855
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: Xpress Evaluation Board
+'''  Date: 13.3.2016
+'''
+
+' ----- Configuration
+    'Chip Settings.
+    #chip 16f18855,32
+    #Config MCLRE_ON
+
+    '' -------------------LATA-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|D5 |D4 |D3 |D1 |-
+    ''-----------------------------------------
+    ''
+
+    dir porta.0 out
+
+    do
+        wait 1000 ms
+        'An alternative Great Cow BASIC method.
+        SetWith ( porta.0, FnNotBit (porta.0) )
+
+    loop

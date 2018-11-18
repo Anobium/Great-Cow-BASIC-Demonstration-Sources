@@ -1,0 +1,68 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program shows the converter capabilities of Great Cow Basic by converting an external source file to a GCB table.
+'''The external source file contains the port settings, as a bit pattern, and the associated delay timings.
+'''A set of 8 LEDs would be connected to PortB via appropriate resistors.
+'''This program requires the AWK.exe utility, AWKRUN.BAT and the assoicated configuration file (TXT2GCB.INI) to be installed in the GCBasic converters folder.
+'''
+'''@author 	EvanV
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	31.01.2015
+'''********************************************************************************
+
+; ----- Configuration
+
+ #chip 16f877a, 16
+ #option explicit
+
+ ; This is the source data file that will be converted into a GCB table by the external converter program.
+ #include <..\converters\infraredpatterns.txt>
+
+; ----- Constants
+  ' No Constants specified in this example.
+
+; ----- Define Hardware settings
+  dir portb out
+
+
+; ----- Variables
+  ' These variables must be WORDs as this could be large table created by the conversion program
+  dim TableReadPosition, TableLen as word
+  Dim TRANSMISSIONPATTERN, PULSEDELAY as Byte
+
+; ----- Quick Command Reference:
+  'This is demonstration of the capabiliites of the GCB converter process.
+
+
+; ----- Main body of program commences here.
+
+  'Read the table length from the first entry in the table.
+  TableReadPosition = 0
+  ReadTable DataSource, TableReadPosition, TableLen
+
+
+  'Read the rest of the table and use the dataset to to set the LEDs with an appropiate time delay.  These values are obtained from the source file.
+  DO Forever
+      For TableReadPosition = 1 to TableLen step 2
+          ReadTable DataSource, TableReadPosition, TransmissionPattern
+          ReadTable DataSource, TableReadPosition+1 , PulseDelay
+          'Set the port
+          portb = TransmissionPattern
+          wait PulseDelay ms
+      next
+  Loop
+
+
+  end
+
+; ----- Support methods.  Subroutines and Functions
+
+
+
+
+
+
+
+
+

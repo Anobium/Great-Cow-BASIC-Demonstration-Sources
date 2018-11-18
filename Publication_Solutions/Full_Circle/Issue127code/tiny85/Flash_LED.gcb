@@ -1,0 +1,16 @@
+; ----- Configuration
+  #chip tiny85, 8
+
+  #OPTION EXPLICIT                    'Provide that variables are dimensioned before use
+  #DEFINE RANDOMIZE_SEED Timer0       'Timer0 gives random values to the Random function
+  #DEFINE PWM_Out1 portB.1            'SoftPWM channel 1
+  #OPTION VOLATILE PortB.1            'Avoid glitches on the LED
+  'Set initial PIN direction and state:
+  DIR PWM_Out1 OUT                    'Set direction LED to output
+
+  'The main program:
+  DO
+      RANDOMIZE
+      PWMOUT 1, RANDOM, 100     'Use Soft-PWM chan. 1 @random
+      WAIT RANDOM MS            'Wait some time
+  LOOP

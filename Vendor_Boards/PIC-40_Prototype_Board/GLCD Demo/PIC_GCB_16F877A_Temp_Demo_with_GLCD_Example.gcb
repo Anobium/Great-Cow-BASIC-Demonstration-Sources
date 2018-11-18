@@ -1,0 +1,139 @@
+'  FILE:    PIC_GCB_16f1939_Temp_Demo_with_GLCD_Example.gcb
+'  DATE:    07/08/14
+'  VERSION: 0.1a
+'  AUTHOR:  Anobium
+'
+'This program was written using the Great Cow Basic IDE for use with the PIC
+'16F8777A development board (HCDVBD0003) and a GLCD module
+'to display the value of the a DS18B20 sensor.
+
+
+'Chip Settings. Assumes the development board with with a 16F877A
+#chip 16F877a,20
+#option explicit
+
+#include <ds18b20.h>
+#include <glcd.h>
+
+
+#define GLCD_TYPE GLCD_TYPE_ST7920
+#define GLCD_IO 8
+#define GLCD_WIDTH 128
+#define GLCD_HEIGHT 64
+
+' read delay of 25 is required at 32mhz, this can be reduced to 0 for slower clock speeds
+#define ST7920ReadDelay 25
+' write delay of 2 is required at 32mhz.  this can be reduced to 1 for slower clock speeds
+#define ST7920WriteDelay 2
+
+
+#define GLCD_RS PORTE.0
+#define GLCD_Enable PORTE.2
+#define GLCD_RW PORTE.1
+#define GLCD_RESET PORTA.0
+#define GLCD_DATA_PORT PORTD
+
+Dim CCOUNT, SIGNBIT, WHOLE, FRACT, DIG as Byte
+
+
+ST7920GLCDDisableGraphics
+GLCDCLS
+GLCDPrint 0, 0, "Great Cow Basic "
+wait 2 s
+
+    ST7920GLCDEnableGraphics
+    GLCDCLS
+    GLCDDrawString 30,0,"ChipMhz@"    ;print string
+    GLCDDrawString 78,0, str(ChipMhz) ;print string
+    circle(10,10,10)                  ;upper left
+    circle(117,10,10)                 ;upper right
+    circle(63,31,10)                  ;center
+    circle(63,31,20)                  ;center
+    circle(10,53,10)                  ;lower left
+    circle(117,53,10)                 ;lower right
+
+    GLCDDrawString 46,54,ChipNameStr  ;print string
+    wait 1 s                          ;wait
+
+
+
+  ' DS18B20 port settings - this is required
+  #define DQ PortC.3
+
+  dim TempC_100 as word  ' a variable to handle the temperature calculations
+  dim IntC_100 as integer  ' a variable to handle the temperature calculations
+  dim msg1 as string * 20  ' a variable to handle the temperature formatting
+  ccount = 0
+  GLCDCLS          ;clear
+  GLCDPrint 0,0, "DS18B20 Temperature"
+  GLCDPrint 48,8, "Sensor"
+
+Do
+  ' The temperature is read back in whole degree steps, and the sensor operates from
+  ' -55 to + 125 degrees Celsius. Note that bit 7 is 0 for positive temperature values
+  ' and 1 for negative values (ie negative values will appear as 128 + numeric value).
+
+   DSdata = readtemp
+
+   ' Format the value of the sensor for the GLCD
+   msg1 = hex(ccount)
+   msg1 = msg1 + " Ceil:"
+
+   ' Test the returned value, if bit 7 is set then the returned value is a negative
+   if DSdata.7 = 0 then
+      msg1 = msg1 + str(DSdata)
+   else
+      msg1 = msg1 + "-"
+      DSdata = DSdata  - 128
+      msg1 = msg1 + str(DSdata)
+   end if
+   msg1 = msg1 + "C  "
+   GLCDPrint 0,24, msg1
+
+
+
+   ' Display the integer and decimal value of the sensor on the GLCD
+   ' The function readtemp12 returns the raw value of the sensor.
+   ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
+   DSdata = readtemp12
+   SignBit = DSdata / 256 / 128
+   If SignBit = 0 Then goto Positive
+   ' its negative!
+   DSdata = ( DSdata # 0xffff ) + 1 ' take twos comp
+
+Positive:
+
+   ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
+   TempC_100 =  DSdata * 6
+   DSdata = ( DSdata * 25 ) / 100
+   TempC_100 = TempC_100 + DSdata
+
+   Whole = TempC_100 / 100
+   Fract = TempC_100 % 100
+
+DisplayTemp:
+
+   ' Format the value of the sensor for the GLCD
+   msg1 = hex(ccount)
+   msg1 = msg1 + " Real:"
+   If SignBit = 0 Then
+      msg1 = msg1 + Str(Whole) + "."
+   else
+      msg1 = msg1 + "-"
+      msg1 = msg1 + Str(Whole) + "."
+   end if
+
+
+  ' To ensure the decimal part is two digits
+   Dig = Fract / 10
+   msg1 = msg1 + str( Dig )
+   Dig = Fract % 10
+   msg1 = msg1 + str( Dig )
+   msg1 = msg1 + "C"
+   msg1 = msg1 + "   "
+   GLCDPrint 0,40, msg1
+
+   wait 2 s
+   ccount++
+
+loop

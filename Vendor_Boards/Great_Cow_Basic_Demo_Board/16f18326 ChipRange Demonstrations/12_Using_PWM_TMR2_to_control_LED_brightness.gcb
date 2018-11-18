@@ -1,0 +1,103 @@
+''' A demonstration program for GCGB and GCB.
+'''
+'''
+''' Pulse-Width Modulation (PWM) is a scheme that provides power to a load by switching
+''' quickly between fully on and fully off states. The PWM signal resembles a square wave
+''' where the high portion of the signal is considered the on state and the low portion of
+''' the signal is considered the off state. The high portion, also known as the pulse width,
+''' can vary in time and is defined in steps. A longer, high on time will illuminate the LED
+''' brighter. The frequency or period of the PWM does not change. A larger number of
+''' steps applied, which lengthens the pulse width, also supplies more power to the load.
+''' Lowering the number of steps applied, which shortens the pulse width, supplies less
+''' power. The PWM period is defined as the duration of one complete cycle or the total
+''' amount of on and off time combined.
+'''
+''' This demonstation shows a how the changing PWM values across the LEDs using the PWM module using different timers and PMW modules.
+'''
+'''
+'''   You need four LEDs connnect to portc.0, portc.1, portc.2 and portc.3 connected via suitable resistors.
+'''  ************************************************************************************************************************************************************************************
+'''
+'''  PIC: 16F18326
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''
+'''@author   EvanV
+'''@licence  GPL
+'''@version  1.0
+'''@date     29.07.2016
+
+
+
+    #chip 16F18326,32
+    #option explicit
+    #Config WRT_OFF, CPD_ON, MCLRE_ON, FEXTOSC_OFF, CLKOUTEN_OFF    'These configs = User non-votatile protection off (WRT), Data non-votatile protection off (CPD), MCLR pin function enablesd, External oscillator not enabled and clockout function is disables ( enable portc.5 to I/O port).
+
+
+    'Set the PPS of the PWM and the RS232 ports.
+    'Set the PPS for this solution.
+  #startup InitPPS, 85
+
+  Sub InitPPS
+    UNLOCKPPS
+
+        RC3PPS = 0x0003;   'RC3->PWM6:PWM6OUT;
+        RC2PPS = 0x0003;   'RC2->PWM6:PWM6OUT;
+        RC1PPS = 0x0003;   'RC1->PWM6:PWM6OUT;
+        RC0PPS = 0x0003;   'RC0->PWM6:PWM6OUT;
+
+'        'if you want to use PWM5 then you will need to uncomment thise PPS settings
+'        RC3PPS = 0x0002;   'RC3->PWM5:PWM5OUT;
+'        RC2PPS = 0x0002;   'RC2->PWM5:PWM5OUT;
+'        RC1PPS = 0x0002;   'RC1->PWM5:PWM5OUT;
+'        RC0PPS = 0x0002;   'RC0->PWM5:PWM5OUT;
+
+
+      LOCKPPS
+  End sub
+
+    #define USART_BAUD_RATE 19200
+    #define USART_TX_BLOCKING
+
+    'You Optimise the code... but, beware.. if you do not set a capability to TRUE... it will not be avaialbe to you!
+'    #define USE_HPWM7 TRUE         ' Not avaiable on this chip
+'    #define USE_HPWM6 TRUE          ' used so compile
+'    #define USE_HPWM5 TRUE         ' not used Optimise
+'    #define USE_HPWM_TIMER2 TRUE    ' used so compile
+'    #define USE_HPWM_TIMER4 TRUE    ' not used Optimise
+'    #define USE_HPWM_TIMER6 TRUE    ' not used Optimise
+
+    '' -------------------LATC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
+    ''-----------------------------------------
+    ''
+    #define LEDD2  PORTC.0
+    #define LEDD3  PORTC.1
+    #define LEDD4  PORTC.2
+    #define LEDD5  PORTC.3
+    #define LEDBANK portc
+
+    Dir     LEDD2 OUT
+    Dir     LEDD3 OUT
+    Dir     LEDD4 OUT
+    Dir     LEDD5 OUT
+
+    Dim BRIGHT as Byte
+
+
+    Do Forever
+          for bright = 0 to 100
+              wait 10 ms
+              'Four parameters
+              ' 1. PWM channel - check the datasheet - you must ensure the PPS is set!!
+              ' 2. frequency
+              ' 3. duty
+              ' 4. timer to be used - check the datasheet typically. 2, 4 or 6
+              HPWM ( 6, 62, bright , 2  )
+        next
+        wait 10 ms
+    Loop
+
+

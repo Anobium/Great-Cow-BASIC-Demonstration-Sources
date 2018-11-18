@@ -1,0 +1,93 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program reads the value of a DS18B20 connected to Portc.3.  The DS18B20 must be setup to correctly.
+'''The serial connection must be to the hardware RX port and to a common ground.
+'''The receiving serial terminal must be set to 4800 bps.n.
+'''@author  EvanV plus works of others
+'''@licence GPL
+'''@version 1.0a
+'''@date    14.02.2015
+'''********************************************************************************
+
+; ----- Configuration
+ #chip 16F886, 16
+ #option explicit
+ #include <ds18b20.h>
+
+; ----- Define Hardware settings
+  'Config UART
+  #define USART_BLOCKING
+  #define USART_BAUD_RATE 4800
+
+; ----- Constants
+  ' DS18B20 port settings
+  #define DQ PortC.3
+
+; ----- Variables
+  'TempC_100 required to support temp sensor
+  Dim TempC_100 as word
+  Dim CCOUNT, SIGNBIT, WHOLE, FRACT, DIG as Byte
+
+; ----- Main body of program commences here.
+  ccount = 1
+
+  'Serial print a start message
+  HSerPrintCRLF 2
+  HSerPrint "Temperature Sensor"
+  HSerPrintCRLF 2
+  do forever
+     ' The Readtemp function returns the integer value of the sensor
+     DSdata = readtemp
+
+     'Serial print the event count
+     hserprint hex(ccount)
+     hserprint ":"
+     'Serial print a tab
+     hsersend 9
+     ' Serial print the integer value of the sensor on the LCD
+     hserprint DSdata
+     'Serial print a special character
+     hserprint chr(0xB0)+"C"
+     HSerSend 9
+
+
+
+     ' Display the integer and decimal value of the sensor on the LCD
+
+       ' The function readtemp12 returns the raw value of the sensor.
+       ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
+       DSdata = readtemp12
+       SignBit = DSdata / 256 / 128
+       If SignBit = 0 Then goto Positive
+       ' its negative!
+       DSdata = ( DSdata # 0xffff ) + 1 ' take twos comp
+
+    Positive:
+
+       ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
+       TempC_100 =  DSdata * 6
+       DSdata = ( DSdata * 25 ) / 100
+       TempC_100 = TempC_100 + DSdata
+
+       Whole = TempC_100 / 100
+       Fract = TempC_100 % 100
+       If SignBit = 0 Then goto DisplayTemp
+       hserprint "-"
+
+    DisplayTemp:
+       hserprint str(Whole)
+       hserprint "."
+      ' To ensure the decimal part is two digits
+       Dig = Fract / 10
+       hserprint Dig
+       Dig = Fract % 10
+       hserprint Dig
+       hserprint chr(0xB0)
+       hserprint "C"
+       HSerPrintCRLF
+
+       wait 2 s
+
+     ccount++
+
+  Loop

@@ -1,0 +1,116 @@
+'''
+''' This demonstration uses a simple software routine to show you can use the reset button as an inout.
+'''
+''' When the switch is held down, one LED will be lit.
+''' But, this time we are using the RESET button as an input switch!!
+'''
+'''
+'''
+'''Great Cow  BASIC Header block
+'''
+'''@author  Evan R. Venn
+'''@licence GPL
+'''@version 1.00
+'''@date    27/10/2018
+'''****
+' ----- Configuration
+    'Chip Settings.
+    #chip 18F25Q10, 32
+    #option Explicit
+
+    'Change the MCLRE to MCLRE_INTMCLR.  This will ensure the reset is an input by setting this Configuration Switch.
+    'Try changing to MCLRE_EXTMCLR to see the diffence.
+    #config MCLRE_INTMCLR
+
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------------------| I | A |-----
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------| O | O | O | O |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTE-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    XXXXXXXXXXXXXXX| I | XXXXXXXXXXXX
+    ''-----------------------------------------
+    ''
+
+
+    'Define constants to make things easier. We can reuse these at any time.
+    #define LEDPORT PORTB
+    #define LEDD1   LEDPORT.0
+    #define LEDD2   LEDPORT.1
+    #define LEDD3   LEDPORT.2
+    #define LEDD4   LEDPORT.3
+
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     LEDD3         Out
+    Dir     LEDD4         Out
+
+    #define SWITCHPORT    PORTA
+    #define SwitchIn      SWITCHPORT.2
+    Dir     SwitchIn      In
+
+    #define RSTButton     PORTE.3
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+     dim lastKeyDown as Byte
+
+
+     'Just show we have restarted the microcontroller.. if the reset button is active then everytime you push it.. the LEDs will flash.
+     Repeat 20
+
+        LEDD1 = !LEDD1
+        LEDD2 = !LEDD2
+        wait 50 ms
+
+     End Repeat
+
+
+     'Debouncing two switches
+      Do forever
+                wait 10 ms
+
+                'This line is normally HIGH, so, we have to test when the line goes low.
+                if  SwitchIn = 0 then
+
+                    'push button pressed
+                    LEDD1 = 1
+
+                Else
+
+                    LEDD1 = 0
+
+                end if
+
+
+                'The reset line is always HIGH, so, we have to test when the line goes low.
+                if  RSTButton = 0 then
+
+                    'push button pressed
+                    LEDD2 = 1
+
+                else
+
+                    LEDD2 = 0
+
+                end if
+
+
+      loop

@@ -1,0 +1,12 @@
+'Toggle the output port to ensure we have connectivity!
+
+#chip 16f1705, 32
+
+#define outport portc.5
+dir outport out
+
+do
+
+  outport = !outport
+
+loop

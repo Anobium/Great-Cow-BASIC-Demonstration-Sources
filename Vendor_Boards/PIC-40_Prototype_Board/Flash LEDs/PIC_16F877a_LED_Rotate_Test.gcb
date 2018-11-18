@@ -1,0 +1,56 @@
+'   FILE:    PIC_16F877a_LED_Rotate_Test.gcb
+'   DATE:    02/08/14
+'   VERSION: 0.1a
+'   AUTHOR:  Anobium
+
+'  This test program will flash the LEDs connected to port D on the development board, aka Knight Rider.. back and forth LEDs
+'  It was written using the Great Cow Basic (GCB) complier. Install GCB - you are recommended to use
+'  GCB@SYN from the Great Cow Basic website.
+
+'    This code is free software; you can redistribute it and/or
+'    modify it under the terms of the GNU Lesser General Public
+'    License as published by the Free Software Foundation; either
+'    version 2.1 of the License, or (at your option) any later version.
+
+'    This code is distributed in the hope that it will be useful,
+'    but WITHOUT ANY WARRANTY; without even the implied warranty of
+'    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'    Lesser General Public License for more details.
+
+'    If you require a copy of the GNU Lesser General Public
+'    License along with this code; please write to the Free Software
+'    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+' Chip settings
+
+
+#chip 16F877a, 20          ' Select the chip and the chip speed
+#option explicit
+
+' Set ports
+  dir portd out          ' Set the portd as outputs
+  set portd = 255        ' Set the initial value of the state of the LEDs
+
+' Set required variables
+  Dim DDELAY as Byte
+  ddelay = 125          ' Set the delay for the LEDs
+
+
+
+  do forever                      ' Loop forever
+
+    repeat 8                      ' Repeat this loop 8 times
+           Rotate PORTD Left      ' Rotate the portD to the left, shifting Carry Bit (equals 0 to first port)
+           wait ddelay ms         ' wait
+
+    end Repeat                    ' Loop
+    wait ddelay ms
+
+    repeat 7                      ' Repeat this loop 7 times, 7 prevents a double flash of one of the LEDs
+         Rotate PORTD Right       ' Rotate the portD to the right.
+         wait ddelay ms           ' wait
+    end Repeat                    ' loop
+
+    set portd = 255               ' reinitialise the port
+    Set C off                     ' ensure the Carry Bit is 0
+
+  loop                            ' loop forever

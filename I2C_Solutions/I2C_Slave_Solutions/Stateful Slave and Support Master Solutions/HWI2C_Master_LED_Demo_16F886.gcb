@@ -1,0 +1,104 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program searches for HI2C devices and display their adresses to the attached PC terminal.
+'''This program uses the software implementation of HI2C for the Microchip microprocessors.
+'''The hardware serial connections are shown in the program.
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    14.12.16
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 16F886
+  #config mclr_on
+  #option explicit
+
+
+  #define SWITCH_DOWN         0
+  #define SWITCH_UP           1
+
+  #define SWITCH      PORTA.5
+
+; ----- Define Hardware settings
+  ' Define HI2C settings - CHANGE PORTS if required
+  #define HI2C_BAUD_RATE 400
+  #define HI2C_DATA PORTC.4
+  #define HI2C_CLOCK PORTC.3
+  'Initialise HI2C Slave
+  'I2C pins need to be input for SSP module
+  Dir HI2C_DATA in
+  Dir HI2C_CLOCK in
+ 'MASTER
+  HI2CMode Master
+
+  #DEFINE TargetGCBI2CAddress 0X40
+
+ ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
+ ' USART settings - CHANGE PORTS if required
+ #define USART_BAUD_RATE 19200
+ Dir PORTc.6 Out
+ Dir PORTc.7 In
+ #define USART_TX_BLOCKING
+ wait 500 ms
+
+
+
+;----- Variables
+  #define STRINGSIZE 32
+
+  dim DeviceID, remoteLEDSTate, HI2CRetry as byte
+  Dim eepromVal1, eepromVal2, eepromVal3 as Byte
+
+
+
+; ----- Main body of program commences here.
+         ' Now assumes Serial Terminal is operational
+  dim DeviceID as byte
+
+  HSerPrintCRLF
+  HSerPrint "Hardware HI2C"
+  HSerPrint " - LED Demo to Slave Device 0x"
+  HSerPrint hex( TargetGCBI2CAddress )
+  HSerPrintCRLF 2
+
+  Repeat  4
+
+     HI2CRetry = 0
+
+      HI2CStart                              ;generate a start signal
+      HI2CSend(TargetGCBI2CAddress)                       ;inidcate a write
+      HI2CSend(0x23)
+      HI2CSend(0)                      ;this value is incrementing - just to get the demo Slave to figure out a packet has been sent
+      HI2CStop
+      wait 100 ms
+
+
+      HI2CStart                              ;generate a start signal
+      HI2CSend(TargetGCBI2CAddress)                       ;inidcate a write
+      HI2CSend(0x23)
+      HI2CSend(15)                      ;this value is incrementing - just to get the demo Slave to figure out a packet has been sent
+      HI2CStop
+      wait 500 ms
+
+
+
+
+  End Repeat
+
+  do
+
+      for remoteLEDSTate = 0 to 7
+          HI2CRetry = 0
+          HI2CStart                              ;generate a start signal
+          HI2CSend(TargetGCBI2CAddress)                       ;inidcate a write
+          HI2CSend(0x23)
+          HI2CSend(remoteLEDSTate)                      ;this value is incrementing - just to get the demo Slave to figure out a packet has been sent
+          HI2CStop
+          wait 500 ms   ' this delay WILL impact the DEMO SLAVE terminal out.  This is because the Interrupts in HSERPRINT impact the SLAVE.
+
+      Next
+
+  loop
+
+; ----- Support methods.  Subroutines and Functions

@@ -1,0 +1,63 @@
+'''A demonstration program for GCGB and GCB
+'''This program will test the LCD panel and show decimal and hexidecimal values on the LCD
+'''Requires  LCD Keypad Shield attached to a Arduino UNO.
+'''The LCD Keypad shield is developed for Arduino compatible boards, to provide a user-friendly interface that allows users to go through the menu, make selections etc.
+'''It consists of a 1602 white character blue backlight LCD.
+'''The keypad consists of 5 keys — select, up, right, down and left. To save the digital IO pins, the keypad interface uses only one ADC channel. The key value is read through a 5 stage voltage divider.
+'''@author 	EvanV plus works of William Roth
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	16 March 2015
+'''********************************************************************************
+
+; ----- Configuration
+  #chip mega328p, 16
+  #option explicit
+  #include <uno_mega328p.h>
+
+; ----- Constants
+  ;Setup LCD Parameters
+  #define LCD_IO 4
+  #define LCD_NO_RW
+  #define LCD_Speed slow
+
+
+  #define LCD_RS         Digital_8
+  #define LCD_Enable     Digital_9
+  #define LCD_DB4        Digital_4
+  #define LCD_DB5        Digital_5
+  #define LCD_DB6        Digital_6
+  #define LCD_DB7        Digital_7
+
+; ----- Define Hardware settings
+
+
+; ----- Variables
+  Dim BV as Byte
+
+; ----- Quick Command Reference:
+; ----- Main body of program commences here.
+
+  DO Forever
+       CLS
+       WAIT 2 s
+       PRINT "Test LCDHex "
+       wait 3 s
+       CLS
+       wait 1 s
+
+
+       for bv = 0 to 255
+          locate 0,0
+          Print "DEC " : Print BV
+          locate 1,0
+          Print "HEX "
+          LCDHex BV, LeadingZeroActive ; dislay leading Zero
+          locate 1,8
+          LCDHex BV         ; do not display leading zero
+          wait 1 s
+       next
+       CLS
+       wait 1 s
+       Print "END TEST"
+  LOOP

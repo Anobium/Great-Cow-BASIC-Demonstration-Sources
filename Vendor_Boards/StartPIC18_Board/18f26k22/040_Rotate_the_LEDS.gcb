@@ -1,0 +1,73 @@
+'''
+'''  This lesson will introduce shifting instructions as well as bit-oriented skip operations to
+'''  update the LEDs.
+'''
+'''  LEDs change at a rate of 1.0s, the bit are set ON or equal to 1 when the LED is turned on!
+'''
+'''
+'''************************************************************************
+'''
+'''  PIC: 18f26k22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: Xpress Evaluation Board
+'''  Date: 29.8.17
+'''
+' ----- Configuration
+    'Chip Settings.
+    #chip 18f26k22, 16
+    #option Explicit
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -----------| A |-----------------
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | ----------| O | I |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------------------| X |---------
+    ''-----------------------------------------
+    ''
+
+    'Define constants to make things easier. We can reuse these at any time.
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTC.5
+    #define LCDControl      PORTC.2
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the AN17 port
+    Dir     LCDControl    Out
+
+    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+    LCDControl = 1
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+
+   'Set the LED states
+    LEDD1 = 1
+    LEDD2 = 0
+
+
+    do
+
+        'Wait for milliseconds
+        Wait 100 ms
+
+        'Flip the state of the LEDs
+        LEDD1 = NOT LEDD1
+        LEDD2 = NOT LEDD2
+
+
+    loop

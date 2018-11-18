@@ -1,0 +1,84 @@
+'''
+'''******************************************************************
+'''
+''' This demonstration will provide code for raising an event when a port changes.
+''' The port that is being set then inspected in portb.7. Why? Because we can use the Pickit IO utility to change the state of the port by pressing the Letter S in the Pickit 2 IO Utility
+''' In the Pickit 2 IO Utility, select Poweer from the Pickit 2, the select Pickit 2 IO Utility, then, enable IO
+'''  then, set PIN 4 as an output - and, press S. The LED will toggle on the event.
+'''
+''' When the event happens the LED is toggled.  The LED will toggle when the Signal value is 0.
+'''
+'''************************************************************************
+'''
+'''  PIC: 18f26k22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: SmartPIC 18 Board
+'''  Date: 29.8.17
+'''
+' ----- Configuration
+    'Chip Settings.
+    #chip 18f26k22, 16
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---|RS |RW | E |D7 |D6 |D5 |D4
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | A |-------| O | I |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---| TX| A |-------| X |---------
+    ''-----------------------------------------
+    ''
+
+
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTC.5
+    #define SwitchIn        PORTB.0
+    #define LCDControl      PORTC.2
+    #define EventPort       PORTB.7
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the AN17 port
+    Dir     SwitchIn      In
+    Dir     LCDControl    Out
+
+    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+    LCDControl = 1
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+
+
+    'Setup an Interrupt event when portb.7 goes negative.
+    IOCB7 = 1
+    On Interrupt PORTChange  Call InterruptHandler
+    do
+
+    loop
+
+
+sub InterruptHandler
+
+    if EventPort = 0 then                     'Is this our event?
+        IOCB7 = 0                             'Prevent the event from reentering the InterruptHandler routine
+        RBIF  = 0                             'We must clear the flag in software
+
+        LEDD1 = !LEDD1                        'Toogle the LED
+
+        IOCB7 = 1                             'ReEnable the InterruptHandler routine
+
+    end if
+
+end sub

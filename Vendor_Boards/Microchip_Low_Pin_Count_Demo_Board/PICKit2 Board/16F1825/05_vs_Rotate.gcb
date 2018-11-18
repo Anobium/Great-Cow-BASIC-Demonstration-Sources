@@ -1,0 +1,52 @@
+'''
+'''******************************************************************
+'''
+'''  Lesson 5 - "Variable Speed Rotate"
+'''
+'''  This lesson combines all of the previous lessons to produce a variable speed rotating
+'''  LED display that is proportional to the ADC value. The ADC value and LED rotate
+'''  speed are inversely proportional to each other.
+'''
+'''  Rotate the POT counterclockwise to see the LEDs shift faster.
+'''
+'''
+''' The top four MSbs of the ADC are mirrored onto the LEDs. Rotate the potentiometer
+''' to change the display.
+'''
+'''
+'''  PIC: 16F1825
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: PICkit 2 Low Pin Count Demo Board
+'''  Date: 10.4.2015
+'''
+''''''******************************************************************
+''' See Low Pin Count Demo Board User's Guide for Lesson Information*
+''''''*****************************************************************
+'''
+
+
+ #chip 16f1825,8
+ #config FOSC_INTOSC , WDTE_OFF , PWRTE_OFF , MCLRE_OFF , CP_OFF , CPD_OFF , BOREN_ON , CLKOUTEN_OFF , IESO_OFF
+ ' , FCMEN_OFF
+ #config WRT_OFF , PLLEN_OFF , STVREN_OFF , LVP_OFF
+
+    '' -------------------LATC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|DS4|DS3|DS2|DS1|-
+    ''-----------------------------------------
+    ''
+
+    dir portc out
+    portc = 0
+    portc.3 = 1
+
+    do
+        wait  ( ( ReadAD10 ( AN0 )  / 4 ) + 1 ) ms
+
+        wait 5 ms
+        Set C off
+        Rotate portc right
+        if C = 1 then portc.3 = 1
+    loop

@@ -1,0 +1,69 @@
+'''A demonstration program for EUSART testing two usarts
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program receive a character from Software-UART and sends it back.
+'''Typically, this sending device is a PC terminal program.
+''':
+'''When using serial commands it essential to  set the following:
+'''		Set the baudrate
+'''		Set the port directions, and
+'''		Set up USART blocking or TX__BLOCKING, if required.
+''':
+'''The initialisation of the serial port will occur based upon the baudrate, port directions and blocking automatically.
+'''The automatical setup will occur by the use of any HSER* command in your program.
+''':
+''':
+'''@author 	Mike Otte
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	31.01.2015
+'''********************************************************************************
+
+
+; ----- Configuration
+#chip 18f26k22, 16
+
+; ----- Define USART settings
+  'Set the pin directions
+  #define USART_BAUD_RATE 9600
+  #define USART_BLOCKING
+  #define USART2_BAUD_RATE 9600
+  #define USART2_TX_BLOCKING
+
+; ----- Define Hardware settings
+  #define SerInPort PORTc.7	'usart1 in
+  #define SerOutPort PORTc.6	'usart2 out
+  'Set pin directions
+  Dir SerOutPort Out
+  Dir SerInPort In
+  Dir PORTB.6 Out			'USART2 out
+  Dir PORTB.7 In			'USArt2 in
+  Dir PORTB.0 Out			'leds for testing
+  Dir PORTB.1 Out			'leds for testing
+
+; ----- Variables
+  ' No Variables specified in this example. All byte variables are defined upon use.
+	Dim myNum as Word
+  Dim myString as string
+
+
+; ----- Main body of program commences here.
+		  Wait 100 Ms
+
+    'Message after reset
+    HSerPrint "18F26k22"
+    HSerPrintCRLF
+		HSerPrint "18F26k22",2
+    HSerPrintCRLF,2
+
+    'Main routine
+  	Do Forever
+        'wait for char from USART 2
+        HSerGetNum myNum,2	'get from USART 2
+
+        'a typical number is... myNum = 54321
+        HSerPrint myNum, 1		'send out usart 1
+        HSerPrint myNum, 2		'send out usart 2
+        HSerPrintCRLF 1, 2		'send one CRLF out usart 2
+				HSerPrintCRLF	1, 1		'send one CRLF out usart 1
+        wait 1 s
+    Loop

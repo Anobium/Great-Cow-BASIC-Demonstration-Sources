@@ -1,0 +1,190 @@
+'''A demonstration program for GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+''' This program: for the Mega328p
+''' demonstrates the use of mechanical rotary encoder
+''' with the ALPS-EC11.h include file.
+'''
+'''@author 	Immo,DL5KB&EvanV
+'''@licence	GPL
+'''@version	1.0b
+'''@date   	Dec 2015
+''' *****************************************
+''' Program: Reads a rotary encoder ALPS EC11
+'''
+''' Turning the knob counts a number up or down in single steps,
+''' corresponding to turning sense.
+''' Pushing encoder switch, disables counting.
+''' Pushing encoder switch again, enables counting again.
+''' Encoder works to Vss (0V), ports are pulled up internal.
+''' LCD is 2x16 connected as Arduino Shield
+''' *****************************************
+
+
+; ----- Configuration
+  #chip mega328p,16
+  #option explicit
+  #include <uno_mega328p.h>
+
+	' Load encoder header file
+  #include <alps-ec11.h>
+
+  ;Setup LCD Parameters
+  #define LCD_IO 4
+  #define LCD_NO_RW
+  #define LCD_Speed slow
+
+
+  #define LCD_RS         Digital_8
+  #define LCD_Enable     Digital_9
+  #define LCD_DB4        Digital_4
+  #define LCD_DB5        Digital_5
+  #define LCD_DB6        Digital_6
+  #define LCD_DB7        Digital_7
+
+
+  #define btnRIGHT  0
+  #define btnUP     1
+  #define btnDOWN   2
+  #define btnLEFT   3
+  #define btnSELECT 4
+  #define btnNONE   5
+
+
+; ----- Define Hardware settings
+  #define Resetbtn         Reset
+  dir Resetbtn in
+  #define LCDBacklite      Digital_10
+  dir LCDBacklite out
+	Set LCDBacklite On
+
+; ----- Define Hardware settings
+
+
+  'Encoder connections defined here for Mega328p these should not be changed
+  #define Alps_ENCODER_A		Portd.2  	'Clock on INT0
+
+  #define Alps_ENCODER_B		Portd.0		'CW
+
+  #define Alps_ENCODER_SW		Portd.3		'Encoder-switch on INT1
+
+  #define Alps_ENCODER_ENC_READ_DELAY 200
+
+  dir Alps_ENCODER_A in
+  dir Alps_ENCODER_B in
+  dir Alps_ENCODER_SW in
+
+
+;---- variables
+  Dim REFRESHLCD as Byte
+
+; ----- Main body of program commences here.
+
+;****************************************************************************
+	'Enable portd.3, which is External Interrupt #1, as the source of the interrupt.
+  'See the datasheet for more information.
+  #define ExternalEventSource_Switch ExtInt1
+  #define SetExternalEventEnable_Switch Int1
+  #define ClearExternalEvent_Switch INTF1
+
+  SetExternalEventEnable_Switch = 1
+  On Interrupt ExternalEventSource_Switch Call Alps_ENCODER_SW_Pressed
+
+;****************************************************************************
+  'Enable portd.2, which is External Interrupt #0, as the source of the interrupt.
+  'See the datasheet for more information.
+  #define ExternalEventSource_Clock ExtInt0
+  #define SetExternalEventEnable_Clock int0
+  #define ClearExternalEvent_Clock INTF0
+  'To control the rising edge set EICRA to 7, as follows:
+  '        7 bit 	6 bit 	5 bit 	4 bit 	3 bit 	2 bit 	1 bit 	0 bit
+  '  EICRA	- 			- 			- 			- 			ISC11 	ISC10 	ISC01 	ISC00
+  '  External Interrupt Control Register A
+  '
+  '
+  '   ISCx1	 ISCx0 	DESCRIPTION
+  '  0	0	 Low level of INTx generates an interrupt request
+  '  0	1	 Any logic change on INTx generates an interrupt request
+  '  1	0	 The falling edge of INTx generates an interrupt request
+  '  1	1	 The rising edge of INTx generates an interrupt request
+
+  #define SetExternalEdge_Clock EICRA
+
+	SetExternalEdge_Clock = 7
+  SetExternalEventEnable_Clock = 1
+  On Interrupt ExternalEventSource_Clock Call Alps_ENCODER_Clock_Event
+
+
+  ;****************************************************************************
+  'Prevent events from firing during initial LCD update
+	IntOff
+	CLS
+  PRINT "Rotary Enc. Demo"
+  Locate 1,0
+  PRINT "Great Cow Basic"
+  wait 2 s
+  CLS
+  Print "@Dec 2015"
+  Locate 1,0
+  PRINT "Immo's&Ano Code"
+  wait 2 s
+	CLS
+
+	'Show what happening with encoder on the LCD
+  locate 0,0
+  print "Counting enabled"
+  locate 1, 0
+  print "Rotate encoder  "
+
+
+
+  RefreshLCD = True
+	inton
+
+  do Forever
+
+			' Alps_ESB_Bit is a bit that is exposed to detect state of button.  Detects event has occurred
+			if Alps_ESB_Bit = 1 then
+
+				'Update screen once on button button change
+				if 	RefreshLCD = true then
+						RefreshLCD = False
+
+						CLS
+        		locate 0,0
+          	print "Counting enabled"
+
+				end if
+
+				' Alps_EncoderEvent is a bit that is exposed to detect state of button.  Detects event has occurred
+				if Alps_EncoderEvent = 1  then
+
+					Alps_EncoderEvent = 0
+
+          locate 1,0
+          'Alps_CurrentPosition is a public Integer value that is the current rotational value
+          print Alps_CurrentPosition
+
+					'Alps_Directn is a public bit that is the current direction of the encoder
+          if Alps_Directn = 1 then
+            print " (+) "
+          Else
+            print " (-) "
+          end if
+
+				end if
+
+      else
+
+        locate 0, 0
+        print "Count disabled  "
+        locate 1, 0
+        print "  press button  "
+				RefreshLCD= True
+
+      end if
+
+  loop
+
+	End
+
+; ----- Support methods.  Subroutines and Functions

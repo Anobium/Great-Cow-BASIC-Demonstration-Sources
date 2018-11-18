@@ -1,0 +1,46 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program blink two LEDs on PORTB.0 and PORTB.1 using the ON and OFF commands.
+'''The LEDS must be attached via appropiate resistors.
+'''
+'''@author 	EvanV plus works of others
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	31.01.2015
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 16F819, 20
+' #config                                     ; no config. assumes defaults
+
+  ' #include
+  ' no solution specifc includes, default includes are always included                                  ; no solution specifc includes, default includes are always included
+
+
+; ----- Define Hardware settings
+  ' this is required to tell the microprocessor the port is an output
+  dir PORTB.0 out
+  ' this is required to tell the microprocessor the port is an output
+  dir PORTB.1 out
+
+
+; ----- Variables
+' none specified in the example. All byte variables are defined upon use.
+
+; ----- Main body of program commences here.
+  Start:
+
+    ' Turn one LED on, the other off.  The LED is connect to the port using an appropiate resistor.
+    SET PORTB.0 ON
+    SET PORTB.1 OFF
+    wait 1 sec
+
+    ' Now toggle the state of the LEDs
+    SET PORTB.0 OFF
+    SET PORTB.1 ON
+    wait 1 sec
+
+  goto Start         ; Jump back to the start of the program
+  end
+
+

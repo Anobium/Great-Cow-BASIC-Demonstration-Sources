@@ -1,0 +1,204 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a LCD shield demonstration for the DFRrobot LCD Shield
+'''See http://www.robotshop.com/dfrobot-lcd-keypad-shield-arduino-1.html
+'''This program supports the LCD keypad shield for Chipino 16f1938 operating at 5V
+'''Supports includes 2x16 LCD display and 6 momentary push buttons
+'''Use digital pins 4, 5, 6, 7, 8, 9, 10, and analog pin 0 to interface with the LCD
+'''Do not use Pin 10 while this shield is connected unless you have adapted the shield with a diode or resistor, see http://forum.arduino.cc/index.php?topic=96747.0
+'''The LCD color may vary (green or blue)
+'''The display is easy to interface, using a 4 wire LCD type of communication.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+'''@author 	EvanV
+'''@licence	GPL
+'''@version	1.0
+'''@date   	1.6.2015
+'''********************************************************************************
+
+; ----- Configuration
+'Chip model
+#chip 16F1938, 32
+#option explicit
+
+#config INTOSC, VCAPEN_OFF, MCLRE_OFF, PLLEN_ON, CLKOUTEN_OFF
+#include <chipino.h>
+
+
+
+
+; ----- Define Hardware settings
+  ' Define LCD settings
+  #define LCD_IO            4
+  #define LCD_NO_RW
+
+  #define LCD_DB4           D4
+  #define LCD_DB5           D5
+  #define LCD_DB6           D6
+  #define LCD_DB7           D7
+  #define LCD_RS            D8
+  #define LCD_Enable        D9
+  #define LCD_Backlite      D10
+
+  ' MCLR
+  #define R1  porte.3
+  #define Resetbtn R1
+
+; ------ Define port directions
+  ' ADC port
+  dir A0 In
+
+  dir Resetbtn in
+  dir LCD_Backlite out
+
+; ------ Define Constants
+  #define btnRIGHT  0
+  #define btnUP     1
+  #define btnDOWN   2
+  #define btnLEFT   3
+  #define btnSELECT 4
+  #define btnReset  5
+  #define btnNONE   6
+
+; ------ Define variables
+  'Select_status is a byte value that tracks status of the select button
+  select_status = !true
+
+  'Used in reading buttun state
+  dim adc_key_in as Word
+
+  Dim SELECT_STATUS, PWMLEVEL, PWMCOUNTER, PWMCOUNTER as Byte
+
+; ------ Main program starts here
+  'Call the initialisation routine
+  InitPWM
+
+
+  'Initial screen messages
+  print "Great Cow Basic"
+  Locate 1,0
+  print "Anobium 5/2015"
+  wait 2 s
+  cls
+  print "Keypad Demo"
+  Locate 1,0
+  print "Version 2"
+  Locate 1,0
+  print Fill(16)
+
+  do forever
+     Locate 0,15
+     if select_status = true Then
+        Print "*"
+     Else
+        Print " "
+     end if
+     Locate 1,0
+     select case read_LCD_buttons
+            case btnRIGHT
+                 Print "Right   "
+            case btnUP
+
+                 if select_status = true  then
+                   PWMLevel++
+                   WAIT 25 MS
+                   if PWMLevel > 100 then
+                      PWMLevel = 100
+                      Print "Up Max  "
+
+                   end if
+                 else
+                   Print "Up      "
+                 end if
+                 Print ""
+            case btnDOWN
+
+                 if select_status = true  then
+
+                   WAIT 25 MS
+                   if PWMLevel > 0 then
+                      PWMLevel--
+                      if PWMLevel = 1 then Print "Down Min"
+                   end if
+                 else
+                   Print "Down    "
+                 end if
+
+
+            case btnLEFT
+                 Print "Left    "
+            case btnSELECT
+                 Print "Select  "
+                 select_status = !select_status
+                 wait while read_LCD_buttons = btnSELECT
+            case btnReset
+                 Print "Reset   "
+            case else
+                 Print "None    "
+
+     end select
+
+
+
+
+  loop
+
+
+  end
+
+
+'read the buttons
+function read_LCD_buttons
+    read_LCD_buttons =   btnNONE
+    if Resetbtn = 0 then
+       read_LCD_buttons = btnReset
+       exit function
+    end if
+    ' read the value from the sensor
+    adc_key_in = ReadAD10(AN0)
+    ' Buttons when read are centered at thes values shown below:
+    ' we add approx 50 to those values and check to see if we are close
+    ' We make this the 1st option for speed reasons since it will be the most likely result
+
+    select case adc_key_in
+           case < 50
+                read_LCD_buttons = btnRIGHT
+           case < 150
+                read_LCD_buttons = btnUP
+           case < 400
+                read_LCD_buttons = btnDOWN
+           case < 550
+                read_LCD_buttons = btnLEFT
+           case < 700
+                read_LCD_buttons = btnSelect
+    end select
+
+end Function
+
+
+'Setup routine for the PWM
+Sub InitPWM
+    'Clear variables
+    PWMLevel = 100
+    PWMCounter = 0
+
+    'Add a handler for the interrupt
+    On Interrupt Timer0Overflow Call PWMHandler
+
+    'Set up the timer
+    InitTimer0 Osc, PS0_2
+    'Timer 0 starts automatically on a PIC
+
+End Sub
+
+'PWM sub this will be called when Timer 0 overflows
+Sub PWMHandler
+    If PWMLevel > PWMCounter Then
+        Set LCD_Backlite On
+    Else
+        Set LCD_Backlite Off
+    End If
+    PWMCounter -= 1
+    If PWMCounter = 0 Then
+       PWMCounter = 99
+    END IF
+End Sub

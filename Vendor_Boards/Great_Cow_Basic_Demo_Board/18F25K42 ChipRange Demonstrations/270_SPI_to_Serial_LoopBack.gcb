@@ -1,0 +1,152 @@
+'''
+'''This demonstration program is an SPI capaibility demonstration.
+'''This show the commands you can use to send SPI data - it is hard to show SPI working... so, review the code and enjoy.
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    22.10.2017
+' ----- Configuration
+
+    'Chip Settings.
+    #chip 18f25k42, 64
+    #option Explicit
+    #config mclr=on, LVP=on
+
+    #startup InitPPS, 85
+
+    Sub InitPPS
+
+          'Module: SPI1
+          SPI1SCKPPS = 0x13     ' RC3->SPI1:SCK1
+          RC5PPS = 0x1F         ' RC5->SPI1:SDO1
+          SPI1SDIPPS = 0x14     ' RC4->SPI1:SDI1
+          RC3PPS = 0x1E         ' RC3->SPI1:SCK1
+
+    End Sub
+
+    'Template comment at the end of the config file
+
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | ----------| O | I |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------------------| X |---------
+    ''-----------------------------------------
+    ''
+
+
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define SwitchIn        PORTB.0
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     SwitchIn      In
+
+
+    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+    #define SPI1_DC       Porta.4           ' Data command line
+    #define SPI1_CS       Porta.5           ' Chip select line
+    #define SPI1_RESET    porta.3           ' Reset line
+
+    #define SPI1_DI       portc.4           ' Data in | MISO
+    #define SPI1_DO       portc.5           ' Data out | MOSI
+    #define SPI1_SCK      portc.3           ' Clock Line
+
+    #define _HardwareSPI1    ' remove/comment out if you want to use software SPI. And, also remove PPS for SPI Module
+
+'*******************************************************************************************
+
+
+    DIM byte1 As byte
+    DIM byte2 As byte
+    DIM byte3 As byte
+
+    byte1 = 0x12
+    byte2 = 0x23
+    byte3 = 0x45
+
+    InitSPIMode
+
+    do
+        set SPI1_DC OFF
+        SendByteviaSPI (byte1)   'send some data
+        set SPI1_DC ON
+
+        set SPI1_DC OFF
+        SendByteviaSPI (byte2)   'send some data
+        set SPI1_DC ON
+
+        set SPI1_DC OFF
+        SendByteviaSPI (byte3)   'send some data
+        set SPI1_DC ON
+
+        wait 10 ms
+    loop
+
+
+    'We call this method to setup the Hardware SPI module and the support for Software SPI
+    sub InitSPIMode
+
+        dir SPI1_DC       out
+        dir SPI1_CS       out
+        dir SPI1_RESET    out
+
+        dir SPI1_DI       in
+        dir SPI1_DO       out
+        dir SPI1_SCK      out
+
+        #ifdef _HardwareSPI1
+            SPIMode ( MasterFast, SPI_CPOL_0 + SPI_CPHA_0 )
+        #endif
+
+        'Set the Port appropiately
+        set SPI1_DO OFF
+        set SPI1_CS ON
+        set SPI1_DC ON    'deselect - this can be Data or Command
+
+    End sub
+
+
+    'This method sends via Hardware SPI or Software SPI (bit-banging) if the constant is defined, or not.
+    sub  SendByteviaSPI( in SPISendByte as byte )
+
+      set SPI1_CS OFF
+
+      #ifdef _HardwareSPI1
+         FastHWSPITransfer ( SPISendByte )
+         set SPI1_CS ON
+         exit sub
+      #endif
+
+      #ifndef _HardwareSPI1   'A softare implementation of SPI!
+        repeat 8
+
+          if SPISendByte.7 = ON  then
+            set SPI1_DO ON
+          else
+            set SPI1_DO OFF
+          end if
+          SET SPI1_SCK On           ; therefore CPOL=0 ==ON, and, where CPOL=1==ON
+          rotate SPISendByte left
+          set SPI1_SCK Off          ; therefore CPOL=0  =OFF, and, where CPOL=1==OFF
+
+        end repeat
+      set SPI1_CS ON
+      set SPI1_DO OFF
+      #endif
+
+    end Sub

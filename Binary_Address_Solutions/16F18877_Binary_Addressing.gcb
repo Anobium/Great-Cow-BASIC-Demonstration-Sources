@@ -1,0 +1,52 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demonstrates the basic primatives of binary address work within Great Cow BASIC
+'''This demonstration write
+''':
+'''@author  BillR and EvanV
+'''@licence GPL
+'''@version 1.00
+'''@date    14.12.2016
+'''********************************************************************************
+
+; ----- Configuration
+' Change chip and speed
+  #chip 16f877a
+
+  #option explicit
+
+
+  dim result as byte
+  dim tmpvar as byte
+  dim index
+
+  result = b'11111111' AND b'00001111'  ;Expect  DEC(15) in the EEPROM
+  EPWRITE 1, result
+
+
+  result = b'11111111' AND 0b00001111  ;Expect  DEC(15) in the EEPROM
+  EPWRITE 2, result
+
+  result = 0b00001111 AND b'11111111'  ;Expect  DEC(15) in the EEPROM
+  EPWRITE 3, result
+
+  result = b'11111111' AND 0B00001111  ;Expect  DEC(15) in the EEPROM
+  EPWRITE 4, result
+
+  result = 0B00001111  AND b'11111111' ;Expect  DEC(15) in the EEPROM
+  EPWRITE 5, result
+
+
+  result = 0b11111111 AND 0b00001111  ;Expect  DEC(15) in the EEPROM
+  EPWRITE 6, result
+
+  result = 0b00001111 AND 0b11111111  ;Expect  DEC(15) in the EEPROM
+  EPWRITE 7, result
+
+  result = 0b11111111 AND b'00001111'  ;Expect  DEC(15) in the EEPROM
+  EPWRITE 8, result
+
+  result = b'00001111' AND 0b11111111  ;Expect  DEC(15) in the EEPROM
+  EPWRITE 9, result
+
+ END

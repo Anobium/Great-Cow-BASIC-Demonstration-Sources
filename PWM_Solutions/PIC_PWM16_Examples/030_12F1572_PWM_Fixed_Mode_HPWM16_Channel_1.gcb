@@ -1,0 +1,28 @@
+' This program will enable fix mode PWM signals
+'
+' All the 12 PWM16 channels can configured at seperate fixed frequencies and fixed duty, the syntax is:
+'
+' #define HPWM16_xx_Freq 38     'Set frequency in KHz on channel xx
+' #define HPWM16_xx_Duty 50     'Set duty cycle to 50%  on channel xx
+'
+' xx can be 1 through 12
+'
+' To eumalate the Great Cow BASIC PWM fixed mode on channel 1 use the following:
+'
+'    #define HPWM16_1_Freq 38
+'    #define HPWM16_1_Duty 50            'Set duty cycle as percentage 0-100%, just change the number
+'
+
+
+    #chip 12F1572, 32
+    #config mclr=on
+
+    Dir PORTA Out
+
+    #define HPWM16_1_Freq 38
+    #define HPWM16_1_Duty 50
+    HPWM16On ( 1 )
+
+    do Forever
+    loop
+

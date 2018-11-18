@@ -1,0 +1,17 @@
+'LCD connection settings
+#define LCD_IO 4
+#define LCD_NO_RW
+
+#define _LCD_RS PORTA.7
+#define _LCD_Enable PORTA.6
+#define _LCD_DB4 PORTB.4
+#define _LCD_DB5 PORTB.5
+#define _LCD_DB6 PORTB.6
+#define _LCD_DB7 PORTB.7
+
+
+CLS
+
+Print "Hello World."
+
+End

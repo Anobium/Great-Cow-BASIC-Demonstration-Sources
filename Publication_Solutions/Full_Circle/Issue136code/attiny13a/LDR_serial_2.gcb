@@ -1,0 +1,21 @@
+#CHIP tiny13a, 1.2
+#OPTION Explicit
+#include <softserial.h> 'include the library. this is required.
+#DEFINE ADSpeed MediumSpeed
+'Config Serial UART:
+#DEFINE SER1_BAUD 1200 'baudrate must be defined
+#DEFINE SER1_TXPORT PORTB 'I/O port (without .bit) must be defined
+#DEFINE SER1_TXPIN 1 'portbit must be defined
+DIR PortB.4 IN
+DIM LDR AS BYTE
+
+'main program
+DO
+LDR = READAD(ADC2)
+REPEAT 3
+Ser1Print LDR 'send the value from the LDR
+Ser1Send 13 'new line in terminal
+Ser1Send 10 'line feed in terminal
+WAIT 1 S
+END REPEAT
+LOOP

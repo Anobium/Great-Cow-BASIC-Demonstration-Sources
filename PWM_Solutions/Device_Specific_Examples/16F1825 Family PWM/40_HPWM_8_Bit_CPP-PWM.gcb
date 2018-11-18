@@ -1,0 +1,32 @@
+'''A demonstration program for GCGB and GCB.
+'''The program shows PWM options for this device
+''':
+'''This demonstration how use the PWM Module in 8-bit mode but with this method you can change the parameters.
+'''To use in 8-bit mode simply pass a byte variable.
+''':
+'''You can make the ASM smaller, adapt the PWM Optimisation!!
+'''
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    23.08.2018
+'''*************************************************************************
+
+    'Chip Settings
+    #chip 16f1825, 16
+
+    'Set the direction of the CCP1/PWM port
+    DIR portc.5 Out
+
+
+    do
+
+        'use for-loop to show the duty changing a 8bit value
+        dim dutyvalue as byte
+        for dutyvalue = 0 to 255
+            HPWM 1, 38, dutyvalue
+            wait 10 ms
+        next
+
+    loop
+

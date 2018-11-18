@@ -1,0 +1,92 @@
+'''
+''' This demonstration uses a simple software routine to avoid the initial noise on the switch
+''' pin. The code will inspect the switch status, but should overcome most of the noise from a switch.
+'''  Some switches are worse than others.
+'''
+''' When the switch is held down, one LED will be lit.
+''' But, this time we are using the RESET button as an input switch!!
+'''
+'''
+'''
+'''Great Cow  BASIC Header block
+'''
+'''@author  Evan R. Venn
+'''@licence GPL
+'''@version 1.00
+'''@date    03/05/2018
+'''****
+' ----- Configuration
+    'Chip Settings.
+    #chip 16F19156, 32
+    #option Explicit
+
+    'Change the MCLRE to be an input by setting this Configuration Switch
+    #config mclre=off
+
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | A |--------| O | I |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
+
+    'Define constants to make things easier. We can reuse these at any time.
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define LDR             PORTB.4
+    #define SwitchIn        PORTB.0
+    #define RSTButton       PORTE.3
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     LDR           In    'this is the ANB4 port
+    Dir     SwitchIn      In
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+     dim lastKeyDown as Byte
+
+     'Debouncing two switches
+      Do forever
+                wait 10 ms
+
+                'This line is normally HIGH, so, we have to test when the line goes low.
+                if  SwitchIn = 0 then
+
+                    'push button pressed
+                    LEDD1 = 1
+
+                Else
+
+                    LEDD1 = 0
+
+                end if
+
+
+                'The reset line is always HIGH, so, we have to test when the line goes low.
+                if  RSTButton = 0 then
+
+                    'push button pressed
+                    LEDD2 = 1
+
+                else
+
+                    LEDD2 = 0
+
+                end if
+
+
+      loop

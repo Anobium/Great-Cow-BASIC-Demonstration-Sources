@@ -1,0 +1,302 @@
+'''
+''' This demonstration will show the tempature sensor on the serial terminal.  The sensor used I2C.
+'''
+''' It also shows many parameter from the sensor.
+'''
+''' The EMC1001 controls the two output pins (marked on the Xpress board as ALARM1 and ALARM2)
+''' according to two different sets of rules.
+''' While both pins are open drain, the Xpress evaluation board comes with a pull up resistor only
+''' for the ALARM1 output. If you intend to use the second output you will have to mount a second
+''' pull up resistor yourself (a ~10K ohm resistor will do).
+'''
+''' The ALARM1 output is activated (pulled low) only when Ttherm is passed (>85°C by default).
+''' You can change this value by writing to the Therm Limit register (0x20).
+''' Note: This is an 8-bit (integer) value.
+'''
+''' The ALARM2 output is activated (pulled low) when the temperature is above Th or below Tl. After appropriate configuration.
+''' By default this output is not enabled.
+''' Write to the Configuration register (0x03) the appropirate value (0x05 for example) to activate.
+'''
+''' You can also verify the device has detected the temperature conditions by reading the STATUS register (0x01).
+''' Bit 6 and bit 5 are set when Thigh and Tlow respectively are violated (equiv ALARM2), while bit 0 is set when the THERM limit is exceeded (equiv. ALARM1)
+'''
+'''
+'''  PIC: 16F18855
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: Xpress Evaluation Board
+'''  Date: 13.3.2016
+'''
+
+
+' ----- Configuration
+    'Chip Settings.
+    #chip 16f18855,32
+    #option explicit
+    #Config MCLRE_ON
+
+    #include <lowlevel\hwi2c2.h>
+    #include <emc1001.h>
+
+
+    #define SWITCH_DOWN         0
+    #define SWITCH_UP           1
+
+    #define SWITCH      PORTA.5
+
+    #define LEDD2 PORTA.0
+    #define LEDD3 PORTA.1
+    #define LEDD4 PORTA.2
+    #define LEDD5 PORTA.3
+    Dir     LEDD2 OUT
+    Dir     LEDD3 OUT
+    Dir     LEDD4 OUT
+    Dir     LEDD5 OUT
+
+    #DEFINE ALARM1  PORTA.7
+    #DEFINE ALARM2  PORTA.6
+    Dir     ALARM1  IN
+    Dir     ALARM2  IN
+
+    'Set the PPS of the PWM and the RS232 ports.
+    'Set the PPS for this solution.
+  #startup InitPPS, 85
+
+  Sub InitPPS
+    UNLOCKPPS
+        RC0PPS = 0x0010       'RC0->EUSART:TX;
+        RXPPS  = 0x0011       'RC1->EUSART:RX;
+
+        RC3PPS = 0x0017       'RC3->MSSP2:SDA2;
+        SSP2DATPPS = 0x0013   'RC3->MSSP2:SDA2;
+        SSP2CLKPPS = 0x0014   'RC4->MSSP2:SCL2;
+        RC4PPS = 0x0016       'RC4->MSSP2:SCL2;
+      LOCKPPS
+  End sub
+
+    #define USART_BAUD_RATE 19200
+    #define USART_TX_BLOCKING
+
+; ----- Define Hardware settings for HWI2C2
+    ' Define I2C settings - CHANGE PORTS if required for your specific device.
+    #define HI2C2_BAUD_RATE 400
+    #define HI2C2_DATA PORTC.3
+    #define HI2C2_CLOCK PORTC.4
+    'Initialise I2C Master
+    'I2C pins need to be input for SSP2 module
+    Dir HI2C2_DATA in
+    Dir HI2C2_CLOCK in
+    'MASTER Second Port
+    HI2C2Mode Master
+
+    Dim HI, LO, EMC_TEMP_H, SIGNBIT, WHOLE, FRACT, DIG, SHOWDEGREECHAR, DATA, OLDSTATUS as Byte
+    showDegreeChar = False
+
+; ----- Main body of program commences here.
+
+    HSerPrintCRLF 2
+    HSerPrint "Great Cow Basic @2016": HSerPrintCRLF
+    HSerPrint "Xpress Demo Board": HSerPrintCRLF
+    HSerPrint "09 Temperature": HSerPrintCRLF 3
+    wait 1 s
+
+    #define EMC1001_ADDRESS     0x70   '  slave device address
+
+    dim emc_temp as word
+
+    EMC1001_Write ( EMC1001_TEMP_LIMIT_HI_H , 30)
+    EMC1001_Write ( EMC1001_TEMP_LIMIT_LO_H , 22)
+
+    EMC1001_Write ( EMC1001_TEMP_THERM_LIMIT, 30)
+    EMC1001_Write ( EMC1001_TEMP_THERM_HYSTERIS, 0x01)
+    EMC1001_Write ( EMC1001_TEMP_SMBus_Timeout, 0xFF)
+
+    'Initiliase the character set.  If button is pressed at start... show the character
+
+    if SWITCH = SWITCH_DOWN Then
+        showDegreeChar = True
+    end if
+
+    do
+        'Optionally, Send a bell alert to the terminal
+        'HSerSend 7
+        'Read Product ID register
+        EMC1001_Read( EMC1001_TEMP_PROD_ID ,  data )
+        if ( HI2C2WaitMSSPTimeout <> TRUE )  then
+          hserprint "Product ID:         EMC1001"
+          if data <> 0 then
+            HSerPrint "-"
+            HSerPrintByteCRLF data
+          end if
+          HSerPrintCRLF
+
+        end if
+
+        'Read Manufacturer ID register
+        EMC1001_Read( EMC1001_TEMP_MANUFACTURE_ID,  data )
+        if ( HI2C2WaitMSSPTimeout <> TRUE )  then
+          hserprint "Manufacturer ID:    0x"
+          HSerPrint hex(data)
+          HSerPrintCRLF
+        end if
+
+        'Read Revision register
+        EMC1001_Read( EMC1001_TEMP_REV_NUMBER,  data )
+        if ( HI2C2WaitMSSPTimeout <> TRUE )  then
+          hserprint "Revision:           "
+          HSerPrintByteCRLF data
+        end if
+
+        'Read temp registers
+        EMC1001_Read( EMC1001_TEMP_HI,  hi )
+        EMC1001_Read( EMC1001_TEMP_LO,  lo )
+
+        if ( HI2C2WaitMSSPTimeout <> TRUE )  then
+          emc_temp = 0
+          emc_temp_h = hi
+
+          if ( HI2C2WaitMSSPTimeout <> TRUE )  then
+            emc_temp = emc_temp + lo
+            hserprint "The temperature is: "
+
+            ' The sensor is read as a 8 bit value therefore each unit equates to 0.25 of a degree
+            dim DSdata as word
+            dim TempC_100 as word
+
+            DSdata = emc_temp
+            SignBit = DSdata.15
+            If SignBit = 0 Then goto Positive
+            ' its negative!
+            DSdata = ( DSdata # 0xffff ) + 1 ' take twos comp
+
+            Positive:
+            TempC_100 =  FnLSR ( DSdata, 6 )
+            TempC_100 = ( TempC_100 * 25 )
+            Whole = TempC_100 / 100
+            Fract = TempC_100 % 100
+            If SignBit = 0 Then goto DisplayTemp
+            hserprint "-"
+
+            DisplayTemp:
+            hserprint str(Whole)
+            hserprint "."
+            ' To ensure the decimal part is two digits
+            Dig = Fract / 10
+            hserprint Dig
+            Dig = Fract % 10
+            hserprint Dig
+            if showDegreeChar = true Then
+              hserprint chr(0xB0)
+            end if
+            hserprint "C"
+            HSerPrintCRLF
+
+          end if
+        end if
+
+        'Read Conversion register
+        EMC1001_Read( EMC1001_CONV_RATE ,  data )
+        if ( HI2C2WaitMSSPTimeout <> TRUE )  then
+          hserprint "Conversion rate is: "
+          HSerPrintByteCRLF data
+        end if
+
+        'Read Hi limit register
+        EMC1001_Read(EMC1001_TEMP_LIMIT_HI_H,  data )
+        if ( HI2C2WaitMSSPTimeout <> TRUE )  then
+          hserprint "High limit is:      "
+          HSerPrint data
+          if showDegreeChar = true Then
+            hserprint chr(0xB0)
+          end if
+          hserprint "C"
+          HSerPrintCRLF
+        end if
+
+        'Read Low Limit register
+        EMC1001_Read( EMC1001_TEMP_LIMIT_LO_H,  data )
+        if ( HI2C2WaitMSSPTimeout <> TRUE )  then
+          hserprint "Low limit is:       "
+          HSerPrint data
+          if showDegreeChar = true Then
+            hserprint chr(0xB0)
+          end if
+          hserprint "C"
+          HSerPrintCRLF
+        end if
+
+
+        'Read Status register
+        EMC1001_Read( EMC1001_TEMP_STATUS,  data )
+        if ( HI2C2WaitMSSPTimeout <> TRUE )  then
+          hserprint "Status is:          "
+          HSerPrint ByteToBin ( data )
+          HSerPrintCRLF
+        end if
+
+        oldStatus = data
+        do while check_switch = check_switch
+            SetWith ( LEDD2 , FnNotBit ( LEDD2 ) )
+            wait 100 ms
+            'Alarms
+            SetWith ( LEDD4 , FnEquBit ( ALARM1 ) )
+            SetWith ( LEDD5 , FnEquBit ( ALARM2 ) )
+            EMC1001_Read( EMC1001_TEMP_STATUS,  data )
+            if data <> oldStatus Then
+                'Exit to show all the information
+                Exit Do
+            end if
+        loop
+
+        HSerPrintCRLF 2
+
+
+
+
+
+    loop
+
+
+
+; ----- Support methods.  Subroutines and Functions
+
+  'global variable - if button is held down, we don't want to keep on switching directions
+  dim previous_state as bit
+  previous_state = SWITCH_UP
+
+  function  check_switch
+      'switch is normally open to 5V ...when pressed, RA3 is connected to GND
+      if (SWITCH = SWITCH_DOWN) then
+          'debounce by delaying and checking if switch is still pressed
+          wait 1 ms
+          if ( (previous_state =  SWITCH_DOWN) & (SWITCH = SWITCH_DOWN) ) then
+              ' don't toggle
+              check_switch = false
+              exit function
+          else
+              ' check if still down
+              if (SWITCH = SWITCH_DOWN) then
+                 previous_state = SWITCH_DOWN
+                 ' reverse the LEDs
+                 check_switch = true
+                 exit function
+             else
+              'switch not properly held down
+              previous_state = SWITCH_UP
+              ' don't reverse
+              check_switch = false
+              exit function
+             end if
+          end if
+      else
+         'switch not pressed
+          previous_state = SWITCH_UP
+          'don't reverse
+          check_switch = false
+          exit function
+      end if
+
+  end Function
+
+

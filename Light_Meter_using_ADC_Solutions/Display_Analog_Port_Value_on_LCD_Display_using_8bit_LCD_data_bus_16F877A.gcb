@@ -1,0 +1,47 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program reads the potentiometer/light sensor on AN0 and display results on the GLCD.
+'''See the hardare section for the GLCD connections.
+'''
+'''@author 	EvanV plus works of HughC
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	31.01.2015
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 16F877A, 16
+  #config HS_OSC, WDT_OFF, LVP_OFF
+
+; ----- Define Hardware settings
+;  none specified in this example.
+
+; ----- Constants
+  #define LCD_IO 8
+  #define LCD_DATA_PORT PORTC
+  #define LCD_RS PORTD.0
+  #define LCD_RW PORTD.1
+  #define LCD_Enable PORTD.2
+
+
+; ----- Variables
+; none specified in this example. All byte variables are defined upon use.
+
+
+; ----- Main body of program commences here.
+  CLS
+  PRINT "Light Meter:"
+  locate 1,2
+  PRINT "A GCBASIC demo"
+  wait 2 s
+
+  do while true
+      cls
+      PRINT "Light Level: "
+      'Take a measurement and display on LCD
+      Print(ReadAD(AN0))
+
+      'Delay to avoid flickering of screen (LCD is hard to read if changed often)
+      wait 25 10ms
+  loop
+  end

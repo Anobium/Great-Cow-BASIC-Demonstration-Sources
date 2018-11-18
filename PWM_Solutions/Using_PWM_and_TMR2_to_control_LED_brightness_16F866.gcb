@@ -1,0 +1,56 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program ia a demonstration of Hardare PWM, but, this also shows how to use PWMON.
+'''The PWM is set to be on CCP1 and CCP2.
+''':
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    24.10.2016
+'''********************************************************************************
+
+; ----- Configuration
+    #chip 16f886,8
+    #config LVP_OFF, BOR_OFF, MCLRE_Off,HS_OSC
+    #option explicit
+
+    'Define the ports
+    #define CCP1Port portc.2
+    #define CCP2Port portc.1
+
+    'Ensure the ports are outputs
+    dir CCP1Port  out
+    dir CCP2Port  out
+
+    'Set two variables to the spefic values we want
+    Dim FrequencyValue, DutyPercentValue as byte
+    DutyPercentValue = 204   'this equate to 80%.  204 is 80% of 255. 255 is 100%
+    FrequencyValue = 76      'starting frequency
+
+    HPWM 2, FrequencyValue, DutyPercentValue
+
+    #define PWM_Freq 76    'Set frequency in KHz
+    #define PWM_Duty 80    'Set duty cycle to 80 %
+    PWMOn                  'Turn on the CCP1/PWM.  This command only operated on CCP1/PWM
+
+    wait 5 s               'Show the signals for 5 seconds on an oscilliscope
+
+    do Forever
+        for DutyPercentValue = 0 to 250 step 10
+          HPWM 2, FrequencyValue, DutyPercentValue      ' cycle thru the duty
+          wait 100 ms
+        Next
+        PWMOff                                          'stop CCP1/PWM
+        wait 1 s
+        PWMOn                                           'star CCP1/PWM again
+    Loop
+
+
+    ''' GCB Optimisations
+
+    'Optmise PWM.h
+        #define USE_HPWMCCP1 false
+        #define USE_HPWMCCP2 true    'we are only using this channel
+        #define USE_HPWMCCP3 false
+        #define USE_HPWMCCP4 false
+        #define USE_HPWMCCP5 false

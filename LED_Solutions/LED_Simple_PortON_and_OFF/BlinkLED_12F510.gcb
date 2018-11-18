@@ -1,0 +1,44 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program blink one LED on GPIO.2 using the ON and OFF commands.
+'''The LED must be attached via appropiate resistors.
+'''
+'''@author  EvanV plus works of others
+'''@licence GPL
+'''@version 1.0a
+'''@date    19.10.2015
+'''********************************************************************************
+
+; ----- Configuration
+#chip 12F510,4
+
+  ' #include
+  ' no solution specifc includes, default includes are always included
+
+; ----- Define Hardware settings
+  ' this is required to tell the microprocessor the port is an output
+'  Dir GPIO.2 Out
+
+; ----- Variables
+' none specified in the example. All byte variables are defined upon use.
+
+; ----- Main body of program commences here.
+
+  Do
+
+    Repeat 50
+        Set GPIO.2 ON   'turn LED on
+        Wait 100 Ms      'wait 100 milliseconds
+        Set GPIO.2 OFF  'turn LED off
+        Wait 100 Ms      'wait 900 milliseconds
+    End Repeat
+
+    Repeat 50
+     Set GPIO.2 ON
+     WAIT 100 us
+     SET GPIO.2 Off
+     wait 100 us
+    End Repeat
+
+   Loop
+   End

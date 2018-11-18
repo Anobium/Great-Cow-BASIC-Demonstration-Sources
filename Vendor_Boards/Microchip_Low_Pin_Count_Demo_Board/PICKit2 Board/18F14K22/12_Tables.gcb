@@ -1,0 +1,72 @@
+'''
+'''******************************************************************
+''' Lesson 12 - "LookupTable"
+'''
+''' This shows using a table lookup function to implement a
+''' binary to gray code conversion.  The POT is read by the A2D,
+''' The high order 4 bits then are converted to Gray Code and
+''' displayed on the LEDs.
+
+''' The ADC value is used as the offset into reading the gray code equivalent inside of
+''' a constant data array.
+'''
+''' Gray coded binary will be reflected on the LEDs in accordance with the POT reading
+'''
+'''
+'''  PIC: 18F14K22
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: PICkit 2 Low Pin Count Demo Board
+'''  Date: 04/05/18
+'''
+''''''******************************************************************
+''' See Low Pin Count Demo Board User's Guide for Lesson Information*
+''''''*****************************************************************
+'''
+
+ #chip 18F14K22,8
+ #config MCLRE_OFF
+
+ table gray_code
+    0
+    1
+    3
+    2
+    6
+    7
+    5
+    4
+    12
+    13
+    15
+    14
+    10
+    11
+    9
+    8
+ end table
+
+    dir portc out
+
+
+    dim maxADCReading, myArrayIndex, myADCReading as Word
+    maxADCReading = 0
+
+
+    do
+        wait 5 ms
+
+        'Read the ADC  and store the result in the variable
+        myADCReading = ReadAD10 ( AN0 , true )
+
+        'Store the maximum value of the ADC in the variable.  We are showing this to ensure the ADC has a dynamic range.
+        if myADCReading > maxADCReading Then
+            maxADCReading = myADCReading
+        end if
+
+        myArrayIndex = scale ( myADCReading, 0, maxADCReading, 1, 16 )
+
+        readtable gray_code, myArrayIndex , portc  ' calcualtion to ensure max value 15, equates to all 4 LEDS on
+
+    loop

@@ -1,0 +1,117 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program shows the humidity and the temperature of a DHT11 on the GLCD.
+'''The data/output from the DHT11 requires a 4.k pull-up to VDD.
+'''
+'''Revised to support large fonts.
+'''
+'''@author 	EvanV
+'''@licence	GPL
+'''@version	1.1a
+'''@date   	09.01.16
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 16f1939, 32
+  #config mclr_on
+  #include <glcd.h>
+  #include <dht.h>
+
+  #define GLCD_TYPE GLCD_TYPE_KS0108               ' This is the Default value, not required.
+
+	#define GLCDDirection 1
+
+  #define GLCD_CS1 PORTC.1    'D12 to actually since CS1, CS2 can be reversed on some devices
+  #define GLCD_CS2 PORTC.0
+  #define GLCD_DB0 PORTD.0 'D0 to pin 7 on LCD
+  #define GLCD_DB1 PORTD.1 'D1 to pin 8 on LCD
+  #define GLCD_DB2 PORTD.2 'D2 to pin 9 on LCD
+  #define GLCD_DB3 PORTD.3 'D3 to pin 10 on LCD
+  #define GLCD_DB4 PORTD.4 'D4 to pin 11 on LCD
+  #define GLCD_DB5 PORTD.5 'D5 to pin 12 on LCD
+  #define GLCD_DB6 PORTD.6 'D6 to pin 13 on LCD
+  #define GLCD_DB7 PORTD.7 'D7 to pin 14 on LCD
+
+  #define GLCD_RS PORTe.0
+  #define GLCD_Enable PORTe.2
+  #define GLCD_RW PORTe.1
+  #define GLCD_RESET PORTC.2
+
+  ' Change timing for 32 mhz
+  #define KS0108ReadDelay    4    ; = 2 normal usage, 6 or above is OK at 32 mhz!
+  #define KS0108WriteDelay   0    ; = 1 normal usage you may get away with 0, 2 or above is OK at 32 mhz!
+  #define KS0108ClockDelay   0     ; = 1 normal usage you may get away with 0, 2 or above is OK at 32 mhz!
+
+; ----- Constants
+  #define DHT_type    22
+  #define DHT_PIN PORTC.6
+
+  #define degree      223             ;ASCII code for degree mark
+  #define period      2 S             ;update period
+
+; ----- Define Hardware settings
+
+
+; ----- Variables
+
+  'required for DHT
+  dim msg, whole, tenths as byte
+  dim rh, cels, fahr as integer
+
+; ----- Quick Command Reference:
+;       The humidity and temperatures are signed integers, the error
+;       indicator a byte. For the DHT11, the numerical results are
+;       simply whole numbers. For the DHT22 numerical results
+;       are fixed pointed numbers, with the decimal point assumed one
+;       digit from the right. In other words, the values are scaled up
+;       by 10. For example, a return value of 657 for the relative
+;       humidity would be interpreted as 65.7%.
+
+; ----- Main body of program commences here.
+
+  box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1
+  GLCDfntDefaultsize = 2
+  GLCDPrint ( 0,   0, "Great Cow")                                ; Print some texT
+  GLCDPrint ( 0,   18, "BASIC 2016")                                ; Print some text
+  GLCDfntDefaultsize = 1
+
+  GLCDPrint ( 0,   52, "@Evan R. Venn")                                ; Print some text
+  wait 4 s
+  GLCDCLS
+
+  glcdcls
+  glcdprint 0,0, "Initializing..."
+  'let sensor stabilize
+  wait period
+  GLCDCLS
+
+
+	GLCDfntDefaultsize = 2: GLCDFontWidth = 6
+  do
+        'get current values
+        readDHT(rh, cels, fahr, msg)
+				GLCDfntDefaultsize = 1: GLCDFontWidth = 6
+        select case msg
+          'all okay, so proceed
+          case 0:
+            'print relative humidity
+            glcdprint 0,0, "Humidity"
+						GLCDfntDefaultsize = 2: GLCDFontWidth = 6
+            glcdprint 88, 0, pad(str(rh / 10),2)+"%"
+            'print temperature in Celsius
+            glcdprint 88, 16, pad(str(cels / 10),2)+"C"
+
+            'print temperature in Fahrenheit
+            glcdprint 88, 32, pad(str(fahr / 10),2)+"F"
+
+          'unit not responding
+          case 1:
+            glcdprint 0,0, "No response..."
+          'checksum error
+          case 2:
+            glcdprint 0,0, "Bad checksum..."
+        end select
+        'between readings
+        wait period
+  loop
+  end

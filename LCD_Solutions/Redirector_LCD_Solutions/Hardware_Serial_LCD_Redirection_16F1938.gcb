@@ -1,0 +1,64 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demonstrates the redirection of the LCD output to an ANSI serial PC terminal.
+'''The LCD is using an 0-bit option for connectivity which requires <LCD2SerialRedirect.h>
+'''For the serial port connection - please refer to the program.
+'''@author 	EvanV
+'''@licence	GPL
+'''@version	1.0a
+'''@date   	14.02.2015
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 16f1938, 16
+  #option explicit
+  #include <lcd2serialredirect.h>
+
+
+  ; ----- Define Hardware settings
+  ; Required to LCD to Serial redirection
+   #define LCD_IO 0             ; Use this option.
+
+   #define USART_BAUD_RATE 9600
+   Dir PORTc.6 Out
+   Dir PORTc.5 In
+   #define USART_DELAY 10 ms
+   #define USART_BLOCKING
+   wait 500 ms
+
+;----- Variables
+  Dim YPOS, XPOS as Byte
+
+
+; ----- Main body of program commences here.
+
+    Do Forever
+        CLS
+        PRINT "START TEST"
+        locate 1,0
+        PRINT "DISPLAY ON"
+        wait 3 s
+
+        locate 0,0
+
+        for ypos = 0 to 1
+            for xpos = 0 to 16
+               locate ypos, xpos
+               print "*"
+               ' flush HSerPrint buffer
+               print ""
+               wait 100 ms
+            next
+        next
+
+
+        CLS
+        Locate 0,0
+        LCDCURSOR LCDON
+        Print "END TEST"
+        wait 3 s
+
+    loop
+
+
+

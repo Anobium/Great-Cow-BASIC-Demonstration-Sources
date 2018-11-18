@@ -1,0 +1,72 @@
+'''
+''' This shows how to read the ADC converter and display the
+''' a proportional delay value by changing/inverting the LEDs state.
+''' The pot on the board varies the voltage coming in from the ADC.
+'''
+''' The ADC is referenced to the same Vdd as the device, which
+''' is nominally is 5V.  The ADC returns the ratio of the voltage
+''' on Pin RA0 to 5V.  The ADC has a resolution of 10 bits, with 1023
+''' representing 5V and 0 representing 0V.
+'''
+''' Rotate the potentiometer to change the LEDs displayed.
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    22.10.2017
+' ----- Configuration
+
+    'Chip Settings.
+    #chip 18f25k42, 16
+    #option Explicit
+    'This Configuration change is needed to enable programming in Low Voltage Programming Mode
+    #config LVP=on
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -----------| A |-----------------
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | ----------| O | I |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------------------| X |---------
+    ''-----------------------------------------
+    ''
+
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTC.5
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the ANC5 port
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+
+    'Set the LED states
+    LEDD1 = 1
+    LEDD2 = 0
+
+    dim ADCVal as word   'we have change to a larger variable to hold the range of 0 to 1023
+
+    do
+
+        ADCVal =  ReadAD10 ( ANC5 )
+        'Wait for the number of milliseconds
+        Wait ADCVal ms
+
+        'Flip the state of the LEDs
+        LEDD1 = NOT LEDD1
+        LEDD2 = NOT LEDD2
+
+    loop

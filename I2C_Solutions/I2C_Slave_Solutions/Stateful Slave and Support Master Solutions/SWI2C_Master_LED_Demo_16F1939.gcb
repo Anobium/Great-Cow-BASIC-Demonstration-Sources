@@ -1,0 +1,100 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program searches for I2C devices and display their adresses to the attached PC terminal.
+'''This program uses the software implementation of I2C for the Microchip microprocessors.
+'''The hardware serial connections are shown in the program.
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    14.12.15
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 16F1939
+  #option explicit
+  #config Osc = intOSC, MCLRE_ON
+
+'************************** YOU MUST VERIFY THIS ADDRESS!!!!!! *********************
+
+  #define TargetGCBI2CAddress 0x60
+
+
+; ----- Define Hardware settings
+  ' Define I2C settings - CHANGE PORTS
+ #define I2C_MODE Master
+ #define I2C_DATA PORTC.4
+ #define I2C_CLOCK PORTC.3
+ #define I2C_DISABLE_INTERRUPTS ON
+ #define I2C_BIT_DELAY   4 us      'width of data bit on SDA
+ #define I2C_CLOCK_DELAY 2 us      'width of clock pulse on SCL
+ #define I2C_END_DELAY   10 us      'interval between clock pulses
+
+
+ ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
+ ' USART settings - CHANGE PORTS if required
+ #define USART_BAUD_RATE 19200
+ Dir PORTc.6 Out
+ Dir PORTc.7 In
+ #define USART_TX_BLOCKING
+ #define USART_DELAY 1 ms
+
+ wait 500 ms
+
+;----- Variables
+  dim reg as byte
+
+
+
+; ----- Main body of program commences here.
+         ' Now assumes Serial Terminal is operational
+
+  HSerPrintCRLF
+  dim myMessage as String * 42
+  myMessage = "Software I2C - LED Demo to Slave Device 0x"
+  HSerPrint myMessage
+  HSerPrint hex( TargetGCBI2CAddress )
+  HSerPrintCRLF 2
+
+
+
+
+  do
+
+
+       wait 500 ms   ' this delay WILL impact the DEMO SLAVE terminal out.  This is because the Interrupts in HSERPRINT impact the SLAVE.
+
+
+      for reg = 0 to 2            ;three LEDs to control
+      I2CStart                  ;take control of the bus
+      I2CSend TargetGCBI2CAddress       ;address the device
+        if I2CSendState = True then
+          I2CSend reg               ;address the particular register
+          I2CSend ON                ;command to turn on LED
+        end if
+      I2CStop                   ;relinquish the bus
+      wait  100 ms
+      next reg
+      wait 100 ms                  ;pause to show results
+
+      for reg = 0 to 2            ;similarly, turn them off
+      I2CStart                  ;take control of the bus
+      I2CSend TargetGCBI2CAddress       ;address the device
+        if I2CSendState = True then
+          I2CSend reg               ;address the particular register
+          I2CSend OFF               ;command to turn off LED
+        end if
+      I2CStop                   ;relinquish the bus
+      wait  100 ms
+      next reg
+      wait 100 ms
+
+      I2CStart                  ;take control of the bus
+      I2CSend TargetGCBI2CAddress       ;address the device
+        if I2CSendState = True then
+          I2CSend reg               ;address the particular register
+          I2CSend OFF             ;command to turn off LED
+        end if
+      I2CStop
+  loop
+
+; ----- Support methods.  Subroutines and Functions

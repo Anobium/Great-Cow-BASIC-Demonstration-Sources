@@ -1,0 +1,45 @@
+'''
+''' Great Cow BASIC Header block Header block
+'''
+'''@author  Chris Roper
+'''@licence GPL
+'''@version 1.00
+'''@date    03/05/2018
+'''********************************************************************
+
+  #chip 16F18446
+  #config MCLRE_OFF
+
+  #define NUM_READINGS 8
+
+  dim _sum as long
+  dim yloop, xloop as byte
+  _sum = 0
+
+  dim queue(8)
+  queue = 0, 0, 0, 0, 0, 0, 0, 0
+
+  dir portc out
+
+  do
+    for xloop = 1 to NUM_READINGS
+    ' calcualtion to ensure max value 15, equates to all 4 LEDS on
+      portc = scale( average_reading ( queue() ), 0, 255, 0, 15)
+
+      queue( xloop ) = ReadAD ( AN0 )
+    next
+  loop
+
+End
+
+function average_reading ( in analyze_queue() ) as word
+
+  _sum = 0
+
+  for yloop = 1 to  NUM_READINGS
+    _sum = [long]queue ( yloop ) + _sum
+  next
+
+  average_reading = _sum / NUM_READINGS
+
+end Function

@@ -1,0 +1,73 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program searches for I2C devices and display their adresses to the attached PC terminal.
+'''This program uses the software implementation of TWI for the ATMEL microprocessors.
+'''The hardware serial connections are shown in the program.
+'''This program requires "DisplayDevices.h" in the same folder.
+'''@author  Theo Loermans plus works of EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    20.02.15
+'''********************************************************************************
+
+; ----- Configuration
+  #chip mega328p,16
+  #option explicit
+
+  #include "displaydevices.h"
+
+
+; ----- Define Hardware settings
+  ' Define I2C settings - CHANGE PORTS
+  #define I2C_MODE Master
+  #define I2C_DATA PORTC.4
+  #define I2C_CLOCK PORTC.5
+  #define I2C_DISABLE_INTERRUPTS ON
+  ' These are very important - get these correct!!
+  #define I2C_BIT_DELAY 4 us
+  #define I2C_CLOCK_DELAY 2 us
+  #define I2C_END_DELAY 2 us
+
+ ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
+ ' USART settings - CHANGE PORTS if required
+   #define USART_BAUD_RATE 9600
+   Dir PORTD.1 Out
+   Dir PORTD.0 In
+   #define USART_DELAY 10 ms
+   #define USART_BLOCKING
+   wait 500 ms
+
+;----- Variables
+  Dim TESTID as Byte
+
+; ----- Main body of program commences here.
+         ' Now assumes Serial Terminal is operational
+         HSerPrintCRLF
+         HSerPrint "Software I2C "
+         HSerPrintCRLF 2
+
+   wait 2 s
+  dim DeviceID as byte
+
+      for DeviceID = 0 to 255
+        I2CStart
+        I2CSend ( deviceID )
+        I2CSend ( 0 )
+        i2cstop
+
+        if I2CSendState = True  then
+          HSerPrint   "__"
+          HSerPrint   "ID: 0x"
+          HSerPrint   hex(deviceID)
+          HSerPrint   " (d"
+          HSerPrint   Str(deviceID)
+          HSerPrint   ") - "
+          HSerSend  9
+          HSerPrint   "I2C Port "
+          testid = deviceID | 1
+          DisplayDevices
+          HSerPrintCRLF
+        end if
+      next
+      HSerPrint   "End of Search": HSerPrintCRLF 2
+  END

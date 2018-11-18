@@ -1,0 +1,59 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program shows common logarithms to two decimal places.
+'''
+'''
+'''@author 		EvanV based on works of ThomasH
+'''@licence		GPL
+'''@version		1.0a
+'''@date   		01.04.2015
+'''********************************************************************************
+
+; ----- Configuration
+
+  #chip mega8,8
+
+  #include <maths.h>
+
+ 'Use LCD in 2-wire mode with 74LS164 / 74HC164
+  #define LCD_IO 2
+  #define LCD_DB PORTC.0            ; databit
+  #define LCD_CB PORTC.1            ; clockbit
+  #define LCD_NO_RW
+
+
+; ----- Variables
+ dim ii as word
+ dim outStr, valStr as string
+
+
+; ----- Main body of program commences here.
+
+  for ii = 1 to 65535
+    cls
+    print "log10("
+    print ii                       ;print argument
+    print ")="
+    locate 1,0
+    print2Places(log10(ii))        ;and its logarithm
+    wait 2 S
+  next
+
+; ----- Support methods.  Subroutines and Functions
+
+  sub print2places(in p2p_arg as word)
+    ;print decently formatted results, to 2 decimal places
+
+    valStr = str(p2p_arg)
+    select case len(valStr)
+      case 1:
+        outStr = "0.0" + valStr
+      case 2:
+        outStr = "0." + valStr
+      case 3:
+        outStr = left(valStr,1) + "." + right(valStr,2)
+      case 4:
+        outStr = left(valStr,2) + "." + right(valStr,2)
+    end select
+    print outStr
+  end sub

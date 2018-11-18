@@ -1,0 +1,76 @@
+'''
+''' This shows how to read the ADC converter and display the
+''' a proportional delay value by changing/inverting the LEDs state.
+''' The pot on the board varies the voltage coming in from the ADC.
+'''
+''' The ADC is referenced to the same Vdd as the device, which
+''' is nominally is 5V.  The ADC returns the ratio of the voltage
+''' on Pin RA0 to 5V.  The ADC has a resolution of 10 bits, with 1023
+''' representing 5V and 0 representing 0V.
+'''
+''' Adjust the LDR or rotate the pot to change the LEDs state displayed.
+'''
+'''
+'''Great Cow  BASIC Header block
+'''
+'''@author  Evan R. Venn
+'''@licence GPL
+'''@version 1.00
+'''@date    03/05/2018
+'''****
+' ----- Configuration
+    'Chip Settings.
+    #chip 16F19156, 32
+    #option Explicit
+
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
+
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | A |--------| O | I |-
+    ''-----------------------------------------
+    ''
+
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
+
+    'Define constants to make things easier. We can reuse these at any time.
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define LDR             PORTB.4
+    #define SwitchIn        PORTB.0
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     LDR           In    'this is the ANB4 port
+    Dir     SwitchIn      In
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+   'Set the LED states
+    LEDD1 = 1
+    LEDD2 = 0
+
+    dim ADCVal as word   'we have change to a larger variable to hold the range of 0 to 1023
+
+    do
+
+        'Read the ADC for the cuttent value
+        ADCVal =  ReadAD10 ( ANB4, TRUE )
+        'Wait for the number of milliseconds
+        Wait ADCVal ms
+
+        'Flip the state of the LEDs
+        LEDD1 = NOT LEDD1
+        LEDD2 = NOT LEDD2
+
+
+    loop

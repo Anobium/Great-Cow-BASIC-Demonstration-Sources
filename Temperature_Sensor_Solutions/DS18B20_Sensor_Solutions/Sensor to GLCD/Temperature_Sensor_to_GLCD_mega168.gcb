@@ -1,0 +1,72 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program reads the value of a DS18B20 connected to Portc.3.  The DS18B20 must be setup to correctly.
+'''The GLCD display connection must be to the correct ports as shown in the hardware section.
+'''The GLCD shows the integer value and the decimal value of the temperature.
+'''@author  EvanV plus works of others
+'''@licence GPL
+'''@version 1.0a
+'''@date    31.01.2015
+'''********************************************************************************
+
+; ----- Configuration
+ #chip mega168,16
+ #option explicit
+ #include <glcd.h>
+ #include <ds18b20.h>
+
+
+; ----- Define Hardware settings
+  ' Hardware is setup in the GLCD methods, therefore none are requied here.
+
+; ----- Constants
+  #define GLCD_TYPE GLCD_TYPE_KS0108               ' This is the Default value, not required.
+  #define GLCD_RW PORTB.1
+  #define GLCD_RESET PORTB.5
+  #define GLCD_CS1 PORTB.3
+  #define GLCD_CS2 PORTB.4
+  #define GLCD_RS PORTB.0
+  #define GLCD_ENABLE PORTB.2
+  #define GLCD_DB0 PORTD.0
+  #define GLCD_DB1 PORTD.1
+  #define GLCD_DB2 PORTD.2
+  #define GLCD_DB3 PORTD.3
+  #define GLCD_DB4 PORTD.4
+  #define GLCD_DB5 PORTD.5
+  #define GLCD_DB6 PORTD.6
+  #define GLCD_DB7 PORTD.7
+
+
+
+; ----- Constants
+  ' DS18B20 port settings
+  #define DQ PortC.3
+
+; ----- Variables
+  ' a variable to handle the temperature calculations
+  dim TempC_100 as word
+  Dim CCOUNT, DSDATA as Byte
+
+; ----- Main body of program commences here.
+
+    ccount = 1
+    GLCDCLS
+    GLCDPrint(0, 0, "GCBasic 2015" )
+
+    GLCDPrint(0, 8, "DS18B20 Demo" )
+
+
+    do forever
+       ' The function readtemp returns the integer value of the sensor
+       DSdata = readtemp
+       GLCDPrint(0, 24, "Reading" )
+       GLCDPrint(48, 24,  hex(ccount) )
+       ' Display the integer value of the sensor on the LCD
+       GLCDPrint(66, 24,  str(DSdata) + "c" )
+       DSdata = ((( DSdata * 9) /5) + 32 )
+       GLCDPrint(66, 32,  str(DSdata) + "f" )
+
+       wait 2 s
+       ccount++
+
+    loop

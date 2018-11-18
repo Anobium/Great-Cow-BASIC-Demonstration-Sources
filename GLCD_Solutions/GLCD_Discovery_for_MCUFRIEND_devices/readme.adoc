@@ -1,0 +1,82 @@
+This is an example output from the software.  This examines the GLCD controller.
+
+Essentially, hook up the GLCD to the microcontroller (Ardunio UNO and any other type), compile and program, look at your terminal and you will see the results on the terminal... what could be simplier.
+
+Two examples are show below.
+
+
+*1 .Terminal Output for a HX8347-G(T) microcontroller*
+
+This is a HX8347-G(T) microcontroller - look at the bottom of this listing to see the determined type of controller.  Refer to the specific datasheet for more information on the registers.
+
+This shows a partial read of the registers plus the determination of the microcontroller type.
+
+----
+    Read Registers on GLCD UNO shield
+    controllers either read as single 16-bit
+    e.g. the ID is at GLCDreadReg(0)
+    or as a sequence of 8-bit values
+    in special locations (first is dummy)
+
+    Operting in 16-bit addressing mode
+
+    reg(0x0000) 75 75	ID ILI9320, ILI9325, ILI9335, HX8347-G (0x75)...
+    reg(0x0004) 00 00 00 00	Manufacturer ID
+    reg(0x0009) 3F 3F 3F 3F 3F	Status Register
+    reg(0x000A) 00 00	Get Power Mode
+    reg(0x000C) 01 01	Get Pixel Format
+    reg(0x0061) 00 00	RDID1 HX8347-G
+    reg(0x0062) 00 00	RDID2 HX8347-G
+    reg(0x0063) 00 00	RDID3 HX8347-G
+    reg(0x0064) 00 00	RDID1 HX8347-A
+    reg(0x0065) 00 00	RDID2 HX8347-A
+    reg(0x0066) 00 00	RDID3 HX8347-A
+    reg(0x0067) 00 00	RDID Himax HX8347-A
+    reg(0x0070) 00 00	Panel Himax HX8347-A
+    reg(0x00A1) 00 00 00 00 00	RD_DDB SSD1963
+    reg(0x00B0) 00 00	RGB Interface Signal Control
+    reg(0x00B4) 00 00	Inversion Control
+    reg(0x00B6) 00 00 00 00 00	Display Control
+    reg(0x00B7) 00 00	Entry Mode Set
+    reg(0x00BF) 00 00 00 00 00 00	ILI9481, HX8357-B
+    reg(0x00C0) 00 00 00 00 00 00 00 00 00	Panel Control
+    reg(0x00C8) 00 00 00 00 00 00 00 00 00 00 00 00 00	GAMMA
+    reg(0x00CC) 00 00	Panel Control
+    reg(0x00D0) 00 00 00	Power Control
+    reg(0x00D2) 00 00 00 00 00	NVM Read
+    reg(0x00D3) 00 00 00 00	ILI9341, ILI9488
+    reg(0x00DA) 00 00	RDID1
+    reg(0x00DB) 00 00	RDID2
+    reg(0x00DC) 00 00	RDID3
+    reg(0x00E0) 02 02 02 02 02 02 02 02 02 02 02 02 02 02 02 02	GAMMA-P
+    reg(0x00E1) 49 49 49 49 49 49 49 49 49 49 49 49 49 49 49 49	GAMMA-N
+    reg(0x00EF) 49 49 49 49 49 49	ILI9327
+    reg(0x00F2) 08 08 08 08 08 08 08 08 08 08 08 08	Adjust Control 2
+    reg(0x00F6) 00 00 00 00	Interface Control
+
+    Examining  : GLCD Device ID
+    Read       : GLCD Device ID = 0x7575
+    Controller : @reg(0x00) HX8347-G(T)
+    Completed  :
+----
+
+*2 .Terminal Output for a ILI9481 microcontroller*
+
+This is a ILI9481  microcontroller - this show the determined type of controller.  Refer to the specific datasheet for more information on the registers.
+
+----
+    Read Registers on GLCD UNO shield
+    controllers either read as single 16-bit
+    e.g. the ID is at GLCDreadReg(0)
+    or as a sequence of 8-bit values
+    in special locations (first is dummy)
+
+    Operting in 16-bit addressing mode
+
+
+    Examining  : GLCD Device ID
+    Read       : GLCD Device ID = 0x9481
+    Controller : @reg(0xBF) ILI9481
+    Completed  :
+----
+
