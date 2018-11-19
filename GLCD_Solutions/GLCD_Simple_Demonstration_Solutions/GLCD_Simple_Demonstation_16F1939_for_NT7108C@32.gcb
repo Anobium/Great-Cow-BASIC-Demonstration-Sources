@@ -1,0 +1,97 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a GLCD demonstration multifunctional capabilities.
+'''
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.2c
+'''@date    31.1.16
+'''********************************************************************************
+
+  #chip 16F1939,32
+'  #option explicit
+  #config Osc = INT, MCLRE_On
+
+   #include <glcd.h>
+   #define GLCD_TYPE GLCD_TYPE_NT7108C               ' Specify the GLCD type
+   #define GLCDDirection 0                           ' Flip the GLCD   0 do not flip, 1 flip
+
+   'Setup the device
+   #define GLCD_CS1 PORTC.1    'D12 to actually since CS1, CS2 can be reversed on some devices
+   #define GLCD_CS2 PORTC.0
+   #define GLCD_DATA_PORT PORTD
+   #define GLCD_RS PORTe.0
+   #define GLCD_Enable PORTe.2
+   #define GLCD_RW PORTc.3
+   #define GLCD_RESET PORTC.2
+
+  ' Timing for 32 mhz device - typically you can use the defaults and not state these constants
+  #define NT7108CReadDelay    5     ; = 5 normal usage, 5 or above is OK at 32 mhz!
+  #define NT7108CWriteDelay   1     ; = 1 normal usage you may get away with 0, 2 or above is OK at 32 mhz!
+  #define NT7108CClockDelay   1     ; = 1 normal usage you may get away with 0, 2 or above is OK at 32 mhz!
+
+'      'Optionally change the font, by uncommenting the next two lines
+'      #define GLCD_OLED_FONT
+'      GLCDfntDefaultsize= 1    'this demo with the GLCD_TYPE_NT7108C only supports GLCDfntDefaultsize= 1, as the text is all in the incorrect position
+
+      'change to LED height, this, avoids set the 4 LED signals if your device uses the bottom row to control LEDs
+      #define LED_GLCD_HEIGHT GLCD_HEIGHT
+
+
+      Dim BYTENUMBER, CCOUNT as Byte
+
+      CCount = 0
+      dim longNumber as long
+      longNumber = 4294967290 ' max value = 4294967296
+      dim wordNumber as Word
+      dim outString as string
+      wordNumber = 0
+      byteNumber = 0
+
+
+      GLCDPrint ( 0,   0, "Great Cow BASIC 2018")                                ; Print some text
+      GLCDPrint ( 0,   16, "@Evan R. Venn")                                ; Print some text
+      wait 3 s
+      GLCDCLS
+
+      ' Prepare the static components of the screen
+      GLCDPrint ( 2,   1, "PrintStr")                                ; Print some text
+      GLCDPrint ( 64,  1, "LAT@")                                    ; Print some more text
+      GLCDPrint ( 88,  1, ChipMhz)                                   ; Print chip speed
+      GLCDPrint ( 100, 1, "Mhz")                                     ; Print some text
+      GLCDDrawString( 2,8,"DrawStr")                                 ; Draw some text
+      box 0,0,GLCD_WIDTH-1, LED_GLCD_HEIGHT-1                        ; Draw a box
+      box GLCD_WIDTH-5, LED_GLCD_HEIGHT-5,GLCD_WIDTH-1, LED_GLCD_HEIGHT-1    ; Draw a box
+      Circle( 44,41,15)                                              ; Draw a circle
+      line LED_GLCD_HEIGHT,31,0,31                                   ; Draw a line
+
+      DO forever
+         for CCount = 32 to 127
+              GLCDPrint ( LED_GLCD_HEIGHT ,  36,  hex(longNumber_E ) )                 ; Print a HEX string
+              GLCDPrint ( 76 ,  36,  hex(longNumber_U ) )                 ; Print a HEX string
+              GLCDPrint ( 88 ,  36,  hex(longNumber_H ) )                 ; Print a HEX string
+              GLCDPrint ( 100 ,  36, hex(longNumber   ) )                 ; Print a HEX string
+              GLCDPrint ( 112 ,  36, "h" )                                ; Print a HEX string
+
+
+              GLCDPrint ( LED_GLCD_HEIGHT ,  44, pad(str(wordNumber), 5 ) )           ; Print a padded string
+              GLCDPrint ( LED_GLCD_HEIGHT ,  52, pad(str(byteNumber), 3 ) )           ; Print a padded string
+
+
+              box (46,9,56,19)                                           ; Draw a Box
+              GLCDDrawChar(48, 10, CCount )                               ; Draw a character
+              outString = str( CCount )                                  ; Prepare a string
+              GLCDDrawString(LED_GLCD_HEIGHT, 9, pad(outString,3) )                   ; Draw a string
+
+              filledbox 3,43,11,51, wordNumber                           ; Draw a filled box
+
+              FilledCircle( 44,41,9, longNumber xor 1)                   ; Draw a filled box
+              line 0,63,LED_GLCD_HEIGHT,31                                            ; Draw a line
+
+                                                                         ; Do some simple maths
+              longNumber = longNumber + 7 : wordNumber = wordNumber + 3 : byteNumber++
+          NEXT
+      LOOP
+
+  end
