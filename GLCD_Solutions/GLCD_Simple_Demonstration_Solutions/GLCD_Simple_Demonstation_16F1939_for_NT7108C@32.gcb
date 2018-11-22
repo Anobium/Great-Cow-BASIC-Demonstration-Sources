@@ -5,13 +5,13 @@
 '''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
 '''@author  EvanV
 '''@licence GPL
-'''@version 1.0
-'''@date    19.11.18
+'''@version 1.1
+'''@date    22.11.18
 '''********************************************************************************
 
-  #chip 16F1939,32
+  #chip 16F1939,8
   #option explicit
-  #config Osc = MCLRE_On
+  #config Osc = INT, MCLRE_On
 
    #include <glcd.h>
    #define GLCD_TYPE GLCD_TYPE_NT7108C               ' Specify the GLCD type
@@ -26,10 +26,10 @@
    #define GLCD_RW PORTc.3
    #define GLCD_RESET PORTC.2
 
-   'Timing for 32 mhz device - typically you can use the defaults and not state these constants
-   #define NT7108CReadDelay    5     ; = 5 normal usage, 5 or above is OK at 32 mhz!
-   #define NT7108CWriteDelay   1     ; = 1 normal usage you may get away with 0, 2 or above is OK at 32 mhz!
-   #define NT7108CClockDelay   1     ; = 1 normal usage you may get away with 0, 2 or above is OK at 32 mhz!
+  ' Timing for 32 mhz device - typically you can use the defaults and not state these constants
+  #define NT7108CReadDelay    7      ; = 7 normal usage, 5 or above is OK at 32 mhz!
+  #define NT7108CWriteDelay   7      ; = 7 normal usage you may get away with other lower values
+  #define NT7108CClockDelay   7      ; = 7 normal usage you may get away with other lower values
 
 '     Optionally change the font, by uncommenting the next two lines
 '     #define GLCD_OLED_FONT
@@ -60,7 +60,7 @@
       GLCDPrint ( 64,  1, "LAT@")                                    ; Print some more text
       GLCDPrint ( 88,  1, ChipMhz)                                   ; Print chip speed
       GLCDPrint ( 100, 1, "Mhz")                                     ; Print some text
-      GLCDDrawString( 2,8,"DrawStr")                                 ; Draw some text
+      GLCDDrawString( 2,10,"DrawStr")                                 ; Draw some text
       box 0,0,GLCD_WIDTH-1, LED_GLCD_HEIGHT-1                        ; Draw a box
       box GLCD_WIDTH-5, LED_GLCD_HEIGHT-5,GLCD_WIDTH-1, LED_GLCD_HEIGHT-1    ; Draw a box
       Circle( 44,41,15)                                              ; Draw a circle
@@ -82,7 +82,7 @@
               box (46,9,56,19)                                            ; Draw a Box
               GLCDDrawChar(48, 10, CCount )                               ; Draw a character
               outString = str( CCount )                                   ; Prepare a string
-              GLCDDrawString(LED_GLCD_HEIGHT, 9, pad(outString,3) )       ; Draw a string
+              GLCDDrawString(LED_GLCD_HEIGHT, 10, pad(outString,3) )       ; Draw a string
 
               filledbox 3,43,11,51, wordNumber                            ; Draw a filled box
 
@@ -95,4 +95,4 @@
       LOOP
 
   end
- 
+
