@@ -1,0 +1,68 @@
+'''A demonstration program for GCGB and GCB
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program will count from 0 to 9 on a 7 segment LED display.
+''':
+'''This uses 7 segment port.bit addressing and display selection using port.bit
+''':
+'''The 7 Segment displays are connected to PortB.0-6 for segments A-G respectively.
+'''The 7 Segment displays enable pins are connected to PortA.0, A,1, A.2 and A.3.
+'''@author  EvanV plus works of HughC
+'''@licence GPL
+'''@version 2.0a
+'''@date    02.10.2016
+''' modified 10/26/2016 mlo
+'''********************************************************************************
+
+; ----- Configuration
+
+  #chip 16F877A, 4
+
+; ----- Define Hardware settings
+  ; No hardware specifics setting for 7-Segment display shown below using the constants
+  ; You MUST specify constants as show below in the constants section.
+
+; ----- Constants
+  ; You NEED to specify the port settings
+
+  ; You need to specify the port settings
+  #define DISP_SEG_A PORTB.0
+  #define DISP_SEG_B PORTB.1
+  #define DISP_SEG_C PORTB.2
+  #define DISP_SEG_D PORTB.3
+  #define DISP_SEG_E PORTB.4
+  #define DISP_SEG_F PORTB.5
+  #define DISP_SEG_G PORTB.6
+  #define DISP_SEG_DOT PORTB.7  ' decimal point on multiplexed display
+
+  #define DISP_SEL_1 PORTA.0
+  #define DISP_SEL_2 PORTA.1
+  #define DISP_SEL_3 PORTA.2
+  #define DISP_SEL_4 PORTA.3
+
+
+; ----- Variables
+  dim DigitCounter as byte
+
+; ----- Main body of program commences here.
+
+    do Forever
+
+       For DigitCounter = 0 to 9
+
+            ;Show the value on the 7-Segment displays
+          Repeat 125
+            DisplayValue 1, DigitCounter
+            wait 2 ms
+            DisplayValue 2, DigitCounter
+            wait 2 ms
+            DisplayValue 3, DigitCounter, 1 ' the dot parameter = 1 will turn on the DP
+                                            ' dot is optional. leave off if not needed
+            wait 2 ms
+            DisplayValue 4, DigitCounter
+            wait 2 ms
+          end Repeat
+
+          wait 100 ms
+        Next
+
+    loop
