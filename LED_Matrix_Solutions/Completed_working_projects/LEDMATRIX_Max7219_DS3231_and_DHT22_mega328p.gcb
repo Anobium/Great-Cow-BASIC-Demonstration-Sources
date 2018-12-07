@@ -1,0 +1,326 @@
+'''A demonstration program for Great Cow Basic.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program shows Time, Date, Temperature and Humidity on MAX7219 Dot Matrix Display using Arduino Nano, DS3231 and DHT22.
+'''Credit goes to Great Cow Basic Team
+'''@author  Owais Najam
+'''@licence GPL
+'''@version 1.0
+'''@date 6th Dec 2018
+''' There is always room for improvement.
+'''********************************************************************************
+
+; ----- Configuration
+  #chip mega328p, 16
+  #config MCLRE=on
+  #include <max7219_ledmatrix_driver.h>
+  #include <dht.h>
+  #include <ds3231.h>
+  #include <i2ceeprom.h>                  ; memory chips: at24c32 (storage capacity 32k)
+  #option Explicit
+
+  #define    AT24C32  0xAE                  ;Eeprom address
+
+; Define Hardware I2C settings
+  #define HI2C_BAUD_RATE 100
+  #define HI2C_DATA PORTC.4
+  #define HI2C_CLOCK PORTC.5
+  HI2CMode Master
+
+
+; ----- Constants
+  #define DHT_type    22
+  #define DHT_PIN PORTD.2
+
+  #define period      2 S             ;update period
+
+  #define clocktype   1               ;0 is US or 1 is UK style
+
+
+; ----- Constants
+  'Set SPI pins for the Max7219
+  #define Max7219_DI    portb.4    'pin12
+  #define Max7219_DO    portb.3    'pin11
+  #define Max7219_SCK   portb.5    'pin13
+  #define Max7219_CS    portb.2    'pin10
+
+  'Specifics for device configuration
+  #define MAX7219_X_Devices 8
+
+  Dim ALARM1TRACK, ALARM2TRACK as Byte
+  Dim CENTURY_FLAG, POWERLOSS, EEPROMVAL, DAYSMAX, DAYSMAX as Byte
+  dim changed as bit
+  dim hour, min, sec, am_pm as byte
+  dim oldsec as byte
+  dim date, month, year, DOW, century as byte
+  dim mode, Oldmode, dayMax as byte
+  oldsec = 255                        ; init value
+  century = 20                        ; will be updated by Century calculation... if a century roll ever occurs!! Required in this example code.
+
+  dim myString as string * 50
+  Max7219_LEDMatrix_Brightness ( 0 )
+
+;----- Tables
+
+  table monthDays                     ;# of days in months. Required in this example code.
+    31
+    29                                ;leap years only
+    31
+    30
+    31
+    30
+    31
+    31
+    30
+    31
+    30
+    31
+  end table
+
+
+'; ----- Main body of program commences here.
+
+
+
+
+; ----- Define Hardware settings
+
+
+; ----- Variables
+
+  'required for DHT
+  dim msg, whole, tenths as byte
+  dim rh, cels, fahr as integer
+
+; ----- Quick Command Reference:
+;       The humidity and temperatures are signed integers, the error
+;       indicator a byte. For the DHT11, the numerical results are
+;       simply whole numbers. For the DHT22 numerical results
+;       are fixed pointed numbers, with the decimal point assumed one
+;       digit from the right. In other words, the values are scaled up
+;       by 10. For example, a return value of 657 for the relative
+;       humidity would be interpreted as 65.7%.
+
+; ----- Main body of program commences here.
+
+  GLCDCLS
+  GLCDPrint (1, 0, "Wait...")
+  Max7219_LEDMatrix_Update
+  'let sensor stabilize
+  wait period
+
+  #ifdef HI2C_DATA
+        ' GLCDCLS
+        ' GLCDPrint (1, 0, "i2cHW" )
+        ' Max7219_LEDMatrix_Update
+        ' wait period
+        HI2CReStart                          ; is DS3231 present?
+        HI2CSend(DS_AddrWrite)
+        HI2CStop
+
+        if HI2CAckPollState = True  then  ; is DS3231 present?
+            GLCDCLS
+            GLCDPrint (1, 0, "No DS3231.." )
+            Max7219_LEDMatrix_Update
+            wait period
+            end
+        end if
+  #endif
+
+  #ifdef I2C_DATA
+        ' GLCDCLS
+        ' GLCDPrint (1, 0, "i2cSW" )
+        ' Max7219_LEDMatrix_Update
+        ' wait period
+        I2CStart                          ; is DS3231 present?
+        I2CSend(DS_AddrWrite)
+        I2CStop
+
+        if I2CSendState = False  then     ; is DS3231 present?
+            GLCDCLS
+            GLCDPrint (1, 0, "No DS3231.." )
+            Max7219_LEDMatrix_Update
+            wait period
+            end
+        end if
+   #endif
+
+
+  DS3231_ReadDate(DOW, date, month, year, century_flag )   ;get initial date
+  if century_flag = 1 then
+     DS3231_HandleCentury ( century_flag, Century )
+  end if
+
+  DS3231_ReadHourMode(mode)                 ;and the current mode
+  DS3231_SetHourMode(12)                  ;update hour mode from RTC
+  DS3231_EnableOscillator( true )           ;and, ensure the clock is running
+
+  ;
+  ;Example of configuration of the 32K output and the SQW
+  ;
+  DS3231_Set32kHz ( true )                  ;and, enable the 32kHz Output (EN32kHz).
+  DS3231_EnableSQW
+  DS3231_SetSQW 0                           ;and, turn ON output as we will use as the alarm port!
+  DS3231_DisableSQW
+
+
+
+
+  do
+
+      DS3231_ReadDate(DOW, date, month, year, century_flag )   ;get initial date. This is required for main routine.
+      if century_flag = 1 then
+        DS3231_HandleCentury ( century_flag, Century )
+      end if
+
+      DS3231_ReadHourMode(mode)                 ;and the current mode
+
+      ' initialise a tracking varaible
+      powerloss = false
+      dim EEpromAddress as word
+      EEpromAddress = 0
+
+      GLCDCLS
+      updateDisp                        ;show time and date
+
+      wait period
+
+        'get current values
+        readDHT(rh, cels, fahr, msg)
+        GLCDCLS
+        select case msg
+          'all okay, so proceed
+          case 0:
+            rh = rh / 10
+            cels = cels / 10
+            fahr = fahr / 10
+            myString = str(cels) + "/"
+            myString = myString + str(fahr) + " "
+            myString = myString + str(rh) + "%"
+            GLCDPrint (5, 0, myString )
+            Max7219_LEDMatrix_Update
+          'unit not responding
+          case 1:
+            GLCDPrint (1, 0, "No reply...")
+            Max7219_LEDMatrix_Update
+          'checksum error
+          case 2:
+            GLCDPrint (1, 0, "Bad CS...")
+            Max7219_LEDMatrix_Update
+        end select
+
+        wait period
+  loop
+  end
+
+  sub printTime
+    myString = ""
+    'if mode = 24 then
+      if hour < 10 then               ;left pad with zero
+        myString = "0"
+      end if
+    'end if
+    myString = myString + str(hour)
+    myString = myString + ":"
+
+    if min < 10 then                  ;left pad with zero
+      myString = myString + "0"
+    end if
+    myString = myString + str(min)
+    myString = myString + ":"
+
+    if sec < 10 then                  ;left pad with zero
+      myString = myString + "0"
+    end if
+    myString = myString + str(sec)
+
+    if mode = 12 then                 ;Print a.m or p.m
+      if am_pm then                   ;only in 12-hour mode
+        myString = myString + "pm"
+        GLCDPrint (2, 0, myString )
+        Max7219_LEDMatrix_Update
+      else
+        myString = myString + "am"
+        GLCDPrint (2, 0, myString )
+        Max7219_LEDMatrix_Update
+      end if
+    end if
+  end sub
+
+
+sub printDate
+    myString = ""
+    select case DOW                   ;day of the week
+      case 1:
+        myString = "Sun"
+      case 2:
+        myString = "Mon"
+      case 3:
+        myString = "Tue"
+      case 4:
+        myString = "Wed"
+      case 5:
+        myString = "Thu"
+      case 6:
+        myString = "Fri"
+      case 7:
+        myString = "Sat"
+      case else
+        myString = "Err"
+    end select
+
+    myString = ""
+    if clocktype = 0 then
+      myString = myString + str(month)
+      myString = myString + "/"
+
+      if date < 10 then                  ;left pad with zero
+        myString = myString + "0"
+      end if
+
+      myString = myString + str(date)
+      myString = myString + "/"                      ;make four-digit year
+      myString = myString + str(century)
+      if year < 10 then
+        myString = myString + "0"
+      end if
+
+    else
+      if date < 10 then                  ;left pad with zero
+        myString = myString + "0"
+      end if
+
+      myString = myString + str(date)
+      myString = myString + "/"
+      myString = myString + str(month)
+      myString = myString + "/"                      ;make four-digit year
+      myString = myString + str(century)
+      if year < 10 then
+        myString = myString + "0"
+      end if
+    end if
+    myString = myString + str(year)
+
+    GLCDPrint (2, 0, myString )
+    Max7219_LEDMatrix_Update
+  end sub
+
+
+  sub updateDisp
+    ;for best efficiency, date is only updated once a day
+    DS3231_ReadTime(hour, min, sec, am_pm)
+    if oldsec <> sec then
+      if !(hour | min | sec) then       ;time to update
+        DS3231_ReadDate(DOW, date, month, year, century_flag )
+        if century_flag = 1 then
+           DS3231_HandleCentury ( century_flag, Century )
+        end if
+      end if
+
+      printTime                         ;show time
+      wait period
+
+      GLCDCLS
+      printDate
+      oldsec =  sec
+    end if
+  end sub
