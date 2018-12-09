@@ -1,0 +1,31 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demonstrates the capabilities of a LCD display.
+'''The LCD is using an 4-bit bus for connectivity.
+'''For the LCD connection - please refer to the program.
+'''@author  TheoL plus works of WilliamR
+'''@licence GPL
+'''@version 1.0a
+'''@date    21.01.2015
+'''********************************************************************************
+
+;Set chip model required:
+#chip 16f59, 20
+
+dir porta out
+dir portb out
+dir portc out
+dir portd out
+dir porte out
+
+do Forever
+  for bits = 0 to 255
+    porta = bits
+    portb = porta
+    portc = portb
+    portd = portc
+    porte = portd
+    wait 100 ms
+  next
+Loop
+
