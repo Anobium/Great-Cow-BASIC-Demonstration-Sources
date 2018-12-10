@@ -1,0 +1,36 @@
+#chip 16F688, 20
+
+    'support for Common Anode
+    #define 7Seg_CommonAnode
+
+    'support for pfet or pnp high side drivers
+    #define 7Seg_HighSide
+
+' ----- Constants
+  '''METHOD 1  Define individual port pins for segments and selects
+    #define DISP_SEG_A PORTC.0
+    #define DISP_SEG_B PORTC.1
+    #define DISP_SEG_C PORTC.2
+    #define DISP_SEG_D PORTC.3
+    #define DISP_SEG_E PORTC.4
+    #define DISP_SEG_F PORTC.5
+    #define DISP_SEG_G PORTA.5
+'   #define DISP_SEG_DOT PORTB.7 '' available on some displays as dp or colon
+
+    #define DISP_SEL_1 PORTA.4
+
+    Dim Message As String * 2
+
+    Do
+
+        Message = hex ( ReadAD( AN1 ) )
+
+        Repeat 50
+          Displaychar 2, Message(1)
+          wait 3 ms
+          DisplayChar 1, Message(2)
+          wait 3 ms
+        end Repeat
+        Wait 100 ms
+
+    Loop

@@ -26,16 +26,21 @@
   #define LCD_DB7 PortB.3
 
 
+  PRINT "Great Cow BASIC"
+  locate 1,0
+  PRINT "@2018"
+  wait 4 s
+
   CLS
   PRINT "Channel 0:"
   locate 1,0
   PRINT "Channe: 1:"
 
-    Do Forever
+  Do Forever
 
-      Locate 0, 12
-      Print leftpad( str( ReadAD10( AN0 ) ), 4 )
-      Locate 1, 12
-      Print leftpad( str( ReadAD10( AN1 ) ), 4 )
+    Locate 0, 12
+    Print leftpad( str( ReadAD10( AN0 ) ), 4 )
+    Locate 1, 12
+    Print leftpad( str( ReadAD10( AN1 ) ), 4 )
 
-    loop
+  loop
