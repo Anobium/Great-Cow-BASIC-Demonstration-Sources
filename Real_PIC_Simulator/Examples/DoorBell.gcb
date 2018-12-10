@@ -1,0 +1,48 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demonstrates the capabilities of tone library
+'''@licence GPL
+'''@version 1.0a
+'''@date    10.12.2018
+'''********************************************************************************
+
+;Set chip model required:
+    #chip 12f675
+    #include <songplay.h>
+    #define SoundOut GPIO.0
+
+
+    dim SoundLoop as word
+    dim SoundTracker as bit
+
+
+    SoundTracker = 0
+
+    Do forever
+
+        wait while GPIO.4 = 1 and GPIO.2 = 1
+
+        'change sound
+        if GPIO.4 = 0 then
+            SoundTracker = ! SoundTracker
+        end if
+
+        if SoundTracker = 0 then
+          repeat 5
+          tone 1000, 10
+          tone 100, 5
+          tone 1000, 10
+          tone 100, 5
+          tone 1000, 10
+          tone 100, 5
+          end Repeat
+        else
+          Repeat 3
+            FOR SoundLoop = 4000 TO 1000 STEP -50
+              tone SoundLoop, 1
+            NEXT I
+          end Repeat
+        end if
+
+
+    loop

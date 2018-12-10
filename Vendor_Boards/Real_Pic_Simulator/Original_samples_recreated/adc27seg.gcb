@@ -1,3 +1,12 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demonstrates the capabilities of 7 segments displays
+'''@licence GPL
+'''@version 1.0a
+'''@date    10.12.2018
+'''********************************************************************************
+
+;Set chip model required:
 #chip 16F688, 20
 
     'support for Common Anode
