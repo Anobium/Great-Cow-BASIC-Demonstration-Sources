@@ -7,15 +7,15 @@
 '''@licence GPL
 '''@version 1.0a
 '''@date    10.12.2018
-***********************************************************
+'''***********************************************************
 
   #chip 16f877,20
   #option explicit
 
   #include <glcd.h>
   #define GLCD_TYPE GLCD_TYPE_KS0108               ' This is the Default value, not required.
-  #define GLCD_OLED_FONT                           'The constant is required to support OLED fonts
-  #define GLCD_Disable_OLED_FONT2                  'The constant to disable the large fontset.
+'  #define GLCD_OLED_FONT                           'The constant is required to support OLED fonts
+'  #define GLCD_Disable_OLED_FONT2                  'The constant to disable the large fontset.
 
 ' #define GLCDDirection 1                          ' Invert display, not always required
 
@@ -64,4 +64,3 @@
     GLCDPrint 34,32,  "on Graphic LCD"
     GLCDPrint 100,56,  "v1.2c"
   #endif
-
