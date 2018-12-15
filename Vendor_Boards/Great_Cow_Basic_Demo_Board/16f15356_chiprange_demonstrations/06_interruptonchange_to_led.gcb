@@ -1,0 +1,57 @@
+''' Great Cow BASIC demonstration
+'''
+''' This demonstration simply turns the LED on using the status of the switch using an Interrupt.  See http://gcbasic.sourceforge.net/help/_on_interrupt_the_default_handler.html
+''' There is no main program... the Interrupt does all the clever work.
+'''
+''' Attach an LED to the MPLAB® Xpress PIC16F15356 board that can be turned ON via a suitable resistor.
+''' and OFF. The LED can be activated by driving the connected I/O line.
+'''
+''' Atttach a mechanical button with a 10k pull resistor. This is a generic user configurable
+''' button and when a button is pressed it will drive the I/O line to GND.
+''' If there is no pull-up resistor connected to the generic user button. So we enable
+''' the internal pull-up in the PIC16F15356 to use the mechanical button.
+'''
+'''
+'''@author  Evan R. Venn
+'''@licence GPL
+'''@version 1.00
+'''@date    27/10/2018
+'''********************************************************************
+
+    #chip 16F15356          'Specify the Device you are compiling for - this board is the 16F15356
+                            'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
+    #option Explicit        'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+
+    #define LEDOn  = 1      'Set a constant.  The LED can be de-activated by driving the connected I/O line to the supply voltage via a suitable resistor.
+    #define LEDOff = 0      'Set a constant.  The LED can be activated by driving the connected I/O line to GND.
+
+    #define LED0 portc.1    'Set a constant to refer to the LED. Attach via a suitable resistor.
+    dir LED0 out            'Set LED as an output
+
+
+    #define SW0 portc.0     'Set a constant to refer to the switch
+    dir SW0 in              'Set the switch as an input
+    WPUC0 = 1               'Enable weak pullup
+''' Set up the Interrupt-On-Change. Known as IOC
+    IOCCF0 = 0              'interrupt on change for group IOCCF - flag for the switch port.
+
+    IOCCN0 = 1              'interrupt on change for group IOCCN - negative flag for the switch port.
+
+    IOCCP0 = 1              'interrupt on change for group IOCCP - positive flag for the switch port.
+
+    IOCIE = 1               'enable IOCI interrupt
+
+
+
+    do forever              'loop forever.... there is no code... but the Interrupt is executed when you push the switch
+
+    loop
+
+
+    sub Interrupt           'See http://gcbasic.sourceforge.net/help/_on_interrupt_the_default_handler.html
+
+      LED0 = !LED0          'Toggle led
+      wait 1 ms             'Debounce the switch
+      IOCCF0 = 0            'Clear the interrupt event flag for the switch port.
+
+    end sub
