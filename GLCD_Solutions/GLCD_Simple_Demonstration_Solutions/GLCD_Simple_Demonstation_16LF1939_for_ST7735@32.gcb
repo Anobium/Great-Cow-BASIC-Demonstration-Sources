@@ -6,11 +6,11 @@
 '''@author  EvanV
 '''@licence GPL
 '''@version 1.0
-'''@date    08.11.14
+'''@date    16.12.18
 '''********************************************************************************
 
   'Chip Settings. Assumes the my development board 'C' with with a 16LF1939
-  #chip 16f1939,32
+  #chip 16lf1939,32
   #option explicit
   #config Osc = INT, MCLRE_ON, PLLEN_ON, CLKOUTEN_OFF
 
@@ -32,7 +32,7 @@
       Dim CCOUNT, BYTENUMBER as Byte
 
       GLCDCLS
-      GLCDRotate ( PORTRAIT_REV )     ' optionally you can rotate the screen.
+'      GLCDRotate ( PORTRAIT_REV )     ' optionally you can rotate the screen.
 
       #define GLCD_OLED_FONT
       GLCDfntDefaultSize = 2
@@ -88,4 +88,3 @@
       LOOP
 
   end
-
