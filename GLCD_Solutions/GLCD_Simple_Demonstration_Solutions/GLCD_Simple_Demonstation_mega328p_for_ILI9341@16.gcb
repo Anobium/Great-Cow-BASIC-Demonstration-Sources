@@ -11,7 +11,7 @@
 ''':
 '''@author
 '''@licence GPL
-'''@version 1.0
+'''@version 1.1
 '''@date
 '''********************************************************************************
 
@@ -157,7 +157,7 @@ sub ShowCase1
         GLCDRotate ( Portrait )
 
         GLCDDrawString (2, 1, "GCB", ILI9341_WHITE )
-        GLCDDrawString (56,1,"v.941", ILI9341_YELLOW )
+        GLCDDrawString (56,1,"v.9804", ILI9341_YELLOW )
         GLCDDrawString (2, 16, "DrawStr", ILI9341_WHITE )
 
         GLCDDrawString ( 60, 31, "Long Number" )
@@ -182,7 +182,7 @@ sub ShowCase1
         GLCDDrawString ( 42, ILI9341_GLCD_HEIGHT - 30 , "ILI9341 Driver" , ILI9341_WHITE )
 
         GLCDfntDefaultsize = 1
-        GLCDDrawString ( ILI9341_GLCD_WIDTH - 60, 2 , "July 2015" , ILI9341_WHITE )
+        GLCDDrawString ( ILI9341_GLCD_WIDTH - 60, 2 , "Dec 2018" , ILI9341_WHITE )
         #ifdef ILI9341_HardwareSPI
             GLCDDrawString ( ILI9341_GLCD_WIDTH - 42, 10 , "HW SPI" , ILI9341_WHITE )
         #endif
@@ -248,10 +248,10 @@ sub ShowCase2
         GLCDDrawString ( 50, ILI9341_GLCD_HEIGHT - 30 , "ILI9341 Driver" , ILI9341_WHITE )
 
         GLCDfntDefaultsize = 1
-        GLCDDrawString ( ILI9341_GLCD_WIDTH - 60, 2 , "July 2015" , ILI9341_WHITE )
+        GLCDDrawString ( ILI9341_GLCD_WIDTH - 58, 2 , "Dec 2018" , ILI9341_WHITE )
 
         #ifdef ILI9341_HardwareSPI
-            GLCDDrawString ( ILI9341_GLCD_WIDTH - 42, 10 , "HW SPI" , ILI9341_WHITE )
+            GLCDDrawString ( ILI9341_GLCD_WIDTH - 44, 10 , "HW SPI" , ILI9341_WHITE )
         #endif
 
         #ifndef ILI9341_HardwareSPI
