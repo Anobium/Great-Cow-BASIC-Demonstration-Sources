@@ -11,8 +11,8 @@
 '
 ' This example code is in the public domain.
 '
-#chip mega328p, 16    ' Declare the Targer Processor and Speed
-#option explicit      ' Requier Expisit decleration of Variables
+#chip mega328p, 16    ' Declare the Target Processor and Speed
+#option explicit      ' Require Explicit declaration of Variables
 
 #define LED PORTB.5   ' Define the LED Pin
 
