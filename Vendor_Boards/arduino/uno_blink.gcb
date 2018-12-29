@@ -3,9 +3,9 @@
 '
 '  Turns an LED on for one second, then off for one second, repeatedly.
 '
-'  Most Arduinos have an on-board LED you can control. 
+'  Most Arduinos have an on-board LED you can control.
 '  On the UNO, MEGA and ZERO it is attached to PORTB.5 (digital pin 13)
-'  If you want to know what pin the on-board LED is connected to on   
+'  If you want to know what pin the on-board LED is connected to on
 '  your Arduino model, check the Technical Specs of your board at:
 '  https://www.arduino.cc/en/Main/Products
 '
@@ -22,5 +22,5 @@ Dir LED Out           ' Make the LED Pin an Output
 ' Main                ' This loop runs over and over forever.
 Do
   LED = !LED          ' Toggle state of LED
-  wait 1 s      
+  wait 1 s
 Loop
