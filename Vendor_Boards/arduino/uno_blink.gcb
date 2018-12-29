@@ -1,4 +1,8 @@
-'
+'''@author  C.A.Roper
+'''@licence GPL
+'''@version 1.0
+'''@date  29/12/2018
+'''********************************************************************************'
 '  UNO_Blink.gcb
 '
 '  Turns an LED on for one second, then off for one second, repeatedly.
