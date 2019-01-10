@@ -1,0 +1,28 @@
+#chip 18F24K42,32        ' Declare the Target Processor and Speed
+#option explicit          ' Require Explicit declaration of Variables
+#include <millis.h>       ' Include the Library
+
+        #define LED PORTA.0       ' Define the LED Pin - Digital Pin 2
+        #define LEDRate 1000     ' Flash rate in mS
+        ' Setup
+        Dir LED Out               ' Make the LED Pin an Output
+        LED = 0
+
+        Dim CurMs, LstMs as word  ' declare working variables
+        ' Main                    ' This loop runs over and over forever.
+        LstMs = 0
+        CurMs = 0
+
+        ' Main                    ' This loop runs over and over forever.
+        Do
+          CurMs = millis()
+          IntOff
+          if CurMs - LstMs >= LEDRate then  ' required Time has Elapsed
+          inton
+            LED = !LED                      ' So Toggle state of LED
+            LstMs = CurMs                   ' And Record Toggle Time
+          end if
+          IntOn
+        Loop
+
+END

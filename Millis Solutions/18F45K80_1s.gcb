@@ -1,0 +1,44 @@
+'
+#chip 18F45K80,8         ' Declare the Target Processor and Speed
+#option explicit          ' Require Explicit declaration of Variables
+#include <millis.h>       ' Include the Library
+#config MCLRE=ON
+
+'#define Millis_Default_Timer0_value 23  = 2
+'#define Millis_Default_Timer0_value 14 ' = 4
+
+
+
+        #define LED PORTA.0       ' Define the LED Pin - Digital Pin 2
+        #define LEDRate 1000     ' Flash rate in mS
+        ' Setup
+        Dir LED Out               ' Make the LED Pin an Output
+        LED = 0
+
+'        #define SerialDebug
+
+        Dim CurMs, LstMs as word  ' declare working variables
+        ' Main                    ' This loop runs over and over forever.
+        LstMs = 0
+        CurMs = 0
+
+            #ifdef SerialDebug
+                HSerPrintCRLF
+                HSerPrint "*Start"
+                HSerPrintCRLF
+            #endif
+
+        ' Main                    ' This loop runs over and over forever.
+        Do
+          CurMs = millis()
+          IntOff
+          if CurMs - LstMs >= LEDRate then  ' required Time has Elapsed
+          inton
+            LED = !LED                      ' So Toggle state of LED
+            LstMs = CurMs                   ' And Record Toggle Time
+          end if
+          IntOn
+        Loop
+
+END
+
