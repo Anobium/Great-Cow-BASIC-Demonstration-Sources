@@ -1,0 +1,194 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a GLCD demonstration maps the #1 character for the OLED font 1
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date    05.01.17
+'''********************************************************************************
+  'Chip Settings.
+  #chip mega328p, 16
+  #option explicit
+
+    #include <glcd.h>
+    #include <uno_mega328p.h >
+    #include <xpt2046.h>
+
+    #define GLCD_TYPE GLCD_TYPE_ILI9486L
+
+
+    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+    #define GLCD_DC       DIGITAL_8         ' Data command line
+    #define GLCD_CS       DIGITAL_10        ' Chip select line
+    #define GLCD_RST      DIGITAL_9         ' Reset line
+
+    #define GLCD_DI       DIGITAL_12          ' Data in | MISO
+    #define GLCD_DO       DIGITAL_11          ' Data out | MOSI
+    #define GLCD_SCK      DIGITAL_13          ' Clock Line
+
+    #define ILI9486L_HardwareSPI    ' remove/comment out if you want to use software SPI.
+      'End of GLCD specific setup
+      '*****************************************************************************************
+ 'Setup the XPT2046
+
+    'Typical calibration range for Hardware SPI when using XPT2046
+    'for 320 * 240 screeen... may be different for others
+    #define XPT2046XMIN   12
+    #define XPT2046YMIN   12
+    #define XPT2046XMAX   108
+    #define XPT2046YMAX   117
+    #define XPT2046_ReadSamples 100
+
+    'Typical Calibration range for Software SPI when using XPT2046
+'    #define XPT2046XMIN   30
+'    #define XPT2046YMIN   25
+'    #define XPT2046XMAX   210
+'    #define XPT2046YMAX   225
+
+
+    #define XPT2046_DI       DIGITAL_12          ' Data in | MISO
+    #define XPT2046_DO       DIGITAL_11          ' Data out | MOSI
+    #define XPT2046_SCK      DIGITAL_13          ' Clock Line
+    #define XPT2046_CS       DIGITAL_2           ' Chip select line
+    #define XPT2046_IRQ      ANALOG_5
+    #define XPT2046_HardwareSPI                  ' remove/comment out if you want to use software SPI - must use same method as GLCD
+
+    'Set the initial calibration - shown here to show the method
+    SetCalibation_XPT2046 ( XPT2046XMIN, XPT2046XMAX, XPT2046YMIN, XPT2046YMAX, GLCD_WIDTH, GLCD_HEIGHT )
+
+
+    '******************************************************************************************************
+    'Main program
+    GLCDCLS TFT_NAVY
+    ScreenLayout
+
+   dim Xconverge, Yconverge as Integer
+    dim convergeCounter as byte
+    do
+
+      Xconverge = 0
+      Yconverge = 0
+      convergeCounter = 1
+
+      filledbox Current_GLCD_WIDTH, 0, Current_GLCD_WIDTH-10, 10, TFT_RED
+      'always wait for touch event
+      wait while isTouched_XPT2046
+      filledbox Current_GLCD_WIDTH, 0, Current_GLCD_WIDTH-10, 10, TFT_YELLOW
+      do
+          repeat 5
+              'get the values -
+              GetXY_XPT2046( XTouchPoint_XPT2046, YTouchPoint_XPT2046 )
+          end Repeat
+          'test for settling by testing for convergance
+          if ABS( ( Xconverge - XTouchPoint_XPT2046 ) ) > 1  or  ABS( ( Yconverge - YTouchPoint_XPT2046 ) ) > 1  then
+              Xconverge = XTouchPoint_XPT2046
+              Yconverge = YTouchPoint_XPT2046
+              convergeCounter++
+          Else
+              'converged
+              exit do
+          end if
+      Loop
+      'Flip the data to handle for the screen rotation
+      YTouchPoint_XPT2046 = Current_GLCD_HEIGHT - YTouchPoint_XPT2046
+      filledbox Current_GLCD_WIDTH, 0, Current_GLCD_WIDTH-10, 10, TFT_GREEN
+        if XTouchPoint_XPT2046 > Current_GLCD_WIDTH-59 and YTouchPoint_XPT2046 > Current_GLCD_HEIGHT-20  then
+          if XTouchPoint_XPT2046 < Current_GLCD_WIDTH and  YTouchPoint_XPT2046 < Current_GLCD_HEIGHT then
+            'clear
+            ScreenLayout
+          end if
+      else
+
+          FilledCircle XTouchPoint_XPT2046, YTouchPoint_XPT2046, 3, TFT_LIGHTGREY
+
+          'Show the raw data
+          GLCDPrint ( 24, 56, pad(str(XTouchPoint_XPT2046raw),3 ) )
+          GLCDPrint ( 24, 72, pad(str(YTouchPoint_XPT2046raw),3 ) )
+          GLCDPrint ( 24, 90, pad(str(convergeCounter ) ,3 ) )
+
+          'Automatically adjust the values to min and max
+          'Not needed in a real program use SetCalibation_XPT2046( XPT2046_Xmin, XPT2046_Xmax, XPT2046_Ymin, XPT2046_Ymax )
+          if XTouchPoint_XPT2046raw < XPT2046_Xmin then XPT2046_Xmin = XTouchPoint_XPT2046raw
+          if YTouchPoint_XPT2046raw < XPT2046_Ymin then XPT2046_Ymin = YTouchPoint_XPT2046raw
+          if XTouchPoint_XPT2046raw > XPT2046_Xmax then XPT2046_Xmax = XTouchPoint_XPT2046raw
+          if YTouchPoint_XPT2046raw  > XPT2046_Ymax then XPT2046_Ymax = YTouchPoint_XPT2046raw
+
+          'show the values
+          GLCDPrint ( 102, 56, pad(str(XPT2046_Xmin),3 ) )
+          GLCDPrint ( 102, 72, pad(str(XPT2046_Ymin),3 ) )
+          GLCDPrint ( 162, 56, pad(str(XPT2046_Xmax),3 ) )
+          GLCDPrint ( 162, 72, pad(str(XPT2046_Ymax),3 ) )
+
+          GLCDPrint ( 24, 230, pad(str(XTouchPoint_XPT2046),5 ))
+          GLCDPrint ( 24, 246, pad(str(YTouchPoint_XPT2046),5 ))
+
+          'do not hammer the touch
+          wait 20 ms
+
+      end if
+
+    loop
+
+
+
+sub ScreenLayout
+
+        #define GLCD_OLED_FONT
+        GLCDfntDefaultsize = 2
+        GLCDFontWidth = 5
+        'Layout the screen
+        GLCDCLS
+        GLCDPrint ( 2, 3, "XPT2046 demonstration 2018")
+        line 0, 34, Current_GLCD_WIDTH, 34
+        line 0, 128, Current_GLCD_WIDTH, 128
+        line 0, 220, Current_GLCD_WIDTH, 220
+        GLCDPrint ( 2, 25, "Dynamic Calibration")
+        GLCDPrint ( 22, 40, "Raw    Min   Max")
+        GLCDPrint ( 2, 56, "X:")
+        GLCDPrint ( 2, 72, "Y:")
+        GLCDPrint ( 2, 122, "Current Calibration")
+        GLCDPrint ( 2, 146, "X:")
+        GLCDPrint ( 2, 162, "Y:")
+        GLCDPrint ( 102, 146, pad(str(XPT2046_Xmin),3 ) )
+        GLCDPrint ( 102, 162, pad(str(XPT2046_Ymin),3 ) )
+        GLCDPrint ( 162, 146, pad(str(XPT2046_Xmax),3 ) )
+        GLCDPrint ( 162, 162, pad(str(XPT2046_Ymax),3 ) )
+        GLCDPrint ( 2, 214, "Scaled")
+        GLCDPrint ( 2, 230, "X:")
+        GLCDPrint ( 2, 246, "Y:")
+        GLCDPrint ( 2, 90, "C:")
+
+        GLCDPrint ( 120, 214, "GLCD Size")
+        GLCDPrint ( 120, 230, "X:" + Str( Current_GLCD_WIDTH ) )
+        GLCDPrint ( 120, 246, "Y:" + Str( Current_GLCD_HEIGHT ) )
+
+
+        GLCDfntDefaultsize = 1
+        GLCDPrint ( 2, Current_GLCD_HEIGHT-17, "v0.9c")
+        GLCDfntDefaultsize = 2
+
+        filledbox Current_GLCD_WIDTH, 0, Current_GLCD_WIDTH-10, 10, TFT_RED
+
+        Dim oldGLCDBackground as word
+        oldGLCDBackground = GLCDBackground
+            GLCDBackground = TFT_WHITE
+            GLCDPrint ( Current_GLCD_WIDTH-58, Current_GLCD_HEIGHT-18, "Clear", TFT_BLACK )
+        GLCDBackground = oldGLCDBackground
+
+        ' ------ Version Control - optional
+        #include "GCBVersionNumber.cnt"
+        'Include the GCBVersionNumber.cnt to increment versionString and create the build time string called GCBBuildTimeStr.
+        ' versionString a string is created automatically.
+        ' GCBBuildTimeStr is a string that is also created automatically.
+        ' use "GCBVersionNumber.cnt" as this will create a local copy of the versionString tracker.
+        ' if you use <GCBVersionNumber.cnt> this is a system wide versionString tracker.
+
+        dim versionString as string * 40
+        versionString = "Build: "+GCBBuildStr
+        versionString = versionString + "@"+GCBBuildTimeStr
+        GLCDfntDefaultsize = 1
+        GLCDPrint ( 2, Current_GLCD_HEIGHT-10, versionString)
+        GLCDfntDefaultsize = 2
+        ' ------ End of Version Control - optional
+End Sub
