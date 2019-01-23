@@ -1,0 +1,41 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program show the timer flashing the LED every 1 second.
+'''
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date    22.1.2019
+'''********************************************************************************
+
+
+
+    #chip 16F18446,32                'Specify the Device you are compiling for - this board is the 16F18446
+    #config FEXTOSC=Off              'Required to support the use of the
+                                     'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
+    #option Explicit                 'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+
+    #define LED0 porta.2             'Set a constant to refer to the LED.  RA2 is a Yellow LED called LED0 Edge connector, see section 3.3.1 of the MPLAB-Xpress-PIC16F18446-Evaluation-Board.pdf
+    dir LED0 out                     'Set LED as an output
+
+    InitTimer1 SOSC,0                ' 32768 crystal time keeper
+    On Interrupt Timer1Overflow Call CheckClock
+    SetTimer 1, 0x8000                'TMR1H = 0x80    ' set up for one second delay.
+    StartTimer 1
+
+    do
+    loop
+
+    sub CheckClock
+      SetTimer 1, 0x8000              'TMR1H = 0x80    ' set up for one second delay
+
+      LED0=!LED0
+    end sub
+
+
+    #define USE_Timer0 false
+    #define USE_Timer2 false
+    #define USE_Timer3 false
+    #define USE_Timer4 false
+    #define USE_Timer5 false
+    #define USE_Timer6 false
