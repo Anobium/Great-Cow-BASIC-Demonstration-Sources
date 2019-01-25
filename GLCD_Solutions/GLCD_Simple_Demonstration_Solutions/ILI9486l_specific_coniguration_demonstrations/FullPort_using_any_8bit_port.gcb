@@ -1,0 +1,38 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a simple GLCD demonstration of the ILI9486L GLCD capabilities.
+'''It is a nice graphical LCD, suitable for a lot of various projects.
+'''This program draws lines, boxes, circles and prints strings and numbers.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+''':
+'''This has been tested using the hardware and the software SPI option.
+''':
+''':
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date    24.01.2019
+'''********************************************************************************
+
+  'Chip Settings.
+    #chip 18f24k42, 64
+    #option explicit
+    #config EXTMCLR
+
+    #include <glcd.h>
+
+    #define GLCD_TYPE GLCD_TYPE_ILI9486
+
+    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+    #define GLCD_RD       portc.0          ' read command line
+    #define GLCD_WR       portc.1          ' write command line
+    #define GLCD_DC       portc.2          ' Command/Data line.
+    #define GLCD_CS       portc.3          ' Chip select line
+    #define GLCD_RST      portc.4          ' Reset line
+
+    #define GLCD_DataPort portb
+
+    GLCDCLS  TFT_BLUE
+    GLCDLocateString( 0, 1 )
+    GLCDPrintString "Full Port Addressing"
+
