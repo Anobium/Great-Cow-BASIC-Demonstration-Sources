@@ -1,11 +1,11 @@
 '''A demonstration program for GCGB and GCB.
 '''--------------------------------------------------------------------------------------------------------------------------------
-'''This program is a simple GLCD demonstration of the ILI9486L GLCD capabilities.
+'''This program is a simple GLCD demonstration of the ILI9486(l) GLCD capabilities.
 '''It is a nice graphical LCD, suitable for a lot of various projects.
 '''This program draws lines, boxes, circles and prints strings and numbers.
 '''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
 ''':
-'''This has been tested using the hardware and the software SPI option.
+'''This has been tested using this method.
 ''':
 ''':
 '''@author  EvanV
