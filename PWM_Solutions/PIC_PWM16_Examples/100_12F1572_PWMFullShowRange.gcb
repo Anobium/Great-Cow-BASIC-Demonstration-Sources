@@ -1,0 +1,24 @@
+  #chip PIC12F1572 ,32
+  #config mclr=on, lvp=on
+  #option explicit
+
+  dim adcSetting as word
+  adcSetting =0
+
+  Dir PORTA.2 Out     'pwm out
+
+
+  Do
+      'read the ADC
+      adcSetting = ReadAD10( an0 )
+
+      'Scale the ADC - in the context that this is a test therefore the is a 'stepped' result
+      adcSetting = scale ( adcSetting, 0, 1023, 0, 65535 )
+
+      'Call the method
+      HPWM16(3, 100, adcSetting)
+  loop
+
+
+
+
