@@ -16,13 +16,12 @@
         ' Main                    ' This loop runs over and over forever.
         Do
           CurMs = millis()
-          IntOff
           if CurMs - LstMs >= LEDRate then  ' required Time has Elapsed
-          inton
+
             LED = !LED                      ' So Toggle state of LED
             LstMs = CurMs                   ' And Record Toggle Time
           end if
-          IntOn
+
         Loop
 
 END
