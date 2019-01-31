@@ -1,0 +1,63 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a simple GLCD demonstration of the ILI9486L GLCD capabilities.
+'''It is a nice graphical LCD, suitable for a lot of various projects.
+'''This program draws lines, boxes, circles and prints strings and numbers.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+''':
+'''This has been tested using the hardware and the software SPI option.
+''':
+''':
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date    24.01.2019
+'''********************************************************************************
+
+  'Chip Settings.
+  #chip mega328p, 16
+  #option explicit
+
+    #include <glcd.h>
+    #include <uno_mega328p.h >
+'    #include "sampleimage001.h"
+    #include "samplebmp001.h"
+
+    #define GLCD_TYPE GLCD_TYPE_ILI9486L
+
+    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+    #define GLCD_DC       DIGITAL_8         ' Data command line
+    #define GLCD_CS       DIGITAL_10        ' Chip select line
+    #define GLCD_RST      DIGITAL_9         ' Reset line
+
+    #define GLCD_DI       DIGITAL_12          ' Data in | MISO
+    #define GLCD_DO       DIGITAL_11          ' Data out | MOSI
+    #define GLCD_SCK      DIGITAL_13          ' Clock Line
+
+    #define ILI9486L_HardwareSPI    ' remove/comment out if you want to use software SPI.
+
+
+
+'main program start here
+    GLCDCLS SSD1289_Blue
+
+    DrawBMP_SSD1289 (30, 60, Image1)
+    DrawBMP_SSD1289 (140, 60, Image2)
+
+    Wait 5 s
+    GLCDPrint  1, 200, " May the force...", TFT_Yellow
+    GLCDPrint  1, 230, "   ...be with you", TFT_Yellow
+    Do
+    Loop
+
+
+
+
+
+
+    table TableImage3
+    end Table
+    table TableImage4
+    end Table
+    table TableImage5
+    end Table
