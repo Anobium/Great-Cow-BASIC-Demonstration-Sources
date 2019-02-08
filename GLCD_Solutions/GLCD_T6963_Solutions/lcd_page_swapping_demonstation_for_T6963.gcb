@@ -1,0 +1,415 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a simple GLCD demonstration of the T6963 GLCD capabilities.
+'''This program will show page swapping for the LCD (text mode).  The pages are swapped and the ADC is used to aquire the wait in ms.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date    3.1.19
+'''********************************************************************************
+
+  #chip 16f1939,32
+  #option explicit
+  #config Osc = INT, VCAPEN_OFF, MCLRE_On, PLLEN_ON, CLKOUTEN_OFF
+
+  #include <glcd.h>
+  #define GLCD_TYPE GLCD_TYPE_T6963_64
+
+  '***********************************************************************************************
+  'define the connectivity - the ports
+  #define GLCD_DATA_PORT PORTD             'Library only support contigous 8-bit port
+  #define GLCD_CS        PORTa.7           'Chip Enable (Active Low)
+  #define GLCD_CD        PORTa.0           'Command or Data conrol line port
+  #define GLCD_RD        PORTA.1           'Read control line  port
+  #define GLCD_WR        PORTA.2           'Write control line port
+  #define GLCD_RESET     PORTA.3           'Reset port
+  #define GLCD_FS        PORTA.5           'FS port
+  #define GLCD_FS_SELECT 1                 'FS1 Font Select port. 6x8 font: FS1=“High”=1 8x8 font FS1=“Low”=0 for GLCD_FS_SELECT
+
+  '***********************************************************************************************
+  '*
+  '* Note    :   The T6963 controller's RAM address space from $0000 - $7FFF, total 32kbyte RAM, or it could be 64kbyte RAM best check!!
+  '*
+  '***********************************************************************************************
+  #define TEXT_HOME_ADDR      0x0000                                                         'This is specific to the GLCD display
+  #define GRH_HOME_ADDR       0x3FFF                                                         'This is specific to the GLCD display
+  #define CG_HOME_ADDR        0x77FF                                                         'This is specific to the GLCD display
+  #define COLUMN              40    'Set column number to be 40 , 32, 30 etc.                 This is specific to the GLCD display
+  #define MAX_ROW_PIXEL       64    'MAX_ROW_PIXEL the physical matrix length (y direction)   This is specific to the GLCD display
+  #define MAX_COL_PIXEL       240   'MAX_COL_PIXEL the physical matrix width (x direction)    This is specific to the GLCD display
+
+  '***********************************************************************************************
+  '* End of configuration
+  '***********************************************************************************************
+
+;Start of demonstration main program
+
+        wait 3 s
+
+        Print "WG24064A-TMI-TZ#"
+        LCDSpace 16
+        Print "Feb 2019"
+        Locate 7,0
+        Print "LCDPAGESIZE = "
+        Print LCDPAGESIZE
+        wait 2 s
+
+        CLS
+        LCDBox
+        Locate 2, 2
+        Print"Page 0"
+        Locate 3, 20
+        Print "Address: 0x"
+        Print hex(current_text_home_addr_h)
+        Print hex(current_text_home_addr)
+        locate 5,2
+        print "LCD methods used to create page"
+        wait 2 s
+
+        SelectLCDPage ( LCDPage1_T6963 )
+        CLS
+        LCDBox
+        Locate 2, 2
+        Print"Page 1"
+        Locate 3, 20
+        Print "Address: 0x"
+        Print hex(current_text_home_addr_h)
+        Print hex(current_text_home_addr)
+        locate 5,2
+        print "LCD methods used to create page"
+        wait 2 s
+
+        SelectLCDPage ( LCDPage2_T6963 )
+        CLS
+        LCDBox
+        Locate 2, 2
+        Print"Page 2"
+        Locate 3, 20
+        Print "Address: 0x"
+        Print hex(current_text_home_addr_h)
+        Print hex(current_text_home_addr)
+        locate 5,2
+        print "LCD methods used to create page"
+        wait 2 s
+
+        SelectLCDPage ( LCDPage3_T6963 )
+        CLS
+        LCDBox
+        Locate 2, 2
+        Print"Page 3"
+        Locate 3, 20
+        Print "Address: 0x"
+        Print hex(current_text_home_addr_h)
+        Print hex(current_text_home_addr)
+        locate 5,2
+        print "LCD methods used to create page"
+        wait 2 s
+
+        SelectLCDPage ( LCDPage4_T6963 )
+        CLS
+        LCDBox
+        Locate 2, 2
+        Print"Page 4"
+        Locate 3, 20
+        Print "Address: 0x"
+        Print hex(current_text_home_addr_h)
+        Print hex(current_text_home_addr)
+        locate 5,2
+        print "LCD methods used to create page"
+        wait 2 s
+
+        SelectLCDPage ( LCDPage5_T6963 )
+        CLS
+        LCDBox
+        Locate 2, 2
+        Print"Page 5"
+        Locate 3, 20
+        Print "Address: 0x"
+        Print hex(current_text_home_addr_h)
+        Print hex(current_text_home_addr)
+        locate 5,2
+        print "LCD methods used to create page"
+        wait 2 s
+
+        SelectLCDPage ( LCDPage6_T6963 )
+        CLS
+        LCDBox
+        Locate 2, 2
+        Print"Page 6"
+        Locate 3, 20
+        Print "Address: 0x"
+        Print hex(current_text_home_addr_h)
+        Print hex(current_text_home_addr)
+        locate 5,2
+        print "LCD methods used to create page"
+        wait 2 s
+
+        SelectLCDPage ( LCDPage7_T6963 )
+        CLS
+        LCDBox
+        Locate 2, 2
+        Print"Page 7"
+        Locate 3, 20
+        Print "Address: 0x"
+        Print hex(current_text_home_addr_h)
+        Print hex(current_text_home_addr)
+        locate 5,2
+        print "LCD methods used to create page"
+        wait 2 s
+
+        SelectLCDPage ( LCDPage8_T6963 )
+        CLS
+        LCDBox
+        Locate 2, 2
+        Print"Page 8"
+        Locate 3, 20
+        Print "Address: 0x"
+        Print hex(current_text_home_addr_h)
+        Print hex(current_text_home_addr)
+        locate 5,2
+        print "LCD methods used to create page"
+        wait 2 s
+
+        SelectLCDPage ( LCDPage9_T6963 )
+        CLS
+        LCDBox
+        Locate 2, 2
+        Print"Page 9"
+        Locate 3, 20
+        Print "Address: 0x"
+        Print hex(current_text_home_addr_h)
+        Print hex(current_text_home_addr)
+        locate 5,2
+        print "LCD methods used to create page"
+        wait 2 s
+
+
+        SelectLCDPage ( LCDPage10_T6963 )
+        CLS
+        LCDBox
+        Locate 2, 2
+        Print"Page 10"
+        Locate 3, 20
+        Print "Address: 0x"
+        Print hex(current_text_home_addr_h)
+        Print hex(current_text_home_addr)
+        locate 5,2
+        print "LCD methods used to create page"
+        wait 2 s
+
+'Swap pages back into focus
+
+        SelectLCDPage ( LCDPage0_T6963 )
+        Locate 5, 2
+        Print"Page 0 swapped into focus"
+        LCDSpace 6
+        Wait 2 s
+
+        SelectLCDPage ( LCDPage1_T6963 )
+        Locate 5, 2
+        Print"Page 1 swapped into focus"
+        LCDSpace 6
+        Wait 2 s
+
+        SelectLCDPage ( LCDPage2_T6963 )
+        Locate 5, 2
+        Print"Page 2 swapped into focus"
+        LCDSpace 6
+        Wait 2 s
+
+        SelectLCDPage ( LCDPage3_T6963 )
+        Locate 5, 2
+        Print"Page 3 swapped into focus"
+        LCDSpace 6
+        Wait 2 s
+
+        SelectLCDPage ( LCDPage4_T6963 )
+        Locate 5, 2
+        Print"Page 4 swapped into focus"
+        LCDSpace 6
+        Wait 2 s
+
+        SelectLCDPage ( LCDPage5_T6963 )
+        Locate 5, 2
+        Print"Page 5 swapped into focus"
+        LCDSpace 6
+        Wait 2 s
+
+        SelectLCDPage ( LCDPage6_T6963 )
+        Locate 5, 2
+        Print"Page 6 swapped into focus"
+        LCDSpace 6
+        Wait 2 s
+
+        SelectLCDPage ( LCDPage7_T6963 )
+        Locate 5, 2
+        Print"Page 7 swapped into focus"
+        LCDSpace 6
+        Wait 2 s
+
+        SelectLCDPage ( LCDPage8_T6963 )
+        Locate 5, 2
+        Print"Page 8 swapped into focus"
+        LCDSpace 6
+        Wait 2 s
+
+        SelectLCDPage ( LCDPage9_T6963 )
+        Locate 5, 2
+        Print"Page 9 swapped into focus"
+        LCDSpace 6
+        Wait 2 s
+
+        SelectLCDPage ( LCDPage10_T6963 )
+        Locate 5, 2
+        Print"Page 10 swapped into focus"
+        LCDSpace 6
+        Wait 2 s
+
+        ShowLoop
+
+        end
+
+
+sub ShowLoop
+
+
+
+        do Forever
+
+            dim adcwait as Word
+
+            SelectLCDPage ( LCDPage0_T6963 )
+            Locate 5, 2
+            Print"Page 0 swapped on timeout"
+            LCDSpace 7
+            adcwait = ReadAD10(an12)
+            Print "ADC/Wait: ": Print adcwait
+            print "  "
+            Wait adcwait ms
+
+            SelectLCDPage ( LCDPage1_T6963 )
+            Locate 5, 2
+            Print"Page 1 swapped on timeout"
+            LCDSpace 6
+            locate 6, 2
+            adcwait = ReadAD10(an12)
+            Print "ADC/Wait: ": Print adcwait
+            print "  "
+            Wait adcwait ms
+
+            SelectLCDPage ( LCDPage2_T6963 )
+            Locate 5, 2
+            Print"Page 2 swapped on timeout"
+            LCDSpace 6
+            locate 6, 2
+            adcwait = ReadAD10(an12)
+            Print "ADC/Wait: ": Print adcwait
+            print "  "
+            Wait adcwait ms
+
+            SelectLCDPage ( LCDPage3_T6963 )
+            Locate 5, 2
+            Print"Page 3 swapped on timeout"
+            LCDSpace 6
+            locate 6, 2
+            adcwait = ReadAD10(an12)
+            Print "ADC/Wait: ": Print adcwait
+            print "  "
+            Wait adcwait ms
+
+            SelectLCDPage ( LCDPage4_T6963 )
+            Locate 5, 2
+            Print"Page 4 swapped on timeout"
+            LCDSpace 6
+            locate 6, 2
+            adcwait = ReadAD10(an12)
+            Print "ADC/Wait: ": Print adcwait
+            print "  "
+            Wait adcwait ms
+
+            SelectLCDPage ( LCDPage5_T6963 )
+            Locate 5, 2
+            Print"Page 5 swapped on timeout"
+            LCDSpace 6
+            locate 6, 2
+            adcwait = ReadAD10(an12)
+            Print "ADC/Wait: ": Print adcwait
+            print "  "
+            Wait adcwait ms
+
+            SelectLCDPage ( LCDPage6_T6963 )
+            Locate 5, 2
+            Print"Page 6 swapped on timeout"
+            LCDSpace 6
+            locate 6, 2
+            adcwait = ReadAD10(an12)
+            Print "ADC/Wait: ": Print adcwait
+            print "  "
+            Wait adcwait ms
+
+            SelectLCDPage ( LCDPage7_T6963 )
+            Locate 5, 2
+            Print"Page 7 swapped on timeout"
+            LCDSpace 6
+            locate 6, 2
+            adcwait = ReadAD10(an12)
+            Print "ADC/Wait: ": Print adcwait
+            print "  "
+            Wait adcwait ms
+
+            SelectLCDPage ( LCDPage8_T6963 )
+            Locate 5, 2
+            Print"Page 8 swapped on timeout"
+            LCDSpace 6
+            locate 6, 2
+            adcwait = ReadAD10(an12)
+            Print "ADC/Wait: ": Print adcwait
+            print "  "
+            Wait adcwait ms
+
+            SelectLCDPage ( LCDPage9_T6963 )
+            Locate 5, 2
+            Print"Page 9 swapped on timeout"
+            LCDSpace 6
+            locate 6, 2
+            adcwait = ReadAD10(an12)
+            Print "ADC/Wait: ": Print adcwait
+            print "  "
+            Wait adcwait ms
+
+            SelectLCDPage ( LCDPage10_T6963 )
+            Locate 5, 2
+            Print"Page 10 swapped on timeout"
+            LCDSpace 6
+            locate 6, 2
+            adcwait = ReadAD10(an12)
+            Print "ADC/Wait: ": Print adcwait
+            print "  "
+            Wait adcwait ms
+
+        loop
+
+end sub
+
+Sub LCDBox
+
+                Dim Xposition, Yposition as byte
+                locate 20, 4
+                Print "Put ( row, column, ascii character )"
+                for Yposition = 0 to MAX_ROWS -1
+                    put Yposition, 0, "*"
+                    wait 10 ms
+                next
+                for Xposition = 0 to MAX_COLUMNS -1
+                    put 0, Xposition ,"*"
+                    put MAX_ROWS -1, Xposition, "*"
+                    wait 10 ms
+                next
+                for Yposition = 0 to MAX_ROWS -1
+                    put Yposition, MAX_COLUMNS -1 , "*"
+                    wait 10 ms
+                next
+
+End Sub
+
