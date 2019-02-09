@@ -24,7 +24,7 @@
     #include <glcd.h>
 
     #DEFINE GLCD_TYPE GLCD_TYPE_PCD8544
-    #DEFINE GLCD_TYPE_PCD8544_CHARACTER_MODE_ONLY
+'    #DEFINE GLCD_TYPE_PCD8544_CHARACTER_MODE_ONLY
 '    #define PCD8544_HardwareSPI     'comment out to use Software SPI
 
 ' Pin mappings for SPI for Nokia 3310 Device
