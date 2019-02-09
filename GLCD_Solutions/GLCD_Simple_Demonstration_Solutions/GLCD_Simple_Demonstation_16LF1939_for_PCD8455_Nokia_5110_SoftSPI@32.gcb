@@ -12,8 +12,8 @@
 ''':
 '''@author  EvanV
 '''@licence GPL
-'''@version 1.6
-'''@date    15.11.17
+'''@version 0.98.40
+'''@date    09.02.19
 '''********************************************************************************
 
     ;Chip Settings.
@@ -24,11 +24,10 @@
     #include <glcd.h>
 
     #DEFINE GLCD_TYPE GLCD_TYPE_PCD8544
-'    #DEFINE GLCD_TYPE_PCD8544_CHARACTER_MODE_ONLY
+    #DEFINE GLCD_TYPE_PCD8544_CHARACTER_MODE_ONLY
 '    #define PCD8544_HardwareSPI     'comment out to use Software SPI
 
 ' Pin mappings for SPI for Nokia 3310 Device
-' None LAT configurations
     #define GLCD_DO portc.5
     #define GLCD_SCK portc.3
     #define GLCD_DC portc.2
@@ -142,8 +141,8 @@
 
           DO forever
              for CCount = 32 to 127
-                  GLCDPrint (0, 0, "PrintStr")
-                  GLCDDrawString (0, 9, "DrawStr")
+                  GLCDPrint (2, 1, "PrintStr")
+                  GLCDDrawString (2, 9, "DrawStr")
                   GLCDPrint ( 44 ,  21, "     ")
                   GLCDPrint ( 44 ,  29, "     ")                                           ' word value
                   GLCDPrint ( 44 ,  37, "   ")                                             ' Byte value
@@ -159,15 +158,15 @@
                   GLCDPrint ( 44 , 37, byteNumber)
 
                   box 46,9,57,19
-                  GLCDDrawChar(48, 9, CCount )
+                  GLCDDrawChar(48, 10, CCount )
                   outString = str( CCount )
                   ' draw a box to overwrite existing strings
                   FilledBox(58,9,GLCD_WIDTH-1,17,GLCDBackground )
                   #ifndef GLCD_TYPE_PCD8544_CHARACTER_MODE_ONLY
                       GLCDfntDefaultsize = 2: GLCDFontWidth = 4
-                      GLCDDrawString(58, 4, "   " )
-                      GLCDDrawString(58, 4, outString )
-                      GLCDfntDefaultsize = 1: GLCDFontWidth = 6
+                      GLCDDrawString(60, 4, "   " )
+                      GLCDDrawString(60, 4, outString )
+                      GLCDfntDefaultsize = 1: GLCDFontWidth = 5
                   #endif
                   #ifdef GLCD_TYPE_PCD8544_CHARACTER_MODE_ONLY
                       GLCDDrawString(58, 4, outString )
