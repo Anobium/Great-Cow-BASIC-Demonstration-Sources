@@ -1,0 +1,57 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demonstrates Greek characters using the GLCD_EXTENDEDFONTSET1 fontset.
+'''Greek characters are placed in the fontset, the first Greek character starts 190 ASCII and the counting goes on until the last Greek letter omega.
+'''This is how the numeration of the letters begins in Greek fonts that Greek Windows use.
+'''?here must be the necessary character match for displaying correctly in the source program to the support ASCII characters.
+'''
+'''
+'''@author  DimiL and EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    12.02.2019
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 16f877,20
+  #option explicit
+
+  #include <glcd.h>
+  #define GLCD_TYPE GLCD_TYPE_KS0108               ' This is the Default value, not required.
+
+  #define GLCD_EXTENDEDFONTSET1
+
+
+' #define GLCDDirection 1                          ' Invert display, not always required
+
+
+  #define GLCD_CS1 PORTb.1
+  #define GLCD_CS2 PORTb.0
+  #define GLCD_DB0 PORTD.0 'D0 to pin 7 on LCD
+  #define GLCD_DB1 PORTD.1 'D1 to pin 8 on LCD
+  #define GLCD_DB2 PORTD.2 'D2 to pin 9 on LCD
+  #define GLCD_DB3 PORTD.3 'D3 to pin 10 on LCD
+  #define GLCD_DB4 PORTD.4 'D4 to pin 11 on LCD
+  #define GLCD_DB5 PORTD.5 'D5 to pin 12 on LCD
+  #define GLCD_DB6 PORTD.6 'D6 to pin 13 on LCD
+  #define GLCD_DB7 PORTD.7 'D7 to pin 14 on LCD
+
+  #define GLCD_RS PORTb.2
+  #define GLCD_Enable PORTb.5
+  #define GLCD_RW PORTb.4
+  #define GLCD_RESET PORTC.2
+
+
+
+; ----- Main body of program commences here.
+  do
+    GLCDCLS
+    GLCDPrint 0,10,"Γειά σου κόσμε"
+    GLCDPrint 0,20,"Evan είσαι πολύ"
+    GLCDPrint 0,30,"cool τύπος";Evan you are very cool guy
+
+    Wait 10 s
+  loop
+end
+
+; ----- Support methods.  Subroutines and Functions
