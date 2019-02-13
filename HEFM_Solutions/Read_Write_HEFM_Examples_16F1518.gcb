@@ -14,7 +14,7 @@
 
 ; Chip Settings
  #chip 16F1518, 16
- #Config FOSC = INTOSC, MCLRE = ON
+ #Config MCLRE = ON
  #Config LVP = ON, WDTE = OFF
  #option explicit
 

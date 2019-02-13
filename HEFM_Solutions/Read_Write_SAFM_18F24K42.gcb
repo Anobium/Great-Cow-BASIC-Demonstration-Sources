@@ -47,7 +47,6 @@
 
  'Chip Settings.
  #chip 18F25K42, 16
- #config FEXTOSC = OFF, RSTOSC = HFINTOSC_64MHZ
  #Config LVP = ON, MCLRE = ON
  #option Explicit
 
