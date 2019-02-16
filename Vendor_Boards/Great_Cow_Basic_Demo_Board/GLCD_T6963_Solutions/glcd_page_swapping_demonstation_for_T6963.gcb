@@ -17,9 +17,18 @@
   #define GLCD_TYPE GLCD_TYPE_T6963_64
 
   '***********************************************************************************************
-  'define the connectivity - the ports
-  #define GLCD_DATA_PORT PORTD             'Library only support contigous 8-bit port
+  'define the connectivity - the 8bit port
+  #define GLCD_DATA_PORT PORTD             'Library support contigous 8-bit port
 
+'  or
+'  #define GLCD_DB0      PORTD.0            'chip specific configuration where the ibrary supports 8-bit port defined via 8 constants
+'  #define GLCD_DB1      PORTD.1            'chip specific configuration
+'  #define GLCD_DB2      PORTD.2            'chip specific configuration
+'  #define GLCD_DB3      PORTD.3            'chip specific configuration
+'  #define GLCD_DB4      PORTD.4            'chip specific configuration
+'  #define GLCD_DB5      PORTD.5            'chip specific configuration
+'  #define GLCD_DB6      PORTD.6            'chip specific configuration
+'  #define GLCD_DB7      PORTD.7            'chip specific configuration
   #define GLCD_CD        porte.0            'Command or Data conrol line port
   #define GLCD_RD        PORTe.1           'Read control line  port
   #define GLCD_WR        PORTe.2           'Write control line port
