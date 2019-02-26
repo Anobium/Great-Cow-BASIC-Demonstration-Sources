@@ -2,6 +2,8 @@
 '''--------------------------------------------------------------------------------------------------------------------------------
 '''This program scroll text on the LED Matrix.
 ''':
+'''You must select the correct Pset constant to match your LED Matrix.  See Configuration below.
+''':
 '''The parameters are text and delay in milliseconds
 ''':
 '''@author  Evan R. Venn
@@ -39,6 +41,13 @@
   'Specifics for device configuration
   #define MAX7219_X_Devices 4
   #define MAX7219_LEDMatrix_HardwareSPI     ' remove and make a comment out if you want to use Software SPI for this device
+
+  'Choose one of the constants below to match the orientation of your LED Matrixes.
+  'All the LED Matrixes must have the same orientation.
+  #define Pset max7219_LEDMatrix_PSet_0
+  '#define Pset max7219_LEDMatrix_PSet_90
+  '#define Pset max7219_LEDMatrix_PSet_180
+  '#define Pset max7219_LEDMatrix_PSet_270
 
 '; ----- Main body of program commences here.
 

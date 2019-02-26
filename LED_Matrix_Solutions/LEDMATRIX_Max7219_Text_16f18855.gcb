@@ -2,6 +2,7 @@
 '''--------------------------------------------------------------------------------------------------------------------------------
 '''This program displays text on the LED Matrix
 ''':
+'''You must select the correct Pset constant to match your LED Matrix.  See Configuration below.
 ''':
 '''@author  Evan R. Venn
 '''@licence GPL
@@ -39,9 +40,15 @@
   #define MAX7219_X_Devices 4
   #define MAX7219_LEDMatrix_HardwareSPI     ' remove and make a comment out if you want to use Software SPI for this device
 
-'; ----- Main body of program commences here.
+  'Choose one of the constants below to match the orientation of your LED Matrixes.
+  'All the LED Matrixes must have the same orientation.
+  #define Pset max7219_LEDMatrix_PSet_0
+  '#define Pset max7219_LEDMatrix_PSet_90
+  '#define Pset max7219_LEDMatrix_PSet_180
+  '#define Pset max7219_LEDMatrix_PSet_270
 
-  dim
+
+'; ----- Main body of program commences here.
 
   Do
 

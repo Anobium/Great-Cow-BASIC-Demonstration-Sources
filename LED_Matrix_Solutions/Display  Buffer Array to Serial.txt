@@ -1,0 +1,17 @@
+Use Serial Redirect
+
+
+'
+'    CLS
+'        For Max7219_CurrentMatrix = 1 to Max7219_Devices
+'
+'      For CurrPixelX = 0 to  7
+'
+'          hserprint  bytetobin(Max7219_Image_Buffer ( Max7219_PixelCounter))
+'          HSerPrintCRLF
+'          Max7219_PixelCounter++
+'
+'      Next
+'
+'
+'    Next
