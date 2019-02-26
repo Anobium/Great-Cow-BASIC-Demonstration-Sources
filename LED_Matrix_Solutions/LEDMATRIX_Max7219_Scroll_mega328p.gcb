@@ -31,6 +31,7 @@
   'Specifics for device configuration
   #define MAX7219_X_Devices 4
 '  #define MAX7219_LEDMatrix_HardwareSPI     ' remove and make a comment out if you want to use Software SPI for this device
+'  #define HWSPIMode MasterUltraFast
 
   'Choose one of the constants below to match the orientation of your LED Matrixes.
   'All the LED Matrixes must have the same orientation.
