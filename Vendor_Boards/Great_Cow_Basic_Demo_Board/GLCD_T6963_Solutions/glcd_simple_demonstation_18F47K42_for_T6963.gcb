@@ -9,9 +9,8 @@
 '''@date    3.1.19
 '''********************************************************************************
 
-  #chip 16f1939,32
+  #chip 18F47K42,32
   #option explicit
-  #config Osc = INT, VCAPEN_OFF, MCLRE_On, PLLEN_ON, CLKOUTEN_OFF
 
   #include <glcd.h>
   #define GLCD_TYPE GLCD_TYPE_T6963_64
@@ -56,7 +55,6 @@
   '***********************************************************************************************
   '* End of configuration
   '***********************************************************************************************
-
 
 ;Start of demonstration main program
 
