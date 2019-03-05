@@ -168,12 +168,12 @@
   GLCDDrawString ( 68, GLCDDeviceHeight - 60 , "HX8347 Driver" , HX8347_WHITE )
 
   GLCDfntDefaultsize = 1
-  GLCDDrawString ( GLCD_WIDTH - 54, 2 , "Nov 2017" , HX8347_WHITE )
-  GLCDDrawString ( GLCD_WIDTH - 66, 10 , "UNO Shield" , HX8347_WHITE )
+  GLCDDrawString ( GLCD_WIDTH - 60, 2 , "Nov 2017" , HX8347_WHITE )
+  GLCDDrawString ( GLCD_WIDTH - 72, 10 , "UNO Shield" , HX8347_WHITE )
 
   GLCDForeground = HX8347_WHITE
   GLCDfntDefaultsize = 2
-  GLCDDrawString ( 52 , GLCD_HEIGHT - 30 , "Great Cow BASIC" )
+  GLCDDrawString ( 42 , GLCD_HEIGHT - 30 , "Great Cow BASIC" )
 
   'Revert the font size
   GLCDfntDefaultsize = 2
@@ -196,4 +196,3 @@
     byteNumber++
 
   LOOP
-
