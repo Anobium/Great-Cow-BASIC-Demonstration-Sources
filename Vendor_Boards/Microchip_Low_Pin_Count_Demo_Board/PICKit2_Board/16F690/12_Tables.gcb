@@ -18,7 +18,7 @@
 '''  IDE: GCB@SYN
 '''
 '''  Board: PICkit 2 Low Pin Count Demo Board
-'''  Date: 10.4.2015
+'''  Date: 28.3.2019
 '''
 ''''''******************************************************************
 ''' See Low Pin Count Demo Board User's Guide for Lesson Information*
@@ -42,9 +42,7 @@
  #endscript
 
 
- #chip 16f690,8
- #config FOSC_INTOSC , WDTE_OFF , PWRTE_OFF , MCLRE_OFF , CP_OFF , CPD_OFF , BOREN_ON  , IESO_OFF
-
+ #chip 16f690
 
     '' -------------------LATC-----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---

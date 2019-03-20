@@ -4,9 +4,9 @@
 '''
 '''  One way to create a delay is to spend time decrementing a value. In assembly, the timing
 '''  can be accurately programmed since the user will have direct control on how the
-'''  code is executed. In 'C', the compiler takes the 'C' and compiles it into assembly before
+'''  code is executed. In 'GCB', the compiler takes the 'GCB Source' and compiles it into assembly before
 '''  creating the file to program to the actual PIC MCU (HEX file). Because of this, it is hard
-'''  to predict exactly how many instructions it takes for a line of 'C' to execute.
+'''  to predict exactly how many instructions it takes for a line of 'GCB' to execute but GCB calculates the delay for you.
 '''
 '''  DS1 blinks at a rate of approximately 1.5 seconds.
 '''
@@ -15,7 +15,7 @@
 '''  IDE: GCB@SYN
 '''
 '''  Board: PICkit 2 Low Pin Count Demo Board
-'''  Date: 10.4.2015
+'''  Date: 20.3.2019
 '''
 ''''''******************************************************************
 ''' See Low Pin Count Demo Board User's Guide for Lesson Information*
@@ -24,7 +24,7 @@
 
  #chip 16f690,8
  #option explicit
- #config FOSC_INTOSC , WDTE_OFF , PWRTE_OFF , MCLRE_OFF , CP_OFF , CPD_OFF , BOREN_ON , IESO_OFF, FCMEN_OFF
+
 
 
     '' -------------------LATC-----------------

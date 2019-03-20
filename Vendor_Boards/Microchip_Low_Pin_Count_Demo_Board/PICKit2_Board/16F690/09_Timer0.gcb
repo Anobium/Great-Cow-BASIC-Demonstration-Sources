@@ -20,7 +20,7 @@
 '''  IDE: GCB@SYN
 '''
 '''  Board: PICkit 2 Low Pin Count Demo Board
-'''  Date: 10.4.2015
+'''  Date: 28.3.2019
 '''
 ''''''******************************************************************
 ''' See Low Pin Count Demo Board User's Guide for Lesson Information*
@@ -28,7 +28,6 @@
 '''
 
  #chip 16f690,2
- #config INTOSC , WDTE_OFF , PWRTE_OFF , MCLRE_ON , CP_OFF , CPD_OFF , BOREN_ON , IESO_OFF
 
     '' -------------------LATC-----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---
@@ -38,7 +37,7 @@
 
     dir portc out
     portc = 0
-    portc.5 = 1
+    portc.3 = 1
 
     InitTimer0 Osc, PS0_256
     do

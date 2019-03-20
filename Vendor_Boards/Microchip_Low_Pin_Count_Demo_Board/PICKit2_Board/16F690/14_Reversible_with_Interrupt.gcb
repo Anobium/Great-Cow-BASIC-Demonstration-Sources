@@ -16,7 +16,7 @@
 '''  LEDs will rotate at a speed that is proportional to the ADC value. The switch will toggle
 '''  the direction of the LEDs
 '''
-'''  PIC: 16f690,8
+'''  PIC: 16f690
 '''  Compiler: GCB
 '''  IDE: GCB@SYN
 '''
@@ -31,7 +31,6 @@
 
  #chip 16f690,16
  #option explicit
- #config FOSC_INTOSC , WDTE_OFF , PWRTE_OFF , MCLRE_OFF , CP_OFF , CPD_OFF , BOREN_ON , IESO_OFF
 
  #define PULL_UPS                                  'if this is uncommented, the trace under JP5 can be cut
                                                     'with no affect on the output
