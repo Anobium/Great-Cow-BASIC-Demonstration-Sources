@@ -13,8 +13,12 @@
 ''' power. The PWM period is defined as the duration of one complete cycle or the total
 ''' amount of on and off time combined.
 '''
-''' Demo1.  Rotating the POT will adjust the brightness of a single LED, DS4
-''' Demo2.  Shows a how the changing PWM values across the LEDs
+''' Demo1.  Rotating the POT will adjust the brightness of the CCP port.
+''' Demo2.  Shows a how the changing PWM values across the CCP ports.
+'''
+''' As CCP1 is connect to portc.5 you have two choices....
+''' 1. Connect the output of portc.5 to the output of any of the existing LEDs ports, such as portc.0, portc.1, portc.2 or portc.3
+''' 2. Or, connect an LED via a suitable resistor to portc.5 then to 0v.  Like MCU portc.5 ---> resistor 1kOhmns ----> Ov
 '''
 '''  PIC: 16F1825
 '''  Compiler: GCB
@@ -60,6 +64,10 @@
 
  #endscript
 
+''' As CCP1 is connect to portc.5 you have two choices....
+''' 1. Connect the output of portc.5 to the output of any of the existing LEDs ports, such as portc.0, portc.1, portc.2 or portc.3
+''' 2. Or, connect an LED via a suitable resistor to portc.5 then to 0v.  Like MCU portc.5 ---> resistor 1kOhmns ----> Ov
+
   #ifdef demo1
       dir portc out
       dir portc.3 out
@@ -74,6 +82,9 @@
 
   #endif
 
+''' As CCPx is connect to portc.x you have two choices....
+''' 1. Connect the output of portc.x to the output of any of the existing LEDs ports, such as portc.0, portc.1, portc.2 or portc.3
+''' 2. Or, connect an LED via a suitable resistor to portc.5 then to 0v.  Like MCU portc.x ---> resistor 1kOhmns ----> Ov
 
   #ifdef demo2
     dir portc.5 out    ; CCP1
