@@ -13,8 +13,10 @@
 ''' power. The PWM period is defined as the duration of one complete cycle or the total
 ''' amount of on and off time combined.
 '''
-''' Demo1.  Rotating the POT will adjust the brightness of a single LED, DS4.  As CCP1 is connect to portc.5 you have two choices....
+''' Demo1.  Rotating the POT will adjust the brightness of the CCP1 portc.5.
 '''
+'''
+''' As CCP1 is connect to portc.5 you have two choices....
 ''' 1. Connect the output of portc.5 to the output of any of the existing LEDs ports, such as portc.0, portc.1, portc.2 or portc.3
 ''' 2. Or, connect an LED via a suitable resistor to portc.5 then to 0v.  Like MCU portc.5 ---> resistor 1kOhmns ----> Ov
 '''
@@ -30,6 +32,9 @@
 ''''''*****************************************************************
 '''
 
+''' As CCP1 is connect to portc.5 you have two choices....
+''' 1. Connect the output of portc.5 to the output of any of the existing LEDs ports, such as portc.0, portc.1, portc.2 or portc.3
+''' 2. Or, connect an LED via a suitable resistor to portc.5 then to 0v.  Like MCU portc.5 ---> resistor 1kOhmns ----> Ov
 
  #chip 16f690
 
@@ -55,6 +60,10 @@
         ADC_adjustment = int(ADC_adjustment * maxADC / numberofgrads )
 
  #endscript
+
+''' As CCP1 is connect to portc.5 you have two choices....
+''' 1. Connect the output of portc.5 to the output of any of the existing LEDs ports, such as portc.0, portc.1, portc.2 or portc.3
+''' 2. Or, connect an LED via a suitable resistor to portc.5 then to 0v.  Like MCU portc.5 ---> resistor 1kOhmns ----> Ov
 
       dir portc.5 out
 
