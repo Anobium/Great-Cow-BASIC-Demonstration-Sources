@@ -1,0 +1,41 @@
+ '''A program  for GCGB and GCB
+'''-------------------------------------------------------------
+'''This program lights an LED when a button is pushed
+'''the LED remains lit for 3 seconds.
+'''simple demonstration of Button-Push 'Run' switch
+'''Extractor Fan control,Water-Pump timer,courtesy lights...
+'''target hardware:- Microchip's Low-Pin-Count Demo PCB
+'''Jumpers from 8-11,9-12 on side header
+'''@author  Works of EvanV\HackInBlack
+'''@licence    GPL
+'''@version    2
+'''@date     23/3/2019
+'''*************************************************************
+
+    #chip 12F509, 4
+    #option explicit
+    ; ----- Define Hardware settings
+
+    #define DOWN        0
+    #define UP          1
+    #define SWITCH GPIO.3
+    #define LED GPIO.2
+    Dir SWITCH In
+    Dir LED Out
+
+    ; ----- Main body of program commences here.
+    Do
+
+         if ( SWITCH = DOWN ) then
+             wait 10 ms
+
+            if ( SWITCH = DOWN ) Then
+               Set LED on
+               Wait 3 s
+           end if
+          else
+          Set LED off
+         end if
+    loop
+
+    End
