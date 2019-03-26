@@ -21,7 +21,7 @@
             LED = !LED                      ' So Toggle state of LED
             LstMs = CurMs                   ' And Record Toggle Time
           end if
-          IntOn
+
         Loop
 
 END
