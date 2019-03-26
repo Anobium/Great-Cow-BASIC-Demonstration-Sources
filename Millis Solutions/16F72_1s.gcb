@@ -2,7 +2,8 @@
 #chip 16F72,4             ' Declare the Target Processor and Speed
 #option explicit          ' Require Explicit declaration of Variables
 #include <millis.h>       ' Include the Library
-#define TMRValueMillis 18  ' May work better than the default of 6 to obtain a 1ms timer - only use for 4mhz with external clock
+
+#define TMRValueMillis 18 ' May work better than the default of 6 to obtain a 1ms timer - only use for 4mhz with external clock
 
         #define LED PORTA.0       ' Define the LED Pin - Digital Pin 2
         #define LEDRate 1000     ' Flash rate in mS

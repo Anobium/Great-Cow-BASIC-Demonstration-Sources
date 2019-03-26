@@ -1,4 +1,4 @@
-#chip PIC18F26K83,32        ' Declare the Target Processor and Speed
+#chip 18F26K83,32        ' Declare the Target Processor and Speed
 #option explicit          ' Require Explicit declaration of Variables
 #include <millis.h>       ' Include the Library
 
