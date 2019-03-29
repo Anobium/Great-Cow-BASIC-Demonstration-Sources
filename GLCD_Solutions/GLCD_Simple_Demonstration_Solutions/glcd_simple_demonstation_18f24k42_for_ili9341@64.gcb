@@ -74,8 +74,8 @@
 
     'Optionally, you can define the HWSPIMode by using #define HWSPIMode masterfast where #define HWSPIMode is masterslow|master|masterfast
     'This will overwrite the default in the GLCD SPI library.  This is so users do not have to change the library.
-    'the default is "masterfast"
-    'The following example is commented out intentionally
+    'the default is "master"
+    'The following example can be commented out if you want to use the default value
         '#define HWSPIMode masterfast
 
 ' ********************** DEMO REALLY STARTS HERE ************************************************
