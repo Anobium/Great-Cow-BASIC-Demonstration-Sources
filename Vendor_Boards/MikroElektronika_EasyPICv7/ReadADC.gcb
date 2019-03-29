@@ -1,0 +1,86 @@
+'''A demonstration program for GreatCowBASIC.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program will demonstrate reading the analog to digital converter (ADC or A/D) module.
+'''This is implemented within Great Cow Basic to support 8-bit, 10-bit and 12-bit read operations.
+'''This is supported for Single channel measurement mode and Differential Channel Measurement mode.
+''':
+'''This is a Single channel measurement mode, or normal mode demonstration.
+''':
+'''Great Cow Basic will configure the analog to digitalconverter clock source, the programmed acquisition time and justification of the returned value.
+'''The response can be a byte, word or integer (as defined in the Great Cow Basic method) these are 8-bit, 10-bit and 12-bit values respectively.
+''':
+'''This demonstration show the usage for normal or Single channel measurement of the ADC.
+'''See the Help for connectivity but essential the source device is connected to the appropiate ADC (ANx) pin.
+''':
+'''This demonstation assumes you have a 10k POT connected to AN0 port of the microchip processor.
+'''
+'''Check datasheet for your specific chip
+'''changed for EasyPICv7 pinouts 28/3/2019
+'''
+'''@author  Bill Roth /HiB
+'''@licence GPL
+'''@version 1.0a
+'''@date    21.12.2015
+'''********************************************************************************
+
+; ----- Configuration
+
+     #Chip 18f45K22, 8
+
+
+; ----- Constants
+
+  #define LCD_IO 4
+  #define LCD_NO_RW
+  #define LCD_Speed SLOW 'FAST IS OK ON ARDUINO UNO R3
+
+
+  'Change as necessary
+  #define LCD_RS PortB.4
+  #define LCD_Enable PortB.5
+  #define LCD_DB4 PortB.0
+  #define LCD_DB5 PortB.1
+  #define LCD_DB6 PortB.2
+  #define LCD_DB7 PortB.3
+
+; ----- Variables
+    DIM ad_val as integer 'lets read negative values also!
+
+
+; ----- Main body of program commences here.
+    'Show start up message
+    SPLASH
+    Wait 1 S
+    CLS
+
+    'Display fixed messages to display
+    Locate 0,0: Print  "ReadAD:"
+    Locate 1,0 : Print "ReadAD10:"
+
+    Do
+
+      'read 8-bit value to Variable
+      ad_val = Readad(AN0)
+      Locate 0,10
+      Print ad_val
+      Print "   "
+      wait 20 ms
+
+     'read 10-bit value to Variable
+      ad_val = ReadAd10(AN0)
+      Locate 1,10
+      Print ad_val
+      Print "   "
+      wait 20 ms
+
+    loop
+
+    End
+
+; ----- Support methods.  Subroutines and Functions
+
+    Sub Splash
+      Locate 0,0 : Print "CHIP: ": Print ChipNameStr
+      Locate 1,0 : Print "RAM: ": Print  ChipRam: Print " Bytes"
+      Locate 2,0 : Print "MEMORY:" : Print ChipWords: Print " Words"
+    End sub
