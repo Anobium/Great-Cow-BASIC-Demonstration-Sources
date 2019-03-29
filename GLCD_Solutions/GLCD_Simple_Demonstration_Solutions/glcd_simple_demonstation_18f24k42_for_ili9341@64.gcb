@@ -64,7 +64,7 @@
     'You can specify an SPI baud rate - the baud rate is dependent on the chip frequency!
     'If you get nothing, you have exceeded the SPI modules capabilites, so, slow down the BAUD RATE or use the SPI_BAUD_RATE_REGISTER constant, shown below.
 
-    'The default SPI_BAUD_RATE is 1/8th of the clock frequency
+    'The default SPI_BAUD_RATE is 1/8th of the clock frequency in khz. Khz is used to allow for fine adjustment
     'The following example is commented out intentionally
         '#define SPI_BAUD_RATE 8000
 
