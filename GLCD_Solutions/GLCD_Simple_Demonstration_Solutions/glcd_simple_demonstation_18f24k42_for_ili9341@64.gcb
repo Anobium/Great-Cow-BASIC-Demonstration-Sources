@@ -64,9 +64,9 @@
     'You can specify an SPI baud rate - the baud rate is dependent on the chip frequency!
     'If you get nothing, you have exceeded the SPI modules capabilites, so, slow down the BAUD RATE or use the SPI_BAUD_RATE_REGISTER constant, shown below.
 
-    'The default SPI_BAUD_RATE is 1/8th of the clock frequency in khz. Khz is used to allow for fine adjustment
+    'The default SPI_BAUD_RATE is 1/4th of the clock frequency in khz. Khz is used to allow for fine adjustment
     'The following example is commented out intentionally
-        '#define SPI_BAUD_RATE 8000
+        '#define SPI_BAUD_RATE 32000
 
     'or, use an explicit constant as show below
     'The following example is commented out intentionally
@@ -79,9 +79,6 @@
         '#define HWSPIMode masterfast
 
 ' ********************** DEMO REALLY STARTS HERE ************************************************
-
-
-
 
     'GLCD selected extension font set. ASCII characters 31-254, the extended font uses 1358 bytes of program memory
     #define GLCD_EXTENDEDFONTSET1
@@ -128,7 +125,7 @@
             GLCDRotate ( Landscape_rev )
             GLCDCLS ILI9341_BLUE
 
-            GLCDForeground = ILI9341_MAROON
+            GLCDForeground = ILI9341_WHITE
             GLCDfntDefaultsize = 1
             GLCDPrint ( 2, 2, SPI1BAUD )
 
