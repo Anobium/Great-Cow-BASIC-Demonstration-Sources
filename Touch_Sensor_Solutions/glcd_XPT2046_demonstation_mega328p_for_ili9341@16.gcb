@@ -37,6 +37,11 @@
     #define GLCD_DO       DIGITAL_11          ' Data out | MOSI
     #define GLCD_SCK      DIGITAL_13          ' Clock Line
     #define ILI9341_HardwareSPI               ' remove/comment out if you want to use software SPI.
+    'Optionally, you can define the HWSPIMode by using #define HWSPIMode masterfast where #define HWSPIMode is masterslow|master|masterfast
+    'This will overwrite the default in the GLCD library.  This is so users do not have to change the library.
+    'the default is "masterfast"
+    'The following example is commented out intentionally
+        '#define HWSPIMode masterfast
 
     '******************************************************************************************************
     'Setup the XPT2046
@@ -62,6 +67,13 @@
     #define XPT2046_CS       DIGITAL_2           ' Chip select line
     #define XPT2046_IRQ      ANALOG_5
     #define XPT2046_HardwareSPI                  ' remove/comment out if you want to use software SPI - must use same method as GLCD
+    'Optionally, you can define the HWSPIMode by using #define HWSPIMode masterfast where #define HWSPIMode is masterslow|master|masterfast
+    'This will overwrite the default in the XPT2046 library.  This is so users do not have to change the library.
+    'the default is "masterfast"
+    'The following example is commented out intentionally
+        '#define HWSPIMode masterfast
+
+
 
     'Set the initial calibration - shown here to show the method.
     'If you rotate the screen then you will have to call the method to reset these parameters.

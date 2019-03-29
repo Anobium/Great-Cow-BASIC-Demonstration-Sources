@@ -69,7 +69,7 @@
     #define XPT2046_SCK      PORTH.3  ' Arduino Mega D6
     #define XPT2046_CS       PORTE.3  ' Arduino Mega D5
     #define XPT2046_IRQ      PORTE.4  ' Arduino Mega D2
-    '#define XPT2046_HardwareSPI                  ' remove/comment out if you want to use software SPI - must use same method as GLCD
+    'The mega2560 does not suppport hardware SPI!! So, for this hardware configuration tested, using Software SPI by default
 
     'Set the initial calibration - shown here to show the method.
     'If you rotate the screen then you will have to call the method to reset these parameters.
