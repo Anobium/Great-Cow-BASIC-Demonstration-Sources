@@ -72,7 +72,7 @@
 
     'or, use an explicit constant as show below
     'The following example is commented out intentionally
-        '#define SPI_BAUD_RATE_REGISTER 9
+        #define SPI_BAUD_RATE_REGISTER 7
 
     'Optionally, you can define the HWSPIMode by using #define HWSPIMode masterfast where #define HWSPIMode is masterslow|master|masterfast
     'This will overwrite the default in the GLCD SPI library.  This is so users do not have to change the library.
