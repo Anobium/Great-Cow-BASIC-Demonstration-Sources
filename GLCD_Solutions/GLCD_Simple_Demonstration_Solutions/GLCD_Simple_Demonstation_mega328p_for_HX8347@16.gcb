@@ -1,3 +1,19 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a simple GLCD demonstration of the GLCD capabilities.
+'''It is a nice graphical LCD, suitable for a lot of various projects.
+'''This program draws lines, boxes, circles and prints strings and numbers.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+''':
+'''This has been tested using the hardware and the software SPI option.
+''':
+''':
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date    03.04.2019
+'''********************************************************************************
+
   #chip mega328p, 16
   #option explicit
 
@@ -7,7 +23,7 @@
 
     #define GLCD_TYPE GLCD_TYPE_HX8347
 
-    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+    'Pin mappings device
     #define GLCD_RD       ANALOG_0          ' read command line
     #define GLCD_WR       ANALOG_1          ' write command line
     #define GLCD_RS       ANALOG_2          ' Command/Data line
