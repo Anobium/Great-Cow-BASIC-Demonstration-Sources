@@ -1,3 +1,6 @@
+'
+' 500mS flash for a 1Hz square wave on PIN13 (PORTB.7)
+'
 #chip mega2560,16         ' Declare the Target Processor and Speed
 #option explicit          ' Require Explicit declaration of Variables
 #include <millis.h>       ' Include the Library
