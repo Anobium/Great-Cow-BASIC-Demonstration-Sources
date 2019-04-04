@@ -11,7 +11,7 @@
 
   #chip 16f1939,32
   #option explicit
-  #config Osc = INT, VCAPEN_OFF, MCLRE_On, PLLEN_ON, WDTE_SWDTEN
+  #config Osc = INT, MCLRE_On, PLLEN_ON, WDTE_SWDTEN
 
   #include <glcd.h>
   #include <ds18b20.h>

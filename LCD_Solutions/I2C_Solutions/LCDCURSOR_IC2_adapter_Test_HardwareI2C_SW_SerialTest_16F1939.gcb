@@ -18,7 +18,7 @@
 
   #chip 16f1939, 32
   #option explicit
-  #config Osc = intOSC, MCLRE_ON, PLLEN_OFF, VCAPEN_OFF
+  #config Osc = intOSC, MCLRE_ON, PLLEN_OFF
   ; ----- Define Hardware settings
   ' Define I2C settings - CHANGE PORTS
   #define HI2C_BAUD_RATE 100

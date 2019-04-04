@@ -16,7 +16,7 @@
  ; or
 
  ;#chip 16F1938, 32
- ;#config INTOSC, VCAPEN_OFF, MCLRE_ON, PLLEN_ON
+ ;#config INTOSC, MCLRE_ON, PLLEN_ON
 
 
   ;Setup LCD Parameters

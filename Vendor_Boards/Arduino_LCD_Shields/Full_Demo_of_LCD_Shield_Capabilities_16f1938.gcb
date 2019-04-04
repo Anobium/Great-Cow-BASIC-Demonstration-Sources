@@ -20,7 +20,7 @@
 #chip 16F1938, 32
 #option explicit
 
-#config INTOSC, VCAPEN_OFF, MCLRE_OFF, PLLEN_ON
+#config INTOSC, MCLRE_OFF, PLLEN_ON
 #include <chipino.h>
 
 

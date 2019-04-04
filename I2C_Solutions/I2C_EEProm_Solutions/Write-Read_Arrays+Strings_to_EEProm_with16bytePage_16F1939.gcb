@@ -20,7 +20,7 @@
 ; ----- Configuration
   #chip 16F1939, 32
   #option explicit
-  #config Osc = intOSC, MCLRE_ON, PLLEN_ON, VCAPEN_OFF
+  #config Osc = intOSC, MCLRE_ON, PLLEN_ON
   #include <i2ceeprom.h>
 
 ; ----- Define Hardware settings

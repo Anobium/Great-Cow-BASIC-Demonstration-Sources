@@ -13,7 +13,7 @@
 ; ----- Configuration
   #chip 16F1938, 32
   #option explicit
-  #config Osc = intOSC, MCLRE_ON, PLLEN_ON, VCAPEN_OFF
+  #config Osc = intOSC, MCLRE_ON, PLLEN_ON
   #include "displaydevices.h"
 
 

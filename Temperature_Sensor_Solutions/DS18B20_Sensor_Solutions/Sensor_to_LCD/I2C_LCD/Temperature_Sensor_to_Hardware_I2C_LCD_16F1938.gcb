@@ -13,7 +13,7 @@
 ; ----- Configuration
   #chip 16f1938, 16
   #option explicit
-  #config Osc = intOSC, MCLRE_ON, PLLEN_OFF, VCAPEN_OFF
+  #config Osc = intOSC, MCLRE_ON, PLLEN_OFF
   #include <ds18b20.h>
 
   ; ----- Define Hardware settings

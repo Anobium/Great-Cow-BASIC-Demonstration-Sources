@@ -21,7 +21,7 @@
 ' Change chip and speed
   #chip 16f1939,32
   #option explicit
-  #config Osc = INT, VCAPEN_OFF, MCLRE_ON, PLLEN_ON
+  #config Osc = INT, MCLRE_ON, PLLEN_ON
 
 	' Initialise HMC5883L device is automatic
   #include <hmc5883l.h>
