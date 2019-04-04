@@ -12,7 +12,7 @@
   'Chip Settings. Assumes the my development board 'C' with with a 16LF1939
   #chip 16f1937,32
   #option explicit
-  #config Osc = INT, MCLRE_ON, PLLEN_ON, CLKOUTEN_OFF
+  #config Osc = INT, MCLRE_ON, PLLEN_ON
 
       #include <glcd.h>
 

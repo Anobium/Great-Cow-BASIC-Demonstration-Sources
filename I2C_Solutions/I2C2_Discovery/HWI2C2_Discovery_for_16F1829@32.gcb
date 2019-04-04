@@ -16,7 +16,7 @@
   'Chip Settings.
   #chip 16f1829,4
   #option explicit
-  #config Osc = INT, MCLRE_OFF, PLLEN_ON, CLKOUTEN_OFF
+  #config Osc = INT, MCLRE_OFF, PLLEN_ON
 
   #include <chipino.h>
   #include <lowlevel\hwi2c2.h>

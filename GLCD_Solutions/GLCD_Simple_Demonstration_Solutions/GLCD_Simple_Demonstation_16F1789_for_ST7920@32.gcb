@@ -13,7 +13,7 @@
 
     #chip 16F1789,32
     #option explicit
-    #config Osc = INT, VCAPEN_OFF, MCLRE_On, PLLEN_ON, CLKOUTEN_OFF
+    #config Osc = INT, VCAPEN_OFF, MCLRE_On, PLLEN_ON
     #include <glcd.h>
 
 

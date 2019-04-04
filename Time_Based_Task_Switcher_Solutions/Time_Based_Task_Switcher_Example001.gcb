@@ -1,8 +1,8 @@
 '  See the .h file for documenatation
 
     #chip 16f18855, 4
-    #Config   FEXTOSC_OFF, RSTOSC_HFINT32
-    #Config   WRT_OFF, CPD_ON, MCLRE_ON
+    #Config   RSTOSC_HFINT32
+    #Config   WRT_OFF, cpd_off, MCLRE_ON
 
     '' -------------------LATA-----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---

@@ -33,7 +33,7 @@
 
     'Chip Settings.
     #chip 16f18877,32
-    #Config WRT_OFF, CPD_ON, MCLRE_ON, FEXTOSC_OFF, CLKOUTEN_OFF    'These configs = User non-votatile protection off (WRT), Data non-votatile protection off (CPD), MCLR pin function enablesd, External oscillator not enabled and clockout function is disables ( enable I/O port).
+    #Config WRT_OFF, cpd_off, MCLRE_ON    'These configs = User non-votatile protection off (WRT), Data non-votatile protection off (CPD), MCLR pin function enablesd, External oscillator not enabled and clockout function is disables ( enable I/O port).
 
 
   '' -------------------LATD-----------------

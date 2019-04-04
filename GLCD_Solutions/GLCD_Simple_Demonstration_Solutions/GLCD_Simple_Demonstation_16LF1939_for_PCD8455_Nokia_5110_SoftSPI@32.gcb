@@ -19,7 +19,7 @@
     ;Chip Settings.
     #chip 16lf1939,32
     #option explicit
-    #config Osc = INT, MCLRE_ON, PLLEN_Off, CLKOUTEN_OFF
+    #config Osc = INT, MCLRE_ON, PLLEN_Off
 
     #include <glcd.h>
 

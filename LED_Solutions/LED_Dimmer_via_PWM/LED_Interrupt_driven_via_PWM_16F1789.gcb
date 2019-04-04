@@ -12,7 +12,7 @@
 ; ----- Configuration
  #chip 16F1789, 16
  #option explicit
-  #config Osc = INT, MCLRE_ON, PLLEN_OFF, CLKOUTEN_OFF
+  #config Osc = INT, MCLRE_ON, PLLEN_OFF
 
 ; ----- Define Hardware settings
   Dir LED out

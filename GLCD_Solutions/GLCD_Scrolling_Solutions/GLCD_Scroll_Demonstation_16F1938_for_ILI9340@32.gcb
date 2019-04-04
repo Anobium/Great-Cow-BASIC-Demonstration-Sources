@@ -14,7 +14,7 @@
 ; ----- Configuration
   #chip 16f1938,32
   #option explicit
-  #config Osc = INT, VCAPEN_OFF, MCLRE_ON, PLLEN_ON, CLKOUTEN_OFF
+  #config Osc = INT, VCAPEN_OFF, MCLRE_ON, PLLEN_ON
 
   #include <glcd.h>
   #include <chipino.h>

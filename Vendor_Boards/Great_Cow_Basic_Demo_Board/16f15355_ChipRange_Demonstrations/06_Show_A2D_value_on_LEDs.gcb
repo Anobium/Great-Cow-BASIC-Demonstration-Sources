@@ -29,7 +29,7 @@
 
 ' ----- Configuration
     #chip 16f15355, 32
-    #Config  MCLRE_ON, FEXTOSC_OFF, CLKOUTEN_OFF    'These configs = MCLR pin function enablesd, External oscillator not enabled and clockout function is disables ( enable I/O port).
+    #Config  MCLRE_ON    'These configs = MCLR pin function enablesd, External oscillator not enabled and clockout function is disables ( enable I/O port).
 
 
 
