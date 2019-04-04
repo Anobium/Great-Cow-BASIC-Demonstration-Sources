@@ -1,9 +1,12 @@
+'
+' 500mS flash for a 1Hz square wave on PIN13 (PORTB.7)
+'
 #chip mega2560,16         ' Declare the Target Processor and Speed
 #option explicit          ' Require Explicit declaration of Variables
 #include <millis.h>       ' Include the Library
 
-  #define LED PORTB.7     ' Define the LED Pin
-  #define LEDRate 1000    ' Flash rate in mS
+  #define LED PORTB.7     ' Define the LED Pin - Digital Pin 2
+  #define LEDRate 500     ' Flash rate in mS
   ' Setup
   Dir LED Out               ' Make the LED Pin an Output
   LED = 0
