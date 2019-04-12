@@ -35,8 +35,9 @@
 
     Sub InitPPS
 
-        'This has been added to turn off PPS SPI when in SPI software mode
+        '#ifdef added to ensure PPS SPI is not used when in SPI software mode
         #ifdef ILI9341_hardwarespi
+
             'Module: SPI1
             RC5PPS = 0x001F    'SDO1 > RC5
             RC3PPS = 0x001E    'SCK1 > RC3
