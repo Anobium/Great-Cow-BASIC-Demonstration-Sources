@@ -3,16 +3,16 @@
 '''This program is a simple GLCD demonstration of the ST7735 GLCD capabilities.  It is a nice small graphical LCD, suitable for a lot of various projects.
 '''This program draws lines, boxes, circles and prints strings and numbers.
 '''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
-'''@author 	EvanV
-'''@licence	GPL
-'''@version	1.0
-'''@date   	08.11.14
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.1
+'''@date    14.04.2019
 '''********************************************************************************
 
-  'Chip Settings. Assumes the my development board 'C' with with a 16LF1939
+  'Chip Settings. Assumes the my development board 'C' with with a 16f1937 or any MCU really
   #chip 16f1937,32
   #option explicit
-  #config Osc = INT, MCLRE_ON, PLLEN_ON
+  #config Osc = INT, MCLRE_ON, PLLEN_ON, CLKOUTEN_OFF
 
       #include <glcd.h>
 
@@ -29,52 +29,255 @@
 
       #define ST7735_HardwareSPI     ' remove comment out if you want to use software SPI.
 
-      GLCDCLS
-      ' GLCDRotate ( LANDSCAPE )     ' optionally you can rotate the screen.
+
+    'GLCD selected extension font set. ASCII characters 31-254, the extended font uses 1358 bytes of program memory
+    #define GLCD_EXTENDEDFONTSET1
+    GLCDfntDefaultsize = 1
+
+    'GLCDCLS  supports GLCDBackground as default
+    'GLCDCLS  also support passing color parameter.
+    'GLCDCLS [color]
+    GLCDRotate ( Landscape_rev )     ' optionally you can rotate the screen.
 
 
-        Dim CCOUNT, BYTENUMBER as Byte
+    'Available colors
+    'TFT_BLACK
+    'TFT_RED
+    'TFT_GREEN
+    'TFT_BLUE
+    'TFT_WHITE
+    'TFT_PURPLE
+    'TFT_YELLOW
+    'TFT_CYAN
+    'TFT_D_GRAY
+    'TFT_L_GRAY
+    'TFT_LIGHTGREY
+    'TFT_MAROON
+    'TFT_OLIVE
+    'TFT_LIME
+    'TFT_AQUA
+    'TFT_TEAL
+    'TFT_NAVY
+    'TFT_FUCHSIA
 
-        CCount = 0
-        dim longNumber as long
-        longNumber = 0 ' max value = 4294967290
-        dim wordNumber as Word
-        wordNumber = 0
-        byteNumber = 0
+    Dim CCOUNT, BYTENUMBER, OLDFONT, OLDFONT as Byte
+
+    CCount = 31
+    dim longNumber as long
+    longNumber = 0 ' max value = 4294967290
+    dim wordNumber as Word
+    wordNumber = 0
+    byteNumber = 0
+
+
+    repeat 2
+
+            GLCDRotate ( Landscape_rev )
+            GLCDCLS TFT_BLUE
+
+            GLCDForeground = TFT_YELLOW
+            GLCDfntDefaultsize = 1
+            GLCDPrint ( 2, 2, "Font 1" )
+
+            GLCDForeground = TFT_WHITE
+            GLCDfntDefaultsize = 2
+            GLCDPrint ( 2, 12, "Font 2" )
+
+            GLCDForeground = TFT_YELLOW
+            GLCDfntDefaultsize = 3
+            GLCDPrint ( 2,30, "Font 3" )
+
+            wait 2 s
+
+            longNumber = 0xFFFFFFFF
+            wordNumber = 0xFFFF
+            byteNumber = 0xFF
+
+            GLCDRotate ( Portrait )
+            GLCDCLS TFT_WHITE
+            GLCDfntDefaultsize = 1
+
+            GLCDForeground = TFT_MAROON
+            GLCDfntDefaultsize = 1
+            GLCDPrint ( 2, 2, bytenumber )
+
+
+            GLCDForeground = TFT_BLACK
+            GLCDfntDefaultsize = 2
+            GLCDPrint ( 2, 12, wordNumber )
+
+
+            GLCDForeground = TFT_CYAN
+            GLCDfntDefaultsize = 3
+            GLCDPrint ( 2,30, longnumber )
+
+            wait 2 s
+
+    end Repeat
+
+
+
+  GLCDCLS TFT_BLUE
+  'Set font size.
+  GLCDfntDefaultsize = 1     'this determines the demo to execute also
+  longNumber = 0 ' max value = 4294967290
+  wordNumber = 0
+  byteNumber = 0
+
+    'Using the global variable GLCDfntDefaultsize to show the different capabilities
+    Select Case GLCDfntDefaultsize
+
+    Case 1
+
+      ShowCase1
+
+    Case 2
+
+      ShowCase2
+
+    Case 3
+
+      GLCDDrawString (2, 0, "GLCD")
+      GLCDDrawString (2, 24, "Font")
+      GLCDDrawString (2, 48, "size 3")
+      box 0,0,GLCDDeviceWidth, GLCDDeviceHeight, TFT_WHITE
+      box GLCDDeviceWidth-4, GLCDDeviceHeight-4,GLCDDeviceWidth, GLCDDeviceHeight, TFT_WHITE
+
+  End Select
+
+end
+
+
+sub ShowCase1
+
+        GLCDRotate ( Portrait )
+
+        GLCDDrawString (2, 1, "GCB", TFT_WHITE )
+        GLCDDrawString (26,1,"v0.98", TFT_YELLOW )
+        GLCDDrawString (2, 20, "DrawStr", TFT_WHITE )
+
+        GLCDDrawString ( 2, 31, "Long#" )
+        GLCDDrawString ( 2, 39, "Word#" )
+        GLCDDrawString ( 2, 47, "Byte#" )
+
+        GLCDDrawString ( 74, 20, "Asc:" )
+
+        box 0,0,GLCDDeviceWidth, GLCDDeviceHeight, TFT_YELLOW
+        box GLCDDeviceWidth-4, GLCDDeviceHeight-4,GLCDDeviceWidth, GLCDDeviceHeight, TFT_WHITE
+
+        Circle( (GLCDDeviceWidth+1)/2, (GLCDDeviceHeight+1)/2, 20, TFT_LIGHTGREY )            ;center
+        FilledCircle( (GLCDDeviceWidth+1)/2, (GLCDDeviceHeight+1)/2, 10, TFT_DARKGREY  )
+
+        line 0,  GLCDDeviceHeight , (GLCDDeviceWidth+1)/2 +55,  (GLCDDeviceHeight /2) - 20, TFT_CYAN
+        line  0, (GLCDDeviceHeight /2) - 20, (GLCDDeviceWidth+1)/2 +55, (GLCDDeviceHeight /2) - 20, TFT_CYAN
+
+        filledbox 2,(GLCDDeviceHeight+1)/2+10,22,(GLCDDeviceHeight+1)/2+32, TFT_RED
+
+        oldfont = GLCDfntDefaultsize
+        GLCDfntDefaultsize = 2
+        GLCDDrawString ( 36, GLCDDeviceHeight - 30 , "ST7735 Driver" , TFT_WHITE )
+
+        GLCDfntDefaultsize = 1
+        GLCDDrawString ( GLCDDeviceWidth - 57, 1 , "Apr 2019" , TFT_WHITE )
+        #ifdef ST7735_HardwareSPI
+            GLCDDrawString ( GLCDDeviceWidth - 42, 10 , "HW SPI" , TFT_WHITE )
+        #endif
+
+        #ifndef ST7735_HardwareSPI
+            GLCDDrawString ( GLCDDeviceWidth - 42, 10 , "SW SPI" , TFT_WHITE )
+        #endif
+
+        'Revert the font size
+        GLCDfntDefaultsize = oldfont
+        GLCDForeground = TFT_WHITE
 
         DO forever
 
-            GLCDPrint (0, 0, "PrintStr")
+            GLCDPrint ( 40 , 31, longNumber)
+            GLCDPrint ( 40 , 39, pad( str(wordnumber),5))
+            GLCDPrint ( 40 , 47, pad( str(bytenumber),3))
 
-            GLCDPrint ( 44 ,  21, "     ")
-            GLCDPrint ( 44 ,  29, "     ")
-            GLCDPrint ( 44 ,  37, "   ")
+            GLCDDrawChar(54, 20, CCount )
+            Box 52,19,62,30, TFT_WHITE                'Draw a box around the Char below
 
-
-            GLCDPrint ( 44 , 21, longNumber)
-            GLCDPrint ( 44 , 29, wordNumber)
-            GLCDPrint ( 44 , 37, byteNumber)
-
-            GLCDDrawString( 0,8,"DrawStr")
-            GLCDDrawChar(64, 8, ( CCount + 31 ) mod 127)
-
-             box 0,0,ST7735_GLCD_WIDTH-1, ST7735_GLCD_HEIGHT-1, ST7735_BLACK
-             box ST7735_GLCD_WIDTH-5, ST7735_GLCD_HEIGHT-5,ST7735_GLCD_WIDTH-1, ST7735_GLCD_HEIGHT-1, ST7735_BLACK
-
-             filledbox 2,30,6,38, wordNumber
-             Circle( 25,30,8,1)            ;center
-             FilledCircle( 25,30,4,longNumber xor 1)         ;center
-
-             line 0,  ST7735_GLCD_HEIGHT-1 , ST7735_GLCD_WIDTH/2,  (ST7735_GLCD_HEIGHT /2) +1
-             line  ST7735_GLCD_WIDTH/2, (ST7735_GLCD_HEIGHT /2) +1 ,0, (ST7735_GLCD_HEIGHT /2) +1
+            GLCDDrawString ( 100, 20 , pad( str(CCount),3) )
 
             CCount++
+            if CCount = 0 then CCount = 31
+            if CCount = 128 then CCount = 192
             longNumber = longNumber + 7
+
             wordNumber = wordNumber + 3
             byteNumber++
 
         LOOP
 
-    end
+end sub
+
+sub ShowCase2
 
 
+        'Change the font size as this device. This is intended
+        GLCDfntDefaultsize = 1
+
+        GLCDRotate ( Landscape_rev )
+        GLCDDrawString (2, 1, "GCB", TFT_WHITE )
+        GLCDDrawString (26,1,"v0.98", TFT_YELLOW )
+        GLCDDrawString (2, 10, "DrawStr", TFT_WHITE )
+
+        GLCDDrawString ( 64, 10, "Asc:" )
+        GLCDDrawString ( 2, 18, "Long#" )
+        GLCDDrawString ( 2, 26, "Word#" )
+        GLCDDrawString ( 2, 34, "Byte#" )
+
+
+
+        box 0,0,GLCDDeviceWidth, GLCDDeviceHeight, TFT_YELLOW
+        box GLCDDeviceWidth-5, GLCDDeviceHeight-5,GLCDDeviceWidth, GLCDDeviceHeight, TFT_WHITE
+
+        Circle( (GLCDDeviceWidth+1)/2, (GLCDDeviceHeight+1)/2, 20, TFT_LIGHTGREY )            ;center
+        FilledCircle( (GLCDDeviceWidth+1)/2, (GLCDDeviceHeight+1)/2, 10, TFT_DARKGREY  )
+
+        line 0,  GLCDDeviceHeight , (GLCDDeviceWidth+1)/2 +55,  (GLCDDeviceHeight /2) - 20, TFT_CYAN
+        line  0, (GLCDDeviceHeight /2) - 20, (GLCDDeviceWidth+1)/2 +55, (GLCDDeviceHeight /2) - 20, TFT_CYAN
+
+        filledbox 2,(GLCDDeviceHeight+1)/2+10,22,(GLCDDeviceHeight+1)/2+32, TFT_RED
+
+        oldfont = GLCDfntDefaultsize
+        GLCDfntDefaultsize = 2
+        GLCDDrawString ( 50, GLCDDeviceHeight - 30 , "ST7735 " , TFT_WHITE )
+
+        GLCDfntDefaultsize = 1
+        GLCDDrawString ( GLCDDeviceWidth - 57, 1 , "Apr 2019" , TFT_WHITE )
+        #ifdef ST7735_HardwareSPI
+            GLCDDrawString ( GLCDDeviceWidth - 42, 10 , "HW SPI" , TFT_WHITE )
+        #endif
+
+        #ifndef ST7735_HardwareSPI
+            GLCDDrawString ( GLCDDeviceWidth - 42, 10 , "SW SPI" , TFT_WHITE )
+        #endif
+
+        'Revert the font size
+        GLCDfntDefaultsize = oldfont
+        GLCDForeground = TFT_WHITE
+
+        DO forever
+
+          GLCDPrint ( 40 , 18, longNumber)
+          GLCDPrint ( 40 , 26, pad( str(wordnumber),5))
+          GLCDPrint ( 40 , 34, pad( str(bytenumber),3))
+
+          GLCDDrawChar(54, 10, CCount )
+          Box 52,10,62,20, TFT_WHITE                'Draw a box around the Char below
+
+          GLCDDrawString ( 90, 10 , pad( str(CCount),3) )
+
+          CCount++
+          if CCount = 0 then CCount = 31
+          if CCount = 128 then CCount = 192
+          longNumber = longNumber + 7
+          wordNumber = wordNumber + 3
+          byteNumber++
+
+        LOOP
+end sub
