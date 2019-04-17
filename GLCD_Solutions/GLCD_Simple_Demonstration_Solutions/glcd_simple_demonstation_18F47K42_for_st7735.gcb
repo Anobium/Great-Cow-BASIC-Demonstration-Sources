@@ -9,7 +9,7 @@
 '''@date    17.04.2019
 '''********************************************************************************
 
-  'Chip Settings. Assumes the my development board 'C' with with a 16LF1939
+  'Chip Settings.
   #chip 18F47K42
   #option explicit
 
