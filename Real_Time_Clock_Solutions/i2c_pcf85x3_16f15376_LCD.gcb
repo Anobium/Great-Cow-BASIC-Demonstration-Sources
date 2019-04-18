@@ -78,7 +78,7 @@
 ; ----- Commence the Clock specific solution
 ; ----- Define Clock include, clock addres and the input switch hardware settings
 
-  #include "PCF85X3.h"
+  #include <PCF85X3.h>
   #define DS_AddrWrite 0xA2
   #define DS_AddrRead  0xA3
 

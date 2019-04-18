@@ -37,6 +37,8 @@
 
     #include <glcd.h>
     #define GLCD_TYPE GLCD_TYPE_ST7735
+    #define ST7735TABCOLOR ST7735_BLACKTAB  ' can be ST7735_BLACKTAB, ST7735_GREENTAB or ST7735_REDTAB.  Each tab is a different ST7735 configuration.
+                                            ' you may have to try all three - if you do not know what chipset you have.
 
    'Pin mappings for SPI
     #define GLCD_DI  portc.4        '  NOT CONNECTED - can loop back if required
