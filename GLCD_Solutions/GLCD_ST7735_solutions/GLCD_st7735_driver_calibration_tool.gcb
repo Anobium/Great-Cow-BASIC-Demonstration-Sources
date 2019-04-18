@@ -35,7 +35,7 @@
         'The slection of the TAB below enable the selection of the three type of ST7735
         #define ST7735TABCOLOR ST7735_BLACKTAB  'ST7735_BLACKTAB  can ST7735_GREENTAB or ST7735_REDTAB
 
-        'Pin mappings for Software SPI - do use HWSPI when calibrating... PPS and HPSPI add complexity that is not required.
+        'Pin mappings for Software SPI - do NOT use HWSPI when calibrating... PPS and HPSPI add complexity that is not required.
         #define GLCD_DO  portc.5
         #define GLCD_SCK portc.3
 
@@ -55,10 +55,15 @@
 
 '''   You can use the followin to adjust the parameters
 '''       ST7735_BLACKTAB | ST7735_GREENTAB | ST7735_REDTAB.  ST7735_MINI160x80 not seen in the wide therefore not supported...yet
-'''       Correct the pixel offset by the two constants ST7735_XSTART and ST7735_YSTART - these constants can be used to adjust the X and Y position of the pixels.  Where the constant is a pixel size.
+'''       Correct the pixel offset by the two constants    and ST7735_YSTART - these constants can be used to adjust the X and Y position of the pixels.  Where the constant is a pixel size.
 '''       Change the ST7735_RASET_ADJUSTMENT and ST7735_RASET_ADJUSTMENT - these constants can be used to adjust the CASET and RASET registers
 '''
 '''
+
+'          Use one or both the following constants - if the geometry is not correct.  The yellow box is a good gauge.
+'          #define ST7735_XSTART 0   'values of greater then zero is shift the columns by that number of pixels
+'          #define ST7735_YSTART 0   'values of greater then zero is shift the rows by that number of pixels
+
         GLCDRotate Portrait
         #define DEFAULT_GLCDBACKGROUND TFT_BLUE
         filledbox 2,2,80,80,TFT_RED
@@ -69,3 +74,4 @@
         GLCDPrint 5, 30, ST7735TABCOLOR
         GLCDPrint 5, 40, GLCDRotateState
         filledbox GLCDDeviceWidth-2,GLCDDeviceHeight-2,GLCDDeviceWidth-42,GLCDDeviceHeight-42, TFT_GREEN
+        end
