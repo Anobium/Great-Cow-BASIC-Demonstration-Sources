@@ -59,12 +59,13 @@
 '''       Change the ST7735_RASET_ADJUSTMENT and ST7735_RASET_ADJUSTMENT - these constants can be used to adjust the CASET and RASET registers
 '''
 '''
-
+        GLCDRotate Portrait
         #define DEFAULT_GLCDBACKGROUND TFT_BLUE
         filledbox 2,2,80,80,TFT_RED
         box 0,0,GLCDDeviceWidth, GLCDDeviceHeight, TFT_YELLOW
         GLCDBackground = TFT_RED
         GLCDPrint 5, 10, ST7735_XSTART
         GLCDPrint 5, 20, ST7735_YSTART
-        GLCDPrint 5,30, ST7735TABCOLOR
+        GLCDPrint 5, 30, ST7735TABCOLOR
+        GLCDPrint 5, 40, GLCDRotateState
         filledbox GLCDDeviceWidth-2,GLCDDeviceHeight-2,GLCDDeviceWidth-42,GLCDDeviceHeight-42, TFT_GREEN
