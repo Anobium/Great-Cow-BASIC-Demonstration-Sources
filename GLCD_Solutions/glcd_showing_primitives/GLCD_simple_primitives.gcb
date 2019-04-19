@@ -44,10 +44,14 @@
 
 '************************ Graphics Main program ***********************
 
+    #define x_C GLCD_WIDTH/2
+    #define y_C GLCD_HEIGHT/2
+    #define xx2 GLCD_WIDTH
+    #define yy2 GLCD_HEIGHT
+
     Table Colors as Word
         TFT_BLACK       'BLACK
         TFT_NAVY        'Navy
-        TFT_DARKGREEN   'DARKGREEN
         TFT_DARKGREEN   'DARKGREEN
         TFT_DARKCYAN    'DARKCYAN
         TFT_MAROON      'MAROON
@@ -71,29 +75,27 @@
     Dim cleared           as byte
     Dim delx,dely,ind     as byte
     Dim nx, ny            as byte
-    Dim xx1,xx2,yy1,yy2   as Word
+    Dim n_color           as byte
+    Dim xx1,yy1           as Word
     Dim color             as word
-    Dim first_call_Ellipse as byte
 
     GLCDCLS(ST7735_NAVY)'black'white 'NAVY
 
-    first_call_Ellipse=0  'usata per stampa in ellipse
+    n_color=19
     delx=10
     dely=10
-    nx=(128/delx)+1
-    ny=(160/dely)+1
+    nx=(GLCD_WIDTH/delx)+1
+    ny=(GLCD_HEIGHT/dely)+1
     xx1=0
     yy1=0
-    xx2=128
-    yy2=160
 do
             'scan circle
-      ScanCircle(64,80)
+      ScanCircle(x_C,y_C)
             'from center
-      scanx(64,80,xx1,yy1,1)
-      scany(64,80,xx2,yy1,1)
-      scanx(64,80,xx2,yy2,2)
-      scany(64,80,xx1,yy2,2)
+      scanx(x_C,y_C,xx1,yy1,1)
+      scany(x_C,y_C,xx2,yy1,1)
+      scanx(x_C,y_C,xx2,yy2,2)
+      scany(x_C,y_C,xx1,yy2,2)
             'from angles case 1
       scany(xx1,yy1,xx2,yy1,1)
       scanx(xx1,yy1,xx2,yy2,2)
@@ -115,7 +117,7 @@ do
       scany(xx1,yy2,xx2,yy2,2)
       scanx(xx1,yy2,xx2,yy1,2)
 
-      ScanEllipse(64,80)
+      ScanEllipse(x_C,y_C)
 
       wait 1 s
 
@@ -139,7 +141,7 @@ sub scany(x_1,y_1,x_2,y_2,incr)
     end if
     for ind=1  to ny
       ycurr=ycurr+del
-      readtable colors,ind%20,color
+      readtable colors,ind%n_color,color
       line(x_1,y_1,x_2,ycurr,color)
     next
 
@@ -160,7 +162,7 @@ sub scanx(x_1,y_1,x_2,y_2,incr)
     end if
     for ind=1  to nx
       xcurr=xcurr+del
-      readtable colors,ind%20,color
+      readtable colors,ind%n_color,color
       line(x_1,y_1,xcurr,y_2,color)
     next
 
@@ -173,7 +175,7 @@ sub ScanCircle(x0,y0)
     delrad=0
     for ind=1 to 102
       delrad=delrad+1
-      readtable colors,ind%20,color
+      readtable colors,ind%n_color,color
       circle(x0,y0,delrad,color)
     next
 
@@ -187,7 +189,7 @@ sub ScanEllipse(x0,y0)
     for ind=1 to 40
       radx=radx+1
       rady=2*radx
-      readtable colors,ind%20,color
+      readtable colors,ind%n_color,color
       Ellipse(x0,y0,radx,rady,color)
     next
 
