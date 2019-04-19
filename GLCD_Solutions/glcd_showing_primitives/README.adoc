@@ -4,7 +4,7 @@ The baseline set of demonstrations was created at version 0.98.xx of the Great C
 
 Please add your demonstrations and improve those that have been posted.
 
-The GIT contains the source Great Cow BASIC that can be used to program the specific product configuration.{nbsp}{nbsp}For Great Cow BASIC please download from https://sourceforge.net/projects/gcbasic/files/latest/download
+The GIT contains the source Great Cow BASIC that can be used to program the specific MCU configuration.{nbsp}{nbsp}For Great Cow BASIC please download from https://sourceforge.net/projects/gcbasic/files/latest/download
 
 
 Use the Great Cow BASIC IDE to adapt the source GCB files.
