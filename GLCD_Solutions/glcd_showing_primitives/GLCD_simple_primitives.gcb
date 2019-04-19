@@ -1,0 +1,194 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a GLCD demonstration to show colors and graphics primitives
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''
+'''This program shows circles and lines.  :-)
+'''
+'''The program has been setup for a ST7735 GLCD and a 18f MCU - but, you can use the main 'Graphics Main program' on any color GLCD.  Just change the configuration.
+'''
+'''@author  Giuseppe D'Elia
+'''@licence GPL
+'''@version 1.0
+'''@date    18.4.19
+'''********************************************************************************
+
+
+        #chip 18F47K42, 64
+        #option explicit
+        #config MCLRE = ON
+
+        #include <glcd.h>
+
+'************************ Setup ST7735 ***********************
+
+        #define GLCD_TYPE GLCD_TYPE_ST7735
+
+        'The slection of the TAB below enable the selection of the three type of ST7735
+        #define ST7735TABCOLOR ST7735_BLACKTAB  'ST7735_BLACKTAB  can ST7735_GREENTAB or ST7735_REDTAB
+
+
+'************************ Setup SPI for the ST7736 **********************************************************
+'************************ You can use hardware SPI, ensure you setup PPS, if required ***********************
+
+        'Pin mappings for Software SPI
+        #define GLCD_DO  portc.5
+        #define GLCD_SCK portc.3
+
+        #define GLCD_DC portA.0
+        #define GLCD_CS portC.1
+        #define GLCD_RESET portC.0
+
+        ' #define ST7735_HardwareSPI     ' Remove to enable hardware SPI, ensure you setup PPS, if required
+
+
+'************************ Graphics Main program ***********************
+
+    Table Colors as Word
+        TFT_BLACK       'BLACK
+        TFT_NAVY        'Navy
+        TFT_DARKGREEN   'DARKGREEN
+        TFT_DARKGREEN   'DARKGREEN
+        TFT_DARKCYAN    'DARKCYAN
+        TFT_MAROON      'MAROON
+        TFT_PURPLE      'PURPLE
+        TFT_OLIVE       'OLIVE
+        TFT_LIGHTGREY   'LIGHTGREY
+        TFT_DARKGREY    'DARKGREY
+        TFT_BLUE        'BLUE
+        TFT_GREEN       'GREEN
+        TFT_CYAN        'CYAN
+        TFT_RED         'RED
+        TFT_MAGENTA     'MAGENTA
+        TFT_YELLOW      'YELLOW
+        TFT_WHITE       'WHITE
+        TFT_ORANGE      'ORANGE
+        TFT_GREENYELLOW 'GREENYELLOW
+        TFT_PINK        'PINK
+    End Table
+
+    Dim port_rev          as byte
+    Dim cleared           as byte
+    Dim delx,dely,ind     as byte
+    Dim nx, ny            as byte
+    Dim xx1,xx2,yy1,yy2   as Word
+    Dim color             as word
+    Dim first_call_Ellipse as byte
+
+    GLCDCLS(ST7735_NAVY)'black'white 'NAVY
+
+    first_call_Ellipse=0  'usata per stampa in ellipse
+    delx=10
+    dely=10
+    nx=(128/delx)+1
+    ny=(160/dely)+1
+    xx1=0
+    yy1=0
+    xx2=128
+    yy2=160
+do
+            'scan circle
+      ScanCircle(64,80)
+            'from center
+      scanx(64,80,xx1,yy1,1)
+      scany(64,80,xx2,yy1,1)
+      scanx(64,80,xx2,yy2,2)
+      scany(64,80,xx1,yy2,2)
+            'from angles case 1
+      scany(xx1,yy1,xx2,yy1,1)
+      scanx(xx1,yy1,xx2,yy2,2)
+      scanx(xx1,yy1,xx1,yy2,1)
+      scany(xx1,yy1,xx2,yy2,2)
+            'case2
+      scanx(xx2,yy1,xx2,yy2,2)
+      scany(xx2,yy1,xx1,yy2,2)
+      scany(xx2,yy1,xx1,yy1,1)
+      scanx(xx2,yy1,xx1,yy2,1)
+           'case3
+      scany(xx2,yy2,xx1,yy2,2)
+      scanx(xx2,yy2,xx1,yy1,1)
+      scanx(xx2,yy2,xx2,yy1,2)
+      scany(xx2,yy2,xx1,yy1,1)
+            'case4
+      scanx(xx1,yy2,xx1,yy1,1)
+      scany(xx1,yy2,xx2,yy1,1)
+      scany(xx1,yy2,xx2,yy2,2)
+      scanx(xx1,yy2,xx2,yy1,2)
+
+      ScanEllipse(64,80)
+
+      wait 1 s
+
+      GLCDCLS(ST7735_NAVY)
+
+loop
+
+
+sub scany(x_1,y_1,x_2,y_2,incr)
+
+    Dim x_1,x_2,y_1,y_2 as Word
+    Dim ind, del    as word
+    Dim ind1,ind2,  as Word
+    Dim ycurr       as Word
+    if incr=1 then
+      del=dely
+      ycurr=y_2-del
+    else
+      del=-dely
+      ycurr=y_2-del
+    end if
+    for ind=1  to ny
+      ycurr=ycurr+del
+      readtable colors,ind%20,color
+      line(x_1,y_1,x_2,ycurr,color)
+    next
+
+end sub
+
+sub scanx(x_1,y_1,x_2,y_2,incr)
+
+    Dim x_1, x_2, y_1, y_2 as Word
+    Dim ind, del   as Word
+    Dim ind1,ind2, as Word
+    Dim xcurr      as Word
+    if incr=1 then
+      del=delx
+      xcurr=x_2-del
+    else
+      del=-delx
+      xcurr=x_2-del
+    end if
+    for ind=1  to nx
+      xcurr=xcurr+del
+      readtable colors,ind%20,color
+      line(x_1,y_1,xcurr,y_2,color)
+    next
+
+end sub
+
+sub ScanCircle(x0,y0)
+
+    Dim x0,y0,delrad, rad, ind as word
+    Dim color as Word
+    delrad=0
+    for ind=1 to 102
+      delrad=delrad+1
+      readtable colors,ind%20,color
+      circle(x0,y0,delrad,color)
+    next
+
+end sub
+
+sub ScanEllipse(x0,y0)
+
+    Dim x0,y0,radx, rady, ind as word
+    Dim color as Word
+    radx=0
+    for ind=1 to 40
+      radx=radx+1
+      rady=2*radx
+      readtable colors,ind%20,color
+      Ellipse(x0,y0,radx,rady,color)
+    next
+
+end sub
