@@ -16,16 +16,16 @@
   #include <ds18b20.h>
 
 ; ----- Define Hardware settings
-  #include <softserial.h>	'include the library. this is required.
+  #include <softserial.h> 'include the library. this is required.
 
   'Config Serial UART:
-  #DEFINE SER1_BAUD 9600   	'baudrate must be defined
-  #DEFINE SER1_TXPORT PORTB  	'I/O port (without .bit) must be defined
-  #DEFINE SER1_TXPIN 1   	        'portbit  must be defined
+  #DEFINE SER1_BAUD 9600    'baudrate must be defined
+  #DEFINE SER1_TXPORT PORTB   'I/O port (without .bit) must be defined
+  #DEFINE SER1_TXPIN 1            'portbit  must be defined
 
 ; ----- Constants
   ' DS18B20 port settings
-  #define DQ PortC.3
+  #define DQ PortB.3
 
 ; ----- Main body of program commences here.
 
