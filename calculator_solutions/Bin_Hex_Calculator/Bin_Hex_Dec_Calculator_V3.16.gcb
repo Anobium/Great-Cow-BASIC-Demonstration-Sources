@@ -1,0 +1,1732 @@
+'Pic 16F1829 Binary, Decimal and Hexadecimal Calculator using a 74HC165 Keyboard scanner (24 buttons) and a 16x2 LCD
+'(c) Mark Stevenson MkEDS 2019
+
+#Chip 16F1829, 32
+#Config CP=On
+'Read protected
+#Option Explicit
+
+
+#Define Codeversion      "3.16 14th Apr"
+#Define CopyRight     " (C) MkEDS 2019 "
+
+#Define TimeOut       120000    ' ScreenSaver timeout in mS currently 120 Seconds, or two minutes
+
+#Include "bin_hex_dec_calculator_define.h"
+
+'*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*
+'Note:
+'If the millis.h file is located in the same directory as the source code,
+'use the following #Include statement
+'#Include "millis.h"
+
+
+'If the millis.h file has been copied into your GreatCowBasic/include folder,
+'use the following #Include statement
+'#Include <millis.h>
+'*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*
+
+#Include <millis.h>
+'Include the millis() library. This is stored in the /GreatCowBasic/include/
+'folder so can be referenced with the filename encased in < > not encased in " "
+
+Dim     Dat           As Byte
+Dim     Temp          As Byte
+
+Dim     RandB1        As Byte
+Dim     RandB2        As Byte
+Dim     RandB3        As Byte
+Dim     RandB4        As Byte
+
+Dim     Clocks        As Byte
+Dim     Dat_Out       As Byte
+Dim     Button_Value  As Byte
+Dim     Row           As Byte
+Dim     Decode_Value  As Byte
+Dim     Zero_Value    As Byte
+
+Dim     Input_Value   As Word
+Dim     Operate1      As Word
+Dim     Operate2      As Word
+Dim     Built_Value   As Word
+Dim     Result        As Word
+
+Dim     Input_ValueL   As Long
+Dim     Display_ValueL As Long
+Dim     Display_Value  As Word
+Dim     DisplayHiL     As Byte
+Dim     DisplayLoL     As Byte
+Dim     DisplayHi      As Byte
+Dim     DisplayLo      As Byte
+Dim     Operate1L      As Long
+Dim     Operate2L      As Long
+Dim     Built_ValueL   As Long
+Dim     ResultL        As Long
+
+Dim     Operand       As Byte
+Dim     Op            As Byte
+Dim     Mode          As Byte
+Dim     Bit_Mode      As Byte
+Dim     Last_Mode     As Byte
+Dim     Not_Active    As Byte
+Dim     RSeed         As Byte
+Dim     RandomSeed    As Byte
+Dim     TenThou       As Byte
+
+Dim     Math_Loop     As Word
+Dim     Temp_W        As Word
+Dim     Animate_Mode  As Byte
+Dim     Animate_Delay As Byte
+
+Dim     Stop_SSaver   As Bit
+Dim     Trail         As Byte
+
+Dim     CGArray (8)
+StartUp
+
+Sub StartUp
+
+    Let Dat          = 0
+    Let Temp         = 0
+    Let Clocks       = 0
+    Let Dat_Out      = 0
+    Let Row          = 0
+    Let Button_Value = 0
+    Let Decode_Value = 0
+    Let Input_Value  = 0
+    Let Display_Value= 0
+    Let DisplayHi    = 0
+    Let DisplayLo    = 0
+    Let Operate1     = 0
+    Let Operate2     = 0
+    Let Built_Value  = 0
+    Let Result       = 0
+    Let Operand      = 0
+    Let Op           = 1
+    Let RSeed        = 0
+    Let RandomSeed   = 0
+
+    Let Input_ValueL  = 0
+    Let Display_ValueL= 0
+    Let DisplayHiL    = 0
+    Let DisplayLoL    = 0
+    Let DisplayHi     = 0
+    Let DisplayLo     = 0
+    Let Operate1L     = 0
+    Let Operate2L     = 0
+    Let Built_ValueL  = 0
+    Let ResultL       = 0
+
+    Let Math_Loop    = 0
+    Let Temp_W       = 0
+    Let Animate_Mode = 0
+    Let Animate_Delay= 35 'mS
+    Let Stop_SSaver  = 0
+    Let Trail        = BlankPill 'This is the 'blank' custom LCD character for the ScreenSaver
+
+
+    EpRead (EpMode, Mode)
+    If Mode > M_Hex Then
+        Let Mode = M_Dec
+    End If
+
+    EpRead (Ep_Bit, Bit_Mode)
+    If Bit_Mode > Bit_32 Then
+        Let Bit_Mode = Bit_16
+    End If
+    If Bit_Mode < Bit_16 Then
+        Let Bit_Mode = Bit_16
+    End If
+
+    EpRead Ep_Ani, Animate_Mode
+    If Animate_Mode > Animate Then
+        Let Animate_Mode = NoAnimate
+    End If
+
+    Let Last_Mode    = 0
+
+    Let D_Clk = 0
+
+    MakeLCDGraphics
+
+    Show_SplashScreen
+
+    If Bit_Mode = Bit_32 Then
+        If Mode = M_Bin Then
+            Let Mode = M_Dec
+            EpWrite EpMode, Mode
+        End If
+    End If
+
+    If Bit_Mode = Bit_16 Then
+        Show_ValuesSub(0)
+    Else
+        CLS
+        Show_ValuesSubL(0)
+    End If
+
+    Let MsCtr_ = 0 'Set millis() to zero
+End Sub
+
+'Main Calculator program Loop
+Do
+    If Bit_Mode = Bit_16 Then
+        MainLoop_Sub
+    Else
+        MainLoop_SubL
+    End If
+
+    if Millis() >= TimeOut then  ' required Time has Elapsed
+
+        Do
+
+            ScreenSaver 'Start the ScreenSaver
+
+            'Print either a blank custom LCD character or a 'Pill'
+            If Trail = BlankPill Then
+                Let Trail = Pill
+            Else
+                Let Trail = BlankPill
+            End If
+
+            If Stop_SSaver = 1 Then
+                CLS
+                If Bit_Mode = Bit_16 Then
+                    If Op = 1 Then
+                        Show_ValuesSub(Operate1)
+                        Let Operate2 = 0
+                        Let Result   = 0
+                    Else
+                        If Operate2 > 0 Then
+                            Show_ValuesSub(Operate2)
+                        Else
+                            If Result = 0 Then
+                                Show_ValuesSub(Operate1)
+                            End If
+                        End If
+                    End If
+
+                    If Result > 0 Then
+                        Show_ValuesSub(Result)
+                        Locate 1,6
+                        Print "Ans"
+                    Else
+                        If Operand = Answer Then
+                            Show_ValuesSub(Result)
+                            Locate 1,6
+                            Print "Ans"
+                        Else
+                            Locate 1,7
+                            Print " "
+                        End If
+                    End If
+                Else
+                    If Op = 1 Then
+                        Show_ValuesSubL(Operate1L)
+                        Let Operate2L = 0
+                        Let ResultL   = 0
+                    Else
+                        If Operate2L > 0 Then
+                            Show_ValuesSubL(Operate2L)
+                        Else
+                            If ResultL = 0 Then
+                                Show_ValuesSubL(Operate1L)
+                            End If
+                        End If
+                    End If
+
+                    If ResultL > 0 Then
+                        Show_ValuesSubL(ResultL)
+                        Locate 0,11
+                        Print "Ans"
+                    Else
+                        If Operand = Answer Then
+                            Show_ValuesSubL(ResultL)
+                            Locate 0,11
+                            Print "Ans"
+                        Else
+                            Locate 0,11
+                            Print "   "
+                        End If
+                    End If
+                End If
+
+                Do
+                    Wait 50 mS
+                    Get_Buttons
+                Loop Until Button_Value = 255
+
+                Let Trail        = BlankPill 'This is the 'blank' custom LCD character for the ScreenSaver
+
+            End If
+
+        Loop Until Stop_SSaver = 1
+
+        Let MsCtr_ = 0 'reset millis() to zero
+        Let Stop_SSaver = 0
+
+    end if
+
+    If RandomSeed = 0 Then
+        Let RSeed = RSeed + 1 'Seed the random number generator to the time of the loop before 'Random' is requested
+    End If
+Loop
+
+Sub MainLoop_Sub
+    Get_Buttons
+
+    If Button_Value < 255 Then
+
+        If Button_Value = BtMode Then
+            Check_Mode
+        End If
+
+        If Button_Value = BtOr Then
+            Check_Or
+        End If
+
+        If Button_Value = BtEn Then
+            Check_En
+        End If
+
+        If Button_Value = BtAn Then
+            Check_An
+        End If
+
+        If Button_Value = BtDi Then
+            Check_Modulo
+        End If
+
+        If Operand = Answer Then 'Clear ready for new calculation'
+            Let Op       = 1
+            Let Operate1 = 0
+            Let Operate2 = 0
+            Let Result   = 0
+            Let Operand  = 0
+        End If
+
+
+        If Result > 0 Then
+            If Mode = M_Bin Then
+                If Button_Value < Bt2 Then 'Clear ready for new calculation'
+                    Let Op       = 1
+                    Let Operate1 = 0
+                    Let Operate2 = 0
+                    Let Result   = 0
+                    Let Operand  = 0
+                End If
+            End If
+
+            If Mode = M_Dec Then
+                If Button_Value < BtA Then 'Clear ready for new calculation'
+                    Let Op       = 1
+                    Let Operate1 = 0
+                    Let Operate2 = 0
+                    Let Result   = 0
+                    Let Operand  = 0
+                End If
+            End If
+
+            If Mode = M_Hex Then
+                If Button_Value < BtEn Then 'Clear ready for new calculation'
+                    Let Op       = 1
+                    Let Operate1 = 0
+                    Let Operate2 = 0
+                    Let Result   = 0
+                    Let Operand  = 0
+                End If
+            End If
+        End If
+
+        Build_Value(Button_Value)
+
+        If Op = 1 Then
+            Show_ValuesSub(Operate1)
+            Let Operate2 = 0
+            Let Result   = 0
+        Else
+            If Operate2 > 0 Then
+                Show_ValuesSub(Operate2)
+            Else
+                If Result = 0 Then
+                    Show_ValuesSub(Operate1)
+                End If
+            End If
+        End If
+
+        If Result > 0 Then
+            Show_ValuesSub(Result)
+            Locate 1,6
+            Print "Ans"
+        Else
+            If Operand = Answer Then
+                Show_ValuesSub(Result)
+                Locate 1,6
+                Print "Ans"
+            Else
+                Locate 1,7
+                Print " "
+            End If
+        End If
+
+        Do
+            Wait 50 mS
+            Get_Buttons
+        Loop Until Button_Value = 255
+
+    End If
+End Sub
+
+Sub MainLoop_SubL
+    Get_Buttons
+
+    If Button_Value < 255 Then
+
+        If Button_Value = BtMode Then
+            Check_Mode
+        End If
+
+        If Button_Value = BtOr Then
+            Check_Or
+        End If
+
+        If Button_Value = BtEn Then
+            Check_En
+        End If
+
+        If Button_Value = BtAn Then
+            Check_An
+        End If
+
+        If Button_Value = BtDi Then
+            Check_Modulo
+        End If
+
+        If Operand = Answer Then 'Clear ready for new calculation'
+            Let Op        = 1
+            Let Operate1L = 0
+            Let Operate2L = 0
+            Let ResultL   = 0
+            Let Operand   = 0
+        End If
+
+
+        If ResultL > 0 Then
+
+            If Mode = M_Dec Then
+                If Button_Value < BtA Then 'Clear ready for new calculation'
+                    Let Op        = 1
+                    Let Operate1L = 0
+                    Let Operate2L = 0
+                    Let ResultL   = 0
+                    Let Operand   = 0
+                End If
+            End If
+
+            If Mode = M_Hex Then
+                If Button_Value < BtEn Then 'Clear ready for new calculation'
+                    Let Op        = 1
+                    Let Operate1L = 0
+                    Let Operate2L = 0
+                    Let ResultL   = 0
+                    Let Operand   = 0
+                End If
+            End If
+        End If
+
+        Build_ValueL(Button_Value)
+
+        If Op = 1 Then
+            Show_ValuesSubL(Operate1L)
+            Let Operate2L = 0
+            Let ResultL   = 0
+        Else
+            If Operate2L > 0 Then
+                Show_ValuesSubL(Operate2L)
+            Else
+                If ResultL = 0 Then
+                    Show_ValuesSubL(Operate1L)
+                End If
+            End If
+        End If
+
+        If ResultL > 0 Then
+            Show_ValuesSubL(ResultL)
+            Locate 0,11
+            Print "Ans"
+        Else
+            If Operand = Answer Then
+                Show_ValuesSubL(ResultL)
+                Locate 0,11
+                Print "Ans"
+            Else
+                Locate 0,11
+                Print "   "
+            End If
+        End If
+
+        Do
+            Wait 50 mS
+            Get_Buttons
+        Loop Until Button_Value = 255
+
+    End If
+
+End Sub
+
+Sub Get_Buttons
+    For Row = 1 to 3
+        If Row = 1 Then
+            Let Button_R1 = 0
+            Let Button_R2 = 1
+            Let Button_R3 = 1
+        End If
+
+        If Row = 2 Then
+            Let Button_R1 = 1
+            Let Button_R2 = 0
+            Let Button_R3 = 1
+        End If
+
+        If Row = 3 Then
+            Let Button_R1 = 1
+            Let Button_R2 = 1
+            Let Button_R3 = 0
+        End If
+
+        Let D_Lat = 0 'Load data to register
+
+        Let D_Clk = 0 'Send Dummy pulse to ready actual data
+        Wait 1 uS
+        Let D_Clk = 1
+        Wait 1 uS
+
+        Let Dat_Out = 0
+        Let D_Lat = 1 'Data now loaded, and ready for reading
+
+
+        For Clocks = 1 to 8
+          Let D_Clk = 1               'Shift register clocked
+
+          Let Dat_Out.7 = D_Data       'Read the first 'bit' into Dat_Out,
+                                       'using bit.7 gives the correct sequence
+
+          Let D_Clk = 0               'Close the clock
+          Wait 1 uS
+          Rotate Dat_Out Left Simple   'Move the data along one bit, ready for
+                                       'the next bit, left gives the correct sequence
+        Next Clocks
+
+
+        If Dat_Out < 255 Then
+            'Data is sent from 74HC165 in reverse order, so invert it
+            'so that input zero is read as '1' and input 7 as '254'
+            Let Dat_Out = 255 - Dat_Out
+
+            If Row = 1 Then
+                Decode_Row1(Dat_Out)
+            End If
+
+            If Row = 2 Then
+                Decode_Row2(Dat_Out)
+            End If
+
+            If Row = 3 Then
+                Decode_Row3(Dat_Out)
+            End If
+
+            'Button has been pressed so reset the ScreenSaver
+            Let MsCtr_ = 0
+
+            Exit Sub
+        Else
+            Let Button_Value = 255
+        End If
+    Next
+End Sub
+
+Sub Decode_Row1(In Decode_Value As Byte)
+    Let Button_Value = 255
+    Select Case Decode_Value
+        Case Column_0
+            Let Button_Value = Bt0
+        Case Column_1
+            Let Button_Value = Bt1
+        Case Column_2
+            Let Button_Value = Bt2
+        Case Column_3
+            Let Button_Value = Bt3
+        Case Column_4
+            Let Button_Value = Bt4
+        Case Column_5
+            Let Button_Value = Bt5
+        Case Column_6
+            Let Button_Value = Bt6
+        Case Column_7
+            Let Button_Value = Bt7
+    End Select
+End Sub
+
+Sub Decode_Row2(In Decode_Value As Byte)
+    Let Button_Value = 255
+    Select Case Decode_Value
+        Case Column_0
+            Let Button_Value = Bt8
+        Case Column_1
+            Let Button_Value = Bt9
+        Case Column_2
+            Let Button_Value = BtA
+        Case Column_3
+            Let Button_Value = BtB
+        Case Column_4
+            Let Button_Value = BtC
+        Case Column_5
+            Let Button_Value = BtD
+        Case Column_6
+            Let Button_Value = BtE
+        Case Column_7
+            Let Button_Value = BtF
+    End Select
+End Sub
+
+Sub Decode_Row3(In Decode_Value As Byte)
+    Let Button_Value = 255
+    Select Case Decode_Value
+        Case Column_0
+            Let Button_Value = BtEn
+        Case Column_1
+            Let Button_Value = BtPl
+        Case Column_2
+            Let Button_Value = BtMi
+        Case Column_3
+            Let Button_Value = BtDi
+        Case Column_4
+            Let Button_Value = BtMu
+        Case Column_5
+            Let Button_Value = BtAn
+        Case Column_6
+            Let Button_Value = BtOr
+        Case Column_7
+            Let Button_Value = BtMode
+    End Select
+End Sub
+
+Sub Build_Value(In Input_Value As Byte)
+
+    If Input_Value = BtClr Then
+        Let Operate1    = 0
+        Let Operate2    = 0
+        Let Operand     = 0
+        Let Op          = 1
+        Let Result      = 0
+        Let Built_Value = 0
+        Exit Sub
+    End If
+
+    If Input_Value = BtEn Then 'Enter pressed, do maths'
+        Do_Maths
+    End If
+
+    If Input_Value > BtEn Then 'Operand is Pressed'
+        If Input_Value < BtMode Then 'Mode or Clr are not Pressed'
+            If Result > 0 Then
+                Let Operate1 = Result
+                Let Operate2 = 0
+                Let Result   = 0
+                Let Op       = 2
+                Let Operand  = Input_Value
+            Else
+                'If Operate1 > 0 Then
+                    If Op = 2 Then
+                        Let Operate2 = 0
+                        Let Result   = 0
+                    End If
+
+                    If Op = 1 Then
+                        Let Op = 2
+                    End If
+
+                    Let Operand = Input_Value
+                    Exit Sub
+                'Else
+                '    Exit Sub
+                'End If
+            End If
+            Exit Sub
+        End If
+    End If
+
+
+    If Input_Value < BtEn Then 'Number pressed'
+        Do_Number
+    End If
+
+    If Input_Value = BtNot Then
+        Do_Not
+    End If
+
+    If Input_Value = BtRand Then
+        Do_Rand
+    End If
+
+End Sub
+
+Sub Build_ValueL(In Input_Value As Byte)
+
+    If Input_Value = BtClr Then
+        Let Operate1L    = 0
+        Let Operate2L    = 0
+        Let Operand      = 0
+        Let Op           = 1
+        Let ResultL      = 0
+        Let Built_ValueL = 0
+        Exit Sub
+    End If
+
+    If Input_Value = BtEn Then 'Enter pressed, do maths'
+        Do_Maths
+    End If
+
+    If Input_Value > BtEn Then 'Operand is Pressed'
+        If Input_Value < 24 Then 'Mode or Clr are not Pressed'
+            If ResultL > 0 Then
+                Let Operate1L = ResultL
+                Let Operate2L = 0
+                Let ResultL   = 0
+                Let Op        = 2
+                Let Operand   = Input_Value
+            Else
+                'If Operate1L > 0 Then
+                    If Op = 2 Then
+                        Let Operate2L = 0
+                        Let ResultL   = 0
+                    End If
+
+                    If Op = 1 Then
+                        Let Op = 2
+                    End If
+
+                    Let Operand = Input_Value
+                    Exit Sub
+                'Else
+                '    Exit Sub
+                'End If
+            End If
+            Exit Sub
+        End If
+    End If
+
+
+    If Input_Value < BtEn Then 'Number pressed'
+        Do_NumberL
+    End If
+
+    If Input_Value = BtNot Then
+        Do_NotL
+    End If
+
+    If Input_Value = BtRand Then
+        Do_RandL
+    End If
+
+End Sub
+
+Sub Get_ZeroValue
+    Select Case Mode
+        Case M_Dec
+            Let Zero_Value = 10
+        Case M_Bin
+            Let Zero_Value = 2
+        Case M_Hex
+            Let Zero_Value = 16
+    End Select
+End Sub
+
+Sub Show_ValuesSub(In D_Value As Word)
+
+    Let Display_Value = D_Value
+
+    Let DisplayHi = Display_Value_H
+    Let DisplayLo = Display_Value
+
+    Locate 0,0
+    Print DisplayHi.7 'Show High byte binary value'
+    Print DisplayHi.6
+    Print DisplayHi.5
+    Print DisplayHi.4
+    Print DisplayHi.3
+    Print DisplayHi.2
+    Print DisplayHi.1
+    Print DisplayHi.0
+
+    Print DisplayLo.7 'Show low  byte binary value'
+    Print DisplayLo.6
+    Print DisplayLo.5
+    Print DisplayLo.4
+    Print DisplayLo.3
+    Print DisplayLo.2
+    Print DisplayLo.1
+    Print DisplayLo.0
+
+
+
+    Locate 1,0
+    Print "h"
+    LCDHex DisplayHi, LeadingZeroActive
+    LCDHex DisplayLo, LeadingZeroActive
+
+    Show_Mode
+    Show_Button
+
+    Locate 1,10
+    Print "d"
+    If Display_Value < 10000 Then
+     Print "0"
+    End If
+    If Display_Value < 1000  Then
+     Print "0"
+    End If
+    If Display_Value < 100   Then
+     Print "0"
+    End If
+    If Display_Value < 10    Then
+     Print "0"
+    End If
+    Print Display_Value
+
+    If Result > 0 Then
+        Wait 500 mS 'Ensures Mode and Button are displayed briefly'
+    End If
+
+End Sub
+
+Sub Show_ValuesSubL(In D_ValueL As Long)
+
+    Let Display_ValueL = D_ValueL
+
+    Let DisplayHiL = Display_ValueL_E
+    Let DisplayLoL = Display_ValueL_U
+    Let DisplayHi  = Display_ValueL_H
+    Let DisplayLo  = Display_ValueL
+
+    Locate 0,0
+    Print "h"
+    LCDHex DisplayHiL, LeadingZeroActive
+    LCDHex DisplayLoL, LeadingZeroActive
+    LCDHex DisplayHi , LeadingZeroActive
+    LCDHex DisplayLo , LeadingZeroActive
+
+    Show_Mode
+    Show_Button
+
+    Locate 1,0
+    Print "d"
+
+
+
+    If Display_ValueL < 1000000000 Then
+     Print "0"
+    End If
+    If Display_ValueL < 100000000  Then
+     Print "0"
+    End If
+    If Display_ValueL < 10000000   Then
+     Print "0"
+    End If
+    If Display_ValueL < 1000000    Then
+     Print "0"
+    End If
+    If Display_ValueL < 100000     Then
+     Print "0"
+    End If
+    If Display_ValueL < 10000      Then
+     Print "0"
+    End If
+    If Display_ValueL < 1000       Then
+     Print "0"
+    End If
+    If Display_ValueL < 100        Then
+     Print "0"
+    End If
+    If Display_ValueL < 10         Then
+     Print "0"
+    End If
+    Print Display_ValueL
+
+    If Result > 0 Then
+        Wait 500 mS 'Ensures Mode and Button are displayed briefly'
+    End If
+
+End Sub
+
+Sub Show_SplashScreen
+
+    Get_Buttons
+    If Button_Value = BtAn Then
+        Locate 0,15
+        Print "*"
+        Let TenThou = 1
+    Else
+        Let TenThou = 0
+    End If
+
+    If Button_Value = BtMode Then
+        Locate 1,15
+        Print "^"
+        If Bit_Mode = Bit_16 Then
+            Let Bit_Mode = Bit_32
+        Else
+            Let Bit_Mode = Bit_16
+        End If
+        EpWrite Ep_Bit, Bit_mode
+    End If
+
+    If Button_Value = BtA Then
+        Locate 1,15
+        Print "a"
+        If Animate_Mode = Animate Then
+            Let Animate_Mode = NoAnimate
+        Else
+            Let Animate_Mode = Animate
+        End If
+        EpWrite Ep_Ani, Animate_Mode
+    End If
+
+    Locate 0,0
+    If Bit_Mode = Bit_16 Then
+              '0123456789012345'
+        Print "16bit Bin - Dec"'Nothing in position 15 so that the mode changing 'markers' are not overwritten
+    Else
+              '0123456789012345'
+        Print " 32bit  Decimal"'Nothing in position 15 so that the mode changing 'markers' are not overwritten
+    End If
+
+    Locate 1,0
+          '0123456789012345'
+    Print " - Hexadecimal "'Nothing in position 15 so that the mode changing 'markers' are not overwritten
+
+    Wait 1500 mS
+    Locate 0,0
+    Print " *Integer only* "
+    Locate 1,0
+          '0123456789012345'
+    Print "   Calculator   "
+
+    Wait 1500 mS
+    CLS
+    Print "V. "
+    Print CodeVersion
+
+    'Locate 1,0
+    'Print "h: "
+    'Print HCodeversion
+
+    Locate 1,0
+    Print CopyRight
+
+
+    Wait 1500 mS
+    CLS
+    Locate 0,0
+    Print " "
+    Print ChipNameStr
+    Print "  "
+    Print ChipMHz
+    Print "Mhz"
+    Locate 1,0
+    Print CopyRight
+
+    Wait 1500 mS
+    CLS
+
+End Sub
+
+Sub ScreenSaver
+
+    #Define AnimateSpeed 1500
+    Dim AnimateWait As Word
+    Dim XX, YY As Byte
+    Let XX = 0
+    Let YY = 0
+    Let Stop_SSaver = 0
+
+    Locate 0,0 'Print the first PacMan on line 1
+    LCDWriteChar PacManFwd
+
+    Let AnimateWait = 0
+    Do
+        Get_Buttons
+        If Button_Value <> 255 Then
+            Let Stop_SSaver = 1
+            Exit Sub
+        End If
+        Wait 100 uS
+        Let AnimateWait = AnimateWait + 1
+    Loop Until AnimateWait > AnimateSpeed
+
+    Do
+        Locate YY, XX
+        LCDWriteChar Trail
+        LCDWriteChar PacManFwd
+
+        Let AnimateWait = 0
+        Do
+            Get_Buttons
+            If Button_Value <> 255 Then
+                Let Stop_SSaver = 1
+                Exit Sub
+            End If
+            Wait 100 uS
+            Let AnimateWait = AnimateWait + 1
+        Loop Until AnimateWait > AnimateSpeed
+
+        Let XX = XX + 1
+    Loop Until XX > 14
+
+    Locate 0,15 'Erase the last PacMan on line 1
+    LCDWriteChar Trail
+
+    Let YY = 1
+    Locate YY,XX
+    LCDWriteChar PacManRev 'Print the end PacMan on line 2
+
+    Do
+        Locate YY, XX
+        LCDWriteChar PacManRev
+        LCDWriteChar Trail
+
+        Let AnimateWait = 0
+        Do
+            Get_Buttons
+            If Button_Value <> 255 Then
+                Let Stop_SSaver = 1
+                Exit Sub
+            End If
+            Wait 100 uS
+            Let AnimateWait = AnimateWait + 1
+        Loop Until AnimateWait > AnimateSpeed
+
+        Let XX = XX - 1
+    Loop Until XX = 255
+
+    Locate 1,0 'Erase the first PacMan on line 2
+    LCDWriteChar Trail
+
+End Sub
+
+Sub MakeLCDGraphics
+    'Or CG0
+    CGArray(1) = b'00010001'
+    CGArray(2) = b'00010001'
+    CGArray(3) = b'00010001'
+    CGArray(4) = b'00001010'
+    CGArray(5) = b'00000100'
+    CGArray(6) = b'00000000'
+    CGArray(7) = b'00000000'
+    CGArray(8) = b'00000000'
+    LCDCreateChar 0, CGArray()
+
+    'Xor CG1
+    CGArray(1) = b'00010001'
+    CGArray(2) = b'00010001'
+    CGArray(3) = b'00010001'
+    CGArray(4) = b'00001010'
+    CGArray(5) = b'00000100'
+    CGArray(6) = b'00000000'
+    CGArray(7) = b'00011111'
+    CGArray(8) = b'00000000'
+    LCDCreateChar 1, CGArray()
+
+    'Not CG2
+    CGArray(1) = b'00011111'
+    CGArray(2) = b'00011111'
+    CGArray(3) = b'00010001'
+    CGArray(4) = b'00011111'
+    CGArray(5) = b'00010001'
+    CGArray(6) = b'00011111'
+    CGArray(7) = b'00011111'
+    CGArray(8) = b'00000000'
+    LCDCreateChar 2, CGArray()
+
+    'PacMan < CG3
+    CGArray(1) = b'00000000'
+    CGArray(2) = b'00001110'
+    CGArray(3) = b'00011111'
+    CGArray(4) = b'00011000'
+    CGArray(5) = b'00011000'
+    CGArray(6) = b'00011111'
+    CGArray(7) = b'00001110'
+    CGArray(8) = b'00000000'
+    LCDCreateChar 3, CGArray()
+
+    'PacMan > CG4
+    CGArray(1) = b'00000000'
+    CGArray(2) = b'00001110'
+    CGArray(3) = b'00011111'
+    CGArray(4) = b'00000011'
+    CGArray(5) = b'00000011'
+    CGArray(6) = b'00011111'
+    CGArray(7) = b'00001110'
+    CGArray(8) = b'00000000'
+    LCDCreateChar 4, CGArray()
+
+    'Blank Pill > CG5
+    CGArray(1) = b'00000000'
+    CGArray(2) = b'00000000'
+    CGArray(3) = b'00000000'
+    CGArray(4) = b'00000000'
+    CGArray(5) = b'00000000'
+    CGArray(6) = b'00000000'
+    CGArray(7) = b'00000000'
+    CGArray(8) = b'00000000'
+    LCDCreateChar 5, CGArray()
+
+    'Pill > CG5
+    CGArray(1) = b'00000000'
+    CGArray(2) = b'00000000'
+    CGArray(3) = b'00000000'
+    CGArray(4) = b'00001100'
+    CGArray(5) = b'00001100'
+    CGArray(6) = b'00000000'
+    CGArray(7) = b'00000000'
+    CGArray(8) = b'00000000'
+    LCDCreateChar 6, CGArray()
+End Sub
+
+Sub Show_Mode
+    If Bit_Mode < Bit_32 Then
+        Locate 1,6
+    Else
+        Locate 1,15
+    End If
+    Select Case Mode
+        Case M_Dec
+            Print "d"
+        Case M_Bin
+            Print "b"
+        Case M_Hex
+            Print "h"
+    End Select
+    If Bit_Mode < Bit_32 Then
+        Locate 1,7
+        Print " "
+    Else
+        Locate 0,11
+        Print "   "
+    End If
+End Sub
+
+Sub Show_Button
+    If Bit_Mode <> Bit_32 Then
+        Locate 1,8
+    Else
+        Locate 0,15
+    End If
+    If Button_Value < 255 Then
+        Select Case Button_Value
+            Case Bt0
+                Print "0"
+            Case Bt1
+                Print "1"
+            Case Bt2
+                Print "2"
+            Case Bt3
+                Print "3"
+            Case Bt4
+                Print "4"
+            Case Bt5
+                Print "5"
+            Case Bt6
+                Print "6"
+            Case Bt7
+                Print "7"
+            Case Bt8
+                Print "8"
+            Case Bt9
+                Print "9"
+            Case BtA
+                Print "A"
+            Case BtB
+                Print "B"
+            Case BtC
+                Print "C"
+            Case BtD
+                Print "D"
+            Case BtE
+                Print "E"
+            Case BtF
+                Print "F"
+            Case BtEn
+                Print "="
+            Case BtPl
+                Print "+"
+            Case BtMi
+                Print "-"
+            Case BtDi
+                Print "/"
+            Case BtMu
+                Print "x"
+            Case BtAn
+                Print "&"
+            Case BtModulo
+                Print "%"
+            Case BtOr
+                LCDWriteChar CG_Or  'Print Or symbol
+                ''Print "|"
+            Case BTXor
+                LCDWriteChar CG_Xor 'Print Xor symbol
+                ''Print "#"
+            Case BtMode
+                Print "m"
+            Case BtClr
+                Print "c"
+            Case BtNot
+                LCDWriteChar CG_Not 'Print Not symbol
+            Case BtRand
+                Print "R"
+        End Select
+    Else
+        Print " "
+    End If
+
+End Sub
+
+Sub Check_Mode
+    Wait 50 mS
+    Get_Buttons
+
+    If Button_Value = BtMode Then
+        Wait 100 mS
+        Get_Buttons
+
+        If Button_Value = BtMode Then
+            Wait 100 mS
+            Get_Buttons
+
+            If Button_Value = BtMode Then
+                Let Button_Value = BtClr
+            Else
+                Let Button_Value = BtMode
+            End If
+        Else
+            Let Button_Value = BtMode
+        End If
+    Else
+        Let Button_Value = BtMode
+    End If
+
+    If Button_Value = BtMode Then
+        Let Mode = Mode + 1
+        If Mode > M_Hex Then
+            Let Mode = M_Bin
+        End If
+        If Bit_Mode = Bit_32 Then 'No Binary in 32bit
+            If Mode = M_Bin Then
+                Let Mode = Mode + 1
+            End If
+        End If
+        EpRead  (EpMode, Temp) 'Only write if value is different'
+        If Temp <> Mode Then
+            EpWrite (EpMode, Mode)
+        End If
+    End If
+
+End Sub
+
+Sub Check_Or
+    Wait 50 mS
+    If Button_Value = BtOr Then
+        Wait 100 mS
+        Get_Buttons
+
+        If Button_Value = BtOr Then
+            Wait 100 mS
+            Get_Buttons
+
+            If Button_Value = BtOr Then
+                Let Button_Value = BtXor
+            Else
+                Let Button_Value = BtOr
+            End If
+        Else
+            Let Button_Value = BtOr
+        End If
+    Else
+        Let Button_Value = BtOr
+    End If
+End Sub
+
+Sub Check_En
+    Wait 50 mS
+    If Button_Value = BtEn Then
+        Wait 100 mS
+        Get_Buttons
+
+        If Button_Value = BtEn Then
+            Wait 100 mS
+            Get_Buttons
+
+            If Button_Value = BtEn Then
+                Let Button_Value = BtNot
+            Else
+                Let Button_Value = BtEn
+            End If
+        Else
+            Let Button_Value = BtEn
+        End If
+    Else
+        Let Button_Value = BtEn
+    End If
+End Sub
+
+Sub Check_An
+    Wait 50 mS
+    If Button_Value = BtAn Then
+        Wait 100 mS
+        Get_Buttons
+
+        If Button_Value = BtAn Then
+            Wait 100 mS
+            Get_Buttons
+
+            If Button_Value = BtAn Then
+                Let Button_Value = BtRand
+            Else
+                Let Button_Value = BtAn
+            End If
+        Else
+            Let Button_Value = BtAn
+        End If
+    Else
+        Let Button_Value = BtAn
+    End If
+End Sub
+
+Sub Check_Modulo
+    Wait 50 mS
+    If Button_Value = BtDi Then
+        Wait 100 mS
+        Get_Buttons
+
+        If Button_Value = BtDi Then
+            Wait 100 mS
+            Get_Buttons
+
+            If Button_Value = BtDi Then
+                Let Button_Value = BtModulo
+            Else
+                Let Button_Value = BtDi
+            End If
+        Else
+            Let Button_Value = BtDi
+        End If
+    Else
+        Let Button_Value = BtDi
+    End If
+End Sub
+
+Sub Do_Maths
+    If Bit_Mode = Bit_32 Then
+        Do_MathsL
+        Exit Sub
+    End If
+'    If Operate1 > 0 Then
+'        If Operate2 > 0 Then
+            If Operand > 0 Then
+                If Operand = BtPl Then
+                    If Animate_Mode = Animate Then
+                        For Math_Loop = 1 to Operate2
+                            Let Operate1 = Operate1 + 1
+                            Show_ValuesSub(Operate1)
+
+                            Get_Buttons
+                            If Button_Value <> BtMode Then
+                                Wait Animate_Delay mS
+                                Show_ValuesSub(Operate1)
+                            End If
+
+                        Next
+                        Let Result = Operate1
+                    Else
+                        Let Result = Operate1 + Operate2
+                    End If
+                End If
+
+                If Operand = BtMi Then
+                    If Animate_Mode = Animate Then
+                        For Math_Loop = 1 to Operate2
+                            Let Operate1 = Operate1 - 1
+                            Show_ValuesSub(Operate1)
+
+                            Get_Buttons
+                            If Button_Value <> BtMode Then
+                                Wait Animate_Delay mS
+                                Show_ValuesSub(Operate1)
+                            End If
+
+                        Next
+                    Let Result = Operate1
+                    Else
+                        Let Result = Operate1 - Operate2
+                    End If
+                End If
+
+                If Operand = BtDi Then
+                    'If Operate1 >= Operate2 Then
+                        If Animate_Mode = Animate Then
+                            Let Math_Loop = 0
+                            Do
+                                Let Operate1 = Operate1 - Operate2
+                                Let Math_Loop = Math_Loop + 1
+                                Show_ValuesSub(Operate1)
+
+                            Get_Buttons
+                            If Button_Value <> BtMode Then
+                                Wait Animate_Delay mS
+                                Show_ValuesSub(Operate1)
+                            End If
+
+                            Loop While Operate1 >= Operate2
+                            Let Result = Math_Loop
+                        Else
+                            Let Result = Operate1 / Operate2
+                        End If
+                    'Else   'Division equals zero
+                    '    Let Result   = 0
+                    'End If
+                End If
+
+                If Operand = BtMu Then
+                    If Animate_Mode = Animate Then
+                        Let Temp_W = Operate1
+                        For Math_Loop = 2 to Operate2
+                            Let Operate1 = Operate1 + Temp_W
+
+                            Get_Buttons
+                            If Button_Value <> BtMode Then
+                                Wait Animate_Delay mS
+                                Show_ValuesSub(Operate1)
+                            End If
+
+                        Next
+                        Let Result = Operate1
+                    Else
+                        Let Result = Operate1 * Operate2
+                    End If
+                End If
+
+
+                If Operand = BtAn Then
+                    Let Result = Operate1 And Operate2
+                End If
+
+                If Operand = BtOr Then
+                    Let Result = Operate1 Or Operate2
+                End If
+
+                If Operand = BtXor Then
+                    Let Result = Operate1 # Operate2
+                End If
+
+                If Operand = BtModulo Then
+                    Let Result = Operate1 % Operate2
+                End If
+
+                If Result = 0 Then 'Clear ready for new calculation'
+                    Let Op       = 1
+                    Let Operate1 = 0
+                    Let Operate2 = 0
+                    Let Result   = 0
+                    Let Operand  = Answer
+                End If
+
+            End If
+'        End If
+'    End If
+End Sub
+
+Sub Do_Not
+    If Bit_Mode = Bit_32 Then
+        Do_NotL
+        Exit Sub
+    End If
+    If Op = 1 Then
+        Let Operate1 = Not Operate1
+    Else
+        If Op = 2 Then
+            If Result <> 0 Then
+                Let Result = Not Result
+                If Result = 0 Then 'Clear ready for new calculation'
+                    Let Op       = 1
+                    Let Operate1 = 0
+                    Let Operate2 = 0
+                    Let Result   = 0
+                End If
+            Else
+                Let Operate2 = Not Operate2
+            End If
+        Else
+            Let Result = Not Result
+            If Result = 0 Then 'Clear ready for new calculation'
+                Let Op       = 1
+                Let Operate1 = 0
+                Let Operate2 = 0
+                Let Result   = 0
+            End If
+        End If
+    End If
+    Show_Mode
+    Show_Button
+End Sub
+
+Sub Do_Number
+    If Bit_Mode = Bit_32 Then
+        Do_NumberL
+        Exit Sub
+    End If
+    If Mode = M_Bin Then
+        If Input_Value > Bt1 Then
+            Exit Sub
+        End if
+    End If
+    If Mode = M_Dec Then
+        If Input_Value > Bt9 Then
+            Exit Sub
+        End If
+    End If
+
+    Get_ZeroValue
+    If Op = 1 Then
+        If Input_Value = Bt0 Then
+            Let Operate1 = Operate1 * Zero_Value
+        Else
+            Let Operate1 = Operate1 * Zero_Value
+            Let Operate1 = Operate1 + Input_Value
+        End If
+    Else
+         If Input_Value = Bt0 Then
+            Let Operate2 = Operate2 * Zero_Value
+        Else
+            Let Operate2 = Operate2 * Zero_Value
+            Let Operate2 = Operate2 + Input_Value
+        End If
+    End If
+End Sub
+
+Sub Do_Rand
+    If Bit_Mode = Bit_32 Then
+        Do_RandL
+        Exit Sub
+    End If
+
+    If RandomSeed = 0 Then
+        Randomize RSeed
+        Let RandomSeed = 1
+    End If
+
+    If TenThou = 1 Then
+        Do
+            Let RandB1 = Random
+            Let RandB2 = Random
+            Let RandB3 = Random
+            Let RandB4 = Random
+
+            Let Result.0  = RandB1.0
+            Let Result.1  = RandB2.1
+            Let Result.2  = RandB3.2
+            Let Result.3  = RandB4.3
+            Let Result.4  = RandB1.2
+            Let Result.5  = RandB2.3
+            Let Result.6  = RandB3.4
+            Let Result.7  = RandB4.5
+            Let Result.8  = RandB1.3
+            Let Result.9  = RandB2.4
+            Let Result.10 = RandB3.5
+            Let Result.11 = RandB4.6
+            Let Result.12 = RandB1.4
+            Let Result.13 = RandB2.5
+            Let Result.14 = 0
+            Let Result.15 = 0
+        Loop until Result < 9999
+        Let Result = Result + 1 'Prevent zero being returned
+    Else
+        Let Result = Random
+    End If
+
+    Show_ValuesSub(Result)
+    Let Op = 2
+End Sub
+
+Sub Do_MathsL
+    If Bit_Mode < Bit_32 Then
+        Do_Maths
+        Exit Sub
+    End If
+    Wait 500 mS
+
+'    If Operate1L > 0 Then
+'        If Operate2L > 0 Then
+            If Operand > 0 Then
+                If Operand = BtPl Then
+                    Let ResultL = Operate1L + Operate2L
+                End If
+
+                If Operand = BtMi Then
+                    Let ResultL = Operate1L - Operate2L
+                End If
+
+                If Operand = BtDi Then
+                 '   If Operate1L >= Operate2L Then
+                        Let ResultL = Operate1L / Operate2L
+                 '   Else   'Division equals zero
+                 '       Let ResultL   = 0
+                 '   End If
+                End If
+
+                If Operand = BtMu Then
+                    Let ResultL = Operate1L * Operate2L
+                End If
+
+
+                If Operand = BtAn Then
+                    Let ResultL = Operate1L And Operate2L
+                End If
+
+                If Operand = BtOr Then
+                    Let ResultL = Operate1L Or Operate2L
+                End If
+
+                If Operand = BtXor Then
+                    Let ResultL = Operate1L # Operate2L
+                End If
+
+                If Operand = BtModulo Then
+                    Let ResultL = Operate1L % Operate2l
+                End If
+
+                If ResultL = 0 Then 'Clear ready for new calculation'
+                    Let Op        = 1
+                    Let Operate1L = 0
+                    Let Operate2L = 0
+                    Let ResultL   = 0
+                    Let Operand   = Answer
+                End If
+
+            End If
+'        End If
+'    End If
+End Sub
+
+Sub Do_NotL
+    If Bit_Mode < Bit_32 Then
+        Do_Not
+        Exit Sub
+    End If
+    If Op = 1 Then
+        Let Operate1L = Not Operate1L
+    Else
+        If Op = 2 Then
+            If ResultL <> 0 Then
+                Let ResultL = Not ResultL
+                If ResultL = 0 Then 'Clear ready for new calculation'
+                    Let Op        = 1
+                    Let Operate1L = 0
+                    Let Operate2L = 0
+                    Let ResultL   = 0
+                End If
+            Else
+                Let Operate2L = Not Operate2L
+            End If
+        Else
+            Let ResultL = Not ResultL
+            If ResultL = 0 Then 'Clear ready for new calculation'
+                Let Op        = 1
+                Let Operate1L = 0
+                Let Operate2L = 0
+                Let ResultL   = 0
+            End If
+        End If
+    End If
+    Show_Mode
+    Show_Button
+End Sub
+
+Sub Do_NumberL
+    If Bit_Mode < Bit_32 Then
+        Do_Number
+        Exit Sub
+    End If
+
+    If Mode = M_Bin Then
+        Let Mode = M_Dec
+    End If
+
+    If Mode = M_Dec Then
+        If Input_Value > Bt9 Then
+            Exit Sub
+        End If
+    End If
+
+    Get_ZeroValue
+    If Op = 1 Then
+        If Input_Value = Bt0 Then
+            Let Operate1L = Operate1L * Zero_Value
+        Else
+            Let Operate1L = Operate1L * Zero_Value
+            Let Operate1L = Operate1L + Input_Value
+        End If
+    Else
+         If Input_Value = Bt0 Then
+            Let Operate2L = Operate2L * Zero_Value
+        Else
+            Let Operate2L = Operate2L * Zero_Value
+            Let Operate2L = Operate2L + Input_Value
+        End If
+    End If
+End Sub
+
+Sub Do_RandL
+    If Bit_Mode < Bit_32 Then
+        Do_Rand
+        Exit Sub
+    End If
+
+    If RandomSeed = 0 Then
+        Randomize RSeed
+        Let RandomSeed = 1
+    End If
+
+    Let ResultL = 0
+
+    If TenThou = 1 Then
+        Do
+            Let RandB1 = Random
+            Let RandB2 = Random
+            Let RandB3 = Random
+            Let RandB4 = Random
+
+            Let ResultL.0  = RandB1.0
+            Let ResultL.1  = RandB2.1
+            Let ResultL.2  = RandB3.2
+            Let ResultL.3  = RandB4.3
+            Let ResultL.4  = RandB1.2
+            Let ResultL.5  = RandB2.3
+            Let ResultL.6  = RandB3.4
+            Let ResultL.7  = RandB4.5
+            Let ResultL.8  = RandB1.3
+            Let ResultL.9  = RandB2.4
+            Let ResultL.10 = RandB3.5
+            Let ResultL.11 = RandB4.6
+            Let ResultL.12 = RandB1.4
+            Let ResultL.13 = RandB2.5
+            Let ResultL.14 = 0
+            Let ResultL.15 = 0
+        Loop until ResultL < 9999
+        Let ResultL = ResultL + 1 'Prevent zero being returned
+    Else
+        Let ResultL = Random
+    End If
+
+    Show_ValuesSubL(ResultL)
+    Let Op = 2
+End Sub
