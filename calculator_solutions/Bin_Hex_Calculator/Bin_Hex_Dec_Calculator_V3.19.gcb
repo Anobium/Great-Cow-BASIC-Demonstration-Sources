@@ -7,7 +7,7 @@
 #Option Explicit
 
 
-#Define Codeversion      "3.16 14th Apr"
+#Define Codeversion      "3.19 27th Apr"
 #Define CopyRight     " (C) MkEDS 2019 "
 
 #Define TimeOut       120000    ' ScreenSaver timeout in mS currently 120 Seconds, or two minutes
@@ -81,6 +81,8 @@ Dim     Animate_Delay As Byte
 Dim     Stop_SSaver   As Bit
 Dim     Trail         As Byte
 
+Dim     ShiftValue    As Byte
+
 Dim     CGArray (8)
 StartUp
 
@@ -124,7 +126,7 @@ Sub StartUp
     Let Stop_SSaver  = 0
     Let Trail        = BlankPill 'This is the 'blank' custom LCD character for the ScreenSaver
 
-
+    Let ShiftValue   = 0
     EpRead (EpMode, Mode)
     If Mode > M_Hex Then
         Let Mode = M_Dec
@@ -176,7 +178,7 @@ Do
         MainLoop_SubL
     End If
 
-    if Millis() >= TimeOut then  ' required Time has Elapsed
+    If Millis() >= TimeOut Then  ' required Time has Elapsed
 
         Do
 
@@ -297,6 +299,10 @@ Sub MainLoop_Sub
             Check_Modulo
         End If
 
+        If Button_Value = BtMu Then
+            Check_Shift
+        End If
+
         If Operand = Answer Then 'Clear ready for new calculation'
             Let Op       = 1
             Let Operate1 = 0
@@ -400,6 +406,10 @@ Sub MainLoop_SubL
 
         If Button_Value = BtDi Then
             Check_Modulo
+        End If
+
+        If Button_Value = BtMu Then
+            Check_Shift
         End If
 
         If Operand = Answer Then 'Clear ready for new calculation'
@@ -627,8 +637,17 @@ Sub Build_Value(In Input_Value As Byte)
         Do_Maths
     End If
 
+    If Input_Value < BtEn Then 'Number pressed'
+        Do_Number
+    End If
+
     If Input_Value > BtEn Then 'Operand is Pressed'
-        If Input_Value < BtMode Then 'Mode or Clr are not Pressed'
+        If Input_Value < BtNot Then
+'%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'For the correct functioning of those operators which
+'take only a single operand, they must be given values
+'greater than BtNot or they will not work.
+'%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             If Result > 0 Then
                 Let Operate1 = Result
                 Let Operate2 = 0
@@ -656,13 +675,13 @@ Sub Build_Value(In Input_Value As Byte)
         End If
     End If
 
-
-    If Input_Value < BtEn Then 'Number pressed'
-        Do_Number
+   If Input_Value = BtNot Then
+        Do_Not
     End If
 
-    If Input_Value = BtNot Then
-        Do_Not
+    If Input_Value = BtShiftL Then
+        Check_Left_Right
+        Do_Shift
     End If
 
     If Input_Value = BtRand Then
@@ -687,8 +706,17 @@ Sub Build_ValueL(In Input_Value As Byte)
         Do_Maths
     End If
 
+    If Input_Value < BtEn Then 'Number pressed'
+        Do_NumberL
+    End If
+
     If Input_Value > BtEn Then 'Operand is Pressed'
-        If Input_Value < 24 Then 'Mode or Clr are not Pressed'
+        If Input_Value < BtNot Then
+'%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'For the correct functioning of those operators which
+'take only a single operand, they must be given values
+'greater than BtNot or they will not work.
+'%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             If ResultL > 0 Then
                 Let Operate1L = ResultL
                 Let Operate2L = 0
@@ -716,13 +744,13 @@ Sub Build_ValueL(In Input_Value As Byte)
         End If
     End If
 
-
-    If Input_Value < BtEn Then 'Number pressed'
-        Do_NumberL
-    End If
-
     If Input_Value = BtNot Then
         Do_NotL
+    End If
+
+    If Input_Value = BtShiftL Then
+        Check_Left_Right
+        Do_ShiftL
     End If
 
     If Input_Value = BtRand Then
@@ -1184,6 +1212,10 @@ Sub Show_Button
                 LCDWriteChar CG_Not 'Print Not symbol
             Case BtRand
                 Print "R"
+            Case BtShiftL
+                Print "<"
+            Case BtShiftR
+                Print ">"
         End Select
     Else
         Print " "
@@ -1323,6 +1355,62 @@ Sub Check_Modulo
     Else
         Let Button_Value = BtDi
     End If
+End Sub
+
+Sub Check_Shift
+    Wait 50 mS
+    If Button_Value = BtMu Then
+        Wait 100 mS
+        Get_Buttons
+
+        If Button_Value = BtMu Then
+            Wait 100 mS
+            Get_Buttons
+
+            If Button_Value = BtMu Then
+                Let Button_Value = BtShiftL
+            Else
+                Let Button_Value = BtMu
+            End If
+        Else
+            Let Button_Value = BtMu
+        End If
+    Else
+        Let Button_Value = BtMu
+    End If
+End Sub
+
+Sub Check_Left_Right
+
+    If ShiftValue = 0 Then
+        Let ShiftValue = BtShiftL
+    Else
+        If ShiftValue = BtShiftL Then
+            Let ShiftValue = BtShiftR
+        Else
+            Let ShiftValue = BtShiftL
+        End If
+    End If
+    Let Button_Value = ShiftValue
+    Show_Button
+    Wait 1000 mS
+
+    Do
+        Get_Buttons
+        If Button_Value = BtMu Then 'Shift Button held?
+            If ShiftValue = BtShiftL Then
+                Let ShiftValue = BtShiftR
+            Else
+                Let ShiftValue = BtShiftL
+            End If
+        End If
+        Let Button_Value = ShiftValue
+        Show_Button
+        Wait 1000 mS
+        Get_Buttons
+    Loop Until Button_Value = 255
+    Let Button_Value = ShiftValue
+
 End Sub
 
 Sub Do_Maths
@@ -1472,6 +1560,106 @@ Sub Do_Not
                 Let Operate1 = 0
                 Let Operate2 = 0
                 Let Result   = 0
+            End If
+        End If
+    End If
+    Show_Mode
+    Show_Button
+End Sub
+
+Sub Do_Shift
+    If Bit_Mode = Bit_32 Then
+        Do_ShiftL
+        Exit Sub
+    End If
+    If Op = 1 Then
+        If ShiftValue = BtShiftL Then
+            Rotate Operate1 Left  Simple
+        Else
+            Rotate Operate1 Right Simple
+        End If
+    Else
+        If Op = 2 Then
+            If Result <> 0 Then
+                If ShiftValue = BtShiftL Then
+                    Rotate Result Left  Simple
+                Else
+                    Rotate Result Right Simple
+                End If
+                If Result = 0 Then 'Clear ready for new calculation'
+                    Let Op       = 1
+                    Let Operate1 = 0
+                    Let Operate2 = 0
+                    Let Result   = 0
+                End If
+            Else
+                If ShiftValue = BtShiftL Then
+                    Rotate Operate2 Left  Simple
+                Else
+                    Rotate Operate2 Right Simple
+                End If
+            End If
+        Else
+            If ShiftValue = BtShiftL Then
+                Rotate Result Left  Simple
+            Else
+                Rotate Result Right Simple
+            End If
+            If Result = 0 Then 'Clear ready for new calculation'
+                Let Op       = 1
+                Let Operate1 = 0
+                Let Operate2 = 0
+                Let Result   = 0
+            End If
+        End If
+    End If
+    Show_Mode
+    Show_Button
+End Sub
+
+Sub Do_ShiftL
+    If Bit_Mode = Bit_16 Then
+        Do_Shift
+        Exit Sub
+    End If
+    If Op = 1 Then
+        If ShiftValue = BtShiftL Then
+            Rotate Operate1L Left  Simple
+        Else
+            Rotate Operate1L Right Simple
+        End If
+    Else
+        If Op = 2 Then
+            If ResultL <> 0 Then
+                If ShiftValue = BtShiftL Then
+                    Rotate ResultL Left  Simple
+                Else
+                    Rotate ResultL Right Simple
+                End If
+                If Result = 0 Then 'Clear ready for new calculation'
+                    Let Op        = 1
+                    Let Operate1L = 0
+                    Let Operate2L = 0
+                    Let ResultL   = 0
+                End If
+            Else
+                If ShiftValue = BtShiftL Then
+                    Rotate Operate2L Left  Simple
+                Else
+                    Rotate Operate2L Right Simple
+                End If
+            End If
+        Else
+            If ShiftValue = BtShiftL Then
+                Rotate ResultL Left  Simple
+            Else
+                Rotate ResultL Right Simple
+            End If
+            If Result = 0 Then 'Clear ready for new calculation'
+                Let Op        = 1
+                Let Operate1L = 0
+                Let Operate2L = 0
+                Let ResultL   = 0
             End If
         End If
     End If
