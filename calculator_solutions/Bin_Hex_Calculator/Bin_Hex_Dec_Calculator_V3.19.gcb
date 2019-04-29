@@ -12,7 +12,7 @@
 
 #Define TimeOut       120000    ' ScreenSaver timeout in mS currently 120 Seconds, or two minutes
 
-#Include "bin_hex_dec_calculator_define.h"
+#Include "Bin_Hex_Dec_Calculator_Define.h"
 
 '*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*
 'Note:
@@ -1393,6 +1393,7 @@ Sub Check_Left_Right
     End If
     Let Button_Value = ShiftValue
     Show_Button
+    Show_Mode
     Wait 1000 mS
 
     Do
