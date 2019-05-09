@@ -95,21 +95,21 @@
 do
     Select Case Case_Choice
 
-    Case 1                      'single  x_alined Hyperbole
+    Case 1                      'single  x_aligned Hyperbole
       x_0=GLCD_WIDTH/4
       y_0=GLCD_HEIGHT/4
       a_axis=8
       b_axis=4
       hyperbole(x_0, y_0, a_axis, b_axis, 1, ModeStp)
 
-    Case 2                      'single y_alined Hyperbole
+    Case 2                      'single y_aligned Hyperbole
       x_0=GLCD_WIDTH/2
       y_0=GLCD_HEIGHT/2
       a_axis=8
       b_axis=4
       hyperbole(x_0, y_0, a_axis, b_axis, 2, ModeStp)
 
-    Case 3                      'double x_alined and y-alined Hyperboles
+    Case 3                      'double x_aligned and y-aligned Hyperboles
       x_0=3*GLCD_WIDTH/4
       y_0=GLCD_HEIGHT/4
       a_axis=8
@@ -117,28 +117,28 @@ do
       hyperbole(x_0, y_0, a_axis, b_axis, 1, ModeStp)
       hyperbole(x_0, y_0, a_axis, b_axis, 2, ModeStp)
 
-    Case 4                      'set of n_Hyperboles centered, x-alined, Hyperboles
+    Case 4                      'set of n_Hyperboles centered, x-aligned, Hyperboles
       n_hyperboles=200
       ratio_ab=1
       x_0=GLCD_WIDTH/2
       y_0=GLCD_HEIGHT/2
       ScanHyperbole(x_0, y_0,ratio_ab,n_hyperboles, 1, ModeStp)
 
-    Case 5                      'set of n_Hyperboles centered, y-alined, Hyperboles
+    Case 5                      'set of n_Hyperboles centered, y-aligned, Hyperboles
       n_hyperboles=100
       ratio_ab=1
       x_0=GLCD_WIDTH/2
       y_0=GLCD_HEIGHT/2
       ScanHyperbole(x_0, y_0,ratio_ab,n_hyperboles, 2, ModeStp)
 
-    Case 6                      'set of n_Hyperboles centered x-alined and y_alined Hyperboles
+    Case 6                      'set of n_Hyperboles centered x-aligned and y_aligned Hyperboles
       n_hyperboles=200
       ratio_ab=2
       x_0=GLCD_WIDTH/2
       y_0=GLCD_HEIGHT/2
       ScanHyperbole(x_0, y_0,ratio_ab,n_hyperboles, 3, ModeStp)
 
-    Case 7                      'four regularly distributed sets of n_Hyperboles x-alined and y_alined Hyperboles
+    Case 7                      'four regularly distributed sets of n_Hyperboles x-aligned and y_aligned Hyperboles
       n_hyperboles=10
       ratio_ab=1
       n_sets=4
@@ -162,7 +162,7 @@ do
         ScanHyperbole(x_0, y_0,ratio_ab,n_hyperboles, 3, ModeStp)
       Next
 
-    Case 8                      'n_sets of randomly distributed n_Hyperboles x-alined and y_alined Hyperboles
+    Case 8                      'n_sets of randomly distributed n_Hyperboles x-aligned and y_aligned Hyperboles
       n_hyperboles=10
       ratio_ab=1
       n_sets=8
@@ -182,9 +182,9 @@ loop
 
 sub ScanHyperbole(x0,y0, ratio_ab, n_hyperboles, type0, ModeStp)
 
-    'Type=1 hyperbola alined along x
-    'Type=2 hyperbole alined along y
-    'Type=3 hyperbole alined along x plus iperbole alined along y
+    'Type=1 hyperbola aligned along x
+    'Type=2 hyperbole aligned along y
+    'Type=3 hyperbole aligned along x plus iperbole aligned along y
 
     Dim x0,y0,a_axis, b_axis, ind, n_hyperboles as word
     Dim color as Word
