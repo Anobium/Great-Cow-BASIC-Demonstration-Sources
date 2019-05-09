@@ -3,7 +3,7 @@
 '''This program is a GLCD demonstration to show colors and graphics primitives
 '''--------------------------------------------------------------------------------------------------------------------------------
 '''
-'''This program shows circles and lines.  :-)
+'''This program shows circles, ellipses and lines.  :-)
 '''
 '''The program has been setup for a specific GLCD, an 18f MCU and Software SPI - but, you can use the main 'Graphics Main program' on any color GLCD.  Just change the configuration.
 '''
