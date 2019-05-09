@@ -1,6 +1,6 @@
 This GIT contains the demonstrations to show GLCD primitives like circles, lines and elipses.  And, these demonstrations now include Hyperbole and Parabola.
 
-The baseline set of demonstrations was created at version 0.98.xx of the Great Cow BASIC distrubution.
+The baseline set of demonstrations was created at version 0.98.xx of the Great Cow BASIC distribution.
 
 Please add your demonstrations and improve those that have been posted.
 
