@@ -5,7 +5,7 @@
 '''
 '''This program shows circles and lines.  :-)
 '''
-'''The program has been setup for a ST7735 GLCD and a 18f MCU - but, you can use the main 'Graphics Main program' on any color GLCD.  Just change the configuration.
+'''The program has been setup for a specific GLCD, an 18f MCU and Software SPI - but, you can use the main 'Graphics Main program' on any color GLCD.  Just change the configuration.
 '''
 '''@author  Giuseppe D'Elia
 '''@licence GPL
