@@ -1,0 +1,34 @@
+    '''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+'''This program uses the SoftSerial library for serial sending.
+''' SoftSerial uses ASM routines for minimal overhead.
+''':
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    16.05.2019
+'''********************************************************************************
+
+    #chip 12f1571, 4
+    #option explicit                     ' all variables must be declared !
+
+    ; ----- Include library
+    #include <SoftSerial.h>
+
+    HEFWrite (127,0x55)   'write 0x55 to HEF location 127
+
+    ; ----- Config Serial UART :
+    #define SER1_BAUD 9600   ; baudrate must be defined
+    ; Config I/O ports for transmitting:
+    #define SER1_TXPORT PORTA  ; I/O port (without .bit) must be defined
+    #define SER1_TXPIN 0       ; portbit  must be defined
+
+    dim adval as word
+    HEFRead (127,adval)   'read location 127 to variable.
+    do
+        Ser1Send  13   'new line in Terminal
+        Ser1Send  10
+        Ser1Print "Software-UART: 0x"  'send a text
+        Ser1Print hex(adval & 0xFF)  'send the value
+        wait 100 ms
+    loop

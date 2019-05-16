@@ -14,7 +14,7 @@
 
 
 
-  #chip 16F18313
+  #chip 16F18426
   #include <glcd.h>
   #option Explicit
 
