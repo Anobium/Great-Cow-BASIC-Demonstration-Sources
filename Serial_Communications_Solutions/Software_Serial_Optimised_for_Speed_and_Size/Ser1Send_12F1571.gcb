@@ -13,7 +13,7 @@
     #option explicit                     ' all variables must be declared !
 
     ; ----- Include library
-    #include <SoftSerial.h>
+    #include <softserial.h>
 
     HEFWrite (127,0x55)   'write 0x55 to HEF location 127
 
