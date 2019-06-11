@@ -3,7 +3,7 @@
 '''This program is a GLCD demonstration multifunctional capabilities for the NT7108C GLCD controllers.
 '''
 '''The GLCD is connected to the microprocessor as shown in the hardware section of this code. This shows how to define the data port using 8 port.bit(s).
-'''@author  EvanV
+'''@author  EvanV & ClintK
 '''@licence GPL
 '''@version 1.0
 '''@date    14.06.19
