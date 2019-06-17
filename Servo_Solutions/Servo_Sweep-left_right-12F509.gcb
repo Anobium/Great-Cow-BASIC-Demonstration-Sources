@@ -1,0 +1,40 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program drives a servo-motor pulse generator
+'''pressing button on GPIO.3 (active low)produces a 1ms wide
+'''pulse-train,sending the servo left.
+'''
+'''When the button is not pressed a 2ms wide pulse-train sends the servo right
+'''by varying the mark width (PulseOut ms)between 1ms and 2 ms,
+'''the postion of the servo-motor can be controlled.
+'''
+'''@author  HiB
+'''@licence GPL
+'''@version 1.0
+'''@date    17/6/2019
+
+
+ #chip 12F509, 4
+    #option Explicit
+
+    #define SWITCH_PORT GPIO.3
+
+    Dir SWITCH_PORT In
+
+    Do
+      If SWITCH_PORT = 0 Then
+
+          'Pulse pin port
+         PulseOut GPIO.2,1 ms 'servo left'
+         'Then wait after the pin goes off
+         Wait 17 ms
+
+      Else
+
+         PulseOut GPIO.2,2 ms  'servo right'
+
+         'Then wait after the pin goes off
+         Wait 16 ms
+
+      End If
+    Loop
