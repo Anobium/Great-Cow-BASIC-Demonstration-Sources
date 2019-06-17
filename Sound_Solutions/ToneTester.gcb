@@ -1,0 +1,45 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''A two-waveform square-wave generator
+'''pressing button on GPIO.3 (active low)
+'''produces a 1Khz signal;otherwise a 500Hz signal is produced.
+'''by varying the mark-space (pulseout/wait)ratio
+'''custom waves can be produced.
+'''
+'''See the GIF demonstration in the same folder as this demonstration.
+'''
+'''@author  HiB
+'''@licence GPL
+'''@version 1.0
+'''@date    16/6/2019
+'''********************************************************************************
+
+; ----- Configuration
+
+ #chip 12F509, 4
+ #option explicit
+
+    #define pulser GPIO.2
+    #define SWITCH_PORT GPIO.3
+
+    Dir pulser Out
+    Dir SWITCH_PORT In
+
+    Do
+      If SWITCH_PORT = 0 Then
+
+          'Pulse pin port
+         PulseOut GPIO.2,495 us '1Khz code section
+
+         'Then wait after the pin goes off
+         Wait 495 us
+
+      Else
+
+         PulseOut GPIO.2,1002 us  '500Hz code section
+
+         'Then wait after the pin goes off
+         Wait 1002 us
+
+      End If
+    Loop

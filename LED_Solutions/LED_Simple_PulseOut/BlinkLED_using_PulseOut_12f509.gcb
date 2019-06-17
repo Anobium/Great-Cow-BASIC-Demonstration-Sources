@@ -1,0 +1,37 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program blinks one LED on GPIO. 2  using the PulseOut command.
+'''The LED must be attached via an appropriate resistor.
+'''this version acts as a surpsingly accurate 500hz pulse train generator
+'''by playing with pulseout (mark) and wait (space) values;you can produce
+'''customised square-waves.1002us = 500Hz,500us = 1Khz.
+'''@author  HiB
+'''@licence GPL
+'''@version 1.0
+'''@date    16/6/2019
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 12F509, 4
+  #option explicit
+
+; #include                  ; no solution specifc includes, default includes are always included
+
+
+; ----- Define Hardware settings
+ ' none specified in the example.
+
+
+; ----- Variables
+' none specified in the example. All byte variables are defined upon use.
+
+; ----- Main body of program commences here.
+  Do Forever
+
+     'Pulse pin port (Change this if you change the chip)
+     PulseOut GPIO.2,1002 us
+
+     'Then wait after the pin goes off
+     Wait 1002 us
+
+  Loop
