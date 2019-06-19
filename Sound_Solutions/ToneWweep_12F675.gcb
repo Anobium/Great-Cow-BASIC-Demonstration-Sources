@@ -1,0 +1,21 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''ToneSweeper  Audio Range Tone-Sweep generator
+'''
+'''
+'''@author chuck.h  HiB
+'''@licence GPL
+'''@version v0.1
+'''@date    19.06.2019
+'''********************************************************************************
+#chip 12f675, 4
+#option explicit
+
+
+DIM SND as word 'Create a word variable
+#define SoundOut GPIO.2
+Do forever
+    For SND = 100 to 1000 step 10 'frequency controls
+        Tone SND, 5 ' sweep-rate control
+    Next
+loop
