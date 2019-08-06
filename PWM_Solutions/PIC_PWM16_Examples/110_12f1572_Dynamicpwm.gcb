@@ -1,0 +1,33 @@
+'''A program  for GCGB and GCB the demonsations.
+'''--------------------------------------------------------------------
+'''This program changes dynamically,on a button press,the output
+'''of one of the 3 available PWM channels of a 12F1572 microcontroller.
+'''only 2 channels are used in this example;matched to the pinout
+'''of microchips PICKit2 low-pin-count demo pcb.
+'''jumpers from GP1 and GP2 to the middle 2 led's
+'''the 80khz output is deliberate to make high-efficiency led's show
+'''a clearly visible change when the button is pressed.
+'''
+'''@author     HiB
+'''@licence    GPL
+'''@version    2.1
+'''@date       6/8/2019
+'''*******************************************************************
+    #chip 12F1572, 32
+
+    #define SWITCH_PORT GPIO.3
+
+    Dir SWITCH_PORT IN
+
+     Do
+        If SWITCH_PORT = 0 Then
+
+          HPWM16(1, 10, 16384)   '10 kHz, 25% duty cycle (16384/65535)
+
+      else
+
+          HPWM16(1, 80, 16384)   '80 kHz, 25% duty cycle (16384/65535)
+          HPWM16(3, 30, 16384)   '30 kHz, 25% duty cycle (16384/65535)
+
+      End if
+    loop
