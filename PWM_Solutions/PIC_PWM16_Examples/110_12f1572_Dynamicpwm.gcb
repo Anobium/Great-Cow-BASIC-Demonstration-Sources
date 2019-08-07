@@ -10,13 +10,14 @@
 '''
 '''@author     HiB
 '''@licence    GPL
-'''@version    2.1
+'''@version    2.2
 '''@date       6/8/2019
 '''*******************************************************************
     #chip 12F1572, 32
 
     #define SWITCH_PORT GPIO.3
 
+    Dir PORTA Out
     Dir SWITCH_PORT IN
 
      Do
