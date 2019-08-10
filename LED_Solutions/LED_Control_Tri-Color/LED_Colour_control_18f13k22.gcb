@@ -1,0 +1,81 @@
+'''A demonstration program for GCGB and GCB.
+'''-------------------------------------------------------------------------------
+'''This program is a demonstration of controling a colour of Tri-colour
+'''LED based upon the value of ANO.
+'''
+'''The LED is connected to PortC.0,1 and 2 via resistors .
+'''@author  EvanV plus works of HughC HiB
+'''@licence GPL
+'''@version 1.0a
+'''@date    31.01.2015 18F13K22 version 10/8/2019
+'''********************************************************************************
+
+; ----- Configuration
+
+  #chip 18f13K22,1
+  #option explicit
+
+
+; ----- Define Hardware settings
+  'LED port directions
+  dir Red out
+  dir green out
+  dir blue out
+
+
+  'LED pins
+  #define Red PORTC.2
+  #define Green PORTC.1
+  #define Blue PORTC.0
+
+; ----- Variables
+  'Calculation Variable
+  Dim CalcTemp As Word
+
+  Dim HUE, RINT, GINT, BINT, FLASHRATE, PULSELOOP, LEVEL, RLTEMP as Byte
+
+
+  Main:
+   Hue = ReadAD(AN0)
+   If Hue < 20 Then Hue = 20
+   If Hue > 240 Then Hue = 240
+   Hue = Hue - 20
+   RInt = 0
+   GInt = 0
+   BInt = 0
+   If Hue < 220 And Hue > 150 Then
+      CalcTemp = ((220 - Hue) * 171) / 100
+      BInt = CalcTemp
+      CalcTemp = ((Hue - 150) * 286) / 100
+      RInt = CalcTemp
+   End If
+   If Hue < 150 And Hue > 120 Then
+      GInt = (150 - Hue) * 4
+      BInt = (Hue - 120) * 4
+   End If
+   If Hue < 120 Then
+      CalcTemp = ((120 - Hue) * 167)/100
+      RInt = CalcTemp
+      GInt = Hue
+   End If
+   ShowColour(RInt,GInt,BInt)
+  goto Main
+
+  end
+
+; ----- Support methods.  Subroutines and Functions
+
+  sub ShowColour(RL, GL, BL)
+   RLTemp = RL+RL
+   FlashRate = ReadAD(AN0)
+   for PulseLoop = 1 to FlashRate
+      set red on
+      set green on
+      set blue on
+      for Level = 1 to 200
+         if Level > RLTemp then set red off
+         if Level > GL then set green off
+         if Level > BL then set blue off
+      next
+   next
+  end sub
