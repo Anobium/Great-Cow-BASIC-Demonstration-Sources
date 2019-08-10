@@ -11,14 +11,16 @@
 '''@author     HiB
 '''@licence    GPL
 '''@version    2.2
-'''@date       6/8/2019
+'''@date       10/8/2019
 '''*******************************************************************
     #chip 12F1572, 32
 
     #define SWITCH_PORT GPIO.3
-
-    Dir PORTA Out
     Dir SWITCH_PORT IN
+
+    Dir GPIO.1 Out
+    Dir GPIO.2 Out
+
 
      Do
         If SWITCH_PORT = 0 Then
