@@ -1,0 +1,53 @@
+ '''A program  for GCGB and GCB the demonsations
+'''-------------------------------------------------------------
+'''This program produces a customisable 4-segment Bar-Graph
+'''on the LED's of a PICKit2 Low-pin-count demo pcb by taking
+'''an 8-bit reading from the analog to digital converter(AN0)
+'''connected to the potentiometer;comparing it with set values
+'''before lighting the appropriate LED's up in order.
+'''target Microcontroller PIC 18F13K22 or 18F14K22 or equivilent
+'''
+'''@author     HiB
+'''@licence    GPL
+'''@version    v1
+'''@date       8/8/2019
+'''*************************************************************
+
+; ----- Configuration
+
+ #Chip 18F14K22, 1
+
+    Dir PORTA.0 In
+    #define LIGHT1 PORTC.0
+    #define LIGHT2 PORTC.1
+    #define LIGHT3 PORTC.2
+    #define LIGHT4 PORTC.3
+
+    Do
+
+      If ReadAD(An0) > 20 Then
+        Set LIGHT1 On
+        Else
+        Set LIGHT1 Off
+        End If
+
+      If ReadAD(An0) > 80 Then
+      Set LIGHT2 On
+      Else
+      Set LIGHT2 Off
+      End If
+
+      If ReadAD(An0) > 150 Then
+      Set LIGHT3 On
+      Else
+      Set LIGHT3 Off
+      End If
+
+      If ReadAD(An0) > 200 Then
+      Set LIGHT4 On
+      Else
+      Set LIGHT4 Off
+      End If
+
+
+    Loop
