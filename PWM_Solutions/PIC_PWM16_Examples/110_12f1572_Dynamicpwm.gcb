@@ -15,11 +15,11 @@
 '''*******************************************************************
     #chip 12F1572, 32
 
-    #define SWITCH_PORT GPIO.3
+    #define SWITCH_PORT PORTA.3
     Dir SWITCH_PORT IN
 
-    Dir GPIO.1 Out
-    Dir GPIO.2 Out
+    Dir PORTA.1 Out       'default PWM1 port
+    Dir PORTA.2 Out       'default PWM3 port
 
 
      Do
