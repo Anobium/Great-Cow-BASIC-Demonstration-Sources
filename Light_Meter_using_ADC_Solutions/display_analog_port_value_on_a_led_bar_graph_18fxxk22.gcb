@@ -1,0 +1,64 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program reads the potentiometer/light sensor on AN0 and lights the LEDs connected to PORTB.
+'''This is in the form a bar graph (4 LEDS) to show the value of the potentiometer.
+'''LEDS are connected to PortC.0,1,2 and 3  via 470ohm resistors.
+'''This is similar to the volume display on a stereo
+'''***Hardware:- Microchip low-pin-count PCB***
+'''@author  EvanV plus works of HughC ***HiB***
+'''@licence GPL
+'''@version 1.0a
+'''@date    31.01.2015 ***18F13K22 version 10.8.2019***
+'''********************************************************************************
+
+; ----- Configuration
+ #chip 18F13K22,1
+
+; ----- Define Hardware settings
+  Dir PORTC Out
+
+
+; ----- Constants
+  ' No Constants specified in this example.
+
+
+; ----- Variables
+  ' No Variables specified in this example. All byte variables are defined upon use.
+
+
+; ----- Main body of program commences here.
+
+    Start:
+
+    'Light all LEDs if pot turned all way to right
+    If ReadAD(AN0) > 200 Then
+              PORTC = b'00001111'
+              Goto Start
+    end if
+
+    'Three LEDs lit
+    If ReadAD(AN0) > 150 Then
+              PORTC = b'00000111'
+              Goto Start
+    end if
+
+    'Two LEDs lit
+    If ReadAD(AN0) > 80 Then
+              PORTC = b'00000011'
+              Goto Start
+    end if
+
+    'One LED lit
+    If ReadAD(AN0) > 10 Then
+              PORTC = b'00000001'
+              Goto Start
+    end if
+
+    'All LEDs off, Pot all way to left
+    If ReadAD(AN0) < 10 Then
+              PORTC = 0
+    end if
+
+    Goto Start
+
+    end
