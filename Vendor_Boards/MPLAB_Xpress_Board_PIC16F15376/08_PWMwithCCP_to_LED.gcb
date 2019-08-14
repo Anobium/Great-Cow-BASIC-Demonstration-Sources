@@ -50,6 +50,8 @@
 
 
 ''' The real program.  :-)
+    #define HPWM_FAST                   'Define that the PWM  is optimised in terms of not recalculation the timer prescaler, faster PWM duty changes!!
+                                        'This constant only works with PWM/CCP for hardware PWM see the Help.
 
     dim PMWDuty as byte                 'Define a variable.
 
