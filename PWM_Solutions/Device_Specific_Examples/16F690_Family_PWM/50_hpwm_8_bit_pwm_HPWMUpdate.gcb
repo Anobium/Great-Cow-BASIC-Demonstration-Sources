@@ -28,7 +28,10 @@
             HPWMUpdate 1, dutyvalue       'Only update the duty value
             wait 10 ms
         next
-
+        for dutyvalue = 254 to 1
+            HPWMUpdate 1, dutyvalue       'Only update the duty value
+            wait 10 ms
+        next
     loop
 
 ''' GCB Optimisation file
