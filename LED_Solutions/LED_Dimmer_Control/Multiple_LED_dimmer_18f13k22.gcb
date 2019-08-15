@@ -1,0 +1,51 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a demonstration of a simple 4-LED dimmer.
+'''The pot on port ANO controls the value of the dimmer state.
+''' LED's must be connected to PortC via appropiate resistors
+'''
+'''18f13K22 LPCDB 4-LED version
+'''
+'''@author  HiB
+'''@licence GPL
+'''@version 1.0a
+'''@date    15-8-2019
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 18f13K22,1
+  #option explicit
+  #config MCLR_OFF
+
+
+; ----- Define Hardware settings
+  dir PORTA.0 in
+  dir PORTC.0 out
+
+
+;----- Variables
+  Dim PWMCOUNT, PWMLEVEL as Byte
+
+; ----- Main body of program commences here.
+  Main:
+  ' Get value of the Pot connected to 0
+  ' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
+  PWMLevel = ReadAD( 0 )
+
+  ' Turn on the LED
+  set PORTC.0 on
+  set PORTC.1 on
+  set PORTC.2 on
+  set PORTC.3 on
+  ' Loop through the byte variable
+  for PWMCount = 1 to 255
+    ' if the Pot value is greater than the byte value then turn LED off
+    if PWMCount > PWMLevel then
+      set PORTC.0 off
+      set PORTC.1 off
+      set PORTC.2 off
+      set PORTC.3 off
+    end if
+  next
+  goto Main
+  end
