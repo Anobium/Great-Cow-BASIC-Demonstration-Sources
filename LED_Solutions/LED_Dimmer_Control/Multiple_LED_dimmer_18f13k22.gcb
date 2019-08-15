@@ -2,7 +2,7 @@
 '''--------------------------------------------------------------------------------------------------------------------------------
 '''This program is a demonstration of a simple 4-LED dimmer.
 '''The pot on port ANO controls the value of the dimmer state.
-''' LED's must be connected to PortC via appropiate resistors
+''' LED's must be connected to PortC via appropriate resistors
 '''
 '''18f13K22 LPCDB 4-LED version
 '''
