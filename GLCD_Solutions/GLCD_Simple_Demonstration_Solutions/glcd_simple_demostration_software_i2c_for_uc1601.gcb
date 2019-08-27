@@ -1,0 +1,118 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a simple GLCD demonstration of the UC1601 GLCD capabilities.
+'''This program draws lines, boxes, circles and prints strings and numbers.
+'''The UC1601 controller a small graphical OLED, suitable for a lot of various projects.
+'''The display is xx*xx mm, with an active display surface of xxinches , and a 132*22 pixel resolution.
+'''The display is easy to interface, using an I2C and SPI type of communication.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date    27.08.2019
+'''********************************************************************************
+
+; ----- Configuration
+    #chip 16f18446, 32
+    #option explicit
+
+
+; ----- Define GLCD Hardware settings
+    #include <glcd.h>
+
+    #define GLCD_TYPE GLCD_TYPE_UC1601
+    #define GLCD_I2C_Address      0x70                   'I2C address
+    #define GLCD_RESET            portc.0                'Hard Reset pin connection
+    #define GLCD_PROTECTOVERRUN
+    #define GLCD_OLED_FONT
+
+; ----- Define Hardware settings
+
+    ' Define I2C settings - CHANGE PORTS
+    #define I2C_MODE Master
+    #define I2C_DATA PORTb.5
+    #define I2C_CLOCK PORTb.7
+    #define I2C_DISABLE_INTERRUPTS ON
+
+; ----- Define variables
+
+    Dim BYTENUMBER, CCOUNT as Byte
+    CCount = 0
+    dim longNumber as long
+    longNumber = 0x00 ' max value = 4294967290
+    longNumber = 0
+    dim wordNumber as Word
+    dim outstring as string
+    wordNumber = 0
+    byteNumber = 0
+
+; ----- Main program
+
+    GLCDRotate ( Landscape_Rev )
+
+    GLCDFntDefaultSize = 2
+    GLCDFontWidth = 4
+    GLCDPrint( 0, 0, "Sanbum UC1601" )                               ; Print some text
+    GLCDFntDefaultSize = 1
+    GLCDFontWidth = 5
+    GLCDPrint( 10, 15, "Contrast " )                                   ; Print some text
+    GLCDPrintString str ( UC1601_CONTRAST )
+    wait 4 s
+    GLCDCLS
+
+
+    GLCDPrint 0, 0,   "Great Cow BASIC"
+    GLCDPrint (0, 7, "Anobium 2019")
+    GLCDPrint (0, 14, "MPLAB Xpress Board")
+    GLCDPrint (94, 0, ChipNameStr )
+    GLCDPrint (64, 7, "I2C GLCD UC1601" )
+
+    wait 4 s
+    GLCDCLS
+
+    ' Prepare the static components of the screen
+    GLCDPrint ( 2,   1, "GLCDPrint")                               ; Print some text
+    GLCDPrint ( 48,  1, "@")                                       ; Print some more text
+    GLCDPrint ( 54,  1, ChipMhz)                                   ; Print chip speed
+    GLCDPrintString ( "Mhz")                                       ; Print some text
+    box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1                            ; Draw a box
+    box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1    ; Draw a box
+    Circle( GLCD_WIDTH/2+(GLCD_WIDTH/4),GLCD_HEIGHT/2,5)                                              ; Draw a circle
+    line 0,GLCD_HEIGHT-1,GLCD_WIDTH/2+(GLCD_WIDTH/4),(GLCD_HEIGHT/2)-5                                ; Draw a line
+    wait 2 s
+    GLCDCLS
+
+    DO forever
+
+       for CCount = 32 to 127
+
+            GLCDPrint ( 64 ,  0, "0x" )
+            GLCDPrintString ( hex(longNumber_E ) )                 ; Print a HEX string
+            GLCDPrintString ( hex(longNumber_U ) )                 ; Print a HEX string
+            GLCDPrintString ( hex(longNumber_H ) )                 ; Print a HEX string
+            GLCDPrintString ( hex(longNumber   ) )                 ; Print a HEX string
+            GLCDPrintString "  "                                   ; Pad for string
+
+            GLCDPrint ( 64 ,  7, pad(str(wordNumber), 10 ) )           ; Print a padded string
+            GLCDPrint ( 64 ,  15, pad(str(byteNumber), 5 ) )           ; Print a padded string
+
+
+            filledbox (1,1,8,8, GLCDBackground  )                      ; Draw a Box
+            box (0,0,9,9 )                                             ; Draw a Box
+
+            GLCDDrawChar(3, 1, CCount )                                ; Draw a character
+            outString = str( CCount )                                  ; Prepare a string
+            GLCDDrawString(12, 1, pad(outString,3) )                   ; Draw a string
+
+            filledbox 0,21,5,16, wordNumber                           ; Draw a filled box
+
+            Ellipse( 40,11,12,8  , longNumber xor 1)                   ; Draw a filled box
+            line 5,16,40,2                                             ; Draw a line
+
+                                                                       ; Do some simple maths
+            longNumber = longNumber + 1 : wordNumber = wordNumber + 1 : byteNumber++
+
+        NEXT
+
+    LOOP
+    end
