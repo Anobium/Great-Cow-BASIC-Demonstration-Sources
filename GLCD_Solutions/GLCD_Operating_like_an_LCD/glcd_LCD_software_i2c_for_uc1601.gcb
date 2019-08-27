@@ -1,0 +1,58 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''The display is 120*24 mm, with an active display surface of 4inches, and a 132*22 pixel resolution.
+'''The display is easy to interface, using an I2C and SPI type of communication.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date    27.08.2019
+'''********************************************************************************
+
+; ----- Configuration
+    #chip 16f18446, 32
+    #option explicit
+
+
+; ----- Define GLCD Hardware settings
+    #include <glcd.h>
+
+    #define GLCD_TYPE GLCD_TYPE_UC1601
+    #define GLCD_I2C_Address      0x70                   'I2C address
+    #define GLCD_RESET            portc.0                'Hard Reset pin connection
+    #define GLCD_PROTECTOVERRUN
+    #define GLCD_OLED_FONT
+
+; ----- Define Hardware settings
+
+    ' Define I2C settings - CHANGE PORTS
+    #define I2C_MODE Master
+    #define I2C_DATA PORTb.5
+    #define I2C_CLOCK PORTb.7
+    #define I2C_DISABLE_INTERRUPTS ON
+
+; ----- Define variables
+    'none
+; ----- Main program
+
+    'You can treat the GLCD like an LCD....
+    GLCDPrintStringLN "User the GLCD like an LCD...."
+    GLCDPrintStringLN "The GLCDPrintString commands...."
+    GLCDPrintString "Enjoy....."
+    wait 4 s
+
+    do
+              GLCDCLS
+              GLCDPrintStringLN "1. START DEMO"
+              GLCDPrintStringLN   "2. GLCD PrintStringLN"
+
+              'Print the letter X on the third line in the far right position
+              GLCDLocateString  127, 3
+              GLCDPrintString   "X"
+              wait 2 s
+
+              GLCDCLS
+              GLCDPrintStringLN "END DEMO"
+              wait 2 s
+
+    loop

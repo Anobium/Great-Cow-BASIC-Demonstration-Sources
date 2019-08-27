@@ -2,8 +2,7 @@
 '''--------------------------------------------------------------------------------------------------------------------------------
 '''This program is a simple GLCD demonstration of the UC1601 GLCD capabilities.
 '''This program draws lines, boxes, circles and prints strings and numbers.
-'''The UC1601 controller a small graphical OLED, suitable for a lot of various projects.
-'''The display is xx*xx mm, with an active display surface of xxinches , and a 132*22 pixel resolution.
+'''The display is 120*24 mm, with an active display surface of 4inches, and a 132*22 pixel resolution.
 '''The display is easy to interface, using an I2C and SPI type of communication.
 '''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
 '''@author  EvanV
