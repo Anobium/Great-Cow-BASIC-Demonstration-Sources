@@ -106,8 +106,10 @@
     Close_Transaction_UC1601
 
 
-    'A box to confirm we have the BMP
-    box 1,1,130,20
+    'Optionally, a box to confirm we have the BMP
+'    box 1,1,130,20
+     'Optionally, a box to remove the corner pixels.
+'     box 0,0,131,21,0
 
     'We have put the BMP on the GLCD, now update the GLCD using public methods.
     dim mypos as byte
