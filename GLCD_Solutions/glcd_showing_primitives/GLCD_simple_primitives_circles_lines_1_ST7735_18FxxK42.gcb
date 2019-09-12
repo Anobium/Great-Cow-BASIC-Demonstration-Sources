@@ -28,7 +28,7 @@
         #define ST7735TABCOLOR ST7735_BLACKTAB  'ST7735_BLACKTAB  can ST7735_GREENTAB or ST7735_REDTAB
 
 
-'************************ Setup SPI for the ST7736 **********************************************************
+'************************ Setup SPI for the ST7735 **********************************************************
 '************************ You can use hardware SPI, ensure you setup PPS, if required ***********************
 
         'Pin mappings for Software SPI
