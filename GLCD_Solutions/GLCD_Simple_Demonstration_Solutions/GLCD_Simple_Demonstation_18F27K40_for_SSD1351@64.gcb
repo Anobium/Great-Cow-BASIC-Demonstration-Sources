@@ -1,7 +1,7 @@
 '''A demonstration program for GCGB and GCB.
 '''--------------------------------------------------------------------------------------------------------------------------------
 '''This program is a simple GLCD demonstration of the SSD1351 GLCD capabilities.
-'''It is a nice graphical TFT LCD, suitable for a lot of various projects.
+'''It is a nice graphical OLED display, suitable for a lot of various projects.
 '''This program draws lines, boxes, circles and prints strings and numbers.
 '''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
 '''
