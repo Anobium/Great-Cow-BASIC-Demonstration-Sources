@@ -1,6 +1,6 @@
 '''A program  for GCGB and GCB.
 '''--------------------------------------------------------------------------------------------------------------------------------
-'''This program examines the GLCD devices and shows the registers on the GLCD
+'''This program examines the GLCD devices and shows the registers the GLCD itself
 '''
 '''This is a standalone program with no supporting libraries.
 '''
@@ -20,29 +20,25 @@
   #config FOSC=HSPLL_HS, PLLDIV=5, CPUDIV=OSC1_PLL2,  MCLRE=ON
 
     #include <glcd.h>
-    #define GLCD_TYPE GLCD_TYPE_ST7735  ' can be GLCD_TYPE_ST7735 OR GLCD_TYPE_ST7735R OR GLCD_TYPE_ST7735R_160_80
 
-    #define ST7735TABCOLOR ST7735_BLACKTAB  ' can be ST7735_BLACKTAB, ST7735_GREENTAB or ST7735_REDTAB.  Each tab is a different ST7735 configuration.
+    #define GLCD_TYPE GLCD_TYPE_ST7735R_160_80
+
+    #define ST7735TABCOLOR ST7735_GREENTAB  ' can be ST7735_BLACKTAB, ST7735_GREENTAB or ST7735_REDTAB.  Each tab is a different ST7735 configuration.
                                             ' you may have to try all three - if you do not know what chipset you have.
-
-    #define ST7735_YSTART 0
-    #define ST7735_XSTART 0
-
     #option Explicit
 
-
    'Pin mappings for SPI ST7735
-    #define GLCD_DC         portE.2              'Data/Command select
-    #define GLCD_CS         portB.2              'CS Chip select
-    #define GLCD_RESET      portC.6
-    #define GLCD_DO         portC.7              'SPI SDO (MOSI)
+    #define GLCD_DC         portE.2              'Data/Command select   Purple Wire
+    #define GLCD_CS         portB.2              'CS Chip select        White
+    #define GLCD_RESET      portC.6              '                      Gray
+    #define GLCD_DO         portC.7              'SPI SDO (MOSI)        Blue
     #define GLCD_DI         portC.7              'SPI SDI (MISO)  assume bi-directional DO/DI
-    #define GLCD_SCK        portB.1              'SPI SCK
+    #define GLCD_SCK        portB.1              'SPI SCK               Green
 
 
 '*************************** GLCD Specific setup ************************************************
 
-    GLCDRotate ( Landscape_rev )     ' optionally you can rotate the screen.
+'    GLCDRotate ( Landscape_rev )     ' optionally you can rotate the screen.
 
     dim reg_result as long
     reg_result=0
@@ -58,6 +54,7 @@
     GLCDPrintStringLn hex(reg_result)
     GLCDLocateString 0,2
 
+
     if ( reg_result_u = 0x89 and reg_result_h = 0xf0 ) then
         GLCDPrintString "ST7735R"
     end if
@@ -68,8 +65,11 @@
     GLCDPrint 4,50, ChipNameStr
     GLCDPrint 4,66, "@ "+ Str(ChipMHz)+"Mhz"
 
+
     line 0,0,2,2
     box 0,0,GLCDDeviceWidth, GLCDDeviceHeight, TFT_YELLOW
+    filledbox GLCDDeviceWidth-40, GLCDDeviceHeight-40,GLCDDeviceWidth, GLCDDeviceHeight, TFT_YELLOW
+    filledbox GLCDDeviceWidth-30, GLCDDeviceHeight-30,GLCDDeviceWidth, GLCDDeviceHeight, TFT_GREEN
     filledbox GLCDDeviceWidth-20, GLCDDeviceHeight-20,GLCDDeviceWidth, GLCDDeviceHeight, TFT_BLUE
     filledbox GLCDDeviceWidth-10, GLCDDeviceHeight-10,GLCDDeviceWidth, GLCDDeviceHeight, TFT_RED
 
@@ -86,6 +86,7 @@ sub  GLCDReadReg32( IN SPISendByte as byte, OUT SPITempOut as long )
     set ST7735_CS OFF;
 
     set ST7735_DC OFF;
+
 
     repeat 8
 
@@ -131,6 +132,7 @@ sub  GLCDReadReg32( IN SPISendByte as byte, OUT SPITempOut as long )
       rotate SPITempOut left
       SET GLCD_SCK OFF
     next
+
 
       set ST7735_CS ON
     Dir GLCD_DO out
