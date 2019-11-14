@@ -128,7 +128,7 @@
 
             GLCDForeground = ILI9341_WHITE
             GLCDfntDefaultsize = 1
-            GLCDPrint ( 2, 2, SPI1BAUD )
+            GLCDPrint ( 2, 2, "GLCDPrint" )
 
 
             GLCDForeground = ILI9341_WHITE
