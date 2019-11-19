@@ -1,0 +1,189 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demonstrates the using Great Cow BASIC to update the gauges.
+'''
+'''The setup is:
+'''     Include the <glcd.h>
+'''     Specify the Nextion.  #define GLCD_TYPE GLCD_TYPE
+'''     Set the device size. #define GLCD_WIDTH xxx and #define GLCD_HEIGHT yyy
+'''     Specify hardware or software serial. If using PPS you must setup the serial port.
+'''
+'''This demonstration assumes the Nextion design has:
+'''     1. Two gauge objects called 'z0' and 'z1'
+'''     2. Text text objects called 't0'
+'''     3. Gauges are show on an object page called 'gauges'.
+'''     If any of these assumptions are incorrect then change this program or rename the objects in the Nextion Editor.
+'''
+'''     Then, enjoy.
+'''
+'''
+'''@author     Evan Venn
+'''@licence    GPL
+'''@version    1.00
+'''@date       18.11.2019
+'''********************************************************************************
+
+
+
+
+
+' ----- Configuration
+    'Chip Settings.
+    #chip 16f18855, 32
+    #option explicit
+
+' ----- Set up the Nextion GLCD
+    #include <glcd.h>
+    #define GLCD_TYPE GLCD_TYPE_Nextion
+
+
+    ;Change the width and height to match the rotation in the Nextion Editor
+    #define GLCD_WIDTH  800   'could be 320 | 400 | 272 | 480 but any valid dimension will work.
+    #define GLCD_HEIGHT 480  'could be 240 | 480 | 800 but any valid dimension will work.
+
+' ----- End of set up for Nextion GLCD
+
+' ----- Set up for Hardware Serial
+    ;VERY IMPORTANT!!
+    ;The Nextion MUST be setup for 9600 bps.
+    #define USART_BAUD_RATE 9600
+    #define USART_BLOCKING
+    #define USART_DELAY 0
+
+
+
+' ----- Main program
+    #define Page0           0
+    #define Page1           1
+    #define TouchEvent      0x65
+
+    #define ToggleLEDButton 7
+    #define SelectPage1     1
+    #define SelectPage0     0
+
+    #define LED1            porta.0
+
+
+
+' ----- Setup the Interrupt Handler
+    On Interrupt UsartRX1Ready Call readUSART
+    ' Constants required for Buffer Ring
+    #define BUFFER_SIZE 64
+    #define bkbhit (next_in <> next_out)
+    ;Declare the required variables
+    Dim buffer( BUFFER_SIZE - 1 ) '
+    Dim next_in as byte: next_in = 0
+    Dim next_out as byte: next_out = 0
+
+
+' ----- Declare the variables we need for this tutorial
+    dim byteValueOutToNextion as byte
+    dim inComingByteFromNextion as byte
+    dim stringOutToNextion as string
+
+' ----- Set the LED as an put
+    dir LED1 out
+
+
+
+
+
+    'Create a string for page t3.object - this will state the type of microcontroller and the frequency of the microcontroller
+    #ifdef PIC
+        stringOutToNextion = "PIC"
+    #endif
+    #ifdef AVR
+        stringOutToNextion = ""
+    #endif
+    stringOutToNextion = stringOutToNextion + ChipNameStr + " @"+str(ChipMHz)+"Mhz"
+
+    displayPage0
+
+    do
+        'Update the n0.val object
+        byteValueOutToNextion = (byteValueOutToNextion + 1) % 101
+        GLCDUpdateObject_Nextion( "n0.val",  byteValueOutToNextion )
+        wait 50 ms
+
+        'react to incoming data, if there is none... do not do anything
+        do while bkbhit
+
+            'Has a Nextion Touch Event happended?
+            if bgetc = TouchEvent then
+                'Page 0 events
+                select case bgetc
+                    case Page0
+                        select case bgetc
+                            case SelectPage1
+                                'Send an instruction to 'page' change the Nextion
+                                GLCDSendOpInstruction_Nextion( "page",  "page1" )
+                            case ToggleLEDButton
+                                inComingByteFromNextion  = bgetc
+                                LED1 = inComingByteFromNextion
+                                if inComingByteFromNextion = 1 then
+                                    Repeat 3
+                                        GLCDUpdateObject_Nextion( "r0.bco",  [long]63488 )
+                                        GLCDUpdateObject_Nextion( "r0.pco",  [long]63488 )
+                                    end Repeat
+                                end if
+                        end select
+
+                    case Page1    'Page 1 events... there is only one, so, just send the page change and send out the string
+                        displayPage0
+                    end select
+
+            end if
+
+        loop
+
+    loop
+
+
+sub displayPage0
+
+    'Send an instruction to 'page' change the Nextion
+    GLCDSendOpInstruction_Nextion( "page",  "page0" )
+    'wait for display
+    wait 750 ms
+    'Update the page 1 t3.string
+    GLCDUpdateObject_Nextion( "page0.t3.txt", stringOutToNextion  )
+
+End sub
+
+    'Utility methods - these are required to support the Interrupt routines
+
+    Sub readUSART
+        dim temppnt as byte
+        buffer(next_in) = HSerReceive
+        temppnt = next_in
+        next_in = ( next_in + 1 ) % BUFFER_SIZE
+        if ( next_in = next_out ) then  ' buffer is full so overflow
+            next_in = temppnt
+        end if
+    End Sub
+
+    function bgetc
+        wait while !(bkbhit)
+        bgetc = buffer(next_out)
+        next_out=(next_out+1) % BUFFER_SIZE
+    end Function
+
+
+' ----- Set up Perpherial Support for Microchip PICs
+    'Generated by PIC PPS Tool for Great Cow Basic
+    'PPS Tool version: 0.0.5.11
+    'PinManager data: v1.55
+    '
+    'Template comment at the start of the config file   '
+    #startup InitPPS, 85
+    Sub InitPPS
+
+            'Module: EUSART
+            RXPPS = 0x0016    'RC6 > RX
+
+            'Module: EUSART
+            RC5PPS = 0x0010    'TX > RC5
+            TXPPS = 0x0015    'RC5 > TX (bi-directional)
+
+    End Sub
+    'Template comment at the end of the config file
