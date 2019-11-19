@@ -60,7 +60,7 @@
     'This manages the serial buffer on the bytes coming from the Nextion
     On Interrupt UsartRX1Ready Call readUSART
     ' Constants required for Buffer Ring
-    #define BUFFER_SIZE 64
+    #define BUFFER_SIZE 256
     #define bkbhit (next_in <> next_out)
     ;Declare the required variables
     Dim buffer( BUFFER_SIZE - 1 ) '
@@ -133,7 +133,7 @@
 
                                 'Tell the Nextion the LED is ON
                                 if inComingByteFromNextion = 1 then
-                                    Repeat 3
+                                    Repeat 5
                                         GLCDUpdateObject_Nextion( RADIOCOMPONENT+".bco",  [long]63488 )
                                         GLCDUpdateObject_Nextion( RADIOCOMPONENT+".pco",  [long]63488 )
                                     end Repeat
