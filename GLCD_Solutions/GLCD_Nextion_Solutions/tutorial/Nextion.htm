@@ -1,0 +1,871 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Nextion</title></head><body><span style="font-family: Arial;"><big><big><span style="font-weight: bold;">@PATRICK - Introduction and Nextion Editor piece completed. I have the GCB project on GitHub for you.</span><br style="font-weight: bold;">
+<br style="font-weight: bold;">
+<span style="font-weight: bold;">Evan</span></big></big><br>
+<br>
+<br>
+This step by step tutorial will show you:</span><br style="font-family: Arial;">
+<ul style="font-family: Arial;">
+  <li>How to use a Nextion display and Great Cow BASIC with Nextion displays.</li>
+  <li>How to use the Great Cow BASIC language with Nextion diskplays
+woyh Microchip PICs and AVRs 8bit microcontrollers including the
+Arduino range microcontrollers, with a common approach with a cross
+microcontroller solution.</li>
+</ul>
+<span style="font-family: Arial;">The solution you will create will show you.</span><br style="font-family: Arial;">
+<ul style="font-family: Arial;">
+  <li>How the Nextion display responds to Nextion Button Component
+release event to send instructions the microcontroller and the
+microcontroller will instruct the Nextion display to change page(s)</li>
+  <li>How the Nextion display on-screen Button Component press/release
+event send instructions to the microcontroller to control an LED</li>
+  <li>How the microcontroller update status Text Component on the Nextion display</li>
+  <li>How the microcontroller increments a variable and updates a Number Component on the Nextion display</li>
+  <li>How the Nextion display evaluates and update color status of a Text Component based on value of another Number Component</li>
+  <li>The Nextion screen when created, following the instructions below, look like this.</li>
+</ul>
+<br style="font-family: Arial;">
+<span style="font-family: Arial;"><br>
+When the Nextion display is operation you can be able to control an LED attached to the microcontroller (via a suitable resisitor) and the microcontroller will update the Nextion display.<br>
+<br>
+<br>
+So, enjoy this tutorial and thank you to Patrick for the inspiration.<br>
+<br>
+Evan</span><br style="font-family: Arial;">
+<strong style="font-weight: 700; font-family: Arial;"><br>
+</strong>
+<hr style="width: 100%; height: 2px; font-family: Arial;"><strong style="font-weight: 700; font-family: Arial;"><br>
+<br>
+<big><big>Nextion and Great Cow BASIC: step by step</big></big></strong><br>
+<br>
+<span style="font-family: Arial;">You will create a Nextion screen similar to this and integrate with a microcontroller.</span><br>
+<br style="font-family: Arial;">
+<img style="width: 489px; height: 293px; font-family: Arial;" alt="Nextion Display" src="file:///C:/Users/admin/Desktop/NextionDemo002.JPG"><br style="font-family: Arial;">
+<span style="font-family: Arial;"><br>
+This tutorial will explain:</span><br style="font-family: Arial;">
+<ul style="font-family: Arial;">
+  <li>How to use a Nextion display with Great Cow BASIC.</li>
+  <li>How Great Cow BASIC can support many Microchip PICs and AVRs with
+a portable langauge that is simply to use with the Nextion display.</li>
+  <li>How to ensure the demonstration works for you by hilighting the
+critical activities that are mandated to make the tuturial work for you.</li>
+  <li>How you adapt for your needs.</li>
+</ul>
+
+  
+
+<span style="color: rgb(58, 58, 58); font-family: Arial; font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">What you will understand following the tutorial</span><br style="font-family: Arial;">
+<span style="color: rgb(58, 58, 58); font-family: Arial; font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;"></span>
+<ul style="font-family: Arial;">
+  <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How
+the Nextion display responds to Nextion Button Component release event
+to send instructions the microcontroller and the microcontroller will
+instruct the Nextion display to change page(s)</span></li>
+  <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How
+the Nextion display on-screen Button Component press/release event send
+instructions to the microcontroller to control an LED</span></li>
+  <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How the microcontroller update status Text Component on the Nextion display</span></li>
+  <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How the microcontroller increments a variable and updates a Number Component on the Nextion display</span></li>
+  <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How the Nextion display evaluates and update color status of a Text Component based on value of another Number Component</span></li>
+  <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How to ensure the Nextion display and the microcontroller communicate correctly</span></li>
+</ul>
+<br style="font-family: Arial;">
+<hr style="width: 100%; height: 2px; font-family: Arial;"><br style="font-family: Arial;">
+<span style="color: rgb(58, 58, 58); font-family: Arial; font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;"></span><span style="font-family: Arial;">Step 1 - Install the software required.&nbsp; </span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<div style="margin-left: 40px; font-family: Arial;">
+<table style="text-align: left; width: 988px;" border="0" cellpadding="2" cellspacing="2">
+
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; width: 49px;"><br>
+      </td>
+      <td style="vertical-align: top; width: 412px; font-weight: bold;">Activity
+      </td>
+      <td style="vertical-align: top; width: 72px; font-weight: bold;">Mandated<br>
+      </td>
+<td style="vertical-align: top; width: 422px; font-weight: bold;">Comment<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 49px;">1<br>
+      </td>
+      <td style="vertical-align: top; width: 412px;">Download and install Great Cow BASIC toolchain for your specific operating system<br>
+      </td>
+      <td style="vertical-align: top; width: 72px;">Yes<br>
+      </td>
+<td style="vertical-align: top; width: 422px;">We need this software installed and operational before we start. <br>
+      <br>
+See <a href="https://sourceforge.net/projects/gcbasic/">https://sourceforge.net/projects/gcbasic/</a><br>
+
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 49px;">2<br>
+      </td>
+      <td style="vertical-align: top; width: 412px;">Download and install the Nextion Editor<br>
+      </td>
+      <td style="vertical-align: top; width: 72px;">Yes<br>
+      </td>
+<td style="vertical-align: top; width: 422px;">See <a href="https://nextion.tech/">https://nextion.tech/</a> and then select the download options(s).
+      </td>
+    </tr>
+    
+  </tbody>
+</table>
+
+</div>
+<br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-family: Arial;">Step 2 - Choose your microcontroller
+and ensure you can program from Great Cow BASIC.&nbsp; There are many
+resources but the simple choices are to use an Arduino UNO or one of
+the many </span><a style="font-family: Arial;" href="https://www.microchip.com/DevelopmentTools/Listing/9cd5ea3c-b05c-4a84-ad38-bd6c6506421e">Microchip Xpress boards</a><span style="font-family: Arial;">.&nbsp; The tutorial will use an Arduino UNO and an </span><a style="font-family: Arial;" href="https://www.microchip.com/DevelopmentTools/ProductDetails/PartNO/DM164140">Microchip&nbsp; Xpress Evaluation&nbsp; Board</a><span style="font-family: Arial;"> which uses a PIC6F18855. </span><br style="font-family: Arial;">
+
+
+<br style="font-family: Arial;">
+
+
+<div style="margin-left: 40px; font-family: Arial;">
+<table style="text-align: left; width: 988px;" border="0" cellpadding="2" cellspacing="2">
+
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; width: 43px;"><br>
+      </td>
+      <td style="vertical-align: top; width: 236px; font-weight: bold;">Activity
+      </td>
+      <td style="vertical-align: top; width: 312px; font-weight: bold;">Mandated<br>
+      </td>
+<td style="vertical-align: top; width: 364px; font-weight: bold;">Comment<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 43px;">1<br>
+      </td>
+      <td style="vertical-align: top; width: 236px;">Test your Great Cow BASIC installation.&nbsp; <br>
+</td>
+      <td style="vertical-align: top; width: 312px;">Do this, or download the latest from GitHub, see activity 3.2<br>
+      </td>
+<td style="vertical-align: top; width: 364px;">The following Help page has a GIF that shows how to set up the programmers for the Arduino UNO and other programmers.<br>
+      <a href="http://gcbasic.sourceforge.net/help/_using_great_cow_basic.html">http://gcbasic.sourceforge.net/help/_using_great_cow_basic.html</a><br>
+      <br>
+If you need help on this - the <a href="https://sourceforge.net/projects/gcbasic/">https://sourceforge.net/projects/gcbasic/</a> forum is a great friendly resource.
+</td>
+    </tr>
+    
+    
+  </tbody>
+</table>
+
+</div>
+
+
+<br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-family: Arial;">Step 3 - Use an existing resource to start your project  </span><br style="font-family: Arial;">
+
+<br style="font-family: Arial;">
+
+<div style="margin-left: 40px; font-family: Arial;">
+<table style="text-align: left; width: 987px; height: 350px;" border="0" cellpadding="2" cellspacing="2">
+
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; width: 51px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold; width: 219px;">Activity &nbsp; &nbsp; &nbsp;&nbsp;
+      </td>
+      <td style="vertical-align: top; width: 244px; font-weight: bold;">Mandated<br>
+      </td>
+<td style="vertical-align: top; width: 509px; font-weight: bold;">Comment<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 51px; height: 95px;">1<br>
+      </td>
+      <td style="vertical-align: top; width: 219px; height: 95px;">Open the tutorial code within your Great Cow BASIC installatio<br>
+</td>
+      <td style="vertical-align: top; width: 244px; height: 95px;">Do this, or download the latest from GitHub, see activity 3.2<br>
+      </td>
+<td style="vertical-align: top; width: 509px; height: 95px;">The tutorial in located in your .. GreatCowBasic\Demos\glcd_solutions\glcd_nextion_solutions\tutorial sub folder<br>
+</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 51px; height: 191px;">2<br>
+      </td>
+      <td style="vertical-align: top; width: 219px; height: 191px;">Download the tutorials from <a href="https://github.com/Anobium/Great-Cow-BASIC-Demonstration-Sources/tree/master/GLCD_Solutions/GLCD_Nextion_Solutions/tutorial">GitHub</a>.<br>
+      <br>
+ Save the files to a location you will remember on your hard drive.<br>
+      </td>
+      <td style="vertical-align: top; width: 244px; height: 191px;">Do this, or use the stock demos, see activity 3.1
+      </td>
+<td style="vertical-align: top; width: 509px; height: 191px;">See <a href="https://nextion.tech/">https://nextion.tech/</a> and then select the download options(s).
+      </td>
+    </tr>
+    
+  </tbody>
+</table>
+
+</div>
+
+<br style="font-family: Arial;">
+
+<br style="font-family: Arial;">
+<span style="font-family: Arial;">Step 4 - The Nextion HMI</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-family: Arial;">In this step you will create the
+Nextion solution using the Nextion Editor.&nbsp; We will be using a
+Nextion NX8048P070 but you can you use many of the Nextion displays -
+you will see how to adapt with each activity.</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+
+
+<div style="margin-left: 40px; font-family: Arial;">
+<table style="text-align: left; width: 988px;" border="0" cellpadding="2" cellspacing="2">
+
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; width: 68px;"><br>
+      </td>
+      <td style="vertical-align: top; width: 416px; font-weight: bold;">Activity
+      </td>
+      <td style="vertical-align: top; width: 72px; font-weight: bold;">Mandated<br>
+      </td>
+<td style="vertical-align: top; width: 422px; font-weight: bold;">Comment<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 68px;">1<br>
+      </td>
+      <td style="vertical-align: top; width: 416px;">Gather the resources will be using.&nbsp; <br>
+      <br>
+You may use a&nbsp; picture resource for the Nextion display
+background.&nbsp; The picture resource shoould match the size of your
+Nextion display<br>
+</td>
+      <td style="vertical-align: top; width: 72px;">No</td>
+<td style="vertical-align: top; width: 422px;">The picture is optional as you can set the bacground colo</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">2<br>
+      </td>
+      <td style="vertical-align: top;">Start the Nextion Editor,<br>
+Create a new project. Name the project 'Tutorial' and select `Save`.<br>
+
+      </td>
+      <td style="vertical-align: top;">Yes<br>
+      </td>
+      <td style="vertical-align: top;">:You will be presented with a setting dialog to choose your device.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">3<br>
+      </td>
+      <td style="vertical-align: top;">Select BASIC, Enhangced or Intelligent,<br>
+Then, select your specific device type,<br>
+      <br>
+Then, select the `Display` tab (if you press OK, you will be presented
+with the `Display` tab).&nbsp; Select the "Display Direction".<br>
+      <br>
+Then, press `OK`<br>
+      <br>
+ </td>
+      <td style="vertical-align: top;">Yes<br>
+      </td>
+      <td style="vertical-align: top;">This activity is specific to your device type.<br>
+      <br>
+      <span style="font-weight: bold; font-style: italic;">Page 0</span> is created as the default page Component.&nbsp;&nbsp; All Components discussed will be in BOLD and Italics.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">4<br>
+      </td>
+      <td style="vertical-align: top;">We need another resource. A font resource.<br>
+      <br>
+Create a&nbsp; font resource. An 8×16 ASCII ZI font file.&nbsp; Create
+this font using the Nextion Editor.&nbsp; Select Tools/Font
+Generator.&nbsp; Follow the dialog to create the font resource, save
+and finally select `Yes` when requested "Add the generated
+font?".&nbsp; C;lose the dialog,<br>
+      </td>
+      <td style="vertical-align: top;">Yes<br>
+      </td>
+      <td style="vertical-align: top;">You will require this font.<br>
+      <br>
+If you have a suitable Nextion font then skip this activity but simply add the font to the project using the <br>
+      <br>
+To review the font installed - select the resource interface (below the `Toolbox`, selecting the `Fonts` tab at the bottom.<br>
+      </td>
+    </tr>
+<tr>
+      <td style="vertical-align: top; width: 68px;">5<br>
+      </td>
+      <td style="vertical-align: top; width: 416px;">Add the picture resource for <span style="font-weight: bold; font-style: italic;">Page 0</span> background.<br>
+      <br>
+Select the resource interface and then select the `Picture` tab. <br>
+a) in the Picture tab, click `+`<br>
+b) Select your picture file and click Open<br>
+The selected picture is now added as "Picture resource ID:0"<br>
+      <br>
+</td>
+      <td style="vertical-align: top; width: 72px;">No<br>
+</td>
+<td style="vertical-align: top; width: 422px;">This is optional.<br>
+      <br>
+      <br>
+</td>
+    </tr><tr>
+      <td style="vertical-align: top;">6<br>
+      </td>
+      <td style="vertical-align: top;">Add the picture to the page.&nbsp; Setting the Page <span style="font-weight: bold; font-style: italic;">Page0</span> background to "Picture resource ID:0"<br>
+      <br>
+a) Select the <span style="font-weight: bold; font-style: italic;">page0</span> attribute ".sta" value dropdown, it will be the default value of "solid color". &nbsp; Select the dropdown option "image".<br>
+&nbsp;<br>
+b) Select attribute ".pic" then "browse" and select Picture resource "ID:0" and press `OK`.&nbsp; <br>
+      <br>
+The picture will be inserted as the page background.<br>
+      </td>
+      <td style="vertical-align: top;">No<br>
+      </td>
+      <td style="vertical-align: top;">This is optional.<span style="font-family: Courier New,Courier,monospace;">r0.bco=0</span><br style="font-family: Courier New,Courier,monospace;">
+
+
+      <span style="font-family: Courier New,Courier,monospace;">r0.pco=0</span></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">7<br>
+      </td>
+      <td style="vertical-align: top;">In the Event Pane, Preinitialize Event add the Nextion event instuctions.<br>
+
+      <br>
+
+      <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">bauds=9600</span><br>
+      </div>
+
+      <br>
+
+The value of the baud rate will need to match the microcontroller.<br>
+
+      </td>
+      <td style="vertical-align: top;">Yes<br>
+      </td>
+      <td style="vertical-align: top;">If the baud rate does not match there will be no communication, so, this is a critical step.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">8<br>
+      </td>
+      <td style="vertical-align: top;">Add the font, if you have not added when you created the font ZI file.<br>
+      <br>
+a) In the Font Pane click +<br>
+b) select your 8×16 ZI Font file (*.zi) and click Open<br>
+The Selected<span style="font-family: Courier New,Courier,monospace;">r0.bco=0</span><br style="font-family: Courier New,Courier,monospace;">
+
+
+      <span style="font-family: Courier New,Courier,monospace;">r0.pco=0</span> ZI Font is now added as "Font Resource ID:0"<br>
+      <br>
+      </td>
+      <td style="vertical-align: top;">No<br>
+      </td>
+      <td style="vertical-align: top;">'Page 1 events... there is only one, so, just change page<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">9<br>
+      </td>
+      <td style="vertical-align: top;">Add a Button Component.&nbsp; Use the Toolbox Pane&nbsp; to create the Button Component..<br>
+      <br>
+Edit the attibutes as follows:<br>
+      <br>
+a) Ensure the attribute "objname" is "<span style="font-weight: bold; font-style: italic;">b0</span>"<br>
+b) Change the attribute "txt" to "Page1"<br>
+c) Set attribute "x" to "700"<br>
+d) Set attribute "y" to "430"<br>
+      <br>
+then, in the Event Pane <br>
+e) Select the  Touch Release Event tab and check "Send Component ID" checkbox.<br>
+      <br>
+      </td>
+      <td style="vertical-align: top;">Yes<br>
+      </td>
+      <td style="vertical-align: top;">The "x" and "y" attributes are specific to your Nextion display.&nbsp; A quick way of setting this is to drag the Button Component to bottom right position.<br>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4" rowspan="1" style="vertical-align: top;">You&nbsp; now have three Components that need to aligned - to look nice.<br>
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">10<br>
+      </td>
+      <td style="vertical-align: top;">Add a Text Component. Use the Toolbox Pane&nbsp; to create the Text Component..<br>
+
+      <br>
+
+Edit the attibutes as follows:<br>
+      <br>
+a) Ensure the attribute "objname" is "<span style="font-weight: bold; font-style: italic;">t0</span>"<br>
+b) Set attribute "txt_maxl" to "15"... Set this before the next attribute<br>
+
+c) Change the attribute "txt" to "MCU Value"<br>
+
+d) Set attribute "x" to "470"<br>
+
+e) Set attribute "y" to "330"<br>
+f)  Set attribute "w" to "150"<br>
+g) Set attribute "h" to "30"<br>
+      <br>
+      </td>
+      <td style="vertical-align: top;">Yes<br>
+      </td>
+      <td style="vertical-align: top;">The "x","y","w" and "h" attributes are specific to your Nextion display.&nbsp; A quick way of setting this is to drag the Text Component to bottom right position and then resize the Text Component.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">11<br>
+      </td>
+      <td style="vertical-align: top;">Add a Number Component. Use the Toolbox Pane&nbsp; to create the Number&nbsp; Component..<br>
+
+
+      <br>
+
+
+Edit the attibutes as follows:<br>
+
+      <br>
+
+a) Ensure the attribute "objname" is "<span style="font-weight: bold; font-style: italic;">n0</span>"<br>
+b) Set attribute "x" to "630"<br>
+
+
+c) Set attribute "y" to "330"<br>
+
+d)Set attribute "w" to "60"<br>
+e) Set attribute "h" to "30"<br>
+      <br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">The "x","y","w" and "h" attributes are specific to your Nextion
+display.&nbsp; A quick way of setting this is to drag the Number Component and then resize the Number Component.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">12<br>
+      </td>
+      <td style="vertical-align: top;">Add Text Component. Use the Toolbox Pane&nbsp; to create the Text Component..<br>
+
+
+      <br>
+
+
+Edit the attibutes as follows:<br>
+
+      <br>
+
+a) Ensure the attribute "objname" is "<span style="font-weight: bold; font-style: italic;">t2</span>".&nbsp; <span style="text-decoration: underline;">Get this attribure correct.</span><br>
+b) Ensure the attribute "xcen" is "Right"<br>
+c) Set attribute "txt_maxl" to "10"... Set this before the next attribute<br>
+
+
+d) The attribute "txt" will be "nextxt".&nbsp; Leave as is.<br>
+
+
+e) Set attribute "x" to "700"<br>
+
+
+f) Set attribute "y" to "330"<br>
+
+g)  Set attribute "w" to "100"<br>
+
+h) Set attribute "h" to "30"<br>
+      <br>
+      </td>
+      <td style="vertical-align: top;">Yes<br>
+      </td>
+      <td style="vertical-align: top;">The "x","y","w" and "h" attributes are specific to your Nextion
+display.&nbsp; A quick way of setting this is to drag the Text Component
+and then resize the Text Component.<br>
+      <br>
+The attribute "objname" is critical at this step.<br>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4" rowspan="1" style="vertical-align: top;">You&nbsp; now have three Components that need to aligned - to look nice.<br>
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">13<br>
+      </td>
+      <td style="vertical-align: top;">Add a Timer Component.&nbsp; Use the Toolbox Pane&nbsp; to create the Timer Component..<br>
+
+
+
+      <br>
+When creating a Timer Component is added in the middle of the UI.&nbsp;
+But, a quick way to locate the attributes of the timer is to use the
+Attribute Pane and select the timer.<br>
+      <span style="font-family: Courier New,Courier,monospace;">r0.bco=0</span><br style="font-family: Courier New,Courier,monospace;">
+
+
+      <span style="font-family: Courier New,Courier,monospace;">r0.pco=0</span><br>
+
+
+
+Edit the attibutes as follows:<br>
+      <br>
+
+a) Ensure the attribute "objname" is "<span style="font-weight: bold; font-style: italic;">tm0</span>"<br>
+b) Set the attribure "tim" is "50"<br>
+      <br>
+Then, <br>
+      <br>
+c) In the Event Pane add the following Nextion code.<br>
+      <br>
+      <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">if(n0.val&gt;50)</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">{</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp; n0.bco=63488</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp; t2.txt="Too Hot!"</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">}else</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">{</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp; n0.bco=2016</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp; t2.txt="Normal"</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">}</span><br>
+      </div>
+      <br>
+      </td>
+      <td style="vertical-align: top;">Yes<br>
+      </td>
+      <td style="vertical-align: top;">This critical timer will update the text Component created at step 12.<br>
+      <br>
+63488 equates to RED<br>
+2016 equates to GREEN<br>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4" rowspan="1" style="vertical-align: top;">You can, optionally, "Debug" the project at this step.&nbsp; You should have no errors.<span style="font-style: italic;"><span style="font-weight: bold;"></span></span><br>
+      <br>
+      <div style="margin-left: 40px;">If you enter "n0.val=100" in the `Instruction Input Area" the obejct <span style="font-weight: bold; font-style: italic;">n0&nbsp; </span>will change to RED!!<br>
+      <br>
+Exit the debugger.<br>
+      <br>
+      </div>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">14<br>
+      </td>
+      <td style="vertical-align: top;">Add a Button Component.&nbsp; Use the Toolbox Pane&nbsp; to create the Button Component..<br>
+
+
+
+
+      <br>
+      <br>
+
+
+
+
+Edit the attibutes as follows:<br>
+      <br>
+
+a) Ensure the attribute "objname" is "<span style="font-style: italic;"><span style="font-weight: bold;">b1</span></span><span style="font-weight: bold; font-style: italic;"></span>".&nbsp; <span style="text-decoration: underline;">Get this attribute correct!</span><br>
+b) Set attribute "txt_maxl" to "10"... Set this before the next attribute<br>
+
+
+
+c) The attribute "txt" will be "Toggle LED".<br>
+
+
+
+d) Set attribute "x" to "470"<br>
+e) Set attribute "y" to "380"<br>
+
+
+f)Set attribute "w" to "170"<br>
+
+
+g) Set attribute "h" to "30"<br>
+      <br>
+Then, In the Event Pane select the following:<br>
+      <br>
+h) in Touch Press Event tab. Check the "Send Component ID" checkbox <br>
+i) In the Touch Release Event tab. Check Send Component ID checkbox<br>
+j)&nbsp; Add the following Nextion code, to always set a Radio
+Component to black.&nbsp; The Radio Component will be created at step
+16.<br>
+      <br>
+      <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">r0.bco=0</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">r0.pco=0</span><br>
+      </div>
+
+      <br>
+      </td>
+      <td style="vertical-align: top;">Yes<br>
+      </td>
+      <td style="vertical-align: top;">The "x","y","w" and "h" attributes are specific to your Nextion
+display.&nbsp; A quick way of setting this is to drag the Button Component
+and then resize the Button Component.<br>
+
+      <br>
+      <br>
+The Event Pane actions are critical.&nbsp; Selecting the check boxes
+will send key information to the microcontroller when you Press and
+Release the button.<br>
+
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">15<br>
+      </td>
+      <td style="vertical-align: top;">Note the Button Component "id" created in activity 14.&nbsp; <br>
+      <br>
+This tutorial assumes the Button Component "id" equals 6.&nbsp; But, you will need this value later!<br>
+      <br>
+      </td>
+      <td style="vertical-align: top;">Yes<br>
+      </td>
+      <td style="vertical-align: top;">This Button Component "id" value will be needed in our microcontroller program.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">16<br>
+      </td>
+      <td style="vertical-align: top;">Add a Radio Component.&nbsp; Use the Toolbox Pane&nbsp; to create the Radio Component..<br>
+
+
+
+
+
+      <br>
+
+      <br>
+
+
+
+
+
+Edit the attibutes as follows:<br>
+
+      <br>
+
+
+a) Ensure the attribute "objname" is "<span style="font-style: italic;"><span style="font-weight: bold;">r0</span></span><span style="font-weight: bold; font-style: italic;"></span>".&nbsp; <span style="text-decoration: underline;">Get this attribute correct!</span><br>
+
+b) Set attribute "bco" to "63488"<br>
+
+c) Set attribute "pco" to "0"<br>
+d) Set attribute "x" to "670"<br>
+
+e) Set attribute "y" to "380"<br>
+
+
+
+f)Set attribute "w" to "30"<br>
+
+
+
+g) Set attribute "h" to "30"<br>
+      <br>
+      </td>
+      <td style="vertical-align: top;">Yes<br>
+      </td>
+      <td style="vertical-align: top;">This Radio Component will be updated from the microcontroller.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">17<br>
+      </td>
+      <td style="vertical-align: top;">Add Text Component. Use the Toolbox Pane&nbsp; to create the Text Component..<br>
+
+
+
+      <br>
+
+
+
+Edit the attibutes as follows:<br>
+
+
+      <br>
+
+
+a) Ensure the attribute "objname" is "<span style="font-weight: bold; font-style: italic;">t1"</span>.&nbsp; <span style="text-decoration: underline;">Get this attribure correct.</span><br>
+
+b) Ensure the attribute "xcen" is "Right"<br>
+
+c) Set attribute "txt_maxl" to "40"... Set this before the next attribute<br>
+
+
+
+d) The attribute "txt" will be "Microcontroller Communications"<br>
+
+
+
+e) Using drag and drop place the Text Component at a position below the top right corner and adjust the width.<br>
+      <br>
+      </td>
+      <td style="vertical-align: top;">Optional<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">18<br>
+      </td>
+      <td style="vertical-align: top;">Add Text Component. Use the Toolbox Pane&nbsp; to create the Text Component..<br>
+
+
+
+
+      <br>
+
+
+
+
+Edit the attibutes as follows:<br>
+
+
+
+      <br>
+
+
+
+a) Ensure the attribute "objname" is "<span style="font-weight: bold; font-style: italic;">t3"</span>.&nbsp; <span style="text-decoration: underline;">Get this attribure correct.</span><br>
+
+
+b) Ensure the attribute "xcen" is "Right"<br>
+
+
+c) Set attribute "txt_maxl" to "30"... Set this before the next attribute<br>
+
+
+
+
+d) The attribute "txt" will be "MCU type and frequency"<br>
+
+
+
+
+e) Using drag and drop place the Text Component at a position below the top right corner and adjust the width.<br>
+      <br>
+
+      </td>
+      <td style="vertical-align: top;">Yes<br>
+      </td>
+      <td style="vertical-align: top;">This Text Component will be updated from the microcontroller.<br>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4" rowspan="1" style="vertical-align: top;">Now create a second page and one component.<br>
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">19<br>
+      </td>
+      <td style="vertical-align: top;">Add a New Page. Use the Page Pane to create a second page.<br>
+      <br>
+Add new Page "page1" <br>
+a) In the Page pane click Add icon<br>
+a) Set the&nbsp; attribute ".bco" as&nbsp; 0<br>
+      <br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">20<br>
+      </td>
+      <td style="vertical-align: top;">Add a Button Component.&nbsp; Use the Toolbox Pane&nbsp; to create the Button Component..<br>
+
+      <br>
+
+Edit the attibutes as follows:<br>
+
+      <br>
+
+a) Ensure the attribute "objname" is "<span style="font-weight: bold; font-style: italic;">b0</span>"<br>
+
+b) Change the attribute "txt" to "Back"<br>
+
+c) Using drap and drop place the Button Component at the botton right position.<br>
+      <br>
+Then, In the Event Pane select the following:<br>
+
+      <br>
+
+h) in Touch Release Event tab. Check the "Send Component ID" checkbox <br>
+      <br>
+      </td>
+      <td style="vertical-align: top;">Yes<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4" rowspan="1" style="vertical-align: top;">To return to review <span style="font-style: italic;"><span style="font-weight: bold;">"</span></span><span style="font-weight: bold; font-style: italic;">page0</span>" double click <span style="font-style: italic;"><span style="font-weight: bold;">"</span></span><span style="font-weight: bold; font-style: italic;">page0</span>" in the Page Pane.<br>
+      <br>
+Save the project.<br>
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">21</td>
+      <td style="vertical-align: top;">Preparing your microSD card<br>
+a) ensure the microSD card is embedded compatible<br>
+(I have good success with Kingston Class 10 HC 8GB microSDs)<br>
+b) ensure the microSD is format under Windows as FAT32<br>
+c) ensure there are no *.tft files on the microSD card<br>
+      <br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">22<br>
+      </td>
+      <td style="vertical-align: top;">Install the TFT to the Nextion device<br>
+In the Nextion Editor File Menu<br>
+a) Click Open Build Folder<br>
+b) copy Tutorial.tft to your prepared embedded microSD card<br>
+c) Turn power to the Nextion off.<br>
+d) Insert the microSD card with Tutorial.tft into Nextion device<br>
+e) Turn power to the Nextion on<br>
+f) Wait for Nextion to begin uploading and complete uploading<br>
+When Nextion completes uploading and states success<br>
+g) Turn power to the Nextion off<br>
+h) Remove the microSD card from the Nextion device<br>
+i) Turn the power to the Nextion on<br>
+j) Wait a few moments to ensure all firmware upgrades complete<br>
+At this point the Tutorial HMI should be running on the Nextion<br>
+      <br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+
+    
+  </tbody>
+</table>
+
+</div>
+
+
+<br style="font-family: Arial;">
+
+
+<br style="font-family: Arial;">
+
+<br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="color: rgb(58, 58, 58); font-family: Arial; font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;"></span></body></html>
