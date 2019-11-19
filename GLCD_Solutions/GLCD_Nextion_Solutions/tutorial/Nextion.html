@@ -1,5 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Nextion</title></head><body><span style="font-family: Arial;"><big><big><span style="font-weight: bold;">@PATRICK - Introduction and Nextion Editor piece completed. I have the GCB project on GitHub for you.</span><br style="font-weight: bold;">
+<html><head>
+
+<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Nextion</title></head><body><span style="font-family: Arial;"><big><big><span style="font-weight: bold;">@PATRICK - Introduction and Nextion Editor piece completed. I have the GCB project on GitHub for you.</span><br style="font-weight: bold;">
 <br style="font-weight: bold;">
 <span style="font-weight: bold;">Evan</span></big></big><br>
 <br>
@@ -26,7 +28,9 @@ event send instructions to the microcontroller to control an LED</li>
 </ul>
 <br style="font-family: Arial;">
 <span style="font-family: Arial;"><br>
-When the Nextion display is operation you can be able to control an LED attached to the microcontroller (via a suitable resisitor) and the microcontroller will update the Nextion display.<br>
+When the Nextion display is operation you can be able to control an LED
+attached to the microcontroller (via a suitable resisitor) and the
+microcontroller will update the Nextion display.<br>
 <br>
 <br>
 So, enjoy this tutorial and thank you to Patrick for the inspiration.<br>
@@ -57,10 +61,12 @@ critical activities that are mandated to make the tuturial work for you.</li>
 <span style="color: rgb(58, 58, 58); font-family: Arial; font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">What you will understand following the tutorial</span><br style="font-family: Arial;">
 <span style="color: rgb(58, 58, 58); font-family: Arial; font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;"></span>
 <ul style="font-family: Arial;">
+  
   <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How
 the Nextion display responds to Nextion Button Component release event
 to send instructions the microcontroller and the microcontroller will
 instruct the Nextion display to change page(s)</span></li>
+
   <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How
 the Nextion display on-screen Button Component press/release event send
 instructions to the microcontroller to control an LED</span></li>
@@ -346,6 +352,16 @@ The picture will be inserted as the page background.<br>
       <br>
 
 The value of the baud rate will need to match the microcontroller.<br>
+      <br>
+Also, in the Event Pane, Postnitialize Event add the Nextion event instuctions.<br>
+
+
+      <br>
+      <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">r0.bco=0</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">r0.pco=0</span><br>
+      </div>
+
+      
 
       </td>
       <td style="vertical-align: top;">Yes<br>
@@ -384,12 +400,15 @@ c) Set attribute "x" to "700"<br>
 d) Set attribute "y" to "430"<br>
       <br>
 then, in the Event Pane <br>
-e) Select the  Touch Release Event tab and check "Send Component ID" checkbox.<br>
+e) Select the  Touch Press Event tab and check "Send Component ID" checkbox.<br>
       <br>
       </td>
       <td style="vertical-align: top;">Yes<br>
       </td>
-      <td style="vertical-align: top;">The "x" and "y" attributes are specific to your Nextion display.&nbsp; A quick way of setting this is to drag the Button Component to bottom right position.<br>
+      <td style="vertical-align: top;">The
+"x" and "y" attributes are specific to your Nextion display.&nbsp; A
+quick way of setting this is to drag the Button Component to bottom
+right position.<br>
       </td>
     </tr>
     <tr>
@@ -420,7 +439,10 @@ g) Set attribute "h" to "30"<br>
       </td>
       <td style="vertical-align: top;">Yes<br>
       </td>
-      <td style="vertical-align: top;">The "x","y","w" and "h" attributes are specific to your Nextion display.&nbsp; A quick way of setting this is to drag the Text Component to bottom right position and then resize the Text Component.<br>
+      <td style="vertical-align: top;">The
+"x","y","w" and "h" attributes are specific to your Nextion
+display.&nbsp; A quick way of setting this is to drag the Text
+Component to bottom right position and then resize the Text Component.<br>
       </td>
     </tr>
     <tr>
@@ -781,7 +803,7 @@ a) Set the&nbsp; attribute ".bco" as&nbsp; 0<br>
     <tr>
       <td style="vertical-align: top;">20<br>
       </td>
-      <td style="vertical-align: top;">Add a Button Component.&nbsp; Use the Toolbox Pane&nbsp; to create the Button Component..<br>
+      <td style="vertical-align: top; outline-color: navy ! important; outline-style: dashed ! important; outline-width: 2px ! important;">Add a Button Component.&nbsp; Use the Toolbox Pane&nbsp; to create the Button Component..<br>
 
       <br>
 
@@ -799,7 +821,7 @@ Then, In the Event Pane select the following:<br>
 
       <br>
 
-h) in Touch Release Event tab. Check the "Send Component ID" checkbox <br>
+h) in Touch Press Event tab. Check the "Send Component ID" checkbox <br>
       <br>
       </td>
       <td style="vertical-align: top;">Yes<br>
