@@ -1,32 +1,45 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
 
-<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Nextion</title></head><body><span style="font-family: Arial;"><big><big><span style="font-weight: bold;">@PATRICK - Introduction and Nextion Editor piece completed. I have the GCB project on GitHub for you.</span><br style="font-weight: bold;">
-<br style="font-weight: bold;">
-<span style="font-weight: bold;">Evan</span></big></big><br>
-<br>
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Nextion</title></head><body>
+<strong style="font-weight: 700; font-family: Arial;"><big><big>Nextion Displays and Great Cow BASIC</big></big></strong><br>
+<span style="font-family: Arial;">
 <br>
 This step by step tutorial will show you:</span><br style="font-family: Arial;">
+
 <ul style="font-family: Arial;">
-  <li>How to use a Nextion display and Great Cow BASIC with Nextion displays.</li>
+
+  <li>How to use a Nextion display and Great Cow BASIC with Nextion
+displays.</li>
   <li>How to use the Great Cow BASIC language with Nextion diskplays
 woyh Microchip PICs and AVRs 8bit microcontrollers including the
 Arduino range microcontrollers, with a common approach with a cross
 microcontroller solution.</li>
 </ul>
-<span style="font-family: Arial;">The solution you will create will show you.</span><br style="font-family: Arial;">
+
+<span style="font-family: Arial;">The solution you will create will
+show you.</span><br style="font-family: Arial;">
+
 <ul style="font-family: Arial;">
+
   <li>How the Nextion display responds to Nextion Button Component
 release event to send instructions the microcontroller and the
 microcontroller will instruct the Nextion display to change page(s)</li>
   <li>How the Nextion display on-screen Button Component press/release
 event send instructions to the microcontroller to control an LED</li>
-  <li>How the microcontroller update status Text Component on the Nextion display</li>
-  <li>How the microcontroller increments a variable and updates a Number Component on the Nextion display</li>
-  <li>How the Nextion display evaluates and update color status of a Text Component based on value of another Number Component</li>
-  <li>The Nextion screen when created, following the instructions below, look like this.</li>
+  <li>How the microcontroller update status Text Component on the
+Nextion display</li>
+  <li>How the microcontroller increments a variable and updates a
+Number Component on the Nextion display</li>
+  <li>How the Nextion display evaluates and update color status of a
+Text Component based on value of another Number Component</li>
+  <li>The Nextion screen when created, following the instructions
+below, look like this.</li>
 </ul>
+
 <br style="font-family: Arial;">
+
 <span style="font-family: Arial;"><br>
 When the Nextion display is operation you can be able to control an LED
 attached to the microcontroller (via a suitable resisitor) and the
@@ -36,18 +49,28 @@ microcontroller will update the Nextion display.<br>
 So, enjoy this tutorial and thank you to Patrick for the inspiration.<br>
 <br>
 Evan</span><br style="font-family: Arial;">
+
 <strong style="font-weight: 700; font-family: Arial;"><br>
 </strong>
 <hr style="width: 100%; height: 2px; font-family: Arial;"><strong style="font-weight: 700; font-family: Arial;"><br>
 <br>
-<big><big>Nextion and Great Cow BASIC: step by step</big></big></strong><br>
+<big><big>Nextion </big></big></strong><strong style="font-weight: 700; font-family: Arial;"><big><big>Displays </big></big></strong><strong style="font-weight: 700; font-family: Arial;"><big><big>and Great Cow BASIC: step by step</big></big></strong><br>
+
 <br>
-<span style="font-family: Arial;">You will create a Nextion screen similar to this and integrate with a microcontroller.</span><br>
+
+<span style="font-family: Arial;">You will create a Nextion screen
+similar to this and integrate with a microcontroller.</span><br>
+
 <br style="font-family: Arial;">
-<img style="width: 489px; height: 293px; font-family: Arial;" alt="Nextion Display" src="file:///C:/Users/admin/Desktop/NextionDemo002.JPG"><br style="font-family: Arial;">
+
+<div style="margin-left: 200px;"><img style="width: 489px; height: 293px; font-family: Arial;" alt="Nextion Display" src="file:///C:/Users/admin/Desktop/NextionDemo002.JPG"><br style="font-family: Arial;">
+</div>
+
 <span style="font-family: Arial;"><br>
 This tutorial will explain:</span><br style="font-family: Arial;">
+
 <ul style="font-family: Arial;">
+
   <li>How to use a Nextion display with Great Cow BASIC.</li>
   <li>How Great Cow BASIC can support many Microchip PICs and AVRs with
 a portable langauge that is simply to use with the Nextion display.</li>
@@ -56,32 +79,43 @@ critical activities that are mandated to make the tuturial work for you.</li>
   <li>How you adapt for your needs.</li>
 </ul>
 
-  
+<span style="color: rgb(58, 58, 58); font-family: Arial; font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">What
+you will understand following the tutorial</span><br style="font-family: Arial;">
 
-<span style="color: rgb(58, 58, 58); font-family: Arial; font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">What you will understand following the tutorial</span><br style="font-family: Arial;">
 <span style="color: rgb(58, 58, 58); font-family: Arial; font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;"></span>
 <ul style="font-family: Arial;">
-  
+
   <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How
 the Nextion display responds to Nextion Button Component release event
 to send instructions the microcontroller and the microcontroller will
 instruct the Nextion display to change page(s)</span></li>
-
   <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How
 the Nextion display on-screen Button Component press/release event send
 instructions to the microcontroller to control an LED</span></li>
-  <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How the microcontroller update status Text Component on the Nextion display</span></li>
-  <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How the microcontroller increments a variable and updates a Number Component on the Nextion display</span></li>
-  <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How the Nextion display evaluates and update color status of a Text Component based on value of another Number Component</span></li>
-  <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How to ensure the Nextion display and the microcontroller communicate correctly</span></li>
+  <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How
+the microcontroller update status Text Component on the Nextion display</span></li>
+  <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How
+the microcontroller increments a variable and updates a Number
+Component on the Nextion display</span></li>
+  <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How
+the Nextion display evaluates and update color status of a Text
+Component based on value of another Number Component</span></li>
+  <li><span style="color: rgb(58, 58, 58); font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">How
+to ensure the Nextion display and the microcontroller communicate
+correctly</span></li>
 </ul>
-<br style="font-family: Arial;">
-<hr style="width: 100%; height: 2px; font-family: Arial;"><br style="font-family: Arial;">
-<span style="color: rgb(58, 58, 58); font-family: Arial; font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;"></span><span style="font-family: Arial;">Step 1 - Install the software required.&nbsp; </span><br style="font-family: Arial;">
-<br style="font-family: Arial;">
-<div style="margin-left: 40px; font-family: Arial;">
-<table style="text-align: left; width: 988px;" border="0" cellpadding="2" cellspacing="2">
 
+<br style="font-family: Arial;">
+
+<hr style="width: 100%; height: 2px; font-family: Arial;"><br style="font-family: Arial;">
+
+<span style="color: rgb(58, 58, 58); font-family: Arial; font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;"></span><span style="font-family: Arial;">Step 1 - Install the software
+required.&nbsp; </span><br style="font-family: Arial;">
+
+<br style="font-family: Arial;">
+
+<div style="margin-left: 40px; font-family: Arial;">
+<table style="text-align: left; width: 988px; height: 162px;" border="1" cellpadding="2" cellspacing="2">
   <tbody>
     <tr>
       <td style="vertical-align: top; width: 49px;"><br>
@@ -90,51 +124,55 @@ instructions to the microcontroller to control an LED</span></li>
       </td>
       <td style="vertical-align: top; width: 72px; font-weight: bold;">Mandated<br>
       </td>
-<td style="vertical-align: top; width: 422px; font-weight: bold;">Comment<br>
+      <td style="vertical-align: top; width: 422px; font-weight: bold;">Comment<br>
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top; width: 49px;">1<br>
       </td>
-      <td style="vertical-align: top; width: 412px;">Download and install Great Cow BASIC toolchain for your specific operating system<br>
+      <td style="vertical-align: top; width: 412px;">Download and
+install Great Cow BASIC toolchain for your specific operating system<br>
       </td>
       <td style="vertical-align: top; width: 72px;">Yes<br>
       </td>
-<td style="vertical-align: top; width: 422px;">We need this software installed and operational before we start. <br>
+      <td style="vertical-align: top; width: 422px;">We need this
+software installed and operational before we start. <br>
       <br>
 See <a href="https://sourceforge.net/projects/gcbasic/">https://sourceforge.net/projects/gcbasic/</a><br>
-
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top; width: 49px;">2<br>
       </td>
-      <td style="vertical-align: top; width: 412px;">Download and install the Nextion Editor<br>
+      <td style="vertical-align: top; width: 412px;">Download and
+install the Nextion Editor<br>
       </td>
       <td style="vertical-align: top; width: 72px;">Yes<br>
       </td>
-<td style="vertical-align: top; width: 422px;">See <a href="https://nextion.tech/">https://nextion.tech/</a> and then select the download options(s).
-      </td>
+      <td style="vertical-align: top; width: 422px;">See <a href="https://nextion.tech/">https://nextion.tech/</a> and then select
+the download options(s). </td>
     </tr>
-    
   </tbody>
 </table>
-
 </div>
+
 <br style="font-family: Arial;">
+
 <br style="font-family: Arial;">
+
 <span style="font-family: Arial;">Step 2 - Choose your microcontroller
 and ensure you can program from Great Cow BASIC.&nbsp; There are many
 resources but the simple choices are to use an Arduino UNO or one of
-the many </span><a style="font-family: Arial;" href="https://www.microchip.com/DevelopmentTools/Listing/9cd5ea3c-b05c-4a84-ad38-bd6c6506421e">Microchip Xpress boards</a><span style="font-family: Arial;">.&nbsp; The tutorial will use an Arduino UNO and an </span><a style="font-family: Arial;" href="https://www.microchip.com/DevelopmentTools/ProductDetails/PartNO/DM164140">Microchip&nbsp; Xpress Evaluation&nbsp; Board</a><span style="font-family: Arial;"> which uses a PIC6F18855. </span><br style="font-family: Arial;">
-
+the many </span><a style="font-family: Arial;" href="https://www.microchip.com/DevelopmentTools/Listing/9cd5ea3c-b05c-4a84-ad38-bd6c6506421e">Microchip
+Xpress boards</a><span style="font-family: Arial;">.&nbsp; The tutorial
+will use an Arduino UNO and an </span><a style="font-family: Arial;" href="https://www.microchip.com/DevelopmentTools/ProductDetails/PartNO/DM164140">Microchip&nbsp;
+Xpress Evaluation&nbsp; Board</a><span style="font-family: Arial;">
+which uses a PIC6F18855. </span><br style="font-family: Arial;">
 
 <br style="font-family: Arial;">
 
-
 <div style="margin-left: 40px; font-family: Arial;">
-<table style="text-align: left; width: 988px;" border="0" cellpadding="2" cellspacing="2">
-
+<table style="text-align: left; width: 988px;" border="1" cellpadding="2" cellspacing="2">
   <tbody>
     <tr>
       <td style="vertical-align: top; width: 43px;"><br>
@@ -143,93 +181,106 @@ the many </span><a style="font-family: Arial;" href="https://www.microchip.com/D
       </td>
       <td style="vertical-align: top; width: 312px; font-weight: bold;">Mandated<br>
       </td>
-<td style="vertical-align: top; width: 364px; font-weight: bold;">Comment<br>
+      <td style="vertical-align: top; width: 364px; font-weight: bold;">Comment<br>
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top; width: 43px;">1<br>
       </td>
-      <td style="vertical-align: top; width: 236px;">Test your Great Cow BASIC installation.&nbsp; <br>
-</td>
-      <td style="vertical-align: top; width: 312px;">Do this, or download the latest from GitHub, see activity 3.2<br>
+      <td style="vertical-align: top; width: 236px;">Test your Great
+Cow BASIC installation.&nbsp; <br>
       </td>
-<td style="vertical-align: top; width: 364px;">The following Help page has a GIF that shows how to set up the programmers for the Arduino UNO and other programmers.<br>
+      <td style="vertical-align: top; width: 312px;">Do this, or
+download the latest from GitHub, see activity 3.2<br>
+      </td>
+      <td style="vertical-align: top; width: 364px;">The following Help
+page has a GIF that shows how to set up the programmers for the Arduino
+UNO and other programmers.<br>
       <a href="http://gcbasic.sourceforge.net/help/_using_great_cow_basic.html">http://gcbasic.sourceforge.net/help/_using_great_cow_basic.html</a><br>
       <br>
-If you need help on this - the <a href="https://sourceforge.net/projects/gcbasic/">https://sourceforge.net/projects/gcbasic/</a> forum is a great friendly resource.
-</td>
+If you need help on this - the <a href="https://sourceforge.net/projects/gcbasic/">https://sourceforge.net/projects/gcbasic/</a>
+forum is a great friendly resource.
+      </td>
     </tr>
-    
-    
   </tbody>
 </table>
-
 </div>
 
+<br style="font-family: Arial;">
 
 <br style="font-family: Arial;">
-<br style="font-family: Arial;">
-<span style="font-family: Arial;">Step 3 - Use an existing resource to start your project  </span><br style="font-family: Arial;">
+
+<span style="font-family: Arial;">Step 3 - Use an existing resource to
+start your project </span><br style="font-family: Arial;">
 
 <br style="font-family: Arial;">
 
 <div style="margin-left: 40px; font-family: Arial;">
-<table style="text-align: left; width: 987px; height: 350px;" border="0" cellpadding="2" cellspacing="2">
-
+<table style="text-align: left; width: 987px; height: 350px;" border="1" cellpadding="2" cellspacing="2">
   <tbody>
     <tr>
-      <td style="vertical-align: top; width: 51px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+      <td style="vertical-align: top; width: 51px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <br>
       </td>
-      <td style="vertical-align: top; font-weight: bold; width: 219px;">Activity &nbsp; &nbsp; &nbsp;&nbsp;
-      </td>
+      <td style="vertical-align: top; font-weight: bold; width: 219px;">Activity
+&nbsp; &nbsp; &nbsp;&nbsp; </td>
       <td style="vertical-align: top; width: 244px; font-weight: bold;">Mandated<br>
       </td>
-<td style="vertical-align: top; width: 509px; font-weight: bold;">Comment<br>
+      <td style="vertical-align: top; width: 509px; font-weight: bold;">Comment<br>
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top; width: 51px; height: 95px;">1<br>
       </td>
-      <td style="vertical-align: top; width: 219px; height: 95px;">Open the tutorial code within your Great Cow BASIC installatio<br>
-</td>
-      <td style="vertical-align: top; width: 244px; height: 95px;">Do this, or download the latest from GitHub, see activity 3.2<br>
+      <td style="vertical-align: top; width: 219px; height: 95px;">Open
+the tutorial code within your Great Cow BASIC installatio<br>
       </td>
-<td style="vertical-align: top; width: 509px; height: 95px;">The tutorial in located in your .. GreatCowBasic\Demos\glcd_solutions\glcd_nextion_solutions\tutorial sub folder<br>
-</td>
+      <td style="vertical-align: top; width: 244px; height: 95px;">Do
+this, or download the latest from GitHub, see activity 3.2<br>
+      </td>
+      <td style="vertical-align: top; width: 509px; height: 95px;">The
+tutorial in located in your ..
+GreatCowBasic\Demos\glcd_solutions\glcd_nextion_solutions\tutorial sub
+folder<br>
+      </td>
     </tr>
     <tr>
       <td style="vertical-align: top; width: 51px; height: 191px;">2<br>
       </td>
-      <td style="vertical-align: top; width: 219px; height: 191px;">Download the tutorials from <a href="https://github.com/Anobium/Great-Cow-BASIC-Demonstration-Sources/tree/master/GLCD_Solutions/GLCD_Nextion_Solutions/tutorial">GitHub</a>.<br>
+      <td style="vertical-align: top; width: 219px; height: 191px;"><a style="font-weight: bold;" href="https://github.com/Anobium/Great-Cow-BASIC-Demonstration-Sources/tree/master/GLCD_Solutions/GLCD_Nextion_Solutions/tutorial">Download
+the tutorials from GitHub.</a><br>
       <br>
- Save the files to a location you will remember on your hard drive.<br>
+      <br>
+      <br>
+Save the files to a location you will remember on your hard drive.<br>
       </td>
-      <td style="vertical-align: top; width: 244px; height: 191px;">Do this, or use the stock demos, see activity 3.1
-      </td>
-<td style="vertical-align: top; width: 509px; height: 191px;">See <a href="https://nextion.tech/">https://nextion.tech/</a> and then select the download options(s).
-      </td>
+      <td style="vertical-align: top; width: 244px; height: 191px;">Do
+this, or use the stock demos, see activity 3.1 </td>
+      <td style="vertical-align: top; width: 509px; height: 191px;">See
+      <a href="https://nextion.tech/">https://nextion.tech/</a> and
+then select the download options(s). </td>
     </tr>
-    
   </tbody>
 </table>
-
 </div>
 
 <br style="font-family: Arial;">
 
 <br style="font-family: Arial;">
+
 <span style="font-family: Arial;">Step 4 - The Nextion HMI</span><br style="font-family: Arial;">
+
 <br style="font-family: Arial;">
+
 <span style="font-family: Arial;">In this step you will create the
 Nextion solution using the Nextion Editor.&nbsp; We will be using a
 Nextion NX8048P070 but you can you use many of the Nextion displays -
 you will see how to adapt with each activity.</span><br style="font-family: Arial;">
+
 <br style="font-family: Arial;">
 
-
 <div style="margin-left: 40px; font-family: Arial;">
-<table style="text-align: left; width: 988px;" border="0" cellpadding="2" cellspacing="2">
-
+<table style="text-align: left; width: 988px;" border="1" cellpadding="2" cellspacing="2">
   <tbody>
     <tr>
       <td style="vertical-align: top; width: 68px;"><br>
@@ -238,37 +289,40 @@ you will see how to adapt with each activity.</span><br style="font-family: Aria
       </td>
       <td style="vertical-align: top; width: 72px; font-weight: bold;">Mandated<br>
       </td>
-<td style="vertical-align: top; width: 422px; font-weight: bold;">Comment<br>
+      <td style="vertical-align: top; width: 422px; font-weight: bold;">Comment<br>
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top; width: 68px;">1<br>
       </td>
-      <td style="vertical-align: top; width: 416px;">Gather the resources will be using.&nbsp; <br>
+      <td style="vertical-align: top; width: 416px;">Gather the
+resources will be using.&nbsp; <br>
       <br>
 You may use a&nbsp; picture resource for the Nextion display
 background.&nbsp; The picture resource shoould match the size of your
 Nextion display<br>
-</td>
+      </td>
       <td style="vertical-align: top; width: 72px;">No</td>
-<td style="vertical-align: top; width: 422px;">The picture is optional as you can set the bacground colo</td>
+      <td style="vertical-align: top; width: 422px;">The picture is
+optional as you can set the bacground colo</td>
     </tr>
     <tr>
       <td style="vertical-align: top;">2<br>
       </td>
       <td style="vertical-align: top;">Start the Nextion Editor,<br>
 Create a new project. Name the project 'Tutorial' and select `Save`.<br>
-
       </td>
       <td style="vertical-align: top;">Yes<br>
       </td>
-      <td style="vertical-align: top;">:You will be presented with a setting dialog to choose your device.<br>
+      <td style="vertical-align: top;">:You will be presented with a
+setting dialog to choose your device.<br>
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top;">3<br>
       </td>
-      <td style="vertical-align: top;">Select BASIC, Enhangced or Intelligent,<br>
+      <td style="vertical-align: top;">Select BASIC, Enhangced or
+Intelligent,<br>
 Then, select your specific device type,<br>
       <br>
 Then, select the `Display` tab (if you press OK, you will be presented
@@ -276,18 +330,22 @@ with the `Display` tab).&nbsp; Select the "Display Direction".<br>
       <br>
 Then, press `OK`<br>
       <br>
- </td>
+      </td>
       <td style="vertical-align: top;">Yes<br>
       </td>
-      <td style="vertical-align: top;">This activity is specific to your device type.<br>
+      <td style="vertical-align: top;">This activity is specific to
+your device type.<br>
       <br>
-      <span style="font-weight: bold; font-style: italic;">Page 0</span> is created as the default page Component.&nbsp;&nbsp; All Components discussed will be in BOLD and Italics.<br>
+      <span style="font-weight: bold; font-style: italic;">Page 0</span>
+is created as the default page Component.&nbsp;&nbsp; All Components
+discussed will be in BOLD and Italics.<br>
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top;">4<br>
       </td>
-      <td style="vertical-align: top;">We need another resource. A font resource.<br>
+      <td style="vertical-align: top;">We need another resource. A font
+resource.<br>
       <br>
 Create a&nbsp; font resource. An 8×16 ASCII ZI font file.&nbsp; Create
 this font using the Nextion Editor.&nbsp; Select Tools/Font
@@ -299,98 +357,102 @@ font?".&nbsp; C;lose the dialog,<br>
       </td>
       <td style="vertical-align: top;">You will require this font.<br>
       <br>
-If you have a suitable Nextion font then skip this activity but simply add the font to the project using the <br>
+If you have a suitable Nextion font then skip this activity but simply
+add the font to the project using the <br>
       <br>
-To review the font installed - select the resource interface (below the `Toolbox`, selecting the `Fonts` tab at the bottom.<br>
+To review the font installed - select the resource interface (below the
+`Toolbox`, selecting the `Fonts` tab at the bottom.<br>
       </td>
     </tr>
-<tr>
+    <tr>
       <td style="vertical-align: top; width: 68px;">5<br>
       </td>
-      <td style="vertical-align: top; width: 416px;">Add the picture resource for <span style="font-weight: bold; font-style: italic;">Page 0</span> background.<br>
+      <td style="vertical-align: top; width: 416px;">Add the picture
+resource for <span style="font-weight: bold; font-style: italic;">Page
+0</span> background.<br>
       <br>
 Select the resource interface and then select the `Picture` tab. <br>
 a) in the Picture tab, click `+`<br>
 b) Select your picture file and click Open<br>
 The selected picture is now added as "Picture resource ID:0"<br>
       <br>
-</td>
+      </td>
       <td style="vertical-align: top; width: 72px;">No<br>
-</td>
-<td style="vertical-align: top; width: 422px;">This is optional.<br>
+      </td>
+      <td style="vertical-align: top; width: 422px;">This is optional.<br>
       <br>
       <br>
-</td>
-    </tr><tr>
+      </td>
+    </tr>
+    <tr>
       <td style="vertical-align: top;">6<br>
       </td>
-      <td style="vertical-align: top;">Add the picture to the page.&nbsp; Setting the Page <span style="font-weight: bold; font-style: italic;">Page0</span> background to "Picture resource ID:0"<br>
+      <td style="vertical-align: top;">Add the picture to the
+page.&nbsp; Setting the Page <span style="font-weight: bold; font-style: italic;">Page0</span> background
+to "Picture resource ID:0"<br>
       <br>
-a) Select the <span style="font-weight: bold; font-style: italic;">page0</span> attribute ".sta" value dropdown, it will be the default value of "solid color". &nbsp; Select the dropdown option "image".<br>
+a) Select the <span style="font-weight: bold; font-style: italic;">page0</span>
+attribute ".sta" value dropdown, it will be the default value of "solid
+color". &nbsp; Select the dropdown option "image".<br>
 &nbsp;<br>
-b) Select attribute ".pic" then "browse" and select Picture resource "ID:0" and press `OK`.&nbsp; <br>
+b) Select attribute ".pic" then "browse" and select Picture resource
+"ID:0" and press `OK`.&nbsp; <br>
       <br>
 The picture will be inserted as the page background.<br>
       </td>
       <td style="vertical-align: top;">No<br>
       </td>
       <td style="vertical-align: top;">This is optional.<span style="font-family: Courier New,Courier,monospace;">r0.bco=0</span><br style="font-family: Courier New,Courier,monospace;">
-
-
       <span style="font-family: Courier New,Courier,monospace;">r0.pco=0</span></td>
     </tr>
     <tr>
       <td style="vertical-align: top;">7<br>
       </td>
-      <td style="vertical-align: top;">In the Event Pane, Preinitialize Event add the Nextion event instuctions.<br>
-
+      <td style="vertical-align: top;">In the Event Pane, Preinitialize
+Event add the Nextion event instuctions.<br>
       <br>
-
       <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">bauds=9600</span><br>
       </div>
-
       <br>
-
 The value of the baud rate will need to match the microcontroller.<br>
       <br>
-Also, in the Event Pane, Postnitialize Event add the Nextion event instuctions.<br>
-
-
+Also, in the Event Pane, Postnitialize Event add the Nextion event
+instuctions.<br>
       <br>
       <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">r0.bco=0</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">r0.pco=0</span><br>
       </div>
-
-      
-
       </td>
       <td style="vertical-align: top;">Yes<br>
       </td>
-      <td style="vertical-align: top;">If the baud rate does not match there will be no communication, so, this is a critical step.<br>
+      <td style="vertical-align: top;">If the baud rate does not match
+there will be no communication, so, this is a critical step.<br>
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top;">8<br>
       </td>
-      <td style="vertical-align: top;">Add the font, if you have not added when you created the font ZI file.<br>
+      <td style="vertical-align: top;">Add the font, if you have not
+added when you created the font ZI file.<br>
       <br>
 a) In the Font Pane click +<br>
 b) select your 8×16 ZI Font file (*.zi) and click Open<br>
 The Selected<span style="font-family: Courier New,Courier,monospace;">r0.bco=0</span><br style="font-family: Courier New,Courier,monospace;">
-
-
-      <span style="font-family: Courier New,Courier,monospace;">r0.pco=0</span> ZI Font is now added as "Font Resource ID:0"<br>
+      <span style="font-family: Courier New,Courier,monospace;">r0.pco=0</span>
+ZI Font is now added as "Font Resource ID:0"<br>
       <br>
       </td>
       <td style="vertical-align: top;">No<br>
       </td>
-      <td style="vertical-align: top;">'Page 1 events... there is only one, so, just change page<br>
+      <td style="vertical-align: top;">'Page 1 events... there is only
+one, so, just change page<br>
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top;">9<br>
       </td>
-      <td style="vertical-align: top;">Add a Button Component.&nbsp; Use the Toolbox Pane&nbsp; to create the Button Component..<br>
+      <td style="vertical-align: top;">Add a Button Component.&nbsp;
+Use the Toolbox Pane&nbsp; to create the Button Component..<br>
       <br>
 Edit the attibutes as follows:<br>
       <br>
@@ -400,7 +462,8 @@ c) Set attribute "x" to "700"<br>
 d) Set attribute "y" to "430"<br>
       <br>
 then, in the Event Pane <br>
-e) Select the  Touch Press Event tab and check "Send Component ID" checkbox.<br>
+e) Select the Touch Press Event tab and check "Send Component ID"
+checkbox.<br>
       <br>
       </td>
       <td style="vertical-align: top;">Yes<br>
@@ -412,28 +475,26 @@ right position.<br>
       </td>
     </tr>
     <tr>
-      <td colspan="4" rowspan="1" style="vertical-align: top;">You&nbsp; now have three Components that need to aligned - to look nice.<br>
+      <td colspan="4" rowspan="1" style="vertical-align: top;">You&nbsp;
+now have three Components that need to aligned - to look nice.<br>
       <br>
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top;">10<br>
       </td>
-      <td style="vertical-align: top;">Add a Text Component. Use the Toolbox Pane&nbsp; to create the Text Component..<br>
-
+      <td style="vertical-align: top;">Add a Text Component. Use the
+Toolbox Pane&nbsp; to create the Text Component..<br>
       <br>
-
 Edit the attibutes as follows:<br>
       <br>
 a) Ensure the attribute "objname" is "<span style="font-weight: bold; font-style: italic;">t0</span>"<br>
-b) Set attribute "txt_maxl" to "15"... Set this before the next attribute<br>
-
+b) Set attribute "txt_maxl" to "15"... Set this before the next
+attribute<br>
 c) Change the attribute "txt" to "MCU Value"<br>
-
 d) Set attribute "x" to "470"<br>
-
 e) Set attribute "y" to "330"<br>
-f)  Set attribute "w" to "150"<br>
+f) Set attribute "w" to "150"<br>
 g) Set attribute "h" to "30"<br>
       <br>
       </td>
@@ -448,97 +509,74 @@ Component to bottom right position and then resize the Text Component.<br>
     <tr>
       <td style="vertical-align: top;">11<br>
       </td>
-      <td style="vertical-align: top;">Add a Number Component. Use the Toolbox Pane&nbsp; to create the Number&nbsp; Component..<br>
-
-
+      <td style="vertical-align: top;">Add a Number Component. Use the
+Toolbox Pane&nbsp; to create the Number&nbsp; Component..<br>
       <br>
-
-
 Edit the attibutes as follows:<br>
-
       <br>
-
 a) Ensure the attribute "objname" is "<span style="font-weight: bold; font-style: italic;">n0</span>"<br>
 b) Set attribute "x" to "630"<br>
-
-
 c) Set attribute "y" to "330"<br>
-
 d)Set attribute "w" to "60"<br>
 e) Set attribute "h" to "30"<br>
       <br>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;">The "x","y","w" and "h" attributes are specific to your Nextion
-display.&nbsp; A quick way of setting this is to drag the Number Component and then resize the Number Component.</td>
+      <td style="vertical-align: top;">The "x","y","w" and "h"
+attributes are specific to your Nextion
+display.&nbsp; A quick way of setting this is to drag the Number
+Component and then resize the Number Component.</td>
     </tr>
     <tr>
       <td style="vertical-align: top;">12<br>
       </td>
-      <td style="vertical-align: top;">Add Text Component. Use the Toolbox Pane&nbsp; to create the Text Component..<br>
-
-
+      <td style="vertical-align: top;">Add Text Component. Use the
+Toolbox Pane&nbsp; to create the Text Component..<br>
       <br>
-
-
 Edit the attibutes as follows:<br>
-
       <br>
-
 a) Ensure the attribute "objname" is "<span style="font-weight: bold; font-style: italic;">t2</span>".&nbsp; <span style="text-decoration: underline;">Get this attribure correct.</span><br>
 b) Ensure the attribute "xcen" is "Right"<br>
-c) Set attribute "txt_maxl" to "10"... Set this before the next attribute<br>
-
-
+c) Set attribute "txt_maxl" to "10"... Set this before the next
+attribute<br>
 d) The attribute "txt" will be "nextxt".&nbsp; Leave as is.<br>
-
-
 e) Set attribute "x" to "700"<br>
-
-
 f) Set attribute "y" to "330"<br>
-
-g)  Set attribute "w" to "100"<br>
-
+g) Set attribute "w" to "100"<br>
 h) Set attribute "h" to "30"<br>
       <br>
       </td>
       <td style="vertical-align: top;">Yes<br>
       </td>
-      <td style="vertical-align: top;">The "x","y","w" and "h" attributes are specific to your Nextion
-display.&nbsp; A quick way of setting this is to drag the Text Component
+      <td style="vertical-align: top;">The "x","y","w" and "h"
+attributes are specific to your Nextion
+display.&nbsp; A quick way of setting this is to drag the Text
+Component
 and then resize the Text Component.<br>
       <br>
 The attribute "objname" is critical at this step.<br>
       </td>
     </tr>
     <tr>
-      <td colspan="4" rowspan="1" style="vertical-align: top;">You&nbsp; now have three Components that need to aligned - to look nice.<br>
+      <td colspan="4" rowspan="1" style="vertical-align: top;">You&nbsp;
+now have three Components that need to aligned - to look nice.<br>
       <br>
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top;">13<br>
       </td>
-      <td style="vertical-align: top;">Add a Timer Component.&nbsp; Use the Toolbox Pane&nbsp; to create the Timer Component..<br>
-
-
-
+      <td style="vertical-align: top;">Add a Timer Component.&nbsp; Use
+the Toolbox Pane&nbsp; to create the Timer Component..<br>
       <br>
 When creating a Timer Component is added in the middle of the UI.&nbsp;
 But, a quick way to locate the attributes of the timer is to use the
 Attribute Pane and select the timer.<br>
       <span style="font-family: Courier New,Courier,monospace;">r0.bco=0</span><br style="font-family: Courier New,Courier,monospace;">
-
-
       <span style="font-family: Courier New,Courier,monospace;">r0.pco=0</span><br>
-
-
-
 Edit the attibutes as follows:<br>
       <br>
-
 a) Ensure the attribute "objname" is "<span style="font-weight: bold; font-style: italic;">tm0</span>"<br>
 b) Set the attribure "tim" is "50"<br>
       <br>
@@ -548,28 +586,37 @@ c) In the Event Pane add the following Nextion code.<br>
       <br>
       <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">if(n0.val&gt;50)</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">{</span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">&nbsp; n0.bco=63488</span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">&nbsp; t2.txt="Too Hot!"</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;
+n0.bco=63488</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;
+t2.txt="Too Hot!"</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">}else</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">{</span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">&nbsp; n0.bco=2016</span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">&nbsp; t2.txt="Normal"</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;
+n0.bco=2016</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;
+t2.txt="Normal"</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">}</span><br>
       </div>
       <br>
       </td>
       <td style="vertical-align: top;">Yes<br>
       </td>
-      <td style="vertical-align: top;">This critical timer will update the text Component created at step 12.<br>
+      <td style="vertical-align: top;">This critical timer will update
+the text Component created at step 12.<br>
       <br>
 63488 equates to RED<br>
 2016 equates to GREEN<br>
       </td>
     </tr>
     <tr>
-      <td colspan="4" rowspan="1" style="vertical-align: top;">You can, optionally, "Debug" the project at this step.&nbsp; You should have no errors.<span style="font-style: italic;"><span style="font-weight: bold;"></span></span><br>
+      <td colspan="4" rowspan="1" style="vertical-align: top;">You can,
+optionally, "Debug" the project at this step.&nbsp; You should have no
+errors.<span style="font-style: italic;"><span style="font-weight: bold;"></span></span><br>
       <br>
-      <div style="margin-left: 40px;">If you enter "n0.val=100" in the `Instruction Input Area" the obejct <span style="font-weight: bold; font-style: italic;">n0&nbsp; </span>will change to RED!!<br>
+      <div style="margin-left: 40px;">If you enter "n0.val=100" in the
+`Instruction Input Area" the obejct <span style="font-weight: bold; font-style: italic;">n0&nbsp; </span>will
+change to RED!!<br>
       <br>
 Exit the debugger.<br>
       <br>
@@ -579,36 +626,19 @@ Exit the debugger.<br>
     <tr>
       <td style="vertical-align: top;">14<br>
       </td>
-      <td style="vertical-align: top;">Add a Button Component.&nbsp; Use the Toolbox Pane&nbsp; to create the Button Component..<br>
-
-
-
-
+      <td style="vertical-align: top;">Add a Button Component.&nbsp;
+Use the Toolbox Pane&nbsp; to create the Button Component..<br>
       <br>
       <br>
-
-
-
-
 Edit the attibutes as follows:<br>
       <br>
-
 a) Ensure the attribute "objname" is "<span style="font-style: italic;"><span style="font-weight: bold;">b1</span></span><span style="font-weight: bold; font-style: italic;"></span>".&nbsp; <span style="text-decoration: underline;">Get this attribute correct!</span><br>
-b) Set attribute "txt_maxl" to "10"... Set this before the next attribute<br>
-
-
-
+b) Set attribute "txt_maxl" to "10"... Set this before the next
+attribute<br>
 c) The attribute "txt" will be "Toggle LED".<br>
-
-
-
 d) Set attribute "x" to "470"<br>
 e) Set attribute "y" to "380"<br>
-
-
 f)Set attribute "w" to "170"<br>
-
-
 g) Set attribute "h" to "30"<br>
       <br>
 Then, In the Event Pane select the following:<br>
@@ -622,111 +652,77 @@ Component to black.&nbsp; The Radio Component will be created at step
       <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">r0.bco=0</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">r0.pco=0</span><br>
       </div>
-
       <br>
       </td>
       <td style="vertical-align: top;">Yes<br>
       </td>
-      <td style="vertical-align: top;">The "x","y","w" and "h" attributes are specific to your Nextion
-display.&nbsp; A quick way of setting this is to drag the Button Component
+      <td style="vertical-align: top;">The "x","y","w" and "h"
+attributes are specific to your Nextion
+display.&nbsp; A quick way of setting this is to drag the Button
+Component
 and then resize the Button Component.<br>
-
       <br>
       <br>
 The Event Pane actions are critical.&nbsp; Selecting the check boxes
 will send key information to the microcontroller when you Press and
 Release the button.<br>
-
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top;">15<br>
       </td>
-      <td style="vertical-align: top;">Note the Button Component "id" created in activity 14.&nbsp; <br>
+      <td style="vertical-align: top;">Note the Button Component "id"
+created in activity 14.&nbsp; <br>
       <br>
-This tutorial assumes the Button Component "id" equals 6.&nbsp; But, you will need this value later!<br>
+This tutorial assumes the Button Component "id" equals 6.&nbsp; But,
+you will need this value later!<br>
       <br>
       </td>
       <td style="vertical-align: top;">Yes<br>
       </td>
-      <td style="vertical-align: top;">This Button Component "id" value will be needed in our microcontroller program.<br>
+      <td style="vertical-align: top;">This Button Component "id" value
+will be needed in our microcontroller program.<br>
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top;">16<br>
       </td>
-      <td style="vertical-align: top;">Add a Radio Component.&nbsp; Use the Toolbox Pane&nbsp; to create the Radio Component..<br>
-
-
-
-
-
+      <td style="vertical-align: top;">Add a Radio Component.&nbsp; Use
+the Toolbox Pane&nbsp; to create the Radio Component..<br>
       <br>
-
       <br>
-
-
-
-
-
 Edit the attibutes as follows:<br>
-
       <br>
-
-
 a) Ensure the attribute "objname" is "<span style="font-style: italic;"><span style="font-weight: bold;">r0</span></span><span style="font-weight: bold; font-style: italic;"></span>".&nbsp; <span style="text-decoration: underline;">Get this attribute correct!</span><br>
-
 b) Set attribute "bco" to "63488"<br>
-
 c) Set attribute "pco" to "0"<br>
 d) Set attribute "x" to "670"<br>
-
 e) Set attribute "y" to "380"<br>
-
-
-
 f)Set attribute "w" to "30"<br>
-
-
-
 g) Set attribute "h" to "30"<br>
       <br>
       </td>
       <td style="vertical-align: top;">Yes<br>
       </td>
-      <td style="vertical-align: top;">This Radio Component will be updated from the microcontroller.<br>
+      <td style="vertical-align: top;">This Radio Component will be
+updated from the microcontroller.<br>
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top;">17<br>
       </td>
-      <td style="vertical-align: top;">Add Text Component. Use the Toolbox Pane&nbsp; to create the Text Component..<br>
-
-
-
+      <td style="vertical-align: top;">Add Text Component. Use the
+Toolbox Pane&nbsp; to create the Text Component..<br>
       <br>
-
-
-
 Edit the attibutes as follows:<br>
-
-
       <br>
-
-
 a) Ensure the attribute "objname" is "<span style="font-weight: bold; font-style: italic;">t1"</span>.&nbsp; <span style="text-decoration: underline;">Get this attribure correct.</span><br>
-
 b) Ensure the attribute "xcen" is "Right"<br>
-
-c) Set attribute "txt_maxl" to "40"... Set this before the next attribute<br>
-
-
-
+c) Set attribute "txt_maxl" to "40"... Set this before the next
+attribute<br>
 d) The attribute "txt" will be "Microcontroller Communications"<br>
-
-
-
-e) Using drag and drop place the Text Component at a position below the top right corner and adjust the width.<br>
+e) Using drag and drop place the Text Component at a position below the
+top right corner and adjust the width.<br>
       <br>
       </td>
       <td style="vertical-align: top;">Optional<br>
@@ -737,65 +733,44 @@ e) Using drag and drop place the Text Component at a position below the top righ
     <tr>
       <td style="vertical-align: top;">18<br>
       </td>
-      <td style="vertical-align: top;">Add Text Component. Use the Toolbox Pane&nbsp; to create the Text Component..<br>
-
-
-
-
+      <td style="vertical-align: top;">Add Text Component. Use the
+Toolbox Pane&nbsp; to create the Text Component..<br>
       <br>
-
-
-
-
 Edit the attibutes as follows:<br>
-
-
-
       <br>
-
-
-
 a) Ensure the attribute "objname" is "<span style="font-weight: bold; font-style: italic;">t3"</span>.&nbsp; <span style="text-decoration: underline;">Get this attribure correct.</span><br>
-
-
 b) Ensure the attribute "xcen" is "Right"<br>
-
-
-c) Set attribute "txt_maxl" to "30"... Set this before the next attribute<br>
-
-
-
-
+c) Set attribute "txt_maxl" to "30"... Set this before the next
+attribute<br>
 d) The attribute "txt" will be "MCU type and frequency"<br>
-
-
-
-
-e) Using drag and drop place the Text Component at a position below the top right corner and adjust the width.<br>
+e) Using drag and drop place the Text Component at a position below the
+top right corner and adjust the width.<br>
       <br>
-
       </td>
       <td style="vertical-align: top;">Yes<br>
       </td>
-      <td style="vertical-align: top;">This Text Component will be updated from the microcontroller.<br>
+      <td style="vertical-align: top;">This Text Component will be
+updated from the microcontroller.<br>
       </td>
     </tr>
     <tr>
-      <td colspan="4" rowspan="1" style="vertical-align: top;">Now create a second page and one component.<br>
+      <td colspan="4" rowspan="1" style="vertical-align: top;">Now
+create a second page and one component.<br>
       <br>
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top;">19<br>
       </td>
-      <td style="vertical-align: top;">Add a New Page. Use the Page Pane to create a second page.<br>
+      <td style="vertical-align: top;">Add a New Page. Use the Page
+Pane to create a second page.<br>
       <br>
 Add new Page "page1" <br>
 a) In the Page pane click Add icon<br>
 a) Set the&nbsp; attribute ".bco" as&nbsp; 0<br>
       <br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td style="vertical-align: top;">Yes<br>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
@@ -803,24 +778,19 @@ a) Set the&nbsp; attribute ".bco" as&nbsp; 0<br>
     <tr>
       <td style="vertical-align: top;">20<br>
       </td>
-      <td style="vertical-align: top; outline-color: navy ! important; outline-style: dashed ! important; outline-width: 2px ! important;">Add a Button Component.&nbsp; Use the Toolbox Pane&nbsp; to create the Button Component..<br>
-
+      <td style="vertical-align: top;">Add
+a Button Component.&nbsp; Use the Toolbox Pane&nbsp; to create the
+Button Component..<br>
       <br>
-
 Edit the attibutes as follows:<br>
-
       <br>
-
 a) Ensure the attribute "objname" is "<span style="font-weight: bold; font-style: italic;">b0</span>"<br>
-
 b) Change the attribute "txt" to "Back"<br>
-
-c) Using drap and drop place the Button Component at the botton right position.<br>
+c) Using drap and drop place the Button Component at the botton right
+position.<br>
       <br>
 Then, In the Event Pane select the following:<br>
-
       <br>
-
 h) in Touch Press Event tab. Check the "Send Component ID" checkbox <br>
       <br>
       </td>
@@ -830,7 +800,10 @@ h) in Touch Press Event tab. Check the "Send Component ID" checkbox <br>
       </td>
     </tr>
     <tr>
-      <td colspan="4" rowspan="1" style="vertical-align: top;">To return to review <span style="font-style: italic;"><span style="font-weight: bold;">"</span></span><span style="font-weight: bold; font-style: italic;">page0</span>" double click <span style="font-style: italic;"><span style="font-weight: bold;">"</span></span><span style="font-weight: bold; font-style: italic;">page0</span>" in the Page Pane.<br>
+      <td colspan="4" rowspan="1" style="vertical-align: top;">To
+return to review <span style="font-style: italic;"><span style="font-weight: bold;">"</span></span><span style="font-weight: bold; font-style: italic;">page0</span>" double
+click <span style="font-style: italic;"><span style="font-weight: bold;">"</span></span><span style="font-weight: bold; font-style: italic;">page0</span>" in the
+Page Pane.<br>
       <br>
 Save the project.<br>
       <br>
@@ -839,13 +812,15 @@ Save the project.<br>
     <tr>
       <td style="vertical-align: top;">21</td>
       <td style="vertical-align: top;">Preparing your microSD card<br>
-a) ensure the microSD card is embedded compatible<br>
-(I have good success with Kingston Class 10 HC 8GB microSDs)<br>
+<br>
+a) ensure the microSD card is embedded compatible<br><br>
+A&nbsp; Kingston Class 10 HC 8GB microSDs has been proven to work.<br>
+<br>
 b) ensure the microSD is format under Windows as FAT32<br>
 c) ensure there are no *.tft files on the microSD card<br>
       <br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td style="vertical-align: top;">Yes<br>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
@@ -853,8 +828,9 @@ c) ensure there are no *.tft files on the microSD card<br>
     <tr>
       <td style="vertical-align: top;">22<br>
       </td>
-      <td style="vertical-align: top;">Install the TFT to the Nextion device<br>
-In the Nextion Editor File Menu<br>
+      <td style="vertical-align: top;">Install the project to the Nextion
+device<br><br>
+In the Nextion Editor File Menu<br><br>
 a) Click Open Build Folder<br>
 b) copy Tutorial.tft to your prepared embedded microSD card<br>
 c) Turn power to the Nextion off.<br>
@@ -866,28 +842,717 @@ g) Turn power to the Nextion off<br>
 h) Remove the microSD card from the Nextion device<br>
 i) Turn the power to the Nextion on<br>
 j) Wait a few moments to ensure all firmware upgrades complete<br>
-At this point the Tutorial HMI should be running on the Nextion<br>
+At this point the Tutorial should be running on the Nextion display.<br>
       <br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td style="vertical-align: top;">Yes<br>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
     </tr>
-
-    
   </tbody>
 </table>
-
 </div>
 
-
-<br style="font-family: Arial;">
-
-
 <br style="font-family: Arial;">
 
 <br style="font-family: Arial;">
+
 <br style="font-family: Arial;">
+
+<span style="font-family: Arial;">Step 5 - Great COW BASIC program</span><br style="font-family: Arial;">
+
 <br style="font-family: Arial;">
-<span style="color: rgb(58, 58, 58); font-family: Arial; font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;"></span></body></html>
+
+<span style="font-family: Arial;">In this step you will create the
+Great Cow BASIC solution using the Great Cow BASIC IDE.&nbsp; We will
+be using an Ardunio (really an ATMEL328p microcontroler) and an
+Microchip Xpress 16F18855 board but you can you use many of the
+supported microcontrollers -
+you will see how to adapt with each activity.</span><br>
+
+<br style="font-family: Arial;">
+
+<span style="font-family: Arial;">The solution approach is relatively
+simple from a microcontroller programming point of view.&nbsp; The main
+programmng functionality is as shown below in the psuedo code.<br>
+<br>
+</span>
+<div style="margin-left: 80px;"><span style="font-family: Arial;">Do a
+loop forever</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp; </span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; Increment a value
+to be sent to the Nextion</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; Send the value to
+the Nextion display</span><br>
+<span style="font-family: Arial;">|</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; Do this code segement if the
+microcontroller has received a byte from the Nextion</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;
+&nbsp;&nbsp; </span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp;
+|&nbsp;&nbsp;&nbsp; IF a Nextion TouchEvent </span><br>
+<span style="font-family: Arial;"></span><span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; | </span><br>
+<span style="font-family: Arial;"></span><span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;"></span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;
+Select which Page was the source of the TouchEvent</span><br>
+<span style="font-family: Arial;"></span><span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; Case Page 0</span><br>
+<span style="font-family: Arial;"></span><span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |&nbsp;</span><span style="font-family: Arial;">&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; </span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; </span><span style="font-family: Arial;"></span><span style="font-family: Arial;">Select which Component Raise Event</span><br>
+<span style="font-family: Arial;"></span><span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; </span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; </span><span style="font-family: Arial;"></span><span style="font-family: Arial;">|</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><br>
+<span style="font-family: Arial;"></span><span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp; &nbsp; </span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; </span><span style="font-family: Arial;"></span><span style="font-family: Arial;"> |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; Case ToggleLEDEvent
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; </span><br>
+<span style="font-family: Arial;"></span><span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; </span><span style="font-family: Arial;"></span><span style="font-family: Arial;">&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><br>
+<span style="font-family: Arial;"></span><span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Set LED on</span><br>
+<span style="font-family: Arial;"></span><span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="font-family: Arial;"></span><span style="font-family: Arial;">|</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style="font-family: Arial;"></span><span style="font-family: Arial;">Instruct Nextion to change color of LED
+radio component</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; Case SelectPage1Event
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style="font-family: Arial;">Instruct Nextion to goto to
+page0</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End Select
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; </span><span style="font-family: Arial;"></span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp; Case Page 1</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><br>
+<span style="font-family: Arial;"></span><span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Instruct Nextion to goto to
+page0</span><br>
+<span style="font-family: Arial;"></span><span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; End Select</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; |</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp;
+|&nbsp;&nbsp;&nbsp; End if</span><br>
+<span style="font-family: Arial;"></span><span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; |</span><br>
+<span style="font-family: Arial;">|&nbsp;&nbsp;&nbsp; </span><span style="font-family: Arial;">End Do loop</span><br>
+<span style="font-family: Arial;">|</span><br>
+<span style="font-family: Arial;">End Do loop</span><br style="font-family: Arial;">
+<span style="font-family: Arial;"></span><span style="color: rgb(58, 58, 58); font-family: Arial; font-size: 15px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;"></span><br>
+</div>
+
+<span style="font-family: Arial;"></span><br>
+
+<span style="font-family: Arial;">This psuedo code represents the
+solution that we will create.&nbsp; We will add microcontroller
+section, communications setup, the creation of a buffer to handle the
+incoming stream of bytes from the Nextion and change some application
+constants to match the project you created in the Nextion Editor.</span><br>
+
+<br>
+
+<span style="font-family: Arial;"></span><span style="font-family: Arial;">If you have downloaded the demonstration
+code from GitHub, or, opened the demonstration within your installation
+- the code may be easier.</span><br>
+
+<br>
+
+<br>
+
+<br>
+
+<div style="margin-left: 40px; font-family: Arial;">
+<table style="text-align: left; width: 1188px;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; width: 43px;"><br>
+      </td>
+      <td style="vertical-align: top; width: 423px; font-weight: bold;">
+Code Segment<br>
+      </td>
+      <td style="vertical-align: top; width: 654px; font-weight: bold;">Comment<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 43px;">1<br>
+      </td>
+      <td style="vertical-align: top; width: 423px;">Specify the
+microcontroller type<br>
+      <br>
+      <br>
+      <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">#chip mega328p</span><br>
+      <br>
+      </div>
+      </td>
+      <td style="vertical-align: top; width: 654px;">This could also be
+many of the 8-bit Microchip microcontrollers, like the 16F18855<br>
+      <br>
+<br>
+      <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">#chip 16f18855</span><br>
+      </div>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">2<br>
+      </td>
+      <td style="vertical-align: top;">If you are using an UNO. Include
+the hardware file to expose the UNO constants for the LED.<br>
+      <br>
+      <div style="margin-left: 40px; font-family: Courier New,Courier,monospace;">#include
+&lt;uno_mega328p.h&gt;<br>
+      </div>
+      <br>
+      </td>
+      <td style="vertical-align: top; width: 654px;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">3<br>
+      </td>
+      <td style="vertical-align: top;">Tell the compiler to ensure all
+variables are defined.<br>
+      <br>
+      <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">#option explicit</span><br>
+      </div>
+      <br>
+      </td>
+      <td style="vertical-align: top; width: 654px;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">4<br>
+      </td>
+      <td style="vertical-align: top;">Setup the Nextion.&nbsp; Change
+the width and height to match the rotation in the Nextion Editor<br>
+      <br>
+      <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">#include
+&lt;glcd.h&gt;</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">#define
+GLCD_TYPE GLCD_TYPE_Nextion</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">#define
+GLCD_WIDTH&nbsp; 800.</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">#define
+GLCD_HEIGHT 480</span><br>
+      </div>
+      <br>
+      </td>
+      <td style="vertical-align: top; width: 654px;">This instructs the
+compiler to include the Nextion software library.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">5<br>
+      </td>
+      <td style="vertical-align: top;">Setup the communications.&nbsp;
+We are using 9600.&nbsp; This will match our Nextion project.<br>
+      <br>
+      <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">#define
+USART_BAUD_RATE 9600</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">#define
+USART_BLOCKING</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">#define
+USART_DELAY 0</span><br>
+      </div>
+      <br>
+      </td>
+      <td style="vertical-align: top; width: 654px;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">6<br>
+      </td>
+      <td style="vertical-align: top;">Define, adapt constants to match
+of Nextion project.&nbsp; Ensure this CONSTANTS SHOULD BE CORRECT and
+they match for Nextion project components in the tutorial.<br>
+      <br>
+      <br style="font-family: Courier New,Courier,monospace;">
+      <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">#define
+RADIOCOMPONENT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "r0"</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">#define
+NUMBERCOMPONENT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "n0" </span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">#define
+TEXTCOMPONENT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+"t3"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">#define
+TOGGLELEDBUTTON&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">#define
+SELECTPAGE1BUTTON&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+1&nbsp;&nbsp;&nbsp;&nbsp; </span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">'Statics
+that should not change.</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">#define
+PAGE0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;
+      </span><span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;
+      </span><span style="font-family: Courier New,Courier,monospace;">&nbsp;
+      </span><span style="font-family: Courier New,Courier,monospace;">0</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">#define
+PAGE1</span><span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;
+      </span><span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;
+      </span><span style="font-family: Courier New,Courier,monospace;">&nbsp;
+      </span><span style="font-family: Courier New,Courier,monospace;"></span><span style="font-family: Courier New,Courier,monospace;">1</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">#define
+TOUCHEVENT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0x65</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">'&nbsp;&nbsp;
+The microcontroller LED</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">#define
+LED1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+DIGITAL_13</span><br>
+      </div>
+      <br>
+      </td>
+      <td style="vertical-align: top; width: 654px;">These needs to
+match the Nextion project.<br>
+      <br>
+The Nextion component `objname` and `id` are critical.<br>
+      <br>
+If you have the LED attached to a different port then change the
+constant LED1.&nbsp; This could be something like:<br>
+      <br>
+      <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">'&nbsp;&nbsp; The
+microcontroller LED</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">#define
+LED1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Porta.0</span><br>
+      </div>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">7<br>
+      </td>
+      <td style="vertical-align: top;">Setup the serial buffer.&nbsp;
+This is a buffer ring where the incoming bytes are placed in the
+buffer. <br>
+      <br>
+As a byte arrives we can test `bkbhit`. If this is true then a byte as
+arrived.&nbsp; After we know a byte as arrived, the function `bgetc`
+returns the byte.<br>
+      <br>
+The buffer uses an interrupt to ensure the microcontroller places the
+byte in the buffer.<br>
+      <br>
+      <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">On Interrupt
+UsartRX1Ready Call readUSART</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">'Constants
+required for Buffer Ring</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">#define
+BUFFER_SIZE 256</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">#define
+bkbhit (next_in &lt;&gt; next_out)</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">'Declare
+the required variables</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">Dim
+buffer( BUFFER_SIZE - 1 ) '</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">Dim
+next_in as byte: next_in = 0</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">Dim
+next_out as byte: next_out = 0</span><br>
+      </div>
+      <br>
+      </td>
+      <td style="vertical-align: top; width: 654px;">Some
+micrcontrollers, specificially the newer microcontrollers may be the `UsartRX1Ready`
+adapting to the appropiate microcontroller event name.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">8<br>
+      </td>
+      <td style="vertical-align: top;">Declare the variables that we
+need for the program.&nbsp; And, set the LED as an output<br>
+      <br>
+      <div style="margin-left: 40px; font-family: Courier New,Courier,monospace;">'
+----- Declare the variables we need for this tutorial<br>
+&nbsp;&nbsp;&nbsp; dim byteValueOutToNextion as byte<br>
+&nbsp;&nbsp;&nbsp; dim inComingByteFromNextion as byte<br>
+&nbsp;&nbsp;&nbsp; dim stringOutToNextion as string<br>
+      <br>
+' ----- Set the LED as an output<br>
+&nbsp;&nbsp;&nbsp; dir LED1 out<br>
+      </div>
+      <br>
+      </td>
+      <td style="vertical-align: top; width: 654px;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">9<br>
+      </td>
+      <td style="vertical-align: top;">Create a string for Nextion text
+component - this will state the type of microcontroller and the
+frequency of the microcontroller, and, call the method to initialise
+the Nextion component `<span style="font-weight: bold; font-style: italic;">page0</span>`.<br>
+      <br>
+      <div style="margin-left: 40px; font-family: Courier New,Courier,monospace;">#ifdef
+PIC<br>
+&nbsp;&nbsp;&nbsp; stringOutToNextion = "PIC"<br>
+#endif<br>
+#ifdef AVR<br>
+&nbsp;&nbsp;&nbsp; stringOutToNextion = ""<br>
+#endif<br>
+stringOutToNextion = stringOutToNextion + ChipNameStr + "
+@"+str(ChipMHz)+"Mhz"<br>
+      <br>
+'Initialise page0<br>
+displayPage0<br>
+      </div>
+      <br>
+      <br>
+      </td>
+      <td style="vertical-align: top; width: 654px;">As this program
+can support ATMEL and PIC we add a prefix only when a PIC.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">10<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top; width: 654px;">The main loop.&nbsp; This
+is eseentially the psuedo code.<br>
+      <br>
+      <br>
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">'&nbsp;&nbsp;
+Main loop, never exits</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
+do</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'Update the n0.val object</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+byteValueOutToNextion = (byteValueOutToNextion + 1) % 101</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+GLCDUpdateObject_Nextion( NUMBERCOMPONENT+".val",&nbsp;
+byteValueOutToNextion )</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+wait 50 ms</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'react to incoming data, if bkbhit is TRUE then we have some serial
+data!</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+do while bkbhit</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'Has a Nextion Touch Event happended.&nbsp; bgetc is the next serial
+byte, so, we can test it.</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;"></span><span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+if bgetc = TouchEvent then</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'The next bgetc byte in the buffer is the originating Nextion page</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+select case bgetc</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'Page 0 events... test the next buffer byte to set which component
+caused the event</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+case PAGE0</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'The next bgetc byte in the buffer is the&nbsp; component ID that
+caused the event</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+select case bgetc</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'Page change pressed</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+case SELECTPAGE1BUTTON</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'Send an instruction to 'page' change the Nextion</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+GLCDSendOpInstruction_Nextion( "page",&nbsp; "page"+str(PAGE1) )</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'Toggle LED pressed or released</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+case TOGGLELEDBUTTON</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'The next byte is the state of the TOGGLELEDBUTTON 0 or 1</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+inComingByteFromNextion&nbsp; = bgetc</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'Set the LED state to TOGGLELEDBUTTON state</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+LED1 = inComingByteFromNextion</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'Tell the Nextion the LED is ON</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+if inComingByteFromNextion = 1 then</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Repeat 5</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+GLCDUpdateObject_Nextion( RADIOCOMPONENT+".bco",&nbsp; [long]63488 )</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+GLCDUpdateObject_Nextion( RADIOCOMPONENT+".pco",&nbsp; [long]63488 )</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+end Repeat</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+end if</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+end select</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'Page 1 events... there is only one, so, just change page</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+case PAGE1</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+displayPage0</span><br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; </span><span style="font-family: Arial;"></span><span style="font-family: Courier New,Courier,monospace;">end select</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+end if</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+loop</span><br style="font-family: Courier New,Courier,monospace;">
+      <br style="font-family: Courier New,Courier,monospace;">
+      <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
+loop</span><br style="font-family: Courier New,Courier,monospace;">
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">11<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">Create a
+method to initialise `<span style="font-style: italic;"><span style="font-weight: bold;">page0</span></span>`.&nbsp; This is created
+as the program can call this many times.<br>
+      <br>
+      <br>
+      <div style="margin-left: 40px; font-family: Courier New,Courier,monospace;">sub
+displayPage0<br>
+      <br>
+&nbsp;&nbsp;&nbsp; 'Send an instruction to 'page' change the Nextion<br>
+&nbsp;&nbsp;&nbsp; GLCDSendOpInstruction_Nextion( "page",&nbsp;
+"page"+str(PAGE0) )<br>
+&nbsp;&nbsp;&nbsp; 'wait for display<br>
+&nbsp;&nbsp;&nbsp; wait 750 ms<br>
+&nbsp;&nbsp;&nbsp; 'Update the page text<br>
+&nbsp;&nbsp;&nbsp; GLCDUpdateObject_Nextion( TEXTCOMPONENT+".txt",
+stringOutToNextion&nbsp; )<br>
+      <br>
+End sub<br>
+      </div>
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">12<br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">Finally
+add some utility methods - these are required to support the Interrupt
+routines - no need to change<br>
+      <br>
+      <div style="margin-left: 40px; font-family: Courier New,Courier,monospace;">Sub
+readUSART<br>
+&nbsp;&nbsp;&nbsp; dim temppnt as byte<br>
+&nbsp;&nbsp;&nbsp; buffer(next_in) = HSerReceive<br>
+&nbsp;&nbsp;&nbsp; temppnt = next_in<br>
+&nbsp;&nbsp;&nbsp; next_in = ( next_in + 1 ) % BUFFER_SIZE<br>
+&nbsp;&nbsp;&nbsp; if ( next_in = next_out ) then&nbsp; ' buffer is
+full so overflow<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; next_in = temppnt<br>
+&nbsp;&nbsp;&nbsp; end if<br>
+End Sub<br>
+      <br>
+function bgetc<br>
+&nbsp;&nbsp;&nbsp; wait while !(bkbhit)<br>
+&nbsp;&nbsp;&nbsp; bgetc = buffer(next_out)<br>
+&nbsp;&nbsp;&nbsp; next_out=(next_out+1) % BUFFER_SIZE<br>
+end Function<br>
+      </div>
+      <br>
+      <br>
+If you are using a newer PIC with PPS you will be required to add the
+PPS instructions to setup the serial communications.&nbsp; See the
+GITHUB examples for details of PPS.<br>
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">Finally, compile and load the
+program.&nbsp;&nbsp; When you load the program to an UNO. &nbsp;<span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">
+      <br>
+      <br>
+Ensure to unplug the Nextion RX/TX so it does not interfere with the
+sketch
+upload</span>.&nbsp; See connectivity section below.<br>
+      <br>
+
+      <span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);"></span>
+      </td>
+      
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<br style="font-family: Arial;">
+
+<br>
+
+<span style="font-family: Arial;">Step 6<br>
+<br>
+Connect the microcontroller to the Nextion display.<br>
+<br>
+</span><br style="font-family: Arial;">
+
+<div style="margin-left: 40px; font-family: Arial;">
+<table style="text-align: left; width: 988px;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; width: 49px;"><br>
+      </td>
+      <td style="vertical-align: top; width: 412px; font-weight: bold;">Activity
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 49px;">1<br>
+      </td>
+      <td style="vertical-align: top; width: 412px;"><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">For
+each of the four Nextion DuPont connector ends, insert a header pin
+into the end so can now be plugged in directly to the target board.<br>
+      </span></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">2<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-size: 12pt; line-height: 115%; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">Do
+not connect the Nextion display directly to the microcontroller and the
+microcontroller power supply UNLESS you also make a similar
+confirmations&nbsp; (for your specific board and your model Nextion)
+via Datasheets.<br>
+      <br>
+Nextion Datasheets are clear on the recommended supply current required.<br>
+      <br>
+Failure to review and understand the </span><span style="font-size: 12pt; line-height: 115%; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">recommended
+supply current required for the Nextion display will cause damage.</span><br>
+      <span style="font-size: 12pt; line-height: 115%; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);"><br>
+      </span></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 49px;">3<br>
+      </td>
+      <td style="vertical-align: top; width: 412px;"><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">Connect
+as follow.<br>
+      <br>
+Nextion RX (yellow) to Serial TX on the microcontroller.<br>
+Nextion TX (blue) to UNO Serial RX </span><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">on
+the microcontroller.</span><br>
+      <span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">Nextion
+GND (black)&nbsp; to </span><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">the
+microcontroller 0V</span>.<br>
+      <br>
+      <span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58); font-weight: bold;"></span><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">Nextion
+5V (red) to a suitable 5V supply</span><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58); font-weight: bold;">.&nbsp;
+This is probably NOT the microcontroller board as MANY of the </span><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58); font-weight: bold;">microcontroller
+boards cannot provide sufficient current - and, if you do connect you
+may cause real damage.<br>
+      <br>
+Connect the </span><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58); font-weight: bold;"></span><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">Nextion
+5V (red) to a suitable 5V supply and then connect a common 0V to the
+Nextion and the microcontroller.</span><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58); font-weight: bold;"></span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<br style="font-family: Arial;">
+
+<br>
+
+<span style="font-family: Arial;">Step 7<br>
+<br>
+Enjoy the integrated solution of the Nextion display and a
+microcontroller.&nbsp; You can use the solution as follows<br>
+</span><br>
+
+<br style="font-family: Arial;">
+
+<div style="margin-left: 40px; font-family: Arial;">
+<table style="text-align: left; width: 988px;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; width: 338px;"><span style="font-weight: bold;">Action</span><br>
+      </td>
+      <td style="vertical-align: top; width: 630px; font-weight: bold;">Response
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 338px;">Press <span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">Nextion
+Button "Page1"</span> </td>
+      <td style="vertical-align: top; width: 630px;"><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">Nextion</span>
+display<span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">
+notifies the microcontroller and the&nbsp;</span><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">
+microcontroller instructs the Nextion to </span><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">change
+the page to <span style="font-weight: bold; font-style: italic;">`page1`</span></span></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 338px;">Press Nextion <span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">Button&nbsp;
+"Back"</span> </td>
+      <td style="vertical-align: top; width: 630px;"><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">Nextion</span>
+display<span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">
+notifies the microcontroller and the&nbsp;&nbsp;</span><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">
+microcontroller instructs the Nextion to </span><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">change
+the page to <span style="font-weight: bold; font-style: italic;">`page0`</span></span></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; width: 338px;">Press Nextion
+Button "Toggle LED"<br>
+      </td>
+      <td style="vertical-align: top; width: 630px;"><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">Nextion</span>
+display<span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">
+notifies the microcontroller, the </span><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">microcontroller
+set the state of the LED</span><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">&nbsp;
+and the&nbsp;&nbsp;</span><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);">
+microcontroller instructs the Nextion to<span style="font-style: italic;"><span style="font-weight: bold;"> </span></span><span style="font-weight: bold;"></span>update the radio button on the
+Nextion display <span style="font-style: italic;"><span style="font-weight: bold;"><span style="font-style: italic;"><span style="font-weight: bold;"><span style="font-style: italic;"><span style="font-weight: bold;"></span></span></span></span></span></span></span><span style="font-size: 12pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; color: rgb(58, 58, 58);"><span style="font-weight: bold; font-style: italic;"></span></span></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Automatically the microconroller
+sends a value to the Nextion display<br>
+      </td>
+      <td style="vertical-align: top;">Nextion display is updated with
+the value.&nbsp; And, the Nextion display timer event evaluates this
+component and sets the number component color and the text compont
+appropiately.<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<br style="font-family: Arial;">
+
+<span style="font-family: Arial;"><span style="font-weight: bold;"></span><br>
+</span><br>
+
+<span style="font-family: Arial;"><span style="font-weight: bold;">Summary</span><br>
+<br>
+It is simple to connect the Microchip range of 8-bit microcontrollers
+to the Nextion display.&nbsp; Great Cow BASIC makes the task very easy
+with very little code adapation for each microcontroller type.<br>
+<br>
+Enjoy<br>
+<br>
+<br>
+</span>
+</body></html>
