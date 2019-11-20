@@ -36,8 +36,9 @@
 
     ;VERY IMPORTANT!!
     ;Change the width and height to match the rotation in the Nextion Editor
-    #define GLCD_WIDTH  320   'could be 320 | 400 | 272 | 480 but any valid dimension will work.
-    #define GLCD_HEIGHT 240  'could be 240 | 480 | 800 but any valid dimension will work.
+    #define GLCD_WIDTH  800
+    #define GLCD_HEIGHT 480
+
 
 ' ----- End of set up for Nextion GLCD
 

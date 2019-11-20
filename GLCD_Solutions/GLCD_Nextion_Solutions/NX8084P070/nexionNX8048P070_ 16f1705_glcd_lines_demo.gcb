@@ -1,0 +1,149 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demonstrates the basic Great Cow BASIC GLCD commands plus the Nextion specifics to use Nextion fonts.
+'''
+'''The setup is:
+'''     Include the <glcd.h>
+'''     Specify the Nextion.  #define GLCD_TYPE GLCD_TYPE_Nextion
+'''     Set the device size. #define GLCD_WIDTH xxx and #define GLCD_HEIGHT yyy
+'''     Specify the fonts:
+'''        #define NextionFont0      0, 8, 16    'Arial 8x16
+'''        #define NextionFont1      1, 12, 24   '24point 12x24 charset
+'''        #define NextionFont2      2, 16, 32   '32point 16x32 charset
+'''     Specify hardware or software serial. If using PPS you must setup the serial port.
+'''
+'''     Then, enjoy.
+'''
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.00
+'''@date       24.04.18
+'''********************************************************************************
+
+
+' ----- Configuration
+    'Chip Settings.
+    #chip 16f1705
+    #option explicit
+
+' ----- Set up the Nextion GLCD
+    #include <glcd.h>
+    #define GLCD_TYPE GLCD_TYPE_Nextion
+
+
+    ;VERY IMPORTANT!!
+    ;Change the width and height to match the rotation in the Nextion Editor
+    #define GLCD_WIDTH  800
+    #define GLCD_HEIGHT 480
+
+
+    ;VERY IMPORTANT!!
+    ;Fonts installed in the Nextion MUST match the fonts parameters loading to the GLCD.
+    ;Obtain parameters from Nextion Editor/Font dialog.
+    #define NextionFont0      0, 8, 16    'Arial 8x16
+    #define NextionFont1      1, 12, 24   '24point 12x24 charset
+    #define NextionFont2      2, 16, 32   '32point 16x32 charset
+
+' ----- End of set up for Nextion GLCD
+
+' ----- Set up for Hardware Serial
+    ;VERY IMPORTANT!!
+    ;The Nextion MUST be setup for 9600 bps.
+    #define USART_BAUD_RATE 9600
+    #define USART_TX_BLOCKING
+    #define USART_DELAY 0 MS
+
+    ;VERY IMPORTANT!!
+    ;These two are optional. These constants are set in the library.
+    #define GLCD_NextionSerialPrint HSerPrint
+    #define GLCD_NextionSerialSend  HSerSend
+
+
+' ----- Set up for Software Serial - this is optional - shown to explain the method.
+'    ;Remove Hardware Serial before using Software serial
+'    ;You MUST also remove PPS setup, for hardware serial, when using Software serial
+'    #include <softserial.h>
+'
+'    ; ----- Config Serial UART for sending:
+'    #define SER1_BAUD 9600     ; baudrate must be defined
+'    #define SER1_TXPORT PORTC ; I/O port (without .bit) must be defined
+'    #define SER1_TXPIN 5       ; portbit  must be defined
+'
+'    ;VERY IMPORTANT!!
+'    ;These two constants are required to support the the library.
+'    #define GLCD_NextionSerialPrint        Ser1Print
+'    #define GLCD_NextionSerialSend         Ser1Send
+'
+' ----- End of set up for Serial
+
+
+    'PPS Tool version: 0.0.5.27
+    'PinManager data: v1.78
+    'Generated for 16F1705
+    '
+    'Template comment at the start of the config file
+    '
+    #startup InitPPS, 85
+    #define PPSToolPart 16F1705
+
+    Sub InitPPS
+
+            'Module: EUSART
+            RXPPS = 0x0015    'RC5 > RX
+            RC4PPS = 0x0014    'TX > RC4
+
+    End Sub
+    'Template comment at the end of the config file
+
+
+
+
+' ----- Main program
+
+    'show front screen
+    wait 3 s
+
+
+  dim scalefactor as Word
+  dim outstring as String * 40
+
+  if GLCD_WIDTH > GLCD_HEIGHT then
+    scalefactor = GLCD_HEIGHT * 100
+  else
+    scalefactor = GLCD_WIDTH * 100
+  end if
+  scalefactor = scalefactor / 255
+
+
+
+  GLCDLocateString_Nextion 1,1
+  GLCDPrintDefaultFont_Nextion ( NextionFont2 )
+  outstring = "Scalefactor = "+ str(scalefactor)
+  GLCDPrintString_Nextion ( outstring)
+  wait 2 s
+
+  GLCDBackground = ILI9341_BLUE
+  ;- hide will remove component visually, touch events on the objects will be disabled
+  GLCDSendOpInstruction_Nextion( "vis",  "255,0" )
+  GLCDCLS
+
+  dim ccc, xpos, ypos, xpos1, ypos1 as word
+  do Forever
+
+              repeat 500
+                xpos = (random * scalefactor  ):xpos = xpos/100
+                ypos = (random * scalefactor ):ypos = ypos/100
+                xpos1 = (random * scalefactor ):xpos1 = xpos1/100
+                ypos1 = (random * scalefactor ):ypos1 = ypos1/100
+
+                ccc = Random
+                ccc_h = Random
+
+                box(xpos,ypos,(xpos+xpos1),(ypos+ypos1),ccc)
+
+                end repeat
+          GLCDCLS
+
+
+  loop
