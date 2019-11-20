@@ -1,7 +1,6 @@
 For an HTML rendered document, see http://htmlpreview.github.io/?https://github.com/Anobium/Great-Cow-BASIC-Demonstration-Sources/blob/master/GLCD_Solutions/GLCD_Nextion_Solutions/tutorial/Nextion.html
 
 
-![Nextion Display](
-https://github.com/Anobium/Great-Cow-BASIC-Demonstration-Sources/blob/master/GLCD_Solutions/GLCD_Nextion_Solutions/tutorial/NextionDemo001.JPG)
+The Nextion Display picture will be missing from the HTML rendering.  So, it looks like this.
 
 image::https://github.com/Anobium/Great-Cow-BASIC-Demonstration-Sources/blob/master/GLCD_Solutions/GLCD_Nextion_Solutions/tutorial/NextionDemo001.JPG[Nextion Display]
