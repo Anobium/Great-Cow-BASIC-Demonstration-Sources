@@ -4,3 +4,6 @@ For an HTML rendered document, see http://htmlpreview.github.io/?https://github.
 The Nextion Display picture will be missing from the HTML rendering.  So, it looks like this.
 
 image::https://github.com/Anobium/Great-Cow-BASIC-Demonstration-Sources/blob/master/GLCD_Solutions/GLCD_Nextion_Solutions/tutorial/NextionDemo001.JPG[Nextion Display]
+
+
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](http://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE "Video Title")
