@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Compilation Report</title>
+</head>
+<body>
+<h1>Compilation Report</h1>
+<p>Compiler Version (YYYY-MM-DD): 0.98.<<>> 2019-11-14 (Windows 32 bit)</p>
+<h2>Compilation time</h2>
+<p> (Compile time: 4.90625 seconds)</p>
+<p> (Assembly time: 0.1875 seconds)</p>
+<p> (Download time: 4.6875 seconds)</p>
+<p> (Total time: 9.78125 seconds)</p>
+<h2>Chip resource usage:</h2>
+<p>Chip Model: 16F1705</p>
+<p>Program Memory: 1405/8192 words (17.15%)</p>
+<p>RAM: 398/1024 bytes (38.87%)</p>
+<p> OSC: INT, 32</p>
+<h2>RAM Allocation</h2>
+<table border="1">
+</table>
+<h2>Subroutines</h2>
+<table border="1">
+<tr><th>Name</th><th>Code Size (lines)</th><th>Compiled Size (words)</th><th>Page</th><th>Outgoing calls</th></tr>
+<tr><td>Main</td><td>63</td><td>250</td><td>1</td><td>INITUSART(1), INITGLCD_NEXTION(34), SYSDIVSUB(1), SYSCOPYSTRING(3), SYSREADSTRING(11), READUSART(1), Delay_MS(1), GLCDUPDATEOBJECT_NEXTION(2), GLCDSENDOPINSTRUCTION_NEXTION(1), BGETC(4), GLCDUPDATEOBJECT_NEXTION(1), DISPLAYPAGE0(2), STR(2), INITPPS(18), INITSYS(27)</td></tr>
+<tr><td>DISPLAYPAGE0</td><td>3</td><td>68</td><td>1</td><td>SYSCOPYSTRING(1), SYSREADSTRING(3), Delay_MS(1), GLCDUPDATEOBJECT_NEXTION(1), STR(1), GLCDSENDOPINSTRUCTION_NEXTION(1)</td></tr>
+<tr><td>READUSART</td><td>7</td><td>27</td><td>1</td><td>SYSDIVSUB(1), HSERRECEIVE(1)</td></tr>
+<tr><td>BGETC</td><td>3</td><td>30</td><td>1</td><td>SYSDIVSUB(1), SYSCOMPEQUAL(1)</td></tr>
+<tr><td>INITPPS</td><td>2</td><td>8</td><td>1</td><td></td></tr>
+<tr><td>INITGLCD_NEXTION</td><td>23</td><td>33</td><td>1</td><td>Delay_S(1), SENDPARAM_NEXTION(1), HSERSEND(3)</td></tr>
+<tr><td>SENDPARAM_NEXTION</td><td>8</td><td>24</td><td>1</td><td>HSERSEND(4), HSERPRINT(1)</td></tr>
+<tr><td>GLCDUPDATEOBJECT_NEXTION</td><td>8</td><td>36</td><td>1</td><td>HSERSEND(5), HSERPRINT(3)</td></tr>
+<tr><td>GLCDUPDATEOBJECT_NEXTION</td><td>6</td><td>34</td><td>1</td><td>HSERSEND(3), HSERPRINT(1), HSERPRINT(2)</td></tr>
+<tr><td>GLCDUPDATEOBJECT_NEXTION</td><td>6</td><td>30</td><td>1</td><td>HSERSEND(3), HSERPRINT(1), HSERPRINT(2)</td></tr>
+<tr><td>GLCDSENDOPINSTRUCTION_NEXTION</td><td>6</td><td>30</td><td>1</td><td>HSERSEND(3), HSERPRINT(3)</td></tr>
+<tr><td>INITSYS</td><td>696</td><td>18</td><td>1</td><td></td></tr>
+<tr><td>SYSCOPYSTRING</td><td>118</td><td>17</td><td>1</td><td></td></tr>
+<tr><td>SYSREADSTRING</td><td>101</td><td>16</td><td>1</td><td>SysStringTables(1)</td></tr>
+<tr><td>SYSDIVSUB</td><td>48</td><td>20</td><td>1</td><td></td></tr>
+<tr><td>SYSDIVSUB16</td><td>38</td><td>52</td><td>1</td><td>SYSCOMPEQUAL16(1)</td></tr>
+<tr><td>SYSDIVSUB32</td><td>40</td><td>90</td><td>1</td><td>SYSCOMPEQUAL32(1)</td></tr>
+<tr><td>SYSCOMPEQUAL</td><td>20</td><td>6</td><td>1</td><td></td></tr>
+<tr><td>SYSCOMPEQUAL16</td><td>34</td><td>11</td><td>1</td><td></td></tr>
+<tr><td>SYSCOMPEQUAL32</td><td>52</td><td>19</td><td>1</td><td></td></tr>
+<tr><td>SYSCOMPLESSTHAN16</td><td>38</td><td>15</td><td>1</td><td></td></tr>
+<tr><td>STR</td><td>36</td><td>172</td><td>1</td><td>SYSDIVSUB16(4), SYSCOMPLESSTHAN16(4)</td></tr>
+<tr><td>INITUSART</td><td>141</td><td>15</td><td>1</td><td></td></tr>
+<tr><td>HSERSEND</td><td>49</td><td>7</td><td>1</td><td></td></tr>
+<tr><td>HSERSEND</td><td>128</td><td>10</td><td>1</td><td></td></tr>
+<tr><td>HSERRECEIVE</td><td>3</td><td>6</td><td>1</td><td>HSERRECEIVE(1)</td></tr>
+<tr><td>HSERRECEIVE</td><td>145</td><td>20</td><td>1</td><td></td></tr>
+<tr><td>HSERPRINT</td><td>12</td><td>29</td><td>1</td><td>HSERSEND(1)</td></tr>
+<tr><td>HSERPRINT</td><td>35</td><td>129</td><td>1</td><td>SYSDIVSUB16(4), SYSCOMPLESSTHAN16(4), HSERSEND(1), HSERSEND(4)</td></tr>
+<tr><td>HSERPRINT</td><td>8</td><td>18</td><td>1</td><td>HSERPRINT(1), HSERSEND(1)</td></tr>
+<tr><td>HSERPRINT</td><td>17</td><td>72</td><td>1</td><td>SYSDIVSUB32(1), SYSCOMPEQUAL32(1), HSERSEND(1)</td></tr>
+<tr><td>Delay_MS</td><td>0</td><td>14</td><td>1</td><td></td></tr>
+<tr><td>Delay_S</td><td>0</td><td>8</td><td>1</td><td>Delay_MS(1)</td></tr>
+<tr><td>SysStringTables</td><td>0</td><td>71</td><td>1</td><td></td></tr>
+</table>
+</body>
+</html>
