@@ -8,5 +8,5 @@ image::https://github.com/Anobium/Great-Cow-BASIC-Demonstration-Sources/blob/mas
 
 [![IMAGE ALT TEXT](http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](http://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE "Video Title")
 
-image::https://youtu.be/kfwB7tkC9-U[YouTube]
+image::https://www.youtube.com/watch?v=kfwB7tkC9-U&t=3s[YouTube]
 
