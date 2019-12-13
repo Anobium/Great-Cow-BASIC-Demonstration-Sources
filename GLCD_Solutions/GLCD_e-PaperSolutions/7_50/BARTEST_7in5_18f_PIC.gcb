@@ -134,7 +134,7 @@
      GLCDDisplay on
 
      GLCDCLS
-     GLCDSleep
+     GLCDDisplay off
 
      do
 

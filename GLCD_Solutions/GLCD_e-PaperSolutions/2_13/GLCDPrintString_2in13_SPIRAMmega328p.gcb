@@ -8,7 +8,8 @@
 
      'Chip Settings.
 
-     #include <uno_mega328p.h>
+     #chip mega328p, 16
+    #include <uno_mega328p.h>
      #option explicit
 
      #include <glcd.h>
@@ -26,14 +27,14 @@
 
 ' ******************************************************************************************************
 
-    #include <spieeprom.h>
-    #define SPIEEPROM_CS            DIGITAL_5
-    #define SPIEEPROM_SCK           DIGITAL_13
-    #define SPIEEPROM_DO            DIGITAL_11
-    #define SPIEEPROM_DI            DIGITAL_12
+    #include <spisram.h>
+    #define SPISRAM_CS            DIGITAL_5
+    #define SPISRAM_SCK           DIGITAL_13
+    #define SPISRAM_DO            DIGITAL_11
+    #define SPISRAM_DI            DIGITAL_12
 
-    #define SPIEEPROM_HARDWARESPI
-    #define SPIEEPROM_TYPE          SRAM_23LC1024
+    #define SPISRAM_HARDWARESPI
+    #define SPISRAM_TYPE          SRAM_23LC1024
 
     #define HWSPIMode MasterULTRAFAST
 
@@ -64,5 +65,4 @@
 
 
      GLCDCLS
-     GLCDSleep
-
+     GLCDDisplay off

@@ -1,3 +1,4 @@
+   #chip mega328p, 16
    #include <uno_mega328p.h>
    #option explicit
 
@@ -19,14 +20,14 @@
     #define SD_DO DIGITAL_11
     #define SD_DI DIGITAL_12
 
-    #include <spieeprom.h>
-    #define SPIEEPROM_CS            DIGITAL_5         'Also known as SS, or Slave Select
-    #define SPIEEPROM_SCK           DIGITAL_13        'Also known as CLK
-    #define SPIEEPROM_DO            DIGITAL_11        'Also known as MOSI
-    #define SPIEEPROM_DI            DIGITAL_12        'Also known as MISO
+    #include <spisram.h>
+    #define SPISRAM_CS            DIGITAL_5         'Also known as SS, or Slave Select
+    #define SPISRAM_SCK           DIGITAL_13        'Also known as CLK
+    #define SPISRAM_DO            DIGITAL_11        'Also known as MOSI
+    #define SPISRAM_DI            DIGITAL_12        'Also known as MISO
 
-    #define SPIEEPROM_HARDWARESPI
-    #define SPIEEPROM_TYPE          SRAM_23LC1024
+    #define SPISRAM_HARDWARESPI
+    #define SPISRAM_TYPE          SRAM_23LC1024
 
     #define HWSPIMode MASTERULTRAFAST              'MASTERSLOW | MASTER | MASTERFAST | MASTERULTRAFAST
 
@@ -47,11 +48,11 @@
     counter = 0
     HSerPrint "Reading..."
     HSerPrintCRLF
-    For EPD_Ind_raw=0 to SPIEEPROM_CAPACITY - 1
+    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
       'choose one....
-      'SPIEeprom_rd_byte (  EPD_Ind_raw, spirambyteread )
+      'SPISRAM_rd_byte (  EPD_Ind_raw, spirambyteread )
     'or, as a function
-      spirambyteread = SPIEeprom_rd_byte (  EPD_Ind_raw )
+      spirambyteread = SPISRAM_rd_byte (  EPD_Ind_raw )
       if spirambyteread=0x00 then counter++
       HSerPrint hex(spirambyteread)
       HSerPrint ":"

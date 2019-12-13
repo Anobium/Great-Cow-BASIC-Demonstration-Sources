@@ -8,7 +8,8 @@
 
      'Chip Settings.
 
-     #include <uno_mega328p.h>
+     #chip mega328p, 16
+    #include <uno_mega328p.h>
      #option explicit
 
      #include <glcd.h>
@@ -31,6 +32,6 @@
     GLCDBackground=TFT_WHITE
 
     GLCDCLS
-    GLCDSleep
+    GLCDDisplay off
 
   'look at the ASM for the versions

@@ -23,7 +23,7 @@
 
     Sub InitPPS
          'This has been added to turn off PPS SPI when in SPI software mode
-            #ifdef SPIEEPROM_HARDWARESPI
+            #ifdef SPISRAM_HARDWARESPI
                 'Module: SPI1
                 RC3PPS = 0x001E    'SCK1 > RC3
                 SPI1SCKPPS = 0x0013    'RC3 > SCK1 (bi-directional)

@@ -15,7 +15,7 @@
 
     Sub InitPPS
          'This has been added to turn off PPS SPI when in SPI software mode
-            #ifdef SPIEEPROM_HARDWARESPI
+            #ifdef SPISRAM_HARDWARESPI
                 'Module: SPI1
                 RC3PPS = 0x001E    'SCK1 > RC3
                 SPI1SCKPPS = 0x0013    'RC3 > SCK1 (bi-directional)
@@ -37,14 +37,14 @@
    #define USART_BLOCKING
    #define USART_TX_BLOCKING
 
-    #include <spieeprom.h>
-    #define SPIEEPROM_CS            Porta.2           'Also known as SS, or Slave Select
-    #define SPIEEPROM_SCK           Portc.3           'Also known as CLK
-    #define SPIEEPROM_DO            Portc.5           'Also known as MOSI
-    #define SPIEEPROM_DI            Portc.4           'Also known as MISO
+    #include <spisram.h>
+    #define SPISRAM_CS            Porta.2           'Also known as SS, or Slave Select
+    #define SPISRAM_SCK           Portc.3           'Also known as CLK
+    #define SPISRAM_DO            Portc.5           'Also known as MOSI
+    #define SPISRAM_DI            Portc.4           'Also known as MISO
 
-    #define SPIEEPROM_HARDWARESPI
-    #define SPIEEPROM_TYPE          SRAM_23LC1024
+    #define SPISRAM_HARDWARESPI
+    #define SPISRAM_TYPE          SRAM_23LC1024
 
     'This is specific to the K42 chips
     #define SPI_BAUD_RATE_REGISTER 7
@@ -56,9 +56,9 @@
     'Wait 2 seconds to open the serial terminal
     wait 2 s
     dim sizeofSPIRAM as long
-    sizeofSPIRAM = SPIEEPROM_CAPACITY
+    sizeofSPIRAM = SPISRAM_CAPACITY
     HSerPrintCRLF 2
-    HSerPrint "Writing...SPIEEPROM_CAPACITY = 0x"
+    HSerPrint "Writing...SPISRAM_CAPACITY = 0x"
     HSerPrint hex(sizeofSPIRAM_U)
     HSerPrint hex(sizeofSPIRAM_H)
     HSerPrint hex(sizeofSPIRAM)
@@ -66,8 +66,8 @@
     wait 100 ms
 
     dim EPD_Ind_raw as long
-    For EPD_Ind_raw=0 to SPIEEPROM_CAPACITY - 1
-      SPIEeprom_wr_byte ( [long]EPD_Ind_raw, EPD_Ind_raw and 255 )
+    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
+      SPISRAM_wr_byte ( [long]EPD_Ind_raw, EPD_Ind_raw and 255 )
     Next
 
 
@@ -77,11 +77,11 @@
 
     HSerPrint "Reading..."
     HSerPrintCRLF
-    For EPD_Ind_raw=0 to SPIEEPROM_CAPACITY - 1
+    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
       'choose one....
-      'SPIEeprom_rd_byte (  EPD_Ind_raw, spirambyteread )
+      'SPISRAM_rd_byte (  EPD_Ind_raw, spirambyteread )
     'or, as a function
-      spirambyteread = SPIEeprom_rd_byte (  EPD_Ind_raw )
+      spirambyteread = SPISRAM_rd_byte (  EPD_Ind_raw )
 
       if spirambyteread = ( EPD_Ind_raw and 255 ) then
           HSerPrint hex(spirambyteread)
@@ -97,14 +97,14 @@
 
     HSerPrint "Rewriting to 0x00 ..."
     HSerPrintCRLF
-    For EPD_Ind_raw=0 to SPIEEPROM_CAPACITY - 1
-      SPIEeprom_wr_byte ( [long]EPD_Ind_raw, 0 )
+    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
+      SPISRAM_wr_byte ( [long]EPD_Ind_raw, 0 )
     Next
 
     Dim errorcount as long
     errorcount = 0
-    For EPD_Ind_raw=0 to SPIEEPROM_CAPACITY - 1
-      SPIEeprom_rd_byte (  EPD_Ind_raw, spirambyteread )
+    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
+      SPISRAM_rd_byte (  EPD_Ind_raw, spirambyteread )
       if spirambyteread <> 0 then
           errorcount++
       end if

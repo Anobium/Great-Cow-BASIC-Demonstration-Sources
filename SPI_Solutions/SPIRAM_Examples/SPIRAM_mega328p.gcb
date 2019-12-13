@@ -14,14 +14,14 @@
     'Mega:      MOSI - pin 51, MISO - pin 50, CLK - pin 52, CS - pin 4 (CS pin can be changed) and pin #52 (SS) must be an output
     'Leonardo:  Connect to hardware SPI via the ICSP header
 
-    #include <spieeprom.h>
-    #define SPIEEPROM_CS            DIGITAL_5         'Also known as SS, or Slave Select
-    #define SPIEEPROM_SCK           DIGITAL_13        'Also known as CLK
-    #define SPIEEPROM_DO            DIGITAL_11        'Also known as MOSI
-    #define SPIEEPROM_DI            DIGITAL_12        'Also known as MISO
+    #include <spisram.h>
+    #define SPISRAM_CS            DIGITAL_5         'Also known as SS, or Slave Select
+    #define SPISRAM_SCK           DIGITAL_13        'Also known as CLK
+    #define SPISRAM_DO            DIGITAL_11        'Also known as MOSI
+    #define SPISRAM_DI            DIGITAL_12        'Also known as MISO
 
-    #define SPIEEPROM_HARDWARESPI
-    #define SPIEEPROM_TYPE          SRAM_23LC1024
+    #define SPISRAM_HARDWARESPI
+    #define SPISRAM_TYPE          SRAM_23LC1024
 
     #define HWSPIMode MASTERULTRAFAST              'MASTERSLOW | MASTER | MASTERFAST | MASTERULTRAFAST
 
@@ -36,8 +36,8 @@
     HSerPrintCRLF 2
     HSerPrint "Writing..."
     HSerPrintCRLF
-    For EPD_Ind_raw=0 to SPIEEPROM_CAPACITY - 1
-      SPIEeprom_wr_byte ( [long]EPD_Ind_raw, EPD_Ind_raw and 255 )
+    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
+      SPISRAM_wr_byte ( [long]EPD_Ind_raw, EPD_Ind_raw and 255 )
     Next
 
 
@@ -47,11 +47,11 @@
     dim EPD_Ind_raw as long
     HSerPrint "Reading..."
     HSerPrintCRLF
-    For EPD_Ind_raw=0 to SPIEEPROM_CAPACITY - 1
+    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
       'choose one....
-      'SPIEeprom_rd_byte (  EPD_Ind_raw, spirambyteread )
+      'SPISRAM_rd_byte (  EPD_Ind_raw, spirambyteread )
     'or, as a function
-      spirambyteread = SPIEeprom_rd_byte (  EPD_Ind_raw )
+      spirambyteread = SPISRAM_rd_byte (  EPD_Ind_raw )
 
       if spirambyteread = ( EPD_Ind_raw and 255 ) then
           HSerPrint hex(spirambyteread)
@@ -67,14 +67,14 @@
 
     HSerPrint "Rewriting to 0x00 ..."
     HSerPrintCRLF
-    For EPD_Ind_raw=0 to SPIEEPROM_CAPACITY - 1
-      SPIEeprom_wr_byte ( [long]EPD_Ind_raw, 0 )
+    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
+      SPISRAM_wr_byte ( [long]EPD_Ind_raw, 0 )
     Next
 
     Dim errorcount as long
     errorcount = 0
-    For EPD_Ind_raw=0 to SPIEEPROM_CAPACITY - 1
-      SPIEeprom_rd_byte (  EPD_Ind_raw, spirambyteread )
+    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
+      SPISRAM_rd_byte (  EPD_Ind_raw, spirambyteread )
       if spirambyteread <> 0 then
           errorcount++
       end if

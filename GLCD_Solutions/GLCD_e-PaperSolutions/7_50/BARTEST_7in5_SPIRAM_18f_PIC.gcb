@@ -23,7 +23,7 @@
 
     Sub InitPPS
          'This has been added to turn off PPS SPI when in SPI software mode
-            #ifdef SPIEEPROM_HARDWARESPI
+            #ifdef SPISRAM_HARDWARESPI
                 'Module: SPI1
                 RC3PPS = 0x001E    'SCK1 > RC3
                 SPI1SCKPPS = 0x0013    'RC3 > SCK1 (bi-directional)
@@ -60,14 +60,14 @@
 
 '******************************************************************************************************
 
-    #include <spieeprom.h>
-    #define SPIEEPROM_CS            Porta.2           'Also known as SS, or Slave Select
-    #define SPIEEPROM_SCK           Portc.3           'Also known as CLK
-    #define SPIEEPROM_DO            Portc.5           'Also known as MOSI
-    #define SPIEEPROM_DI            Portc.4           'Also known as MISO
+    #include <spisram.h>
+    #define SPISRAM_CS            Porta.2           'Also known as SS, or Slave Select
+    #define SPISRAM_SCK           Portc.3           'Also known as CLK
+    #define SPISRAM_DO            Portc.5           'Also known as MOSI
+    #define SPISRAM_DI            Portc.4           'Also known as MISO
 
-    #define SPIEEPROM_HARDWARESPI
-    #define SPIEEPROM_TYPE          SRAM_23LC1024
+    #define SPISRAM_HARDWARESPI
+    #define SPISRAM_TYPE          SRAM_23LC1024
 
 '********************************************************************************
      'Main program
@@ -144,7 +144,7 @@
      GLCDDisplay on
 
      GLCDCLS
-     GLCDSleep
+     GLCDDisplay off
 
      do
 

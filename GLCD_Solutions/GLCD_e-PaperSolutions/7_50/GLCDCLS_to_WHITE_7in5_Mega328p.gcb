@@ -6,7 +6,8 @@
  '''*************************************************************************
 ' *******
 
-     #include <uno_mega328p.h>
+     #chip mega328p, 16
+    #include <uno_mega328p.h>
      #option explicit
 
  '******************************************************************************************************
@@ -42,7 +43,7 @@
     GLCDBackground=TFT_WHITE
     GLCDCLS
 
-    GLCDSleep
+    GLCDDisplay off
 
     do
     loop
