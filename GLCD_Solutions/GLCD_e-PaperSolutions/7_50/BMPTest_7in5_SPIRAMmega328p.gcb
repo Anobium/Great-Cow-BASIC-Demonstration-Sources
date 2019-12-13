@@ -1,0 +1,178 @@
+'''A demonstration program for Explicit-Paper.
+ '''-------------------------------------------------------------------------
+' -------------------------------------------------------
+ '''This has been tested using the hardware and software SPI option.
+
+ '''*************************************************************************
+' *******
+
+
+     'Chip Settings.
+
+     #include <uno_mega328p.h>
+     #option explicit
+
+     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+     #define GLCD_DC     DIGITAL_9
+     #define GLCD_CS     DIGITAL_10
+     #define GLCD_RESET  DIGITAL_8
+     #define GLCD_DO     DIGITAL_11
+     #define GLCD_SCK    DIGITAL_13
+     #define GLCD_Busy   DIGITAL_7
+
+    'Setup the E-Paper
+
+     #include <glcd.h>
+     #define GLCD_TYPE GLCD_TYPE_EPD_EPD7in5
+     #define GLCD_EXTENDEDFONTSET1
+     #define GLCD_OLED_FONT
+
+ '  The following should be used   '#define EPD_HardwareSPI     'remove comment out if you want to use software SPI.
+     #define EPD_HardwareSPI
+     #define HWSPIMode MasterUltraFast
+
+'***************************************************************************
+
+    #include <spieeprom.h>
+    #define SPIEEPROM_CS            DIGITAL_5
+    #define SPIEEPROM_SCK           DIGITAL_13
+    #define SPIEEPROM_DO            DIGITAL_11
+    #define SPIEEPROM_DI            DIGITAL_12
+
+    #define SPIEEPROM_HARDWARESPI
+    #define SPIEEPROM_TYPE          SRAM_23LC1024
+
+'******************************************************************************************************
+
+  'main
+
+    'USART settings
+    #define USART_BAUD_RATE 9600
+    #define USART_TX_BLOCKING
+
+    #include "resources\640384_2.bmp640"
+
+    GLCDForeground=TFT_BLACK
+    GLCDBackground=TFT_WHITE
+    GLCDfntDefaultSize = 2
+
+    GLCDRotate ( Landscape )
+
+    GLCDDisplay on
+
+
+    EPD_LoadBMP  640384_2
+    SendCommand_EPD2in13D(DISPLAY_REFRESH)
+
+    GLCDDisplay Off
+    wait 30 s
+    GLCDDisplay On
+    GLCDForeground=TFT_BLACK
+    GLCDBackground=TFT_WHITE
+    GLCDCLS
+    GLCDDisplay Off
+
+    end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+macro EPD_LoadBMP ( in epd_tablename )
+
+      Dim EPD_Ind_raw, EPD_Ind_col, dibHeader_Width, dibHeader_Height as long
+      Dim tableposition as word
+      Dim monoData as long
+      dim EPD2in13D_Data as byte
+        dim EPD7in5_Data_Black, EPD7in5_Data as byte
+
+      Readtable  epd_tablename, 1 ,  dibHeader_Width
+      Readtable  epd_tablename, 2 ,  dibHeader_Height
+      monoData = 0
+
+
+      EPD7in5_Data_Black=0
+
+      tableposition = 3
+      SendCommand_EPD2in13D(Data_Transmission_1)
+
+          dim sendDataFlag as byte
+          sendDataFlag = 0
+          EPD7in5_Data = 0
+
+
+ 'We need to set the signals as we are optimising the code by using the macro
+    SET EPD_CS OFF
+    SET EPD_DC ON
+    Do while monoData <> 0xFFFF
+
+        Readtable  epd_tablename, tableposition ,  monoData
+        tableposition++
+
+        if monoData <> 0xFFFF then
+
+          Repeat monoData
+
+
+                if sendDataFlag < 2 then
+
+                    if EPD7in5_Data_Black= 0 then
+                        EPD7in5_Data.0  = 0
+                    else
+                        EPD7in5_Data.0  = 1
+                    end if
+
+                    sendDataFlag++
+
+                end if
+
+
+                if  sendDataFlag = 2 then
+                  'This macro assumes the use of the variable EPD7in5_Data
+
+                      SendData_EPD7in5_Macro
+                      sendDataFlag = 0
+
+                else
+
+                    repeat 4
+                      Set C Off
+                      rotate EPD7in5_Data left
+                    end repeat
+
+                end if
+
+          end repeat
+
+          if EPD7in5_Data_Black = 0 then
+            EPD7in5_Data_Black = 1
+          else
+            EPD7in5_Data_Black = 0
+          end if
+
+        end if
+    Loop
+    SET EPD_CS ON
+
+end macro

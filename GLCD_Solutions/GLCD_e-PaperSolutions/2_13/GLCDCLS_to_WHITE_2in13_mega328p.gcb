@@ -1,0 +1,36 @@
+'''A demonstration program for Explicit-Paper.
+ '''-------------------------------------------------------------------------
+' -------------------------------------------------------
+ '''This has been tested using the hardware and software SPI option.
+
+ '''*************************************************************************
+' *******
+
+     'Chip Settings.
+
+     #include <uno_mega328p.h>
+     #option explicit
+
+     #include <glcd.h>
+     #define GLCD_TYPE GLCD_TYPE_EPD_EPD2in13D
+     #define GLCD_TYPE_EPD2in13D_LOWMEMORY2_GLCD_MODE
+     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+     #define GLCD_DC     DIGITAL_9
+     #define GLCD_CS     DIGITAL_10
+     #define GLCD_RESET  DIGITAL_8
+     #define GLCD_DO     DIGITAL_11
+     #define GLCD_SCK    DIGITAL_13
+     #define GLCD_Busy   DIGITAL_7
+' ******************************************************************************************************
+    dim ver1 as byte
+    dim ver2 as byte
+    ver1 = EPD2_13VERSION
+    ver2 = GLCDVERSION
+
+    GLCDForeground=TFT_BLACK
+    GLCDBackground=TFT_WHITE
+
+    GLCDCLS
+    GLCDSleep
+
+  'look at the ASM for the versions

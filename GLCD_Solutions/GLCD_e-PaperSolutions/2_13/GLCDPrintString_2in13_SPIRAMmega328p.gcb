@@ -1,0 +1,68 @@
+'''A demonstration program for Explicit-Paper.
+ '''-------------------------------------------------------------------------
+' -------------------------------------------------------
+ '''This has been tested using the hardware and software SPI option.
+
+ '''*************************************************************************
+' *******
+
+     'Chip Settings.
+
+     #include <uno_mega328p.h>
+     #option explicit
+
+     #include <glcd.h>
+     #define GLCD_TYPE GLCD_TYPE_EPD_EPD2in13D
+
+     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+     #define GLCD_DC     DIGITAL_9
+     #define GLCD_CS     DIGITAL_10
+     #define GLCD_RESET  DIGITAL_8
+     #define GLCD_DO     DIGITAL_11
+     #define GLCD_SCK    DIGITAL_13
+     #define GLCD_Busy   DIGITAL_7
+
+     #define EPD_HARDWARESPI
+
+' ******************************************************************************************************
+
+    #include <spieeprom.h>
+    #define SPIEEPROM_CS            DIGITAL_5
+    #define SPIEEPROM_SCK           DIGITAL_13
+    #define SPIEEPROM_DO            DIGITAL_11
+    #define SPIEEPROM_DI            DIGITAL_12
+
+    #define SPIEEPROM_HARDWARESPI
+    #define SPIEEPROM_TYPE          SRAM_23LC1024
+
+    #define HWSPIMode MasterULTRAFAST
+
+' ******************************************************************************************************
+
+'Tests
+    dim ver1 as byte
+    dim ver2 as byte
+    ver1 = EPD2_13VERSION
+    ver2 = GLCDVERSION
+
+    GLCDForeground=TFT_BLACK
+    GLCDBackground=TFT_WHITE
+
+    dim xloop as byte
+
+     GLCD_Open_PageTransaction
+        for xloop = 1 to 27
+            GLCDPrintString ""
+            GLCDPrintString "Line "
+            GLCDPrintStringLN Str(xloop)
+        next
+     GLCD_Close_PageTransaction
+
+     GLCDDisplay Off
+     wait 5 s
+     GLCDDisplay On
+
+
+     GLCDCLS
+     GLCDSleep
+

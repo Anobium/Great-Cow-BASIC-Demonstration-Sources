@@ -1,0 +1,114 @@
+'''A demonstration program for Explicit-Paper.
+ '''-------------------------------------------------------------------------
+' -------------------------------------------------------
+ '''This has been tested using the hardware and software SPI option.
+
+ '''*************************************************************************
+' *******
+     #include <uno_mega328p.h>
+     #option explicit
+
+ '******************************************************************************************************
+
+    'Setup the E-Paper
+     #include <glcd.h>
+
+     #define GLCD_TYPE GLCD_TYPE_EPD_EPD7in5
+     #define GLCD_EXTENDEDFONTSET1
+     #define GLCD_OLED_FONT
+     #define GLCD_TYPE_EPD7in5_LOWMEMORY1_GLCD_MODE    'Only mode that works in 2k RAM chips
+
+
+     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+     #define GLCD_DC     DIGITAL_9
+     #define GLCD_CS     DIGITAL_10
+     #define GLCD_RESET  DIGITAL_8
+     #define GLCD_DO     DIGITAL_11
+     #define GLCD_SCK    DIGITAL_13
+     #define GLCD_Busy   DIGITAL_7
+
+ '  The following should be used   '#define EPD_HardwareSPI     'remove comment out if you want to use software SPI.
+     #define EPD_HardwareSPI
+     #define HWSPIMode MasterUltraFast
+
+'******************************************************************************************************
+
+     'Main program
+
+
+    GLCDForeground=TFT_BLACK
+    GLCDBackground=TFT_WHITE
+    GLCDfntDefaultSize = 2
+
+     GLCD_Open_PageTransaction
+        GLCDPrintStringLn "Default"
+        GLCDPrintStringLn "BAR1"
+        GLCDPrintStringLn "BAR2"
+        GLCDPrintStringLn "BAR3"
+     GLCD_Close_PageTransaction
+
+     GLCDDisplay off
+     wait 2 s
+     GLCDDisplay on
+
+
+     GLCDRotate Portrait
+
+     GLCD_Open_PageTransaction
+        GLCDPrintStringLn "Portrait"
+        GLCDPrintStringLn "BAR1"
+        GLCDPrintStringLn "BAR2"
+        GLCDPrintStringLn "BAR3"
+     GLCD_Close_PageTransaction
+
+     GLCDDisplay off
+     wait 2 s
+     GLCDDisplay on
+
+
+     GLCDRotate Portrait_rev
+
+     GLCD_Open_PageTransaction
+        GLCDPrintStringLn "Portrait_rev"
+        GLCDPrintStringLn "BAR1"
+        GLCDPrintStringLn "BAR2"
+        GLCDPrintStringLn "BAR3"
+
+     GLCD_Close_PageTransaction
+
+     GLCDDisplay off
+     wait 2 s
+     GLCDDisplay on
+
+     GLCDRotate Landscape
+
+     GLCD_Open_PageTransaction
+        GLCDPrintStringLn "Landscape"
+        GLCDPrintStringLn "BAR1"
+        GLCDPrintStringLn "BAR2"
+        GLCDPrintStringLn "BAR3"
+     GLCD_Close_PageTransaction
+
+     GLCDDisplay off
+     wait 2 s
+     GLCDDisplay on
+
+     GLCDRotate Landscape_Rev
+
+     GLCD_Open_PageTransaction
+        GLCDPrintStringLn "Landscape_Rev"
+        GLCDPrintStringLn "BAR1"
+        GLCDPrintStringLn "BAR2"
+        GLCDPrintStringLn "BAR3"
+     GLCD_Close_PageTransaction
+
+     GLCDDisplay off
+     wait 2 s
+     GLCDDisplay on
+
+     GLCDCLS
+     GLCDSleep
+
+     do
+
+     loop

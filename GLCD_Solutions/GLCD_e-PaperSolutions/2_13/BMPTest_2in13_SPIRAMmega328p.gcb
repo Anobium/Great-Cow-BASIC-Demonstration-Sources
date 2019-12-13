@@ -1,0 +1,90 @@
+'''A demonstration program for Explicit-Paper.
+ '''-------------------------------------------------------------------------
+' -------------------------------------------------------
+ '''This has been tested using the hardware and software SPI option.
+
+ '''*************************************************************************
+' *******
+
+
+     'Chip Settings.
+
+     #include <uno_mega328p.h>
+     #option explicit
+
+     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+     #define GLCD_DC     DIGITAL_9
+     #define GLCD_CS     DIGITAL_10
+     #define GLCD_RESET  DIGITAL_8
+     #define GLCD_DO     DIGITAL_11
+     #define GLCD_SCK    DIGITAL_13
+     #define GLCD_Busy   DIGITAL_7
+
+    'Setup the E-Paper
+
+     #include <glcd.h>
+     #define GLCD_TYPE GLCD_TYPE_EPD_EPD2in13D
+     #define GLCD_EXTENDEDFONTSET1
+
+     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+     #define GLCD_DC     portA.0   ' Data(hight)/ command(low) line
+     #define GLCD_CS     portC.1   ' Chip select line (negate)
+     #define GLCD_RESET  portD.2   ' Reset line       (negate)
+     #define GLCD_DO     portC.5   ' GLCD MOSI connect to MCU SDO
+     #define GLCD_SCK    portC.3   ' Clock Line
+     #define GLCD_Busy   portC.0   ' Busy Line
+
+'***************************************************************************
+    #include <spieeprom.h>
+    #define SPIEEPROM_CS            DIGITAL_5
+    #define SPIEEPROM_SCK           DIGITAL_13
+    #define SPIEEPROM_DO            DIGITAL_11
+    #define SPIEEPROM_DI            DIGITAL_12
+
+    #define SPIEEPROM_TYPE          SRAM_23LC1024
+
+' ******************************************************************************************************
+  'main
+
+    #include "resources\anobium104x212.BMP104"
+    #include "resources\anobium104x212a.BMP104"
+
+
+
+      EPD_LoadBMP  anobium104x212
+      SendCommand_EPD2in13D(DISPLAY_REFRESH)
+      wait 2 s
+      EPD_LoadBMP  anobium104x212a
+      SendCommand_EPD2in13D(DISPLAY_REFRESH)
+
+    GLCDDisplay Off
+    wait 30 s
+    GLCDDisplay On
+    GLCDForeground=TFT_BLACK
+    GLCDBackground=TFT_WHITE
+    GLCDCLS
+    GLCDDisplay Off
+
+    end
+
+
+macro EPD_LoadBMP ( in epd_tablename )
+
+      Dim EPD_Ind_raw, EPD_Ind_col as Word
+      Dim tableposition as word
+      dim EPD2in13D_Data as byte
+
+      tableposition = 3
+      SendCommand_EPD2in13D(Data_Transmission_2)
+      wait 2 ms
+      SET EPD_DC ON
+      for EPD_Ind_raw=1 to 212
+        for EPD_Ind_col=1 to 104
+          'Was.. speed optimised with macro
+          Readtable  epd_tablename, tableposition, EPD2in13D_Data
+          SendData_EPD2in13D_Macro
+          tableposition++
+        next
+      next
+
+end macro
