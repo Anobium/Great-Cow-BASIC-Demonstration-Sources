@@ -13,7 +13,7 @@ Use the Great Cow BASIC IDE to adapt the source GCB files, or, simply load the H
 {empty} +
 
 
-image::../../logo.png[Waveshare logo]
+image::../../images/logo.png[Waveshare logo]
 
 Waveshare is located in located in Shenzhen, a Technology City in China.
 
