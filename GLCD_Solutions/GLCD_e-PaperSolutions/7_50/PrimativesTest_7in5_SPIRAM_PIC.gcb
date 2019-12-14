@@ -149,7 +149,7 @@
 
     CCount++
     if CCount = 0 then CCount = 31
-    if CCount = 128 then CCount = 192
+    if CCount = 128 then CCount = 31
     longNumber = longNumber + 7
     wordNumber = wordNumber + 3
     byteNumber++
