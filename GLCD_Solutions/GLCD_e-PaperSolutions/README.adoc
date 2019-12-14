@@ -12,7 +12,7 @@ Use the Great Cow BASIC IDE to adapt the source GCB files, or, simply load the H
 {empty} +
 {empty} +
 
-...
+'''
 
 
 image::https://github.com/Anobium/Great-Cow-BASIC-Demonstration-Sources/blob/master/GLCD_Solutions/GLCD_e-PaperSolutions/images/logo.png[Waveshare logo]
