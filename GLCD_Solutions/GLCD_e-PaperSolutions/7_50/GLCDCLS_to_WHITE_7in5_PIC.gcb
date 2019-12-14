@@ -37,7 +37,7 @@
      #include <glcd.h>
 
      #define GLCD_TYPE GLCD_TYPE_EPD_EPD7in5
-     #define GLCD_TYPE_EPD7in5_LOWMEMORY1_GLCD_MODE    ' fastest
+     #define GLCD_TYPE_EPD7in5_LOWMEMORY1_GLCD_MODE
 
      'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
     #define GLCD_DC     portA.0   ' Data(hight)/ command(low) line

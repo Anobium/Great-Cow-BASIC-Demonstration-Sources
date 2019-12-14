@@ -34,7 +34,7 @@
  '  The following should be used   '#define EPD_HARDWARESPI     'remove comment out if you want to use software SPI.
      #define EPD_HARDWARESPI
      #define HWSPIMode MasterULTRAFAST
-***********************************************************************************************
+'***********************************************************************************************
 
     #include <spisram.h>
     #define SPISRAM_CS            DIGITAL_5

@@ -88,7 +88,7 @@
 
 '*******************************************************************************************
    DIM myString as string * 28
-   myString = "Great Cow BASIC 2017"
+   myString = "Great Cow BASIC 2019"
 
    GLCDfntDefaultSize = 2
    GLCDFontWidth = 5

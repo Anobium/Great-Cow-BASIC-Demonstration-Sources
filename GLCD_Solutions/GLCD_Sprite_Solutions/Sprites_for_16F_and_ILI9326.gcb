@@ -57,7 +57,7 @@
 
     GLCDPrint 30,50, " Great Cow BASIC"
     GLCDPrint 30,70, "   Sprite Demo"
-    GLCDPrint 30,90, "  ILI9326 @ 2018"
+    GLCDPrint 30,90, "  ILI9326 @ 2019"
 
     Wait 6 s
 

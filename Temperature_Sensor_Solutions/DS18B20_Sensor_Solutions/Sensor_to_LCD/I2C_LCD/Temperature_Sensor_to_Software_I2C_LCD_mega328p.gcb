@@ -44,7 +44,7 @@
 
     ccount = 0
     CLS
-    print "GCBasic 2015"
+    print "GCBasic 2019"
     locate 1,0
     print "DS18B20 Demo"
     wait 2 s
@@ -77,7 +77,7 @@
     Positive:
 
        ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
-       TempC_100 =  DSdata * 6		
+       TempC_100 =  DSdata * 6
        DSdata = ( DSdata * 25 ) / 100
        TempC_100 = TempC_100 + DSdata
 

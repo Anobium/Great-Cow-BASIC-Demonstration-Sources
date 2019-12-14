@@ -183,7 +183,7 @@ sub ShowCase1
         GLCDDrawString ( 42, ILI9340_GLCD_HEIGHT - 30 , "ILI9340 Driver" , ILI9340_WHITE )
 
         GLCDfntDefaultsize = 1
-        GLCDDrawString ( ILI9340_GLCD_WIDTH - 60, 2 , "July 2015" , ILI9340_WHITE )
+        GLCDDrawString ( ILI9340_GLCD_WIDTH - 60, 2 , "July 2019" , ILI9340_WHITE )
         #ifdef ILI9340_HardwareSPI
         		GLCDDrawString ( ILI9340_GLCD_WIDTH - 42, 10 , "HW SPI" , ILI9340_WHITE )
         #endif
@@ -249,7 +249,7 @@ sub ShowCase2
         GLCDDrawString ( 50, ILI9340_GLCD_HEIGHT - 30 , "ILI9340 Driver" , ILI9340_WHITE )
 
         GLCDfntDefaultsize = 1
-        GLCDDrawString ( ILI9340_GLCD_WIDTH - 60, 2 , "July 2015" , ILI9340_WHITE )
+        GLCDDrawString ( ILI9340_GLCD_WIDTH - 60, 2 , "July 2019" , ILI9340_WHITE )
 
         #ifdef ILI9340_HardwareSPI
         		GLCDDrawString ( ILI9340_GLCD_WIDTH - 42, 10 , "HW SPI" , ILI9340_WHITE )

@@ -61,7 +61,7 @@
     #endif
 
         GLCDPrint 0, 0,   "Great Cow BASIC"
-        GLCDPrint (0, 16, "Anobium 2017")
+        GLCDPrint (0, 16, "Anobium 2019")
         GLCDPrint (76, 16, GLCD_WIDTH )
         GLCDPrint (96, 16, "*" )
         GLCDPrint (104, 16, GLCD_HEIGHT )

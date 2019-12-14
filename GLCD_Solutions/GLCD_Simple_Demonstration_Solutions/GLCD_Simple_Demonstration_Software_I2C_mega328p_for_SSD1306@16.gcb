@@ -49,7 +49,7 @@
 
 
   GLCDPrint (0, 0, "Great Cow Basic")
-  GLCDPrint (0, 8, "Anobium 2015")
+  GLCDPrint (0, 8, "Anobium 2019")
 
 
   wait 3 s

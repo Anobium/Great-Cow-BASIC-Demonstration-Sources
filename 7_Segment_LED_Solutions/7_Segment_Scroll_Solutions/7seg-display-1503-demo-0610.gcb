@@ -1,7 +1,7 @@
 '******************************************
 '******************************************
 '******************************************
-'**  Copyright 2016-2019 by Ofuzzy1 -
+'**  Copyright 2019-2019 by Ofuzzy1 -
 '** This code may be used in non-commercial use, if the author is cited.
 '** No Limitations if included in the main distribution of Great Cow Basic.
 '**
@@ -20,7 +20,7 @@
 ' Call: Display_Memo to call the display function with Memo containing the text
 '
 
-' Compiler Version: 0.98.01 2017-10-27   Program Memory: 970/2048 words (47.36%)   RAM: 42/128 bytes (32.81%)   Chip: 16F1503
+' Compiler Version: 0.98.01 2019-10-27   Program Memory: 970/2048 words (47.36%)   RAM: 42/128 bytes (32.81%)   Chip: 16F1503
 
 '******************************************
 '#include "setup_16f1503.h"

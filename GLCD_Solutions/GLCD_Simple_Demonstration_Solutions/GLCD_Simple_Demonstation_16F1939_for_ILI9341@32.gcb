@@ -186,7 +186,7 @@ sub ShowCase1
         GLCDDrawString ( 42, ILI9341_GLCD_HEIGHT - 30 , "ILI9341 Driver" , ILI9341_WHITE )
 
         GLCDfntDefaultsize = 1
-        GLCDDrawString ( ILI9341_GLCD_WIDTH - 60, 2 , "Sept 2017" , ILI9341_WHITE )
+        GLCDDrawString ( ILI9341_GLCD_WIDTH - 60, 2 , "Sept 2019" , ILI9341_WHITE )
         #ifdef ILI9341_HardwareSPI
             GLCDDrawString ( ILI9341_GLCD_WIDTH - 42, 10 , "HW SPI" , ILI9341_WHITE )
         #endif
@@ -252,7 +252,7 @@ sub ShowCase2
         GLCDDrawString ( 50, ILI9341_GLCD_HEIGHT - 30 , "ILI9341 Driver" , ILI9341_WHITE )
 
         GLCDfntDefaultsize = 1
-        GLCDDrawString ( ILI9341_GLCD_WIDTH - 60, 2 , "Sept 2017" , ILI9341_WHITE )
+        GLCDDrawString ( ILI9341_GLCD_WIDTH - 60, 2 , "Sept 2019" , ILI9341_WHITE )
 
         #ifdef ILI9341_HardwareSPI
             GLCDDrawString ( ILI9341_GLCD_WIDTH - 42, 10 , "HW SPI" , ILI9341_WHITE )

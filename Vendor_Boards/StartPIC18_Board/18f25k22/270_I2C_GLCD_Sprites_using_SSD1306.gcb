@@ -94,7 +94,7 @@
     'Draw initial screen
     Box 0,0,127,63
     GLCDPrint ( 1, 36, "Great Cow BASIC")
-    GLCDPrint ( 1, 46, "GLCD Library 2017")
+    GLCDPrint ( 1, 46, "GLCD Library 2019")
     GLCDPrint ( 1, 54, "Sprite Support")
     wait 1 s
     GLCDCLS

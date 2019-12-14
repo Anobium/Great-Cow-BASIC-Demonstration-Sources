@@ -51,7 +51,7 @@
       wordNumber = 0
       byteNumber = 0
 
-      GLCDPrint ( 0,   0, "Great Cow BASIC 2016")                                ; Print some text
+      GLCDPrint ( 0,   0, "Great Cow BASIC 2019")                                ; Print some text
       GLCDPrint ( 0,   16, "@Evan R. Venn")                                ; Print some text
       wait 3 s
       GLCDCLS

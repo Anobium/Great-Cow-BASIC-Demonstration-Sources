@@ -51,7 +51,7 @@
 
     ccount = 1
     GLCDCLS
-    GLCDPrint(0, 0, "GCBasic 2015" )
+    GLCDPrint(0, 0, "GCBasic 2019" )
 
     GLCDPrint(0, 8, "DS18B20 Demo" )
 

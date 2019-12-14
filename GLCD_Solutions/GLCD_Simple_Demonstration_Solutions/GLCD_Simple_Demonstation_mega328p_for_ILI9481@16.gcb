@@ -176,7 +176,7 @@ sub ShowCase1
         GLCDDrawString ( 42, deviceSpecific_ILI9481_GLCD_HEIGHT - 30 , "ILI9481 Driver" , ILI9481_WHITE )
 
         GLCDfntDefaultsize = 1
-        GLCDDrawString ( ILI9481_GLCD_WIDTH - 54, 2 ,      "May 2017" , ILI9481_WHITE )
+        GLCDDrawString ( ILI9481_GLCD_WIDTH - 54, 2 ,      "May 2019" , ILI9481_WHITE )
         #ifdef AVR
             GLCDDrawString ( ILI9481_GLCD_WIDTH - 68, 10 , "Uno Shield" , ILI9481_WHITE )
         #endif
@@ -239,7 +239,7 @@ sub ShowCase2
         GLCDDrawString ( 50, deviceSpecific_ILI9481_GLCD_HEIGHT - 30 , "ILI9481 Driver" , ILI9481_WHITE )
 
         GLCDfntDefaultsize = 1
-        GLCDDrawString ( ILI9481_GLCD_WIDTH - 54, 2 , "May 2017" , ILI9481_WHITE )
+        GLCDDrawString ( ILI9481_GLCD_WIDTH - 54, 2 , "May 2019" , ILI9481_WHITE )
 
         #ifdef AVR
           GLCDDrawString ( ILI9481_GLCD_WIDTH - 66, 10 , "UNO Shield" , ILI9481_WHITE )

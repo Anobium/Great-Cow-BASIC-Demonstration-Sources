@@ -58,7 +58,7 @@
       GLCDfntDefaultsize = 2
       GLCDFontWidth = 4
       GLCDPrint ( 2,   0, "Great Cow")                                ; Print some texT
-      GLCDPrint ( 2,   18, "BASIC 2017")                                ; Print some text
+      GLCDPrint ( 2,   18, "BASIC 2019")                                ; Print some text
       box 0,0,GLCD_WIDTH-1, LED_GLCD_HEIGHT-1
 
 

@@ -72,7 +72,7 @@
       box 0,0,GLCD_WIDTH-1, LED_GLCD_HEIGHT-1
       GLCDfntDefaultsize = 2
       GLCDPrint ( 0,   0, "Great Cow")                                ; Print some texT
-      GLCDPrint ( 0,   18, "BASIC 2017")                                ; Print some text
+      GLCDPrint ( 0,   18, "BASIC 2019")                                ; Print some text
       GLCDfntDefaultsize = 1
 
       GLCDPrint ( 0,   52, "@Anobium")                                ; Print some text

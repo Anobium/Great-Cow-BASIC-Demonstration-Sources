@@ -23,7 +23,7 @@
     GLCDPrintStringLN ("")
     GLCDPrintStringLN ("SSD1331 Boxes!!")
     GLCDPrintStringLN ("")
-    GLCDPrintStringLN ("Anobium 2017")
+    GLCDPrintStringLN ("Anobium 2019")
 
     Wait 4 s
 

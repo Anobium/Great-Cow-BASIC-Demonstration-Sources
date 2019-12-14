@@ -80,7 +80,7 @@
 
   ;----- Program
   GLCDCLS
-  glcdprint 0,0,"GCBasic 2016"
+  glcdprint 0,0,"GCBasic 2019"
   glcdprint 0,8, "IRR Demo"
 
   glcdprint 0,32, "Device: "

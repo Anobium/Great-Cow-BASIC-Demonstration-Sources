@@ -1,5 +1,5 @@
 '''Program    cvd_touch_button_16f1619
-'''Compiler   gcbasic v0.98.02 2018-05-16 (UNIX)
+'''Compiler   gcbasic v0.98.02 2019-05-16 (UNIX)
 '''
 '''Microchip Curiosity 8/14/20 pin 8 bit demo board
 '''o PIC16F1619 (http://microchip.com/pic16f1619)
@@ -20,7 +20,7 @@
 '''@author  Trevor B Roydhouse
 '''@licence Public Domain Unlicense (see https://unlicense.org/)
 '''@version 1.0
-'''@date    10 September 2018 
+'''@date    10 September 2019
 '''***************************************************************************************
 
 ; ---- Configuration
@@ -102,7 +102,7 @@ Do Forever
 
    'AN1298 - Step 2: Select secondary channel on ADC (charge CHOLD to VDD)
    Set ADCON0 = 0b00011000      'ADC channel select -> AN6/RC2 (bits 2-6)
-			
+
    'AN1298 - Step 3: Set sensor pin as output, low (GND) to eliminate any charge
    Dir SensorChannel OUT	'Set as output
    Set ANSELC.1 = 0		'Set as digital
@@ -117,7 +117,7 @@ Do Forever
     	     		   	'Enable ADC (bit 0)
    Wait 10 US 		   	'Delay to allow ADC voltage to stabilise
 
-   'AN1298 - Step 6: Start ADC conversion			
+   'AN1298 - Step 6: Start ADC conversion
    Set ADCON0.1 = 1  	       	'Start ADC conversion (set go/done bit 1 = 1)
    Wait While ADCON0.1 = 1     	'Wait for ADC conversion (done bit 1 = 0)
 
@@ -130,5 +130,5 @@ Do Forever
    Else
 	    LED1 = 0
    End if
-	 
+
 LOOP

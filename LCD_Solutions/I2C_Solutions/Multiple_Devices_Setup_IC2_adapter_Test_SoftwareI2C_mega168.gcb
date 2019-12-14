@@ -72,7 +72,7 @@ do forever
     Locate 2,0
     Print  "By Anobium"
     Locate 3,0
-    Print  "Feb 2015"
+    Print  "Feb 2019"
     Wait 3 s
 
     LCD_I2C_Address_Current = LCD_I2C_Address_1

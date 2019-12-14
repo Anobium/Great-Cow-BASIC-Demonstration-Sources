@@ -1,5 +1,5 @@
 '''Program    led_interrupt_adc_16f1619
-'''Compiler   gcbasic v0.98.02 2018-05-16 (UNIX)
+'''Compiler   gcbasic v0.98.02 2019-05-16 (UNIX)
 '''
 '''Microchip Curiosity 8/14/20 pin 8 bit demo board
 '''o PIC16F1619 (http://microchip.com/pic16f1619)
@@ -16,7 +16,7 @@
 '''@author  Trevor B Roydhouse
 '''@licence Public Domain Unlicense (see https://unlicense.org/)
 '''@version 1.0
-'''@date    24 August 2018 
+'''@date    24 August 2019
 '''***************************************************************************************
 
 ; ---- Configuration

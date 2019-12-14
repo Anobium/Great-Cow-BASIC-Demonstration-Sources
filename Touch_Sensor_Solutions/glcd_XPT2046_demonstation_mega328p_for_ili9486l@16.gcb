@@ -152,7 +152,7 @@ sub ScreenLayout
         GLCDFontWidth = 5
         'Layout the screen
         GLCDCLS
-        GLCDPrint ( 2, 3, "XPT2046 demonstration 2018")
+        GLCDPrint ( 2, 3, "XPT2046 demonstration 2019")
         line 0, 34, Current_GLCD_WIDTH, 34
         line 0, 128, Current_GLCD_WIDTH, 128
         line 0, 220, Current_GLCD_WIDTH, 220

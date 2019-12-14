@@ -46,7 +46,7 @@
 
 ; ----- Main body of program commences here.
 
-    hserprint "GCBasic 2016"
+    hserprint "GCBasic 2019"
     HSerPrintCRLF
     hserprint "SRF04 Demo"
     HSerPrintCRLF

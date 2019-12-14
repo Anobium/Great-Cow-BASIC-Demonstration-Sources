@@ -94,7 +94,7 @@
    #define GLCD_TYPE_SSD1306_CHARACTER_MODE_ONLY
 
    DIM myString as string * 28
-   myString = "Great Cow BASIC 2017"
+   myString = "Great Cow BASIC 2019"
 
    GLCDfntDefaultSize = 2
    GLCDPrint(24, 0,"GCBASIC")

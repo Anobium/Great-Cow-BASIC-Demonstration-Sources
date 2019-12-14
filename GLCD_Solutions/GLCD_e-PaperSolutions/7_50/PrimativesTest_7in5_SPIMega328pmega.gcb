@@ -113,7 +113,7 @@
         GLCDDrawString ( 150, GLCDDeviceHeight - 30 , "EPD_EPD7in5 Driver" , TFT_BLACK )
 
         GLCDfntDefaultsize = 1
-        GLCDDrawString ( GLCDDeviceWidth - 60, 2 , "Nov 2019" , TFT_BLACK )
+        GLCDDrawString ( GLCDDeviceWidth - 60, 2 , "Dec 2019" , TFT_BLACK )
 
 
         'Revert the font size

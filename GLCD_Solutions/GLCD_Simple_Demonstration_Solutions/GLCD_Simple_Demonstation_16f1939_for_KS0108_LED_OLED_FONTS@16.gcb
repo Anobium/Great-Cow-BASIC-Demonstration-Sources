@@ -59,7 +59,7 @@
       GLCDfntDefaultsize = 2: SetFontWidth
 
       GLCDPrint ( 1,   1, "Great Cow")                                ; Print some texT
-      GLCDPrint ( 1,   19, "BASIC 2017")                                ; Print some text
+      GLCDPrint ( 1,   19, "BASIC 2019")                                ; Print some text
       GLCDfntDefaultsize = 1: SetFontWidth
 
       GLCDPrint ( 1,   52, "@Evan R. Venn")                                ; Print some text

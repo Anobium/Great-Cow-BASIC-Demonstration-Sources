@@ -65,7 +65,7 @@
 
   print "Great Cow Basic"
   Locate 1,0
-  print "Anobium Feb 2017"
+  print "Anobium Feb 2019"
   wait 2 s
   cls
 

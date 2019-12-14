@@ -110,7 +110,7 @@
 
     filledbox 2,GLCD_HEIGHT/2+10,42,GLCD_HEIGHT/2+50, TFT_RED
 
-    GLCDPrint ( GLCD_WIDTH - 78, 2 , "Feb 2018" )
+    GLCDPrint ( GLCD_WIDTH - 78, 2 , "Feb 2019" )
 
     GLCDForeground = TFT_WHITE
     GLCDPrint ( 100 , GLCD_HEIGHT - 60 , "Nextion Driver" )

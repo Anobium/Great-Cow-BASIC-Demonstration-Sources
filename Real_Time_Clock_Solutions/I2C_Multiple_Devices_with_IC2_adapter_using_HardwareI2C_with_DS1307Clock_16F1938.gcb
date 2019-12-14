@@ -27,7 +27,7 @@
 ''':    Evan R Venn/Anobium  ---  10/1/2015 - Minor improvements to cater for Oscicallor stopping
 ''':    Evan R Venn/Anobium  ---  11/1/2015 - added Hardware i2c support
 ''':
-'''@author          EvanV       	
+'''@author          EvanV
 '''@licence	GPL
 '''@version	1.0a
 '''@date   	22.02.15
@@ -132,7 +132,7 @@ do forever
     Locate 2,0
     Print  "By Anobium"
     Locate 3,0
-    Print  "Feb 2015"
+    Print  "Feb 2019"
     Wait 3 s
 
     LCD_I2C_Address_Current = LCD_I2C_Address_1

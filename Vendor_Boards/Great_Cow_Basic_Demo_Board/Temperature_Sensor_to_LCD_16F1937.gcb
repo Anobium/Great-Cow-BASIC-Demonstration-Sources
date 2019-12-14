@@ -41,7 +41,7 @@
 
     ccount = 0
     CLS
-    print "GCBasic 2015"
+    print "GCBasic 2019"
     locate 1,0
     print "DS18B20 Demo"
     wait 2 s

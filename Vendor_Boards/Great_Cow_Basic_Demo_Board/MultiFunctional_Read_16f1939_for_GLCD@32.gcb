@@ -77,7 +77,7 @@
 
     ccount = 0
     GLCDCLS
-    glcdprint 0,   0, "GCBasic 2016"
+    glcdprint 0,   0, "GCBasic 2019"
     glcdprint 0,   8, "Multifunctional Demo"
     glcdprint 0,   24,"DS18B20, Sony Remote,"
     glcdprint 0,   32,"DHT22, Pots and GLCD "

@@ -42,7 +42,7 @@
 
 ; ----- Main body of program commences here.
   GLCDCLS
-  GLCDPrint 0,0,   "GCBASIC 2015"
+  GLCDPrint 0,0,   "GCBASIC 2019"
   GLCDPrint 0,8,   "Demonstation Code"
   GLCDPrint 0,32,  "Light Level:"
   do while true

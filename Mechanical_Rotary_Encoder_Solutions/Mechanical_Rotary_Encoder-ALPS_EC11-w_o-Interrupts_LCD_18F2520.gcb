@@ -9,7 +9,7 @@
 '''@author 	Immo, DL5KB
 '''@licence	GPL
 '''@version	1.0b
-'''@date   	Dec. 2015
+'''@date   	Dec. 2019
 ''' *****************************************
 ''' Program: Reads a rotary encoder ALPS EC11
 '''
@@ -84,7 +84,7 @@
   PRINT "Great Cow Basic"
   wait 2 s
   CLS
-  Print "@Dec 2015"
+  Print "@Dec 2019"
   Locate 1,0
   PRINT "Immo's&Ano Code"
   wait 2 s

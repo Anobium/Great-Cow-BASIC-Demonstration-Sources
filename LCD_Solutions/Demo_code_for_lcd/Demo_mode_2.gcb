@@ -19,7 +19,7 @@
   #define LCD_IO 2
 
   ' #define LCD_IO 2		' use this mode with shiftreg 74LS174 or old
-					' hardware diagram 74HC164 pre Aug. 2015.
+					' hardware diagram 74HC164 pre Aug. 2019.
   ' #define LCD_IO 2_74XX174	' the same mode as LCD_IO 2
   ' #define LCD_IO 2_74XX164	' use this mode with shiftreg 74HC164/74LS164
 

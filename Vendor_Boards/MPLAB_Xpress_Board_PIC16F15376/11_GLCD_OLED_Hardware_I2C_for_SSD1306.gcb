@@ -69,7 +69,7 @@
 ; ----- Main program
 
     GLCDPrint 0, 0,   "Great Cow BASIC"
-    GLCDPrint (0, 11, "Anobium 2018")
+    GLCDPrint (0, 11, "Anobium 2019")
     GLCDPrint (0, 23, "MPLAB Xpress Board")
     GLCDPrint (0, 35, "PIC"+ChipNameStr )
     GLCDPrint (0, 47, "I2C OLED SDD1306" )

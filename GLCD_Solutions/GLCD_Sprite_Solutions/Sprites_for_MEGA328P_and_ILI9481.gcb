@@ -129,7 +129,7 @@
       GLCDPrintStringLN "Sprite Demonstration"
 '      GLCDPrintStringLN str(GLCDfntDefaultSize)
 '      GLCDPrintStringLN ""
-      GLCDPrintStringLN "ILI9481     Nov 2017"
+      GLCDPrintStringLN "ILI9481     Nov 2019"
 '      GLCDPrintStringLN ""
       GLCDPrintStringLN "Great Cow BASIC"
       wait 3 s

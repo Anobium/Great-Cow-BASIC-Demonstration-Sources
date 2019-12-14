@@ -184,7 +184,7 @@
   GLCDDrawString ( 68, GLCDDeviceHeight - 60 , "HX8347 Driver" , HX8347_WHITE )
 
   GLCDfntDefaultsize = 1
-  GLCDDrawString ( GLCD_WIDTH - 60, 2 , "Nov 2017" , HX8347_WHITE )
+  GLCDDrawString ( GLCD_WIDTH - 60, 2 , "Nov 2019" , HX8347_WHITE )
   GLCDDrawString ( GLCD_WIDTH - 72, 10 , "UNO Shield" , HX8347_WHITE )
 
   GLCDForeground = HX8347_WHITE

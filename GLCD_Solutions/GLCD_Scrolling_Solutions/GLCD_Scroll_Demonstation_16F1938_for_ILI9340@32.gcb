@@ -43,7 +43,7 @@
 		SetVerticalScrollDefinition (32, 0)
 
     GLCDfntDefaultsize = 2
-    GLCDDrawString(0,8, "Great Cow Basic 2015", ILI9340_GREEN )
+    GLCDDrawString(0,8, "Great Cow Basic 2019", ILI9340_GREEN )
 
 		dim ScrollPosition as word
 		ScrollPosition = 32

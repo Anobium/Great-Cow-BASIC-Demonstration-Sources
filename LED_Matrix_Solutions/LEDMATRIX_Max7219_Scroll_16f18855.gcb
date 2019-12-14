@@ -67,7 +67,7 @@
 
 
       GLCDCLS
-      myString = "made by Great Cow BASIC Signs Ltd.  2018       "
+      myString = "made by Great Cow BASIC Signs Ltd.  2019       "
       Max7219_LEDMatrix_ScrollMessage ( myString, 1 )
       wait 1 s
 

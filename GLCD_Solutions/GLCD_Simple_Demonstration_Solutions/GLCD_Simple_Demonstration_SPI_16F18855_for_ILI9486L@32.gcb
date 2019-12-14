@@ -200,7 +200,7 @@ sub ShowCase1
         GLCDDrawString ( 42, ILI9486L_GLCD_HEIGHT - 30 , "ILI9486L Driver" , ILI9486L_WHITE )
 
         GLCDfntDefaultsize = 1
-        GLCDDrawString ( ILI9486L_GLCD_WIDTH - 64, 2 , "April 2017" , ILI9486L_WHITE )
+        GLCDDrawString ( ILI9486L_GLCD_WIDTH - 64, 2 , "April 2019" , ILI9486L_WHITE )
 
         #ifdef ILI9486L_HardwareSPI
             GLCDDrawString ( ILI9486L_GLCD_WIDTH - 42, 10 , "HW SPI" , ILI9486L_WHITE )
@@ -265,7 +265,7 @@ sub ShowCase2
         GLCDDrawString ( 50, ILI9486L_GLCD_HEIGHT - 30 , "ILI9486L Driver" , ILI9486L_WHITE )
 
         GLCDfntDefaultsize = 1
-        GLCDDrawString ( ILI9486L_GLCD_WIDTH - 64, 2 , "April 2017" , ILI9486L_WHITE )
+        GLCDDrawString ( ILI9486L_GLCD_WIDTH - 64, 2 , "April 2019" , ILI9486L_WHITE )
 
         #ifdef ILI9486L_HardwareSPI
             GLCDDrawString ( ILI9486L_GLCD_WIDTH - 42, 10 , "HW SPI" , ILI9486L_WHITE )

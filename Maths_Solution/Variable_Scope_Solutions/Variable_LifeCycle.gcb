@@ -101,7 +101,7 @@
 
  'See Variable Lifecycle in the HELP
     dim myString as string * 28
-    myString = "Great Cow BASIC 2017"
+    myString = "Great Cow BASIC 2019"
     GLCDDrawString(2, 24, myString)
 
     dim signedvar as Integer

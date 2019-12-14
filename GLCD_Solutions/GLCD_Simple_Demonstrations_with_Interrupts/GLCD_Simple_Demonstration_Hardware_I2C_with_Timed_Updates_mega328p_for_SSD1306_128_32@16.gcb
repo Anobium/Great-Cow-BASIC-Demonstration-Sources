@@ -57,7 +57,7 @@
   GLCDCLS
 
   GLCDfntDefaultSize = 1
-  GLCDPrint (0, 0, "Anobium 2017")
+  GLCDPrint (0, 0, "Anobium 2019")
   GLCDPrint (0, 9, "Timed pixel demo")
   GLCDPrint (76, 18, GLCD_WIDTH )
   GLCDPrint (96, 18, "*" )

@@ -17,7 +17,7 @@
      #define EPD_HARDWARESPI
      #define HWSPIMode MasterULTRAFAST
  '***************************************************************************
-********************
+'********************
 
     'Setup the E-Paper
      #include <glcd.h>

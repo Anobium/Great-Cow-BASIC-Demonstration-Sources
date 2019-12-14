@@ -93,7 +93,7 @@
     #define GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
 
     DIM myString as string * 28
-    myString = "Great Cow BASIC 2017"
+    myString = "Great Cow BASIC 2019"
 
 
     'Open GLCD page mode of operations. The SSD1306 has 8 pages, so, we use the pages 0 and 7
