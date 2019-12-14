@@ -1,10 +1,10 @@
-'''A demonstration program for Explicit-Paper.
+'''A demonstration program for Explicit-Paper from WaveShare.
  '''-------------------------------------------------------------------------
 ' -------------------------------------------------------
  '''This has been tested using the hardware and software SPI option.
 
  '''*************************************************************************
-' *******
+
 
      'Chip Settings.
      'Chip Settings.
@@ -50,7 +50,7 @@
  '  The following should be used   '#define EPD_HardwareSPI     'remove comment out if you want to use software SPI.
      #define EPD_HardwareSPI
 '******************************************************************************************************
-     'Main program
+'Main program
 
 
     GLCDForeground=TFT_BLACK

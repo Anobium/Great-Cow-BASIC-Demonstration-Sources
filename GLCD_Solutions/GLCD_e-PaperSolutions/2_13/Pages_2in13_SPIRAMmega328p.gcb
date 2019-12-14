@@ -1,10 +1,10 @@
-'''A demonstration program for Explicit-Paper.
+'''A demonstration program for Explicit-Paper from WaveShare.
  '''-------------------------------------------------------------------------
 ' -------------------------------------------------------
  '''This has been tested using the hardware and software SPI option.
 
  '''*************************************************************************
-' *******
+
 
      'Chip Settings.
 
@@ -34,7 +34,7 @@
  '  The following should be used   '#define EPD_HARDWARESPI     'remove comment out if you want to use software SPI.
      #define EPD_HARDWARESPI
      #define HWSPIMode MasterULTRAFAST
-' ******************************************************************************************************
+***********************************************************************************************
 
     #include <spisram.h>
     #define SPISRAM_CS            DIGITAL_5

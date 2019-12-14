@@ -1,10 +1,10 @@
-'''A demonstration program for Explicit-Paper.
+'''A demonstration program for Explicit-Paper from WaveShare.
  '''-------------------------------------------------------------------------
 ' -------------------------------------------------------
  '''This has been tested using the hardware and software SPI option.
 
  '''*************************************************************************
-' *******
+
 
      'Chip Settings.
      'Chip Settings.
@@ -60,7 +60,7 @@
     #define GLCD_Busy   portC.0   ' Busy Line
 
 '******************************************************************************************************
-     'Main program
+'Main program
 
 
     GLCDForeground=TFT_BLACK

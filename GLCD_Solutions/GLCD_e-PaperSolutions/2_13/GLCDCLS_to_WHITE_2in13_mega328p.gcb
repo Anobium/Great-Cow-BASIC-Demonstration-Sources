@@ -1,10 +1,10 @@
-'''A demonstration program for Explicit-Paper.
+'''A demonstration program for Explicit-Paper from WaveShare.
  '''-------------------------------------------------------------------------
 ' -------------------------------------------------------
  '''This has been tested using the hardware and software SPI option.
 
  '''*************************************************************************
-' *******
+
 
      'Chip Settings.
 
@@ -22,7 +22,7 @@
      #define GLCD_DO     DIGITAL_11
      #define GLCD_SCK    DIGITAL_13
      #define GLCD_Busy   DIGITAL_7
-' ******************************************************************************************************
+***********************************************************************************************
     dim ver1 as byte
     dim ver2 as byte
     ver1 = EPD2_13VERSION

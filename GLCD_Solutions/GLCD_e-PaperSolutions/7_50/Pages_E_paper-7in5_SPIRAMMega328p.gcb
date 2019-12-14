@@ -1,10 +1,10 @@
-'''A demonstration program for Explicit-Paper.
+'''A demonstration program for Explicit-Paper from WaveShare.
  '''-------------------------------------------------------------------------
 ' -------------------------------------------------------
  '''This has been tested using the hardware and software SPI option.
 
  '''*************************************************************************
-' *******
+
 
      #chip mega328p, 16
     #include <uno_mega328p.h>
@@ -44,7 +44,7 @@
 
 '******************************************************************************************************
 
-     'Main program
+'Main program
 
   GLCDForeground=TFT_BLACK
   GLCDBackground=TFT_WHITE
