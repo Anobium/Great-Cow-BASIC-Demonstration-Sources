@@ -1,0 +1,94 @@
+This GIT contains the demonstrations created for the Waveshare Electronics suite of products.
+
+The baseline set of demonstrations was created at version 0.98.xx of the Great Cow BASIC distrubution.
+
+Please add your demonstrations and improve those that have been posted.
+
+The GIT contains the source Great Cow BASIC and a HEX file that can be used to program the specific product configuration.{nbsp}{nbsp}For Great Cow BASIC please download from https://sourceforge.net/projects/gcbasic/files/latest/download
+
+
+Use the Great Cow BASIC IDE to adapt the source GCB files, or, simply load the HEX via the USB connection (using AVRDUDE) to use the hex file.
+{empty} +
+{empty} +
+{empty} +
+
+
+image::logo.png[Waveshare logo]
+
+Waveshare is located in located in Shenzhen, a Technology City in China.
+
+They create electronics modules, sensors and robot parts.
+
+The brand name is *Waveshare* selling  products including development boards like Uno, MEGA, Pro-mini, Nano, ESP8266, ESP32, Power & Drive modules, Sensors, Breadboards, Connectors and Jumper Wires.
+
+They are committed to provide the latest products at the highest quality and competitive price to the people at all over the world through many different channels like Amazon.
+
+{empty} +
+[cols="2", options="header"]
+|===
+|Web Site
+|Web Address
+
+|Waveshare main website
+|www.waveshare.com
+
+|United States Amazon Store
+|https://www.amazon.co.uk/s?i=merchant-items&me=A3U321I9X7C9XA[Waveshare on Amazon]
+
+|===
+{empty} +
+
+
+
+# Demostration GIT Layout
+
+The GIT is layout matched the products that Waveshare Electronics products.
+
+
+[cols="4", options="header"]
+|===
+|Product
+|Review
+|Description
+|GIT URL
+
+|2.13 inch e-Paper Display - Mono dislay
+|https://github.com/Anobium/Great-Cow-BASIC-Demonstration-Sources/tree/master/GLCD_Solutions/GLCD_e-PaperSolutions/2_13eradme.adoc[Product review]
+|Shows how the display can be used to show the basics to a complex weather monitor application
+|https://github.com/Anobium/Great-Cow-BASIC-Demonstration-Sources/tree/master/GLCD_Solutions/GLCD_e-PaperSolutions/2_13[2.13 inch e-paper demonstrations code]
+
+|7.5 inch e-Paper Display - Mono dislay
+|https://github.com/Anobium/Great-Cow-BASIC-Demonstration-Sources/blob/master/GLCD_Solutions/GLCD_e-PaperSolutions/7_50/readme.adoc[Product review]
+|Shows how the display can be used to show the basics to a complex weather monitor application
+|https://github.com/Anobium/Great-Cow-BASIC-Demonstration-Sources/tree/master/GLCD_Solutions/GLCD_e-PaperSolutions/7_50[7.5 inch e-paper demonstrations code]
+
+
+|===
+
+{empty} +
+
+# Amazon Product Links
+
+The following links are to the Waveshare products.
+
+
+[cols="3", options="header"]
+|===
+|Product
+|Main Website
+|Amazon Shop URL
+
+|Waveshare 2.13 inch e-paper
+|
+|
+
+|Waveshare 7.5 inch e-paper
+|
+|
+
+
+|===
+
+{empty} +
+
+Updated v0.9a
