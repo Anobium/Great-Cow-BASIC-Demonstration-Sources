@@ -52,7 +52,7 @@ The GIT is layout matched the products that Waveshare Electronics products.
 |GIT URL
 
 |2.13 inch e-Paper Display - Mono dislay
-|https://github.com/Anobium/Great-Cow-BASIC-Demonstration-Sources/tree/master/GLCD_Solutions/GLCD_e-PaperSolutions/2_13/readme.adoc[Product review]
+|https://github.com/Anobium/Great-Cow-BASIC-Demonstration-Sources/blob/master/GLCD_Solutions/GLCD_e-PaperSolutions/2_13/readme.adoc[Product review]
 |Shows how the display can be used to show the basics to a complex weather monitor application
 |https://github.com/Anobium/Great-Cow-BASIC-Demonstration-Sources/tree/master/GLCD_Solutions/GLCD_e-PaperSolutions/2_13[2.13 inch e-paper demonstrations code]
 
