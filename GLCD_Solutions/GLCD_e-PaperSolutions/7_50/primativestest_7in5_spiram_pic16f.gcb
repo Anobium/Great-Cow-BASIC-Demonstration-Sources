@@ -1,0 +1,130 @@
+'''A demonstration program for Explicit-Paper from WaveShare.
+ '''-------------------------------------------------------------------------
+' -------------------------------------------------------
+ '''This has been tested using the hardware and software SPI option.
+
+ '''*************************************************************************
+
+
+     'Chip Settings.
+    #chip 16F1939
+    #config MCLRE = ON
+    #option explicit
+
+ '******************************************************************************************************
+
+    'Setup the E-Paper
+     #include <glcd.h>
+
+     #define GLCD_TYPE GLCD_TYPE_EPD_EPD7in5
+     #define GLCD_EXTENDEDFONTSET1
+     #define GLCD_OLED_FONT
+
+     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+    #define GLCD_DC     portA.0   ' Data(hight)/ command(low) line
+    #define GLCD_CS     portC.1   ' Chip select line (negate)
+    #define GLCD_RESET  portD.2   ' Reset line       (negate)
+    #define GLCD_DO     portC.5   ' GLCD MOSI connect to MCU SDO
+    #define GLCD_SCK    portC.3   ' Clock Line
+    #define GLCD_Busy   portC.0   ' Busy Line
+
+ '  The following should be used   '#define EPD_HardwareSPI     'remove comment out if you want to use software SPI.
+     #define EPD_HardwareSPI
+
+'******************************************************************************************************
+
+    #include <spisram.h>
+    #define SPISRAM_CS            Porta.2           'Also known as SS, or Slave Select
+    #define SPISRAM_SCK           Portc.3           'Also known as CLK
+    #define SPISRAM_DO            Portc.5           'Also known as MOSI
+    #define SPISRAM_DI            Portc.4           'Also known as MISO
+
+    #define SPISRAM_HARDWARESPI
+    #define SPISRAM_TYPE          SRAM_23LC1024
+
+'********************************************************************************
+ 'Main program
+
+  Dim CCOUNT, BYTENUMBER, OLDFONT, OLDFONT as Byte
+
+  CCount = 31
+  dim longNumber as long
+  longNumber = 0 ' max value = 4294967290
+  dim wordNumber as Word
+  wordNumber = 0
+  byteNumber = 0
+
+  GLCDForeground=TFT_BLACK
+  GLCDBackground=TFT_WHITE
+  GLCDfntDefaultSize = 2
+
+  GLCDRotate ( Landscape_rev )
+
+  GLCDDisplay on
+  GLCD_Open_PageTransaction
+      GLCDPrintLargeFont ( 200 , GLCDDeviceHeight - 100 , "BOOTING - Loading first screen" )
+      GLCDPrintLargeFont ( 200 , GLCDDeviceHeight - 60 , "Great Cow BASIC" )
+  GLCD_Close_PageTransaction
+
+  Do
+      GLCDDisplay on
+      GLCD_Open_PageTransaction
+
+        GLCDDrawString (2, 1, "GCB",TFT_BLACK)
+        GLCDDrawString (56,1,"v.9700",TFT_BLACK)
+        GLCDDrawString (2, 18, "DrawStr",TFT_BLACK)
+
+        GLCDDrawString ( 2, 52, "Long:" )
+        GLCDDrawString ( 2, 70, "Word:" )
+        GLCDDrawString ( 2, 88, "Byte:" )
+
+        GLCDDrawString ( 128, 18, "Asc:"+"  " )
+
+        box 0,0,GLCDDeviceWidth, GLCDDeviceHeight, TFT_BLACK
+        box GLCDDeviceWidth-5, GLCDDeviceHeight-5,GLCDDeviceWidth, GLCDDeviceHeight, CCount
+
+        Circle( GLCDDeviceWidth/2, GLCDDeviceHeight/2, 50, CCount )            ;center
+        FilledCircle( GLCDDeviceWidth/2, GLCDDeviceHeight/2, 25, CCount  )     ;center
+
+        line 0,  GLCDDeviceHeight , GLCDDeviceWidth/2 +100,  (GLCDDeviceHeight /2) - 50, TFT_BLACK
+        line  0, (GLCDDeviceHeight /2) - 50, GLCDDeviceWidth/2 +100, (GLCDDeviceHeight /2) - 50, TFT_BLACK
+
+        filledbox 2,GLCDDeviceHeight/2+10,42,GLCDDeviceHeight/2+50, !CCount
+
+        oldfont = GLCDfntDefaultsize
+        GLCDfntDefaultsize = 2
+        GLCDDrawString ( 150, GLCDDeviceHeight - 30 , "EPD_EPD7in5 Driver" , TFT_BLACK )
+
+        GLCDfntDefaultsize = 1
+        GLCDDrawString ( GLCDDeviceWidth - 60, 2 , "Dec 2019" , TFT_BLACK )
+
+
+        'Revert the font size
+        GLCDfntDefaultsize = oldfont
+        GLCDForeground = TFT_BLACK
+        GLCDPrintLargeFont ( 150 , GLCDDeviceHeight - 60 , "Great Cow BASIC" )
+
+
+          GLCDPrint ( 64 , 52, longNumber)
+          GLCDPrint ( 64 , 70, pad( str(wordnumber),5))
+          GLCDPrint ( 64 , 88, pad( str(bytenumber),3))
+
+          GLCDDrawChar(99, 18, CCount )
+          Box 98,18,117,42, TFT_BLACK               'Draw a box around the Char below
+
+          GLCDDrawString ( 180, 18 , pad( str(CCount),3) )
+
+     GLCD_Close_PageTransaction
+
+     GLCDDisplay off
+     wait 1800 ms
+
+
+    CCount++
+    if CCount = 0 then CCount = 31
+    if CCount = 128 then CCount = 31
+    longNumber = longNumber + 7
+    wordNumber = wordNumber + 3
+    byteNumber++
+
+  Loop

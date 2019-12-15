@@ -23,10 +23,8 @@
      #define GLCD_SCK    DIGITAL_13
      #define GLCD_Busy   DIGITAL_7
 '***********************************************************************************************
-    dim ver1 as byte
-    dim ver2 as byte
-    ver1 = EPD2_13VERSION
-    ver2 = GLCDVERSION
+
+'Main Program
 
     GLCDForeground=TFT_BLACK
     GLCDBackground=TFT_WHITE

@@ -14,18 +14,15 @@
 
  '******************************************************************************************************
 
-    'Setup the E-Paper
+     'Setup the E-Paper
      #include <glcd.h>
-
-     #define HWSPIMode ULTRAFAST
 
      #define GLCD_TYPE GLCD_TYPE_EPD_EPD2in13D
      #define GLCD_EXTENDEDFONTSET1
-     #define GLCD_TYPE_EPD2in13D_LOWMEMORY4_GLCD_MODE
      #define GLCD_OLED_FONT
      #define GLCD_PROTECTOVERRUN
 
-
+     #define GLCD_TYPE_EPD2in13D_LOWMEMORY4_GLCD_MODE
 
      'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
      #define GLCD_DC     DIGITAL_9
@@ -35,15 +32,17 @@
      #define GLCD_SCK    DIGITAL_13
      #define GLCD_Busy   DIGITAL_7
 
+ '  The following should be used   '#define EPD_HARDWARESPI     'remove comment out if you want to use software SPI.
      #define EPD_HARDWARESPI
+     #define HWSPIMode MasterULTRAFAST
+
 
  '***********************************************************************************************
 
 
 'Main program
-
-    GLCDForeground=TFT_BLACK
-    GLCDBackground=TFT_WHITE
+    GLCDForeground = TFT_WHITE
+    GLCDBackground = TFT_BLACK
 
 
      GLCD_Open_PageTransaction

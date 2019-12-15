@@ -51,7 +51,6 @@
 
     GLCDForeground = TFT_BLACK
     GLCDBackground = TFT_WHITE
-' Tests
 
      GLCD_Open_PageTransaction
         GLCDPrint 0,0, "Test @ Default"
