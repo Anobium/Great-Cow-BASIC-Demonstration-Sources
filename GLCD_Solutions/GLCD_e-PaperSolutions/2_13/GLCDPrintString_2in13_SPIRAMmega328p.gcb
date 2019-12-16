@@ -56,9 +56,19 @@
      GLCD_Close_PageTransaction
 
      GLCDDisplay Off
-     wait 5 s
      GLCDDisplay On
 
+    GLCDForeground=TFT_WHITE
+    GLCDBackground=TFT_BLACK
 
-     GLCDCLS
+     GLCD_Open_PageTransaction
+        for xloop = 1 to 27
+            GLCDPrintString ""
+            GLCDPrintString "Line "
+            GLCDPrintStringLN Str(xloop)
+        next
+     GLCD_Close_PageTransaction
+
+     wait 5 s
+     GLCDCLS  TFT_WHITE
      GLCDDisplay off

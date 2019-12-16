@@ -57,6 +57,8 @@
     GLCDDisplay On
 
      GLCDRotate Portrait
+     GLCDForeground = TFT_BLACK
+     GLCDBackground = TFT_WHITE
 
      GLCD_Open_PageTransaction
         GLCDPrintStringLn "Portrait"
@@ -69,6 +71,8 @@
      wait 2 s
      GLCDDisplay On
      GLCDRotate Portrait_rev
+     GLCDForeground = TFT_WHITE
+     GLCDBackground = TFT_BLACK
 
      GLCD_Open_PageTransaction
         GLCDPrintStringLn "Portrait_rev"
@@ -83,6 +87,8 @@
      GLCDDisplay On
 
      GLCDRotate Landscape
+     GLCDForeground = TFT_BLACK
+     GLCDBackground = TFT_WHITE
 
      GLCD_Open_PageTransaction
         GLCDPrintStringLn "Landscape"
@@ -96,6 +102,8 @@
      GLCDDisplay On
 
      GLCDRotate Landscape_Rev
+     GLCDForeground = TFT_BLACK
+     GLCDBackground = TFT_WHITE
 
      GLCD_Open_PageTransaction
         GLCDPrintStringLn "Landscape_Rev"

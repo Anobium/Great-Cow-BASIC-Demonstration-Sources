@@ -49,8 +49,8 @@
 '******************************************************************************************************
 'Main program
 
-    GLCDForeground = TFT_BLACK
-    GLCDBackground = TFT_WHITE
+     GLCDForeground = TFT_BLACK
+     GLCDBackground = TFT_WHITE
 
      GLCD_Open_PageTransaction
         GLCDPrint 0,0, "Test @ Default"
@@ -67,6 +67,8 @@
      GLCDRotate Portrait_rev
 
      GLCDRotate Portrait
+     GLCDForeground = TFT_WHITE
+     GLCDBackground = TFT_BLACK
 
      GLCD_Open_PageTransaction
         GLCDPrint 0,0, "Test @ Portrait"
@@ -82,6 +84,8 @@
      wait 2 s
 
      GLCDRotate Portrait_rev
+     GLCDForeground = TFT_BLACK
+     GLCDBackground = TFT_WHITE
 
      GLCD_Open_PageTransaction
         GLCDPrint 0,0, "Test @ Portrait_rev"
@@ -97,6 +101,8 @@
      wait 2 s
 
      GLCDRotate Landscape
+     GLCDForeground = TFT_WHITE
+     GLCDBackground = TFT_BLACK
 
      GLCD_Open_PageTransaction
         GLCDPrint 0,0, "Test @ Landscape"
@@ -112,6 +118,8 @@
      wait 2 s
 
      GLCDRotate Landscape_Rev
+     GLCDForeground = TFT_BLACK
+     GLCDBackground = TFT_WHITE
 
      GLCD_Open_PageTransaction
         GLCDPrint 0,0, "Test @ Landscape_Rev"
@@ -126,7 +134,7 @@
      GLCD_Close_PageTransaction
      wait 2 s
 
-     GLCDCLS
+     GLCDCLS TFT_WHITE
      GLCDDisplay off
 
      do

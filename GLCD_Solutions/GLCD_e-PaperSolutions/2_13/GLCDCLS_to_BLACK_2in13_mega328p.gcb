@@ -14,7 +14,7 @@
 
      #include <glcd.h>
      #define GLCD_TYPE GLCD_TYPE_EPD_EPD2in13D
-     #define GLCD_TYPE_EPD2in13D_LOWMEMORY4_GLCD_MODE
+     #define GLCD_TYPE_EPD2in13D_LOWMEMORY2_GLCD_MODE
      'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
      #define GLCD_DC     DIGITAL_9
      #define GLCD_CS     DIGITAL_10
@@ -23,41 +23,11 @@
      #define GLCD_SCK    DIGITAL_13
      #define GLCD_Busy   DIGITAL_7
 '***********************************************************************************************
-'Main program
 
-    GLCDForeground=TFT_BLACK
-    GLCDBackground=TFT_WHITE
-
-    dim xloop as byte
-
-     GLCD_Open_PageTransaction
-        for xloop = 1 to 27
-            GLCDPrintString ""
-            GLCDPrintString "Line "
-            GLCDPrintStringLN Str(xloop)
-        next
-     GLCD_Close_PageTransaction
-
-     GLCDDisplay Off
-     wait 2 s
-     GLCDDisplay On
-
-    GLCDForeground=TFT_WHITE
-    GLCDBackground=TFT_BLACK
+'Main Program
 
 
-     GLCD_Open_PageTransaction
-        for xloop = 1 to 27
-            GLCDPrintString ""
-            GLCDPrintString "Line "
-            GLCDPrintStringLN Str(xloop)
-        next
-     GLCD_Close_PageTransaction
+    GLCDCLS  TFT_BLACK
+    GLCDDisplay off
 
-     GLCDDisplay Off
-     wait 2 s
-     GLCDDisplay On
-
-
-     GLCDCLS TFT_WHITE
-     GLCDDisplay off
+  'look at the ASM for the versions
