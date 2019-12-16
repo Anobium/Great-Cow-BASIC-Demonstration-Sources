@@ -42,8 +42,4 @@
     GLCDForeground=TFT_BLACK
     GLCDBackground=TFT_WHITE
     GLCDCLS
-
     GLCDDisplay off
-
-    do
-    loop

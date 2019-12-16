@@ -48,7 +48,7 @@
 
   GLCDForeground=TFT_BLACK
   GLCDBackground=TFT_WHITE
-  GLCDfntDefaultSize = 1
+  GLCDfntDefaultSize = 2
 
   GLCDDisplay on
   GLCD_Open_PageTransaction
@@ -69,4 +69,8 @@
 
   GLCD_Close_PageTransaction
 
+  GLCDDisplay off
+  wait 5 s
+  GLCDDisplay on
+  GLCDCLS
   GLCDDisplay off

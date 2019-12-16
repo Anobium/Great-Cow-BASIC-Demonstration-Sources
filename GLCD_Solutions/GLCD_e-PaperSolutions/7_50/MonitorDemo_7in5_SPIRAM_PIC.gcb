@@ -149,7 +149,7 @@ GLCDDisplay Off
 
 end
 
-
+'*********************************************************************************************************
 
    dim advalue as Integer
    dim tempstring as string
@@ -167,20 +167,6 @@ end
       tempstring = StrInteger (advalue)+"c"
 
    End sub
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 '''
 '''  table name, clear the screen, color

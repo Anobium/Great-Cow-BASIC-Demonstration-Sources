@@ -6,12 +6,9 @@
  '''*************************************************************************
 
 
-     'Chip Settings.
-
      #chip mega328p, 16
     #include <uno_mega328p.h>
      #option explicit
-
 
  '******************************************************************************************************
 
@@ -21,6 +18,8 @@
      #define GLCD_TYPE GLCD_TYPE_EPD_EPD7in5
      #define GLCD_EXTENDEDFONTSET1
      #define GLCD_OLED_FONT
+     #define GLCD_TYPE_EPD7in5_LOWMEMORY1_GLCD_MODE    'Only mode that works in 2k RAM chips
+
 
      'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
      #define GLCD_DC     DIGITAL_9
@@ -34,46 +33,10 @@
      #define EPD_HardwareSPI
      #define HWSPIMode MasterUltraFast
 
-'******************************************************************************************************
-    #include <spisram.h>
-    #define SPISRAM_CS            DIGITAL_5
-    #define SPISRAM_SCK           DIGITAL_13
-    #define SPISRAM_DO            DIGITAL_11
-    #define SPISRAM_DI            DIGITAL_12
-
-    #define SPISRAM_HARDWARESPI
-    #define SPISRAM_TYPE          SRAM_23LC1024
 
 '******************************************************************************************************
 
-    'Main program
+'Main program
 
-  GLCDForeground=TFT_BLACK
-  GLCDBackground=TFT_WHITE
-  GLCDfntDefaultSize = 1
-  GLCDDisplay on
-  GLCD_Open_PageTransaction
-
-
-      GLCDPrint (10, 0, "x10,y0 is here", TFT_BLACK)    'black to show if the background is white
-
-      if _GLCDPage.0 = 0 then
-        GLCDPrint ( 0, _GLCDPage * EPD_PIXELS_PER_PAGE, _GLCDPage )
-        GLCDForeground =  TFT_WHITE
-        GLCDBackground = TFT_BLACK
-
-      else
-        GLCDPrint ( 0, _GLCDPage * EPD_PIXELS_PER_PAGE, _GLCDPage )
-        GLCDForeground=TFT_BLACK
-        GLCDBackground=TFT_WHITE
-
-      end if
-
-
-  GLCD_Close_PageTransaction
-
-  GLCDDisplay off
-  wait 5 s
-  GLCDDisplay on
-  GLCDCLS
-  GLCDDisplay off
+    GLCDCLS TFT_BLACK
+    GLCDDisplay off

@@ -133,14 +133,14 @@
     wait 5 s
 
 
-wait 30 s
-GLCDDisplay On
-GLCDForeground=TFT_BLACK
-GLCDBackground=TFT_WHITE
-GLCDCLS
-GLCDDisplay Off
+    wait 30 s
+    GLCDDisplay On
+    GLCDForeground=TFT_BLACK
+    GLCDBackground=TFT_WHITE
+    GLCDCLS
+    GLCDDisplay Off
 
-end
+    end
 
 
 

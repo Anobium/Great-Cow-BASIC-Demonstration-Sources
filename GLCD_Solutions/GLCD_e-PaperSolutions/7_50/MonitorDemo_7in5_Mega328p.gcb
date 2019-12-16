@@ -87,16 +87,16 @@
     wait 5 s
 
 
-wait 30 s
-GLCDDisplay On
-GLCDForeground=TFT_BLACK
-GLCDBackground=TFT_WHITE
-GLCDCLS
-GLCDDisplay Off
+    wait 30 s
+    GLCDDisplay On
+    GLCDForeground=TFT_BLACK
+    GLCDBackground=TFT_WHITE
+    GLCDCLS
+    GLCDDisplay Off
 
 end
 
-
+'***************************************************************************************************
 
    dim advalue as Integer
    dim tempstring as string
@@ -114,20 +114,6 @@ end
       tempstring = StrInteger (advalue)+"c"
 
    End sub
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 '''
 '''  table name, clear the screen, color

@@ -65,29 +65,7 @@
 
     end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+'*********************************************************************************************
 
 
 macro EPD_LoadBMP ( in epd_tablename )
@@ -108,9 +86,9 @@ macro EPD_LoadBMP ( in epd_tablename )
       tableposition = 3
       SendCommand_EPD2in13D(Data_Transmission_1)
 
-          dim sendDataFlag as byte
-          sendDataFlag = 0
-          EPD7in5_Data = 0
+      dim sendDataFlag as byte
+      sendDataFlag = 0
+      EPD7in5_Data = 0
 
 
  'We need to set the signals as we are optimising the code by using the macro
