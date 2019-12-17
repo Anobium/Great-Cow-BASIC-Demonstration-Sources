@@ -67,7 +67,9 @@
     GLCDForeground = TFT_BLACK
     GLCDBackground = TFT_WHITE
 
-    Clear_buffer_EPD2in13D
+    'We need to clear the page buffer first using the EPD2in13D private method
+    ClearPageData_EPD2in13D
+
 
     GLCDLocateString 0,0
     GLCDPrint 0,0, "Test @ Default"
@@ -81,7 +83,8 @@
     GLCDPrintStringLN "Line 4"
     GLCDPrintStringLN "Line 5"
 
-    Pixel_To_Display_EPD2in13D
+    'This is required to send the page of GLCD data to the display using the EPD2in13D private method
+    UpdatePageData_EPD2in13D
     Refresh_EPD2in13D
 
     wait 5 s

@@ -51,7 +51,8 @@
     dim _GLCDPage as byte
     dim _GLCDPagesL, _GLCDPagesH as byte
 
-    Clear_buffer_EPD2in13D
+    'We need to clear the page buffer first using the EPD2in13D private method
+    ClearPageData_EPD2in13D
 
     for _GLCDPage = _GLCDPagesL to _GLCDPagesH    '_GLCDPage is a global variable - DO NOT CHANGE!!!
 
@@ -67,11 +68,17 @@
       GLCDPrintStringLN "Line 4"
       GLCDPrintStringLN "Line 5"
 
-      Pixel_To_Display_EPD2in13D
+      'This is required to send the page of GLCD data to the display using the EPD2in13D private method
+      UpdatePageData_EPD2in13D
 
     next
 
     Refresh_EPD2in13D
+    GLCDDisplay off
+    wait 10 s
+
+    GLCDDisplay on
+    GLCDCLS
     GLCDDisplay off
 
     end
