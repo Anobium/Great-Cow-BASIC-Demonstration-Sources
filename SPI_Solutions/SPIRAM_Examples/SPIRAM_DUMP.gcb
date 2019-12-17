@@ -50,9 +50,9 @@
     HSerPrintCRLF
     For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
       'choose one....
-      'SPISRAM_rd_byte (  EPD_Ind_raw, spirambyteread )
+      'SRAMRead (  EPD_Ind_raw, spirambyteread )
     'or, as a function
-      spirambyteread = SPISRAM_rd_byte (  EPD_Ind_raw )
+      spirambyteread = SRAMRead (  EPD_Ind_raw )
       if spirambyteread=0x00 then counter++
       HSerPrint hex(spirambyteread)
       HSerPrint ":"

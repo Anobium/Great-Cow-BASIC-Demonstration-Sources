@@ -33,7 +33,7 @@
 
 '******************************************************************************************************
 
-    #include <spisram.h>
+
     #define SPISRAM_CS            Porta.2           'Also known as SS, or Slave Select
     #define SPISRAM_SCK           Portc.3           'Also known as CLK
     #define SPISRAM_DO            Portc.5           'Also known as MOSI

@@ -34,7 +34,7 @@
 
 '***************************************************************************
 
-    #include <spisram.h>
+
     #define SPISRAM_CS            DIGITAL_5
     #define SPISRAM_SCK           DIGITAL_13
     #define SPISRAM_DO            DIGITAL_11
