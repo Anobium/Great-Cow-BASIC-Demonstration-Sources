@@ -28,6 +28,7 @@
   #define USART_BAUD_RATE 38400
   #define USART_TX_BLOCKING
   #define USART_BLOCKING
+  #define USART_DELAY OFF
 
   dir portc.7 in
   dir portc.6 out

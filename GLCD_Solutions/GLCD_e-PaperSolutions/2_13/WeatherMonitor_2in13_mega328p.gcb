@@ -107,7 +107,7 @@
 
 
     GLCDDisplay On
-    GLCDCLS
+    GLCDCLS TFT_WHITE
     GLCDDisplay Off
 
     end

@@ -3,14 +3,14 @@
 '''This example code implements a serial buffer ring.
 '''This means the incoming serial port data is placed into a buffer that can be read at anytime.
 '''This example uses an interrupt and a buffer.
-'''@author 	EvanV
-'''@licence	GPL
-'''@version	1.0a
-'''@date   	31.01.2015
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    31.01.2015
 '''********************************************************************************
 
 ; ----- Configuration
-  #chip 16F886, 16 	
+  #chip 16F886, 16
   #option explicit
 
 ; ----- Define Hardware settings
@@ -20,7 +20,9 @@
 ; ----- Constants
   ' Define the USART port
   #define USART_BAUD_RATE 9600
-  #define USART_BLOCKING true
+  #define USART_BLOCKING
+  #define USART_DELAY off
+
   ' [[change to your config] Ensure these port addresses are correct
   #define SerInPort PORTc.7
   #define SerOutPort PORTc.6
@@ -85,5 +87,4 @@
        bgetc = buffer(next_out)
        next_out=(next_out+1) % BUFFER_SIZE
     end Function
-
 
