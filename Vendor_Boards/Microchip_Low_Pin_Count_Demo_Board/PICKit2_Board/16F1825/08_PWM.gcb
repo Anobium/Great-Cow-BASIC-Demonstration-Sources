@@ -34,10 +34,6 @@
 
 
  #chip 16f1825,8
-  INTOSC , WDTE_OFF , PWRTE_OFF , MCLRE_OFF  , IESO_OFF
-
-
-
 
  #define demo1
 ' #define demo2

@@ -75,7 +75,7 @@
 
   #option explicit
   #include <smt_timers.h>
-   CLKOUTEN_ON
+  #config CLKOUTEN_ON
 
 
     '' -------------------LATA-----------------

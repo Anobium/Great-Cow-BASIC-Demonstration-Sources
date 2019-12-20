@@ -38,7 +38,7 @@
 '''
 
  #chip 16f1829,8
-  INTOSC , WDTE_OFF , PWRTE_OFF , MCLRE_OFF  , IESO_OFF
+
 
 
 
