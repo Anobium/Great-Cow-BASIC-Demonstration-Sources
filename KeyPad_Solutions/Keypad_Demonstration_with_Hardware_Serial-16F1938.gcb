@@ -17,7 +17,7 @@
 
   #chip 16f1938,16
   #option explicit
-  #config osc=int
+
 
 ; ----- Constants
   #define KEYPAD_ROW_1 portb.3

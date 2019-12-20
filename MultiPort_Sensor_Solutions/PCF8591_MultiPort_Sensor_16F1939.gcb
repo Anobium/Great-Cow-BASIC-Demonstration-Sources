@@ -5,19 +5,18 @@
 '''The NXP PCF8591 IC has a single DAC (digital to analogue) converter as well as four ADCs (analogue to digital converters) – all accessible via the I2C bus.
 '''If the I2C bus is new to you, please familiarise yourself with I2C here before moving forward.
 '''The PCF8591 is available in DIP form, which makes it easy to experiment with:
-'''@author 	EvanV
-'''@licence	GPL
-'''@version	1.1a
-'''@date   	10/12/2015
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.1a
+'''@date    10/12/2015
 '''********************************************************************************
 
 ; ----- Configuration
   #chip 16F1937, 32
-  #config Osc = intOSC, MCLRE_ON, PLLEN_ON
 
 
  'Please review the datasheet
- #define PCF8591 0x90									'Device address
+ #define PCF8591 0x90                 'Device address
  #define PCF8591_DAC_ENABLE 0x40
  #define PCF8591_ADC_CH0 0x40
  #define PCF8591_ADC_CH1 0x41
@@ -57,13 +56,13 @@
 
 
 '#define Demo1  Reference Voltage demo
-'#define Demo2	' Reads the ADC channels
-#define Demo3	' Sine wave in AOUT. You may get clipping... voltage losses by the LED! See Scope to 20ms
-'#define Demo4	' Sets the AOUT to Ramp up and Ramp down
+'#define Demo2  ' Reads the ADC channels
+#define Demo3 ' Sine wave in AOUT. You may get clipping... voltage losses by the LED! See Scope to 20ms
+'#define Demo4  ' Sets the AOUT to Ramp up and Ramp down
 
 
 
-	#ifdef Demo1
+  #ifdef Demo1
       dim DACoutVolt, Voltage, RawValue0 as long 'these are psuedo floats
       dim Offset as Integer
       DACoutVolt = 0
@@ -74,9 +73,9 @@
 
       '***** Calibrate
       HI2CStart
-      HI2CSend PCF8591	'sets the PCF8591 into a DA mode
-      HI2CSend PCF8591_DAC_ENABLE	'sets the PCF8591 into a DA mode
-      HI2CSend 0x80	'sets the output to mid scale
+      HI2CSend PCF8591  'sets the PCF8591 into a DA mode
+      HI2CSend PCF8591_DAC_ENABLE 'sets the PCF8591 into a DA mode
+      HI2CSend 0x80 'sets the output to mid scale
       HI2CStop
       wait 100 ms
       DACoutVolt = (128 * IntegerMathsFactorisor * 5) / 256
@@ -90,9 +89,9 @@
 
         for DACout = 0 to 255
           HI2CStart
-          HI2CSend PCF8591	'sets the PCF8591 into a DA mode
-          HI2CSend PCF8591_DAC_ENABLE	'sets the outputn
-          HI2CSend DACout	'set On
+          HI2CSend PCF8591  'sets the PCF8591 into a DA mode
+          HI2CSend PCF8591_DAC_ENABLE 'sets the outputn
+          HI2CSend DACout 'set On
           HI2CStop
           wait 10 ms
 
@@ -149,7 +148,7 @@
       PrintFloat = PrintFloat + Right(tempstr,2)
 
     end function
-	#endif
+  #endif
 
 
 
@@ -157,14 +156,14 @@
 
 
 
-	#ifdef Demo2
+  #ifdef Demo2
     do Forever
             HI2CStart
             HI2CSend PCF8591
-            HI2CSend PCF8591_AUTO_INCREMENT	'control byte - read ADC0 then auto-increment
+            HI2CSend PCF8591_AUTO_INCREMENT 'control byte - read ADC0 then auto-increment
             HI2CStart
             HI2CSend ( PCF8591 | 1 )
-            HI2CReceive value0							'First byte is a dummy byte. Dump this value.
+            HI2CReceive value0              'First byte is a dummy byte. Dump this value.
             HI2CReceive value0
             HI2CReceive value1
             HI2CReceive value2
@@ -183,9 +182,9 @@
 
     loop
 
-	#endif
+  #endif
 
-	#ifdef Demo3
+  #ifdef Demo3
     dim sinev(256)
     dim inc as word
     for inc = 1 to 256
@@ -230,31 +229,31 @@
     do Forever
         for inc = 1 to 256
                         HI2CStart
-                        HI2CSend PCF8591	'sets the PCF8591 into a DA mode
-                        HI2CSend PCF8591_DAC_ENABLE	'sets the outputn
-                        HI2CSend sinev(inc)	'set On
+                        HI2CSend PCF8591  'sets the PCF8591 into a DA mode
+                        HI2CSend PCF8591_DAC_ENABLE 'sets the outputn
+                        HI2CSend sinev(inc) 'set On
                         HI2CStop
         next
     loop
 
-	#endif
+  #endif
 
   #ifdef Demo4
 
     do
         for inc = 0 to 255
                         HI2CStart
-                        HI2CSend PCF8591	'sets the PCF8591 into a DA mode
-                        HI2CSend PCF8591_DAC_ENABLE	'sets the outputn
-                        HI2CSend inc	'set On
+                        HI2CSend PCF8591  'sets the PCF8591 into a DA mode
+                        HI2CSend PCF8591_DAC_ENABLE 'sets the outputn
+                        HI2CSend inc  'set On
                         HI2CStop
         '                wait 5 ms
         next
         for inc = 255 to 0 step -1
                         HI2CStart
-                        HI2CSend PCF8591	'sets the PCF8591 into a DA mode
-                        HI2CSend PCF8591_DAC_ENABLE	'sets the outputn
-                        HI2CSend inc	'set On
+                        HI2CSend PCF8591  'sets the PCF8591 into a DA mode
+                        HI2CSend PCF8591_DAC_ENABLE 'sets the outputn
+                        HI2CSend inc  'set On
                         HI2CStop
         '                wait 5 ms
         next

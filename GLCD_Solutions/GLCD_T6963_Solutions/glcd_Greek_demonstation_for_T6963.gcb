@@ -11,7 +11,6 @@
 
   #chip 16f1939,32
   #option explicit
-  #config Osc = INT, MCLRE_On, PLLEN_ON
 
   #include <glcd.h>
   #define GLCD_TYPE GLCD_TYPE_T6963_64

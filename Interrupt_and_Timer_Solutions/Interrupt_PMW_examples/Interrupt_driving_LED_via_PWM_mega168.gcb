@@ -13,7 +13,7 @@
 
   #chip mega168, 16
   #option explicit
-  #config osc = Ext
+
 
 
 ; ----- Define Hardware settings

@@ -3,21 +3,20 @@
 '''This program demonstrates the capabilities of a LCD display.
 '''The LCD is using an 8-bit bus for connectivity.
 '''For the LCD connection - please refer to the program.
-'''@author 	WilliamR plus works of EvanV
-'''@licence	GPL
-'''@version	1.0a
-'''@date   	21.01.2015
+'''@author  WilliamR plus works of EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    21.01.2015
 '''********************************************************************************
 
 ;Set chip model required:
 
  #chip 16F886, 16
- #config MCLRE_ON
 
  ; or
 
  ;#chip 16F1938, 32
- ;#config INTOSC, MCLRE_ON, PLLEN_ON
+ ;
 
   ;Setup LCD Parameters
   #define LCD_IO 8
@@ -108,4 +107,3 @@
         wait 3 s
 
     loop
-

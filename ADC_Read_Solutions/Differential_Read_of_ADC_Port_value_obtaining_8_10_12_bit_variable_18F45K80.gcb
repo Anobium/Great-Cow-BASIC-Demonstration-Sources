@@ -30,8 +30,8 @@
 ; ----- Configuration
 
      #Chip 18F45K80, 4
-     #Config XINST OFF
-     #config MCLRE = OFF
+
+    #config MCLRE_OFF
 
 ; ----- Constants
 

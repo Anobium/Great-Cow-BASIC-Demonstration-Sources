@@ -12,7 +12,7 @@
   'Chip Settings
     #chip 16F1789,32
 
-    #config MCLRE=on
+     #config MCLRE=on
     #option explicit
     #include <glcd.h>
     #define GLCD_TYPE GLCD_TYPE_ILI9326

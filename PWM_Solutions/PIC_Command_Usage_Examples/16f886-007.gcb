@@ -8,7 +8,7 @@
 ' Fixed frequency of 100mhz with 50% duty
 '
 #chip 16f886,8
-#Config WRT_OFF, MCLRE_ON
+
 
     'Set the CCP/PWM pin to output mode
     DIR PORTC.1 out

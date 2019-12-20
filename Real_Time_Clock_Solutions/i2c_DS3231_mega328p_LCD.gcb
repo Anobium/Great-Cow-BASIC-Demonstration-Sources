@@ -31,7 +31,6 @@
 ; ----- Configuration
  #chip mega328p, 16
  #option explicit
- #config MCLRE_ON
 
  #include <ds3231.h>
  #include <i2ceeprom.h>                  ; memory chips: at24c32 (storage capacity 32k)

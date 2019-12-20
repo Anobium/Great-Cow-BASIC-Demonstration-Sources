@@ -1,3 +1,18 @@
+'Results should look like this
+'
+'    Writing...SPISRAM_CAPACITY = 0x020000
+'    Error Count (should be 0) = 0
+'
+'
+'    Reading...
+'    Error Count (should be 0) = 0
+'
+'    Wait...
+'    Rewriting to 0x00 ...
+'    Error Count (should be 0) = 0
+'    End...
+
+
      'Chip Settings.
     #chip 18F47k42, 64
     #config MCLRE = ON
@@ -45,8 +60,7 @@
     #define SPISRAM_HARDWARESPI
     #define SPISRAM_TYPE          SRAM_23LC1024
 
-    'This is specific to the K42 chips
-    #define SPI_BAUD_RATE_REGISTER 7
+    #define HWSPIMode MASTER
 
 '********************************************************************************
 
@@ -64,10 +78,18 @@
     HSerPrintCRLF
     wait 100 ms
 
+    Dim errorcount as long
+    errorcount = 0
     dim EPD_Ind_raw as long
     For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
       SRAMWrite ( [long]EPD_Ind_raw, EPD_Ind_raw and 255 )
+      if SRAMRead (  [long]EPD_Ind_raw ) <> ( EPD_Ind_raw and 255 ) then
+          errorcount++
+      end if
     Next
+    HSerPrint "Error Count (should be 0) = "
+    HSerPrint errorcount
+    HSerPrintCRLF
 
 
     dim spirambyteread as Byte
@@ -76,19 +98,21 @@
 
     HSerPrint "Reading..."
     HSerPrintCRLF
+    errorcount = 0
     For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
       'choose one....
       'SRAMRead (  EPD_Ind_raw, spirambyteread )
     'or, as a function
-      spirambyteread = SRAMRead (  EPD_Ind_raw )
+      spirambyteread = SRAMRead (  [long]EPD_Ind_raw )
 
-      if spirambyteread = ( EPD_Ind_raw and 255 ) then
-          HSerPrint hex(spirambyteread)
-      else
-          HSerPrint "**"
+      if spirambyteread <> ( [long]EPD_Ind_raw and 255 ) then
+          errorcount++
       end if
-      HSerPrint ":"
+
     Next
+    HSerPrint "Error Count (should be 0) = "
+    HSerPrint errorcount
+    HSerPrintCRLF
     HSerPrintCRLF
     HSerPrint "Wait..."
     HSerPrintCRLF
@@ -100,10 +124,9 @@
       SRAMWrite ( [long]EPD_Ind_raw, 0 )
     Next
 
-    Dim errorcount as long
     errorcount = 0
     For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
-      SRAMRead (  EPD_Ind_raw, spirambyteread )
+      SRAMRead (  [long]EPD_Ind_raw, spirambyteread )
       if spirambyteread <> 0 then
           errorcount++
       end if

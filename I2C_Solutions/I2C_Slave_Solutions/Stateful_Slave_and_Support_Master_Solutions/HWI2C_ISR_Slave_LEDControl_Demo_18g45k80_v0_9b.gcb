@@ -37,7 +37,7 @@
 
     #chip 18f45k80, 16
     #option explicit
-    #config MCLR_On
+
 
     #include <hwi2c_messageinterface.h>  'defines a set of callbacks - you do not need to define hi2cslave_state_1-5
     'Buffer size

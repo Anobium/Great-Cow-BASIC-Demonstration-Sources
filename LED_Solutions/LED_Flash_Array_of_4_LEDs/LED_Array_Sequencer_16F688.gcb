@@ -10,7 +10,7 @@
 
 ; ----- Configuration
   #chip 16F886,16
-  #config HS_OSC, WDT_OFF, LVP_OFF
+
 
 
 ; ----- Define Hardware settings

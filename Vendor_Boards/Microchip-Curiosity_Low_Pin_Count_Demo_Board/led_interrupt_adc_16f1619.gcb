@@ -24,14 +24,9 @@
 'Microcontroller @ 32MHz
 #chip 16F1619, 32
 
-'Use the internal oscillator
-#config OSC = INTOSC
-
 'MCLRE set on so that switch S2 can reset microcontroller
 #config MCLRE_ON
 
-'Ensure LVP is enabled to allow use of onboard programmer
-#config LVP_ON
 
 'Ensure all variables are explicitly defined
 #option explicit

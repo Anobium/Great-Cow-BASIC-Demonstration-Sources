@@ -1,7 +1,6 @@
     'Chip Settings.
     #chip 18F45k42, 64
-    #config MCLRE = ON
-    #option explicit
+      #option explicit
     #include <glcd.h>
 
     '

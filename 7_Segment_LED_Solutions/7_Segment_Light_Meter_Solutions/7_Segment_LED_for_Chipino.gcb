@@ -14,7 +14,7 @@
 
   #chip 16F886, 16
   #option explicit
-  #config HS_OSC, WDT_OFF, LVP_OFF
+
   ' Define CHIPINO I/O pins
   #include <chipino.h>
 

@@ -37,7 +37,7 @@
 
   #chip 16f18855,32
   #option explicit
-  #config RSTOSC_HFINT32
+
 
   'Set the PPS of the I2C and the RS232 ports.
   #startup InitPPS, 85

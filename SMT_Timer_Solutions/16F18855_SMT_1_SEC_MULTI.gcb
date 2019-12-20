@@ -3,10 +3,6 @@
 ''' WilliamR
 '
  #chip 16f18855, 32
- #config FEXTOSC = OFF, RSTOSC = HFINT32
- #config MCLRE = ON, WDTE=OFF
- #CONFIG CSWEN = ON, BOREN = Off
-
  #option explicit
  #include <smt_timers.h>
 

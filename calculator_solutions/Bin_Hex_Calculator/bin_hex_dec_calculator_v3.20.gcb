@@ -2,8 +2,8 @@
 '(c) Mark Stevenson MkEDS 2019
 
 #Chip 16F1829, 32
-#Config CP=On
-'Read protected
+
+
 #Option Explicit
 
 

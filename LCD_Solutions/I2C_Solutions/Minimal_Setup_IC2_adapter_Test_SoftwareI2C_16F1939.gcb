@@ -17,7 +17,7 @@
 
   #chip 16f1939, 16
   #option explicit
-  #config mclr_on
+
 
 
   ; ----- Define Hardware settings

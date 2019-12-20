@@ -18,7 +18,7 @@
 ; ----- Configuration
  #chip 16F886, 16
  #option explicit
- #config INTOSC_OSC_NOCLKOUT, MCLRE_OFF
+
 
 
 

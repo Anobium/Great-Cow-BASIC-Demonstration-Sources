@@ -29,7 +29,7 @@
 
 
   #chip 16F877a
-  #Config WRT_OFF
+   WRT_OFF
 
   #include <getuserid.h>
 

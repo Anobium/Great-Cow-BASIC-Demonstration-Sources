@@ -12,7 +12,7 @@
 ; ----- Configuration
   #chip 16f1939, 4
   'Switch Low-Volt-Programming:
-  #config LVP = On
+   LVP = On
 
   ' #include
   ' no solution specifc includes, default includes are always included                                  ; no solution specifc includes, default includes are always included

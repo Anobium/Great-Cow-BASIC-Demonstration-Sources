@@ -11,7 +11,6 @@
 
   #chip 18F45K80,64
   #option explicit
-  #config Osc = INT, MCLRE_On
 
    #include <glcd.h>
    #define GLCD_TYPE GLCD_TYPE_NT7108C               ' Specify the GLCD type

@@ -18,7 +18,7 @@
     'Chip Settings.
     #chip 18f25k42, 16
     'This Configuration change is needed to enable programming in Low Voltage Programming Mode
-    #config LVP=on
+
 
     '' -------------------PORTA----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---

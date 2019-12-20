@@ -25,7 +25,7 @@
 ' ----- Configuration
     'Chip Settings.
     #chip 18f25k22, 16
-    #config mclre=on
+     #config MCLRE=on
     #option Explicit
 
     '' -------------------PORTA----------------

@@ -29,7 +29,6 @@
 
 
   #chip PIC18F14k22
-  #Config MCLRE_ON
 
   #include <getuserid.h>
 

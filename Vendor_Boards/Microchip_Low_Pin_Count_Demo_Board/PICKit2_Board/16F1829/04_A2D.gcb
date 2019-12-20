@@ -33,9 +33,8 @@
 
 
  #chip 16f1829,8
- #config FOSC_INTOSC , WDTE_OFF , PWRTE_OFF , MCLRE_OFF , CP_OFF , CPD_OFF , BOREN_ON  , IESO_OFF
- ' , FCMEN_OFF
- #config WRT_OFF , PLLEN_OFF , STVREN_OFF , LVP_OFF
+
+
 
     '' -------------------LATC-----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---

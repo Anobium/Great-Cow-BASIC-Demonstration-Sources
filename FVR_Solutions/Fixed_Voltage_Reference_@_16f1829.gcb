@@ -14,7 +14,7 @@
 
 ; ----- Configuration
     #Chip 16f1829, 16
-    #config osc=int , pllen=on
+
 
     ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
     ' USART settings - CHANGE PORTS if required

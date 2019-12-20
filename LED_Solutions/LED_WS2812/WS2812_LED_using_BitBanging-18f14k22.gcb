@@ -49,7 +49,7 @@
     'Chip Settings.
     #chip 18f14k22, 16
     #option explicit
-    #Config MCLRE_OFF    'We need the switch to operate on this demo board
+   #config MCLRE_OFF    'We need the switch to operate on this demo board
 
 
 Setup:

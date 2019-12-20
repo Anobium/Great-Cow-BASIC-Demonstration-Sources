@@ -7,7 +7,7 @@
 ' The first call to setup the PWM module is much slower then the second and subsequent calls.
 '
 #chip 16f886,8
-#Config WRT_OFF, MCLRE_ON
+
 
 
     'Set the CCP2 pin to output mode

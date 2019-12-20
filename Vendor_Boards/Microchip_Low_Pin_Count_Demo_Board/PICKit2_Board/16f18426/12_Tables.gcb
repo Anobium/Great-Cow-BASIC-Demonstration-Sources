@@ -9,7 +9,7 @@
 '''********************************************************************
 
   #chip 16F18426
-  #config MCLRE_OFF
+ #config MCLRE_OFF
   #Define  ADC_Fudge 0x0739   ' as found by A2D example
 
   table gray_code

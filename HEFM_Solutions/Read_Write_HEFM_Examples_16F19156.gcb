@@ -14,7 +14,6 @@
 
 ; Chip Settings
  #chip 16F19156, 16
- #Config MCLRE = ON, LVP = ON, WDTE = OFF
  #option explicit
 
  #startup InitPPS, 85

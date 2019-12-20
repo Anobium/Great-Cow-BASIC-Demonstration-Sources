@@ -29,8 +29,7 @@
 
 
   #chip 16F18855
-  #Config FEXTOSC_OFF, RSTOSC_HFINT32
-  #Config WRT_OFF, cpd_off, MCLRE_ON
+
 
   #include <getuserid.h>
 

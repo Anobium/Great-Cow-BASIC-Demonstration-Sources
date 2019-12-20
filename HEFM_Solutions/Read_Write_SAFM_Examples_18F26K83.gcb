@@ -14,7 +14,7 @@
 
  'Chip Settings.
  #chip 18F26K83, 16
- #Config LVP = ON, MCLRE = ON
+
  #option Explicit
 
  #startup InitPPS, 85

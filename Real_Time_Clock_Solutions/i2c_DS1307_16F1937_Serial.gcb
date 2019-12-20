@@ -20,7 +20,7 @@
 ''':    or press momentarily for a single increment. Time is
 ''':    always set in 24-hour clock format.
 
-'''@author          EvanV       	
+'''@author          EvanV
 '''@licence	GPL
 '''@version	1.2a
 '''@date   	23.02.15
@@ -29,7 +29,6 @@
 ; ----- Configuration
  #chip 16F1937, 32
  #option explicit
- #config Osc = intOSC, MCLRE_ON, PLLEN_ON
 
  #include <ds1307.h>
 

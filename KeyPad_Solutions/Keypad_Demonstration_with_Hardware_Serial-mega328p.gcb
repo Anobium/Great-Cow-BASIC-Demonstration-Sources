@@ -12,14 +12,15 @@
 '''The column pins must also be pulled up (high) to 5v through 10k Resistors.
 '''
 '''
-'''@author 	EvanV based on works of HughC
-'''@licence	GPL
-'''@version	1.0a
-'''@date   	08.04.2015
+'''@author  EvanV based on works of HughC
+'''@licence GPL
+'''@version 1.0a
+'''@date    08.04.2015
 '''********************************************************************************
 
 ; ----- Configuration
 
+  #chip mega328p, 16
   #include <uno_mega328p.h>
 
 ; ----- Constants

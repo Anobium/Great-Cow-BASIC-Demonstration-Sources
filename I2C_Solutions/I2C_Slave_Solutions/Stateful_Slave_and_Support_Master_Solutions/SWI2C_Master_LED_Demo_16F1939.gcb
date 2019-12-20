@@ -12,7 +12,6 @@
 ; ----- Configuration
   #chip 16F1939
   #option explicit
-  #config Osc = intOSC, MCLRE_ON
 
 '************************** YOU MUST VERIFY THIS ADDRESS!!!!!! *********************
 

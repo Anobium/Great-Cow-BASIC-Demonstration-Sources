@@ -27,8 +27,8 @@
 ; ----- Configuration
 
      #Chip 18F14K22, 4
-     #Config XINST OFF
-     #config MCLRE = OFF
+
+    #config MCLRE_OFF
 
 ; ----- Constants
 

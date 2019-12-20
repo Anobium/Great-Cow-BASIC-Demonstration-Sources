@@ -4,16 +4,15 @@
 '''The LED array must be attached via appropiate resistors.
 '''The pot on port ANO contros the value of the dimmer state.
 '''A LED must be connec to Portb.0 via appropiate resistors
-'''@author 	EvanV
-'''@licence	GPL
-'''@version	1.0a
-'''@date   	08.11.2014
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    08.11.2014
 '''********************************************************************************
 
 ; ----- Configuration
   #chip 16F886,16
   #option explicit
-  #config MCLR_OFF
 
 
 ; ----- Define Hardware settings
@@ -42,4 +41,3 @@
   next
   goto Main
   end
-

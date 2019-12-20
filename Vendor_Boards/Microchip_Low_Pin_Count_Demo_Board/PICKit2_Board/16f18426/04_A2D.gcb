@@ -14,7 +14,7 @@
 ' Recompile and Test - all LEDS should now be lit at maiximum
 
   #Chip 16f18426
-  #config MCLRE_OFF    ' Allows RA3 to be used as an Input
+ #config MCLRE_OFF    ' Allows RA3 to be used as an Input
 
   #Define  ADC_Fudge 0x0739   ' 12 Bit ADC maximum
 

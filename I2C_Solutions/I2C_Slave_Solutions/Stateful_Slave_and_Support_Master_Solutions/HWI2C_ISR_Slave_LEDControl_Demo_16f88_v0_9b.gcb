@@ -37,7 +37,7 @@
 
   #chip 16f88, 8
   #option explicit
-  #config INTRC_IO,MCLR_OFF
+
 
    #include <hwi2c_messageinterface.h>  'defines a set of callbacks - you do not need to define hi2cslave_state_1-5
 

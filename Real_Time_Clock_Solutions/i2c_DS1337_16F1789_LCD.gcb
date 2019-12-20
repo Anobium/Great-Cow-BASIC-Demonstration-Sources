@@ -31,7 +31,6 @@
 ; ----- Configuration
  #chip 16F1789, 32
  #option explicit
- #config Osc = intOSC, MCLRE_ON, PLLEN_ON
 
  #include <ds1337.h>
 

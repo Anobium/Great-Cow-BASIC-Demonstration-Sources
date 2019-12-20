@@ -14,8 +14,8 @@
  ; ----- Configuration
 
   #chip 16f18855,32
-  #Config FEXTOSC_OFF, RSTOSC_HFINT32
-  #Config WRT_OFF, cpd_off, MCLRE_OFF
+
+  #config MCLRE_OFF
 
   'Set the PPS of the PWM
   'Set the PPS for this solution.

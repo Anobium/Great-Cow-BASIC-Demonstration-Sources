@@ -12,7 +12,7 @@
 ; ----- Configuration
   #chip 18F13k50, 1
   'Switch Low-Volt-Programming:
-  #config LVP = Off
+   LVP = Off
 
 ' #include
 ' no solution specifc includes, default includes are always included

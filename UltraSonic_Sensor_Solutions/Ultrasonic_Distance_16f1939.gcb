@@ -3,21 +3,20 @@
 '''This program is a GLCD demonstration multifunctional capabilities.
 '''This program reads the SRF04 distance sensor and dispays the results on the GLCD.
 '''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
-'''@author 	EvanV
-'''@licence	GPL
-'''@version	1.0
-'''@date   	17.2.16
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date    17.2.16
 '''********************************************************************************
 
-  #chip 16f1939,32
-  #config MCLRE_ON, PLLEN_ON,
+  #chip 16f1939
   #include <srf04.h>
 
   #include <glcd.h>
   #define GLCD_TYPE GLCD_TYPE_KS0108               ' This is the Default value, not required.
 
 
-	#define GLCDDirection 1
+  #define GLCDDirection 1
 
    #define GLCD_CS1 PORTC.1    'D12 to actually since CS1, CS2 can be reversed on some devices
    #define GLCD_CS2 PORTC.0
@@ -79,4 +78,3 @@
 
 
 end
-

@@ -12,7 +12,7 @@
 
 ; ----- Configuration
   #chip 16F886
-  #config mclr_on
+
   #option explicit
 
 

@@ -23,7 +23,7 @@
     'Chip Settings.
     #chip 18f25k42, 64
     #option Explicit
-    #config mclr=on, LVP=on
+    #config mclr=on
 
     #startup InitPPS, 85
 

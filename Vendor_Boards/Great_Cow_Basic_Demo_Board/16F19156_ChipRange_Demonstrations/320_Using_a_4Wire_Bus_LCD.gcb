@@ -8,9 +8,8 @@
 '''************************************************************************
 
 
- #chip 16F19156, 32
- #option explicit
- #config LVP=on
+  #chip 16F19156, 32
+  #option explicit
 
   ;Setup LCD Parameters
   #define LCD_IO 4

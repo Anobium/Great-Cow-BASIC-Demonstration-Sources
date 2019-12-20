@@ -22,7 +22,7 @@
     'Chip Settings.
     #chip 16f15355,32
     #option explicit
-    #Config  MCLRE_ON    'These configs = MCLR pin function enablesd, External oscillator not enabled and clockout function is disables ( enable I/O port).
+
 
 
     '' -------------------LATC-----------------

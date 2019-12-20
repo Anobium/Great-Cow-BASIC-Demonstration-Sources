@@ -21,7 +21,6 @@
     ;Chip Settings.
     #chip 16f18855
     #option explicit
-    #config Osc = INT, MCLRE_ON
 
     #include <glcd.h>
 

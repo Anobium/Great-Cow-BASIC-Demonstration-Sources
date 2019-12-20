@@ -17,7 +17,7 @@
 
   'Chip Settings
 #chip 16f1789,32
-#config OSC=INTOSC, MCLRE=off, WDTEN=Off, boren=off
+
 #option Explicit
 #include <glcd.h>
 

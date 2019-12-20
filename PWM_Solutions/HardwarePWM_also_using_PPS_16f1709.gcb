@@ -12,7 +12,7 @@
 ; ----- Configuration
 #chip 16f1709, 4
 #option explicit
-#config osc=INT
+
 
 	'Set the PPS of the PWM and the RS232 ports.
     Intoff

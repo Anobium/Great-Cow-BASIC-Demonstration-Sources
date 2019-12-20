@@ -17,7 +17,7 @@
 
 
   #chip 18f45k50, 16
-  #config OSC = INTOSCCLKO
+
   ; ----- Define Hardware settings
   ' Define I2C settings - CHANGE PORTS if required
   #define HI2C_BAUD_RATE 100

@@ -29,7 +29,6 @@
   '#chip 16f1825, 1
     #chip 16f1503, 8 '' 8Mhz
 
-  #config Osc = Int, CP_ON
 
     'Meet the Outputs  only port A has Weak_Pull_Ups ~50kOhm
      '' these are the 7segment display outputs

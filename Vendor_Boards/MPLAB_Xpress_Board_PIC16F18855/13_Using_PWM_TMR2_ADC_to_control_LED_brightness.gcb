@@ -22,7 +22,6 @@
 '''  Date: 13.3.2016
 '''
     #chip 16f18855,32
-    #Config MCLRE_ON
     'Set the PPS of the PWM and the RS232 ports.
     'Set the PPS for this solution.
   #startup InitPPS, 85

@@ -12,6 +12,7 @@
   'Chip Settings.
   #chip 18F4550, 48
   #config FOSC=HSPLL_HS, PLLDIV=5, CPUDIV=OSC1_PLL2,  MCLRE=ON
+
   #option explicit
 
 

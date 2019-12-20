@@ -25,7 +25,7 @@
 
 #chip 18F47K42, 64   'change chip
 #option explicit
-#config MCLRE = ON
+
 
 
 

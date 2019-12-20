@@ -16,7 +16,7 @@
 
     #chip 16f18855,32
     #option explicit
-    #config RSTOSC_HFINT32
+
 
 
 

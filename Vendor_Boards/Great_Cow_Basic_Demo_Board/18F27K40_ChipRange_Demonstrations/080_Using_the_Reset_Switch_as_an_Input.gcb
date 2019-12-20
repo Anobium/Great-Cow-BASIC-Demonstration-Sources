@@ -20,7 +20,7 @@
 
     'Change the MCLRE to MCLRE_INTMCLR.  This will ensure the reset is an input by setting this Configuration Switch.
     'Try changing to MCLRE_EXTMCLR to see the diffence.
-    #config MCLRE_INTMCLR
+     MCLRE_INTMCLR
 
 
     '' -------------------PORTA----------------

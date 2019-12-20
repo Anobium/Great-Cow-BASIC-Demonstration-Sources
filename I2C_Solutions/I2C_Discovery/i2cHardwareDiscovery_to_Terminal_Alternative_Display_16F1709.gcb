@@ -15,7 +15,6 @@
 ; ----- Configuration
   #chip 16F1709, 16
   #option explicit
-  #config Osc = intOSC, MCLRE_ON, PLLEN_OFF
 
   'Set the PPS for this solution.
   #startup InitPPS, 85

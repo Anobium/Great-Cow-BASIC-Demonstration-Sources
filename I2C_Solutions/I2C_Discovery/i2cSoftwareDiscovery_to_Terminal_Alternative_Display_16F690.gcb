@@ -12,9 +12,6 @@
 ; ----- Configuration
   #chip 16F690
   #option explicit
-  #config Osc = intOSC, MCLRE_ON
-
-
 
 ; ----- Define Hardware settings
   ' Define I2C settings - CHANGE PORTS
@@ -79,5 +76,4 @@
   HSerPrint   "End of Search"
   HSerPrintCRLF 2
   END
-
 

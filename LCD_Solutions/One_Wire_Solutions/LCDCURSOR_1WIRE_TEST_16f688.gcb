@@ -6,21 +6,21 @@
 '''This  method of driving an LCD requires an additional integrated circuit and other passive
 '''components. This is not recommended for the beginner.
 '''Evan R. Venn based on the works of Thomas Henry and Mike Predko
-'''@author 	EvanV plus works of ThomasH and MikeP
-'''@licence	GPL
-'''@version	1.0
-'''@date   	09.08.2015
+'''@author  EvanV plus works of ThomasH and MikeP
+'''@licence GPL
+'''@version 1.0
+'''@date    09.08.2015
 '''********************************************************************************
 
 ; ----- Configuration
 
  #chip 16F886, 16
- #config MCLRE_ON
+
 
  ; or
 
  ;#chip 16F1938, 32
- ;#config INTOSC, MCLRE_ON, PLLEN_ON
+ ;
 
 
   ;Setup LCD Parameters
@@ -112,4 +112,3 @@
         LCDBacklight On
         WAIT 3 S
     loop
-

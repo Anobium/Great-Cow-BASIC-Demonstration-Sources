@@ -2,10 +2,10 @@
   '''--------------------------------------------------------------------------------------------------------------------------------
   '''This program demonstrates how to read the ADC and create an event at a specific ADC value.
   '''
-  '''@author 		EvanV & CRoper
-  '''@licence		GPL
-  '''@version		1.0
-  '''@date   		6.7.2016
+  '''@author    EvanV & CRoper
+  '''@licence   GPL
+  '''@version   1.0
+  '''@date      6.7.2016
   '''
   '''
   '''  PIC: 16f690
@@ -36,16 +36,15 @@
 
   ' ----- Configuration
        #chip 16f690,16
-       #config FOSC_INTOSC , WDTE_OFF , PWRTE_OFF , MCLRE_OFF , CP_OFF , CPD_OFF , BOREN_ON , IESO_OFF
 
-      #define ADCTimeDelay 10		  'this is in milliseconds - this therefore reads the ADC every... ms.
-      														'There is a small processing overhead so the actual delay may a tiny bit out.
-      #define myADCLimit   131		'this is the alarm setting
+      #define ADCTimeDelay 10     'this is in milliseconds - this therefore reads the ADC every... ms.
+                                  'There is a small processing overhead so the actual delay may a tiny bit out.
+      #define myADCLimit   131    'this is the alarm setting
 
       Dim t1_millis             As long ' Critical - Used by the ISR'
       ' working copy '
       Dim curMillis             As Long
-      Dim currentACvalue				As Word
+      Dim currentACvalue        As Word
 
       'Potentitor is connected to RA0...set as input
       dir porta.0 in
@@ -69,20 +68,20 @@
       ' Set up the Interrupt
       ' TMR1_Initialize
       'Timer1
-			'Prescaler 1:1; TMR1 Preload = 63536; Actual Interrupt Time : 1 ms
+      'Prescaler 1:1; TMR1 Preload = 63536; Actual Interrupt Time : 1 ms
       InitTimer1( Osc, PS_1_8 )
       SetTimer( 1, 63536 ) ' Preload Count for 1ms '
       ' Add a handler for the interrupt '
       On Interrupt Timer1Overflow Call TMR1_ISR
 
       ' reset our timer.
-		  t1_millis = 0
+      t1_millis = 0
 
       StartTimer 1
 
-			'Loop forever
+      'Loop forever
       Do forever
-      		'Get the current time in ms
+          'Get the current time in ms
           curMillis = millis
 
           'is the current time greater than our specified time delay.
@@ -118,7 +117,7 @@
 
     'This is called every time timer1 overflows.  We increment t1_millis so we can count things.
     Sub TMR1_ISR
-    		IntOff
+        IntOff
         ' 63576 should be used in this code to ensure the timing is exactly 1ms.
         ' This number has been validated with an oscilliscope.
         SetTimer( 1, 63576 )
@@ -126,4 +125,3 @@
         t1_millis += 1
         Inton
     End Sub
-

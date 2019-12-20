@@ -8,8 +8,7 @@
 
      'Chip Settings.
     #chip 16F1939
-    #config MCLRE = ON
-    #option explicit
+      #option explicit
 
  '******************************************************************************************************
 

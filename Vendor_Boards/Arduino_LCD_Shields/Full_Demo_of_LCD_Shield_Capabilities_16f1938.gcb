@@ -9,10 +9,10 @@
 '''The LCD color may vary (green or blue)
 '''The display is easy to interface, using a 4 wire LCD type of communication.
 '''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
-'''@author 	EvanV
-'''@licence	GPL
-'''@version	1.0
-'''@date   	1.6.2015
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date    1.6.2015
 '''********************************************************************************
 
 ; ----- Configuration
@@ -20,7 +20,6 @@
 #chip 16F1938, 32
 #option explicit
 
-#config INTOSC, MCLRE_OFF, PLLEN_ON
 #include <chipino.h>
 
 

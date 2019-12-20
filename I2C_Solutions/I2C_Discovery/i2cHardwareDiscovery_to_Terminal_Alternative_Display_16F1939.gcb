@@ -13,7 +13,6 @@
 ; ----- Configuration
   #chip 16F1939, 32
   #option explicit
-  #config Osc = intOSC, MCLRE_ON, PLLEN_ON
 
 
 ; ----- Define Hardware settings

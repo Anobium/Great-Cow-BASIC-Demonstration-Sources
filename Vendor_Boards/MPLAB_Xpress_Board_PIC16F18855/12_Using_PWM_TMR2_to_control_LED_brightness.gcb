@@ -26,7 +26,6 @@
 
     #chip 16f18855,32
     #option explicit
-    #Config MCLRE_ON
 
     'Set the PPS of the PWM and the RS232 ports.
     'Set the PPS for this solution.

@@ -13,7 +13,7 @@
 
   #chip 16F886, 16
   #option explicit
-  #config HS_OSC, WDT_OFF, LVP_OFF
+
 
 ; ----- Define Hardware settings
   ; All port settings, like in and out, are handled within the Seven Segment driver.

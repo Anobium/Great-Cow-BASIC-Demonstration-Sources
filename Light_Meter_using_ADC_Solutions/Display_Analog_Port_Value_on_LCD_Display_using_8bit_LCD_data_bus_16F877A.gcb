@@ -11,7 +11,7 @@
 
 ; ----- Configuration
   #chip 16F877A, 16
-  #config HS_OSC, WDT_OFF, LVP_OFF
+
 
 ; ----- Define Hardware settings
 ;  none specified in this example.

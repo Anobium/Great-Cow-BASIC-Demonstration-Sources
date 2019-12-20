@@ -3,23 +3,22 @@
 '''This is the driver for the LCD. This program is a Great Cow Basic implementation of the Picaxe AXE133 Serial LCD/OLED driver.
 '''    See www.picaxe.com for details of the AXE133 and the Open Source code this is based upon.
 '''     Supported Commands, see LCD Wire Usage.txt
-'''     0-252	normal ASCII characters
-'''     253, X	display 16 character pre-saved message from EEPROM memory, X can be 0-15
-'''     254, X	LCD command, X can be 0 to 255
-'''     255, X	control outputs A.3, A.2, A.1, A.0 (via lower 4 bits of X)
+'''     0-252 normal ASCII characters
+'''     253, X  display 16 character pre-saved message from EEPROM memory, X can be 0-15
+'''     254, X  LCD command, X can be 0 to 255
+'''     255, X  control outputs A.3, A.2, A.1, A.0 (via lower 4 bits of X)
 '''     So, if using a backlit LCD with the active low transistor driver
 '''     on output A.2, then 255,%000 switches backlight on and 255,%100 switches off
-'''@author 	EvanV
-'''@licence	GPL
-'''@version	1.0a
-'''@date   	14.02.2015
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    14.02.2015
 '''********************************************************************************
 
 ; ----- Configuration
 
   #chip 16F1847, 32
   #option explicit
-  #config osc = int, PLLEN_ON
 
 ; ----- Define Hardware settings
   'LCD connection settings
@@ -46,10 +45,10 @@
   dir spare3 Out
 
 ; ----- Constants
-  #define spare0 	= PORTA.0 ; spare output 0
-  #define spare1 	= PORTA.1 ; spare output 1
-  #define spare2 	= PORTA.2 ; spare output 2 (or optional backlight)
-  #define spare3 	= PORTA.3 ; spare output 3
+  #define spare0  = PORTA.0 ; spare output 0
+  #define spare1  = PORTA.1 ; spare output 1
+  #define spare2  = PORTA.2 ; spare output 2 (or optional backlight)
+  #define spare3  = PORTA.3 ; spare output 3
 
 
 ;----- Variables
@@ -62,23 +61,23 @@
   set spare2 off
   set spare3 off
 
-  #define line_length = 16	          ; change to 20 for displays with 20 character lines
-  EEPROM 0 ,   "   16f1847 v5   " 	; store msg in the EEPROM memory
-  EEPROM 0x10, "Anobium    @9600" 	; store msg in the EEPROM memory
-  EEPROM 0x20, "Up              " 	; store msg in the EEPROM memory
-  EEPROM 0x30, "Pressed         " 	; store msg in the EEPROM memory
-  EEPROM 0x40, "Down            " 	; store msg in the EEPROM memory
-  EEPROM 0x50, "Released        " 	; store msg in the EEPROM memory
-  EEPROM 0x60, "Button 1 is     " 	; store msg in the EEPROM memory
-  EEPROM 0x70, "Time :          " 	; store msg in the EEPROM memory
-  EEPROM 0x80, "Button 2 is     " 	; store msg in the EEPROM memory
-  EEPROM 0x90, "Used :          " 	; store msg in the EEPROM memory
-  EEPROM 0xA0, "Meter:          " 	; store msg in the EEPROM memory
-  EEPROM 0xB0, "Date :          " 	; store msg in the EEPROM memory
-  EEPROM 0xC0, "Pic Restarts:   " 	; store msg in the EEPROM memory
-  EEPROM 0xD0, "Since:          " 	; store msg in the EEPROM memory
-  EEPROM 0xE0, "Set Clock?      " 	; store msg in the EEPROM memory
-  EEPROM 0xF0, "Set Date?       " 	; store msg in the EEPROM memory
+  #define line_length = 16            ; change to 20 for displays with 20 character lines
+  EEPROM 0 ,   "   16f1847 v5   "   ; store msg in the EEPROM memory
+  EEPROM 0x10, "Anobium    @9600"   ; store msg in the EEPROM memory
+  EEPROM 0x20, "Up              "   ; store msg in the EEPROM memory
+  EEPROM 0x30, "Pressed         "   ; store msg in the EEPROM memory
+  EEPROM 0x40, "Down            "   ; store msg in the EEPROM memory
+  EEPROM 0x50, "Released        "   ; store msg in the EEPROM memory
+  EEPROM 0x60, "Button 1 is     "   ; store msg in the EEPROM memory
+  EEPROM 0x70, "Time :          "   ; store msg in the EEPROM memory
+  EEPROM 0x80, "Button 2 is     "   ; store msg in the EEPROM memory
+  EEPROM 0x90, "Used :          "   ; store msg in the EEPROM memory
+  EEPROM 0xA0, "Meter:          "   ; store msg in the EEPROM memory
+  EEPROM 0xB0, "Date :          "   ; store msg in the EEPROM memory
+  EEPROM 0xC0, "Pic Restarts:   "   ; store msg in the EEPROM memory
+  EEPROM 0xD0, "Since:          "   ; store msg in the EEPROM memory
+  EEPROM 0xE0, "Set Clock?      "   ; store msg in the EEPROM memory
+  EEPROM 0xF0, "Set Date?       "   ; store msg in the EEPROM memory
 
 
   locate 0,0
@@ -95,7 +94,7 @@
      select case b1
               case  < 253
                       LCDNormalWriteByte b1
-                      goto main	    ; quickly loop back to top
+                      goto main     ; quickly loop back to top
               Case 254
 
                       HSerReceive b2
@@ -105,7 +104,7 @@
                       goto main
               case 253
                       HSerReceive b2
-                      msg b2	             ; do the 16 character message
+                      msg b2               ; do the 16 character message
                       goto main            ; back to top
               case else                    ; must be 255
                                            ; wait for the next byte
@@ -134,11 +133,10 @@
             ; EEPROM start address is 0 to 15 multiplied by 16
             endlocation = location + line_length - 1 ; end address is start address + (line_length - 1)
 
-            for eeprom_ptr = location to endlocation			; for 16 times
-                      EPRead eeprom_ptr,inAscVal		; read next character
+            for eeprom_ptr = location to endlocation      ; for 16 times
+                      EPRead eeprom_ptr,inAscVal    ; read next character
                       print chr(inAscVal)
             next
   end sub
-
 
 

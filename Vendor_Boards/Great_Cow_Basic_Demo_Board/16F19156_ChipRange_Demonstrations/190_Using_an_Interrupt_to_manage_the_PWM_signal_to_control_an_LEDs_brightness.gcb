@@ -19,7 +19,7 @@
 ' ----- Configuration
     'Chip Settings.
     #chip 16F19156, 32
-    #config LVP=on
+
     #option Explicit
 
     '' -------------------PORTA----------------

@@ -8,7 +8,7 @@
 '''********************************************************************
 
   #Chip 16f18426, 8
-  #config MCLRE_OFF
+ #config MCLRE_OFF
 
   #option explicit
 

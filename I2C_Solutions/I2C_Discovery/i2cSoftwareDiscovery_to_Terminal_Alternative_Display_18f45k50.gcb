@@ -1,7 +1,7 @@
 
   #chip 18f45k50, 16
   #option explicit
-  #config OSC = INTOSCCLKO
+
 
   ' Define I2C settings - CHANGE PORTS
          #define I2C_MODE Master

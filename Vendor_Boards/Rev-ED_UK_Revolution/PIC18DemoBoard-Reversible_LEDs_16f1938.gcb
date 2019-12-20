@@ -27,8 +27,8 @@
 
  #CHIP 16f1847, 32
  #option explicit
- #config FOSC_INTOSC , WDTE_OFF , PWRTE_OFF , MCLRE_ON , CP_OFF , CPD_OFF , BOREN_ON  , IESO_OFF
- #config WRT_OFF , PLLEN_OFF , STVREN_OFF , LVP_OFF
+
+
 
   #define LED_RIGHT           TRUE
   #define LED_LEFT            FAlSE

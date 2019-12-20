@@ -15,7 +15,7 @@
 ; ----- Configuration
   #chip 18f13K22,1
   #option explicit
-  #config MCLR_OFF
+
 
 
 ; ----- Define Hardware settings

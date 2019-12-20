@@ -17,7 +17,7 @@
 
   'Chip Settings
     #chip 18f26k22, 16
-    #config MCLRE=on
+     #config MCLRE=on
     #option Explicit
     #include <glcd.h>
 

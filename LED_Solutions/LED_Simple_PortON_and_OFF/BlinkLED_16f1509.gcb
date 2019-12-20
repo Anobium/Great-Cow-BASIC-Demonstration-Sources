@@ -11,7 +11,7 @@
 
 ; ----- Configuration
   #chip 16F1509, 16
-  #config LVP = Off
+   LVP = Off
 
   ' #include
   ' no solution specifc includes, default includes are always included                                  ; no solution specifc includes, default includes are always included

@@ -10,16 +10,15 @@
 ''':
 '''This shown in this demonstration is required for versions of the compiler prior to v0.95
 ''':
-'''@author	EvanV
-'''@licence	GPL
+'''@author  EvanV
+'''@licence GPL
 '''@version 1.00
-'''@date   	20.11.2015
+'''@date    20.11.2015
 '''********************************************************************************
 
 ; ----- Configuration
 
   #chip 10F202, 4
-  #config MCLRE_OFF, CP_OFF, WDTE_OFF,  OSC=INTRC
 
 ; ----- Constants
   ' No Constants specified in this example.
@@ -55,20 +54,20 @@
 
 
 ; ----- Quick Command Reference:
-	'This file is a basic code template for using the reset on change,
-	'reset on WDT, and reset of comparator output change features of
-	'the PIC10F20X microcontrollers.
+  'This file is a basic code template for using the reset on change,
+  'reset on WDT, and reset of comparator output change features of
+  'the PIC10F20X microcontrollers.
 
-	'The RESET condition is differentiated as to WDT, POR, Port change
-	'and Comparator change.
+  'The RESET condition is differentiated as to WDT, POR, Port change
+  'and Comparator change.
 
   'This example shows the Port-On-Change only. Similar tests can be added to examine WDT and POR etc.
 
 
 
 ; ----- Main body of program commences here.
-	; Test for a pin change reset (External pin change)
-	if GPWUF = 1 then goto WokeFromSleep
+  ; Test for a pin change reset (External pin change)
+  if GPWUF = 1 then goto WokeFromSleep
 
   JustPoweredUp:
     repeat 5
@@ -98,7 +97,7 @@
       'Please review the datasheet for other microcontrollers to ensure this is valid.
       'Equates to Set NOT_GPWU Off
       'This is assembler.  :-)
-      movlw	B'01001111'
+      movlw B'01001111'
       option
 
       SysBYTETempA = GPIO.3

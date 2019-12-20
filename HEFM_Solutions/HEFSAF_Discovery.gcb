@@ -29,19 +29,19 @@
 ;
 
 #chip 18F25K42, 16
-#config LVP = ON, MCLRE = ON, WDTE = OFF
+
 
 '#chip 16F1769, 16
-'#config LVP = ON, MCLRE = ON, WDTE = OFF
+'
 
 '#Chip 16F1518, 16
-'#Config LVP = ON, MCLRE = ON. WDTE = OFF
+
 
 '#chip 16F1454, 16
-'#Config FOSC_INTOSC,MCLRE=ON, LVP = ON, WDTE=OFF
+
 
 '#chip 18F26K83, 16
-'#config LVP = ON,  MCLRE = ON, WDTE = OFF
+
 
 #option explicit
 #startup InitPPS, 85  '// Use with PPS Chips

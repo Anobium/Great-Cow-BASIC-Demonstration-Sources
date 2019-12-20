@@ -24,7 +24,7 @@
 
 'Chip Settings. Assumes the development board with with a PIC16F1939 at 8 Mhz
 #chip 16F1939,16
-#config MCLRE_ON
+
 
 'Use LCD in 4 pin mode and define LCD pins
  #define LCD_IO 4

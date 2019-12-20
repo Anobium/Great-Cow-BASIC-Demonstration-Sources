@@ -12,10 +12,10 @@
 ; ----- Configuration
 
   'PIC 16F886 running at 16 MHz
-  #chip 16F886, 16 	
+  #chip 16F886, 16
 
   'Turn off MCLR. WDT and LVP disabled and HS OSC selected automatically
-  #config MCLRE_OFF	
+ #config MCLRE_OFF
 
 
 

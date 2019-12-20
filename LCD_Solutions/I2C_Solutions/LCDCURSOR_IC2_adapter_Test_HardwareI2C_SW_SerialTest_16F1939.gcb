@@ -7,10 +7,10 @@
 '''- Set LCD_I0 to 12 for the Ywmjkdz I2C adapter with pot bent over top of chip.
 '''- Use the following to address a diferent I2C device.
 '''-     #define LCD_I2C_Address 0x4e            'This is the default value, change as appropiate
-'''@author 	EvanV
-'''@licence	GPL
-'''@version	1.0a
-'''@date   	17.02.2015
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    17.02.2015
 '''********************************************************************************
 
 ; ----- Configuration
@@ -18,7 +18,7 @@
 
   #chip 16f1939, 32
   #option explicit
-  #config Osc = intOSC, MCLRE_ON, PLLEN_OFF
+
   ; ----- Define Hardware settings
   ' Define I2C settings - CHANGE PORTS
   #define HI2C_BAUD_RATE 100
@@ -150,8 +150,8 @@ end
 
 SUB SHOWI2C
 ; ----- Main body of program commences here.
-	' Now assumes Serial Terminal is operational
-	dim DeviceID as byte
+  ' Now assumes Serial Terminal is operational
+  dim DeviceID as byte
 
   HSerPrintCRLF
   HSerPrint "Hardware I2C "

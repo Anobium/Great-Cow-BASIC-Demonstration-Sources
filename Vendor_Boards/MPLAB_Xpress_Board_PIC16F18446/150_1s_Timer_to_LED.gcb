@@ -11,7 +11,7 @@
 
 
     #chip 16F18446,32                'Specify the Device you are compiling for - this board is the 16F18446
-    #config FEXTOSC=Off              'Required to support the use of the
+
                                      'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
     #option Explicit                 'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
 

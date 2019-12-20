@@ -11,8 +11,8 @@
 
 'Chip model
 #chip 16F1938, 32
-'#config MCLRE_ON
-#config INTOSC, MCLRE_On, PLLEN_ON
+'
+
 #define SoundOut PORTc.2
 dim timedelay1 as word
 dir b0 in

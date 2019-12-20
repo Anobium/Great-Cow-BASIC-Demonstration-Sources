@@ -8,7 +8,7 @@
 ' #define PWM_Duty 50       'Duty cycle of PWM
 
   #chip 12F1572, 32
-  #config mclr=on
+   mclr=on
 
   Dir PORTA Out
 

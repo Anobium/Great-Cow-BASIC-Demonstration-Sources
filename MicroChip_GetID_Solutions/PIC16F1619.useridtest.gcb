@@ -29,7 +29,7 @@
 
 
   #chip 16F1619
-  #Config WRT_OFF, MCLRE_ON
+
 
   #include <getuserid.h>
 

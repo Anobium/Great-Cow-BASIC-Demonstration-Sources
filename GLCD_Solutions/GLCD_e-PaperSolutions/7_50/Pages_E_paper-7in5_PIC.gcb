@@ -9,8 +9,7 @@
      'Chip Settings.
      'Chip Settings.
     #chip 18F47k42, 64
-     #config MCLRE = ON
-     #option explicit
+        #option explicit
 
 
     'PPS Tool version: 0.0.5.27

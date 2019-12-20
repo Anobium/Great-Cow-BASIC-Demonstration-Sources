@@ -65,7 +65,6 @@
     'Chip Settings.
     #chip 16f18855, 32
     #option explicit
-    #Config MCLRE_ON
 
 
 Setup:

@@ -15,7 +15,7 @@
 
 ; ----- Configuration
 #chip 16F15355, 32
-#config mclr_off, WDT_Off
+
 
 #define Comms_OutPut_Port  PORTC.6    'TxD Pin for serial
 

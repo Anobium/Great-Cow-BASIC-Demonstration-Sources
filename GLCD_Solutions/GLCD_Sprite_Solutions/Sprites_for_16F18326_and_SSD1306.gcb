@@ -11,7 +11,6 @@
 '''********************************************************************************
 
 #chip 16F18326, 32
-#Config WRT_OFF, cpd_off, MCLRE_ON    'These configs = User non-votatile protection off (WRT), Data non-votatile protection off (CPD), MCLR pin function enablesd, External oscillator not enabled and clockout function is disables ( enable portc.5 to I/O port).
 
 #include <glcd.h>
 

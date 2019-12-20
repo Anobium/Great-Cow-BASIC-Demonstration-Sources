@@ -1,12 +1,9 @@
  ;Chip Settings - remove the 'config and chip to meet your own needs
     #chip 18F4550, 48
+    #config MCLRE=ON
     #config FOSC=HSPLL_HS, PLLDIV=5, CPUDIV=OSC1_PLL2,  MCLRE=ON
-
-
-      #option explicit
-      #config MCLRE = ON
-
-      #include <glcd.h>
+    #option explicit
+    #include <glcd.h>
 
 
 '************************ Setup ST7735 ***********************

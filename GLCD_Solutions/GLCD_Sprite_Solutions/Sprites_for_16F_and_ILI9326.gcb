@@ -12,7 +12,7 @@
 
 
 #chip 16F1789,32
-#config osc=INTosc, MCLRE=on
+
 
 #option explicit
 #include <glcd.h>

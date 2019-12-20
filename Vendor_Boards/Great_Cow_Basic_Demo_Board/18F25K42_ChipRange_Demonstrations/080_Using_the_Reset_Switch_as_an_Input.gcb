@@ -16,9 +16,9 @@
 
     'Chip Settings.
     #chip 18f25k42, 16
-    'This Configuration change does not have Low Voltage Programming Mode enabled, as the MCLR pin cannot be used as an input when using #config LVP=on
+    'This Configuration change does not have Low Voltage Programming Mode enabled, as the MCLR pin cannot be used as an input when using  LVP=on
     'The will enable the reset switch to be an input.  This will NOT reset the chip now but the reset becomes a switch input
-    #config MCLRE=off
+    #config mclre=off
 
     #option Explicit
 

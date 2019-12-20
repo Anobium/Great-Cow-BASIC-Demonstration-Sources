@@ -18,7 +18,6 @@
 ' ----- Configuration
     'Chip Settings.
     #chip 16f18855,32
-    #Config MCLRE_ON
 
     '' -------------------LATA-----------------
     '' Bit#:  -7---6---5---4---3---2---1---0---

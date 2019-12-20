@@ -17,7 +17,6 @@
 
     #chip 16F1709, 16
     #option explicit
-    #config MCLRE_ON
 
     'Set the PPS for this solution.
   #startup InitPPS, 85

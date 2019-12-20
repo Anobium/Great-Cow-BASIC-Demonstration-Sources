@@ -11,7 +11,7 @@
 
 ; ----- Configuration
     #chip 16f886,8
-    #config LVP_OFF, BOR_OFF, MCLRE_Off,HS_OSC
+
     #option explicit
 
     'Define the ports

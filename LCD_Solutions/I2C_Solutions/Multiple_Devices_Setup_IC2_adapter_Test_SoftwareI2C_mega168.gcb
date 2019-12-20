@@ -28,7 +28,7 @@
 
   #chip mega168, 16
   #option explicit
-  #config mclr_on
+
 
   ; ----- Define Hardware settings
   ' Define I2C settings - CHANGE PORTS

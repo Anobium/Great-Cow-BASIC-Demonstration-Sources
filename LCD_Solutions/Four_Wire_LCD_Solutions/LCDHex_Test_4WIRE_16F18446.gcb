@@ -11,7 +11,7 @@
 ;Set chip model required:
 
     #Chip 16F18446, 32
-    #Config CP=Off
+
     #Option Explicit
 
 

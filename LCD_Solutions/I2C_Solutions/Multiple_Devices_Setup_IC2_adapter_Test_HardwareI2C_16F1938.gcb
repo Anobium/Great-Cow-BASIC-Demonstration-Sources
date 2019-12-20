@@ -28,7 +28,7 @@
 
   #chip 16f1938, 32
   #option explicit
-  #config mclr_on
+
 
   ; ----- Define Hardware settings
   ' Define I2C settings - CHANGE PORTS

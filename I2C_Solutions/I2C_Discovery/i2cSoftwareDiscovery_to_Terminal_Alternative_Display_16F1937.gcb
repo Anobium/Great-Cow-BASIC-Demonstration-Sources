@@ -12,7 +12,6 @@
 ; ----- Configuration
   #chip 16F1937, 32
   #option explicit
-  #config Osc = intOSC, MCLRE_ON, PLLEN_ON
 
 
 
@@ -75,7 +74,6 @@
   HSerPrint   "End of Search"
   HSerPrintCRLF 2
   END
-
 
 
 

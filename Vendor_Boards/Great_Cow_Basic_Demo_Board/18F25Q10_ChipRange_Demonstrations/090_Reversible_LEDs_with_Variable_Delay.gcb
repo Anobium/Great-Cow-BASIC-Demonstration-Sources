@@ -15,7 +15,7 @@
 '''****
 ' ----- Configuration
     'Chip Settings.
-    #chip 18F25Q10, 32
+    #chip 18F25Q10
     #option Explicit
 
 

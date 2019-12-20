@@ -15,9 +15,9 @@
 
 
     #chip 16f18326,32
-    #config mclr_on
+
     #option explicit
-    #config RSTOSC_HFINT32
+
 
 
 

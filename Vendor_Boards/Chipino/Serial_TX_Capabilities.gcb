@@ -11,7 +11,7 @@
 
 'Chip model
 #chip 16F886, 8
-#config MCLRE_ON
+
 #define SoundOut PORTc.2
 dim timedelay1 as word
 dir b0 in

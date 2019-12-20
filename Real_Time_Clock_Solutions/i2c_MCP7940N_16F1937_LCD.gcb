@@ -31,7 +31,6 @@
 ; ----- Configuration
  #chip 16F1937, 32
  #option explicit
- #config Osc = intOSC, MCLRE_ON, PLLEN_ON
 
  #include <mcp7940n.h>
 

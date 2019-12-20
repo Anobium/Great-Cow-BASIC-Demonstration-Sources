@@ -17,7 +17,6 @@
 ; ----- Configuration
   #Chip 16f1829, 32
   #option explicit
-  #config Osc = intOSC, MCLRE_ON
 
    ; ----- Define Hardware settings
 '  ' Define I2C settings - CHANGE PORTS

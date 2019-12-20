@@ -16,7 +16,6 @@
 
         #chip 18F47K42, 64
         #option explicit
-        #config MCLRE = ON
 
         #include <glcd.h>
 

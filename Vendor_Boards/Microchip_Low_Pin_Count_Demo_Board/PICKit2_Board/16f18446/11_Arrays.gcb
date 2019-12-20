@@ -8,7 +8,7 @@
 '''********************************************************************
 
   #chip 16F18446
-  #config MCLRE_OFF
+ #config MCLRE_OFF
 
   #define NUM_READINGS 8
 

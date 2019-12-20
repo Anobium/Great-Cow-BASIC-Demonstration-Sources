@@ -8,7 +8,7 @@
 '''********************************************************************
 
   #Chip 16f18426
-  #config MCLRE_OFF
+ #config MCLRE_OFF
 
     dir portc out
     portc = 0

@@ -12,7 +12,7 @@
 ; ----- Configuration
   #chip 16F886, 16
   #option explicit
-; #config                                     ; no config. assumes defaults
+;                                      ; no config. assumes defaults
 
 ; #include                                    ; no solution specifc includes, default includes are always included
 

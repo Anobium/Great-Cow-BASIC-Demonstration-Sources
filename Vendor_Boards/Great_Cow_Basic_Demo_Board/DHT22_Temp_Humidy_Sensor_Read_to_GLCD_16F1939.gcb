@@ -13,7 +13,7 @@
 
 ; ----- Configuration
   #chip 16f1939, 32
-  #config mclr_on
+
   #include <glcd.h>
   #include <dht.h>
 

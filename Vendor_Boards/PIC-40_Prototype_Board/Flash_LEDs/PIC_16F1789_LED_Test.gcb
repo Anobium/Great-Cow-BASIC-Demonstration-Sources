@@ -25,7 +25,6 @@
 'Chip settings
   #chip 16F1789, 32    ' Select the chip and the chip speed
   #option explicit
-  #config Osc = INTOSC, MCLRE_ON    ' Select the internal oscillator
 
 ' Set ports
   dir portd out          ' Set the portd as outputs

@@ -13,7 +13,7 @@
 ; ----- Configuration
   #chip mega328p,16
   #option explicit
-  #config MCLR_OFF
+
 
 
 ; ----- Define Hardware settings

@@ -12,7 +12,7 @@
 
 ; ----- Configuration
   #chip mega328p, 16
-; #config                                     ; no config. assumes defaults
+;                                      ; no config. assumes defaults
 
 ; #include                                    ; no solution specifc includes, default includes are always included
 

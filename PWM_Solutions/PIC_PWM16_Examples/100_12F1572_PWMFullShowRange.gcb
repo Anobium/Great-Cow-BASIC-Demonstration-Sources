@@ -1,5 +1,5 @@
   #chip PIC12F1572 ,32
-  #config mclr=on, lvp=on
+
   #option explicit
 
   dim adcSetting as word

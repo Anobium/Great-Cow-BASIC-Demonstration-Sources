@@ -14,8 +14,8 @@
 
 ; Chip Settings
  #chip 16F1509, 8
- #Config MCLRE = ON
- #Config LVP = ON, WDTE = OFF
+
+
  #option explicit
 
   ; Config UART

@@ -33,7 +33,6 @@
 ; ----- Configuration
  #chip 16F1937, 32
  #option explicit
- #config Osc = intOSC, MCLRE_ON, PLLEN_ON
 
  #include <ds3231.h>
  #include <i2ceeprom.h>                  ; memory chips: at24c32 (storage capacity 32k)

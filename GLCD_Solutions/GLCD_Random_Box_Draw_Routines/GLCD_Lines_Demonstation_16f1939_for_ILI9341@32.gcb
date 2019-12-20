@@ -13,7 +13,6 @@
   'Chip Settings.
   #chip 16f1939,32
   #option explicit
-  #config Osc = INT, MCLRE_ON, PLLEN_ON
 
     #include <glcd.h>
 

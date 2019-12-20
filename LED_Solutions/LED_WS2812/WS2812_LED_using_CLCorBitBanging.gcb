@@ -65,7 +65,7 @@
     'Chip Settings.
     #chip 16f18855, 32
     #option explicit
-    #Config FEXTOSC_OFF, RSTOSC_HFINT32, MCLRE_ON
+
 
 
 Setup:

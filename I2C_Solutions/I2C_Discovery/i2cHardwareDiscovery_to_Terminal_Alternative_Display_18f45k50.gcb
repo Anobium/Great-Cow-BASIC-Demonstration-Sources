@@ -13,7 +13,7 @@
 ; ----- Configuration
   #chip 18f45k50, 16
   #option explicit
-  #config OSC = INTOSCCLKO
+
 
 
 ; ----- Define Hardware settings

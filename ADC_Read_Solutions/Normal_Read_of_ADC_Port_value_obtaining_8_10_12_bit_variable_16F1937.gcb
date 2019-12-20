@@ -27,7 +27,7 @@
 ; ----- Configuration
 
 		 #Chip 16f1937, 4
-     #config MCLRE = OFF
+    #config MCLRE_OFF
 
 ; ----- Constants
 

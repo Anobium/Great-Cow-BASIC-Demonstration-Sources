@@ -3,20 +3,19 @@
 '''This program accepts messages from a standard PS/2 keyboard.
 '''Incoming messages are played as morse code using a speaker when the Enter key is pressed.
 '''
-'''@author 	EvanV plus works of HughC
-'''@licence	GPL
-'''@version	1.0a
-'''@date   	14.02.2015
+'''@author  EvanV plus works of HughC
+'''@licence GPL
+'''@version 1.0a
+'''@date    14.02.2015
 '''********************************************************************************
 
 ; ----- Configuration
  #chip 16F886, 16
- #config MCLRE_ON
 
  ; or
 
  ;#chip 16F1938, 32
- ;#config INTOSC, MCLRE_ON, PLLEN_ON
+ ;
 
 ; ----- Constants
   #define CodeFrequency 75
@@ -349,4 +348,3 @@
             Tone CodeFrequency, BarLength
             wait BarSpace 10ms
   End Sub
-

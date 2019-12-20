@@ -25,16 +25,15 @@
 '''
 
 
-#CHIP 16f88, 4
-#option explicit
- #config WDTE_OFF , PWRTE_OFF , MCLRE_ON , CP_OFF , BOREN_ON
- #config  LVP_OFF
+  #CHIP 16f88, 4
+  #option explicit
+
 
   #define LED_RIGHT           TRUE
   #define LED_LEFT            FAlSE
 
   #define SWITCH1      PORTA.2
-	#define SWITCH2      PORTA.3
+  #define SWITCH2      PORTA.3
 
   #define SoundOut PORTA.7
 
@@ -56,22 +55,22 @@
     dir SoundOut Out
 
 
-		Repeat 4
+    Repeat 4
 
       portb = 255
       SoundOut = 1
       wait 100 ms
-			SoundOut = 0
+      SoundOut = 0
       portb = 0
       wait 100 ms
 
     end Repeat
 
-		'Initialise the port
-  	portb.7 = 1
+    'Initialise the port
+    portb.7 = 1
     do
 
-    	if  direction = LED_RIGHT  then
+      if  direction = LED_RIGHT  then
        mydelay = ReadAD10 ( AN0 )  / 64
        ' decrement the 8 MSbs of the ADC and delay 20ms for each
         do while ( mydelay <> 0 )
@@ -126,6 +125,5 @@
         end if
 
     loop
-
 
 

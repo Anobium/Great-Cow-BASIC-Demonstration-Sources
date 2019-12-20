@@ -14,7 +14,6 @@
 
  'Chip Settings.
  #chip 18F24K42, 16
- #Config LVP = ON
 
  #option Explicit
  #startup InitPPS, 85

@@ -35,9 +35,9 @@
 
 
  #chip 16f1829,8
- #config INTOSC , WDTE_OFF , PWRTE_OFF , MCLRE_OFF  , IESO_OFF
+  INTOSC , WDTE_OFF , PWRTE_OFF , MCLRE_OFF  , IESO_OFF
 
- #config WRT_OFF , PLLEN_OFF , STVREN_OFF , LVP_OFF
+
 
 
  #define demo1

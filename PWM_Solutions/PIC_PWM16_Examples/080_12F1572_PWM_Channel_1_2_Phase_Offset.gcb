@@ -2,7 +2,7 @@
 
 
     #chip 12F1572, 32
-    #config mclr=on, lvp=on
+    #config mclr=on
 
     Dir PORTA Out
 

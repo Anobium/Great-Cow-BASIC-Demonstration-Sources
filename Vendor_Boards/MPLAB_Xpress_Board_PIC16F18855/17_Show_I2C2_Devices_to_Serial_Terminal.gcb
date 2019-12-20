@@ -16,7 +16,7 @@
     'Chip Settings.
     #chip 16f18855,32
     #option explicit
-    #config RSTOSC_HFINT32
+
 
     #include <lowlevel\hwi2c2.h>
 

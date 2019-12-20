@@ -37,7 +37,6 @@
 ; ----- Configuration
 
   #chip 16f1939,32
-  #config Osc = INT, MCLRE_On, PLLEN_ON, WDTE_SWDTEN
 
   #include <glcd.h>
   #include <sonyremote.h>           							 ' include the header file

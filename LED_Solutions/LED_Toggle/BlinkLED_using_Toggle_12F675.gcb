@@ -13,7 +13,7 @@
 
   #chip 12F675, 4
   #option explicit
-; #config                                     ; no config. assumes defaults
+;                                      ; no config. assumes defaults
 
 ; #include                                    ; no solution specifc includes, default includes are always included
 

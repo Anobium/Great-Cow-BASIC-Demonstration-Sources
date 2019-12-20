@@ -11,7 +11,6 @@
 
 ; ----- Configuration
   #chip 16F570, 4
-  #config CP_OFF, WDTE_OFF, INTRC_IO, DRTEN_OFF, BOREN_OFF, IOSCFS_8MHZ
 
   ' #include
   ' no solution specifc includes, default includes are always included

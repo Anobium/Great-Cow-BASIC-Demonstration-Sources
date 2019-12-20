@@ -13,7 +13,6 @@
  #chip 16f1937,16
  #option explicit
  #include <ds18b20.h>
- #config MCLRE_ON
 
   ;Setup LCD Parameters
   #define LCD_IO 4
@@ -42,7 +41,7 @@
   ' DS18B20 port settings
   #define DQ Portc.7
 
-;----- Variables 
+;----- Variables
   Dim YPOS, OLDDSDATA, XPOS, EIGHTBYTES, CLOCKS, SYSINTSTATESAVE0 as Byte
 
 

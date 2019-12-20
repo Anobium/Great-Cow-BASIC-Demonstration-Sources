@@ -17,7 +17,7 @@
 
   'Chip Settings
     #chip 18f24k42, 64
-    #config MCLRE=on
+     #config MCLRE=on
     #option Explicit
     #include <glcd.h>
     #include <xpt2046.h>

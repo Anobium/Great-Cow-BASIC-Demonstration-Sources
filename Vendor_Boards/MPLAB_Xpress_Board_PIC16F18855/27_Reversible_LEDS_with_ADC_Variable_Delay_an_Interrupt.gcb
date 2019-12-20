@@ -20,7 +20,6 @@
 ' ----- Configuration
     #chip 16f18855
     #option explicit
-    #Config MCLRE_ON
 
     'Required to ensure 16F18855 device is fully supported
     #script
