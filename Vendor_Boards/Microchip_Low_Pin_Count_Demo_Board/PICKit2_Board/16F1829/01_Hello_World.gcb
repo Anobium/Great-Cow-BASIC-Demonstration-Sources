@@ -24,8 +24,6 @@
 '''
 
  #chip 16f1829,8
-  INTOSC , WDTE_OFF , PWRTE_OFF , MCLRE_OFF , CP_OFF , CPD_OFF , BOREN_ON, IESO_OFF
- ', FCMEN_OFF
 
 
     '' -------------------LATC-----------------
