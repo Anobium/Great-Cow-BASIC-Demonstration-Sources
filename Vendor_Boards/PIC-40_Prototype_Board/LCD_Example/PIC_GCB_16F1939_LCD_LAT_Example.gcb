@@ -26,26 +26,9 @@
 #chip 16F1939,32
 
 'Use LCD in 4 pin mode and define LCD pins
-' #define LCD_IO 4
-' #define LCD_RW PORTE.1
-' #define LCD_RS PORTE.0
-' #define LCD_Enable PORTE.2
-' #define LCD_DB4 PORTD.4
-' #define LCD_DB5 PORTD.5
-' #define LCD_DB6 PORTD.6
-' #define LCD_DB7 PORTD.7
-
-
 #define LCD_IO 4
 #define LCD_LAT
-
-#define LCD_DB4 LATD.4
-#define LCD_DB5 LATD.5
-#define LCD_DB6 LATD.6
-#define LCD_DB7 LATD.7
-#define LCD_RS LATE.0
-#DEFINE LCD_Enable LATE.2
-#define LCD_RW LATE.1
+#define LCD_SPEED SLOW
 
 #define _LCD_DB4 PORTD.4
 #define _LCD_DB5 PORTD.5
@@ -54,7 +37,7 @@
 #define _LCD_RS PORTE.0
 #DEFINE _LCD_Enable PORTE.2
 #define _LCD_RW PORTE.1
-#define LCD_SPEED SLOW
+
 
 
 
