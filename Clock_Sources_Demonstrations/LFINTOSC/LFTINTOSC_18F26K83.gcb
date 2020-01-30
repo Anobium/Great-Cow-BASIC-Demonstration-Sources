@@ -1,0 +1,25 @@
+#chip 18F26K83, 31k
+#config OSC=LFINTOSC
+
+
+#option Explicit
+
+    dir porta out
+
+    'Select LTINTOSC as the source and 128 prescaler
+    T0CON1 = 0x87
+    'Set to 1 sec timer
+    TMR0H = 0xF7
+
+    on Interrupt timer0overflow call isr
+    StartTimer 0
+
+    do
+
+    loop
+
+
+sub isr
+    'Toggle an LED
+    porta.1 = !porta.1
+end sub
