@@ -1,4 +1,4 @@
-#chip 16f18326, 31k
+#chip 16f19156, 31k
 #config OSC=LFINT
 
 #option Explicit
