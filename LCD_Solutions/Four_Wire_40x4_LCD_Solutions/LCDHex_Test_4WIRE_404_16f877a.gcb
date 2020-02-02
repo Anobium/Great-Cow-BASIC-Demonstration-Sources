@@ -3,10 +3,10 @@
 '''This program demonstrates the capabilities of a LCD display.
 '''The LCD is using an 4-bit bus for connectivity for a 40x4 display
 '''For the LCD connection - please refer to the program.
-'''@author 	EvanV
-'''@licence	GPL
-'''@version	1.0a
-'''@date   	02.01.2016
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.02a
+'''@date    01.02.2020
 '''********************************************************************************
 
 ;Set chip model required:
@@ -30,226 +30,241 @@
 #define SCROLL_DELAY 50 ms
 'Main routine
 
+  'Test are split into two subs to ensure these routines fit into the 16f memory pages.
 
-	do
-'  	test1:
-'  	for ypos = 0 to 3
-'      For StarPos = 0 To 39
-'          If StarPos = 0 Then
-'              Put ypos-1, 39, 32
-'              Put ypos, 0, 42
-'          Else
-'              Put ypos, StarPos - 1, 32
-'              Put ypos, StarPos, 42
-'          End If
-'          Wait SCROLL_DELAY
-'      Next
-'    next
-'
-'    for ypos = 0 to 3
-'      For StarPos = 0 To 39
-'          If StarPos = 0 Then
-'              locate ypos-1, 39
-'              print " "
-'              locate ypos, 0
-'              print "*"
-'          Else
-'              locate ypos, StarPos - 1
-'              print " "
-'              locate ypos, StarPos
-'              print "*"
-'          End If
-'          Wait SCROLL_DELAY
-'      Next
-'    next
-'
-'		test2:
-'
-'    CLS
-'    Print "CLS  - no parameter"
-'    wait 1 s
-'
-'
-'    CLS 1
-'    Print "CLS - parameter #1"
-'    wait 1 s
-'
-'
-'    CLS 2
-'    Print "CLS - parameter #2"
-'    wait 1 s
-'
-'		CLS 3
-'    Print "CLS - parameter #3"
-'    wait 1 s
-'
-'
-'    test3:
-'
-'    LCDHome
-'    Print "Home - no parameter"
-'    wait 1 s
-'
-'
-'    LCDHome 1
-'    Print "Home - parameter #1"
-'    wait 1 s
-'
-'
-'    LCDHome 2
-'    Print "Home - parameter #2"
-'    wait 1 s
-'
-'		LCDHome 3
-'    Print "Home - parameter #3"
-'    wait 1 s
-'
-'		test4:
-'          locate 0,8
-'          print "123456"
-'          'Scroll display one character right (all lines)       28
-'          '
-'          lcdcmd 28
-'          wait 1 s
-'          lcdcmd 28
-'          wait 1 s
-'          lcdcmd 28
-'          wait 1 s
-'          lcdcmd 28
-'          wait 1 s
-'
-'
-'          'Scroll display one character left (all lines)        24
-'          '
-'          lcdcmd 24
-'          wait 1 s
-'          lcdcmd 24
-'          wait 1 s
-'          lcdcmd 24
-'          wait 1 s
-'          lcdcmd 24
-'          wait 1 s
-'
-'
-'
-'
-'          'Home (move cursor to top/left character position)    2
-'          '
-'          lcdcursor flash
-'          lcdcmd 2
-'          wait 1 s
-'
-'
-'          'Move cursor one character left                       16
-'          '
-'          lcdcursor flash
-'          locate 0,8
-'
-'
-'          lcdcmd 16
-'          wait 1 s
-'          lcdcmd 16
-'          wait 1 s
-'          lcdcmd 16
-'          wait 1 s
-'          lcdcmd 16
-'          wait 1 s
-'
-'
-'
-'
-'          'Move cursor one character right                      20
-'          '
-'          lcdcmd 20
-'          wait 1 s
-'          lcdcmd 20
-'          wait 1 s
-'          lcdcmd 20
-'          wait 1 s
-'          lcdcmd 20
-'          wait 1 s
-'
-'			test4a:
-'          locate 0,28
-'          print "123456"
-'          'Scroll display one character right (all lines)       28
-'          '
-'          lcdcmd 28
-'          wait 1 s
-'          lcdcmd 28
-'          wait 1 s
-'          lcdcmd 28
-'          wait 1 s
-'          lcdcmd 28
-'          wait 1 s
-'
-'
-'          'Scroll display one character left (all lines)        24
-'          '
-'          lcdcmd 24
-'          wait 1 s
-'          lcdcmd 24
-'          wait 1 s
-'          lcdcmd 24
-'          wait 1 s
-'          lcdcmd 24
-'          wait 1 s
-'
-'
-'
-'
-'          'Home (move cursor to top/left character position)    2
-'          '
-'          lcdcursor flash
-'          lcdcmd 2
-'          wait 1 s
-'
-'
-'          'Move cursor one character left                       16
-'          '
-'          lcdcursor flash
-'          locate 0,28
-'
-'
-'          lcdcmd 16
-'          wait 1 s
-'          lcdcmd 16
-'          wait 1 s
-'          lcdcmd 16
-'          wait 1 s
-'          lcdcmd 16
-'          wait 1 s
-'
-'
-'
-'
-'          'Move cursor one character right                      20
-'          '
-'          lcdcmd 20
-'          wait 1 s
-'          lcdcmd 20
-'          wait 1 s
-'          lcdcmd 20
-'          wait 1 s
-'          lcdcmd 20
-'          wait 1 s
+  do
 
-'		test5:
-'    	'Print String
-'      dim myString as string * 40
-'      myString = "01234567890ABCDEFGHI01234567890abcdefghi"
-'      Cls
-'      print myString
-'      locate 1, 0
-'			print myString
-'			locate 2, 0
-'			print myString
-'			locate 3, 0
-'			print myString
-'			wait 1 s
+    testsuite1
+
+    testsuite2
+
+  loop
+
+
+sub testsuite1
+
+         test1:
+       for ypos = 0 to 3
+          For StarPos = 0 To 39
+              If StarPos = 0 Then
+                  Put ypos-1, 39, 32
+                  Put ypos, 0, 42
+              Else
+                  Put ypos, StarPos - 1, 32
+                  Put ypos, StarPos, 42
+              End If
+              Wait SCROLL_DELAY
+          Next
+        next
+
+        for ypos = 0 to 3
+          For StarPos = 0 To 39
+              If StarPos = 0 Then
+                  locate ypos-1, 39
+                  print " "
+                  locate ypos, 0
+                  print "*"
+              Else
+                  locate ypos, StarPos - 1
+                  print " "
+                  locate ypos, StarPos
+                  print "*"
+              End If
+              Wait SCROLL_DELAY
+          Next
+        next
+
+       test2:
+
+        CLS
+        Print "CLS  - no parameter"
+        wait 1 s
+
+
+        CLS 1
+        Print "CLS - parameter #1"
+        wait 1 s
+
+
+        CLS 2
+        Print "CLS - parameter #2"
+        wait 1 s
+
+       CLS 3
+        Print "CLS - parameter #3"
+        wait 1 s
+
+
+        test3:
+
+        LCDHome
+        Print "Home - no parameter"
+        wait 1 s
+
+
+        LCDHome 1
+        Print "Home - parameter #1"
+        wait 1 s
+
+
+        LCDHome 2
+        Print "Home - parameter #2"
+        wait 1 s
+
+       LCDHome 3
+        Print "Home - parameter #3"
+        wait 1 s
+
+       test4:
+        locate 0,8
+        print "123456"
+        'Scroll display one character right (all lines)       28
+        '
+        lcdcmd 28
+        wait 1 s
+        lcdcmd 28
+        wait 1 s
+        lcdcmd 28
+        wait 1 s
+        lcdcmd 28
+        wait 1 s
+
+
+        'Scroll display one character left (all lines)        24
+        '
+        lcdcmd 24
+        wait 1 s
+        lcdcmd 24
+        wait 1 s
+        lcdcmd 24
+        wait 1 s
+        lcdcmd 24
+        wait 1 s
+
+
+
+
+        'Home (move cursor to top/left character position)    2
+        '
+        lcdcursor flash
+        lcdcmd 2
+        wait 1 s
+
+
+        'Move cursor one character left                       16
+        '
+        lcdcursor flash
+        locate 0,8
+
+
+        lcdcmd 16
+        wait 1 s
+        lcdcmd 16
+        wait 1 s
+        lcdcmd 16
+        wait 1 s
+        lcdcmd 16
+        wait 1 s
+
+
+
+
+        'Move cursor one character right                      20
+        '
+        lcdcmd 20
+        wait 1 s
+        lcdcmd 20
+        wait 1 s
+        lcdcmd 20
+        wait 1 s
+        lcdcmd 20
+        wait 1 s
+
+      test4a:
+        locate 0,28
+        print "123456"
+        'Scroll display one character right (all lines)       28
+        '
+        lcdcmd 28
+        wait 1 s
+        lcdcmd 28
+        wait 1 s
+        lcdcmd 28
+        wait 1 s
+        lcdcmd 28
+        wait 1 s
+
+
+        'Scroll display one character left (all lines)        24
+        '
+        lcdcmd 24
+        wait 1 s
+        lcdcmd 24
+        wait 1 s
+        lcdcmd 24
+        wait 1 s
+        lcdcmd 24
+        wait 1 s
+
+
+
+
+        'Home (move cursor to top/left character position)    2
+        '
+        lcdcursor flash
+        lcdcmd 2
+        wait 1 s
+
+
+        'Move cursor one character left                       16
+        '
+        lcdcursor flash
+        locate 0,28
+
+
+        lcdcmd 16
+        wait 1 s
+        lcdcmd 16
+        wait 1 s
+        lcdcmd 16
+        wait 1 s
+        lcdcmd 16
+        wait 1 s
+
+
+
+
+        'Move cursor one character right                      20
+        '
+        lcdcmd 20
+        wait 1 s
+        lcdcmd 20
+        wait 1 s
+        lcdcmd 20
+        wait 1 s
+        lcdcmd 20
+        wait 1 s
+
+       test5:
+         'Print String
+          dim myString as string * 40
+          myString = "01234567890ABCDEFGHI01234567890abcdefghi"
+          Cls
+          print myString
+          locate 1, 0
+         print myString
+         locate 2, 0
+         print myString
+         locate 3, 0
+         print myString
+         wait 1 s
+
+end sub
+
+sub testsuite2
 
     test6:
-    	CLS
+      CLS
       dim myByte as Byte
       myByte = 255
       print myByte
@@ -258,8 +273,8 @@
       wait 1 s
 
     test7:
-    	cls
-    	dim myWord as Word
+      cls
+      dim myWord as Word
       myWord = 256
       print myWord
       locate 3,20
@@ -267,8 +282,8 @@
       wait 1 s
 
     test8:
-    	cls
-    	dim myLong as Long
+      cls
+      dim myLong as Long
       myLong = 0xffff
       print myLong
       locate 3,20
@@ -276,8 +291,8 @@
       wait 1 s
 
     test9a:
-    	cls
-    	dim myInteger as Integer
+      cls
+      dim myInteger as Integer
       myInteger = -100
       print myInteger
       locate 3,20
@@ -285,8 +300,8 @@
       wait 1 s
 
     test9b:
-    	cls
-    	dim myInteger as Integer
+      cls
+      dim myInteger as Integer
       myInteger = 0
       print myInteger
       locate 3,20
@@ -294,8 +309,8 @@
       wait 1 s
 
     test10:
-    	cls
-    	LCDHex(255)
+      cls
+      LCDHex(255)
       locate 3,20
       LCDHex(16)
       wait 1 s
@@ -481,4 +496,4 @@
           Print "END DEMO"
           wait 1 s
 
-	loop
+end sub
