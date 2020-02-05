@@ -17,7 +17,7 @@
 
 
   #chip 16f1829, 32
-  #
+
   ; ----- Define Hardware settings
   ' Define I2C settings - CHANGE PORTS
   #define HI2C_BAUD_RATE 400
@@ -131,4 +131,3 @@
 
 
 end
-

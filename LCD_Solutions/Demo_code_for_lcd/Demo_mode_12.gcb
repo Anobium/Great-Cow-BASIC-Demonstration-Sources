@@ -3,9 +3,9 @@
    #define I2C_DATA PORTC.4
    #define I2C_CLOCK PORTC.5
    #define I2C_DISABLE_INTERRUPTS ON
-   ‘#define I2C_BIT_DELAY 0 us       ;Optional
-   ‘#define I2C_CLOCK_DELAY 1 us     ;Optional
-   ‘#define I2C_END_DELAY 0 us       ;Optional
+   #define I2C_BIT_DELAY 0 us       ;Optional
+   #define I2C_CLOCK_DELAY 1 us     ;Optional
+   #define I2C_END_DELAY 0 us       ;Optional
 
 ; ----- Constants
 

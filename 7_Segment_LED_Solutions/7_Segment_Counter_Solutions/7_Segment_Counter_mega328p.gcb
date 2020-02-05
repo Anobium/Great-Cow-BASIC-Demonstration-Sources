@@ -11,41 +11,41 @@
 
 ; ----- Configuration
 
-  #chip mega328p, 16
-  #option explicit
+#CHIP mega328p, 16
+#OPTION Explicit
 
 ; ----- Define Hardware settings
-  Dir PORTB Out
-  DIR PORTD.1 out
+Dir PORTB Out
+Dir PORTD.1 Out
 
 ; ----- Constants
   ; You need to specify the port settings
-  #define DISP_SEG_A PORTB.0
-  #define DISP_SEG_B PORTB.1
-  #define DISP_SEG_C PORTB.2
-  #define DISP_SEG_D PORTB.3
-  #define DISP_SEG_E PORTB.4
-  #define DISP_SEG_F PORTB.5
-  #define DISP_SEG_G PORTB.6
+#DEFINE DISP_SEG_A PORTB.0
+#DEFINE DISP_SEG_B PORTB.1
+#DEFINE DISP_SEG_C PORTB.2
+#DEFINE DISP_SEG_D PORTB.3
+#DEFINE DISP_SEG_E PORTB.4
+#DEFINE DISP_SEG_F PORTB.5
+#DEFINE DISP_SEG_G PORTB.6
 
-  #define DISP_SEL_1 PORTD.1
+#DEFINE DISP_SEL_1 PORTD.1
 
 ; ----- Variables
-  Dim Temp as Byte
-  Temp = 0
+Dim Temp As Byte
+Temp = 0
 
 ; ----- Main body of program commences here.
 
 
-  Do Forever
+Do Forever
 
     ' Push number to 7 Segment Display
     DisplayValue 1, Temp
     Wait 250 ms
     Temp = Temp + 1
-    if Temp > 9 then
-       Temp = 0
-    end if
+    If Temp > 9 Then
+        Temp = 0
+    End If
 
-  Loop
-  end
+Loop
+End

@@ -15,7 +15,7 @@
 
 ; ----- Configuration
 
-  #chip 16F877A, 4
+#CHIP 16F877A, 4
 
 ; ----- Define Hardware settings
   ; No hardware specifics setting for 7-Segment display shown below using the constants
@@ -24,59 +24,59 @@
 ; ----- Constants
   ; You NEED to specify the port settings
 
-    #define DisplayPortA PORTB          ;Set the 7 segment port for the first 7-Segment display
-    #define DisplayPortB PORTB          ;Set the 7 segment as the same port as the second display
-    #define DisplayPortC PORTB          ;Set the 7 segment as the same port as the third display
-    #define DisplayPortD PORTB          ;Set the 7 segment as the same port as the forth display
+#DEFINE DisplayPortA PORTB          ;Set the 7 segment port for the first 7-Segment display
+#DEFINE DisplayPortB PORTB          ;Set the 7 segment as the same port as the second display
+#DEFINE DisplayPortC PORTB          ;Set the 7 segment as the same port as the third display
+#DEFINE DisplayPortD PORTB          ;Set the 7 segment as the same port as the forth display
 
-    #define DispSelectA Set portA.0 on      ;The select pin for the first 7-Segment display
-    #define DispSelectB Set portA.1 on      ;The select pin for the second  7-Segment display
-    #define DispSelectC Set portA.2 on      ;The select pin for the third 7-Segment display
-    #define DispSelectD Set portA.3 on      ;The select pin for the forth 7-Segment display
-    #define DispDeSelectA Set portA.0 off   ;The select pin for the first 7-Segment display
-    #define DispDeSelectB Set portA.1 off   ;The select pin for the second  7-Segment display
-    #define DispDeSelectC Set portA.2 off   ;The select pin for the third 7-Segment display
-    #define DispDeSelectD Set portA.3 off   ;The select pin for the firstforth 7-Segment display
+#DEFINE DispSelectA Set portA.0 On      ;The select pin for the first 7-Segment display
+#DEFINE DispSelectB Set portA.1 On      ;The select pin for the second  7-Segment display
+#DEFINE DispSelectC Set portA.2 On      ;The select pin for the third 7-Segment display
+#DEFINE DispSelectD Set portA.3 On      ;The select pin for the forth 7-Segment display
+#DEFINE DispDeSelectA Set portA.0 Off   ;The select pin for the first 7-Segment display
+#DEFINE DispDeSelectB Set portA.1 Off   ;The select pin for the second  7-Segment display
+#DEFINE DispDeSelectC Set portA.2 Off   ;The select pin for the third 7-Segment display
+#DEFINE DispDeSelectD Set portA.3 Off   ;The select pin for the firstforth 7-Segment display
 
 ; ----- Variables
   'Words are needed to support the numbers beyond the byte value of 255
   'Note: SysCalcTempX is the carry left over from divisions. We use this!!
-  dim Counter, DCarry, DData, SysCalcTempX as word
+Dim Counter, DCarry, DData, SysCalcTempX As Word
 
 ; ----- Main body of program commences here.
 
-    do Forever
- For Counter = 0 to 10000
+Do Forever
+    For Counter = 0 To 10000
 
             ;Show the value on the 7-Segment displays
             'Calculate 1000
-            THOU = Counter / 1000
-            DCarry = SysCalcTempX
+        THOU = Counter / 1000
+        DCarry = SysCalcTempX
 '
 
             'Calculate 100's
-            HUND = DCarry / 100
-            DCarry = SysCalcTempX
+        HUND = DCarry / 100
+        DCarry = SysCalcTempX
 '
             'Calculate 10's
-            TENS = DCarry / 10
-            ONES = SysCalcTempX
+        TENS = DCarry / 10
+        ONES = SysCalcTempX
 
 '
-            Repeat 125
+        Repeat 125
             DisplayValue 1, THOU
-            wait 2 ms
+            Wait 2 ms
             DisplayValue 2, HUND
-            wait 2 ms
+            Wait 2 ms
             DisplayValue 3, TENS
-            wait 2 ms
+            Wait 2 ms
             DisplayValue 4, ONES
-            wait 2 ms
-          end Repeat
+            Wait 2 ms
+        End Repeat
 
 
-            Wait 5 ms
+        Wait 5 ms
 
-        Next
+    Next
 
-    loop
+Loop

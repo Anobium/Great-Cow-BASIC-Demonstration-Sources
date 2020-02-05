@@ -15,7 +15,7 @@
 
 ; ----- Configuration
 
-  #chip 16F877A, 4
+#CHIP 16F877A, 4
 
 ; ----- Define Hardware settings
   ; No hardware specifics setting for 7-Segment display shown below using the constants
@@ -25,44 +25,44 @@
   ; You NEED to specify the port settings
 
   ; You need to specify the port settings
-  #define DISP_SEG_A PORTB.0
-  #define DISP_SEG_B PORTB.1
-  #define DISP_SEG_C PORTB.2
-  #define DISP_SEG_D PORTB.3
-  #define DISP_SEG_E PORTB.4
-  #define DISP_SEG_F PORTB.5
-  #define DISP_SEG_G PORTB.6
-  #define DISP_SEG_DOT PORTB.7  ' decimal point on multiplexed display
+#DEFINE DISP_SEG_A PORTB.0
+#DEFINE DISP_SEG_B PORTB.1
+#DEFINE DISP_SEG_C PORTB.2
+#DEFINE DISP_SEG_D PORTB.3
+#DEFINE DISP_SEG_E PORTB.4
+#DEFINE DISP_SEG_F PORTB.5
+#DEFINE DISP_SEG_G PORTB.6
+#DEFINE DISP_SEG_DOT PORTB.7  ' decimal point on multiplexed display
 
-  #define DISP_SEL_1 PORTA.0
-  #define DISP_SEL_2 PORTA.1
-  #define DISP_SEL_3 PORTA.2
-  #define DISP_SEL_4 PORTA.3
+#DEFINE DISP_SEL_1 PORTA.0
+#DEFINE DISP_SEL_2 PORTA.1
+#DEFINE DISP_SEL_3 PORTA.2
+#DEFINE DISP_SEL_4 PORTA.3
 
 
 ; ----- Variables
-  dim DigitCounter as byte
+Dim DigitCounter As Byte
 
 ; ----- Main body of program commences here.
 
-    do Forever
+Do Forever
 
-       For DigitCounter = 0 to 9
+    For DigitCounter = 0 To 9
 
             ;Show the value on the 7-Segment displays
-          Repeat 125
+        Repeat 125
             DisplayValue 1, DigitCounter
-            wait 2 ms
+            Wait 2 ms
             DisplayValue 2, DigitCounter
-            wait 2 ms
+            Wait 2 ms
             DisplayValue 3, DigitCounter, 1 ' the dot parameter = 1 will turn on the DP
                                             ' dot is optional. leave off if not needed
-            wait 2 ms
+            Wait 2 ms
             DisplayValue 4, DigitCounter
-            wait 2 ms
-          end Repeat
+            Wait 2 ms
+        End Repeat
 
-          wait 100 ms
-        Next
+        Wait 100 ms
+    Next
 
-    loop
+Loop
