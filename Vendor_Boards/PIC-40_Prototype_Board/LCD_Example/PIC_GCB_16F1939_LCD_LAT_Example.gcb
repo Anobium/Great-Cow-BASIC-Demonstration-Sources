@@ -30,13 +30,13 @@
 #define LCD_LAT
 #define LCD_SPEED SLOW
 
-#define _LCD_DB4 PORTD.4
-#define _LCD_DB5 PORTD.5
-#define _LCD_DB6 PORTD.6
-#define _LCD_DB7 PORTD.7
-#define _LCD_RS PORTE.0
-#DEFINE _LCD_Enable PORTE.2
-#define _LCD_RW PORTE.1
+#define LCD_DB4 PORTD.4
+#define LCD_DB5 PORTD.5
+#define LCD_DB6 PORTD.6
+#define LCD_DB7 PORTD.7
+#define LCD_RS PORTE.0
+#DEFINE LCD_Enable PORTE.2
+#define LCD_RW PORTE.1
 
 
 
@@ -53,11 +53,10 @@
    print ChipNameStr +" @ "+str(ChipMhz) + "Mhz"
    Locate 1,0
    print "by Anobium"
-   
+
    wait 100 ms
    do
    loop
    end
-	
 
 
