@@ -5,11 +5,11 @@
 '''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
 '''@author  EvanV
 '''@licence GPL
-'''@version 1.0
-'''@date    3.1.19
+'''@version 1.1
+'''@date    3.1.20
 '''********************************************************************************
 
-  #chip 16f1939,32
+  #chip 16lf1939,32
   #option explicit
 
   #include <glcd.h>
@@ -55,16 +55,13 @@
   '***********************************************************************************************
   '* End of configuration
   '***********************************************************************************************
-dim xx as Integer
-xx = -17
-GLCDPrint 0,0, StrInteger ( xx )
-end
+
 ;Start of demonstration main program
 
     do Forever
 
         BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
-        BigPrint ( 0, 20, "Feb 2019")
+        BigPrint ( 0, 20, "Feb 2020")
         wait 2 s
 
         CLS

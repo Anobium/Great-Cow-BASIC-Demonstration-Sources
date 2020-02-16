@@ -1,0 +1,46 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program test the Great Cow BASIC compiler for the K90 microcontroller
+'''
+'''@author     Evan R. Venn
+'''@licence    GPL
+'''@version    1.00
+'''@date       12/02/2020
+'''********************************************************************************
+
+' ----- Configuration
+#CHIP 18F67K90
+#OPTION Explicit
+
+
+' ----- Define Hardware settings
+Dir PORTB Out
+
+' ----- Variables
+Dim Tablepos, TimerDelayVariable As Byte
+
+
+' ----- Main body of program commences here.
+
+Do
+
+    For Tablepos = 1 To 6
+        ReadTable DATASET, Tablepos, TimerDelayVariable
+        Repeat 100
+            'Flash Port a 100 times at the specific value
+            PORTB = !PORTB
+            Wait TimerDelayVariable ms
+        End Repeat
+    Next
+Loop
+
+
+Table DATASET STORE DATA
+    'Millisecond delays - this data is loaded in EERPROM
+    12
+    24
+    36
+    48
+    60
+    72
+End Table
