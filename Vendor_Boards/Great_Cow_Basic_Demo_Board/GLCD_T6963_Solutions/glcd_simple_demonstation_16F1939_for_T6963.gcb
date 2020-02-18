@@ -9,16 +9,17 @@
 '''@date    3.1.20
 '''********************************************************************************
 
-  #chip 16lf1939,32
-  #option explicit
+#CHIP 16lf1939,32
+#OPTION Explicit
 
-  #include <glcd.h>
-  #define GLCD_TYPE GLCD_TYPE_T6963_64
+#INCLUDE <glcd.h>
+#DEFINE GLCD_TYPE GLCD_TYPE_T6963_64
 
 
-  '***********************************************************************************************
-  'define the connectivity - the 8bit port
-  #define GLCD_DATA_PORT PORTD             'Library support contigous 8-bit port
+'***********************************************************************************************
+'define the connectivity - the 8bit port
+'Library support contigous 8-bit port
+#DEFINE GLCD_DATA_PORT PORTD
 
 '  or
 '  #define GLCD_DB0      PORTD.0            'chip specific configuration where the ibrary supports 8-bit port defined via 8 constants
@@ -30,235 +31,272 @@
 '  #define GLCD_DB6      PORTD.6            'chip specific configuration
 '  #define GLCD_DB7      PORTD.7            'chip specific configuration
 
-  #define GLCD_CD        porte.0            'Command or Data conrol line port
-  #define GLCD_RD        PORTe.1           'Read control line  port
-  #define GLCD_WR        PORTe.2           'Write control line port
+'Command or Data conrol line port
+#DEFINE GLCD_CD        porte.0
+'Read control line  port
+#DEFINE GLCD_RD        PORTe.1
+'Write control line port
+#DEFINE GLCD_WR        PORTe.2
 
-  #define GLCD_RESET     PORTc.2           'Reset port
-  #define GLCD_FS        PORTc.1           'FS port
-  #define GLCD_CS        PORTc.0           'Chip Enable (Active Low)
+'Reset port
+#DEFINE GLCD_RESET     PORTc.2
+'FS port
+#DEFINE GLCD_FS        PORTc.1
+'Chip Enable (Active Low)
+#DEFINE GLCD_CS        PORTc.0
 
-  #define GLCD_FS_SELECT 1                 'FS1 Font Select port. 6x8 font: FS1=“High”=1 8x8 font FS1=“Low”=0 for GLCD_FS_SELECT
+'FS1 Font Select port. 6x8 font: FS1=“High”=1 8x8 font FS1=“Low”=0 for GLCD_FS_SELECT
+#DEFINE GLCD_FS_SELECT 1
 
-  '***********************************************************************************************
-  '*
-  '* Note    :   The T6963 controller's RAM address space from $0000 - $7FFF, total 32kbyte RAM, or it could be 64kbyte RAM best check!!
-  '*
-  '***********************************************************************************************
-  #define TEXT_HOME_ADDR      0x0000                                                         'This is specific to the GLCD display
-  #define GRH_HOME_ADDR       0x3FFF                                                         'This is specific to the GLCD display
-  #define CG_HOME_ADDR        0x77FF                                                         'This is specific to the GLCD display
-  #define COLUMN              40    'Set column number to be 40 , 32, 30 etc.                 This is specific to the GLCD display
-  #define MAX_ROW_PIXEL       64    'MAX_ROW_PIXEL the physical matrix length (y direction)   This is specific to the GLCD display
-  #define MAX_COL_PIXEL       240   'MAX_COL_PIXEL the physical matrix width (x direction)    This is specific to the GLCD display
+'***********************************************************************************************
+'*
+'* Note    :   The T6963 controller's RAM address space from $0000 - $7FFF, total 32kbyte RAM, or it could be 64kbyte RAM best check!!
+'*
+'***********************************************************************************************
+'This is specific to the GLCD display
+#DEFINE TEXT_HOME_ADDR      0x0000
+'This is specific to the GLCD display
+#DEFINE GRH_HOME_ADDR       0x3FFF
+'This is specific to the GLCD display
+#DEFINE CG_HOME_ADDR        0x77FF
+'Set column number to be 40 , 32, 30 etc.                 This is specific to the GLCD display
+#DEFINE COLUMN              40
+'MAX_ROW_PIXEL the physical matrix length (y direction)   This is specific to the GLCD display
+#DEFINE MAX_ROW_PIXEL       64
+'MAX_COL_PIXEL the physical matrix width (x direction)    This is specific to the GLCD display
+#DEFINE MAX_COL_PIXEL       240
 
-  '***********************************************************************************************
-  '* End of configuration
-  '***********************************************************************************************
+'***********************************************************************************************
+'* End of configuration
+'***********************************************************************************************
 
-;Start of demonstration main program
+'Start of demonstration main program
 
-    do Forever
+Do Forever
 
-        BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
-        BigPrint ( 0, 20, "Feb 2020")
-        wait 2 s
+    BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
+    BigPrint ( 0, 20, "Feb 2020")
+    Wait 2 s
+
+    CLS
+
+    Locate 5, 3
+    Print "40cols x 8rows character mode"
+    Locate 6, 3
+    Print "Mixed mode LCD and GLCD!!"
+    Locate 7, 32
+    Print "Anobium"
+    Wait 4 s
+    CLS
+    GLCDCLS
+
+    BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
+    BigPrint ( 0, 20, "LCD Capability")
+    Wait 4 s
+    CLS
+    GLCDCLS
+
+    ' ----- Main body of program commences here.
+    Repeat 1
+        CLS
+        Print "START TEST"
+        Locate 1,12
+        Print "Version 0x"
+        LCDHex ( 1, LeadingZeroActive )
+        Locate 1,0
+        Print "DISPLAY ON"
+        Wait 2 s
 
         CLS
-
-        locate 5, 3
-        Print "40cols x 8rows character mode"
-        locate 6, 3
-        Print "Mixed mode LCD and GLCD!!"
-        locate 7, 32
-        Print "Anobium"
-        wait 4 s
-        cls
-        GLCDCLS
-
-        BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
-        BigPrint ( 0, 20, "LCD Capability")
-        wait 4 s
-        CLS
-        GLCDCLS
-
-        ; ----- Main body of program commences here.
-            Repeat 1
-                CLS
-                PRINT "START TEST"
-                locate 1,12
-                PRINT "Version 0x"
-                LCDHex ( 1, LeadingZeroActive )
-                locate 1,0
-                PRINT "DISPLAY ON"
-                wait 2 s
-
-                CLS
-                Locate 0,0
-                Print "Cursor ON"
-                Locate 1,0
-                LCDcursor CursorOn
-                wait 1 S
-
-                CLS
-                LCDcursor CursorOFF
-                locate 0,0
-                Print "Cursor OFF"
-                wait 1 s
-
-                CLS
-                Locate 0,0
-                Print "FLASH ON"
-                Locate 1,0
-                LCDcursor FLASHON
-                wait 1 s
-
-                CLS
-                locate 0,0
-                Print "FLASH OFF"
-                LCDCURSOR FLASHOFF
-                wait 1 sec
-
-                Locate 0,0
-                Print "CURSR & FLSH ON"
-                locate 1,0
-                LCDCURSOR CURSORON
-                LCDCURSOR FLASHON, 8
-                Wait 1 sec
-
-                Locate 0,0
-                Print "CURSR & FLSH OFF"
-                locate 1,0
-                LCDCURSOR CursorOFF
-                LCDCURSOR FLASHOFF
-                Wait 1 sec
-
-                CLS
-                Locate 0,4
-                PRINT "Flashing"
-                Locate 1,4
-                Print "Display"
-                wait 500 ms
-
-                repeat 10
-                    LCDCURSOR LCDOFF
-                    wait 500 ms
-                    LCDCURSOR LCDON
-                    wait 500 ms
-                end repeat
-
-                CLS
-                Locate 0,0
-                Print "DISPLAY OFF"
-                Locate 1,0
-                Print "FOR 2 SEC"
-                Wait 2 SEC
-                LCDCURSOR LCDOFF
-                WAIT 2 s
-
-                CLS
-                Dim Xposition, Yposition as byte
-                locate 20, 4
-                Print "Put ( row, column, ascii character )"
-                for Yposition = 0 to MAX_ROWS -1
-                    put Yposition, 0, "*"
-                    wait 10 ms
-                next
-                for Xposition = 0 to MAX_COLUMNS -1
-                    put 0, Xposition ,"*"
-                    put MAX_ROWS -1, Xposition, "*"
-                    wait 10 ms
-                next
-                for Yposition = 0 to MAX_ROWS -1
-                    put Yposition, MAX_COLUMNS -1 , "*"
-                    wait 10 ms
-                next
-
-                wait 2 s
-
-                CLS
-                Locate 0,0
-                LCDCURSOR LCDON
-                Print "END TEST"
-                wait 1 s
-
-            end Repeat
-
-
-        GLCDTest:
-        '#DEFINE GLCD_OLED_FONT
-        CLS
-        GLCDCLS
-        BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
-        BigPrint ( 0, 20, "GLCD Capability")
-        wait 2 s
-        glcdprint 50, 40, "240 * 64  pixels mode"
-
-        glcdprint 50, 50, "Full GCB GLCD capable"
-        wait 4 s
-        CLS
-        GLCDCLS
-
-
-        Dim BYTENUMBER, CCOUNT as Byte
-
-        CCount = 0
-        dim longNumber as long
-        longNumber = 4294967290 ' max value = 4294967296
-        dim wordNumber as Word
-        dim outString as string
-        wordNumber = 0
-        byteNumber = 0
-
-
-        ' Prepare the static components of the screen
-        GLCDPrint ( 2,   0, "PrintStr")                                ; Print some text
-        GLCDPrint ( 64,  0, "LAT@")                                    ; Print some more text
-        GLCDPrint ( 88,  0, ChipMhz)                                   ; Print chip speed
-        GLCDPrint ( 100, 0, "Mhz")                                     ; Print some text
-        GLCDDrawString( 2,8,"DrawStr")                                 ; Draw some text
-        box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1                            ; Draw a box
-        box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1    ; Draw a box
-        Circle( 44,41,15)                                              ; Draw a circle
-        line 64,31,0,31                                                ; Draw a line
-
-        Repeat 1
-           for CCount = 32 to 127
-                GLCDPrint ( 64 ,  36,  hex(longNumber_E ) )                ; Print a HEX string
-                GLCDPrint ( 76 ,  36,  hex(longNumber_U ) )                ; Print a HEX string
-                GLCDPrint ( 88 ,  36,  hex(longNumber_H ) )                ; Print a HEX string
-                GLCDPrint ( 100 ,  36, hex(longNumber   ) )                ; Print a HEX string
-                GLCDPrint ( 112 ,  36, "h" )                               ; Print a HEX string
-
-
-                GLCDPrint ( 64 ,  44, pad(str(wordNumber), 5 ) )           ; Print a padded string
-                GLCDPrint ( 64 ,  52, pad(str(byteNumber), 3 ) )           ; Print a padded string
-
-
-                filledbox (46,9,56,19,0)                                   ; Draw a Box
-                box (46,9,56,19)
-                GLCDDrawChar(49, 10, CCount )                              ; Draw a character
-                outString = str( CCount )                                  ; Prepare a string
-                GLCDDrawString(64, 9, pad(outString,3) )                   ; Draw a string
-
-                filledbox 3,43,11,51, wordNumber.1                         ; Draw a filled box
-
-                FilledCircle( 44,41,9, longNumber.3)                       ; Draw a filled box
-                line 0,63,64,31                                            ; Draw a line
-
-                                                                           ; Do some simple maths
-                longNumber = longNumber + 7 : wordNumber = wordNumber + 3 : byteNumber++
-            NEXT
-        End repeat
+        Locate 0,0
+        Print "Cursor ON"
+        Locate 1,0
+        LCDCursor CURSORON
+        Wait 1 s
 
         CLS
-        GLCDCLS
-        BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
-        BigPrint ( 0, 40, "Anobium :-)")
+        LCDCursor CURSOROFF
+        Locate 0,0
+        Print "Cursor OFF"
+        Wait 1 s
 
-        wait 5 s
         CLS
-        GLCDCLS
+        Locate 0,0
+        Print "FLASH ON"
+        Locate 1,0
+        LCDCursor FLASHON
+        Wait 1 s
 
-    loop
-    end
+        CLS
+        Locate 0,0
+        Print "FLASH OFF"
+        LCDCursor FLASHOFF
+        Wait 1 sec
+
+        Locate 0,0
+        Print "CURSR & FLSH ON"
+        Locate 1,0
+        LCDCursor CURSORON
+        LCDCursor FLASHON, 8
+        Wait 1 sec
+
+        Locate 0,0
+        Print "CURSR & FLSH OFF"
+        Locate 1,0
+        LCDCursor CURSOROFF
+        LCDCursor FLASHOFF
+        Wait 1 sec
+
+        CLS
+        Locate 0,4
+        Print "Flashing"
+        Locate 1,4
+        Print "Display"
+        Wait 500 ms
+
+        Repeat 10
+            LCDCursor LCDOFF
+            Wait 500 ms
+            LCDCursor LCDON
+            Wait 500 ms
+        End Repeat
+
+        CLS
+        Locate 0,0
+        Print "DISPLAY OFF"
+        Locate 1,0
+        Print "FOR 2 SEC"
+        Wait 2 SEC
+        LCDCursor LCDOFF
+        Wait 2 s
+
+        CLS
+        Dim Xposition, Yposition As Byte
+        Locate 20, 4
+        Print "Put ( row, column, ascii character )"
+        For Yposition = 0 To MAX_ROWS -1
+            Put Yposition, 0, "*"
+            Wait 10 ms
+        Next
+        For Xposition = 0 To MAX_COLUMNS -1
+            Put 0, Xposition ,"*"
+            Put MAX_ROWS -1, Xposition, "*"
+            Wait 10 ms
+        Next
+        For Yposition = 0 To MAX_ROWS -1
+            Put Yposition, MAX_COLUMNS -1 , "*"
+            Wait 10 ms
+        Next
+
+        Wait 2 s
+
+        CLS
+        Locate 0,0
+        LCDCursor LCDON
+        Print "END TEST"
+        Wait 1 s
+
+    End Repeat
+
+
+GLCDTest:
+    '#DEFINE GLCD_OLED_FONT
+    CLS
+    GLCDCLS
+    BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
+    BigPrint ( 0, 20, "GLCD Capability")
+    Wait 2 s
+    GLCDPrint 50, 40, "240 * 64  pixels mode"
+
+    GLCDPrint 50, 50, "Full GCB GLCD capable"
+    Wait 4 s
+    CLS
+    GLCDCLS
+
+
+    Dim BYTENUMBER, CCOUNT As Byte
+
+    CCount = 0
+    Dim longNumber As Long
+    ' max value = 4294967296
+    longNumber = 4294967290
+    Dim wordNumber As Word
+    Dim outString As String
+    wordNumber = 0
+    byteNumber = 0
+
+
+    ' Prepare the static components of the screen
+    ' Print some text
+    GLCDPrint ( 2,   0, "PrintStr")
+    ' Print some more text
+    GLCDPrint ( 64,  0, "LAT@")
+    ' Print chip speed
+    GLCDPrint ( 88,  0, ChipMHz)
+    ' Print some text
+    GLCDPrint ( 100, 0, "Mhz")
+    ' Draw some text
+    GLCDDrawString( 2,8,"DrawStr")
+    ' Draw a box
+    Box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1
+    ' Draw a box
+    Box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1
+    ' Draw a circle
+    Circle( 44,41,15)
+    ' Draw a line
+    Line 64,31,0,31
+
+    Repeat 1
+        For CCount = 32 To 127
+            ' Print a HEX string
+            GLCDPrint ( 64 ,  36,  Hex(longNumber_E ) )
+            ' Print a HEX string
+            GLCDPrint ( 76 ,  36,  Hex(longNumber_U ) )
+            ' Print a HEX string
+            GLCDPrint ( 88 ,  36,  Hex(longNumber_H ) )
+            ' Print a HEX string
+            GLCDPrint ( 100 ,  36, Hex(longNumber   ) )
+            ' Print a HEX string
+            GLCDPrint ( 112 ,  36, "h" )
+
+
+            ' Print a padded string
+            GLCDPrint ( 64 ,  44, Pad(Str(wordNumber), 5 ) )
+            ' Print a padded string
+            GLCDPrint ( 64 ,  52, Pad(Str(byteNumber), 3 ) )
+
+
+            ' Draw a Box
+            FilledBox (46,9,56,19,0)
+            Box (46,9,56,19)
+            ' Draw a character
+            GLCDDrawChar(49, 10, CCount )
+            ' Prepare a string
+            outString = Str( CCount )
+            ' Draw a string
+            GLCDDrawString(64, 9, Pad(outString,3) )
+
+            ' Draw a filled box
+            FilledBox 3,43,11,51, wordNumber.1
+
+            ' Draw a filled box
+            FilledCircle( 44,41,9, longNumber.3)
+            ' Draw a line
+            Line 0,63,64,31
+
+            ' Do some simple maths
+            longNumber = longNumber + 7 : wordNumber = wordNumber + 3 : byteNumber++
+        Next
+    End Repeat
+
+    CLS
+    GLCDCLS
+    BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
+    BigPrint ( 0, 40, "Anobium :-)")
+
+    Wait 5 s
+    CLS
+    GLCDCLS
+
+Loop
+End

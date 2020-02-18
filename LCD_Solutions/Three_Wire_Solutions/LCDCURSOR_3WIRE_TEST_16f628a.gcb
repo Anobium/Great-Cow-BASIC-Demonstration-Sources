@@ -11,50 +11,53 @@
 '''@date    28.10.2018
 '''********************************************************************************
 
-; ----- Configuration
-#chip 16f628a, 4
-#option explicit
+' ----- Configuration
+#CHIP 16f628a, 4
+#OPTION Explicit
 
-;Setup LCD Parameters
-#define LCD_IO 3
+'Setup LCD Parameters
+#DEFINE LCD_IO 3
 
 'Change as necessary
-#define LCD_DB     PORTb.3            ; databit
-#define LCD_CB     PORTb.4            ; clockbit
-#define LCD_EB     PORTa.0            ; enable bit
+' databit
+#DEFINE LCD_DB     PORTb.3
+' clockbit
+#DEFINE LCD_CB     PORTb.4
+' enable bit
+#DEFINE LCD_EB     PORTa.0
 
-  Dim BV as Byte
+Dim BV As Byte
 
 
 'Program Start
 
- PRINT "Great Cow BASIC"
- Locate 1,0
- PRINT "@2018"
- Wait 4 s
+Print "Great Cow BASIC"
+Locate 1,0
+Print "@2018"
+Wait 4 s
 
-  DO Forever
-       CLS
-       WAIT 2 s
-       PRINT "Test LCDHex "
-       wait 3 s
-       CLS
-       wait 1 s
+Do Forever
+    CLS
+    Wait 2 s
+    Print "Test LCDHex "
+    Wait 3 s
+    CLS
+    Wait 1 s
 
 
-   for bv = 0 to 16
-     locate 0,0
-     Print "DEC " : Print BV
-     locate 1,0
-     Print "HEX "
-     LCDHex BV
-     Locate 1, 8
-     LCDHEX BV, LeadingZeroActive
+    For bv = 0 To 16
+        Locate 0,0
+        Print "DEC " : Print BV
+        Locate 1,0
+        Print "HEX "
+        LCDHex BV
+        Locate 1, 8
+        LCDHex BV, LeadingZeroActive
 
-     wait 500 ms
-   next
-       CLS
-       wait 1 s
-       Print "END TEST"
-  LOOP
+        Wait 500 ms
+    Next
+    CLS
+    Wait 1 s
+    Print "END TEST"
+Loop
 

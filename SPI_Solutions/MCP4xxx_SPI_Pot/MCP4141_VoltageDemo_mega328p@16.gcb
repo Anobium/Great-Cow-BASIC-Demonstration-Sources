@@ -26,91 +26,95 @@
 '''@date   		May 2019
 '''********************************************************************************
 
-; ----- Configuration
-  #chip mega328p, 16
-  #include <uno_mega328p.h>
-  #include <mcp4xxxdigitalpot.h>
+' ----- Configuration
+#CHIP mega328p, 16
+#INCLUDE <uno_mega328p.h>
+#INCLUDE <mcp4xxxdigitalpot.h>
 
-; ----- Constants
+' ----- Constants
 
-  #define _ShowDialog
+#DEFINE _ShowDialog
 
-	' SPI SETUP
-  #define DigitalPot_CS DIGITAL_10
-  #define DigitalPot_SCK DIGITAL_13
-  #define DigitalPot_DO DIGITAL_11
-  #define DigitalPot_DI DIGITAL_12
+' SPI SETUP
+#DEFINE DigitalPot_CS DIGITAL_10
+#DEFINE DigitalPot_SCK DIGITAL_13
+#DEFINE DigitalPot_DO DIGITAL_11
+#DEFINE DigitalPot_DI DIGITAL_12
 
-   ' USART settings
-   #define USART_BAUD_RATE 9600
-   #define USART_DELAY 2 ms
-   ' do not remove as this messes up the terminal
-   #define USART_BLOCKING
-   #define USART_TX_BLOCKING
+' USART settings
+#DEFINE USART_BAUD_RATE 9600
+#DEFINE USART_DELAY 2 ms
+' do not remove as this messes up the terminal
+#DEFINE USART_BLOCKING
+#DEFINE USART_TX_BLOCKING
 
-; ----- Define Hardware settings
-	' None
+' ----- Define Hardware settings
+' None
 
-; ----- Variables
-	'None
-
-
-; ------ Start of main Program
+' ----- Variables
+'None
 
 
-  ' Setup MCP Device using hardware or software SPI
-
-			' remove or comment out if you want to use H
-      #define _MCP4XXXHardwareSPI
-      ' remove or comment out if you want to use SOFTWARE SPI.
-      '#define _MCP4XXXSoftwareSPI
-
-				'Required to initialise the device
-        MCP4XXXInit
-
-				' Required if you are using HARDWARE SPI.
-        #ifdef _MCP4XXXHardwareSPI
-            SPIMode MasterFast, 0		' or,
-            '    SPIMode Master, 0				' or,
-            '    SPIMode MasterSlow, 0
-        #endif
+' ------ Start of main Program
 
 
-; ----- Example code
+' Setup MCP Device using hardware or software SPI
+
+' remove or comment out if you want to use H
+#DEFINE _MCP4XXXHardwareSPI
+' remove or comment out if you want to use SOFTWARE SPI.
+'#define _MCP4XXXSoftwareSPI
+
+'Required to initialise the device
+MCP4XXXInit
+
+' Required if you are using HARDWARE SPI.
+#IFDEF _MCP4XXXHardwareSPI
+    ' or,
+    SPIMode MasterFast, 0
+    '    SPIMode Master, 0				' or,
+    '    SPIMode MasterSlow, 0
+#ENDIF
 
 
-    'This script allows for the voltage drop and compensates of any losses.
-    #script
-          'reference voltage                        5v
-          'actual voltage at port when 100% Pot     4.36
-          'max slides turns                         128
-          reference_voltage = 4.36
-          numberofgrads = 128
-          Voltage_adjustment = int((reference_voltage*1000)/numberofgrads)
+' ----- Example code
 
 
-    #endscript
-
-    #define maxvoltage 0
-    #define minvoltage 128
-
-
-    HSerPrintCRLF 3
-    HSerPrint "Set Voltage Example": HSerPrintCRLF
-    HSerPrint Voltage_adjustment
-    HSerPrintCRLF
+'This script allows for the voltage drop and compensates of any losses.
+#SCRIPT
+    'reference voltage                        5v
+    'actual voltage at port when 100% Pot     4.36
+    'max slides turns                         128
+    reference_voltage = 4.36
+    numberofgrads = 128
+    Voltage_adjustment = int((reference_voltage*1000)/numberofgrads)
 
 
+#ENDSCRIPT
 
-		do Forever
-    	DigitalPotSetWiperPosition ( maxvoltage )   ' Set wiper to 2 volts
-			wait 3 s
-      ' 2 volts
-    	DigitalPotSetWiperPosition (minvoltage-(2000/Voltage_adjustment) )   ' Set wiper to 2 volts
-			wait 3 s
-      ' 1.56 volts
-      DigitalPotSetWiperPosition (minvoltage-(1560/Voltage_adjustment) )   ' Set wiper to 2 volts
-			wait 3 s
-      DigitalPotSetWiperPosition ( minvoltage )
-      wait 3 s
-		loop
+#DEFINE maxvoltage 0
+#DEFINE minvoltage 128
+
+
+HSerPrintCRLF 3
+HSerPrint "Set Voltage Example": HSerPrintCRLF
+HSerPrint Voltage_adjustment
+HSerPrintCRLF
+
+
+
+Do Forever
+    ' Set wiper to 2 volts
+    DigitalPotSetWiperPosition ( maxvoltage )
+    Wait 3 s
+    ' 2 volts
+    ' Set wiper to 2 volts
+    DigitalPotSetWiperPosition (minvoltage-(2000/Voltage_adjustment) )
+    Wait 3 s
+    ' 1.56 volts
+    ' Set wiper to 2 volts
+    DigitalPotSetWiperPosition (minvoltage-(1560/Voltage_adjustment) )
+    Wait 3 s
+    DigitalPotSetWiperPosition ( minvoltage )
+    Wait 3 s
+Loop

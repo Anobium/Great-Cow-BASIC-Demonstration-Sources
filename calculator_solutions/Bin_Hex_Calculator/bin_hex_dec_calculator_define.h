@@ -1,77 +1,84 @@
-#StartUp SetPortDir  'Port directions cannot be set directly but
-                     'have to be called within a subroutine.
-                     '#StartUp is only allowed in header files
+'Port directions cannot be set directly but
+#STARTUP SetPortDir
+'have to be called within a subroutine.
+'#StartUp is only allowed in header files
 
 'LCD connection settings
-#Define LCD_IO 4
-#Define LCD_SPEED FAST
-#Define LCD_NO_RW
+#DEFINE LCD_IO 4
+#DEFINE LCD_SPEED FAST
+#DEFINE LCD_NO_RW
 
 'Port assignments
-#Define LCD_RS        PortA.0
-#Define LCD_Enable    PortA.1
+#DEFINE LCD_RS        PortA.0
+#DEFINE LCD_Enable    PortA.1
 
-#Define LCD_DB4       PortA.2
-#Define LCD_DB5       PortC.0
-#Define LCD_DB6       PortC.1
-#Define LCD_DB7       PortC.2
+#DEFINE LCD_DB4       PortA.2
+#DEFINE LCD_DB5       PortC.0
+#DEFINE LCD_DB6       PortC.1
+#DEFINE LCD_DB7       PortC.2
 
-#Define D_Clk         PortC.5 'Pin 5
-#Define D_Data        PortA.4 'Pin 3
-#Define D_Lat         PortC.4 'Pin 6
+'Pin 5
+#DEFINE D_Clk         PortC.5
+'Pin 3
+#DEFINE D_Data        PortA.4
+'Pin 6
+#DEFINE D_Lat         PortC.4
 
-#Define Button_R1     PortC.3 'Pin 7 Button Rows (Or columns?)
-#Define Button_R2     PortC.6 'Pin 8
-#Define Button_R3     PortC.7 'Pin 9
+'Pin 7 Button Rows (Or columns?)
+#DEFINE Button_R1     PortC.3
+'Pin 8
+#DEFINE Button_R2     PortC.6
+'Pin 9
+#DEFINE Button_R3     PortC.7
 
-#Define Column_0      1
-#Define Column_1      2
-#Define Column_2      4
-#Define Column_3      8
-#Define Column_4      16
-#Define Column_5      32
-#Define Column_6      64
-#Define Column_7      128
+#DEFINE Column_0      1
+#DEFINE Column_1      2
+#DEFINE Column_2      4
+#DEFINE Column_3      8
+#DEFINE Column_4      16
+#DEFINE Column_5      32
+#DEFINE Column_6      64
+#DEFINE Column_7      128
 
-#Define Bt0           0
+#DEFINE Bt0           0
 'The value used by pressing '0' within a numeric entry
 'will be changed according the entry Mode.
 'It will equall multiplication by:
 'Multiply by 2  for binary Mode
 'Multiply by 10 for decimal Mode
 'Multiply by 16 for hexadecimal mode
-#Define Bt1           1
-#Define Bt2           2
-#Define Bt3           3
-#Define Bt4           4
-#Define Bt5           5
-#Define Bt6           6
-#Define Bt7           7
-#Define Bt8           8
-#Define Bt9           9
-#Define BtA           10
-#Define BtB           11
-#Define BtC           12
-#Define BtD           13
-#Define BtE           14
-#Define BtF           15
+#DEFINE Bt1           1
+#DEFINE Bt2           2
+#DEFINE Bt3           3
+#DEFINE Bt4           4
+#DEFINE Bt5           5
+#DEFINE Bt6           6
+#DEFINE Bt7           7
+#DEFINE Bt8           8
+#DEFINE Bt9           9
+#DEFINE BtA           10
+#DEFINE BtB           11
+#DEFINE BtC           12
+#DEFINE BtD           13
+#DEFINE BtE           14
+#DEFINE BtF           15
 
 'Enter key
-#Define BtEn          16
+#DEFINE BtEn          16
 
 'Operands from here *********************************
 
 'Values here are operators
 'which require two operands to
 'be calculated
-#Define BtPl          17
-#Define BtMi          18
-#Define BtDi          19
-#Define BtMu          20
-#Define BtAn          21
-#Define BtModulo      22
-#Define BtOr          23
-#Define BtXor         24
+#DEFINE BtPl          17
+#DEFINE BtMi          18
+#DEFINE BtDi          19
+#DEFINE BtMu          20
+#DEFINE BtAn          21
+#DEFINE BtModulo      22
+#DEFINE BtOr          23
+#DEFINE BtXor         24
 'Values heres are operators
 'which require two operands to
 'be calculated
@@ -84,43 +91,53 @@
 
 'These operators work directly with
 'a single operand
-#Define BtNot         25
-#Define BtRand        26
+#DEFINE BtNot         25
+#DEFINE BtRand        26
 
-#Define BtShiftL      27
-#Define BtShiftR      28
+#DEFINE BtShiftL      27
+#DEFINE BtShiftR      28
 'These operators work directly with
 'a single operand
 
-#Define BtMode        29
-#Define BtClr         30
+#DEFINE BtMode        29
+#DEFINE BtClr         30
 
-#Define Answer        31
+#DEFINE Answer        31
 'End of button values
 
 
 
-#Define M_Bin         1
-#Define M_Dec         2
-#Define M_Hex         3
+#DEFINE M_Bin         1
+#DEFINE M_Dec         2
+#DEFINE M_Hex         3
 
-#Define Bit_16        1
-#Define Bit_32        2
+#DEFINE Bit_16        1
+#DEFINE Bit_32        2
 
-#Define NoAnimate     0
-#Define Animate       1
+#DEFINE NoAnimate     0
+#DEFINE Animate       1
 
-#Define CG_Or         0 'Graphic symbol for Or
-#Define CG_Xor        1 'Graphic symbol for Xor
-#Define CG_Not        2 'Inverted Equals symbol for Not'
-#Define PacManFwd     3 'PacMan moving forward
-#Define PacManRev     4 'PacMan moving Back
-#Define BlankPill     5 'Blank 'Pill'
-#Define Pill          6 'Pill for PacMan
+'Graphic symbol for Or
+#DEFINE CG_Or         0
+'Graphic symbol for Xor
+#DEFINE CG_Xor        1
+'Inverted Equals symbol for Not'
+#DEFINE CG_Not        2
+'PacMan moving forward
+#DEFINE PacManFwd     3
+'PacMan moving Back
+#DEFINE PacManRev     4
+'Blank 'Pill'
+#DEFINE BlankPill     5
+'Pill for PacMan
+#DEFINE Pill          6
 
-#Define EpMode        0 'Location of last used mode in EeProm'
-#Define Ep_Bit        1 'Location of 16bit or 32bit mode in EeProm
-#Define EP_Ani        2 'Location of Animate mode in EeProm
+'Location of last used mode in EeProm'
+#DEFINE EpMode        0
+'Location of 16bit or 32bit mode in EeProm
+#DEFINE Ep_Bit        1
+'Location of Animate mode in EeProm
+#DEFINE EP_Ani        2
 
 
 Sub SetPortDir

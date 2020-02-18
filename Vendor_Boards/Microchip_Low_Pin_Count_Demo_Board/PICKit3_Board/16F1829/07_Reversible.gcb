@@ -36,114 +36,114 @@
 '''
 
 
- #chip 16f1829,8
- #option explicit
+#CHIP 16f1829,8
+#OPTION Explicit
 
 
 
-    '' -------------------LATC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|DS4|DS3|DS2|DS1|-
-    ''-----------------------------------------
-    ''
+'' -------------------LATC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|DS4|DS3|DS2|DS1|-
+''-----------------------------------------
+''
 
-  Dim DIRECTION as Byte
+Dim DIRECTION As Byte
 
 
-  #define SWITCH_DOWN         0
-  #define SWITCH_UP           1
+#DEFINE SWITCH_DOWN         0
+#DEFINE SWITCH_UP           1
 
-  #define LED_RIGHT           TRUE
-  #define LED_LEFT            FAlSE
+#DEFINE LED_RIGHT           TRUE
+#DEFINE LED_LEFT            FALSE
 
-  #define SWITCH      PORTA.2
+#DEFINE SWITCH      PORTA.2
 
-  dim mydelay as byte
+Dim mydelay As Byte
 
-    'start from the right to left
-    direction = LED_RIGHT
+'start from the right to left
+direction = LED_RIGHT
 
-    dir portc out
-    portc.3 = 1
+Dir portc Out
+portc.3 = 1
 
-    'Potentiamtor is connected to RA4...set as input
-    dir porta.4 in
+'Potentiamtor is connected to RA4...set as input
+Dir porta.4 In
 
-    'setup switch (SW1)
-    dir porta.2 in
+'setup switch (SW1)
+Dir porta.2 In
 
-    do
-        mydelay = ReadAD10 ( AN3 )  / 64
-       ' decrement the 8 MSbs of the ADC and delay 20ms for each
-        do while ( mydelay <> 0 )
-              mydelay--
-              wait 20 ms
-        loop
+Do
+    mydelay = ReadAD10 ( AN3 )  / 64
+    ' decrement the 8 MSbs of the ADC and delay 20ms for each
+    Do While ( mydelay <> 0 )
+        mydelay--
+        Wait 20 ms
+    Loop
 
-        if check_switch = true then
-            ' toggle the direction
-            direction = !direction
-        end if
-        if  direction = LED_RIGHT  then
-            'shift to the right by 1
-            Set C off
-            Rotate portc right
+    If check_switch = TRUE Then
+        ' toggle the direction
+        direction = !direction
+    End If
+    If  direction = LED_RIGHT  Then
+        'shift to the right by 1
+        Set C Off
+        Rotate portc Right
 
-            ' when the last LED is lit, restart the pattern
-            if C = 1 then
-               portc.3 = 1
-            end if
+        ' when the last LED is lit, restart the pattern
+        If C = 1 Then
+            portc.3 = 1
+        End If
 
-        else
-            'shift to the left by 1
-            Set C off
-            Rotate portc left
+    Else
+        'shift to the left by 1
+        Set C Off
+        Rotate portc Left
 
-            'when the last LED is lit, restart the pattern
-            if  portC.4 = 1 then
-                  portC.0 = 1
-                  portC.4 = 0
-            end if
-        end if
+        'when the last LED is lit, restart the pattern
+        If  portC.4 = 1 Then
+            portC.0 = 1
+            portC.4 = 0
+        End If
+    End If
 
-    loop
+Loop
 
 
 
 'global variable - if button is held down, we don't want to keep on switching directions
-dim previous_state as bit
+Dim previous_state As BIT
 previous_state = SWITCH_UP
 
-function  check_switch
+Function  check_switch
     'switch is normally open to 5V ...when pressed, RA3 is connected to GND
-    if (SWITCH = SWITCH_DOWN) then
+    If (SWITCH = SWITCH_DOWN) Then
         'debounce by delaying and checking if switch is still pressed
-        wait 5 ms
-        if ( (previous_state =  SWITCH_DOWN) & (SWITCH = SWITCH_DOWN) ) then
+        Wait 5 ms
+        If ( (previous_state =  SWITCH_DOWN) & (SWITCH = SWITCH_DOWN) ) Then
             ' don't toggle
-            check_switch = false
-            exit function
-        else
+            check_switch = FALSE
+            Exit Function
+        Else
             ' check if still down
-            if (SWITCH = SWITCH_DOWN) then
-               previous_state = SWITCH_DOWN
-               ' reverse the LEDs
-               check_switch = true
-               exit function
-           else
-            'switch not properly held down
-            previous_state = SWITCH_UP
-            ' don't reverse
-            check_switch = false
-            exit function
-           end if
-        end if
-    else
-       'switch not pressed
+            If (SWITCH = SWITCH_DOWN) Then
+                previous_state = SWITCH_DOWN
+                ' reverse the LEDs
+                check_switch = TRUE
+                Exit Function
+            Else
+                'switch not properly held down
+                previous_state = SWITCH_UP
+                ' don't reverse
+                check_switch = FALSE
+                Exit Function
+            End If
+        End If
+    Else
+        'switch not pressed
         previous_state = SWITCH_UP
         'don't reverse
-        check_switch = false
-        exit function
-    end if
+        check_switch = FALSE
+        Exit Function
+    End If
 
-end Function
+End Function

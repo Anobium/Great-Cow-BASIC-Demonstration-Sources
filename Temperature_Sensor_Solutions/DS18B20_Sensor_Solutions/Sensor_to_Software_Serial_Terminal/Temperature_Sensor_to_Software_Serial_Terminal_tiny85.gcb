@@ -9,30 +9,34 @@
 '''@date    20.02.2015
 '''********************************************************************************
 
-; ----- Configuration
-  #chip tiny85, 16
-  #option explicit
+' ----- Configuration
+#CHIP tiny85, 16
+#OPTION Explicit
 
-  #include <ds18b20.h>
+#INCLUDE <ds18b20.h>
 
-; ----- Define Hardware settings
-  #include <softserial.h> 'include the library. this is required.
+' ----- Define Hardware settings
+'include the library. this is required.
+#INCLUDE <softserial.h>
 
-  'Config Serial UART:
-  #DEFINE SER1_BAUD 9600    'baudrate must be defined
-  #DEFINE SER1_TXPORT PORTB   'I/O port (without .bit) must be defined
-  #DEFINE SER1_TXPIN 1            'portbit  must be defined
+'Config Serial UART:
+'baudrate must be defined
+#DEFINE SER1_BAUD 9600
+'I/O port (without .bit) must be defined
+#DEFINE SER1_TXPORT PORTB
+'portbit  must be defined
+#DEFINE SER1_TXPIN 1
 
-; ----- Constants
-  ' DS18B20 port settings
-  #define DQ PortB.3
+' ----- Constants
+' DS18B20 port settings
+#DEFINE DQ PortB.3
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
 
-  do forever
+Do Forever
     Ser1Send 13: Ser1Send 10
     ' Serial print the  value of the sensor
-     Ser1Print [byte]readtemp
-     wait 2 s
-  loop
+    Ser1Print [Byte]ReadTemp
+    Wait 2 s
+Loop

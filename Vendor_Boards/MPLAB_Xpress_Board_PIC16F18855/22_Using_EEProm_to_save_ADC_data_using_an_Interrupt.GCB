@@ -29,66 +29,71 @@
 '''
 
 
-    'Chip Settings.
-    #chip 16f18855,32
-    #option explicit
+'Chip Settings.
+#CHIP 16f18855,32
+#OPTION Explicit
 
-    '' -------------------LATA-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D1 |-
-    ''-----------------------------------------
-    ''
+'' -------------------LATA-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D1 |-
+''-----------------------------------------
+''
 
-    #define USART_BAUD_RATE 19200
-    #define USART_TX_BLOCKING
+#DEFINE USART_BAUD_RATE 19200
+#DEFINE USART_TX_BLOCKING
 
-    #define LEDD2 PORTA.0
-    #define LEDD3 PORTA.1
-    #define LEDD4 PORTA.2
-    #define LEDD5 PORTA.3
-    Dir     LEDD2 OUT
-    Dir     LEDD3 OUT
-    Dir     LEDD4 OUT
-    Dir     LEDD5 OUT
+#DEFINE LEDD2 PORTA.0
+#DEFINE LEDD3 PORTA.1
+#DEFINE LEDD4 PORTA.2
+#DEFINE LEDD5 PORTA.3
+Dir     LEDD2 Out
+Dir     LEDD3 Out
+Dir     LEDD4 Out
+Dir     LEDD5 Out
 
-    #define SWITCH_DOWN         0
-    #define SWITCH_UP           1
+#DEFINE SWITCH_DOWN         0
+#DEFINE SWITCH_UP           1
 
-    #define SWITCH              PORTA.5
+#DEFINE SWITCH              PORTA.5
 
-    Dim OUTVALUE, DOWN, ADC_VALUE as Byte
+Dim OUTVALUE, DOWN, ADC_VALUE As Byte
 
-    'Setup an Interrupt event when porta.5 goes negative.
-    IOCAN5 = 1
-    On Interrupt PORTChange  Call InterruptHandler
+'Setup an Interrupt event when porta.5 goes negative.
+IOCAN5 = 1
+On Interrupt PORTChange  Call InterruptHandler
 
-    do
+Do
 
-     'Read the value from the EEPROM from register Zero in the EEPROM
-      EPRead ( 0, OutValue )
+    'Read the value from the EEPROM from register Zero in the EEPROM
+    EPRead ( 0, OutValue )
 
-      'Leave the Top Bytes alone and set the lower four bits
-      PortA = ( PortA & 0XF0 ) OR ( OutValue / 16 )
-      Sleep
+    'Leave the Top Bytes alone and set the lower four bits
+    PortA = ( PortA & 0XF0 ) OR ( OutValue / 16 )
+    Sleep
 
-    loop
+Loop
 
 
-sub InterruptHandler
+Sub InterruptHandler
 
-    if IOCAF5 = 1 then                         'S2 was just pressed
-        IOCAN5 = 0                             'Prevent the event from reentering the InterruptHandler routine
-        IOCAF5 = 0                             'We must clear the flag in software
+    If IOCAF5 = 1 Then
+        'S2 was just pressed
+        'Prevent the event from reentering the InterruptHandler routine
+        IOCAN5 = 0
+        'We must clear the flag in software
+        IOCAF5 = 0
 
-        wait 5 ms                              'debounce by waiting and seeing if still held down
-        if ( SWITCH = SWITCH_DOWN ) then
+        'debounce by waiting and seeing if still held down
+        Wait 5 ms
+        If ( SWITCH = SWITCH_DOWN ) Then
             'Read the ADC
-            adc_value = readad ( AN4 )
+            adc_value = ReadAD ( AN4 )
             'Write the value to register Zero in the EEPROM
             EPWrite ( 0, adc_value )
-        end if
-        IOCAN5 = 1                              'ReEnable the InterruptHandler routine
+        End If
+        'ReEnable the InterruptHandler routine
+        IOCAN5 = 1
 
-    end if
+    End If
 
-end sub
+End Sub

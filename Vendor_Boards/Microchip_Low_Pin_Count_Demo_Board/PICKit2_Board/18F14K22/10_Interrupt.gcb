@@ -28,88 +28,94 @@
 ''''''*****************************************************************
 '''
 
- #chip 18F14K22,1
- #option explicit
- #config MCLRE_OFF
+#CHIP 18F14K22,1
+#OPTION Explicit
+#CONFIG MCLRE_OFF
 
-  #define DOWN                0
-  #define UP                  1
+#DEFINE DOWN                0
+#DEFINE UP                  1
 
-  #define SWITCH              PORTA.3
+#DEFINE SWITCH              PORTA.3
 
-  #define LED_RIGHT           1
-  #define LED_LEFT            0
+#DEFINE LED_RIGHT           1
+#DEFINE LED_LEFT            0
 
-  #define PULL_UPS                                  'if this is uncommented, the trace under JP5 can be cut
-                                                    'with no affect on the output
+'if this is uncommented, the trace under JP5 can be cut
+#DEFINE PULL_UPS
+'with no affect on the output
 
-  dir portc out
-  portc = 0
-  portc.3 = 1
-  'start with LEDs rotating from right to left
-  _direction = LED_RIGHT
+Dir portc Out
+portc = 0
+portc.3 = 1
+'start with LEDs rotating from right to left
+_direction = LED_RIGHT
 
-  'setup switch (SW1)
-  dir switch in
+'setup switch (SW1)
+Dir switch In
 
-  Dim _DIRECTION as Byte
+Dim _DIRECTION As Byte
 
 
-  #ifdef PULL_UPS
+#IFDEF PULL_UPS
     'enable the weak pull-up for the switch
     WPUA2 = 1
-  #endif
+#ENDIF
 
-  'Set up timer to overflow then call the subroutine to reset the timer for us
-  TMR0IE = 1
-  InitTimer0 Osc, PS0_256
-  On Interrupt Timer0Overflow Call InterruptHandler
+'Set up timer to overflow then call the subroutine to reset the timer for us
+TMR0IE = 1
+InitTimer0 Osc, PS0_256
+On Interrupt Timer0Overflow Call InterruptHandler
 
-  'Set up the button event and call the subroutine to handler the button press
-  IOCA3 = 1
-  On Interrupt PORTChange  Call InterruptHandler
-
-
-  do
-
-  loop
+'Set up the button event and call the subroutine to handler the button press
+IOCA3 = 1
+On Interrupt PORTChange  Call InterruptHandler
 
 
+Do
 
-sub InterruptHandler
+Loop
 
-    if  RABIF = 1 then                         ' SW1 was just pressed
-        RABIF = 0                              ' must clear the flag in software
-        wait 5 ms                              ' debounce by waiting and seeing if still held down
-        if ( SWITCH = DOWN ) then
-            _direction = 1 XOR _direction     ' change directions
-        end if
-    end if
 
-    if T0IF = 1 then                           ' Timer has overflowed
+
+Sub InterruptHandler
+
+    If  RABIF = 1 Then
+        ' SW1 was just pressed
+        ' must clear the flag in software
+        RABIF = 0
+        ' debounce by waiting and seeing if still held down
+        Wait 5 ms
+        If ( SWITCH = DOWN ) Then
+            ' change directions
+            _direction = 1 XOR _direction
+        End If
+    End If
+
+    If T0IF = 1 Then
+        ' Timer has overflowed
         T0IF = 0
-        if  _direction.0 = LED_RIGHT  then
+        If  _direction.0 = LED_RIGHT  Then
             'shift to the right by 1
-            Set C off
-            Rotate portc right
+            Set C Off
+            Rotate portc Right
 
             ' when the last LED is lit, restart the pattern
-            if C = 1 then
-               portc.3 = 1
-            end if
+            If C = 1 Then
+                portc.3 = 1
+            End If
 
-        else
+        Else
             'shift to the left by 1
-            Set C off
-            Rotate portc left
+            Set C Off
+            Rotate portc Left
 
             'when the last LED is lit, restart the pattern
-            if  portC.4 = 1 then
-                  portC.0 = 1
-                  portC.4 = 0
-            end if
-        end if
-    end if
+            If  portC.4 = 1 Then
+                portC.0 = 1
+                portC.4 = 0
+            End If
+        End If
+    End If
 
 
-end sub
+End Sub

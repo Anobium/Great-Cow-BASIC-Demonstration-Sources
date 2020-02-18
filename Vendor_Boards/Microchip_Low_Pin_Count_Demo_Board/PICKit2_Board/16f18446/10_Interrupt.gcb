@@ -7,90 +7,94 @@
 '''@date    03/05/2018
 '''********************************************************************
 
-  #Chip 16F18446
- #config MCLRE_OFF
+#CHIP 16F18446
+#CONFIG MCLRE_OFF
 
-  #option explicit
+#OPTION Explicit
 
-  #define DOWN                0
-  #define UP                  1
+#DEFINE DOWN                0
+#DEFINE UP                  1
 
-  #define SWITCH              PORTA.3
+#DEFINE SWITCH              PORTA.3
 
-  #define LED_RIGHT           1
-  #define LED_LEFT            0
+#DEFINE LED_RIGHT           1
+#DEFINE LED_LEFT            0
 
-  dir portc out
-  portc = 0
-  portc.3 = 1
-  'start with LEDs rotating from right to left
-  _direction = LED_RIGHT
+Dir portc Out
+portc = 0
+portc.3 = 1
+'start with LEDs rotating from right to left
+_direction = LED_RIGHT
 
-  'setup switch (SW1)
-  dir switch in
+'setup switch (SW1)
+Dir switch In
 
-  Dim _DIRECTION as Byte
+Dim _DIRECTION As Byte
 
 ' Initialise the timer.
 ' Firstly tell the compiler to use a 16bit timer for this demonstration
-  #define TMR0_16BIT
-  TMR0IE = 1
-  InitTimer0 Osc, PRE0_256 + TMR0_HFINTOSC ,  POST0_2
+#DEFINE TMR0_16BIT
+TMR0IE = 1
+InitTimer0 Osc, PRE0_256 + TMR0_HFINTOSC ,  POST0_2
 
-  ' setup Timer Interrupt
-  On Interrupt Timer0Overflow Call RotateLEDsNow
+' setup Timer Interrupt
+On Interrupt Timer0Overflow Call RotateLEDsNow
 
-  ' Start the clock
-  Settimer ( 0 , 0x0bdc  )
-  StartTimer 0
+' Start the clock
+SetTimer ( 0 , 0x0bdc  )
+StartTimer 0
 
-  'setup Push Button Interrupt
-  IOCAN3 = 1
-  On Interrupt PORTChange  Call DirChange
+'setup Push Button Interrupt
+IOCAN3 = 1
+On Interrupt PORTChange  Call DirChange
 
-  do
+Do
     ' Empty Loop - All the action happens in the Interrupts
-  loop
+Loop
 
 End
 
-sub DirChange
+Sub DirChange
 
- if IOCAF3 = 1 then
+    If IOCAF3 = 1 Then
 
-     IOCIE  = 0  ' Disable Port Change Interruts to Prevent renter of the same event
-     IOCAF3 = 0  ' Ackowlage the Interrupt by Clearing this Flag
-     _direction = !_direction ; Reverse direction
-     IOCIE = 1  ' Reenable Port change interrupts
-   end if
+        ' Disable Port Change Interruts to Prevent renter of the same event
+        IOCIE  = 0
+        ' Ackowlage the Interrupt by Clearing this Flag
+        IOCAF3 = 0
+        ' Reverse direction
+        _direction = !_direction
+        ' Reenable Port change interrupts
+        IOCIE = 1
+    End If
 
-end sub
+End Sub
 
-sub RotateLEDsNow
+Sub RotateLEDsNow
 
-  TMR0IF = 0
-  if  _direction.0 = LED_RIGHT  then
-      'shift to the right by 1
-      Set C off
-      Rotate portc right
+    TMR0IF = 0
+    If  _direction.0 = LED_RIGHT  Then
+        'shift to the right by 1
+        Set C Off
+        Rotate portc Right
 
-      ' when the last LED is lit, restart the pattern
-      if C = 1 then
-         portc.3 = 1
-      end if
+        ' when the last LED is lit, restart the pattern
+        If C = 1 Then
+            portc.3 = 1
+        End If
 
-  else
-      'shift to the left by 1
-      Set C off
-      Rotate portc left
+    Else
+        'shift to the left by 1
+        Set C Off
+        Rotate portc Left
 
-      'when the last LED is lit, restart the pattern
-      if  portC.4 = 1 then
+        'when the last LED is lit, restart the pattern
+        If  portC.4 = 1 Then
             portC.0 = 1
             portC.4 = 0
-      end if
-  end if
+        End If
+    End If
 
-  Settimer ( 0 , 0x0bdc  )
+    SetTimer ( 0 , 0x0bdc  )
 
-end sub
+End Sub

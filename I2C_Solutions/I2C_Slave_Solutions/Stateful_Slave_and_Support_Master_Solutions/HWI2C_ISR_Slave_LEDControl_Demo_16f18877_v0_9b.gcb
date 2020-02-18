@@ -33,136 +33,147 @@
 '''@date    30.12.2016
 '''********************************************************************************
 
-; ---'''Configuration
+' ---'''Configuration
 
-   'Chip Settings.
-  #chip 16f18877,32
-  #option explicit
-   
-  'Set the PPS of the I2C and the RS232 ports.
-  #startup InitPPS, 85
-  Sub InitPPS
-        RXPPS = 0x17               'RC7->EUSART:RX
-        SSP1CLKPPS = 0x13          'RC3->MSSP1:SCL1
-        RC3PPS = 0x14              'RC3->MSSP1:SCL1
-        RC4PPS = 0x15              'RC4->MSSP1:SDA1
-        RC6PPS = 0x10              'RC6->EUSART:TX
-        SSP1DATPPS = 0x14          'RC4->MSSP1:SDA1
-   End Sub
+'Chip Settings.
+#CHIP 16f18877,32
+#OPTION Explicit
 
-
-   #include <hwi2c_messageinterface.h>  'defines a set of callbacks - you do not need to define hi2cslave_state_1-5
-   #define HI2CSlaveEnableStartStopInterrupts
-   'Buffer size
-   #define HI2CBUFFERSIZE 16
-
-   'Required I2C settings - CHANGE PORTS if required
-    #define hi2c_BAUD_RATE 400
-    #define hi2c_DATA PORTc.4
-    #define hi2c_CLOCK PORTc.3
-    'Initialise I2C Master
-    'I2C pins need to be input for SSP module
-    Dir hi2c_DATA in
-    Dir hi2c_CLOCK in
-
- ' THIS CONFIG OF THE SERIAL PORT WORKS WITH max232 THEN TO PC
- ' USART settings
-    #define USART_BAUD_RATE 19200
-    #define USART_TX_BLOCKING
-
-; ---'''Define Hardware settings
-
-    #define LED0  porta.1
-    #define LED1  porta.2
-    #define LED2  porta.3
-
-    dir LED0 out                  ;0, 1 and 2 are outputs (LEDs)
-    dir LED1 out                  ;0, 1 and 2 are outputs (LEDs)
-    dir LED2 out                  ;0, 1 and 2 are outputs (LEDs
-
-     'Set the appropiate ADC port to be read
-     dir portb.4 in
-
-; ---'''Variables
-    dim HI2CForLoop, ADCValue as byte
-
-; ---'''Main body of program commences here.
-
-    Repeat 20
-
-        LED0 = !LED0
-        LED1 = !LED1
-        LED2 = !LED2
-        wait 100 ms
-
-    end Repeat
-
-    'Now set up the I2C slave library - four commands needed
-    HI2CSetAddress 0x40
-    HI2CMode Slave
-    HI2CSlave_ISR_Init
-    On Interrupt  SSP1Ready call HI2CSlave_ISR_Handler
-    'end of I2C slave library setup
+'Set the PPS of the I2C and the RS232 ports.
+#STARTUP InitPPS, 85
+Sub InitPPS
+    'RC7->EUSART:RX
+    RXPPS = 0x17
+    'RC3->MSSP1:SCL1
+    SSP1CLKPPS = 0x13
+    'RC3->MSSP1:SCL1
+    RC3PPS = 0x14
+    'RC4->MSSP1:SDA1
+    RC4PPS = 0x15
+    'RC6->EUSART:TX
+    RC6PPS = 0x10
+    'RC4->MSSP1:SDA1
+    SSP1DATPPS = 0x14
+End Sub
 
 
-    do Forever
-      'Do stuff
-    Loop
+'defines a set of callbacks - you do not need to define hi2cslave_state_1-5
+#INCLUDE <hwi2c_messageinterface.h>
+#DEFINE HI2CSlaveEnableStartStopInterrupts
+'Buffer size
+#DEFINE HI2CBUFFERSIZE 16
 
-    sub HI2C_Process_In_Message ( in HI2CMESSAGESIZE )
+'Required I2C settings - CHANGE PORTS if required
+#DEFINE hi2c_BAUD_RATE 400
+#DEFINE hi2c_DATA PORTc.4
+#DEFINE hi2c_CLOCK PORTc.3
+'Initialise I2C Master
+'I2C pins need to be input for SSP module
+Dir hi2c_DATA In
+Dir hi2c_CLOCK In
+
+' THIS CONFIG OF THE SERIAL PORT WORKS WITH max232 THEN TO PC
+' USART settings
+#DEFINE USART_BAUD_RATE 19200
+#DEFINE USART_TX_BLOCKING
+
+' ---'''Define Hardware settings
+
+#DEFINE LED0  porta.1
+#DEFINE LED1  porta.2
+#DEFINE LED2  porta.3
+
+'0, 1 and 2 are outputs (LEDs)
+Dir LED0 Out
+'0, 1 and 2 are outputs (LEDs)
+Dir LED1 Out
+'0, 1 and 2 are outputs (LEDs
+Dir LED2 Out
+
+'Set the appropiate ADC port to be read
+Dir portb.4 In
+
+' ---'''Variables
+Dim HI2CForLoop, ADCValue As Byte
+
+' ---'''Main body of program commences here.
+
+Repeat 20
+
+    LED0 = !LED0
+    LED1 = !LED1
+    LED2 = !LED2
+    Wait 100 ms
+
+End Repeat
+
+'Now set up the I2C slave library - four commands needed
+HI2CSetAddress 0x40
+HI2CMode Slave
+HI2CSlave_ISR_Init
+On Interrupt  SSP1Ready Call HI2CSlave_ISR_Handler
+'end of I2C slave library setup
+
+
+Do Forever
+    'Do stuff
+Loop
+
+Sub HI2C_Process_In_Message ( In HI2CMESSAGESIZE )
 
     'We have incoming data!!
-     if HI2CBUFFER(0) = 0x23 then
-       Select CASE HI2CBUFFER(1)
+    If HI2CBUFFER(0) = 0x23 Then
+        Select Case HI2CBUFFER(1)
 
-             Case 0x00
-                LED0 = 0
-                LED1 = 0
-                LED2 = 0
+        Case 0x00
+            LED0 = 0
+            LED1 = 0
+            LED2 = 0
 
-             Case 0x01
-                LED0 = 1
-                LED1 = 0
-                LED2 = 0
+        Case 0x01
+            LED0 = 1
+            LED1 = 0
+            LED2 = 0
 
-             Case 0x02
-                LED0 = 0
-                LED1 = 1
-                LED2 = 0
+        Case 0x02
+            LED0 = 0
+            LED1 = 1
+            LED2 = 0
 
-             Case 0x03
-                LED0 = 1
-                LED1 = 1
-                LED2 = 0
-             Case Else
-                porta = HI2CBUFFER(1) * 2
+        Case 0x03
+            LED0 = 1
+            LED1 = 1
+            LED2 = 0
+        Case Else
+            porta = HI2CBUFFER(1) * 2
 
-        end Select
-     end if
-
-
-     if HI2CBUFFER(0) = 0x24 then
-       Select CASE HI2CBUFFER(1)
-
-             Case 0x09
-                ADCValue = ReadAD(ANB4)
-
-             Case Else
-                ADCValue = 0
-
-        end Select
-     end if
-
-    end sub
+        End Select
+    End If
 
 
-    sub HI2C_Process_Out_Message
+    If HI2CBUFFER(0) = 0x24 Then
+        Select Case HI2CBUFFER(1)
 
-      'WARNING - placing time driven calls here may cause i2c buffer overruns. Move calls to I2C_Process_In_Message.
-      'WARNING - changing the Interrupts, stop or starting the Interrupts may cause i2c buffer overruns. Do not do this.
+        Case 0x09
+            ADCValue = ReadAD(ANB4)
 
-      'Want to post process the data. Do it here.
-      HI2CBUFFER(0) = ADCValue  'Place read value into Output Buffer
+        Case Else
+            ADCValue = 0
 
-    end sub
+        End Select
+    End If
+
+End Sub
+
+
+Sub HI2C_Process_Out_Message
+
+    'WARNING - placing time driven calls here may cause i2c buffer overruns. Move calls to I2C_Process_In_Message.
+    'WARNING - changing the Interrupts, stop or starting the Interrupts may cause i2c buffer overruns. Do not do this.
+
+    'Want to post process the data. Do it here.
+    'Place read value into Output Buffer
+    HI2CBUFFER(0) = ADCValue
+
+End Sub
 

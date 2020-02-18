@@ -16,85 +16,86 @@
 '''  Date: 29.8.17
 '''
 ' ----- Configuration
-    'Chip Settings.
-    #chip 18f25k22, 16
-    #option Explicit
+'Chip Settings.
+#CHIP 18f25k22, 16
+#OPTION Explicit
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | ----------| O | I |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | ----------| O | I |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------------------| X |---------
-    ''-----------------------------------------
-    ''
-
-
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define Potentiometer   PORTC.5
-    #define SwitchIn        PORTB.0
-    #define LCDControl      PORTC.2
-
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     Potentiometer In   'this is the AN17 port
-    Dir     SwitchIn      In
-    Dir     LCDControl    Out
-
-    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
-    LCDControl = 1
-
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
-
-     dim lastKeyDown as Byte
-
-    'Debouncing a switch
-
-      Do forever
-                wait 10 ms
-
-                if  keyPressed( lastKeyDown ) = true then
-
-                    'push button pressed
-                    LEDD1 = !LEDD1
-
-                end if
-
-      loop
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------------------| X |---------
+''-----------------------------------------
+''
 
 
-  function  keyPressed ( in lastKeyDown )
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE Potentiometer   PORTC.5
+#DEFINE SwitchIn        PORTB.0
+#DEFINE LCDControl      PORTC.2
 
-      dim actKeyDown as byte
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+'this is the AN17 port
+Dir     Potentiometer In
+Dir     SwitchIn      In
+Dir     LCDControl    Out
 
-        if ( !SwitchIn ) then
+'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+LCDControl = 1
 
-            actKeyDown = true
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
 
-        else
+Dim lastKeyDown As Byte
 
-            actKeyDown = false
+'Debouncing a switch
 
-        end if
+Do Forever
+    Wait 10 ms
 
-        if (actKeyDown <> lastKeyDown) then
-            lastKeyDown = actKeyDown
-            keyPressed =  actKeyDown
-        else
-            keyPressed = false
-        end if
+    If  keyPressed( lastKeyDown ) = TRUE Then
+
+        'push button pressed
+        LEDD1 = !LEDD1
+
+    End If
+
+Loop
+
+
+Function  keyPressed ( In lastKeyDown )
+
+    Dim actKeyDown As Byte
+
+    If ( !SwitchIn ) Then
+
+        actKeyDown = TRUE
+
+    Else
+
+        actKeyDown = FALSE
+
+    End If
+
+    If (actKeyDown <> lastKeyDown) Then
+        lastKeyDown = actKeyDown
+        keyPressed =  actKeyDown
+    Else
+        keyPressed = FALSE
+    End If
 
 
 
-  end function
+End Function

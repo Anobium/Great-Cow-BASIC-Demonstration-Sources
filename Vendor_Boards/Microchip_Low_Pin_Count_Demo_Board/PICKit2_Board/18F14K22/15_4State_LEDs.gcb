@@ -1,4 +1,4 @@
- '''A program  for GCGB and GCB the demonsations
+'''A program  for GCGB and GCB the demonsations
 '''-------------------------------------------------------------
 '''This program produces a customisable 4-segment Bar-Graph
 '''on the LED's of a PICKit2 Low-pin-count demo pcb by taking
@@ -13,41 +13,41 @@
 '''@date       8/8/2019
 '''*************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
- #Chip 18F14K22, 1
+#CHIP 18F14K22, 1
 
-    Dir PORTA.0 In
-    #define LIGHT1 PORTC.0
-    #define LIGHT2 PORTC.1
-    #define LIGHT3 PORTC.2
-    #define LIGHT4 PORTC.3
+Dir PORTA.0 In
+#DEFINE LIGHT1 PORTC.0
+#DEFINE LIGHT2 PORTC.1
+#DEFINE LIGHT3 PORTC.2
+#DEFINE LIGHT4 PORTC.3
 
-    Do
+Do
 
-      If ReadAD(An0) > 20 Then
+    If ReadAD(An0) > 20 Then
         Set LIGHT1 On
-        Else
+    Else
         Set LIGHT1 Off
-        End If
+    End If
 
-      If ReadAD(An0) > 80 Then
-      Set LIGHT2 On
-      Else
-      Set LIGHT2 Off
-      End If
+    If ReadAD(An0) > 80 Then
+        Set LIGHT2 On
+    Else
+        Set LIGHT2 Off
+    End If
 
-      If ReadAD(An0) > 150 Then
-      Set LIGHT3 On
-      Else
-      Set LIGHT3 Off
-      End If
+    If ReadAD(An0) > 150 Then
+        Set LIGHT3 On
+    Else
+        Set LIGHT3 Off
+    End If
 
-      If ReadAD(An0) > 200 Then
-      Set LIGHT4 On
-      Else
-      Set LIGHT4 Off
-      End If
+    If ReadAD(An0) > 200 Then
+        Set LIGHT4 On
+    Else
+        Set LIGHT4 Off
+    End If
 
 
-    Loop
+Loop

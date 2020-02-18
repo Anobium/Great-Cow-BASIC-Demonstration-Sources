@@ -9,41 +9,42 @@
 '''@date    02.10.2016
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
-  #chip 16F886, 16
-  #option explicit
-
-
-; ----- Define Hardware settings
-  ; All port settings, like in and out, are handled within the Seven Segment driver.
-
-; ----- Constants
-  ; You need to specify the port settings
-  #define DISP_SEG_A PORTc.0
-  #define DISP_SEG_B PORTc.1
-  #define DISP_SEG_C PORTc.2
-  #define DISP_SEG_D PORTc.3
-  #define DISP_SEG_E PORTc.4
-  #define DISP_SEG_F PORTc.5
-  #define DISP_SEG_G PORTc.6
-
-  #define DISP_SEL_1 PORTA.0
+#CHIP 16F886, 16
+#OPTION Explicit
 
 
-; ----- Variables
-  Dim DISPMESSAGE as Byte
-  dim Message as string * 5                                 ; defines a string
-  Message = "Hello"
+' ----- Define Hardware settings
+' All port settings, like in and out, are handled within the Seven Segment driver.
 
-; ----- Main body of program commences her
+' ----- Constants
+' You need to specify the port settings
+#DEFINE DISP_SEG_A PORTc.0
+#DEFINE DISP_SEG_B PORTc.1
+#DEFINE DISP_SEG_C PORTc.2
+#DEFINE DISP_SEG_D PORTc.3
+#DEFINE DISP_SEG_E PORTc.4
+#DEFINE DISP_SEG_F PORTc.5
+#DEFINE DISP_SEG_G PORTc.6
 
-  Do Forever
+#DEFINE DISP_SEL_1 PORTA.0
 
-    for DispMessage = 1 to 5
+
+' ----- Variables
+Dim DISPMESSAGE As Byte
+' defines a string
+Dim Message As String * 5
+Message = "Hello"
+
+' ----- Main body of program commences her
+
+Do Forever
+
+    For DispMessage = 1 To 5
         DisplayChar 1, Message(DispMessage)
-        wait 25 10ms
-    next
+        Wait 25 10ms
+    Next
 
-  Loop
+Loop
 

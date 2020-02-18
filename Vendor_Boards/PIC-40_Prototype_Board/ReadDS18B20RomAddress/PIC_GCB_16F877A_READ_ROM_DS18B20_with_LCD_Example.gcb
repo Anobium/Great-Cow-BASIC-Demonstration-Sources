@@ -9,85 +9,95 @@
 
 
 'Chip Settings. Assumes the development board with with a 16F877A
-#chip 16F877A,20
-#option explicit
-#include <ds18b20.h>
+#CHIP 16F877A,20
+#OPTION Explicit
+#INCLUDE <ds18b20.h>
 
- 'Use LCD in 4 pin mode and define LCD pins
- #define LCD_IO 4
- #define LCD_RW PORTE.1
- #define LCD_RS PORTE.0
- #define LCD_Enable PORTE.2
- #define LCD_DB4 PORTD.4
- #define LCD_DB5 PORTD.5
- #define LCD_DB6 PORTD.6
- #define LCD_DB7 PORTD.7
+'Use LCD in 4 pin mode and define LCD pins
+#DEFINE LCD_IO 4
+#DEFINE LCD_RW PORTE.1
+#DEFINE LCD_RS PORTE.0
+#DEFINE LCD_Enable PORTE.2
+#DEFINE LCD_DB4 PORTD.4
+#DEFINE LCD_DB5 PORTD.5
+#DEFINE LCD_DB6 PORTD.6
+#DEFINE LCD_DB7 PORTD.7
 
-  ' DS18B20 port settings - this is required
-  #define DQ PortC.3
-
-
- ' READ ROM [33h]
- ' This command can only be used when there is one slave on the bus.
- ' It allows the bus master to read the slave’s 64-bit ROM code without using the Search ROM procedure.
- ' If this command is used when there is more than one slave present on the bus, a data collision will occur when all the slaves attempt to respond at the same time.
-
- ' 64-BIT LASERED ROM CODE
- ' Each DS18B20 contains a unique 64–bit code (see Figure 6) stored in ROM.
- ' The least significant 8 bits of the ROM code contain the DS18B20’s 1-Wire family code: 28h.
- ' The next 48 bits contain a unique serial number.
- ' The most significant 8 bits contain a cyclic redundancy check (CRC) byte that is calculated from the first 56 bits of the ROM code. A detailed explanation of the CRC bits is provided in the CRC Generation section. The 64-bit ROM code and associated ROM function control logic allow the DS18B20 to operate as a 1-Wire device using the protocol detailed in the 1-Wire Bus System section.
- ' 64-Bit Lasered ROM Code
- '
- ' 8-BIT CRC      48-BIT SERIAL NUMBER          8-BIT FAMILY CODE (28h)
- ' MSB  LSB       MSB              LSB          MSB                 LSB
-
-  Dim YPOS, XPOS, EIGHTBYTES, CLOCKS as Byte
+' DS18B20 port settings - this is required
+#DEFINE DQ PortC.3
 
 
-  cls
-  print "Great Cow Basic "
-  locate 1 , 0
-  print "DS18B20   @2014 "
-  wait 3 s
-  cls
-  print "SHOW 64BIT LASERED"
-  locate 1 , 0
-  print "ROM CODE ON LCD"
-  wait 3 s
-  cls
-  ypos = 0        ' Ypos on the LCD
+' READ ROM [33h]
+' This command can only be used when there is one slave on the bus.
+' It allows the bus master to read the slave’s 64-bit ROM code without using the Search ROM procedure.
+' If this command is used when there is more than one slave present on the bus, a data collision will occur when all the slaves attempt to respond at the same time.
 
-  repeat 2        ' show 64-BIT LASERED ROM CODE on both rows of the LCD
-     wait 100 ms
-     MasterRST      ' Reset ds18b20
-     PPulse         ' Request a presence pulse
-     wait 100 us
-     OWout ReadRom  ' Send 64-BIT LASERED ROM CODE read code
-     wait 100 us
-     OWinRom        ' Process and display the 64-BIT LASERED ROM CODE
-     xpos = 14
-     ypos = 1
-   end repeat
-end
+' 64-BIT LASERED ROM CODE
+' Each DS18B20 contains a unique 64–bit code (see Figure 6) stored in ROM.
+' The least significant 8 bits of the ROM code contain the DS18B20’s 1-Wire family code: 28h.
+' The next 48 bits contain a unique serial number.
+' The most significant 8 bits contain a cyclic redundancy check (CRC) byte that is calculated from the first 56 bits of the ROM code. A detailed explanation of the CRC bits is provided in the CRC Generation section. The 64-bit ROM code and associated ROM function control logic allow the DS18B20 to operate as a 1-Wire device using the protocol detailed in the 1-Wire Bus System section.
+' 64-Bit Lasered ROM Code
+'
+' 8-BIT CRC      48-BIT SERIAL NUMBER          8-BIT FAMILY CODE (28h)
+' MSB  LSB       MSB              LSB          MSB                 LSB
+
+Dim YPOS, XPOS, EIGHTBYTES, CLOCKS As Byte
+
+
+CLS
+Print "Great Cow Basic "
+Locate 1 , 0
+Print "DS18B20   @2014 "
+Wait 3 s
+CLS
+Print "SHOW 64BIT LASERED"
+Locate 1 , 0
+Print "ROM CODE ON LCD"
+Wait 3 s
+CLS
+' Ypos on the LCD
+ypos = 0
+
+' show 64-BIT LASERED ROM CODE on both rows of the LCD
+Repeat 2
+    Wait 100 ms
+    ' Reset ds18b20
+    MasterRST
+    ' Request a presence pulse
+    PPulse
+    Wait 100 us
+    ' Send 64-BIT LASERED ROM CODE read code
+    OWout ReadRom
+    Wait 100 us
+    ' Process and display the 64-BIT LASERED ROM CODE
+    OWinRom
+    xpos = 14
+    ypos = 1
+End Repeat
+End
 
 Sub OWinRom
- xpos = 14       ' XPos on the LCD
- For EightBytes = 1 to 8
-  For Clocks = 1 to 8
-   Rotate RxData Right 'The DS18s20 wants data LSB first
-   Dir DQ Out
-   Set DQ Off  'Read time slot
-   wait 4 us
-   Dir DQ In   'Release bus for one wire transmission
-   wait 7 us
-   If DQ On  Then Set RxData.7 1
-   If DQ Off Then Set RxData.7 0
-   wait 50 us
-  Next
-   locate ypos , xpos
-   Print hex(RxData)
-   xpos = xpos - 2
+    ' XPos on the LCD
+    xpos = 14
+    For EightBytes = 1 To 8
+        For Clocks = 1 To 8
+            'The DS18s20 wants data LSB first
+            Rotate RxData Right
+            Dir DQ Out
+            'Read time slot
+            Set DQ Off
+            Wait 4 us
+            'Release bus for one wire transmission
+            Dir DQ In
+            Wait 7 us
+            If DQ On  Then Set RxData.7 1
+            If DQ Off Then Set RxData.7 0
+            Wait 50 us
+        Next
+        Locate ypos , xpos
+        Print Hex(RxData)
+        xpos = xpos - 2
 
- Next
- end sub
+    Next
+End Sub

@@ -25,105 +25,105 @@
 '''
 
 
-  #CHIP 16f88, 4
-  #option explicit
+#CHIP 16f88, 4
+#OPTION Explicit
 
 
-  #define LED_RIGHT           TRUE
-  #define LED_LEFT            FAlSE
+#DEFINE LED_RIGHT           TRUE
+#DEFINE LED_LEFT            FALSE
 
-  #define SWITCH1      PORTA.2
-  #define SWITCH2      PORTA.3
+#DEFINE SWITCH1      PORTA.2
+#DEFINE SWITCH2      PORTA.3
 
-  #define SoundOut PORTA.7
+#DEFINE SoundOut PORTA.7
 
-  Dim DIRECTION as Byte
-  dim mydelay as byte
+Dim DIRECTION As Byte
+Dim mydelay As Byte
 
-    'start from the right to left
-    direction = LED_RIGHT
+'start from the right to left
+direction = LED_RIGHT
 
-    dir portb out
+Dir portb Out
 
-    'Potentiamtor is connected to RA4...set as input
-    dir porta.4 in
+'Potentiamtor is connected to RA4...set as input
+Dir porta.4 In
 
-    'setup switches
-    dir SWITCH1 in
-    dir SWITCH2 in
+'setup switches
+Dir SWITCH1 In
+Dir SWITCH2 In
 
-    dir SoundOut Out
+Dir SoundOut Out
 
 
-    Repeat 4
+Repeat 4
 
-      portb = 255
-      SoundOut = 1
-      wait 100 ms
-      SoundOut = 0
-      portb = 0
-      wait 100 ms
+    portb = 255
+    SoundOut = 1
+    Wait 100 ms
+    SoundOut = 0
+    portb = 0
+    Wait 100 ms
 
-    end Repeat
+End Repeat
 
-    'Initialise the port
-    portb.7 = 1
-    do
+'Initialise the port
+portb.7 = 1
+Do
 
-      if  direction = LED_RIGHT  then
-       mydelay = ReadAD10 ( AN0 )  / 64
-       ' decrement the 8 MSbs of the ADC and delay 20ms for each
-        do while ( mydelay <> 0 )
-              mydelay--
-              wait 20 ms
-        loop
+    If  direction = LED_RIGHT  Then
+        mydelay = ReadAD10 ( AN0 )  / 64
+        ' decrement the 8 MSbs of the ADC and delay 20ms for each
+        Do While ( mydelay <> 0 )
+            mydelay--
+            Wait 20 ms
+        Loop
 
-        if SWITCH1 = On then
+        If SWITCH1 = On Then
             ' toggle the direction
             direction = !direction
-            set SoundOut on
-            wait 100 ms
-            set SoundOut off
-        end if
-       Else
+            Set SoundOut On
+            Wait 100 ms
+            Set SoundOut Off
+        End If
+    Else
         mydelay = ReadAD10 ( AN1 )  / 64
-       ' decrement the 8 MSbs of the ADC and delay 20ms for each
-        do while ( mydelay <> 0 )
-              mydelay--
-              wait 20 ms
-        loop
+        ' decrement the 8 MSbs of the ADC and delay 20ms for each
+        Do While ( mydelay <> 0 )
+            mydelay--
+            Wait 20 ms
+        Loop
 
-        if SWITCH2 = On then
+        If SWITCH2 = On Then
             ' toggle the direction
             direction = !direction
-            set SoundOut on
-            wait 100 ms
-            set SoundOut off
-        end if
+            Set SoundOut On
+            Wait 100 ms
+            Set SoundOut Off
+        End If
 
 
-       end if
-        if  direction = LED_RIGHT  then
-            'shift to the right by 1
-            Set C off
-            Rotate portb right
+    End If
+    If  direction = LED_RIGHT  Then
+        'shift to the right by 1
+        Set C Off
+        Rotate portb Right
 
-            ' when the last LED is lit, restart the pattern
-            if C = 1 then
-               portb.7 = 1
-            end if
+        ' when the last LED is lit, restart the pattern
+        If C = 1 Then
+            portb.7 = 1
+        End If
 
-        else
-            'shift to the left by 1
-            Set C off
-            Rotate portb left
+    Else
+        'shift to the left by 1
+        Set C Off
+        Rotate portb Left
 
-            'when the last LED is lit, restart the pattern
-            if C = 1 then
-                  portb.0 = 1
-            end if
-        end if
+        'when the last LED is lit, restart the pattern
+        If C = 1 Then
+            portb.0 = 1
+        End If
+    End If
 
-    loop
+Loop
 
 

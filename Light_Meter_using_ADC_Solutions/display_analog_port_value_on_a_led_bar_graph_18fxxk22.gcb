@@ -11,54 +11,54 @@
 '''@date    31.01.2015 ***18F13K22 version 10.8.2019***
 '''********************************************************************************
 
-; ----- Configuration
- #chip 18F13K22,1
+' ----- Configuration
+#CHIP 18F13K22,1
 
-; ----- Define Hardware settings
-  Dir PORTC Out
-
-
-; ----- Constants
-  ' No Constants specified in this example.
+' ----- Define Hardware settings
+Dir PORTC Out
 
 
-; ----- Variables
-  ' No Variables specified in this example. All byte variables are defined upon use.
+' ----- Constants
+' No Constants specified in this example.
 
 
-; ----- Main body of program commences here.
+' ----- Variables
+' No Variables specified in this example. All byte variables are defined upon use.
 
-    Start:
 
-    'Light all LEDs if pot turned all way to right
-    If ReadAD(AN0) > 200 Then
-              PORTC = b'00001111'
-              Goto Start
-    end if
+' ----- Main body of program commences here.
 
-    'Three LEDs lit
-    If ReadAD(AN0) > 150 Then
-              PORTC = b'00000111'
-              Goto Start
-    end if
+Start:
 
-    'Two LEDs lit
-    If ReadAD(AN0) > 80 Then
-              PORTC = b'00000011'
-              Goto Start
-    end if
-
-    'One LED lit
-    If ReadAD(AN0) > 10 Then
-              PORTC = b'00000001'
-              Goto Start
-    end if
-
-    'All LEDs off, Pot all way to left
-    If ReadAD(AN0) < 10 Then
-              PORTC = 0
-    end if
-
+'Light all LEDs if pot turned all way to right
+If ReadAD(AN0) > 200 Then
+    PORTC = b'00001111'
     Goto Start
+End If
 
-    end
+'Three LEDs lit
+If ReadAD(AN0) > 150 Then
+    PORTC = b'00000111'
+    Goto Start
+End If
+
+'Two LEDs lit
+If ReadAD(AN0) > 80 Then
+    PORTC = b'00000011'
+    Goto Start
+End If
+
+'One LED lit
+If ReadAD(AN0) > 10 Then
+    PORTC = b'00000001'
+    Goto Start
+End If
+
+'All LEDs off, Pot all way to left
+If ReadAD(AN0) < 10 Then
+    PORTC = 0
+End If
+
+Goto Start
+
+End

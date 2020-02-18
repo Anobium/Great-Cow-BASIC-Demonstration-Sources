@@ -11,43 +11,43 @@
 '''@date    23.08.2018
 '''*************************************************************************
 
-    'Chip Settings
-    #chip 16f690, 8
+'Chip Settings
+#CHIP 16f690, 8
 
-    'Set the direction of the CCP1/PWM port
-    DIR portc.5 Out
+'Set the direction of the CCP1/PWM port
+Dir portc.5 Out
 
-    HPWM 1, 38, 127
+HPWM 1, 38, 127
 
-    do
+Do
 
-        'use for-loop to show the duty changing a 8bit value
-        dim dutyvalue as byte
-        for dutyvalue = 0 to 255
-            HPWM 1, 38, dutyvalue
-            wait 10 ms
-        next
+    'use for-loop to show the duty changing a 8bit value
+    Dim dutyvalue As Byte
+    For dutyvalue = 0 To 255
+        HPWM 1, 38, dutyvalue
+        Wait 10 ms
+    Next
 
-    loop
+Loop
 
 ''' GCB Optimisation file
 
 'Optmise PWM.h
-    #define USE_HPWMCCP1 TRUE
-    #define USE_HPWMCCP2 FALSE
-    #define USE_HPWMCCP3 FALSE
-    #define USE_HPWMCCP4 FALSE
-    #define USE_HPWMCCP5 FALSE
+#DEFINE USE_HPWMCCP1 TRUE
+#DEFINE USE_HPWMCCP2 FALSE
+#DEFINE USE_HPWMCCP3 FALSE
+#DEFINE USE_HPWMCCP4 FALSE
+#DEFINE USE_HPWMCCP5 FALSE
 
-    #define USE_HPWM1 FALSE
-    #define USE_HPWM2 FALSE
-    #define USE_HPWM3 FALSE
-    #define USE_HPWM4 FALSE
-    #define USE_HPWM5 FALSE
-    #define USE_HPWM6 FALSE
-    #define USE_HPWM7 FALSE
-    #define USE_HPWM8 FALSE
+#DEFINE USE_HPWM1 FALSE
+#DEFINE USE_HPWM2 FALSE
+#DEFINE USE_HPWM3 FALSE
+#DEFINE USE_HPWM4 FALSE
+#DEFINE USE_HPWM5 FALSE
+#DEFINE USE_HPWM6 FALSE
+#DEFINE USE_HPWM7 FALSE
+#DEFINE USE_HPWM8 FALSE
 
-    #define USE_HPWM_TIMER2 FALSE
-    #define USE_HPWM_TIMER4 FALSE
-    #define USE_HPWM_TIMER6 FALSE
+#DEFINE USE_HPWM_TIMER2 FALSE
+#DEFINE USE_HPWM_TIMER4 FALSE
+#DEFINE USE_HPWM_TIMER6 FALSE

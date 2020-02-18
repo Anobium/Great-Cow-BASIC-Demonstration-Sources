@@ -1,56 +1,57 @@
-    'Stock demonstration show display 1 working
+'Stock demonstration show display 1 working
 
-    #chip p18f2550,16
+#CHIP p18f2550,16
 
-    #include <glcd.h>
-    #DEFINE GLCD_TYPE GLCD_TYPE_PCD8544
+#INCLUDE <glcd.h>
+#DEFINE GLCD_TYPE GLCD_TYPE_PCD8544
 
 
-    ' Pin mappings for SPI for Nokia 3310 Device
-    #define GLCD_DO portb.5
-    #define GLCD_SCK portb.4
-    #define GLCD_DC portb.6
-    #define GLCD_CS portb.3
-    #define GLCD_RESET portb.7
+' Pin mappings for SPI for Nokia 3310 Device
+#DEFINE GLCD_DO portb.5
+#DEFINE GLCD_SCK portb.4
+#DEFINE GLCD_DC portb.6
+#DEFINE GLCD_CS portb.3
+#DEFINE GLCD_RESET portb.7
 
-    'Set other connected ports low
+'Set other connected ports low
 
-    dir portb.0 out
-    dir portb.2 out
-    portb.0 = off
-    portb.2 = on    'this is will disable the second display
+Dir portb.0 Out
+Dir portb.2 Out
+portb.0 = Off
+'this is will disable the second display
+portb.2 = On
 
-    do Forever
+Do Forever
 
-        GLCDCLS
-        box 0,0,83,47
-        wait 1 s
-        GlcdPrint( 5,5, "Display-1" )
-        GLCDLocateString ( 8, 3)
-        GLCDPrintStringLn ("Great Cow")
-        GLCDPrintStringLn ("   BASIC")
+    GLCDCLS
+    Box 0,0,83,47
+    Wait 1 s
+    GLCDPrint( 5,5, "Display-1" )
+    GLCDLocateString ( 8, 3)
+    GLCDPrintStringLn ("Great Cow")
+    GLCDPrintStringLn ("   BASIC")
 
-        filledCircle ( 42, 24, 20 )
-        wait 1 s
-        GLCDCLS
-        filledCircle ( 42, 24, 16 )
-        wait 500 ms
-        GLCDCLS
-        filledCircle ( 42, 24, 12 )
-        wait 250 ms
-        GLCDCLS
-        filledCircle ( 42, 24, 8 )
-        wait 125 ms
-        GLCDCLS
-        filledCircle ( 42, 24, 4 )
-        wait 50 ms
-        GLCDCLS
+    FilledCircle ( 42, 24, 20 )
+    Wait 1 s
+    GLCDCLS
+    FilledCircle ( 42, 24, 16 )
+    Wait 500 ms
+    GLCDCLS
+    FilledCircle ( 42, 24, 12 )
+    Wait 250 ms
+    GLCDCLS
+    FilledCircle ( 42, 24, 8 )
+    Wait 125 ms
+    GLCDCLS
+    FilledCircle ( 42, 24, 4 )
+    Wait 50 ms
+    GLCDCLS
 
-        Triangle 0, 0, 80,0, 8,40
-        wait 1 s
+    Triangle 0, 0, 80,0, 8,40
+    Wait 1 s
 
-        FilledTriangle 5, 5, 62, 5, 12, 33
-        wait 2 s
+    FilledTriangle 5, 5, 62, 5, 12, 33
+    Wait 2 s
 
-    loop
-    end
+Loop
+End

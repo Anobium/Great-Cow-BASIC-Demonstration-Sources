@@ -20,38 +20,39 @@
 
 
 ' ----- Configuration
-    'Chip Settings.
-    #chip 16F18326,32
-    #option explicit
+'Chip Settings.
+#CHIP 16F18326,32
+#OPTION Explicit
 
-    '' -------------------LATC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
-    ''-----------------------------------------
-    ''
+'' -------------------LATC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D2 |-
+''-----------------------------------------
+''
 
-    Dim CURRENTSTATE as Byte
-
-
-    dir portc out
-    '    Set the first LED on
-    portc = 0b0001000
+Dim CURRENTSTATE As Byte
 
 
-    do
-            'get current status of the four bits
-            currentstate = portc & 0x0F
+Dir portc Out
+'    Set the first LED on
+portc = 0b0001000
 
-            'Just rotate the bottom four bits
-            'Set the carry flag
-            C = 0
-            Rotate  currentstate right
-            'Test the Carry flag
-            if C = 1 then currentstate.3 = 1  'set the BIT on
 
-            'Set the four bits
-            portc = ( portc & 0xF0 ) OR currentstate
+Do
+    'get current status of the four bits
+    currentstate = portc & 0x0F
 
-            wait 1 s
+    'Just rotate the bottom four bits
+    'Set the carry flag
+    C = 0
+    Rotate  currentstate Right
+    'Test the Carry flag
+    If C = 1 Then currentstate.3 = 1
+    'set the BIT on
 
-    loop
+    'Set the four bits
+    portc = ( portc & 0xF0 ) OR currentstate
+
+    Wait 1 s
+
+Loop

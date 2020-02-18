@@ -10,95 +10,103 @@
 '''@version 1.00
 '''@date    27.01.2017
 '''********************************************************************************
-; ----- Configuration
-  #chip 16f18855,32
-  #config MCLRE=on
-  #include <max7219_ledmatrix_driver.h>
-  #option Explicit
+' ----- Configuration
+#CHIP 16f18855,32
+#CONFIG MCLRE=On
+#INCLUDE <max7219_ledmatrix_driver.h>
+#OPTION Explicit
 
-  #startup InitPPS, 85
-  Sub InitPPS
-    #ifdef MAX7219_LEDMatrix_HardwareSPI
-      UNLOCKPPS
-              SSP1DATPPS = 0x0C;   //RB4->MSSP1:SDI1;
-              RB5PPS = 0x15;   //RB5->MSSP1:SDO1;
-              RB3PPS = 0x14;   //RB3->MSSP1:SCK1;
-      LOCKPPS
-    #endif
-  End sub
-
-
-; ----- Constants
-  'Set SPI pins for the Max7219
-  #define Max7219_DI    portb.4
-  #define Max7219_DO    portb.5
-  #define Max7219_SCK   portb.3
-  #define Max7219_CS    portc.3
+#STARTUP InitPPS, 85
+Sub InitPPS
+    #IFDEF MAX7219_LEDMatrix_HardwareSPI
+        UNLOCKPPS
+        '   //RB4->MSSP1:SDI1;
+        SSP1DATPPS = 0x0C
+        '   //RB5->MSSP1:SDO1;
+        RB5PPS = 0x15
+        '   //RB3->MSSP1:SCK1;
+        RB3PPS = 0x14
+        LOCKPPS
+    #ENDIF
+End Sub
 
 
-  'Specifics for device configuration
-  #define MAX7219_X_Devices 4
-  #define MAX7219_LEDMatrix_HardwareSPI     ' remove and make a comment out if you want to use Software SPI for this device
+' ----- Constants
+'Set SPI pins for the Max7219
+#DEFINE Max7219_DI    portb.4
+#DEFINE Max7219_DO    portb.5
+#DEFINE Max7219_SCK   portb.3
+#DEFINE Max7219_CS    portc.3
 
-  'Choose one of the constants below to match the orientation of your LED Matrixes.
-  'All the LED Matrixes must have the same orientation.
-  #define Pset max7219_LEDMatrix_PSet_0
-  '#define Pset max7219_LEDMatrix_PSet_90
-  '#define Pset max7219_LEDMatrix_PSet_180
-  '#define Pset max7219_LEDMatrix_PSet_270
+
+'Specifics for device configuration
+#DEFINE MAX7219_X_Devices 4
+' remove and make a comment out if you want to use Software SPI for this device
+#DEFINE MAX7219_LEDMatrix_HardwareSPI
+
+'Choose one of the constants below to match the orientation of your LED Matrixes.
+'All the LED Matrixes must have the same orientation.
+#DEFINE Pset max7219_LEDMatrix_PSet_0
+'#define Pset max7219_LEDMatrix_PSet_90
+'#define Pset max7219_LEDMatrix_PSet_180
+'#define Pset max7219_LEDMatrix_PSet_270
 
 '; ----- Main body of program commences here.
 
-  Do
+Do
 
-      GLCDCLS
-      Max7219_LEDMatrix_ScrollMessage (  "GLCD Demonstration", 25 )
-      wait 1 s
-      GLCDCLS
-
-
-      Max7219_LEDMatrix_ScrollMessage (  "GLCD Set Pixels", 1 )
-      wait 1 s
-      GLCDCLS
-      Pset 0, 0, 1
-      Pset 0, 7, 1
-      Pset 1, 7, 1
-
-      Pset 1, 0, 1
-      Pset 1, 7, 1
-      Pset 31, 7, 1
-      Max7219_LEDMatrix_Update    'Display
-      wait 2 s
+    GLCDCLS
+    Max7219_LEDMatrix_ScrollMessage (  "GLCD Demonstration", 25 )
+    Wait 1 s
+    GLCDCLS
 
 
-      Max7219_LEDMatrix_ScrollMessage (  "GLCD Line & Box", 1 )
-      wait 1 s
-      GLCDCLS
-      line 0,0,31,7
-      box 0,0,31,7
-      line 0,7,31,0
-      Max7219_LEDMatrix_Update    'Display
-      wait 2 s
+    Max7219_LEDMatrix_ScrollMessage (  "GLCD Set Pixels", 1 )
+    Wait 1 s
+    GLCDCLS
+    Pset 0, 0, 1
+    Pset 0, 7, 1
+    Pset 1, 7, 1
 
-      Max7219_LEDMatrix_ScrollMessage (  "GLCD Circle", 1 )
-      wait 1 s
-      Repeat 4
-          GLCDCLS
-          Circle 4, 3, 3
-          Circle 12, 3, 3
-          Circle 20, 3, 3
-          Circle 28, 3, 3
-          Max7219_LEDMatrix_Update    'Display
-          wait 500 ms
+    Pset 1, 0, 1
+    Pset 1, 7, 1
+    Pset 31, 7, 1
+    'Display
+    Max7219_LEDMatrix_Update
+    Wait 2 s
 
 
-          GLCDCLS
-          FilledCircle 4, 3, 2
-          FilledCircle  12, 3, 2
-          FilledCircle  20, 3, 2
-          FilledCircle  28, 3, 2
-          Max7219_LEDMatrix_Update    'Display
-          wait 500 ms
-      end Repeat
+    Max7219_LEDMatrix_ScrollMessage (  "GLCD Line & Box", 1 )
+    Wait 1 s
+    GLCDCLS
+    Line 0,0,31,7
+    Box 0,0,31,7
+    Line 0,7,31,0
+    'Display
+    Max7219_LEDMatrix_Update
+    Wait 2 s
 
-  loop
+    Max7219_LEDMatrix_ScrollMessage (  "GLCD Circle", 1 )
+    Wait 1 s
+    Repeat 4
+        GLCDCLS
+        Circle 4, 3, 3
+        Circle 12, 3, 3
+        Circle 20, 3, 3
+        Circle 28, 3, 3
+        'Display
+        Max7219_LEDMatrix_Update
+        Wait 500 ms
+
+
+        GLCDCLS
+        FilledCircle 4, 3, 2
+        FilledCircle  12, 3, 2
+        FilledCircle  20, 3, 2
+        FilledCircle  28, 3, 2
+        'Display
+        Max7219_LEDMatrix_Update
+        Wait 500 ms
+    End Repeat
+
+Loop

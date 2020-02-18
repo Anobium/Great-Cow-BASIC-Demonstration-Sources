@@ -9,38 +9,39 @@
 '''@date    10.12.2018
 '''********************************************************************************
 
-;Set chip model required:
+'Set chip model required:
 
-  #chip 16f877a, 20
-  ;Setup LCD Parameters
-  #define LCD_IO 4
-  #define LCD_NO_RW
-  #define LCD_Speed fast 'FAST IS OK ON 16f877a
+#CHIP 16f877a, 20
+'Setup LCD Parameters
+#DEFINE LCD_IO 4
+#DEFINE LCD_NO_RW
+'FAST IS OK ON 16f877a
+#DEFINE LCD_SPEED FAST
 
-  ;Change as necessary
-  #define LCD_RS PortB.4
-  #define LCD_Enable PortB.5
-  #define LCD_DB4 PortB.0
-  #define LCD_DB5 PortB.1
-  #define LCD_DB6 PortB.2
-  #define LCD_DB7 PortB.3
+'Change as necessary
+#DEFINE LCD_RS PortB.4
+#DEFINE LCD_Enable PortB.5
+#DEFINE LCD_DB4 PortB.0
+#DEFINE LCD_DB5 PortB.1
+#DEFINE LCD_DB6 PortB.2
+#DEFINE LCD_DB7 PortB.3
 
 
-  PRINT "Great Cow BASIC"
-  locate 1,0
-  PRINT "@2018 v1.0"
-  wait 4 s
+Print "Great Cow BASIC"
+Locate 1,0
+Print "@2018 v1.0"
+Wait 4 s
 
-  CLS
-  PRINT "Channel 0:"
-  locate 1,0
-  PRINT "Channe: 1:"
+CLS
+Print "Channel 0:"
+Locate 1,0
+Print "Channe: 1:"
 
-  Do Forever
+Do Forever
 
     Locate 0, 12
-    Print leftpad( str( ReadAD10( AN0 ) ), 4 )
+    Print LeftPad( Str( ReadAD10( AN0 ) ), 4 )
     Locate 1, 12
-    Print leftpad( str( ReadAD10( AN1 ) ), 4 )
+    Print LeftPad( Str( ReadAD10( AN1 ) ), 4 )
 
-  loop
+Loop

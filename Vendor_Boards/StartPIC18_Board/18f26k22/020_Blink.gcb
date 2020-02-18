@@ -18,39 +18,39 @@
 '''  Date: 29.8.17
 '''
 ' ----- Configuration
-    'Chip Settings.
-     #chip 18f26k22, 16
+'Chip Settings.
+#CHIP 18f26k22, 16
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | ----------| O | I |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | ----------| O | I |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------------------| X |---------
-    ''-----------------------------------------
-    ''
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------------------| X |---------
+''-----------------------------------------
+''
 
-    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
-    PORTC.2 = 1
+'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+PORTC.2 = 1
 
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
 
 
-    dir portb.1 out
+Dir portb.1 Out
 
-    do
-        'wait for 1 second
-        wait 1 s
-        'Set the port bit to NOT ( invert the current value) value from previous state
-        portb.1 = NOT  portb.1
-    loop
+Do
+    'wait for 1 second
+    Wait 1 s
+    'Set the port bit to NOT ( invert the current value) value from previous state
+    portb.1 = NOT  portb.1
+Loop

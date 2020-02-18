@@ -9,34 +9,34 @@
 '''@date    02.10.2016
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
-  #chip 16F886, 16
-  #option explicit
-
-
-; ----- Define Hardware settings
-  Dir PORTC Out
-  DIR PORTA.0 in
-  DIR PORTA.1 out
-
-; ----- Constants
-  ; You need to specify the port settings
-  #define DisplayPortA PORTC
-
-  #define DISP_SEL_1 PORTA.1
-
-; ----- Variables
-  Dim Value as Byte
+#CHIP 16F886, 16
+#OPTION Explicit
 
 
-; ----- Main body of program commences her
+' ----- Define Hardware settings
+Dir PORTC Out
+Dir PORTA.0 In
+Dir PORTA.1 Out
 
-  Do Forever
+' ----- Constants
+' You need to specify the port settings
+#DEFINE DisplayPortA PORTC
+
+#DEFINE DISP_SEL_1 PORTA.1
+
+' ----- Variables
+Dim Value As Byte
+
+
+' ----- Main body of program commences her
+
+Do Forever
     Value = ReadAD(AN0)/26
     DisplayValue 1, Value
-    wait 10 ms
-  Loop
+    Wait 10 ms
+Loop
 
 
 

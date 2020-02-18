@@ -9,131 +9,146 @@
 
 
 'Chip Settings. Assumes the development board with with a 16F877A
-#chip 16F877a,20
-#option explicit
+#CHIP 16F877a,20
+#OPTION Explicit
 
-#include <ds18b20.h>
-#include <glcd.h>
+#INCLUDE <ds18b20.h>
+#INCLUDE <glcd.h>
 
 
-#define GLCD_TYPE GLCD_TYPE_ST7920
-#define GLCD_IO 8
-#define GLCD_WIDTH 128
-#define GLCD_HEIGHT 64
+#DEFINE GLCD_TYPE GLCD_TYPE_ST7920
+#DEFINE GLCD_IO 8
+#DEFINE GLCD_WIDTH 128
+#DEFINE GLCD_HEIGHT 64
 
 ' read delay of 25 is required at 32mhz, this can be reduced to 0 for slower clock speeds
-#define ST7920ReadDelay 25
+#DEFINE ST7920ReadDelay 25
 ' write delay of 2 is required at 32mhz.  this can be reduced to 1 for slower clock speeds
-#define ST7920WriteDelay 2
+#DEFINE ST7920WriteDelay 2
 
 
-#define GLCD_RS PORTE.0
-#define GLCD_Enable PORTE.2
-#define GLCD_RW PORTE.1
-#define GLCD_RESET PORTA.0
-#define GLCD_DATA_PORT PORTD
+#DEFINE GLCD_RS PORTE.0
+#DEFINE GLCD_Enable PORTE.2
+#DEFINE GLCD_RW PORTE.1
+#DEFINE GLCD_RESET PORTA.0
+#DEFINE GLCD_DATA_PORT PORTD
 
-Dim CCOUNT, SIGNBIT, WHOLE, FRACT, DIG as Byte
+Dim CCOUNT, SIGNBIT, WHOLE, FRACT, DIG As Byte
 
 
 ST7920GLCDDisableGraphics
 GLCDCLS
 GLCDPrint 0, 0, "Great Cow Basic "
-wait 2 s
+Wait 2 s
 
-    ST7920GLCDEnableGraphics
-    GLCDCLS
-    GLCDDrawString 30,0,"ChipMhz@"    ;print string
-    GLCDDrawString 78,0, str(ChipMhz) ;print string
-    circle(10,10,10)                  ;upper left
-    circle(117,10,10)                 ;upper right
-    circle(63,31,10)                  ;center
-    circle(63,31,20)                  ;center
-    circle(10,53,10)                  ;lower left
-    circle(117,53,10)                 ;lower right
+ST7920GLCDEnableGraphics
+GLCDCLS
+'print string
+GLCDDrawString 30,0,"ChipMhz@"
+'print string
+GLCDDrawString 78,0, Str(ChipMHz)
+'upper left
+Circle(10,10,10)
+'upper right
+Circle(117,10,10)
+'center
+Circle(63,31,10)
+'center
+Circle(63,31,20)
+'lower left
+Circle(10,53,10)
+'lower right
+Circle(117,53,10)
 
-    GLCDDrawString 46,54,ChipNameStr  ;print string
-    wait 1 s                          ;wait
+'print string
+GLCDDrawString 46,54,ChipNameStr
+'wait
+Wait 1 s
 
 
 
-  ' DS18B20 port settings - this is required
-  #define DQ PortC.3
+' DS18B20 port settings - this is required
+#DEFINE DQ PortC.3
 
-  dim TempC_100 as word  ' a variable to handle the temperature calculations
-  dim IntC_100 as integer  ' a variable to handle the temperature calculations
-  dim msg1 as string * 20  ' a variable to handle the temperature formatting
-  ccount = 0
-  GLCDCLS          ;clear
-  GLCDPrint 0,0, "DS18B20 Temperature"
-  GLCDPrint 48,8, "Sensor"
+' a variable to handle the temperature calculations
+Dim TempC_100 As Word
+' a variable to handle the temperature calculations
+Dim IntC_100 As Integer
+' a variable to handle the temperature formatting
+Dim msg1 As String * 20
+ccount = 0
+'clear
+GLCDCLS
+GLCDPrint 0,0, "DS18B20 Temperature"
+GLCDPrint 48,8, "Sensor"
 
 Do
-  ' The temperature is read back in whole degree steps, and the sensor operates from
-  ' -55 to + 125 degrees Celsius. Note that bit 7 is 0 for positive temperature values
-  ' and 1 for negative values (ie negative values will appear as 128 + numeric value).
+    ' The temperature is read back in whole degree steps, and the sensor operates from
+    ' -55 to + 125 degrees Celsius. Note that bit 7 is 0 for positive temperature values
+    ' and 1 for negative values (ie negative values will appear as 128 + numeric value).
 
-   DSdata = readtemp
+    DSdata = ReadTemp
 
-   ' Format the value of the sensor for the GLCD
-   msg1 = hex(ccount)
-   msg1 = msg1 + " Ceil:"
+    ' Format the value of the sensor for the GLCD
+    msg1 = Hex(ccount)
+    msg1 = msg1 + " Ceil:"
 
-   ' Test the returned value, if bit 7 is set then the returned value is a negative
-   if DSdata.7 = 0 then
-      msg1 = msg1 + str(DSdata)
-   else
-      msg1 = msg1 + "-"
-      DSdata = DSdata  - 128
-      msg1 = msg1 + str(DSdata)
-   end if
-   msg1 = msg1 + "C  "
-   GLCDPrint 0,24, msg1
+    ' Test the returned value, if bit 7 is set then the returned value is a negative
+    If DSdata.7 = 0 Then
+        msg1 = msg1 + Str(DSdata)
+    Else
+        msg1 = msg1 + "-"
+        DSdata = DSdata  - 128
+        msg1 = msg1 + Str(DSdata)
+    End If
+    msg1 = msg1 + "C  "
+    GLCDPrint 0,24, msg1
 
 
 
-   ' Display the integer and decimal value of the sensor on the GLCD
-   ' The function readtemp12 returns the raw value of the sensor.
-   ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
-   DSdata = readtemp12
-   SignBit = DSdata / 256 / 128
-   If SignBit = 0 Then goto Positive
-   ' its negative!
-   DSdata = ( DSdata # 0xffff ) + 1 ' take twos comp
+    ' Display the integer and decimal value of the sensor on the GLCD
+    ' The function readtemp12 returns the raw value of the sensor.
+    ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
+    DSdata = ReadTemp12
+    SignBit = DSdata / 256 / 128
+    If SignBit = 0 Then Goto Positive
+    ' its negative!
+    ' take twos comp
+    DSdata = ( DSdata # 0xffff ) + 1
 
 Positive:
 
-   ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
-   TempC_100 =  DSdata * 6
-   DSdata = ( DSdata * 25 ) / 100
-   TempC_100 = TempC_100 + DSdata
+    ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
+    TempC_100 =  DSdata * 6
+    DSdata = ( DSdata * 25 ) / 100
+    TempC_100 = TempC_100 + DSdata
 
-   Whole = TempC_100 / 100
-   Fract = TempC_100 % 100
+    Whole = TempC_100 / 100
+    Fract = TempC_100 % 100
 
 DisplayTemp:
 
-   ' Format the value of the sensor for the GLCD
-   msg1 = hex(ccount)
-   msg1 = msg1 + " Real:"
-   If SignBit = 0 Then
-      msg1 = msg1 + Str(Whole) + "."
-   else
-      msg1 = msg1 + "-"
-      msg1 = msg1 + Str(Whole) + "."
-   end if
+    ' Format the value of the sensor for the GLCD
+    msg1 = Hex(ccount)
+    msg1 = msg1 + " Real:"
+    If SignBit = 0 Then
+        msg1 = msg1 + Str(Whole) + "."
+    Else
+        msg1 = msg1 + "-"
+        msg1 = msg1 + Str(Whole) + "."
+    End If
 
 
-  ' To ensure the decimal part is two digits
-   Dig = Fract / 10
-   msg1 = msg1 + str( Dig )
-   Dig = Fract % 10
-   msg1 = msg1 + str( Dig )
-   msg1 = msg1 + "C"
-   msg1 = msg1 + "   "
-   GLCDPrint 0,40, msg1
+    ' To ensure the decimal part is two digits
+    Dig = Fract / 10
+    msg1 = msg1 + Str( Dig )
+    Dig = Fract % 10
+    msg1 = msg1 + Str( Dig )
+    msg1 = msg1 + "C"
+    msg1 = msg1 + "   "
+    GLCDPrint 0,40, msg1
 
-   wait 2 s
-   ccount++
+    Wait 2 s
+    ccount++
 
-loop
+Loop

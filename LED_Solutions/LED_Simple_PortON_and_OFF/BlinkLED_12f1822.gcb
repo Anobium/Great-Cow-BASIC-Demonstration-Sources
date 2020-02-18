@@ -9,29 +9,34 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
-  #chip 12F1822, 0.5
-   LVP = Off
+' ----- Configuration
+#CHIP 12F1822, 0.5
+LVP = Off
 
-  ' #include
-  ' no solution specifc includes, default includes are always included                                  ; no solution specifc includes, default includes are always included
+' #include
+' no solution specifc includes, default includes are always included                                  ; no solution specifc includes, default includes are always included
 
 
-; ----- Define Hardware settings
-  ' (PORTA.2 = Pin 5 on Blink_12f1822)
-  ' this is required to tell the microprocessor the port is an output
-  Dir PORTA.2 Out
+' ----- Define Hardware settings
+' (PORTA.2 = Pin 5 on Blink_12f1822)
+' this is required to tell the microprocessor the port is an output
+Dir PORTA.2 Out
 
-; ----- Variables
+' ----- Variables
 ' none specified in the example. All byte variables are defined upon use.
 
-; ----- Main body of program commences here.
-  Start:
-    Set PORTA.2 ON   'turn LED on
-    Wait 100 Ms      'wait 100 milliseconds
-    Set PORTA.2 OFF  'turn LED off
-    Wait 900 Ms      'wait 900 milliseconds
-  Goto Start         'jump back to the start of the program
+' ----- Main body of program commences here.
+Start:
+'turn LED on
+Set PORTA.2 On
+'wait 100 milliseconds
+Wait 100 ms
+'turn LED off
+Set PORTA.2 Off
+'wait 900 milliseconds
+Wait 900 ms
+'jump back to the start of the program
+Goto Start
 
 
 

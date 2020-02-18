@@ -22,53 +22,53 @@
 
 
 'Chip Settings. Assumes the development board with with a 16F877a at 4 or 20 Mhz
-#chip 16F877a,20
-#option explicit
+#CHIP 16F877a,20
+#OPTION Explicit
 
 
 'Use LCD in 4 pin mode and define LCD pins
- #define LCD_IO 4
- #define LCD_RW PORTE.1
- #define LCD_RS PORTE.0
- #define LCD_Enable PORTE.2
- #define LCD_DB4 PORTD.4
- #define LCD_DB5 PORTD.5
- #define LCD_DB6 PORTD.6
- #define LCD_DB7 PORTD.7
- #define LCD_SPEED FAST
+#DEFINE LCD_IO 4
+#DEFINE LCD_RW PORTE.1
+#DEFINE LCD_RS PORTE.0
+#DEFINE LCD_Enable PORTE.2
+#DEFINE LCD_DB4 PORTD.4
+#DEFINE LCD_DB5 PORTD.5
+#DEFINE LCD_DB6 PORTD.6
+#DEFINE LCD_DB7 PORTD.7
+#DEFINE LCD_SPEED FAST
 
- Dim YY, XX, COL, PRINTLOCX as Byte
- dim outstring as string * 16
+Dim YY, XX, COL, PRINTLOCX As Byte
+Dim outstring As String * 16
 'Main program
 
-   'Clear the LCD
-   CLS
-   'Display some text on both lines
-   Locate 0,0
-   Print "HOBBY COMPONENTS"
-   wait 1 s
-   CLS
-   print ChipNameStr +" @ "+str(ChipMhz) + "Mhz"
-   Locate 1,0
-   print "by Anobium"
+'Clear the LCD
+CLS
+'Display some text on both lines
+Locate 0,0
+Print "HOBBY COMPONENTS"
+Wait 1 s
+CLS
+Print ChipNameStr +" @ "+Str(ChipMHz) + "Mhz"
+Locate 1,0
+Print "by Anobium"
 
-cls
-for yy = 0 to 3
-    for xx = 0 to 7
+CLS
+For yy = 0 To 3
+    For xx = 0 To 7
 
         Locate xx,yy
-        outstring = str(xx)
-        outstring = outstring + str(yy)
-        print outstring
-        wait 100 ms
-    next
-next
+        outstring = Str(xx)
+        outstring = outstring + Str(yy)
+        Print outstring
+        Wait 100 ms
+    Next
+Next
 
 
-end
+End
 
 
-#define locate ST7920Locate
+#DEFINE Locate ST7920Locate
 Sub ST7920Locate( In PrintLocX , In PrintLocY )
 
 ' DESCRIPTIONS:
@@ -102,24 +102,24 @@ Sub ST7920Locate( In PrintLocX , In PrintLocY )
 
 
 
-	select case  PrintLocY
-               case 0
-                    col = PrintLocX OR 0x80
+    Select Case  PrintLocY
+    Case 0
+        col = PrintLocX OR 0x80
 
-               case 1
-                    col = PrintLocX OR 0x90
+    Case 1
+        col = PrintLocX OR 0x90
 
-               case 2
-                    col = PrintLocX OR 0x88
+    Case 2
+        col = PrintLocX OR 0x88
 
-               case 3
-                    col = PrintLocX OR 0x98
+    Case 3
+        col = PrintLocX OR 0x98
 
-               case else
-                    col = PrintLocX OR 0x80
-            end select
-            SET LCD_RS OFF
-            LCDWriteByte ( col)
+    Case Else
+        col = PrintLocX OR 0x80
+    End Select
+    Set LCD_RS Off
+    LCDWriteByte ( col)
 
-end sub
+End Sub
 

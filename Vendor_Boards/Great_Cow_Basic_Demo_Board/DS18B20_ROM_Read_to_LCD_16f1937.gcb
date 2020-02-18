@@ -9,150 +9,159 @@
 '''@date   	26.12.15
 '''********************************************************************************
 
-; ----- Configuration
- #chip 16f1937,16
- #option explicit
- #include <ds18b20.h>
+' ----- Configuration
+#CHIP 16f1937,16
+#OPTION Explicit
+#INCLUDE <ds18b20.h>
 
-  ;Setup LCD Parameters
-  #define LCD_IO 4
+'Setup LCD Parameters
+#DEFINE LCD_IO 4
 
-  #define LCD_Speed slow
+#DEFINE LCD_SPEED SLOW
 
-; ----- Define Hardware settings
-  #define LCD_RS PORTE.0
-  #define LCD_RW PORTE.1
-  #define LCD_Enable PORTE.2
-  #define LCD_DB4 PORTd.4
-  #define LCD_DB5 PORTd.5
-  #define LCD_DB6 PORTd.6
-  #define LCD_DB7 PORTd.7
+' ----- Define Hardware settings
+#DEFINE LCD_RS PORTE.0
+#DEFINE LCD_RW PORTE.1
+#DEFINE LCD_Enable PORTE.2
+#DEFINE LCD_DB4 PORTd.4
+#DEFINE LCD_DB5 PORTd.5
+#DEFINE LCD_DB6 PORTd.6
+#DEFINE LCD_DB7 PORTd.7
 
-  #define LED1 porta.0
-  #define LED2 porta.1
-  #define LED3 porta.2
-  #define LED4 porta.3
-  dir LED1 out
-  dir LED2 out
-  dir LED3 out
-  dir LED4 out
+#DEFINE LED1 porta.0
+#DEFINE LED2 porta.1
+#DEFINE LED3 porta.2
+#DEFINE LED4 porta.3
+Dir LED1 Out
+Dir LED2 Out
+Dir LED3 Out
+Dir LED4 Out
 
-; ----- Constants
-  ' DS18B20 port settings
-  #define DQ Portc.7
+' ----- Constants
+' DS18B20 port settings
+#DEFINE DQ Portc.7
 
-;----- Variables
-  Dim YPOS, OLDDSDATA, XPOS, EIGHTBYTES, CLOCKS, SYSINTSTATESAVE0 as Byte
-
-
-; ----- Quick Command Reference:
-
- ; READ ROM [33h]
- ; This command can only be used when there is one slave on the bus.
- ; It allows the bus master to read the slave’s 64-bit ROM code without using the Search ROM procedure.
- ; If this command is used when there is more than one slave present on the bus, a data collision will occur when all the slaves attempt to respond at the same time.
-
- ; 64-BIT LASERED ROM CODE
- ; Each DS18B20 contains a unique 64–bit code (see Figure 6) stored in ROM.
- ; The least significant 8 bits of the ROM code contain the DS18B20’s 1-Wire family code: 28h.
- ; The next 48 bits contain a unique serial number.
- ; The most significant 8 bits contain a cyclic redundancy check (CRC) byte that is calculated from the first 56 bits of the ROM code. A detailed explanation of the CRC bits is provided in the CRC Generation section. The 64-bit ROM code and associated ROM function control logic allow the DS18B20 to operate as a 1-Wire device using the protocol detailed in the 1-Wire Bus System section.
- ; 64-Bit Lasered ROM Code
- ;
- ; 8-BIT CRC      48-BIT SERIAL NUMBER          8-BIT FAMILY CODE (28h)
- ; MSB  LSB       MSB              LSB          MSB                 LSB
-
-; ----- Main body of program commences here.
-
-  'Note: there is NO On Interrupt handler
-  'This flashes the Boards LEDs only... just for show
-  InitTimer1 Osc, PS1_8
-  SetTimer 1, 1
-  StartTimer 1
-  'Manually set Timer1Overflow to the overflow event
-  'this will event will be handled by the Interrupt sub routine
-  TMR1IE = 1
-	porta = 1
+'----- Variables
+Dim YPOS, OLDDSDATA, XPOS, EIGHTBYTES, CLOCKS, SYSINTSTATESAVE0 As Byte
 
 
+' ----- Quick Command Reference:
 
+' READ ROM [33h]
+' This command can only be used when there is one slave on the bus.
+' It allows the bus master to read the slave’s 64-bit ROM code without using the Search ROM procedure.
+' If this command is used when there is more than one slave present on the bus, a data collision will occur when all the slaves attempt to respond at the same time.
 
-    'Main loop
-    cls
-    print "Great Cow Basic "
-    locate 1 , 0
-    print "DS18B20   @2015 "
-    wait 3 s
-    cls
-    print "SHOW 64BIT LASERED"
-    locate 1 , 0
-    print "ROM CODE ON LCD"
-    wait 3 s
-    cls
-    ypos = 0        ' Ypos on the LCD
+' 64-BIT LASERED ROM CODE
+' Each DS18B20 contains a unique 64–bit code (see Figure 6) stored in ROM.
+' The least significant 8 bits of the ROM code contain the DS18B20’s 1-Wire family code: 28h.
+' The next 48 bits contain a unique serial number.
+' The most significant 8 bits contain a cyclic redundancy check (CRC) byte that is calculated from the first 56 bits of the ROM code. A detailed explanation of the CRC bits is provided in the CRC Generation section. The 64-bit ROM code and associated ROM function control logic allow the DS18B20 to operate as a 1-Wire device using the protocol detailed in the 1-Wire Bus System section.
+' 64-Bit Lasered ROM Code
+'
+' 8-BIT CRC      48-BIT SERIAL NUMBER          8-BIT FAMILY CODE (28h)
+' MSB  LSB       MSB              LSB          MSB                 LSB
 
-  ' show 64-BIT LASERED ROM CODE on both rows of the LCD
-     wait 100 ms
-     MasterRST      ' Reset ds18b20
-     PPulse         ' Request a presence pulse
-     wait 100 us
-     OWout ReadRom  ' Send 64-BIT LASERED ROM CODE read code
-     wait 100 us
-     OWinRom        ' Process and display the 64-BIT LASERED ROM CODE
+' ----- Main body of program commences here.
 
-
-      oldDSdata = 255
-      do forever
-       ' The function readtemp returns the integer value of the sensor
-       DSdata = readtemp
-
-       if oldDSdata <> DSdata then
-           ' Display the integer value of the sensor on the LCD
-           locate 1,0
-           print "Currently "
-           print DSdata
-           print chr(223)+"C "
-           oldDSdata = DSdata
-       end if
-    loop
+'Note: there is NO On Interrupt handler
+'This flashes the Boards LEDs only... just for show
+InitTimer1 Osc, PS1_8
+SetTimer 1, 1
+StartTimer 1
+'Manually set Timer1Overflow to the overflow event
+'this will event will be handled by the Interrupt sub routine
+TMR1IE = 1
+porta = 1
 
 
 
 
-; ----- Support methods.  Subroutines and Functions
+'Main loop
+CLS
+Print "Great Cow Basic "
+Locate 1 , 0
+Print "DS18B20   @2015 "
+Wait 3 s
+CLS
+Print "SHOW 64BIT LASERED"
+Locate 1 , 0
+Print "ROM CODE ON LCD"
+Wait 3 s
+CLS
+' Ypos on the LCD
+ypos = 0
 
-  Sub OWinRom
-     xpos = 14       ' XPos on the LCD
-     For EightBytes = 1 to 8
-        For Clocks = 1 to 8
-           Rotate RxData Right 'The DS18s20 wants data LSB first
-           Dir DQ Out
-           Set DQ Off  'Read time slot
-           wait 4 us
-           Dir DQ In   'Release bus for one wire transmission
-           wait 7 us
-           If DQ On  Then Set RxData.7 1
-           If DQ Off Then Set RxData.7 0
-           wait 25 us
-          Next
-         locate ypos , xpos
-         Print hex(RxData)
-         xpos = xpos - 2
-     Next
- end sub
+' show 64-BIT LASERED ROM CODE on both rows of the LCD
+Wait 100 ms
+' Reset ds18b20
+MasterRST
+' Request a presence pulse
+PPulse
+Wait 100 us
+' Send 64-BIT LASERED ROM CODE read code
+OWout ReadRom
+Wait 100 us
+' Process and display the 64-BIT LASERED ROM CODE
+OWinRom
 
 
- 'This flashes the Boards LEDs only... just for show
- Sub Interrupt
+oldDSdata = 255
+Do Forever
+    ' The function readtemp returns the integer value of the sensor
+    DSdata = ReadTemp
 
-  TMR1IF = 0
-  intoff
+    If oldDSdata <> DSdata Then
+        ' Display the integer value of the sensor on the LCD
+        Locate 1,0
+        Print "Currently "
+        Print DSdata
+        Print CHR(223)+"C "
+        oldDSdata = DSdata
+    End If
+Loop
 
-  if porta < 16 Then
-  	porta = FnLSL( porta, 1 )
-  else
-  	porta = 1
-  end if
-  inton
+
+
+
+' ----- Support methods.  Subroutines and Functions
+
+Sub OWinRom
+    ' XPos on the LCD
+    xpos = 14
+    For EightBytes = 1 To 8
+        For Clocks = 1 To 8
+            'The DS18s20 wants data LSB first
+            Rotate RxData Right
+            Dir DQ Out
+            'Read time slot
+            Set DQ Off
+            Wait 4 us
+            'Release bus for one wire transmission
+            Dir DQ In
+            Wait 7 us
+            If DQ On  Then Set RxData.7 1
+            If DQ Off Then Set RxData.7 0
+            Wait 25 us
+        Next
+        Locate ypos , xpos
+        Print Hex(RxData)
+        xpos = xpos - 2
+    Next
+End Sub
+
+
+'This flashes the Boards LEDs only... just for show
+Sub Interrupt
+
+    TMR1IF = 0
+    IntOff
+
+    If porta < 16 Then
+        porta = FnLSL( porta, 1 )
+    Else
+        porta = 1
+    End If
+    IntOn
 
 End Sub

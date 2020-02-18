@@ -9,126 +9,137 @@
 '''@date   	14.02.2015
 '''********************************************************************************
 
-; ----- Configuration
-  #chip mega328p, 16
-  #option explicit
-  #include <ds18b20.h>
+' ----- Configuration
+#CHIP mega328p, 16
+#OPTION Explicit
+#INCLUDE <ds18b20.h>
 
-  ; ----- Define Hardware settings
-  ' Define I2C settings - CHANGE PORTS
-   #define I2C_MODE Master
-   #define I2C_DATA PORTC.4
-   #define I2C_CLOCK PORTC.5
-   #define I2C_DISABLE_INTERRUPTS ON
+' ----- Define Hardware settings
+' Define I2C settings - CHANGE PORTS
+#DEFINE I2C_MODE Master
+#DEFINE I2C_DATA PORTC.4
+#DEFINE I2C_CLOCK PORTC.5
+#DEFINE I2C_DISABLE_INTERRUPTS On
 
-  '''Set up LCD
-   #define LCD_IO 10
-   #define LCD_I2C_Address_1 0x4E                ; LCD 1
-   #define LCD_I2C_Address_2 0x4C                ; LCD 2
+'''Set up LCD
+#DEFINE LCD_IO 10
+' LCD 1
+#DEFINE LCD_I2C_Address_1 0x4E
+' LCD 2
+#DEFINE LCD_I2C_Address_2 0x4C
 
-; ----- Constants
-  ' DS18B20 port settings - this is required
-     #define DQ PortC.3
-
-
-; ----- Quick Command Reference:
-
- '''Set LCD_10 to 10 for the YwRobot LCD1602 IIC V1 or the Sainsmart LCD_PIC I2C adapter
- '''Set LCD_10 to 12 for the Ywmjkdz I2C adapter with pot bent over top of chip
-
-; ----- Variables
-  dim TempC_100 as word   ' a variabler to handle the temperature calculations
-  dim DSdataRaw as Integer
-  Dim LCD_I2C_ADDRESS_CURRENT, CCOUNT, SIGNBIT, WHOLE, FRACT, DIG as Byte
+' ----- Constants
+' DS18B20 port settings - this is required
+#DEFINE DQ PortC.3
 
 
-; ----- Main body of program commences here.
+' ----- Quick Command Reference:
 
-    'Change to the correct LCD by setting     LCD_I2C_Address_Current to the correct address then write to LCD.
-    LCD_I2C_Address_Current = LCD_I2C_Address_1: DisplayInformation ( 1 )
-    LCD_I2C_Address_Current = LCD_I2C_Address_2: DisplayInformation ( 1 )
-    wait 4 s
-    LCD_I2C_Address_Current = LCD_I2C_Address_1:  CLS
-    LCD_I2C_Address_Current = LCD_I2C_Address_2:  CLS
+'''Set LCD_10 to 10 for the YwRobot LCD1602 IIC V1 or the Sainsmart LCD_PIC I2C adapter
+'''Set LCD_10 to 12 for the Ywmjkdz I2C adapter with pot bent over top of chip
 
-    ccount = 0
-    Do forever
+' ----- Variables
+' a variabler to handle the temperature calculations
+Dim TempC_100 As Word
+Dim DSdataRaw As Integer
+Dim LCD_I2C_Address_Current, CCOUNT, SIGNBIT, WHOLE, FRACT, DIG As Byte
 
-        ' The function readtemp12 returns the raw value of the sensor.
-        ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
-        DSdataRaw = readtemp12    ; save to this variable to prevent the delay bewtween screen up dates
-        ' The function readtemp returns the integer value of the sensor
-        DSdata = readtemp
 
-        LCD_I2C_Address_Current = LCD_I2C_Address_1: DisplayInformation ( 2 )  ; update LCD1
-        LCD_I2C_Address_Current = LCD_I2C_Address_2: DisplayInformation ( 2 )  ; update LCD2
-        DSdata = DSdataRaw                                                     ; Set the data
-        LCD_I2C_Address_Current = LCD_I2C_Address_1: DisplayInformation ( 3 )  ; update LCD1
-        DSdata= DSdataRaw                                                      ; Set the data
-        LCD_I2C_Address_Current = LCD_I2C_Address_2: DisplayInformation ( 3 )  ; update LCD2
+' ----- Main body of program commences here.
 
-        ccount++
+'Change to the correct LCD by setting     LCD_I2C_Address_Current to the correct address then write to LCD.
+LCD_I2C_Address_Current = LCD_I2C_Address_1: DisplayInformation ( 1 )
+LCD_I2C_Address_Current = LCD_I2C_Address_2: DisplayInformation ( 1 )
+Wait 4 s
+LCD_I2C_Address_Current = LCD_I2C_Address_1:  CLS
+LCD_I2C_Address_Current = LCD_I2C_Address_2:  CLS
 
-        wait 1 s
+ccount = 0
+Do Forever
 
-    loop
-    End
+    ' The function readtemp12 returns the raw value of the sensor.
+    ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
+    ' save to this variable to prevent the delay bewtween screen up dates
+    DSdataRaw = ReadTemp12
+    ' The function readtemp returns the integer value of the sensor
+    DSdata = ReadTemp
+
+    ' update LCD1
+    LCD_I2C_Address_Current = LCD_I2C_Address_1: DisplayInformation ( 2 )
+    ' update LCD2
+    LCD_I2C_Address_Current = LCD_I2C_Address_2: DisplayInformation ( 2 )
+    ' Set the data
+    DSdata = DSdataRaw
+    ' update LCD1
+    LCD_I2C_Address_Current = LCD_I2C_Address_1: DisplayInformation ( 3 )
+    ' Set the data
+    DSdata= DSdataRaw
+    ' update LCD2
+    LCD_I2C_Address_Current = LCD_I2C_Address_2: DisplayInformation ( 3 )
+
+    ccount++
+
+    Wait 1 s
+
+Loop
+End
 
 Sub DisplayInformation ( LCDCommand )
 
-    Select case LCDCommand
+    Select Case LCDCommand
 
     Case 1
-      CLS
-      print "GCBasic 2019"
-      locate 1,0
-      print "DS18B20 Demo"
+        CLS
+        Print "GCBasic 2019"
+        Locate 1,0
+        Print "DS18B20 Demo"
 
     Case 2
-       ' Display the integer value of the sensor on the LCD
-       locate 0,0
-       print hex(ccount)
-       print " Ceil"
-       locate 0,8
-       print DSdata
-       print chr(223)+"C"+"  "
+        ' Display the integer value of the sensor on the LCD
+        Locate 0,0
+        Print Hex(ccount)
+        Print " Ceil"
+        Locate 0,8
+        Print DSdata
+        Print CHR(223)+"C"+"  "
 
-     Case 3
+    Case 3
 
-       ' Display the integer and decimal value of the sensor on the LCD
+        ' Display the integer and decimal value of the sensor on the LCD
 
-       SignBit = DSdata / 256 / 128
-       If SignBit = 0 Then goto Positive
-       ' its negative!
-       DSdata = ( DSdata # 0xffff ) + 1 ' take twos comp
+        SignBit = DSdata / 256 / 128
+        If SignBit = 0 Then Goto Positive
+        ' its negative!
+        ' take twos comp
+        DSdata = ( DSdata # 0xffff ) + 1
 
-    Positive:
+Positive:
 
-       ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
-       TempC_100 =  DSdata * 6
-       DSdata = ( DSdata * 25 ) / 100
-       TempC_100 = TempC_100 + DSdata
+        ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
+        TempC_100 =  DSdata * 6
+        DSdata = ( DSdata * 25 ) / 100
+        TempC_100 = TempC_100 + DSdata
 
-       Whole = TempC_100 / 100
-       Fract = TempC_100 % 100
-       If SignBit = 0 Then goto DisplayTemp
-       Print "-"
+        Whole = TempC_100 / 100
+        Fract = TempC_100 % 100
+        If SignBit = 0 Then Goto DisplayTemp
+        Print "-"
 
-    DisplayTemp:
-       locate 1,0
-       print hex(ccount)
-       print " Real"
-       locate 1,8
-       print str(Whole)
-       print "."
-      ' To ensure the decimal part is two digits
-       Dig = Fract / 10
-       print Dig
-       Dig = Fract % 10
-       print Dig
-       print chr(223)
-       print "C"+"  "
+DisplayTemp:
+        Locate 1,0
+        Print Hex(ccount)
+        Print " Real"
+        Locate 1,8
+        Print Str(Whole)
+        Print "."
+        ' To ensure the decimal part is two digits
+        Dig = Fract / 10
+        Print Dig
+        Dig = Fract % 10
+        Print Dig
+        Print CHR(223)
+        Print "C"+"  "
 
     End Select
 
-end sub
+End Sub

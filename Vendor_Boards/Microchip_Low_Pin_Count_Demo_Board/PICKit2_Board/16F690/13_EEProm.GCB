@@ -34,66 +34,69 @@
 '''
 
 
- #chip 16f690
- #option explicit
+#CHIP 16f690
+#OPTION Explicit
 
 
- 'This script allows for the voltage drop and compensates of any losses.
- #script
-        'reference voltage                        5v
-        'actual voltage at port when 100% Pot     4.15
-        'adc max                                  255
-        'number of graduations requried           15
-        reference_voltage = 4.15
-        vcc = 5
-        numberofgrads = 15
-        maxADC = 255
-        ADC_adjustment = int((reference_voltage*100)/(vcc*10))
-        ADC_adjustment = int(ADC_adjustment * maxADC / numberofgrads / 10 )
+'This script allows for the voltage drop and compensates of any losses.
+#SCRIPT
+    'reference voltage                        5v
+    'actual voltage at port when 100% Pot     4.15
+    'adc max                                  255
+    'number of graduations requried           15
+    reference_voltage = 4.15
+    vcc = 5
+    numberofgrads = 15
+    maxADC = 255
+    ADC_adjustment = int((reference_voltage*100)/(vcc*10))
+    ADC_adjustment = int(ADC_adjustment * maxADC / numberofgrads / 10 )
 
- #endscript
+#ENDSCRIPT
 
- #define DOWN                0
- #define UP                  1
+#DEFINE DOWN                0
+#DEFINE UP                  1
 
- #define SWITCH              PORTA.3
+#DEFINE SWITCH              PORTA.3
 
-   '' -------------------LATC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|DS4|DS3|DS2|DS1|-
-    ''-----------------------------------------
-    ''
+'' -------------------LATC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|DS4|DS3|DS2|DS1|-
+''-----------------------------------------
+''
 
-    Dim RESTORED_VALUE, ADC_VALUE as Byte
-
-
-    dir portc out
-    portc = 0
-    dir porta.3 in
+Dim RESTORED_VALUE, ADC_VALUE As Byte
 
 
-    IOCA3 = 1
-    On Interrupt PORTChange  Call InterruptHandler
-
-    do
-         EPRead ( 0, restored_value)
-         portc = restored_value / ADC_adjustment
-         Sleep
-
-    loop
+Dir portc Out
+portc = 0
+Dir porta.3 In
 
 
-sub InterruptHandler
+IOCA3 = 1
+On Interrupt PORTChange  Call InterruptHandler
 
-    if RABIF = 1 then                         ' SW1 was just pressed
-        RABIF = 0                             'must clear the flag in software
-        wait 5 ms                              'debounce by waiting and seeing if still held down
-        if ( SWITCH = DOWN ) then
-            adc_value = readad ( AN0 )
+Do
+    EPRead ( 0, restored_value)
+    portc = restored_value / ADC_adjustment
+    Sleep
+
+Loop
+
+
+Sub InterruptHandler
+
+    If RABIF = 1 Then
+        ' SW1 was just pressed
+        'must clear the flag in software
+        RABIF = 0
+        'debounce by waiting and seeing if still held down
+        Wait 5 ms
+        If ( SWITCH = DOWN ) Then
+            adc_value = ReadAD ( AN0 )
             PORTC = adc_value / ADC_adjustment
             EPWrite ( 0, adc_value )
 
-        end if
-    end if
+        End If
+    End If
 
-end sub
+End Sub

@@ -18,156 +18,157 @@
 '''  Date: 29.8.17
 '''
 ' ----- Configuration
-    'Chip Settings.
-    #chip 18f25k22, 16
-    #option Explicit
+'Chip Settings.
+#CHIP 18f25k22, 16
+#OPTION Explicit
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---|RS |RW | E |D7 |D6 |D5 |D4
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---|RS |RW | E |D7 |D6 |D5 |D4
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | A |-------| O | I |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | A |-------| O | I |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---| TX| A |-------| X |---------
-    ''-----------------------------------------
-    ''
-
-
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define Potentiometer   PORTC.5
-    #define SwitchIn        PORTB.0
-    #define LCDControl      PORTC.2
-
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     Potentiometer In   'this is the AN17 port
-    Dir     SwitchIn      In
-    Dir     LCDControl    Out
-
-    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
-    LCDControl = 1
-
-    'USART settings - setup the serial port - connects to PortC.6
-    #define USART_BAUD_RATE 9600
-    #define USART_TX_BLOCKING
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---| TX| A |-------| X |---------
+''-----------------------------------------
+''
 
 
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE Potentiometer   PORTC.5
+#DEFINE SwitchIn        PORTB.0
+#DEFINE LCDControl      PORTC.2
 
-    #define DOWN        0
-    #define UP          1
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+'this is the AN17 port
+Dir     Potentiometer In
+Dir     SwitchIn      In
+Dir     LCDControl    Out
+
+'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+LCDControl = 1
+
+'USART settings - setup the serial port - connects to PortC.6
+#DEFINE USART_BAUD_RATE 9600
+#DEFINE USART_TX_BLOCKING
 
 
-    Dim DIRECTION as Byte
-    Dim mydelay, leds  as byte
-    #define LED_RIGHT 0
-    #define LED_LEFT  1
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
 
-    'start from the right to left
-    direction = LED_RIGHT
+#DEFINE DOWN        0
+#DEFINE UP          1
 
-    'Initialise the value
-    leds = 8
 
-    do
+Dim DIRECTION As Byte
+Dim mydelay, leds  As Byte
+#DEFINE LED_RIGHT 0
+#DEFINE LED_LEFT  1
 
-        'Turn the LEDS off so we can see them Flash
-        LEDD1 = 0
+'start from the right to left
+direction = LED_RIGHT
+
+'Initialise the value
+leds = 8
+
+Do
+
+    'Turn the LEDS off so we can see them Flash
+    LEDD1 = 0
+    LEDD2 = 0
+
+    'Delay whilst off
+    If mydelay > 0 Then
+        Wait mydelay ms
+    End If
+
+    'Get a value for the ADC port
+    mydelay = ReadAD( AN17 )
+
+    'Show state
+    If direction = LED_RIGHT Then
+        HSerPrint ">> "
+    Else
+        HSerPrint "<< "
+    End If
+
+    HSerPrint mydelay
+    HSerPrintCRLF
+
+    'Set the LEDs
+    If  direction = LED_RIGHT  Then
+
+        LEDD1 = 1
         LEDD2 = 0
 
-        'Delay whilst off
-        if mydelay > 0 then
-              wait mydelay ms
-        end if
+    Else
 
-        'Get a value for the ADC port
-        mydelay = ReadAD( AN17 )
+        LEDD1 = 0
+        LEDD2 = 1
 
-        'Show state
-        if direction = LED_RIGHT then
-          HSerPrint ">> "
+    End If
+
+    'wait, delay whilst on, and then check the switch is DOWN
+    If mydelay > 0 Then
+        Wait mydelay ms
+    End If
+
+    If check_switch = TRUE Then
+        ' toggle the direction
+        direction = !direction
+    End If
+
+
+Loop
+
+
+
+'global variable - if button is held down, we don't want to keep on switching directions
+#DEFINE SWITCH_UP   1
+#DEFINE SWITCH_DOWN 0
+
+Dim previous_state As BIT
+previous_state = SWITCH_UP
+
+Function  check_switch
+    'switch is normally open to 5V ...when pressed, RA3 is connected to GND
+    If (SwitchIn = SWITCH_DOWN) Then
+        'debounce by delaying and checking if switch is still pressed
+        Wait 1 ms
+        If ( (previous_state =  SWITCH_DOWN) & (SwitchIn = SWITCH_DOWN) ) Then
+            ' don't toggle
+            check_switch = FALSE
+            Exit Function
         Else
-          HSerPrint "<< "
-        end if
+            ' check if still down
+            If (SwitchIn = SWITCH_DOWN) Then
+                previous_state = SWITCH_DOWN
+                ' reverse the LEDs
+                check_switch = TRUE
+                Exit Function
+            Else
+                'switch not properly held down
+                previous_state = SWITCH_UP
+                ' don't reverse
+                check_switch = FALSE
+                Exit Function
+            End If
+        End If
+    Else
+        'switch not pressed
+        previous_state = SWITCH_UP
+        'don't reverse
+        check_switch = FALSE
+        Exit Function
+    End If
 
-        HSerPrint mydelay
-        HSerPrintCRLF
-
-        'Set the LEDs
-        if  direction = LED_RIGHT  then
-
-            LEDD1 = 1
-            LEDD2 = 0
-
-        else
-
-            LEDD1 = 0
-            LEDD2 = 1
-
-        end if
-
-        'wait, delay whilst on, and then check the switch is DOWN
-        if mydelay > 0 then
-              wait mydelay ms
-        end if
-
-        if check_switch = true then
-            ' toggle the direction
-            direction = !direction
-        end if
-
-
-    loop
-
-
-
-  'global variable - if button is held down, we don't want to keep on switching directions
-  #define SWITCH_UP   1
-  #define SWITCH_DOWN 0
-
-  dim previous_state as bit
-  previous_state = SWITCH_UP
-
-  function  check_switch
-      'switch is normally open to 5V ...when pressed, RA3 is connected to GND
-      if (SwitchIn = SWITCH_DOWN) then
-          'debounce by delaying and checking if switch is still pressed
-          wait 1 ms
-          if ( (previous_state =  SWITCH_DOWN) & (SwitchIn = SWITCH_DOWN) ) then
-              ' don't toggle
-              check_switch = false
-              exit function
-          else
-              ' check if still down
-              if (SwitchIn = SWITCH_DOWN) then
-                 previous_state = SWITCH_DOWN
-                 ' reverse the LEDs
-                 check_switch = true
-                 exit function
-             else
-              'switch not properly held down
-              previous_state = SWITCH_UP
-              ' don't reverse
-              check_switch = false
-              exit function
-             end if
-          end if
-      else
-         'switch not pressed
-          previous_state = SWITCH_UP
-          'don't reverse
-          check_switch = false
-          exit function
-      end if
-
-  end Function
+End Function

@@ -15,42 +15,62 @@
 '''@date    30/06/2018
 '''********************************************************************
 
-    #chip 16F18446              'Specify the Device you are compiling for - this board is the 16F18446
-                                'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
+'Specify the Device you are compiling for - this board is the 16F18446
+#CHIP 16F18446
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
 
-    #option Explicit            'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+#OPTION Explicit
 
-    #define LEDOn  = 0          'Set a constant.  The LED can be activated by driving the connected I/O line to GND, see section 3.3.2 of the MPLAB-Xpress-PIC16F18446-Evaluation-Board.pdf
-    #define LEDOff = 1          'Set a constant.  The LED can be de-activated by driving the connected I/O line to the supply voltage, see section 3.3.2 of the MPLAB-Xpress-PIC16F18446-Evaluation-Board.pdf
+'Set a constant.  The LED can be activated by driving the connected I/O line to GND, see section 3.3.2 of the MPLAB-Xpress-PIC16F18446-Evaluation-Board.pdf
+#DEFINE LEDOn  = 0
+'Set a constant.  The LED can be de-activated by driving the connected I/O line to the supply voltage, see section 3.3.2 of the MPLAB-Xpress-PIC16F18446-Evaluation-Board.pdf
+#DEFINE LEDOff = 1
 
-    #define LED0 porta.2       'Set a constant to refer to the LED.  RA2 is a Yellow LED called LED0 Edge connector, see section 3.3.1 of the MPLAB-Xpress-PIC16F18446-Evaluation-Board.pdf
-    dir LED0 out               'Set LED as an output
-    #define PWM_Out1 porta.2   'Setup the port as a SOFTWARE PWM output.  http://gcbasic.sourceforge.net/help/_pwmout.html
+'Set a constant to refer to the LED.  RA2 is a Yellow LED called LED0 Edge connector, see section 3.3.1 of the MPLAB-Xpress-PIC16F18446-Evaluation-Board.pdf
+#DEFINE LED0 porta.2
+'Set LED as an output
+Dir LED0 Out
+'Setup the port as a SOFTWARE PWM output.  http://gcbasic.sourceforge.net/help/_pwmout.html
+#DEFINE PWM_Out1 porta.2
 
-    dim PWMValue as Byte       'Dimension a byte variable
+'Dimension a byte variable
+Dim PWMValue As Byte
 
-    ''' Most programs run in a loop such as this one
-    do
-        Repeat 8                                'Repeat 8 times
-            for PWMValue = 255 to 150           'Lower the LED instensity
-                PWMOut 1, PWMValue, 1           'Activate PWM software channel number 1, using the value of PWMValue for 1 cycle.
-            next
-            wait 5 ms                           'Wait
-            for PWMValue = 150 to 255           'Raise the LED instensity
-                PWMOut 1, PWMValue, 1           'Activate PWM software channel
-            next
-            wait 5 ms                           'Wait
-        end repeat
-        Repeat 2                                'Repeat 2 times
-            for PWMValue = 255 to 10            'Lower the LED instensity
-                PWMOut 1, PWMValue, 1           'Activate PWM software channel
-            next
-            for PWMValue = 10 to 255            'Raise the LED instensity
-                PWMOut 1, PWMValue, 1           'Activate PWM software channel
-            next
+''' Most programs run in a loop such as this one
+Do
+    'Repeat 8 times
+    Repeat 8
+        'Lower the LED instensity
+        For PWMValue = 255 To 150
+            'Activate PWM software channel number 1, using the value of PWMValue for 1 cycle.
+            PWMOut 1, PWMValue, 1
+        Next
+        'Wait
+        Wait 5 ms
+        'Raise the LED instensity
+        For PWMValue = 150 To 255
+            'Activate PWM software channel
+            PWMOut 1, PWMValue, 1
+        Next
+        'Wait
+        Wait 5 ms
+    End Repeat
+    'Repeat 2 times
+    Repeat 2
+        'Lower the LED instensity
+        For PWMValue = 255 To 10
+            'Activate PWM software channel
+            PWMOut 1, PWMValue, 1
+        Next
+        'Raise the LED instensity
+        For PWMValue = 10 To 255
+            'Activate PWM software channel
+            PWMOut 1, PWMValue, 1
+        Next
 
-        end repeat
-    loop
+    End Repeat
+Loop
 
-    end
+End
 

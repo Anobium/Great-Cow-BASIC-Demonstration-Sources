@@ -21,130 +21,136 @@
 
 
 ' ----- Configuration
-    'Chip Settings.
-    #chip 16f18326,32
-    #option explicit
+'Chip Settings.
+#CHIP 16f18326,32
+#OPTION Explicit
 
 
-    #include <lowlevel\hwi2c2.h>
+#INCLUDE <lowlevel\hwi2c2.h>
 
 
-    'Set the PPS of the PWM and the RS232 ports.
-    'Set the PPS for this solution.
-  #startup InitPPS, 85
+'Set the PPS of the PWM and the RS232 ports.
+'Set the PPS for this solution.
+#STARTUP InitPPS, 85
 
-  Sub InitPPS
+Sub InitPPS
     UNLOCKPPS
-      RXPPS  = 0x15 'Pin RC5 source is an input for RX
-      RC4PPS = 0x14 'Pin RC4 source is TX/CK
+    'Pin RC5 source is an input for RX
+    RXPPS  = 0x15
+    'Pin RC4 source is TX/CK
+    RC4PPS = 0x14
 
-      RA2PPS = 0x001b        'RA2->MSSP2:SDA2;
-      SSP2DATPPS = 0x0002    'RA2->MSSP2:SDA2;
-      SSP2CLKPPS = 0x0004    'RA4->MSSP2:SCL2;
-      RA4PPS = 0x001a        'RA4->MSSP2:SCL2;
-      LOCKPPS
-  End sub
+    'RA2->MSSP2:SDA2;
+    RA2PPS = 0x001b
+    'RA2->MSSP2:SDA2;
+    SSP2DATPPS = 0x0002
+    'RA4->MSSP2:SCL2;
+    SSP2CLKPPS = 0x0004
+    'RA4->MSSP2:SCL2;
+    RA4PPS = 0x001a
+    LOCKPPS
+End Sub
 
-    #define SWITCH_DOWN         1
-    #define SWITCH_UP           0
-
-
-
-  '' -------------------LATC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
-    ''-----------------------------------------
-    ''
-    #define LEDD2  PORTC.0
-    #define LEDD3  PORTC.1
-    #define LEDD4  PORTC.2
-    #define LEDD5  PORTC.3
-    #define LEDBANK portc
-    #define SWITCH      PORTA.1
-
-    Dir     LEDD2 OUT
-    Dir     LEDD3 OUT
-    Dir     LEDD4 OUT
-    Dir     LEDD5 OUT
-    Dir      SWITCH IN
-
-    #define USART_BAUD_RATE 19200
-    #define USART_TX_BLOCKING
-
-
-; ----- Define Hardware settings for HWI2C2
-    ' Define I2C settings - CHANGE PORTS if required for your specific device.
-    #define HI2C2_BAUD_RATE 400
-    #define HI2C2_DATA PORTA.2
-    #define HI2C2_CLOCK PORTA.4
-    'Initialise I2C Master
-    'I2C pins need to be input for SSP2 module
-    Dir HI2C2_DATA in
-    Dir HI2C2_CLOCK in
-    'MASTER Second Port
-    HI2C2Mode Master
+#DEFINE SWITCH_DOWN         1
+#DEFINE SWITCH_UP           0
 
 
 
-; ----- Main body of program commences here.
-  ' Now assumes Serial Terminal is operational
-  dim DeviceID as byte
-  Dim DISPLAYNEWLINE as Byte
+'' -------------------LATC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D2 |-
+''-----------------------------------------
+''
+#DEFINE LEDD2  PORTC.0
+#DEFINE LEDD3  PORTC.1
+#DEFINE LEDD4  PORTC.2
+#DEFINE LEDD5  PORTC.3
+#DEFINE LEDBANK portc
+#DEFINE SWITCH      PORTA.1
 
-  HSerPrintCRLF
-  HSerPrint "Hardware I2C2 "
-  HSerPrintCRLF 2
+Dir     LEDD2 Out
+Dir     LEDD3 Out
+Dir     LEDD4 Out
+Dir     LEDD5 Out
+Dir      SWITCH In
 
-  Do Forever
-        Set LEDD2 off
-        Set LEDD3 off
-        Set LEDD4 off
-        Set LEDD5 off
+#DEFINE USART_BAUD_RATE 19200
+#DEFINE USART_TX_BLOCKING
 
-        HSerPrint "     "
-        for DeviceID = 0 to 15
-          HSerPrint hex(deviceID)
-          HSerPrint " "
-        next
 
-        for DeviceID = 0 to 255
-          DisplayNewLine = DeviceID % 16
-          if DisplayNewLine = 0 Then
+' ----- Define Hardware settings for HWI2C2
+' Define I2C settings - CHANGE PORTS if required for your specific device.
+#DEFINE HI2C2_BAUD_RATE 400
+#DEFINE HI2C2_DATA PORTA.2
+#DEFINE HI2C2_CLOCK PORTA.4
+'Initialise I2C Master
+'I2C pins need to be input for SSP2 module
+Dir HI2C2_DATA In
+Dir HI2C2_CLOCK In
+'MASTER Second Port
+HI2C2Mode Master
+
+
+
+' ----- Main body of program commences here.
+' Now assumes Serial Terminal is operational
+Dim DeviceID As Byte
+Dim DISPLAYNEWLINE As Byte
+
+HSerPrintCRLF
+HSerPrint "Hardware I2C2 "
+HSerPrintCRLF 2
+
+Do Forever
+    Set LEDD2 Off
+    Set LEDD3 Off
+    Set LEDD4 Off
+    Set LEDD5 Off
+
+    HSerPrint "     "
+    For DeviceID = 0 To 15
+        HSerPrint Hex(deviceID)
+        HSerPrint " "
+    Next
+
+    For DeviceID = 0 To 255
+        DisplayNewLine = DeviceID % 16
+        If DisplayNewLine = 0 Then
             HSerPrintCRLF
-            HserPrint hex(DeviceID)
+            HSerPrint Hex(DeviceID)
             HSerPrint ": "
-          end if
-          HSerPrint " "
-          HI2C2Start
-          if HI2C2WaitMSSPTimeout <> True then
+        End If
+        HSerPrint " "
+        HI2C2Start
+        If HI2C2WaitMSSPTimeout <> TRUE Then
 
             HI2C2Send ( deviceID )
 
-            if HI2C2AckPollState = false then
-              HSerPrint   hex(deviceID)
+            If HI2C2AckpollState = FALSE Then
+                HSerPrint   Hex(deviceID)
             Else
-              HSerPrint "--"
-            end if
+                HSerPrint "--"
+            End If
             HI2C2Send ( 0)
 
 
-          end if
-          HI2C2Stop
+        End If
+        HI2C2Stop
 
-        next
+    Next
 
-        HSerPrintCRLF 2
-        HSerPrint   "End of Search - Press button to repeat test"
-        HSerPrintCRLF 2
-        Set LEDD2 on
-        Set LEDD3 on
-        Set LEDD4 on
-        Set LEDD5 on
+    HSerPrintCRLF 2
+    HSerPrint   "End of Search - Press button to repeat test"
+    HSerPrintCRLF 2
+    Set LEDD2 On
+    Set LEDD3 On
+    Set LEDD4 On
+    Set LEDD5 On
 
-        wait while switch = SWITCH_UP
-  Loop
-  END
+    Wait While switch = SWITCH_UP
+Loop
+End
 
 
 
-; ----- Support methods.  Subroutines and Functions
+' ----- Support methods.  Subroutines and Functions

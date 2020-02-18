@@ -15,47 +15,47 @@
 '''@date    22.10.2017
 ' ----- Configuration
 
-    'Chip Settings.
-    #chip 18f25k42, 16
-    'This Configuration change is needed to enable programming in Low Voltage Programming Mode
+'Chip Settings.
+#CHIP 18f25k42, 16
+'This Configuration change is needed to enable programming in Low Voltage Programming Mode
 
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | ----------| O | I |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | ----------| O | I |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------------------| X |---------
-    ''-----------------------------------------
-    ''
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------------------| X |---------
+''-----------------------------------------
+''
 
-    'Define constants to make things easier. We can reuse these at any time.
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
 
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
+Dir     LEDD1         Out
+Dir     LEDD2         Out
 
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
 
-    'Use a constant
-    dir LEDD1 out
+'Use a constant
+Dir LEDD1 Out
 
-    do
+Do
 
-        'wait for 1 second which is 1000 ms
-        wait 1000 ms
-        'Set the port bit to NOT value from previous state but using the ! as an alternative to NOT
-        LEDD1 = !LEDD1
+    'wait for 1 second which is 1000 ms
+    Wait 1000 ms
+    'Set the port bit to NOT value from previous state but using the ! as an alternative to NOT
+    LEDD1 = !LEDD1
 
-    loop
+Loop

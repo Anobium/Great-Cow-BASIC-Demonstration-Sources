@@ -28,64 +28,78 @@
 '''@version  1.0
 '''@date     04.12.2016
 
-  #chip 16F18877
+#CHIP 16F18877
 
 
-  'Set the PPS of the PWM and the RS232 ports.
-  'Set the PPS for this solution.
-  #startup InitPPS, 85
+'Set the PPS of the PWM and the RS232 ports.
+'Set the PPS for this solution.
+#STARTUP InitPPS, 85
 
-  Sub InitPPS
+Sub InitPPS
     UNLOCKPPS
-      RD3PPS = 0x000E;   'RD3->PWM6:PWM6OUT;
-      RD2PPS = 0x000E;   'RD2->PWM6:PWM6OUT;
-      RD1PPS = 0x000E;   'RD1->PWM6:PWM6OUT;
-      RD0PPS = 0x000E;   'RD0->PWM6:PWM6OUT;
+    '   'RD3->PWM6:PWM6OUT;
+    RD3PPS = 0x000E
+    '   'RD2->PWM6:PWM6OUT;
+    RD2PPS = 0x000E
+    '   'RD1->PWM6:PWM6OUT;
+    RD1PPS = 0x000E
+    '   'RD0->PWM6:PWM6OUT;
+    RD0PPS = 0x000E
     LOCKPPS
-  End sub
+End Sub
 
-    '' -------------------LATD-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
-    ''-----------------------------------------
-    ''
-    #define LEDD2  PORTD.0
-    #define LEDD3  PORTD.1
-    #define LEDD4  PORTD.2
-    #define LEDD5  PORTD.3
-    #define LEDBANK PORTD
+'' -------------------LATD-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D2 |-
+''-----------------------------------------
+''
+#DEFINE LEDD2  PORTD.0
+#DEFINE LEDD3  PORTD.1
+#DEFINE LEDD4  PORTD.2
+#DEFINE LEDD5  PORTD.3
+#DEFINE LEDBANK PORTD
 
-    'You do need to specfic the ports as outputs
-    Dir     LEDD2 OUT
-    Dir     LEDD3 OUT
-    Dir     LEDD4 OUT
-    Dir     LEDD5 OUT
+'You do need to specfic the ports as outputs
+Dir     LEDD2 Out
+Dir     LEDD3 Out
+Dir     LEDD4 Out
+Dir     LEDD5 Out
 
 
-    'Optimise commands  for PWM modules to reduce the size of the code produced.
-    #define USE_HPWMCCP1 FALSE      ' not used Optimise
-    #define USE_HPWMCCP2 FALSE      ' not used Optimise
-    #define USE_HPWMCCP3 FALSE      ' not used Optimise
-    #define USE_HPWMCCP4 FALSE      ' not used Optimise
+'Optimise commands  for PWM modules to reduce the size of the code produced.
+' not used Optimise
+#DEFINE USE_HPWMCCP1 FALSE
+' not used Optimise
+#DEFINE USE_HPWMCCP2 FALSE
+' not used Optimise
+#DEFINE USE_HPWMCCP3 FALSE
+' not used Optimise
+#DEFINE USE_HPWMCCP4 FALSE
 
-    #define USE_HPWM6 TRUE          ' used so compile
-    #define USE_HPWM5 FALSE         ' not used Optimise
+' used so compile
+#DEFINE USE_HPWM6 TRUE
+' not used Optimise
+#DEFINE USE_HPWM5 FALSE
 
-    #define USE_HPWM_TIMER2 TRUE    ' used so compile
-    #define USE_HPWM_TIMER4 FALSE   ' not used Optimise
-    #define USE_HPWM_TIMER6 FALSE   ' not used Optimise
+' used so compile
+#DEFINE USE_HPWM_TIMER2 TRUE
+' not used Optimise
+#DEFINE USE_HPWM_TIMER4 FALSE
+' not used Optimise
+#DEFINE USE_HPWM_TIMER6 FALSE
 
-    #define myFrequency 60
-    #define myTimerSelected 2
-    dim myDuty as byte
-        myDuty = 50 'start at 50%
+#DEFINE myFrequency 60
+#DEFINE myTimerSelected 2
+Dim myDuty As Byte
+'start at 50%
+myDuty = 50
 
-    HPWM ( HPWM6, myFrequency, myDuty , myTimerSelected  )
+HPWM ( HPWM6, myFrequency, myDuty , myTimerSelected  )
 
-    Do Forever
-          for myDuty = 0 to 255
-              wait 10 ms
-              HPWM ( HPWM6, myFrequency, myDuty, myTimerSelected  )
-        next
-        wait 10 ms
-    Loop
+Do Forever
+    For myDuty = 0 To 255
+        Wait 10 ms
+        HPWM ( HPWM6, myFrequency, myDuty, myTimerSelected  )
+    Next
+    Wait 10 ms
+Loop

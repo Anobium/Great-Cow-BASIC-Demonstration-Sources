@@ -14,142 +14,146 @@
 '''********************************************************************************
 
 
-    #chip 16f18326,32
+#CHIP 16f18326,32
 
-    #option explicit
-
-
+#OPTION Explicit
 
 
-    'Set the PPS for this solution.
-  #startup InitPPS, 85
 
-  Sub InitPPS
+
+'Set the PPS for this solution.
+#STARTUP InitPPS, 85
+
+Sub InitPPS
     UNLOCKPPS
 
-        RC1PPS = 0x19            ' RC1<-MSSP1:SDA1
-        SSP1CLKPPS = 0x10        ' RC0->MSSP1:SCL1
-        SSP1DATPPS = 0x11        ' RC1->MSSP1:SDA1
-        RC0PPS = 0x18            ' RC0->MSSP1:SCL1
+    ' RC1<-MSSP1:SDA1
+    RC1PPS = 0x19
+    ' RC0->MSSP1:SCL1
+    SSP1CLKPPS = 0x10
+    ' RC1->MSSP1:SDA1
+    SSP1DATPPS = 0x11
+    ' RC0->MSSP1:SCL1
+    RC0PPS = 0x18
 
-      LOCKPPS
-  End sub
+    LOCKPPS
+End Sub
 
-    #include <lowlevel\hwi2c.h>
-  ; ----- Define Hardware settings
-  ' Define I2C settings
-  #define HI2C_BAUD_RATE 100
-    #define hi2c_DATA PORTC.1
-    #define hi2c_CLOCK PORTC.0
-  'I2C pins need to be input for SSP module
-  Dir HI2C_DATA in
-  Dir HI2C_CLOCK in
-  'MASTER MODE
-  HI2CMode Master
+#INCLUDE <lowlevel\hwi2c.h>
+' ----- Define Hardware settings
+' Define I2C settings
+#DEFINE HI2C_BAUD_RATE 100
+#DEFINE hi2c_DATA PORTC.1
+#DEFINE hi2c_CLOCK PORTC.0
+'I2C pins need to be input for SSP module
+Dir HI2C_DATA In
+Dir HI2C_CLOCK In
+'MASTER MODE
+HI2CMode Master
 
 
-  '''Set up LCD
-   #define LCD_IO 10
-   #define LCD_I2C_Address_1 0x4E
+'''Set up LCD
+#DEFINE LCD_IO 10
+#DEFINE LCD_I2C_Address_1 0x4E
 
-   'You may need to use SLOW or MEDIUM if your LCD is a slower device.
-   #define LCD_SPEED SLOW
-   'You may need to invert these states. Dependent of LCD I2C adapter.
-   #define LCD_Backlight_On_State  1
-   #define LCD_Backlight_Off_State 0
+'You may need to use SLOW or MEDIUM if your LCD is a slower device.
+#DEFINE LCD_SPEED SLOW
+'You may need to invert these states. Dependent of LCD I2C adapter.
+#DEFINE LCD_Backlight_On_State  1
+#DEFINE LCD_Backlight_Off_State 0
 
-; ----- Constants
-  'None required beyond the scope of the hardware.
+' ----- Constants
+'None required beyond the scope of the hardware.
 
-; ----- Quick Command Reference:
+' ----- Quick Command Reference:
 
- '''Set LCD_10 to 10 for the YwRobot LCD1602 IIC V1 or the Sainsmart LCD_PIC I2C adapter
- '''Set LCD_10 to 12 for the Ywmjkdz I2C adapter with pot bent over top of chip
+'''Set LCD_10 to 10 for the YwRobot LCD1602 IIC V1 or the Sainsmart LCD_PIC I2C adapter
+'''Set LCD_10 to 12 for the Ywmjkdz I2C adapter with pot bent over top of chip
 
-; ----- Main body of program commences here.
-    InitLCD
-    wait 100 ms
+' ----- Main body of program commences here.
+InitLCD
+Wait 100 ms
+CLS
+Print "Great Cow Basic"
+Locate 1,0
+Print "@v.0.95.010"
+Wait 3 s
+
+Do Forever
     CLS
-    PRINT "Great Cow Basic"
+    Wait 3 s
+    Print "START TEST"
     Locate 1,0
-    Print "@v.0.95.010"
-    WAIT 3 s
+    Print "DISPLAY ON"
+    Wait 3 s
 
-    Do Forever
-        CLS
-        WAIT 3 s
-        PRINT "START TEST"
-        locate 1,0
-        PRINT "DISPLAY ON"
-        wait 3 s
+    CLS
+    Locate 0,0
+    Print "Cursor ON"
+    Locate 1,0
+    LCDCursor CURSORON
+    Wait 3 s
+    CLS
+    LCDCursor CURSOROFF
+    Locate 0,0
+    Print "Cursor OFF"
+    Wait 3 s
+    CLS
+    Locate 0,0
+    Print "FLASH ON"
+    Locate 1,0
+    LCDCursor FLASHON
+    Wait 3 s
 
-        CLS
-        Locate 0,0
-        Print "Cursor ON"
-        Locate 1,0
-        LCDcursor CursorOn
-        wait 3 S
-        CLS
-        LCDcursor CursorOFF
-        locate 0,0
-        Print "Cursor OFF"
-        wait 3 s
-        CLS
-        Locate 0,0
-        Print "FLASH ON"
-        Locate 1,0
-        LCDcursor FLASHON
-        wait 3 s
+    CLS
+    Locate 0,0
+    Print "FLASH OFF"
+    LCDCursor FLASHOFF
+    Wait 3 sec
 
-        CLS
-        locate 0,0
-        Print "FLASH OFF"
-        LCDCURSOR FLASHOFF
-        wait 3 sec
+    Locate 0,0
+    Print "CURSR & FLSH ON"
+    Locate 1,0
+    LCDCursor CURSORON
+    LCDCursor FLASHON
+    Wait 3 sec
 
-        Locate 0,0
-        Print "CURSR & FLSH ON"
-        locate 1,0
-        LCDCURSOR CURSORON
-        LCDCURSOR FLASHON
-        Wait 3 sec
+    Locate 0,0
+    Print "CURSR & FLSH OFF"
+    Locate 1,0
+    LCDCursor CURSOROFF
+    LCDCursor FLASHOFF
+    Wait 3 sec
 
-        Locate 0,0
-        Print "CURSR & FLSH OFF"
-        locate 1,0
-        LCDCURSOR CursorOFF
-        LCDCURSOR FLASHOFF
-        Wait 3 sec
+    CLS
+    Locate 0,4
+    Print "Flashing"
+    Locate 1,4
+    Print "Display"
+    Wait 500 ms
 
-        CLS
-        Locate 0,4
-        PRINT "Flashing"
-        Locate 1,4
-        Print "Display"
-        wait 500 ms
-
-        repeat 10
-            LCDCURSOR LCDOFF
-            wait 500 ms
-            LCDCURSOR LCDON
-            wait 500 ms
-        end repeat
-        CLS
-        Locate 0,0
-        Print "DISPLAY & BACKL."
-        Locate 1,0
-        Print "FOR 5 SEC"
-        Wait 2 SEC
-        LCDCURSOR LCDOFF
-        LCDBacklight OFF
-        WAIT 5 s
-        LCDBacklight ON
-        CLS
-        Locate 0,0
-        LCDCURSOR LCDON
-        Print "END TEST"
-        wait 3 s
-    loop
+    Repeat 10
+        LCDCursor LCDOFF
+        Wait 500 ms
+        LCDCursor LCDON
+        Wait 500 ms
+    End Repeat
+    CLS
+    Locate 0,0
+    Print "DISPLAY & BACKL."
+    Locate 1,0
+    Print "FOR 5 SEC"
+    Wait 2 SEC
+    LCDCursor LCDOFF
+    LCDBacklight Off
+    Wait 5 s
+    LCDBacklight On
+    CLS
+    Locate 0,0
+    LCDCursor LCDON
+    Print "END TEST"
+    Wait 3 s
+Loop
 
 
-end
+End

@@ -23,63 +23,65 @@
 '''@date    10 September 2019
 '''***************************************************************************************
 
-; ---- Configuration
+' ---- Configuration
 
 'Microcontroller @ 32MHz
-#chip 16F1619, 32
+#CHIP 16F1619, 32
 
 
 'MCLRE set on so that switch S2 can reset microcontroller
-#config MCLRE_ON
+#CONFIG MCLRE_ON
 
 
 'Ensure all variables are explicitly defined
-#option explicit
+#OPTION Explicit
 
-; ---- Define hardware settings
+' ---- Define hardware settings
 
-#define S1 PORTC.4
+#DEFINE S1 PORTC.4
 Dir S1 In
 
-#define Led1 PORTA.5
-DIR PORTA.5 OUT
+#DEFINE Led1 PORTA.5
+Dir PORTA.5 Out
 
-#define Led2 PORTA.1
-DIR PORTA.1 OUT
+#DEFINE Led2 PORTA.1
+Dir PORTA.1 Out
 
-#define Led3 PORTA.2
-DIR PORTA.2 OUT
+#DEFINE Led3 PORTA.2
+Dir PORTA.2 Out
 
-#define Led4 PORTC.5
-DIR PORTC.5 OUT
+#DEFINE Led4 PORTC.5
+Dir PORTC.5 Out
 
-#define POT1 AN4
-DIR PORTC.0 IN
+#DEFINE POT1 AN4
+Dir PORTC.0 In
 
-#define SensorChannel PORTC.1	 ' AN5/RC1 - sensor channel
-DIR SensorChannel IN
+' AN5/RC1 - sensor channel
+#DEFINE SensorChannel PORTC.1	
+Dir SensorChannel In
 
-#define SecondaryChannel PORTC.2 ' AN6/RC2 - secondary (dummy) channel
-DIR SecondaryChannel OUT
+' AN6/RC2 - secondary (dummy) channel
+#DEFINE SecondaryChannel PORTC.2
+Dir SecondaryChannel Out
 
-; ---- Constants
+' ---- Constants
 
 'startup wait in seconds
-#define waitSecs 1
+#DEFINE waitSecs 1
 
-; ---- Variables
+' ---- Variables
 
-Dim ADCvalueWord as Word
+Dim ADCvalueWord As Word
 
-; ---- Main body of program
+' ---- Main body of program
 
 'LED init on program startup
-WAIT waitSecs S
+Wait waitSecs s
 Set LED1 = 1
 Set LED2 = 1
 Set LED3 = 1
 Set LED4 = 1
-WAIT waitSecs S
+Wait waitSecs s
 Set LED1 = 0
 Set LED2 = 0
 Set LED3 = 0
@@ -90,41 +92,56 @@ Set ADCvalueWord = 0
 'Program infinite loop
 Do Forever
 
-   'AN1298 - Step 1: Set secondary (dummy) channel high (VDD)
-   Dir SecondaryChannel OUT	 	'set as output
-   Set ODCONC.2 = 1		'set as open drain
-   Set ANSELC.2 = 0		'set as digital
-   Set SecondaryChannel = 1   	'set high (VDD)
+    'AN1298 - Step 1: Set secondary (dummy) channel high (VDD)
+    'set as output
+    Dir SecondaryChannel Out	
+    'set as open drain
+    Set ODCONC.2 = 1
+    'set as digital
+    Set ANSELC.2 = 0
+    'set high (VDD)
+    Set SecondaryChannel = 1
 
-   'AN1298 - Step 2: Select secondary channel on ADC (charge CHOLD to VDD)
-   Set ADCON0 = 0b00011000      'ADC channel select -> AN6/RC2 (bits 2-6)
+    'AN1298 - Step 2: Select secondary channel on ADC (charge CHOLD to VDD)
+    'ADC channel select -> AN6/RC2 (bits 2-6)
+    Set ADCON0 = 0b00011000
 
-   'AN1298 - Step 3: Set sensor pin as output, low (GND) to eliminate any charge
-   Dir SensorChannel OUT	'Set as output
-   Set ANSELC.1 = 0		'Set as digital
-   Set SensorChannel = 0     	'set low (ground)
+    'AN1298 - Step 3: Set sensor pin as output, low (GND) to eliminate any charge
+    'Set as output
+    Dir SensorChannel Out
+    'Set as digital
+    Set ANSELC.1 = 0
+    'set low (ground)
+    Set SensorChannel = 0
 
-   'AN1298 - Step 4: Set sensor pin as input
-   Dir SensorChannel IN	    	'Set as input
-   Set ANSELC.1 = 1		'Set as analog
+    'AN1298 - Step 4: Set sensor pin as input
+    'Set as input
+    Dir SensorChannel In	
+    'Set as analog
+    Set ANSELC.1 = 1
 
-   'AN1298 - Step 5: Select sensor channel on ADC (V-div sensor:CHOLD)
-   Set ADCON0 = 0b00010101	'ADC channel select -> AN5/RC1 (bits 2-6)
-    	     		   	'Enable ADC (bit 0)
-   Wait 10 US 		   	'Delay to allow ADC voltage to stabilise
+    'AN1298 - Step 5: Select sensor channel on ADC (V-div sensor:CHOLD)
+    'ADC channel select -> AN5/RC1 (bits 2-6)
+    Set ADCON0 = 0b00010101
+    'Enable ADC (bit 0)
+    'Delay to allow ADC voltage to stabilise
+    Wait 10 us 		
 
-   'AN1298 - Step 6: Start ADC conversion
-   Set ADCON0.1 = 1  	       	'Start ADC conversion (set go/done bit 1 = 1)
-   Wait While ADCON0.1 = 1     	'Wait for ADC conversion (done bit 1 = 0)
+    'AN1298 - Step 6: Start ADC conversion
+    'Start ADC conversion (set go/done bit 1 = 1)
+    Set ADCON0.1 = 1  	
+    'Wait for ADC conversion (done bit 1 = 0)
+    Wait While ADCON0.1 = 1
 
-   'AN1298 - Step 7: Read ADC result
-   ADCvalueWord = ReadAD10(AN5)
+    'AN1298 - Step 7: Read ADC result
+    ADCvalueWord = ReadAD10(AN5)
 
-   'Action result
-   If ADCvalueWord > 5 then	'If touching S3 touch button
-	    LED1 = 1
-   Else
-	    LED1 = 0
-   End if
+    'Action result
+    If ADCvalueWord > 5 Then
+        'If touching S3 touch button
+        LED1 = 1
+    Else
+        LED1 = 0
+    End If
 
-LOOP
+Loop

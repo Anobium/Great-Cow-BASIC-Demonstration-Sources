@@ -1,47 +1,47 @@
-  '''A demonstration program for GCGB and GCB.
-  '''--------------------------------------------------------------------------------------------------------------------------------
-  '''This program demostrates use of the Logical Shift Left (FnLsl) command.
-  '''A set eigth LEDs are connected to PortC via eigth suitable resistors, 1k resistors should be adequate for a 5v supply voltage.
-  '''This demonstration shifts the LED to the left which turns on each LED in sequence.
-  '''For the LED and Switch connection please see the program below.
-  '''@author 	ChrisR and EvanV
-  '''@licence	GPL
-  '''@version	1.01
-  '''@date   	22.02.2016
-  '''********************************************************************************
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demostrates use of the Logical Shift Left (FnLsl) command.
+'''A set eigth LEDs are connected to PortC via eigth suitable resistors, 1k resistors should be adequate for a 5v supply voltage.
+'''This demonstration shifts the LED to the left which turns on each LED in sequence.
+'''For the LED and Switch connection please see the program below.
+'''@author 	ChrisR and EvanV
+'''@licence	GPL
+'''@version	1.01
+'''@date   	22.02.2016
+'''********************************************************************************
 
-  ; ----- Configuration
-  #chip 16f877a, 4
+' ----- Configuration
+#CHIP 16f877a, 4
 
-  ; ----- Constants
-    ' No Constants specified in this example.
+' ----- Constants
+' No Constants specified in this example.
 
-  ; ----- Define Hardware settings
-  Dir PortC Out
+' ----- Define Hardware settings
+Dir PortC Out
 
-  ; ----- Variables
-    ' No Variables specified in this example. All byte variables are defined upon use.
+' ----- Variables
+' No Variables specified in this example. All byte variables are defined upon use.
 
-  ; ----- Quick Command Reference:
-  'See header for details
+' ----- Quick Command Reference:
+'See header for details
 
 
-  ; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
-  Set C ON
-  Do
+Set C On
+Do
 
     PortC.0 = 1
     Repeat 8
 
-      wait 500 ms
-      PortC = FnLsl( PortC, 1 )
+        Wait 500 ms
+        PortC = FnLSL( PortC, 1 )
 
     End Repeat
 
-  Loop
+Loop
 
-  end
+End
 
-  ; ----- Support methods.  Subroutines and Functions
+' ----- Support methods.  Subroutines and Functions
 

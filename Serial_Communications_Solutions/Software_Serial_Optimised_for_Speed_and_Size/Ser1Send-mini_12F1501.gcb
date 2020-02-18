@@ -9,18 +9,22 @@
 '''@date    13.01.2017
 '''********************************************************************************
 
-; ----- Configuration
-#chip 12F1501, 1
+' ----- Configuration
+#CHIP 12F1501, 1
 
-; ----- Include library
-#include <softserial.h>
+' ----- Include library
+#INCLUDE <softserial.h>
 
-; ----- Config Serial UART for sending:
-#define SER1_BAUD 9600     ; baudrate must be defined
-#define SER1_TXPORT PORTA  ; I/O port (without .bit) must be defined
-#define SER1_TXPIN 5       ; portbit  must be defined
+' ----- Config Serial UART for sending:
+' baudrate must be defined
+#DEFINE SER1_BAUD 9600
+' I/O port (without .bit) must be defined
+#DEFINE SER1_TXPORT PORTA
+' portbit  must be defined
+#DEFINE SER1_TXPIN 5
 
-; ----- Variables
+' ----- Variables
 
-; ----- Main body of program commences here.
-Ser1Send 88   'send one byte (88 = X)
+' ----- Main body of program commences here.
+'send one byte (88 = X)
+Ser1Send 88

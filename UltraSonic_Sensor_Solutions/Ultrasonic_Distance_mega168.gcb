@@ -10,42 +10,42 @@
 '''********************************************************************************
 
 
-; ----- Configuration
-  #chip mega168, 16
-  ;Include files (Libraries)
-  #include <srf04.h>
+' ----- Configuration
+#CHIP mega168, 16
+'Include files (Libraries)
+#INCLUDE <srf04.h>
 
-; ----- hardware
-  dir PORTB.0 out
+' ----- hardware
+Dir PORTB.0 Out
 
-; ----- Constants
-  #define US1Ping PORTB.4
-  #define US1Echo PORTB.7
-  #define AlarmDistance 50
-
-
-; ----- Variables
-  Dim Distance As word
+' ----- Constants
+#DEFINE US1Ping PORTB.4
+#DEFINE US1Echo PORTB.7
+#DEFINE AlarmDistance 50
 
 
-; ----- Main body of program commences here.
-
-  Do Forever
-
-            'Take a distance reading
-            Distance = USDistance(1)
-
-            'Check the reading, is the object too close?
-            if Distance < AlarmDistance then
-                      Set PORTB.0 On
-            Else
-                      Set PORTB.0 Off
-            end if
-  	
-            'Delay for a few milliseconds before taking the next reading
-            Wait 10 ms
-  Loop
+' ----- Variables
+Dim Distance As Word
 
 
-end
+' ----- Main body of program commences here.
+
+Do Forever
+
+    'Take a distance reading
+    Distance = USDistance(1)
+
+    'Check the reading, is the object too close?
+    If Distance < AlarmDistance Then
+        Set PORTB.0 On
+    Else
+        Set PORTB.0 Off
+    End If
+
+    'Delay for a few milliseconds before taking the next reading
+    Wait 10 ms
+Loop
+
+
+End
 

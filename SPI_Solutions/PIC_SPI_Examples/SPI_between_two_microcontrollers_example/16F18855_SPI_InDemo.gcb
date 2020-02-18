@@ -21,68 +21,78 @@
 '''
 
 ' ----- Configuration
-    #chip 16f18855
-    #option explicit
+#CHIP 16f18855
+#OPTION Explicit
 
 
-    'Set the PPS of the PWM and the RS232 ports.
-    'Set the PPS for this solution.
-  #startup InitPPS, 85
+'Set the PPS of the PWM and the RS232 ports.
+'Set the PPS for this solution.
+#STARTUP InitPPS, 85
 
-  Sub InitPPS
+Sub InitPPS
     UNLOCKPPS
-      RC0PPS = 0x0010     'RC0->EUSART:TX;
-      RXPPS  = 0x0011     'RC1->EUSART:RX;
+    'RC0->EUSART:TX;
+    RC0PPS = 0x0010
+    'RC1->EUSART:RX;
+    RXPPS  = 0x0011
 
-      'Module: MSSP1
-      RB3PPS = 0x0014    'SCL1 > RB3
-      SSP1CLKPPS = 0x000B    'RB3 > SCL1 (bi-directional)
-      RB4PPS = 0x0015    'SDA1 > RB4
-      SSP1DATPPS = 0x000C    'RB4 > SDA1 (bi-directional)
-      RB5PPS = 0x0015    'SDO1 > RB5
+    'Module: MSSP1
+    'SCL1 > RB3
+    RB3PPS = 0x0014
+    'RB3 > SCL1 (bi-directional)
+    SSP1CLKPPS = 0x000B
+    'SDA1 > RB4
+    RB4PPS = 0x0015
+    'RB4 > SDA1 (bi-directional)
+    SSP1DATPPS = 0x000C
+    'SDO1 > RB5
+    RB5PPS = 0x0015
 
     LOCKPPS
-  End sub
+End Sub
 
-    #define USART_BAUD_RATE 19200
-    #define USART_TX_BLOCKING
+#DEFINE USART_BAUD_RATE 19200
+#DEFINE USART_TX_BLOCKING
 
-    #define SWITCH_DOWN         0
-    #define SWITCH_UP           1
+#DEFINE SWITCH_DOWN         0
+#DEFINE SWITCH_UP           1
 
-    #define LEDD1               porta.0
-    #define SWITCH      PORTA.5
+#DEFINE LEDD1               porta.0
+#DEFINE SWITCH      PORTA.5
 
-    'Potentitor is connected to RA4...set as input
-    dir porta.4 in
-    'setup switch (SW1)
-    dir SWITCH in
+'Potentitor is connected to RA4...set as input
+Dir porta.4 In
+'setup switch (SW1)
+Dir SWITCH In
 
-    'Set SPI mode to slave
-    SPIMode Slave
-    'setup direction of SPI pins
-    dir PORTB.3 in    'clock
-    dir PORTB.4 in     'data in
-    dir PORTB.5 out    'data out
+'Set SPI mode to slave
+SPIMode Slave
+'setup direction of SPI pins
+'clock
+Dir PORTB.3 In
+'data in
+Dir PORTB.4 In
+'data out
+Dir PORTB.5 Out
 
-    dir LEDD1 out
+Dir LEDD1 Out
 
 
-    HSerPrintCRLF 2
-    HSerPrint "Great Cow Basic @2016": HSerPrintCRLF
-    HSerPrint "SPI Board": HSerPrintCRLF 2
-    wait 1 s
+HSerPrintCRLF 2
+HSerPrint "Great Cow Basic @2016": HSerPrintCRLF
+HSerPrint "SPI Board": HSerPrintCRLF 2
+Wait 1 s
 
-    dim InValue as byte
+Dim InValue As Byte
 
-    do
+Do
 
-      'Show BYTE read of THE remote ADC
-          SPITransfer 0, InValue
-          hserprint InValue
-          HSerPrintCRLF
-          LEDD1 = not LEDD1
-    loop
+    'Show BYTE read of THE remote ADC
+    SPITransfer 0, InValue
+    HSerPrint InValue
+    HSerPrintCRLF
+    LEDD1 = NOT LEDD1
+Loop
 
 
 

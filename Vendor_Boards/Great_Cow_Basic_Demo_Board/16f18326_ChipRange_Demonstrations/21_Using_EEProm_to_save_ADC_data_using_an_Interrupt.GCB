@@ -39,100 +39,109 @@
 
 
 
-    'Chip Settings.
-    #chip 16f18326
-    #option explicit
+'Chip Settings.
+#CHIP 16f18326
+#OPTION Explicit
 
 
-  'Set the PPS of the PWM and the RS232 ports.
-  'Set the PPS for this solution.
-  #startup InitPPS, 85
+'Set the PPS of the PWM and the RS232 ports.
+'Set the PPS for this solution.
+#STARTUP InitPPS, 85
 
-  Sub InitPPS
+Sub InitPPS
     UNLOCKPPS
-      RXPPS  = 0x15 'Pin RC5 source is an input for RX
-      RC4PPS = 0x14 'Pin RC4 source is TX/CK
+    'Pin RC5 source is an input for RX
+    RXPPS  = 0x15
+    'Pin RC4 source is TX/CK
+    RC4PPS = 0x14
     LOCKPPS
-  End sub
+End Sub
 
 
-  #define USART_BAUD_RATE 19200
-  #define USART_TX_BLOCKING
+#DEFINE USART_BAUD_RATE 19200
+#DEFINE USART_TX_BLOCKING
 
-   '' -------------------LATC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
-    ''-----------------------------------------
-    ''
-    #define LEDD2  PORTC.0
-    #define LEDD3  PORTC.1
-    #define LEDD4  PORTC.2
-    #define LEDD5  PORTC.3
-    #define LEDBANK portc
-    #define SWITCH      PORTA.1
+'' -------------------LATC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D2 |-
+''-----------------------------------------
+''
+#DEFINE LEDD2  PORTC.0
+#DEFINE LEDD3  PORTC.1
+#DEFINE LEDD4  PORTC.2
+#DEFINE LEDD5  PORTC.3
+#DEFINE LEDBANK portc
+#DEFINE SWITCH      PORTA.1
 
-    Dir     LEDD2 OUT
-    Dir     LEDD3 OUT
-    Dir     LEDD4 OUT
-    Dir     LEDD5 OUT
-    Dir     SWITCH IN
+Dir     LEDD2 Out
+Dir     LEDD3 Out
+Dir     LEDD4 Out
+Dir     LEDD5 Out
+Dir     SWITCH In
 
-    ' Set LEDS off
-    LEDBANK = 0
+' Set LEDS off
+LEDBANK = 0
 
-    ' A variable to track the button has been presssed
-    dim switchstate as byte
-    switchstate = 0
+' A variable to track the button has been presssed
+Dim switchstate As Byte
+switchstate = 0
 
-    Dim OUTVALUE, ADC_VALUE as Byte
-
-
-    #define SWITCH_DOWN         1
-    #define SWITCH_UP           0
+Dim OUTVALUE, ADC_VALUE As Byte
 
 
-    'Setup an Interrupt event when porta.1 goes negative.
-    IOCAP1 = 1
-    On Interrupt PORTChange  Call InterruptHandler
-
-    do
-
-      if switchstate.0 = 1 Then
-
-         'Read the value from the EEPROM from register Zero in the EEPROM
-          EPRead ( 0, OutValue )
-          'Leave the Top Bytes alone and set the lower four bits
-          LEDBANK = ( LEDBANK & 0XF0 ) OR ( OutValue / 16 )
-
-          HSerPrint "ADC = " + str(adc_Value)
-          HSerPrintCRLF
-
-          Sleep
-
-          switchstate.0 = 0                   '  remove flag
-
-      end if
-
-    loop
+#DEFINE SWITCH_DOWN         1
+#DEFINE SWITCH_UP           0
 
 
-sub InterruptHandler
+'Setup an Interrupt event when porta.1 goes negative.
+IOCAP1 = 1
+On Interrupt PORTChange  Call InterruptHandler
 
-    LEDBANK = 255                               'Set all the LEDs on, the LEDs will flash when the switch is pressed
+Do
 
-    if IOCAP1 = 1 and switch = On then         'S2 was just pressed AND switch is down
-        IOCAP1 = 0                             'Prevent the event from reentering the InterruptHandler routine
-        IOCAF1 = 0                             'We must clear the flag in software
-        switchstate.0 = 1                      'set bit 0 of the variable to flag the switch has been operated
+    If switchstate.0 = 1 Then
+
+        'Read the value from the EEPROM from register Zero in the EEPROM
+        EPRead ( 0, OutValue )
+        'Leave the Top Bytes alone and set the lower four bits
+        LEDBANK = ( LEDBANK & 0XF0 ) OR ( OutValue / 16 )
+
+        HSerPrint "ADC = " + Str(adc_Value)
+        HSerPrintCRLF
+
+        Sleep
+
+        '  remove flag
+        switchstate.0 = 0
+
+    End If
+
+Loop
+
+
+Sub InterruptHandler
+
+    'Set all the LEDs on, the LEDs will flash when the switch is pressed
+    LEDBANK = 255
+
+    If IOCAP1 = 1 AND switch = On Then
+        'S2 was just pressed AND switch is down
+        'Prevent the event from reentering the InterruptHandler routine
+        IOCAP1 = 0
+        'We must clear the flag in software
+        IOCAF1 = 0
+        'set bit 0 of the variable to flag the switch has been operated
+        switchstate.0 = 1
         HSerPrint "SW Pressed"
         HSerPrintCRLF
         'Read the ADC
-        adc_value = readad ( AN0 )
+        adc_value = ReadAD ( AN0 )
 
         'Write the value to register Zero in the EEPROM
         EPWrite ( 0, adc_value )
-        IOCAP1 = 1                               'ReEnable the InterruptHandler routine
+        'ReEnable the InterruptHandler routine
+        IOCAP1 = 1
 
-    end if
+    End If
 
-end sub
+End Sub

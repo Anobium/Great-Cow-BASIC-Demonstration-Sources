@@ -10,34 +10,45 @@
 '''********************************************************************************
 
 
-; ----- Configuration
-#chip tiny85, 1
-#option Explicit
+' ----- Configuration
+#CHIP tiny85, 1
+#OPTION Explicit
 
-; ----- Include library
-#include <softserial.h>
+' ----- Include library
+#INCLUDE <softserial.h>
 
-; ----- Config Serial UART for sending:
-#define SER1_BAUD 19200   ; baudrate must be defined
-#define SER1_TXPORT PORTB  ; I/O port (without .bit) must be defined
-#define SER1_TXPIN 3       ; portbit  must be defined
-#define SER1_DATABITS 8    ; databits optional (default = 8)
-#define SER1_STOPBITS 1    ; stopbits optional (default = 1)
-#define SER1_INVERT Off    ; inverted polarity optional (default = Off)
+' ----- Config Serial UART for sending:
+' baudrate must be defined
+#DEFINE SER1_BAUD 19200
+' I/O port (without .bit) must be defined
+#DEFINE SER1_TXPORT PORTB
+' portbit  must be defined
+#DEFINE SER1_TXPIN 3
+' databits optional (default = 8)
+#DEFINE SER1_DATABITS 8
+' stopbits optional (default = 1)
+#DEFINE SER1_STOPBITS 1
+' inverted polarity optional (default = Off)
+#DEFINE SER1_INVERT Off
 
-; ----- Variables
+' ----- Variables
 Dim xx As Word
 xx = 1000
 
-; ----- Main body of program commences here.
- Do Forever
+' ----- Main body of program commences here.
+Do Forever
 
-  Ser1Send  13                 'new line in Terminal
-  Ser1Send  10                 '
-  Ser1Print "Software-UART: "  'send a text
-  Ser1Send  xx                 'send the value of xx
+    'new line in Terminal
+    Ser1Send  13
+    '
+    Ser1Send  10
+    'send a text
+    Ser1Print "Software-UART: "
+    'send the value of xx
+    Ser1Send  xx
 
-  Wait 1 s                     'time to enjoy the result
-  xx += 1
+    'time to enjoy the result
+    Wait 1 s
+    xx += 1
 
- Loop
+Loop

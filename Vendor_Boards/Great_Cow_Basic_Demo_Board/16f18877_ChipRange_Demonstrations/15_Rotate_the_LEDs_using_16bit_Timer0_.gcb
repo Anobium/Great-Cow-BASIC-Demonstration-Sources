@@ -31,56 +31,58 @@
 '''@date     04.12.2016
 
 
-    'Chip Settings.
-    #chip 16f18877,32
-    #option explicit
+'Chip Settings.
+#CHIP 16f18877,32
+#OPTION Explicit
 
 
 
 
-    'Set the PPS for this solution.
-  #startup InitPPS, 85
+'Set the PPS for this solution.
+#STARTUP InitPPS, 85
 
-  Sub InitPPS
+Sub InitPPS
     UNLOCKPPS
-      '----------------------------------------------------------------------
-      RXPPS  = 0x15 'Pin RC5 source is an input for RX
-      RC4PPS = 0x10 'Pin RC4 source is TX/CK
-      '----------------------------------------------------------------------
-      LOCKPPS
-  End sub
+    '----------------------------------------------------------------------
+    'Pin RC5 source is an input for RX
+    RXPPS  = 0x15
+    'Pin RC4 source is TX/CK
+    RC4PPS = 0x10
+    '----------------------------------------------------------------------
+    LOCKPPS
+End Sub
 
 
-    '' -------------------LATD-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
-    ''-----------------------------------------
-    ''
-    #define LEDD2  PORTD.0
-    #define LEDD3  PORTD.1
-    #define LEDD4  PORTD.2
-    #define LEDD5  PORTD.3
-    #define LEDBANK PORTD
+'' -------------------LATD-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D2 |-
+''-----------------------------------------
+''
+#DEFINE LEDD2  PORTD.0
+#DEFINE LEDD3  PORTD.1
+#DEFINE LEDD4  PORTD.2
+#DEFINE LEDD5  PORTD.3
+#DEFINE LEDBANK PORTD
 
-    Dir     LEDD2 OUT
-    Dir     LEDD3 OUT
-    Dir     LEDD4 OUT
-    Dir     LEDD5 OUT
+Dir     LEDD2 Out
+Dir     LEDD3 Out
+Dir     LEDD4 Out
+Dir     LEDD5 Out
 
-    #define USART_BAUD_RATE 19200
-    #define USART_TX_BLOCKING
+#DEFINE USART_BAUD_RATE 19200
+#DEFINE USART_TX_BLOCKING
 
-    Dim CURRENTSTATE as Byte
+Dim CURRENTSTATE As Byte
 
 
 '    Set LEDS off
-    LEDBANK = 0
+LEDBANK = 0
 '    Set the first LED on
-    Set LEDD5 on
+Set LEDD5 On
 
 '    Initialise the timer.
 '    Firstly tell the compiler to use a 16bit timer for this demonstration
-    #define TMR0_16BIT
+#DEFINE TMR0_16BIT
 
 '     For this we need the following:
 '        Prescaler
@@ -89,35 +91,36 @@
 '            NOT to sync Timer
 '       Post scaler
 '            1:2
-    InitTimer0 Osc, PRE0_256 + TMR0_HFINTOSC ,  POST0_2
+InitTimer0 Osc, PRE0_256 + TMR0_HFINTOSC ,  POST0_2
 '     Start the Timer
-    StartTimer 0
+StartTimer 0
 
-    'Every 1 sec
-    Settimer ( 0 , 0x0bdc  )
+'Every 1 sec
+SetTimer ( 0 , 0x0bdc  )
 
-    do
+Do
 
-            'wait for the event
-            wait while TMR0IF = 0
+    'wait for the event
+    Wait While TMR0IF = 0
 
-            ' Clearing Timer flag will reset event
-            TMR0IF = 0
+    ' Clearing Timer flag will reset event
+    TMR0IF = 0
 
-            'get current status of the four bits
-            currentstate = LEDBANK & 0x0F
+    'get current status of the four bits
+    currentstate = LEDBANK & 0x0F
 
-            'Just rotate the bottom four bits
-            'Set the carry flag
-            C = 0
-            Rotate  currentstate right
-            'Test the Carry flag
-            if C = 1 then currentstate.3 = 1  'set the BIT on
+    'Just rotate the bottom four bits
+    'Set the carry flag
+    C = 0
+    Rotate  currentstate Right
+    'Test the Carry flag
+    If C = 1 Then currentstate.3 = 1
+    'set the BIT on
 
-            'Set the four bits
-            LEDBANK = ( LEDBANK & 0xF0 ) OR currentstate
+    'Set the four bits
+    LEDBANK = ( LEDBANK & 0xF0 ) OR currentstate
 
-            'Set timer to 1s before the next event occurs.  This as close as you can get to 1s
-             Settimer ( 0 , 0x0bdc )
+    'Set timer to 1s before the next event occurs.  This as close as you can get to 1s
+    SetTimer ( 0 , 0x0bdc )
 
-        loop
+Loop

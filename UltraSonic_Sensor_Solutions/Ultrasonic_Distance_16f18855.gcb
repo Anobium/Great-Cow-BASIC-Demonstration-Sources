@@ -9,72 +9,74 @@
 '''@date    17.3.16
 '''********************************************************************************
 
-  'Chip Settings.
-  #chip 16f18855,32
-  #option explicit
+'Chip Settings.
+#CHIP 16f18855,32
+#OPTION Explicit
 
 
-  #include <srf04.h>
+#INCLUDE <srf04.h>
 
 
-  'Set the PPS of the PWM and the RS232 ports.
-  'Set the PPS for this solution.
-  #startup InitPPS, 85
+'Set the PPS of the PWM and the RS232 ports.
+'Set the PPS for this solution.
+#STARTUP InitPPS, 85
 
-  Sub InitPPS
+Sub InitPPS
     UNLOCKPPS
-    RC0PPS = 0x0010    'RC0->EUSART:TX;
-    RXPPS  = 0x0011      'RC1->EUSART:RX;
+    'RC0->EUSART:TX;
+    RC0PPS = 0x0010
+    'RC1->EUSART:RX;
+    RXPPS  = 0x0011
     LOCKPPS
-  End sub
+End Sub
 
 
-  #define USART_BAUD_RATE 19200
-  #define USART_TX_BLOCKING
+#DEFINE USART_BAUD_RATE 19200
+#DEFINE USART_TX_BLOCKING
 
-; ----- Constants
+' ----- Constants
 
-    #define US1Ping PORTb.0
-    #define US1Echo PORTb.1
+#DEFINE US1Ping PORTb.0
+#DEFINE US1Echo PORTb.1
 
-    #define AlarmDistance 50
+#DEFINE AlarmDistance 50
 
-; ----- Variables
-    Dim Distance As word
-    Dim FAR as Byte
+' ----- Variables
+Dim Distance As Word
+Dim FAR As Byte
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
-    hserprint "GCBasic 2019"
-    HSerPrintCRLF
-    hserprint "SRF04 Demo"
-    HSerPrintCRLF
-    wait 2 s
-    far = 0
+HSerPrint "GCBasic 2019"
+HSerPrintCRLF
+HSerPrint "SRF04 Demo"
+HSerPrintCRLF
+Wait 2 s
+far = 0
 
-    Do Forever
-
-
-              'Take a distance reading from the SRF04
-              Distance = USDistance(1)
-
-              'Check the reading, is the object too close to the SRF04?
-              if Distance < AlarmDistance then
-                        hserprint "Close  "
-                        hserprint Distance
-                        HSerPrintCRLF
-                        far = 0
-              Else
-                  if far  = 0 then
-                        hserprint "Far"
-                        HSerPrintCRLF
-                        far =1
-                  end if
-              end if
-
-              'Delay for a few milliseconds before taking the next reading
-              Wait 10 ms
-    Loop
+Do Forever
 
 
-end
+    'Take a distance reading from the SRF04
+    Distance = USDistance(1)
+
+    'Check the reading, is the object too close to the SRF04?
+    If Distance < AlarmDistance Then
+        HSerPrint "Close  "
+        HSerPrint Distance
+        HSerPrintCRLF
+        far = 0
+    Else
+        If far  = 0 Then
+            HSerPrint "Far"
+            HSerPrintCRLF
+            far =1
+        End If
+    End If
+
+    'Delay for a few milliseconds before taking the next reading
+    Wait 10 ms
+Loop
+
+
+End

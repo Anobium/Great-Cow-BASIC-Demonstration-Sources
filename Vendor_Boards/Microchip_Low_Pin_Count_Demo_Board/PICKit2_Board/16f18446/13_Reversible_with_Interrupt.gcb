@@ -7,74 +7,80 @@
 '''@date    03/05/2018
 '''********************************************************************
 
-  #Chip 16F18446, 8
- #config MCLRE_OFF
+#CHIP 16F18446, 8
+#CONFIG MCLRE_OFF
 
-  #option explicit
+#OPTION Explicit
 
-  #Define ADC_Fudge 0x0739   ' as found by A2D example
+' as found by A2D example
+#DEFINE ADC_Fudge 0x0739
 
-  Dim _DIRECTION as Byte
+Dim _DIRECTION As Byte
 
-  #define SWITCH_DOWN         0
-  #define SWITCH_UP           1
+#DEFINE SWITCH_DOWN         0
+#DEFINE SWITCH_UP           1
 
-  #define LED_RIGHT           TRUE
-  #define LED_LEFT            FAlSE
+#DEFINE LED_RIGHT           TRUE
+#DEFINE LED_LEFT            FALSE
 
-  #define SWITCH      PORTA.3
+#DEFINE SWITCH      PORTA.3
 
-  dim mydelay as Word
+Dim mydelay As Word
 
-  'start from the right to left
-  _direction = LED_RIGHT
+'start from the right to left
+_direction = LED_RIGHT
 
-  dir portc out
-  portc.3 = 1
+Dir portc Out
+portc.3 = 1
 
-  'Potentiamtor is connected to RA4...set as input
-  dir porta.0 in
+'Potentiamtor is connected to RA4...set as input
+Dir porta.0 In
 
-  'setup switch (SW1)
-  dir porta.3 in
+'setup switch (SW1)
+Dir porta.3 In
 
-  'setup Interrupt
-  IOCAN3 = 1
-  On Interrupt PORTChange  Call DirChange
+'setup Interrupt
+IOCAN3 = 1
+On Interrupt PORTChange  Call DirChange
 
-  do
+Do
 
-    wait Scale( ReadAD12 ( AN0 ), 0, ADC_Fudge, 100, 1000) ms
+    Wait Scale( ReadAD12 ( AN0 ), 0, ADC_Fudge, 100, 1000) ms
 
-    if  _direction = LED_RIGHT  then
-      'shift to the right by 1
-      Set C off
-      Rotate portc right
+    If  _direction = LED_RIGHT  Then
+        'shift to the right by 1
+        Set C Off
+        Rotate portc Right
 
-      ' when the last LED is lit, restart the pattern
-      if C = 1 then portc.3 = 1
-    else
-      'shift to the left by 1
-      Set C off
-      Rotate portc left
+        ' when the last LED is lit, restart the pattern
+        If C = 1 Then portc.3 = 1
+    Else
+        'shift to the left by 1
+        Set C Off
+        Rotate portc Left
 
-      'when the last LED is lit, restart the pattern
-      if  portC.4 = 1 then
-        portC.0 = 1
-        portC.4 = 0
-      end if
-    end if
-  loop
+        'when the last LED is lit, restart the pattern
+        If  portC.4 = 1 Then
+            portC.0 = 1
+            portC.4 = 0
+        End If
+    End If
+Loop
 
-End ' End execution and put the device into low power sleep mode.
+' End execution and put the device into low power sleep mode.
+End
 
-sub DirChange
+Sub DirChange
 
-  if IOCAF3 = 1 then
-    IOCIE  = 0  ' Disable Port Change Interruts to Prevent renter of the same event
-    IOCAF3 = 0  ' Ackowlage the Interrupt by Clearing this Flag
-    _direction = !_direction ; Reverse direction
-    IOCIE = 1  ' Reenable Port change interrupts
-  end if
+    If IOCAF3 = 1 Then
+        ' Disable Port Change Interruts to Prevent renter of the same event
+        IOCIE  = 0
+        ' Ackowlage the Interrupt by Clearing this Flag
+        IOCAF3 = 0
+        ' Reverse direction
+        _direction = !_direction
+        ' Reenable Port change interrupts
+        IOCIE = 1
+    End If
 
-end sub
+End Sub

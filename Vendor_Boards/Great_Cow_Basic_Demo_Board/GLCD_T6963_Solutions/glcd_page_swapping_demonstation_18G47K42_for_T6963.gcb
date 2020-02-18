@@ -9,15 +9,16 @@
 '''@date    3.1.19
 '''********************************************************************************
 
-  #chip 18F47K42,64
-  #option explicit
+#CHIP 18F47K42,64
+#OPTION Explicit
 
-  #include <glcd.h>
-  #define GLCD_TYPE GLCD_TYPE_T6963_64
+#INCLUDE <glcd.h>
+#DEFINE GLCD_TYPE GLCD_TYPE_T6963_64
 
-  '***********************************************************************************************
-  'define the connectivity - the 8bit port
-  #define GLCD_DATA_PORT PORTD             'Library support contigous 8-bit port
+'***********************************************************************************************
+'define the connectivity - the 8bit port
+'Library support contigous 8-bit port
+#DEFINE GLCD_DATA_PORT PORTD
 
 '  or
 '  #define GLCD_DB0      PORTD.0            'chip specific configuration where the ibrary supports 8-bit port defined via 8 constants
@@ -28,123 +29,136 @@
 '  #define GLCD_DB5      PORTD.5            'chip specific configuration
 '  #define GLCD_DB6      PORTD.6            'chip specific configuration
 '  #define GLCD_DB7      PORTD.7            'chip specific configuration
-  #define GLCD_CD        porte.0            'Command or Data conrol line port
-  #define GLCD_RD        PORTe.1           'Read control line  port
-  #define GLCD_WR        PORTe.2           'Write control line port
+'Command or Data conrol line port
+#DEFINE GLCD_CD        porte.0
+'Read control line  port
+#DEFINE GLCD_RD        PORTe.1
+'Write control line port
+#DEFINE GLCD_WR        PORTe.2
 
-  #define GLCD_RESET     PORTc.2           'Reset port
-  #define GLCD_FS        PORTc.1           'FS port
-  #define GLCD_CS        PORTc.0           'Chip Enable (Active Low)
+'Reset port
+#DEFINE GLCD_RESET     PORTc.2
+'FS port
+#DEFINE GLCD_FS        PORTc.1
+'Chip Enable (Active Low)
+#DEFINE GLCD_CS        PORTc.0
 
-  #define GLCD_FS_SELECT 1                 'FS1 Font Select port. 6x8 font: FS1=“High”=1 8x8 font FS1=“Low”=0 for GLCD_FS_SELECT
+'FS1 Font Select port. 6x8 font: FS1=“High”=1 8x8 font FS1=“Low”=0 for GLCD_FS_SELECT
+#DEFINE GLCD_FS_SELECT 1
 
-  '***********************************************************************************************
-  '*
-  '* Note    :   The T6963 controller's RAM address space from $0000 - $7FFF, total 32kbyte RAM, or it could be 64kbyte RAM best check!!
-  '*
-  '***********************************************************************************************
-  #define TEXT_HOME_ADDR      0x0000                                                         'This is specific to the GLCD display
-  #define GRH_HOME_ADDR       0x3FFF                                                         'This is specific to the GLCD display
-  #define CG_HOME_ADDR        0x77FF                                                         'This is specific to the GLCD display
-  #define COLUMN              40    'Set column number to be 40 , 32, 30 etc.                 This is specific to the GLCD display
-  #define MAX_ROW_PIXEL       64    'MAX_ROW_PIXEL the physical matrix length (y direction)   This is specific to the GLCD display
-  #define MAX_COL_PIXEL       240   'MAX_COL_PIXEL the physical matrix width (x direction)    This is specific to the GLCD display
+'***********************************************************************************************
+'*
+'* Note    :   The T6963 controller's RAM address space from $0000 - $7FFF, total 32kbyte RAM, or it could be 64kbyte RAM best check!!
+'*
+'***********************************************************************************************
+'This is specific to the GLCD display
+#DEFINE TEXT_HOME_ADDR      0x0000
+'This is specific to the GLCD display
+#DEFINE GRH_HOME_ADDR       0x3FFF
+'This is specific to the GLCD display
+#DEFINE CG_HOME_ADDR        0x77FF
+'Set column number to be 40 , 32, 30 etc.                 This is specific to the GLCD display
+#DEFINE COLUMN              40
+'MAX_ROW_PIXEL the physical matrix length (y direction)   This is specific to the GLCD display
+#DEFINE MAX_ROW_PIXEL       64
+'MAX_COL_PIXEL the physical matrix width (x direction)    This is specific to the GLCD display
+#DEFINE MAX_COL_PIXEL       240
 
-  '***********************************************************************************************
-  '* End of configuration
-  '***********************************************************************************************
-
-
-;Start of demonstration main program
-
-        wait 3 s
-
-        BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
-        BigPrint ( 0, 20, "Feb 2019")
-        GLCDPrint( 0, 50, "GLCDPAGESIZE = " )
-        GLCDDrawString ( 88, 50, str(GLCDPAGESIZE) )
-        wait 2 s
-
-        GLCDCLSCLS
-        BigPrint ( 0, 0, "Page 0")
-        box 0, 0, 239, 63
-        locate 7,1
-        print "GLCD methods used to create page"
-        wait 2 s
-
-        SelectGLCDPage ( GLCDPage1_T6963 )
-        GLCDCLSCLS
-        BigPrint ( 0, 0, "Page 1")
-        box 0, 0, 239, 63
-        locate 7,1
-        print "GLCD methods used to create page"
-        wait 2 s
-
-        SelectGLCDPage ( GLCDPage2_T6963 )
-        GLCDCLSCLS
-        BigPrint ( 0, 0, "Page 2")
-        box 0, 0, 239, 63
-        locate 7,1
-        print "GLCD methods used to create page"
-        wait 2 s
+'***********************************************************************************************
+'* End of configuration
+'***********************************************************************************************
 
 
+'Start of demonstration main program
 
-        SelectGLCDPage ( GLCDPage0_T6963 )
-        BigPrint ( 0, 30, "Recall Page 0")
-        CLS
-        locate 7,1
-        print "Recall page by page swapping"
-        wait 2 s
+Wait 3 s
 
-        SelectGLCDPage ( GLCDPage1_T6963 )
-        BigPrint ( 0, 30, "Recall Page 1")
-        CLS
-        locate 7,1
-        print "Recall page by page swapping"
-        wait 2 s
+BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
+BigPrint ( 0, 20, "Feb 2019")
+GLCDPrint( 0, 50, "GLCDPAGESIZE = " )
+GLCDDrawString ( 88, 50, Str(GLCDPAGESIZE) )
+Wait 2 s
 
-        SelectGLCDPage ( GLCDPage2_T6963 )
-        BigPrint ( 0, 30, "Recall Page 2")
-        CLS
-        locate 7,1
-        print "Recall page by page swapping"
-        wait 2 s
+GLCDCLSCLS
+BigPrint ( 0, 0, "Page 0")
+Box 0, 0, 239, 63
+Locate 7,1
+Print "GLCD methods used to create page"
+Wait 2 s
 
-        do Forever
+SelectGLCDPage ( GLCDPage1_T6963 )
+GLCDCLSCLS
+BigPrint ( 0, 0, "Page 1")
+Box 0, 0, 239, 63
+Locate 7,1
+Print "GLCD methods used to create page"
+Wait 2 s
 
-            dim adcwait as Word
-            adcwait = ReadAD10(an12)
+SelectGLCDPage ( GLCDPage2_T6963 )
+GLCDCLSCLS
+BigPrint ( 0, 0, "Page 2")
+Box 0, 0, 239, 63
+Locate 7,1
+Print "GLCD methods used to create page"
+Wait 2 s
 
-            SelectGLCDPage ( GLCDPage0_T6963 )
-            CLS
-            locate 6,1
-            print "Swap page every timeout"
-            locate 7,1
-            print "ADC/Wait: "
-            Print adcwait
-            wait adcwait ms
 
-            SelectGLCDPage ( GLCDPage1_T6963 )
-            CLS
-            locate 6,1
-            print "Swap page every timeout"
-            locate 7,1
-            print "ADC/Wait: "
-            Print adcwait
-            wait adcwait ms
 
-            SelectGLCDPage ( GLCDPage2_T6963 )
-            CLS
-            locate 6,1
-            print "Swap page every timeout"
-            locate 7,1
-            print "ADC/Wait: "
-            Print adcwait
-            wait adcwait ms
+SelectGLCDPage ( GLCDPage0_T6963 )
+BigPrint ( 0, 30, "Recall Page 0")
+CLS
+Locate 7,1
+Print "Recall page by page swapping"
+Wait 2 s
 
-        loop
-        end
+SelectGLCDPage ( GLCDPage1_T6963 )
+BigPrint ( 0, 30, "Recall Page 1")
+CLS
+Locate 7,1
+Print "Recall page by page swapping"
+Wait 2 s
+
+SelectGLCDPage ( GLCDPage2_T6963 )
+BigPrint ( 0, 30, "Recall Page 2")
+CLS
+Locate 7,1
+Print "Recall page by page swapping"
+Wait 2 s
+
+Do Forever
+
+    Dim adcwait As Word
+    adcwait = ReadAD10(an12)
+
+    SelectGLCDPage ( GLCDPage0_T6963 )
+    CLS
+    Locate 6,1
+    Print "Swap page every timeout"
+    Locate 7,1
+    Print "ADC/Wait: "
+    Print adcwait
+    Wait adcwait ms
+
+    SelectGLCDPage ( GLCDPage1_T6963 )
+    CLS
+    Locate 6,1
+    Print "Swap page every timeout"
+    Locate 7,1
+    Print "ADC/Wait: "
+    Print adcwait
+    Wait adcwait ms
+
+    SelectGLCDPage ( GLCDPage2_T6963 )
+    CLS
+    Locate 6,1
+    Print "Swap page every timeout"
+    Locate 7,1
+    Print "ADC/Wait: "
+    Print adcwait
+    Wait adcwait ms
+
+Loop
+End
 
 Sub GLCDCLSCLS
     GLCDCLS

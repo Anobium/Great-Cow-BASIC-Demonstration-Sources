@@ -11,125 +11,127 @@
 '''@date   	21.01.2015
 '''********************************************************************************
 
-; ----- Configuration
-  #chip mega8,8
+' ----- Configuration
+#CHIP mega8,8
 
-; ----- Define Hardware settings
-  ;Setup LCD Parameters
-  ;Use LCD in 2 wire mode with shift reg. 74LS164 / 74HC164
-  #define LCD_IO 2_74XX164
-  #define LCD_DB PORTC.0           ; databit
-  #define LCD_CB PORTC.1           ; clockbit
-  #define LCD_NO_RW
-
-
-; ----- Constants
-  ' No Constants specified in this example.
-
-; ----- Variables
-  ' No Variables specified in this example. All byte variables are defined upon use.
-
-; ----- Quick Command Reference:
-;    LCDCMD command list
-;
-;    15 00001111 display on, cursor on, blinking on
-;    14 00001110 display on, cursor on, blinking off
-;    13 00001101 display on, cursor off, blinking on
-;    12 00001100 display on, cursor off, blinking off (default)
-;    11 00001011 display off, cursor on, blinking on (less useful)
-;    10 00001010 display off, cursor on, blinking off (less useful)
-;    09 00001001 display off, cursor off, blinking on (less useful)
-;    08 00001000 display off, cursor off, blinking off
+' ----- Define Hardware settings
+'Setup LCD Parameters
+'Use LCD in 2 wire mode with shift reg. 74LS164 / 74HC164
+#DEFINE LCD_IO 2_74XX164
+' databit
+#DEFINE LCD_DB PORTC.0
+' clockbit
+#DEFINE LCD_CB PORTC.1
+#DEFINE LCD_NO_RW
 
 
-; ----- Main body of program commences here.
-    Do Forever
-        CLS
-        WAIT 3 s
-        PRINT "START TEST"
-        locate 1,0
-        PRINT "DISPLAY ON"
-        wait 3 s
+' ----- Constants
+' No Constants specified in this example.
 
-        CLS
-        Locate 0,0
-        Print "Cursor ON"
-        Locate 1,0
-;        LCDcursor CursorOn
-LCDCMD 14
-        wait 3 S
+' ----- Variables
+' No Variables specified in this example. All byte variables are defined upon use.
 
-        CLS
-LCDCMD 12
-;        LCDcursor CursorOFF
-        locate 0,0
-        Print "Cursor OFF"
-        wait 3 s
+' ----- Quick Command Reference:
+'    LCDCMD command list
+'
+'    15 00001111 display on, cursor on, blinking on
+'    14 00001110 display on, cursor on, blinking off
+'    13 00001101 display on, cursor off, blinking on
+'    12 00001100 display on, cursor off, blinking off (default)
+'    11 00001011 display off, cursor on, blinking on (less useful)
+'    10 00001010 display off, cursor on, blinking off (less useful)
+'    09 00001001 display off, cursor off, blinking on (less useful)
+'    08 00001000 display off, cursor off, blinking off
 
-        CLS
-        Locate 0,0
-        Print "FLASH ON"
-        Locate 1,0
-LCDCMD 13
-;        LCDcursor FLASHON
-        wait 3 s
 
-        CLS
-        locate 0,0
-        Print "FLASH OFF"
- LCDCMD 12
-;       LCDCURSOR FLASHOFF
-        wait 3 sec
+' ----- Main body of program commences here.
+Do Forever
+    CLS
+    Wait 3 s
+    Print "START TEST"
+    Locate 1,0
+    Print "DISPLAY ON"
+    Wait 3 s
 
-        Locate 0,0
-        Print "CURSR & FLSH ON"
-        locate 1,0
-LCDCMD 15
-;        LCDCURSOR CURSORON
-;        LCDCURSOR FLASHON
-        Wait 3 sec
+    CLS
+    Locate 0,0
+    Print "Cursor ON"
+    Locate 1,0
+'        LCDcursor CursorOn
+    LCDCMD 14
+    Wait 3 s
 
-        Locate 0,0
-        Print "CURSR & FLSH OFF"
-        locate 1,0
-LCDCMD 12
-;        LCDCURSOR CursorOFF
-;        LCDCURSOR FLASHOFF
-        Wait 3 sec
+    CLS
+    LCDCMD 12
+'        LCDcursor CursorOFF
+    Locate 0,0
+    Print "Cursor OFF"
+    Wait 3 s
 
-        CLS
-        Locate 0,4
-        PRINT "Flashing"
-        Locate 1,4
-        Print "Display"
-        wait 500 ms
+    CLS
+    Locate 0,0
+    Print "FLASH ON"
+    Locate 1,0
+    LCDCMD 13
+'        LCDcursor FLASHON
+    Wait 3 s
 
-        repeat 10
-LCDCMD 8
-;           LCDCURSOR LCDOFF
-            wait 500 ms
-LCDCMD 12
-;            LCDCURSOR LCDON
-            wait 500 ms
-        end repeat
+    CLS
+    Locate 0,0
+    Print "FLASH OFF"
+    LCDCMD 12
+'       LCDCURSOR FLASHOFF
+    Wait 3 sec
 
-        CLS
-        Locate 0,0
-        Print "DISPLAY OFF"
-        Locate 1,0
-        Print "FOR 5 SEC"
-        Wait 2 SEC
-LCDCMD 8
-;        LCDCURSOR LCDOFF
-        WAIT 5 s
+    Locate 0,0
+    Print "CURSR & FLSH ON"
+    Locate 1,0
+    LCDCMD 15
+'        LCDCURSOR CURSORON
+'        LCDCURSOR FLASHON
+    Wait 3 sec
 
-        CLS
-        Locate 0,0
-LCDCMD 12
-;        LCDCURSOR LCDON
-        Print "END TEST"
-        wait 3 s
+    Locate 0,0
+    Print "CURSR & FLSH OFF"
+    Locate 1,0
+    LCDCMD 12
+'        LCDCURSOR CursorOFF
+'        LCDCURSOR FLASHOFF
+    Wait 3 sec
 
-    loop
+    CLS
+    Locate 0,4
+    Print "Flashing"
+    Locate 1,4
+    Print "Display"
+    Wait 500 ms
 
-    end
+    Repeat 10
+        LCDCMD 8
+'           LCDCURSOR LCDOFF
+        Wait 500 ms
+        LCDCMD 12
+'            LCDCURSOR LCDON
+        Wait 500 ms
+    End Repeat
+
+    CLS
+    Locate 0,0
+    Print "DISPLAY OFF"
+    Locate 1,0
+    Print "FOR 5 SEC"
+    Wait 2 SEC
+    LCDCMD 8
+'        LCDCURSOR LCDOFF
+    Wait 5 s
+
+    CLS
+    Locate 0,0
+    LCDCMD 12
+'        LCDCURSOR LCDON
+    Print "END TEST"
+    Wait 3 s
+
+Loop
+
+End

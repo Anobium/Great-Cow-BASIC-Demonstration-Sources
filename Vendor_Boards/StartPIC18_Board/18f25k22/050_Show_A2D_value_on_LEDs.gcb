@@ -24,61 +24,63 @@
 '''  Date: 29.8.17
 '''
 ' ----- Configuration
-    'Chip Settings.
-    #chip 18f25k22, 16
-    #option Explicit
+'Chip Settings.
+#CHIP 18f25k22, 16
+#OPTION Explicit
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -----------| A |-----------------
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -----------| A |-----------------
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | ----------| O | I |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | ----------| O | I |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------------------| X |---------
-    ''-----------------------------------------
-    ''
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------------------| X |---------
+''-----------------------------------------
+''
 
-    'Define constants to make things easier. We can reuse these at any time.
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define Potentiometer   PORTC.5
-    #define LDR             PORTA.4
-    #define SwitchIn        PORTB.0
-    #define LCDControl      PORTC.2
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE Potentiometer   PORTC.5
+#DEFINE LDR             PORTA.4
+#DEFINE SwitchIn        PORTB.0
+#DEFINE LCDControl      PORTC.2
 
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     Potentiometer In   'this is the AN17 port
-    Dir     LDR           In   'this is the AN11 port
-    Dir     SwitchIn      In
-    Dir     LCDControl    Out
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+'this is the AN17 port
+Dir     Potentiometer In
+'this is the AN11 port
+Dir     LDR           In
+Dir     SwitchIn      In
+Dir     LCDControl    Out
 
-    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
-    LCDControl = 1
+'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+LCDControl = 1
 
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
 
-    dim ADCVal as byte
+Dim ADCVal As Byte
 
-    do
+Do
 
-        ADCVal =  ReadAD ( AN17 )
+    ADCVal =  ReadAD ( AN17 )
 
-        if ADCVal > 127 then
-            LEDD1 = 1
-            LEDD2 = 0
-        else
-            LEDD1 = 0
-            LEDD2 = 1
-        end if
+    If ADCVal > 127 Then
+        LEDD1 = 1
+        LEDD2 = 0
+    Else
+        LEDD1 = 0
+        LEDD2 = 1
+    End If
 
-    loop
+Loop

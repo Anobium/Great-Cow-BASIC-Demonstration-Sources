@@ -23,76 +23,77 @@
 '''@date    22.10.2017
 ' ----- Configuration
 
-    'Chip Settings.
-    #chip 18f25k42, 16
-    #option Explicit
-     #config MCLRE=on
-    'This Configuration change is needed to enable programming in Low Voltage Programming Mode
+'Chip Settings.
+#CHIP 18f25k42, 16
+#OPTION Explicit
+#CONFIG MCLRE=On
+'This Configuration change is needed to enable programming in Low Voltage Programming Mode
 
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | ----------| O | I |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | ----------| O | I |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------------------| X |---------
-    ''-----------------------------------------
-    ''
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------------------| X |---------
+''-----------------------------------------
+''
 
 
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define Potentiometer   PORTC.5
-    #define SwitchIn        PORTB.0
-    #define LCDControl      PORTC.2
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE Potentiometer   PORTC.5
+#DEFINE SwitchIn        PORTB.0
+#DEFINE LCDControl      PORTC.2
 
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     Potentiometer In   'this is the ANC5 port
-    Dir     SwitchIn      In
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+'this is the ANC5 port
+Dir     Potentiometer In
+Dir     SwitchIn      In
 
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
 
 '   Initialise the timer.
 '   Firstly tell the compiler to use a 16bit timer for this demonstration
-    #define TMR0_16BIT
+#DEFINE TMR0_16BIT
 
 '     For this we need the following:
 '       Prescaler with the FOSC/4 with no post scaler
 '           1:64
-    InitTimer0 Osc, PRE0_64 + TMR0_FOSC4 ,  POST0_1
+InitTimer0 Osc, PRE0_64 + TMR0_FOSC4 ,  POST0_1
 '     Start the Timer
-    StartTimer 0
+StartTimer 0
 
-    'Every 1 sec.  0x0bdc is calculated value using a tool like Mr E. Timer Helper
-    Settimer ( 0 , 0x0bdc  )
+'Every 1 sec.  0x0bdc is calculated value using a tool like Mr E. Timer Helper
+SetTimer ( 0 , 0x0bdc  )
 
-   'Set the LED states
-    LEDD1 = 0
-    LEDD2 = 1
+'Set the LED states
+LEDD1 = 0
+LEDD2 = 1
 
-    do
-            'wait for the event
-            wait while TMR0IF = 0
+Do
+    'wait for the event
+    Wait While TMR0IF = 0
 
-            ' Clearing Timer flag will reset event
-            TMR0IF = 0
-            'Set the LED states
-            LEDD1 = !LEDD1
-            LEDD2 = !LEDD2
+    ' Clearing Timer flag will reset event
+    TMR0IF = 0
+    'Set the LED states
+    LEDD1 = !LEDD1
+    LEDD2 = !LEDD2
 
 
-            'Set timer to 1s before the next event occurs.  This as close as you can get to 1s
-             Settimer ( 0 , 0x0bdc )
+    'Set timer to 1s before the next event occurs.  This as close as you can get to 1s
+    SetTimer ( 0 , 0x0bdc )
 
-        loop
+Loop

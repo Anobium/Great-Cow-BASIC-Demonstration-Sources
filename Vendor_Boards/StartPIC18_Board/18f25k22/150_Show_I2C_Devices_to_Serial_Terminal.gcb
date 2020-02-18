@@ -12,124 +12,125 @@
 '''  Date: 29.8.17
 '''
 ' ----- Configuration
-    'Chip Settings.
-    #chip 18f25k22, 16
-    #option Explicit
+'Chip Settings.
+#CHIP 18f25k22, 16
+#OPTION Explicit
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | ----------| O | I |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | ----------| O | I |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---| TX|---|SDA|CLK| X |---------
-    ''-----------------------------------------
-    ''
-
-
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define Potentiometer   PORTC.5
-    #define SwitchIn        PORTB.0
-    #define LCDControl      PORTC.2
-
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     Potentiometer In   'this is the AN17 port
-    Dir     SwitchIn      In
-    Dir     LCDControl    Out
-
-    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
-    LCDControl = 1
-
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---| TX|---|SDA|CLK| X |---------
+''-----------------------------------------
+''
 
 
-    'Setup Serial port
-    #define USART_BAUD_RATE 9600
-    #define USART_TX_BLOCKING
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE Potentiometer   PORTC.5
+#DEFINE SwitchIn        PORTB.0
+#DEFINE LCDControl      PORTC.2
+
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+'this is the AN17 port
+Dir     Potentiometer In
+Dir     SwitchIn      In
+Dir     LCDControl    Out
+
+'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+LCDControl = 1
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
 
 
-    ' Define I2C settings
-    #define HI2C_BAUD_RATE 400
-    #define HI2C_DATA PORTC.4
-    #define HI2C_CLOCK PORTC.3
-    'Initialise I2C Slave
-    'I2C pins need to be input for SSP module - this is not an option
-    Dir HI2C_DATA in
-    Dir HI2C_CLOCK in
-    'MASTER
-    HI2CMode Master
+'Setup Serial port
+#DEFINE USART_BAUD_RATE 9600
+#DEFINE USART_TX_BLOCKING
 
 
-; ----- Main body of program commences here.
-  ' Now assumes Serial Terminal is operational
-  dim DeviceID as byte
-  Dim DISPLAYNEWLINE as Byte
+' Define I2C settings
+#DEFINE HI2C_BAUD_RATE 400
+#DEFINE HI2C_DATA PORTC.4
+#DEFINE HI2C_CLOCK PORTC.3
+'Initialise I2C Slave
+'I2C pins need to be input for SSP module - this is not an option
+Dir HI2C_DATA In
+Dir HI2C_CLOCK In
+'MASTER
+HI2CMode Master
 
-   do
-      HSerPrintCRLF
-      HSerPrint "Hardware I2C "
-      HSerPrintCRLF 2
 
-        ' Now assumes Serial Terminal is operational
-        HSerPrintCRLF
-        HSerPrint "   "
-        'Create a horizontal row of numbers
-        for DeviceID = 0 to 15
-          HSerPrint hex(deviceID)
-          HSerPrint " "
-        next
+' ----- Main body of program commences here.
+' Now assumes Serial Terminal is operational
+Dim DeviceID As Byte
+Dim DISPLAYNEWLINE As Byte
 
-        'Create a vertical column of numbers
-        for DeviceID = 0 to 255
-          DisplayNewLine = DeviceID % 16
-          if DisplayNewLine = 0 Then
+Do
+    HSerPrintCRLF
+    HSerPrint "Hardware I2C "
+    HSerPrintCRLF 2
+
+    ' Now assumes Serial Terminal is operational
+    HSerPrintCRLF
+    HSerPrint "   "
+    'Create a horizontal row of numbers
+    For DeviceID = 0 To 15
+        HSerPrint Hex(deviceID)
+        HSerPrint " "
+    Next
+
+    'Create a vertical column of numbers
+    For DeviceID = 0 To 255
+        DisplayNewLine = DeviceID % 16
+        If DisplayNewLine = 0 Then
             HSerPrintCRLF
-            HserPrint hex(DeviceID)
-            if DisplayNewLine > 0 then
-              HSerPrint " "
-            end if
-          end if
-          HSerPrint " "
+            HSerPrint Hex(DeviceID)
+            If DisplayNewLine > 0 Then
+                HSerPrint " "
+            End If
+        End If
+        HSerPrint " "
 
-          'Do an initial Start
-          HI2CStart
-          if HI2CWaitMSSPTimeout <> True then
+        'Do an initial Start
+        HI2CStart
+        If HI2CWaitMSSPTimeout <> TRUE Then
 
             'Send to address to device
             HI2CSend ( deviceID )
 
             'Did device fail to respond?
-            if HI2CAckPollState = false then
-              HI2CSend ( 0 )
-              HSerPrint   hex(deviceID)
+            If HI2CAckpollState = FALSE Then
+                HI2CSend ( 0 )
+                HSerPrint   Hex(deviceID)
             Else
-              HSerPrint "--"
-            end if
+                HSerPrint "--"
+            End If
 
             'Do a stop.
             HI2CStop
-          Else
+        Else
             HSerPrint "! "
-          end if
+        End If
 
-        next
+    Next
 
-        HSerPrintCRLF 2
-        HSerPrint   "End of Search"
-        HSerPrintCRLF 2
-        wait 1 s
-        wait while SwitchIn = On
-    loop
+    HSerPrintCRLF 2
+    HSerPrint   "End of Search"
+    HSerPrintCRLF 2
+    Wait 1 s
+    Wait While SwitchIn = On
+Loop
 
-  ; ----- Support methods.  Subroutines and Functions
+' ----- Support methods.  Subroutines and Functions

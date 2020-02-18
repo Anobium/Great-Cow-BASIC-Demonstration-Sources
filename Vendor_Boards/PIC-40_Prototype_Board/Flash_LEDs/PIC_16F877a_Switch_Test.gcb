@@ -23,18 +23,25 @@
 
 
 'Chip settings
-  #chip 16F877a, 20    ' Select the chip and the chip speed
+' Select the chip and the chip speed
+#CHIP 16F877a, 20
 
-  dir portd out         ' Set all PORTD ports as outputs
+' Set all PORTD ports as outputs
+Dir portd Out
 
 
-  do forever            ' Loop for ever
+' Loop for ever
+Do Forever
 
-      PORTD=0xFF      'Turn off LED's on port D
-      wait 125 ms       'wait
+    'Turn off LED's on port D
+    PORTD=0xFF
+    'wait
+    Wait 125 ms
 
-      PORTD=0x00      ' Turn on LED's on port D
-      wait 125 ms       'wait
-  loop
+    ' Turn on LED's on port D
+    PORTD=0x00
+    'wait
+    Wait 125 ms
+Loop
 
 

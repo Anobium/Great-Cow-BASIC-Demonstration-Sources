@@ -19,39 +19,39 @@
 
 
 ' ----- Configuration
-    #chip 16f18855
+#CHIP 16f18855
 
-    '' -------------------LATA-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D1 |-
-    ''-----------------------------------------
-    ''
-    #define LEDD2 PORTA.0
-    #define LEDD3 PORTA.1
-    #define LEDD4 PORTA.2
-    #define LEDD5 PORTA.3
-    #define Potentiometer   PORTA.4
+'' -------------------LATA-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D1 |-
+''-----------------------------------------
+''
+#DEFINE LEDD2 PORTA.0
+#DEFINE LEDD3 PORTA.1
+#DEFINE LEDD4 PORTA.2
+#DEFINE LEDD5 PORTA.3
+#DEFINE Potentiometer   PORTA.4
 
-    Dir     LEDD2 OUT
-    Dir     LEDD3 OUT
-    Dir     LEDD4 OUT
-    Dir     LEDD5 OUT
-    DIR     Potentiometer In
-
-
-    do Forever
+Dir     LEDD2 Out
+Dir     LEDD3 Out
+Dir     LEDD4 Out
+Dir     LEDD5 Out
+Dir     Potentiometer In
 
 
-      'Clear the LEDS
-      Porta = 0
-      'Set the first value
-      LEDD2 = 1
+Do Forever
 
-      repeat 4
 
-        wait  ( ReadAD10 ( AN4 ) + 32 / 32 ) ms
-        wait 5 ms
-        Rotate porta left
+    'Clear the LEDS
+    Porta = 0
+    'Set the first value
+    LEDD2 = 1
 
-      end Repeat
-    loop
+    Repeat 4
+
+        Wait  ( ReadAD10 ( AN4 ) + 32 / 32 ) ms
+        Wait 5 ms
+        Rotate porta Left
+
+    End Repeat
+Loop

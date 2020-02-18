@@ -10,48 +10,48 @@
 '''@date    02.10.2016
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
-  #chip 16F886, 16
-  #option explicit
+#CHIP 16F886, 16
+#OPTION Explicit
 
-  ' Define CHIPINO I/O pins
-  #include <chipino.h>
+' Define CHIPINO I/O pins
+#INCLUDE <chipino.h>
 
-; ----- Define Hardware settings
-  Dir PORTC Out
-  DIR PORTA.0 in
-  DIR PORTA.1 out
+' ----- Define Hardware settings
+Dir PORTC Out
+Dir PORTA.0 In
+Dir PORTA.1 Out
 
-; ----- Constants
-  ; You need to specify the port settings
-  #define DISP_COUNT 1
+' ----- Constants
+' You need to specify the port settings
+#DEFINE DISP_COUNT 1
 
-  #define DISP_SEG_A D7
-  #define DISP_SEG_B D6
-  #define DISP_SEG_C D5
-  #define DISP_SEG_D D4
-  #define DISP_SEG_E D3
-  #define DISP_SEG_F D2
-  #define DISP_SEG_G D1
+#DEFINE DISP_SEG_A D7
+#DEFINE DISP_SEG_B D6
+#DEFINE DISP_SEG_C D5
+#DEFINE DISP_SEG_D D4
+#DEFINE DISP_SEG_E D3
+#DEFINE DISP_SEG_F D2
+#DEFINE DISP_SEG_G D1
 
-  #define DISP_SEG_DOT D0
+#DEFINE DISP_SEG_DOT D0
 
-  #define DISP_SEL_1 D8
+#DEFINE DISP_SEL_1 D8
 
-; ----- Variables
-  Dim Value  as Byte
+' ----- Variables
+Dim Value  As Byte
 
 
-; ----- Main body of program commences her
+' ----- Main body of program commences her
 
-  Do Forever
+Do Forever
 
     Value = ReadAD(AN0)/26
     DisplayValue 1, Value
-    wait 10 ms
+    Wait 10 ms
 
-  Loop
+Loop
 
 
 

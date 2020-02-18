@@ -6,35 +6,37 @@
 '''@date    03/05/2018
 '''********************************************************************
 
-; ----- Configuration
-  #chip 16f18426, 32
-  #option explicit
+' ----- Configuration
+#CHIP 16f18426, 32
+#OPTION Explicit
 
-  #startup InitPPS, 85
+#STARTUP InitPPS, 85
 
-  Sub InitPPS
+Sub InitPPS
     'Module: EUSART1
-    RC4PPS   = 0x000F    'TX1 > RC4
-    RX1DTPPS = 0x0015    'RC5 > RX1
-  End Sub
+    'TX1 > RC4
+    RC4PPS   = 0x000F
+    'RC5 > RX1
+    RX1DTPPS = 0x0015
+End Sub
 
-  'Config UART
-  #define USART_BLOCKING
-  #define USART_BAUD_RATE 19200
+'Config UART
+#DEFINE USART_BLOCKING
+#DEFINE USART_BAUD_RATE 19200
 
-  Wait 100 Ms
+Wait 100 ms
 
-; ----- Variables
-  Dim INCHAR as Byte
+' ----- Variables
+Dim INCHAR As Byte
 
-; ----- Main body of program commences here.
-  'Message after reset
-  HSerPrintStringCRLF "Hello World!"
+' ----- Main body of program commences here.
+'Message after reset
+HSerPrintStringCRLF "Hello World!"
 
-  'Main routine
-  Do
+'Main routine
+Do
     'wait for char from UART
     HSerReceive InChar
     'send back char to UART
     HSerSend InChar
-  Loop
+Loop

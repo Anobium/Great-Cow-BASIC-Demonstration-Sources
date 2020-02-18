@@ -9,54 +9,54 @@
 '''@date       191217
 '''********************************************************************************
 
-; ----- Configuration
-    #chip 16F18326, 8
+' ----- Configuration
+#CHIP 16F18326, 8
 
-; ----- Constants
-    'PWM constant. This is a required constant.
-    #define PWM_Out1 porta.2
+' ----- Constants
+'PWM constant. This is a required constant.
+#DEFINE PWM_Out1 porta.2
 
-    ; ----- Define Hardware settings
-    'PWM port out.  This is not required but good practice.
-    dir PWM_Out1 out
+' ----- Define Hardware settings
+'PWM port out.  This is not required but good practice.
+Dir PWM_Out1 Out
 
-; ----- Define Hardware settings
-  ' None
+' ----- Define Hardware settings
+' None
 
-; ----- Variables
-  ' No Variables specified in this example. All byte variables are defined upon use.
+' ----- Variables
+' No Variables specified in this example. All byte variables are defined upon use.
 
-; ----- Quick Command Reference:
-   'Enjoy
+' ----- Quick Command Reference:
+'Enjoy
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
-    ; ----- Main body of program commences here.
-        do
-          '100 cycles is a purely arbitrary value
-            Repeat 8
-                for xx = 255 to 150
-                    PWMOut 1, xx, 1
-                next
-                wait 5 ms
-                for xx = 150 to 255
-                    PWMOut 1, xx, 1
-                next
-                wait 5 ms
-            end repeat
-            Repeat 2
-                for xx = 255 to 10
-                    PWMOut 1, xx, 1
-                next
-                for xx = 10 to 255
-                    PWMOut 1, xx, 1
-                next
+' ----- Main body of program commences here.
+Do
+    '100 cycles is a purely arbitrary value
+    Repeat 8
+        For xx = 255 To 150
+            PWMOut 1, xx, 1
+        Next
+        Wait 5 ms
+        For xx = 150 To 255
+            PWMOut 1, xx, 1
+        Next
+        Wait 5 ms
+    End Repeat
+    Repeat 2
+        For xx = 255 To 10
+            PWMOut 1, xx, 1
+        Next
+        For xx = 10 To 255
+            PWMOut 1, xx, 1
+        Next
 
-            end repeat
-        loop
-    end
+    End Repeat
+Loop
+End
 
-; ----- Support methods.  Subroutines and Functions
-  ' None
+' ----- Support methods.  Subroutines and Functions
+' None
 
 

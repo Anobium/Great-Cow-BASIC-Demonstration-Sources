@@ -7,39 +7,39 @@
 '''@date    03/05/2018
 '''********************************************************************
 
-  #chip 16F18426
- #config MCLRE_OFF
+#CHIP 16F18426
+#CONFIG MCLRE_OFF
 
-  #define NUM_READINGS 8
+#DEFINE NUM_READINGS 8
 
-  dim _sum as long
-  dim yloop, xloop as byte
-  _sum = 0
+Dim _sum As Long
+Dim yloop, xloop As Byte
+_sum = 0
 
-  dim queue(8)
-  queue = 0, 0, 0, 0, 0, 0, 0, 0
+Dim queue(8)
+queue = 0, 0, 0, 0, 0, 0, 0, 0
 
-  dir portc out
+Dir portc Out
 
-  do
-    for xloop = 1 to NUM_READINGS
-    ' calcualtion to ensure max value 15, equates to all 4 LEDS on
-      portc = scale( average_reading ( queue() ), 0, 255, 0, 15)
+Do
+    For xloop = 1 To NUM_READINGS
+        ' calcualtion to ensure max value 15, equates to all 4 LEDS on
+        portc = Scale( average_reading ( queue() ), 0, 255, 0, 15)
 
-      queue( xloop ) = ReadAD ( AN0 )
-    next
-  loop
+        queue( xloop ) = ReadAD ( AN0 )
+    Next
+Loop
 
 End
 
-function average_reading ( in analyze_queue() ) as word
+Function average_reading ( In analyze_queue() ) As Word
 
-  _sum = 0
+    _sum = 0
 
-  for yloop = 1 to  NUM_READINGS
-    _sum = [long]queue ( yloop ) + _sum
-  next
+    For yloop = 1 To  NUM_READINGS
+        _sum = [Long]queue ( yloop ) + _sum
+    Next
 
-  average_reading = _sum / NUM_READINGS
+    average_reading = _sum / NUM_READINGS
 
-end Function
+End Function

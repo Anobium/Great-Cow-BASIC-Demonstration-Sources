@@ -10,65 +10,68 @@
 '''@date    29.06.2016
 '''********************************************************************************
 
-; ----- Configuration
-  #chip     16f18855,32
-  #option explicit
+' ----- Configuration
+#CHIP     16f18855,32
+#OPTION Explicit
 
-  #include  <lcd2serialredirect.h>
+#INCLUDE  <lcd2serialredirect.h>
 
-  ; ----- Define Hardware settings
-      'Set the PPS of the RS232 port to USB.
-    'Set the PPS for this solution.
-  #startup InitPPS, 85
+' ----- Define Hardware settings
+'Set the PPS of the RS232 port to USB.
+'Set the PPS for this solution.
+#STARTUP InitPPS, 85
 
-  Sub InitPPS
+Sub InitPPS
     UNLOCKPPS
-        RC0PPS = 0x0010       'RC0 <- EUSART:TX;
-        RXPPS  = 0x0011       'RC1 -> EUSART:RX;
-      LOCKPPS
-  End sub
+    'RC0 <- EUSART:TX;
+    RC0PPS = 0x0010
+    'RC1 -> EUSART:RX;
+    RXPPS  = 0x0011
+    LOCKPPS
+End Sub
 
-  #define USART_BAUD_RATE 19200
-  #define USART_TX_BLOCKING
+#DEFINE USART_BAUD_RATE 19200
+#DEFINE USART_TX_BLOCKING
 
-  ; Required to LCD to Serial redirection
-   #define LCD_IO 0
+' Required to LCD to Serial redirection
+#DEFINE LCD_IO 0
 
-  Dim YPOS, XPOS as Byte
-
-
-   wait 500 ms
-
-; ----- Main body of program commences here.
-
-    Do Forever
-
-        PRINT chr(7)  ' Bell Character
-        CLS
-        PRINT "START TEST"
-
-        locate 1,0
-
-        PRINT "DISPLAY ON"
-        wait 3 s
-
-        locate 0,0
-
-        for ypos = 0 to 1
-            for xpos = 0 to 16
-               locate ypos, xpos
-               print "*"
-               ' flush HSerPrint buffer
-               print ""
-               wait 100 ms
-            next
-        next
+Dim YPOS, XPOS As Byte
 
 
-        CLS
-        Locate 0,0
-        LCDCURSOR LCDON
-        Print "END TEST"
-        wait 3 s
+Wait 500 ms
 
-    loop
+' ----- Main body of program commences here.
+
+Do Forever
+
+    ' Bell Character
+    Print CHR(7)
+    CLS
+    Print "START TEST"
+
+    Locate 1,0
+
+    Print "DISPLAY ON"
+    Wait 3 s
+
+    Locate 0,0
+
+    For ypos = 0 To 1
+        For xpos = 0 To 16
+            Locate ypos, xpos
+            Print "*"
+            ' flush HSerPrint buffer
+            Print ""
+            Wait 100 ms
+        Next
+    Next
+
+
+    CLS
+    Locate 0,0
+    LCDCursor LCDON
+    Print "END TEST"
+    Wait 3 s
+
+Loop

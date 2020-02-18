@@ -14,11 +14,11 @@
 '''@date    30.05.15
 '''********************************************************************************
 
-; ----- Configuration
-  #Chip 16f1829, 16
-  #option explicit
+' ----- Configuration
+#CHIP 16f1829, 16
+#OPTION Explicit
 
-   ; ----- Define Hardware settings
+' ----- Define Hardware settings
 '  ' Define I2C settings - CHANGE PORTS
 '   #define HI2C_BAUD_RATE 100
 '   #define HI2C_DATA PORTB.4
@@ -29,60 +29,63 @@
 '
 '   HI2CMode Master
 
- ; ----- Define Hardware settings
-  ' Define I2C settings - CHANGE PORTS
-   #define I2C_MODE Master
-   #define I2C_DATA PORTB.4
-   #define I2C_CLOCK PORTB.6
-   #define I2C_DISABLE_INTERRUPTS ON
-   #define I2C_BIT_DELAY 0 us 'width of data bit on SDA
-   #define I2C_CLOCK_DELAY 0 us 'width of clock pulse on SCL
-   #define I2C_END_DELAY 0 us 'interval between clock pulses
+' ----- Define Hardware settings
+' Define I2C settings - CHANGE PORTS
+#DEFINE I2C_MODE Master
+#DEFINE I2C_DATA PORTB.4
+#DEFINE I2C_CLOCK PORTB.6
+#DEFINE I2C_DISABLE_INTERRUPTS On
+'width of data bit on SDA
+#DEFINE I2C_BIT_DELAY 0 us
+'width of clock pulse on SCL
+#DEFINE I2C_CLOCK_DELAY 0 us
+'interval between clock pulses
+#DEFINE I2C_END_DELAY 0 us
 
-;----- Variables
-  Dim LOOPX as Byte
+'----- Variables
+Dim LOOPX As Byte
 
-; ----- Main body of program commences here.
-  dir portc out
+' ----- Main body of program commences here.
+Dir portc Out
 
-  dim DeviceID as byte
+Dim DeviceID As Byte
 
-      for DeviceID = 0x00 to 0xff
-
-
-        I2CStart
-        I2CSend ( deviceID )
-        I2CSend ( 0 )
-        i2cstop
-
-        if I2CSendState = True  then
-
-          for loopx = 1 to 4
-              portc = 255
-              wait 50 ms
-              portc = 0
-              wait 50 ms
-          next
-          wait 2 s
+For DeviceID = 0x00 To 0xff
 
 
-           Repeat ( ( deviceID / 16 )+1)
-              portc = 255
-              wait 300 ms
-              portc = 0
-              wait 300 ms
-           end Repeat
-           wait 2 s
-           Repeat (( deviceID & 0X0f )+1 )
-              portc = 255
-              wait 300 ms
-              portc = 0
-              wait 300 ms
-           end repeat
-           wait 2 s
+    I2CStart
+    I2CSend ( deviceID )
+    I2CSend ( 0 )
+    I2CStop
 
-        end if
+    If I2CSendState = TRUE  Then
 
-      next
+        For loopx = 1 To 4
+            portc = 255
+            Wait 50 ms
+            portc = 0
+            Wait 50 ms
+        Next
+        Wait 2 s
 
-  END
+
+        Repeat ( ( deviceID / 16 )+1)
+            portc = 255
+            Wait 300 ms
+            portc = 0
+            Wait 300 ms
+        End Repeat
+        Wait 2 s
+        Repeat (( deviceID & 0X0f )+1 )
+            portc = 255
+            Wait 300 ms
+            portc = 0
+            Wait 300 ms
+        End Repeat
+        Wait 2 s
+
+    End If
+
+Next
+
+End

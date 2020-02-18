@@ -19,89 +19,89 @@
 '''@date    24 August 2019
 '''***************************************************************************************
 
-; ---- Configuration
+' ---- Configuration
 
 'Microcontroller @ 32MHz
-#chip 16F1619, 32
+#CHIP 16F1619, 32
 
 'MCLRE set on so that switch S2 can reset microcontroller
-#config MCLRE_ON
+#CONFIG MCLRE_ON
 
 
 'Ensure all variables are explicitly defined
-#option explicit
+#OPTION Explicit
 
-; ---- Define hardware settings
+' ---- Define hardware settings
 
-#define S1 PORTC.4
+#DEFINE S1 PORTC.4
 Dir S1 In
 
-#define Led1 PORTA.5
-DIR PORTA.5 OUT
+#DEFINE Led1 PORTA.5
+Dir PORTA.5 Out
 
-#define Led2 PORTA.1
-DIR PORTA.1 OUT
+#DEFINE Led2 PORTA.1
+Dir PORTA.1 Out
 
-#define Led3 PORTA.2
-DIR PORTA.2 OUT
+#DEFINE Led3 PORTA.2
+Dir PORTA.2 Out
 
-#define Led4 PORTC.5
-DIR PORTC.5 OUT
+#DEFINE Led4 PORTC.5
+Dir PORTC.5 Out
 
-#define POT1 AN4
-DIR PORTC.0 IN
+#DEFINE POT1 AN4
+Dir PORTC.0 In
 
 'Enable interrupt for S1 pin (RC4) with positive going edge
 '- generates interrupt on S1 release, not S1 press
-Set IOCCP4 ON
+Set IOCCP4 On
 
-; ---- Constants
+' ---- Constants
 
 'minimum delay in ms
-#define minMsDelay 80
+#DEFINE minMsDelay 80
 
 'startup wait in seconds
-#define waitSecs 1
+#DEFINE waitSecs 1
 
-; ---- Variables
+' ---- Variables
 
-Dim ADCvalueWord as Word
+Dim ADCvalueWord As Word
 
-; ---- Main body of program
+' ---- Main body of program
 
 'On S1 pin RC4 interrupt, call PortChanged subroutine
 On Interrupt PortChange Call PortChanged
 
 'Enable interrupts
-INTON
+IntOn
 
 'LED init on program startup
-WAIT waitSecs S
+Wait waitSecs s
 Set LED1 = 1
 Set LED2 = 1
 Set LED3 = 1
 Set LED4 = 1
-WAIT waitSecs S
+Wait waitSecs s
 Set LED1 = 0
 Set LED2 = 0
 Set LED3 = 0
 Set LED4 = 0
 
 'Program loop
-DO FOREVER
-   'Read ADC
-   ADCvalueWord = ReadAD10(POT1)
-   'preserve minMsDelay delay
-   if ADCvalueWord < minMsDelay then ADCvalueWord = minMsDelay
+Do Forever
+    'Read ADC
+    ADCvalueWord = ReadAD10(POT1)
+    'preserve minMsDelay delay
+    If ADCvalueWord < minMsDelay Then ADCvalueWord = minMsDelay
 
-   'Flash LED
-   Set LED1 = 1
-   Wait ADCvalueWord MS
-   Set LED1 = 0
-   Wait ADCvalueWord MS
-LOOP
+    'Flash LED
+    Set LED1 = 1
+    Wait ADCvalueWord ms
+    Set LED1 = 0
+    Wait ADCvalueWord ms
+Loop
 
-; ---- Subroutines
+' ---- Subroutines
 
 'Interrupt subroutine called when pin RC4 changes
 ' - note: you would normally need to check which
@@ -110,20 +110,20 @@ LOOP
 '   interrupt for one pin, so we can omit the check
 Sub PortChanged
     'Disable interrupts
-    INTOFF
+    IntOff
 
     'Clear RC4 Interrupt Flag
-    SET IOCCF4 = 0
+    Set IOCCF4 = 0
 
     'Debounce Switch S1 which is high until pressed
-    wait while S1 = 0
+    Wait While S1 = 0
 
-    if LED4 = 0 then
-       set LED4 = 1
-    else
-       set LED4 = 0
-    end if
+    If LED4 = 0 Then
+        Set LED4 = 1
+    Else
+        Set LED4 = 0
+    End If
 
     'Re-enable interrupts
-    INTON
+    IntOn
 End Sub

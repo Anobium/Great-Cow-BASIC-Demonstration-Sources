@@ -9,37 +9,37 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
-  #chip 12F675, 4
-  #option explicit
-;                                      ; no config. assumes defaults
+#CHIP 12F675, 4
+#OPTION Explicit
+'                                      ; no config. assumes defaults
 
-; #include                                    ; no solution specifc includes, default includes are always included
-
-
-; ----- Define Hardware settings
- dir  GPIO out
+' #include                                    ; no solution specifc includes, default includes are always included
 
 
-; ----- Variables
-  Dim DESTBIT as Byte
-
-; ----- Main body of program commences here.
-  Do Forever
-
-     ' toggle the first bit - this equates to GPIO.0
-     Toggle @GPIO, 1
-     'Then wait after the pin goes off
-     Wait 500 ms
-
-  Loop
+' ----- Define Hardware settings
+Dir  GPIO Out
 
 
-; ----- Support methods.  Subroutines and Functions
+' ----- Variables
+Dim DESTBIT As Byte
+
+' ----- Main body of program commences here.
+Do Forever
+
+    ' toggle the first bit - this equates to GPIO.0
+    Toggle @GPIO, 1
+    'Then wait after the pin goes off
+    Wait 500 ms
+
+Loop
+
+
+' ----- Support methods.  Subroutines and Functions
 
 ' You can toggle any number of pins by addressing the bits using this method
 ' Toggle PORT, BIT
-Sub Toggle ( In DestPort As word, In DestBit )
-      Poke DestPort, Peek(DestPort) xor DestBit
-End sub
+Sub Toggle ( In DestPort As Word, In DestBit )
+    Poke DestPort, Peek(DestPort) XOR DestBit
+End Sub

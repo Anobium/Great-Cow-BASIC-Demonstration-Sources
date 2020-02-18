@@ -32,29 +32,29 @@
 
 
 
- #Chip 18F14K22, 8
- #config MCLRE_OFF
- #option Explicit
+#CHIP 18F14K22, 8
+#CONFIG MCLRE_OFF
+#OPTION Explicit
 
 
-    dir portc out
+Dir portc Out
 
-    dim maxADCReading, myDelay as Word
-    maxADCReading = 0
+Dim maxADCReading, myDelay As Word
+maxADCReading = 0
 
 
-    do
+Do
 
-        'Read the ADC  and store the result in the variable
-        myDelay = ReadAD ( AN0 , true )
+    'Read the ADC  and store the result in the variable
+    myDelay = ReadAD ( AN0 , TRUE )
 
-        'Store the maximum value of the ADC in the variable.  We are showing this to ensure the ADC has a dynamic range.
-        if myDelay > maxADCReading Then
-            maxADCReading = myDelay
-        end if
+    'Store the maximum value of the ADC in the variable.  We are showing this to ensure the ADC has a dynamic range.
+    If myDelay > maxADCReading Then
+        maxADCReading = myDelay
+    End If
 
-        portc =  scale ( myDelay,  0, maxADCReading, 0, 15 )
+    portc =  Scale ( myDelay,  0, maxADCReading, 0, 15 )
 
-        wait 30 ms
+    Wait 30 ms
 
-    loop
+Loop

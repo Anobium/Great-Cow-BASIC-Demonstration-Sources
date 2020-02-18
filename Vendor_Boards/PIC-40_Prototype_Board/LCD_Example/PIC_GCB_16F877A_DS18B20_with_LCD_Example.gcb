@@ -9,80 +9,82 @@
 
 
 'Chip Settings. Assumes the development board with with a 16F877A
-#chip 16F877A,20
-#option explicit
+#CHIP 16F877A,20
+#OPTION Explicit
 
-#include <ds18b20.h>
+#INCLUDE <ds18b20.h>
 
 'Use LCD in 4 pin mode and define LCD pins
- #define LCD_IO 4
- #define LCD_RW PORTE.1
- #define LCD_RS PORTE.0
- #define LCD_Enable PORTE.2
- #define LCD_DB4 PORTD.4
- #define LCD_DB5 PORTD.5
- #define LCD_DB6 PORTD.6
- #define LCD_DB7 PORTD.7
+#DEFINE LCD_IO 4
+#DEFINE LCD_RW PORTE.1
+#DEFINE LCD_RS PORTE.0
+#DEFINE LCD_Enable PORTE.2
+#DEFINE LCD_DB4 PORTD.4
+#DEFINE LCD_DB5 PORTD.5
+#DEFINE LCD_DB6 PORTD.6
+#DEFINE LCD_DB7 PORTD.7
 
-  ' DS18B20 port settings - this is required
-  #define DQ PortC.3
+' DS18B20 port settings - this is required
+#DEFINE DQ PortC.3
 
-  Dim CCOUNT, SIGNBIT, WHOLE, FRACT, DIG as Byte
-  dim TempC_100 as word   ' a variabler to handle the temperature calculations
-  ccount = 0
-  CLS
+Dim CCOUNT, SIGNBIT, WHOLE, FRACT, DIG As Byte
+' a variabler to handle the temperature calculations
+Dim TempC_100 As Word
+ccount = 0
+CLS
 
-do forever
-   ' The function readtemp returns the integer value of the sensor
-   DSdata = readtemp
+Do Forever
+    ' The function readtemp returns the integer value of the sensor
+    DSdata = ReadTemp
 
-   ' Display the integer value of the sensor on the LCD
-   locate 0,0
-   print hex(ccount)
-   print " Ceil"
-   locate 0,8
-   print DSdata
-   print chr(223)+"C"
+    ' Display the integer value of the sensor on the LCD
+    Locate 0,0
+    Print Hex(ccount)
+    Print " Ceil"
+    Locate 0,8
+    Print DSdata
+    Print CHR(223)+"C"
 
 
 
-   ' Display the integer and decimal value of the sensor on the LCD
+    ' Display the integer and decimal value of the sensor on the LCD
 
-   ' The function readtemp12 returns the raw value of the sensor.
-   ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
-   DSdata = readtemp12
-   SignBit = DSdata / 256 / 128
-   If SignBit = 0 Then goto Positive
-   ' its negative!
-   DSdata = ( DSdata # 0xffff ) + 1 ' take twos comp
+    ' The function readtemp12 returns the raw value of the sensor.
+    ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
+    DSdata = ReadTemp12
+    SignBit = DSdata / 256 / 128
+    If SignBit = 0 Then Goto Positive
+    ' its negative!
+    ' take twos comp
+    DSdata = ( DSdata # 0xffff ) + 1
 
 Positive:
 
-   ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
-   TempC_100 =  DSdata * 6
-   DSdata = ( DSdata * 25 ) / 100
-   TempC_100 = TempC_100 + DSdata
+    ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
+    TempC_100 =  DSdata * 6
+    DSdata = ( DSdata * 25 ) / 100
+    TempC_100 = TempC_100 + DSdata
 
-   Whole = TempC_100 / 100
-   Fract = TempC_100 % 100
-   If SignBit = 0 Then goto DisplayTemp
-   Print "-"
+    Whole = TempC_100 / 100
+    Fract = TempC_100 % 100
+    If SignBit = 0 Then Goto DisplayTemp
+    Print "-"
 
 DisplayTemp:
-   locate 1,0
-   print hex(ccount)
-   print " Real"
-   locate 1,8
-   print str(Whole)
-   print "."
-  ' To ensure the decimal part is two digits
-   Dig = Fract / 10
-   print Dig
-   Dig = Fract % 10
-   print Dig
-   print chr(223)
-   print "C"
-   wait 2 s
-   ccount++
+    Locate 1,0
+    Print Hex(ccount)
+    Print " Real"
+    Locate 1,8
+    Print Str(Whole)
+    Print "."
+    ' To ensure the decimal part is two digits
+    Dig = Fract / 10
+    Print Dig
+    Dig = Fract % 10
+    Print Dig
+    Print CHR(223)
+    Print "C"
+    Wait 2 s
+    ccount++
 
-loop
+Loop

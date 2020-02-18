@@ -9,73 +9,79 @@
 '''@date    22.2.17
 '''********************************************************************************
 
-  #chip mega328p,16
-  #option explicit
-  #include <uno_mega328p.h>
-  #include <glcd.h>
-  #define HI2C_BAUD_RATE 400
-  #define HI2C_DATA
-  HI2CMode Master
-  #define GLCD_TYPE GLCD_TYPE_SSD1306
-  #define GLCD_I2C_Address 0x78
-  #define ADSpeed LowSpeed
+#CHIP mega328p,16
+#OPTION Explicit
+#INCLUDE <uno_mega328p.h>
+#INCLUDE <glcd.h>
+#DEFINE HI2C_BAUD_RATE 400
+#DEFINE HI2C_DATA
+HI2CMode Master
+#DEFINE GLCD_TYPE GLCD_TYPE_SSD1306
+#DEFINE GLCD_I2C_Address 0x78
+#DEFINE ADSpeed LowSpeed
 
-  'Redirect the standard PSET routine to the XOR routine
-  #define PSet_SSD1306 xorPSet_SSD1306
+'Redirect the standard PSET routine to the XOR routine
+#DEFINE PSet_SSD1306 xorPSet_SSD1306
 
-  dim GLCDDATATEMP as word
-  dim GLCDBITNO as byte
-  dim GLCDCHANGE as byte
-  ;
-  dir portc.0 in
-  dim volt as byte
-  dim xpos as byte
-  dim buffer1 (128)
-  dim buffer2 (128)
+Dim GLCDDATATEMP As Word
+Dim GLCDBITNO As Byte
+Dim GLCDCHANGE As Byte
+'
+Dir portc.0 In
+Dim volt As Byte
+Dim xpos As Byte
+Dim buffer1 (128)
+Dim buffer2 (128)
 
 
 'Main code to set the screen up
 
-  for xpos=0 to 127 ;init read 128 samples 1st time
-    volt = READAD (an0)
+'init read 128 samples 1st time
+For xpos=0 To 127
+    volt = ReadAD (an0)
     buffer1 (xpos)=volt/4
     buffer2 (xpos)=volt/4
-  next xpos
+Next xpos
 
-  glcdcls
+GLCDCLS
 
-  'Draw the grid
-  line 0,31,128,32
-  line 63,0,63,63
-  '
-  for xpos=0 to 127
-    pset xpos,buffer1(xpos),1 ;plot data 1st time for xor
-  next xpos
-  '
+'Draw the grid
+Line 0,31,128,32
+Line 63,0,63,63
+'
+For xpos=0 To 127
+    'plot data 1st time for xor
+    Pset xpos,buffer1(xpos),1
+Next xpos
+'
 
-  'Main loop
-  do
-  for xpos=0 to 127
-    pset xpos,buffer1(xpos),1 ;erase old data
-    pset xpos,buffer2(xpos),1 ;plot new data
-  next xpos
-  ;
-  for xpos=0 to 127
-    buffer1 (xpos)=buffer2 (xpos) ;copy new data to old data
-    volt = READAD (an0)
-    Repeat 2
-      set c off
-      rotate volt right
-    End Repeat
-   buffer2 (xpos)=volt ;save new data
-  next xpos
-  ;
-  loop
-; end of main
+'Main loop
+Do
+    For xpos=0 To 127
+        'erase old data
+        Pset xpos,buffer1(xpos),1
+        'plot new data
+        Pset xpos,buffer2(xpos),1
+    Next xpos
+    '
+    For xpos=0 To 127
+        'copy new data to old data
+        buffer1 (xpos)=buffer2 (xpos)
+        volt = ReadAD (an0)
+        Repeat 2
+            Set c Off
+            Rotate volt Right
+        End Repeat
+        'save new data
+        buffer2 (xpos)=volt
+    Next xpos
+    '
+Loop
+' end of main
 
 
-;
-; redirected glcd library function to XOR GLCD
+'
+' redirected glcd library function to XOR GLCD
 '''Draws a pixel on the GLCD
 '''@param GLCDX X coordinate of pixel
 '''@param GLCDY Y coordinate of pixel
@@ -85,42 +91,42 @@ Sub xorPSet_SSD1306(In GLCDX, In GLCDY, In GLCDColour As Word)
     'X is 0 to 127
     'Y is 0 to 63
     'Origin in top left
-  #if GLCD_TYPE = GLCD_TYPE_SSD1306
-          'SSD1306_BufferLocationCalc = ( GLCDY / 8 )* GLCD_WIDTH
-          'faster than /8
-          SSD1306_BufferLocationCalc = GLCDY
-          Repeat 3
+    #IF GLCD_TYPE = GLCD_TYPE_SSD1306
+        'SSD1306_BufferLocationCalc = ( GLCDY / 8 )* GLCD_WIDTH
+        'faster than /8
+        SSD1306_BufferLocationCalc = GLCDY
+        Repeat 3
             Set C Off
             Rotate SSD1306_BufferLocationCalc Right
-          End Repeat
-          SSD1306_BufferLocationCalc = SSD1306_BufferLocationCalc * GLCD_WIDTH
+        End Repeat
+        SSD1306_BufferLocationCalc = SSD1306_BufferLocationCalc * GLCD_WIDTH
 
-          SSD1306_BufferLocationCalc = GLCDX + SSD1306_BufferLocationCalc+1
-          GLCDDataTemp = SSD1306_BufferAlias(SSD1306_BufferLocationCalc)
+        SSD1306_BufferLocationCalc = GLCDX + SSD1306_BufferLocationCalc+1
+        GLCDDataTemp = SSD1306_BufferAlias(SSD1306_BufferLocationCalc)
 
-          'Change data to set/clear pixel
-          GLCDBitNo = GLCDY And 7
-          If GLCDColour.0 = 0 Then
+        'Change data to set/clear pixel
+        GLCDBitNo = GLCDY AND 7
+        If GLCDColour.0 = 0 Then
             GLCDChange = 254
             Set C On
-          Else
+        Else
             GLCDChange = 1
             Set C Off
-          End If
-          Repeat GLCDBitNo
+        End If
+        Repeat GLCDBitNo
             Rotate GLCDChange Left
-          End Repeat
+        End Repeat
 
-          If GLCDColour.0 = 0 Then
-             GLCDDataTemp = GLCDDataTemp And GLCDChange
-          Else
-             GLCDDataTemp = GLCDDataTemp xOr GLCDChange
-          End If
+        If GLCDColour.0 = 0 Then
+            GLCDDataTemp = GLCDDataTemp AND GLCDChange
+        Else
+            GLCDDataTemp = GLCDDataTemp XOR GLCDChange
+        End If
 
-          SSD1306_BufferAlias(SSD1306_BufferLocationCalc) = GLCDDataTemp
-          Cursor_Position_SSD1306 ( GLCDX, GLCDY )
-          Write_Data_SSD1306 ( GLCDDataTemp )
+        SSD1306_BufferAlias(SSD1306_BufferLocationCalc) = GLCDDataTemp
+        Cursor_Position_SSD1306 ( GLCDX, GLCDY )
+        Write_Data_SSD1306 ( GLCDDataTemp )
 
-  #endif
+    #ENDIF
 
 End Sub

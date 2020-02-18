@@ -7,22 +7,23 @@
 '''@date    03/05/2018
 '''********************************************************************
 
-  #Chip 16F18446
- #config MCLRE_OFF
+#CHIP 16F18446
+#CONFIG MCLRE_OFF
 
-  #Define  ADC_Fudge 0x0739   ' as found by A2D example
+' as found by A2D example
+#DEFINE  ADC_Fudge 0x0739
 
-  dir portc out
-  portc = 0
-  portc.3 = 1
+Dir portc Out
+portc = 0
+portc.3 = 1
 
-  do
+Do
 
-    wait Scale( ReadAD12 ( AN0 ), 0, ADC_Fudge, 100, 1000) ms
-    Set C off
-    Rotate portc right
-    if C = 1 then portc.3 = 1
+    Wait Scale( ReadAD12 ( AN0 ), 0, ADC_Fudge, 100, 1000) ms
+    Set C Off
+    Rotate portc Right
+    If C = 1 Then portc.3 = 1
 
-  loop
+Loop
 
 End

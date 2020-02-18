@@ -1,63 +1,69 @@
-    #chip mega328p, 16
-    #option explicit
+#CHIP mega328p, 16
+#OPTION Explicit
 
-    #include <glcd.h>
-    #include <uno_mega328p.h >
+#INCLUDE <glcd.h>
+#INCLUDE <uno_mega328p.h >
 
-    #define GLCD_TYPE GLCD_TYPE_SSD1331
+#DEFINE GLCD_TYPE GLCD_TYPE_SSD1331
 
-    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-    #define GLCD_DC       portb.0           ' Data command line
-    #define GLCD_CS       portb.2           ' Chip select line
-    #define GLCD_RESET    portb.1           ' Reset line
-    #define GLCD_DO       portb.3           ' Data out | MOSI
-    #define GLCD_SCK      portb.5           ' Clock Line
+'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+' Data command line
+#DEFINE GLCD_DC       portb.0
+' Chip select line
+#DEFINE GLCD_CS       portb.2
+' Reset line
+#DEFINE GLCD_RESET    portb.1
+' Data out | MOSI
+#DEFINE GLCD_DO       portb.3
+' Clock Line
+#DEFINE GLCD_SCK      portb.5
 
-    #define SSD1331_HardwareSPI    ' remove/comment out if you want to use software SPI.
+' remove/comment out if you want to use software SPI.
+#DEFINE SSD1331_HardwareSPI
 
-    'GLCD selected OLED font set.
-    #define GLCD_OLED_FONT
-    GLCDfntDefaultsize = 1
+'GLCD selected OLED font set.
+#DEFINE GLCD_OLED_FONT
+GLCDfntDefaultSize = 1
 
-    GLCDPrintStringLN ("Great Cow BASIC")
-    GLCDPrintStringLN ("")
-    GLCDPrintStringLN ("SSD1331 Boxes!!")
-    GLCDPrintStringLN ("")
-    GLCDPrintStringLN ("Anobium 2019")
+GLCDPrintStringLn ("Great Cow BASIC")
+GLCDPrintStringLn ("")
+GLCDPrintStringLn ("SSD1331 Boxes!!")
+GLCDPrintStringLn ("")
+GLCDPrintStringLn ("Anobium 2019")
 
-    Wait 4 s
+Wait 4 s
 
 
-    dim scalefactor as Word
+Dim scalefactor As Word
 
-    if GLCD_WIDTH > GLCD_HEIGHT then
-      scalefactor = GLCD_HEIGHT * 100
-    else
-      scalefactor = GLCD_WIDTH * 100
-    end if
-    scalefactor = scalefactor / 255
+If GLCD_WIDTH > GLCD_HEIGHT Then
+    scalefactor = GLCD_HEIGHT * 100
+Else
+    scalefactor = GLCD_WIDTH * 100
+End If
+scalefactor = scalefactor / 255
 
-    GLCDBackground = TFT_BLUE
+GLCDBackground = TFT_BLUE
+GLCDCLS
+
+GLCDPrint 0,0, "Scalefactor = "+ Str(scalefactor)
+
+Dim ccc, xpos, ypos, xpos1, ypos1 As Word
+Do Forever
+
+    Repeat 500
+        xpos = (Random * scalefactor  ):xpos = xpos/100
+        ypos = (Random * scalefactor ):ypos = ypos/100
+        xpos1 = (Random * scalefactor ):xpos1 = xpos1/100
+        ypos1 = (Random * scalefactor ):ypos1 = ypos1/100
+
+        ccc = Random
+        ccc_h = Random
+
+        Box(xpos,ypos,(xpos+xpos1),(ypos+ypos1),ccc)
+
+    End Repeat
     GLCDCLS
 
-    GLCDPrint 0,0, "Scalefactor = "+ str(scalefactor)
 
-    dim ccc, xpos, ypos, xpos1, ypos1 as word
-    do Forever
-
-                repeat 500
-                  xpos = (random * scalefactor  ):xpos = xpos/100
-                  ypos = (random * scalefactor ):ypos = ypos/100
-                  xpos1 = (random * scalefactor ):xpos1 = xpos1/100
-                  ypos1 = (random * scalefactor ):ypos1 = ypos1/100
-
-                  ccc = Random
-                  ccc_h = Random
-
-                  box(xpos,ypos,(xpos+xpos1),(ypos+ypos1),ccc)
-
-                  end repeat
-            GLCDCLS
-
-
-    loop
+Loop

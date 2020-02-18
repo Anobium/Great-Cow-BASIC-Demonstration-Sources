@@ -17,28 +17,28 @@
 '''@date   	14.02.2015
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
-  #chip mega168, 16
-  #option explicit
+#CHIP mega168, 16
+#OPTION Explicit
 
-  ; ----- Define Hardware settings
-  'Set up the Serial Port
-   #define USART_BAUD_RATE 9600
-   Dir PORTD.1 Out
-   Dir PORTD.0 In
-   ' A delay is required to enable to AXE133 Emulator to process
-   #define USART_DELAY 1 ms
-   #define USART_BLOCKING
-   wait 500 ms
+' ----- Define Hardware settings
+'Set up the Serial Port
+#DEFINE USART_BAUD_RATE 9600
+Dir PORTD.1 Out
+Dir PORTD.0 In
+' A delay is required to enable to AXE133 Emulator to process
+#DEFINE USART_DELAY 1 ms
+#DEFINE USART_BLOCKING
+Wait 500 ms
 
-;----- Variables
-  Dim DISPLAYEEPROMMESSAGE as Byte
+'----- Variables
+Dim DISPLAYEEPROMMESSAGE As Byte
 
-; ----- Constants
-  ' No Constants specified in this example.
+' ----- Constants
+' No Constants specified in this example.
 
-; ----- Quick Command Reference:
+' ----- Quick Command Reference:
 
 '        The most common control commands are, any standard command will work!
 '        HSerSend 254: HSerSend 1         ;Clear Display (must be followed by a "wait 20 ms" command)
@@ -52,33 +52,34 @@
 '        HSerSend 254: HSerSend 192       ;Move to line 2, position 1
 '        HSerSend 254: HSerSend y         ;Move to line 2, position x (where y = 192 + x)
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
-  do forever
+Do Forever
+    'CLS
+    HSerSend 254: HSerSend 1: Wait 20 ms
+    HSerPrint "START LCD TEST"
+    'Locate 1,0
+    HSerSend 254: HSerSend 192
+    HSerPrint "DISPLAY ON"
+    Wait 1 s
+
+    For displayEEPromMessage = 0 To 15
         'CLS
-        HSerSend 254: HSerSend 1: wait 20 ms
-        HserPrint "START LCD TEST"
-        'Locate 1,0
+        HSerSend 254: HSerSend 1: Wait 20 ms
+        HSerPrint "EEProm Msg#"
+        HSerPrint displayEEPromMessage
+        'Second Line
         HSerSend 254: HSerSend 192
-        HserPrint "DISPLAY ON"
-        wait 1 s
+        'Display an EEprom message
+        HSerSend 253: HSerSend displayEEPromMessage
+        Wait 1 s
+    Next
+    'All LCD outputs on
+    HSerSend 255: HSerSend b'00000111'
+    Wait  1 s
+    'All LCD outputs off
+    ' all outputs off
+    HSerSend 255: HSerSend b'00000000'
+    Wait  1 s
 
-        for displayEEPromMessage = 0 to 15
-            'CLS
-            HSerSend 254: HSerSend 1: wait 20 ms
-            HSerPrint "EEProm Msg#"
-            HSerPrint displayEEPromMessage
-            'Second Line
-            HSerSend 254: HSerSend 192
-            'Display an EEprom message
-            HSerSend 253: HSerSend displayEEPromMessage
-            wait 1 s
-        next
-        'All LCD outputs on
-        HSerSend 255: HSerSend b'00000111'
-        wait  1 s
-        ;All LCD outputs off
-        HSerSend 255: HSerSend b'00000000'         ; all outputs off
-        wait  1 s
-
-  loop
+Loop

@@ -1,34 +1,38 @@
 
-    #chip 12F1572, 32
-    #config mclr=on
+#CHIP 12F1572, 32
+#CONFIG mclr=On
 
-    Dir PORTA Out
+Dir PORTA Out
 
-    #define HPWM16_1_Freq 1
-    #define HPWM16_1_Duty 50
-    HPWM16On ( 1 )
-    '''This should generate a 1 ms pulse every 20 ms (50 hz)
+#DEFINE HPWM16_1_Freq 1
+#DEFINE HPWM16_1_Duty 50
+HPWM16On ( 1 )
+'''This should generate a 1 ms pulse every 20 ms (50 hz)
 
-    #define LEDD2 PortA.2
-    Dir LEDD2 Out '' LED
-    #define LEDD0 PortA.0
-    Dir LEDD0 Out '' LED
+#DEFINE LEDD2 PortA.2
+'' LED
+Dir LEDD2 Out
+#DEFINE LEDD0 PortA.0
+'' LED
+Dir LEDD0 Out
 
-    PWM1PRIE = 1  'MUST be included to enable PWMMatchEvent Interrupts
-    On Interrupt PWM1MatchEvent call BlinkLEDD2 ' call this when PWM1Timer Matches
+'MUST be included to enable PWMMatchEvent Interrupts
+PWM1PRIE = 1
+' call this when PWM1Timer Matches
+On Interrupt PWM1MatchEvent Call BlinkLEDD2
 
-    Do
-        'waiting for interrupt
-        LEDD0 = !LEDD0
-    Loop
+Do
+    'waiting for interrupt
+    LEDD0 = !LEDD0
+Loop
 
 
-    sub BlinkLEDD2
-        DIM ccount AS WORD
-        PWM1PRIF = 0
-        ccount++
-        if ccount mod 1000 = 0 then
-            LEDD2 = ! LEDD2
-            ccount = 0
-        end if
-    End Sub
+Sub BlinkLEDD2
+    Dim ccount As Word
+    PWM1PRIF = 0
+    ccount++
+    If ccount mod 1000 = 0 Then
+        LEDD2 = ! LEDD2
+        ccount = 0
+    End If
+End Sub

@@ -36,44 +36,44 @@
 ''' 1. Connect the output of portc.5 to the output of any of the existing LEDs ports, such as portc.0, portc.1, portc.2 or portc.3
 ''' 2. Or, connect an LED via a suitable resistor to portc.5 then to 0v.  Like MCU portc.5 ---> resistor 1kOhmns ----> Ov
 
- #chip 16f690
+#CHIP 16f690
 
 
-    '' -------------------LATC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|DS4|DS3|DS2|DS1|-
-    ''-----------------------------------------
-    ''
+'' -------------------LATC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|DS4|DS3|DS2|DS1|-
+''-----------------------------------------
+''
 
- #script
-        'This script provides PWM results!
+#SCRIPT
+    'This script provides PWM results!
 
-        'reference voltage                        5v
-        'actual voltage at port when 100% Pot     4.15
-        'adc max                                  1023
-        'number of graduations requried           255
-        reference_voltage = 4.15
-        vcc = 5
-        numberofgrads = 255
-        maxADC = 1023
-        ADC_adjustment = int((reference_voltage*100)/(vcc*10))
-        ADC_adjustment = int(ADC_adjustment * maxADC / numberofgrads )
+    'reference voltage                        5v
+    'actual voltage at port when 100% Pot     4.15
+    'adc max                                  1023
+    'number of graduations requried           255
+    reference_voltage = 4.15
+    vcc = 5
+    numberofgrads = 255
+    maxADC = 1023
+    ADC_adjustment = int((reference_voltage*100)/(vcc*10))
+    ADC_adjustment = int(ADC_adjustment * maxADC / numberofgrads )
 
- #endscript
+#ENDSCRIPT
 
 ''' As CCP1 is connect to portc.5 you have two choices....
 ''' 1. Connect the output of portc.5 to the output of any of the existing LEDs ports, such as portc.0, portc.1, portc.2 or portc.3
 ''' 2. Or, connect an LED via a suitable resistor to portc.5 then to 0v.  Like MCU portc.5 ---> resistor 1kOhmns ----> Ov
 
-      dir portc.5 out
+Dir portc.5 Out
 
-      dim calculatedPWM as word
+Dim calculatedPWM As Word
 
-      do
-          wait 5 ms
-          calculatedPWM = ( ( ReadAD10 ( AN0 ) * 10  ) / ADC_adjustment   )
-          if calculatedPWM > 255 then calculatedPWM = 255
-          HPWM 1, 40, calculatedPWM
-      loop
+Do
+    Wait 5 ms
+    calculatedPWM = ( ( ReadAD10 ( AN0 ) * 10  ) / ADC_adjustment   )
+    If calculatedPWM > 255 Then calculatedPWM = 255
+    HPWM 1, 40, calculatedPWM
+Loop
 
 

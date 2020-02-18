@@ -13,94 +13,99 @@
 '''@date    22.10.2017
 ' ----- Configuration
 
-    'Chip Settings.
-    #chip 18f25k42, 64
-    #option Explicit
-    #config mclr=on
+'Chip Settings.
+#CHIP 18f25k42, 64
+#OPTION Explicit
+#CONFIG mclr=On
 
-    #startup InitPPS, 85
+#STARTUP InitPPS, 85
 
-    Sub InitPPS
+Sub InitPPS
 
-          RC4PPS =      0x22   'RC4->I2C1:SDA1
-          RC3PPS =      0x21   'RC3->I2C1:SCL1
-          I2C1SCLPPS =  0x13   'RC3->I2C1:SCL1
-          I2C1SDAPPS =  0x14   'RC4->I2C1:SDA1
+    'RC4->I2C1:SDA1
+    RC4PPS =      0x22
+    'RC3->I2C1:SCL1
+    RC3PPS =      0x21
+    'RC3->I2C1:SCL1
+    I2C1SCLPPS =  0x13
+    'RC4->I2C1:SDA1
+    I2C1SDAPPS =  0x14
 
-    End Sub
+End Sub
 
-    'Template comment at the end of the config file
-
-
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
-    ''-----------------------------------------
-    ''
-
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | ----------| O | I |-
-    ''-----------------------------------------
-    ''
-
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------------I---I-| X |---------
-    ''-----------------------------------------
-    ''
+'Template comment at the end of the config file
 
 
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define Potentiometer   PORTC.5
-    #define SwitchIn        PORTB.0
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
 
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     Potentiometer In   'this is the ANC5 port
-    Dir     SwitchIn      In
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | ----------| O | I |-
+''-----------------------------------------
+''
 
-    ' Define I2C settings
-    #define HI2C_BAUD_RATE 100
-    #define HI2C_DATA PORTC.4
-    #define HI2C_CLOCK PORTC.3
-    'Initialise I2C
-    Dir HI2C_DATA out
-    Dir HI2C_CLOCK out
-    RC3I2C.TH0=1
-    RC4I2C.TH0=1
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------------I---I-| X |---------
+''-----------------------------------------
+''
 
-    'MASTER
-    HI2CMode Master
 
-    #include <glcd.h>
-    #define GLCD_TYPE GLCD_TYPE_SSD1306
-    #define GLCD_I2C_Address 0x78
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE Potentiometer   PORTC.5
+#DEFINE SwitchIn        PORTB.0
 
-    'These constants allow you to change the GLCD memory usage.
-    #define GLCD_PROTECTOVERRUN
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+'this is the ANC5 port
+Dir     Potentiometer In
+Dir     SwitchIn      In
 
-    #define GLCD_OLED_FONT
+' Define I2C settings
+#DEFINE HI2C_BAUD_RATE 100
+#DEFINE HI2C_DATA PORTC.4
+#DEFINE HI2C_CLOCK PORTC.3
+'Initialise I2C
+Dir HI2C_DATA Out
+Dir HI2C_CLOCK Out
+RC3I2C.TH0=1
+RC4I2C.TH0=1
+
+'MASTER
+HI2CMode Master
+
+#INCLUDE <glcd.h>
+#DEFINE GLCD_TYPE GLCD_TYPE_SSD1306
+#DEFINE GLCD_I2C_Address 0x78
+
+'These constants allow you to change the GLCD memory usage.
+#DEFINE GLCD_PROTECTOVERRUN
+
+#DEFINE GLCD_OLED_FONT
 
 '*******************************************************************************************
-   DIM myString as string * 28
-   myString = "Great Cow BASIC 2017"
+Dim myString As String * 28
+myString = "Great Cow BASIC 2017"
 
-   GLCDfntDefaultSize = 2
-   GLCDFontWidth = 5
-   GLCDPrint(24, 2,"GCBASIC")
-   GLCDDrawString(20, 15,"Extensive")
-   GLCDDrawString(20, 28,"Libraries")
+GLCDfntDefaultSize = 2
+GLCDFontWidth = 5
+GLCDPrint(24, 2,"GCBASIC")
+GLCDDrawString(20, 15,"Extensive")
+GLCDDrawString(20, 28,"Libraries")
 
-   GLCDfntDefaultSize = 1
-   GLCDPrint(20, 48,"https://goo.gl/gjrxkp")
-   GLCDDrawString(20, 56,myString)
+GLCDfntDefaultSize = 1
+GLCDPrint(20, 48,"https://goo.gl/gjrxkp")
+GLCDDrawString(20, 56,myString)
 
-   Box (0, 0, 127 , 63 )
+Box (0, 0, 127 , 63 )
 
-   FilledCircle 8, 8, 5
-   Triangle 127, 0, 117, 0, 127, 10, 1
+FilledCircle 8, 8, 5
+Triangle 127, 0, 117, 0, 127, 10, 1
 
-   Do Forever
-   Loop
+Do Forever
+Loop

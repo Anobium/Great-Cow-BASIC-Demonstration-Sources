@@ -1,13 +1,13 @@
 'LCD connection settings
-#define LCD_IO 8
-#define LCD_NO_RW
+#DEFINE LCD_IO 8
+#DEFINE LCD_NO_RW
 
-#define LCD_DATA_PORT PORTB
-#define LCD_RS PORTA.7
-#define LCD_Enable PORTA.6
+#DEFINE LCD_DATA_PORT PORTB
+#DEFINE LCD_RS PORTA.7
+#DEFINE LCD_Enable PORTA.6
 
 CLS
 
 Print "Hello World"
 
-END
+End

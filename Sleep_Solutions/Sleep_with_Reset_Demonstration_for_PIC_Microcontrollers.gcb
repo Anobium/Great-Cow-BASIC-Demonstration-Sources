@@ -16,98 +16,98 @@
 '''@date    20.11.2015
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
-  #chip 10F202, 4
+#CHIP 10F202, 4
 
-; ----- Constants
-  ' No Constants specified in this example.
-
-
-; ----- Define Hardware settings
-  '
-  '      Pinout Data 10F202 - 8 pin PDIP
-  '             --------
-  '       N/C -|1      8|- GP3
-  '       GPO -|2      7|- VDD
-  '       VSS -|3      6|- N/C
-  '       GP1 -|4      5|- GP2
-  '             --------
+' ----- Constants
+' No Constants specified in this example.
 
 
-  '             --------
-  '       N/C -|1      8|- SWITCH PULLED HIGH
-  '       GPO -|2      7|- VDD
-  '       VSS -|3      6|- N/C
-  '       LED -|4      5|- GP2
-  '             --------
+' ----- Define Hardware settings
+'
+'      Pinout Data 10F202 - 8 pin PDIP
+'             --------
+'       N/C -|1      8|- GP3
+'       GPO -|2      7|- VDD
+'       VSS -|3      6|- N/C
+'       GP1 -|4      5|- GP2
+'             --------
 
 
-  dir gpio.3 in
-  dir gpio.2 out
-  dir gpio.1 out
-  dir gpio.0 out
+'             --------
+'       N/C -|1      8|- SWITCH PULLED HIGH
+'       GPO -|2      7|- VDD
+'       VSS -|3      6|- N/C
+'       LED -|4      5|- GP2
+'             --------
 
 
-; ----- Variables
-  ' No Variables specified in this example. All byte variables are defined upon use.
+Dir gpio.3 In
+Dir gpio.2 Out
+Dir gpio.1 Out
+Dir gpio.0 Out
 
 
-; ----- Quick Command Reference:
-  'This file is a basic code template for using the reset on change,
-  'reset on WDT, and reset of comparator output change features of
-  'the PIC10F20X microcontrollers.
-
-  'The RESET condition is differentiated as to WDT, POR, Port change
-  'and Comparator change.
-
-  'This example shows the Port-On-Change only. Similar tests can be added to examine WDT and POR etc.
+' ----- Variables
+' No Variables specified in this example. All byte variables are defined upon use.
 
 
+' ----- Quick Command Reference:
+'This file is a basic code template for using the reset on change,
+'reset on WDT, and reset of comparator output change features of
+'the PIC10F20X microcontrollers.
 
-; ----- Main body of program commences here.
-  ; Test for a pin change reset (External pin change)
-  if GPWUF = 1 then goto WokeFromSleep
+'The RESET condition is differentiated as to WDT, POR, Port change
+'and Comparator change.
 
-  JustPoweredUp:
-    repeat 5
-      gpio = 255
-      wait 100 ms
-      gpio = 0
-      wait 100 ms
-    end Repeat
+'This example shows the Port-On-Change only. Similar tests can be added to examine WDT and POR etc.
 
 
 
-    do FOREVER
+' ----- Main body of program commences here.
+' Test for a pin change reset (External pin change)
+If GPWUF = 1 Then Goto WokeFromSleep
 
-      gpio = 255
-      wait 100 ms
+JustPoweredUp:
+Repeat 5
+    gpio = 255
+    Wait 100 ms
+    gpio = 0
+    Wait 100 ms
+End Repeat
 
-      'debounce
-      If gpio.3 = 0 Then
-          Do While gpio.3 = 0
-              wait 1 10ms
-          Loop
-      end if
 
-      gpio = 0
 
-      'This set the Change on Port-On-Change for the inputs.  This is specific to the 10f20x devices.
-      'Please review the datasheet for other microcontrollers to ensure this is valid.
-      'Equates to Set NOT_GPWU Off
-      'This is assembler.  :-)
-      movlw B'01001111'
-      option
+Do Forever
 
-      SysBYTETempA = GPIO.3
-      'Clear the port change reset flag
-      Set GPWUF off
-      'Return to sleep
-      sleep
-      nop
-      WokeFromSleep:
+    gpio = 255
+    Wait 100 ms
 
-    loop
+    'debounce
+    If gpio.3 = 0 Then
+        Do While gpio.3 = 0
+            Wait 1 10ms
+        Loop
+    End If
 
-; ----- Support methods.  Subroutines and Functions
+    gpio = 0
+
+    'This set the Change on Port-On-Change for the inputs.  This is specific to the 10f20x devices.
+    'Please review the datasheet for other microcontrollers to ensure this is valid.
+    'Equates to Set NOT_GPWU Off
+    'This is assembler.  :-)
+    movlw B'01001111'
+    option
+
+    SysBYTETempA = GPIO.3
+    'Clear the port change reset flag
+    Set GPWUF Off
+    'Return to sleep
+    sleep
+    nop
+WokeFromSleep:
+
+Loop
+
+' ----- Support methods.  Subroutines and Functions

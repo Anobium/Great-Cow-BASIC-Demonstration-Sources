@@ -16,19 +16,21 @@
 '''@date    23.08.2018
 '''*************************************************************************
 
-    'Chip Settings
-    #chip 16f1825, 16
+'Chip Settings
+#CHIP 16f1825, 16
 
-    'Set the direction all the ports out - just for ease.
-    DIR porta Out
-    DIR portc  Out
+'Set the direction all the ports out - just for ease.
+Dir porta Out
+Dir portc  Out
 
 '    #define PWM_Timer2_Freq 20        'Set frequency in KHz, just change the number
-    #define PWM_Timer4_Freq 40        'Set frequency in KHz, just change the number
-    #define PWM_Timer6_Freq 60        'Set frequency in KHz, just change the number
+'Set frequency in KHz, just change the number
+#DEFINE PWM_Timer4_Freq 40
+'Set frequency in KHz, just change the number
+#DEFINE PWM_Timer6_Freq 60
 
-    #define PWM_1_Duty 10
-    #define PWM_1_Clock_Source 4
+#DEFINE PWM_1_Duty 10
+#DEFINE PWM_1_Clock_Source 4
 
 '    #define PWM_2_Duty 20
 '    #define PWM_2_Clock_Source 4
@@ -40,20 +42,21 @@
 '    #define PWM_4_Clock_Source 6
 
 
-    'port c.5
-    PWMOn (1)    'Will enable any valid CCP/PWM channel
+'port c.5
+'Will enable any valid CCP/PWM channel
+PWMOn (1)
 
-    'port c.3
+'port c.3
 '    PWMOn (2)    'Will enable any valid CCP/PWM channel
 
-     'porta.3
+'porta.3
 '    PWMOn (3)    'Will enable any valid CCP/PWM channel
 
-     'port c.1
+'port c.1
 '    PWMOn (4)    'Will enable any valid CCP/PWM channel
 
 
-    do
-    loop
+Do
+Loop
 
 

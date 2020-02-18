@@ -30,121 +30,123 @@
 '''@date     04.12.2016
 
 
-  'Chip Settings.
-  #chip 16f18877,32
-  #option explicit
+'Chip Settings.
+#CHIP 16f18877,32
+#OPTION Explicit
 
 
 
-  'Set the RS232 ports.
-  'Set the PPS for this solution.
-  #startup InitPPS, 85
+'Set the RS232 ports.
+'Set the PPS for this solution.
+#STARTUP InitPPS, 85
 
-  Sub InitPPS
+Sub InitPPS
     UNLOCKPPS
-      RXPPS  = 0x15 'Pin RC5 source is an input for RX
-      RC4PPS = 0x10 'Pin RC4 source is TX/CK
+    'Pin RC5 source is an input for RX
+    RXPPS  = 0x15
+    'Pin RC4 source is TX/CK
+    RC4PPS = 0x10
     LOCKPPS
-  End sub
+End Sub
 
 
-  #define USART_BAUD_RATE 19200
-  #define USART_TX_BLOCKING
+#DEFINE USART_BAUD_RATE 19200
+#DEFINE USART_TX_BLOCKING
 
-   '' -------------------LATD-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
-    ''-----------------------------------------
-    ''
-    #define LEDD2  PORTD.0
-    #define LEDD3  PORTD.1
-    #define LEDD4  PORTD.2
-    #define LEDD5  PORTD.3
-    #define LEDBANK PORTD
-    #define SWITCH      PORTA.1
+'' -------------------LATD-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D2 |-
+''-----------------------------------------
+''
+#DEFINE LEDD2  PORTD.0
+#DEFINE LEDD3  PORTD.1
+#DEFINE LEDD4  PORTD.2
+#DEFINE LEDD5  PORTD.3
+#DEFINE LEDBANK PORTD
+#DEFINE SWITCH      PORTA.1
 
-    Dir     LEDD2 OUT
-    Dir     LEDD3 OUT
-    Dir     LEDD4 OUT
-    Dir     LEDD5 OUT
-    Dir      SWITCH IN
+Dir     LEDD2 Out
+Dir     LEDD3 Out
+Dir     LEDD4 Out
+Dir     LEDD5 Out
+Dir      SWITCH In
 
 '    Set LEDS off
-    LEDBANK = 0
+LEDBANK = 0
 '    Set the first LED on
-    Set LEDD5 on
+Set LEDD5 On
 
 
-    #define SWITCH_DOWN         1
-    #define SWITCH_UP           0
+#DEFINE SWITCH_DOWN         1
+#DEFINE SWITCH_UP           0
 
 
-    ' Now assumes Serial Terminal is operational
-    dim EEPromAddress as byte
-    dim EEPROMArray(255)
+' Now assumes Serial Terminal is operational
+Dim EEPromAddress As Byte
+Dim EEPROMArray(255)
 
 
-    Dim OUTDATA, DISPLAYNEWLINE as Byte
+Dim OUTDATA, DISPLAYNEWLINE As Byte
 
 
-    HSerPrintCRLF
-    HSerPrint "EEPROM Test and Show EEProm Results"
-    HSerPrintCRLF 2
+HSerPrintCRLF
+HSerPrint "EEPROM Test and Show EEProm Results"
+HSerPrintCRLF 2
 
-    HSerPrint "Initial Values"
-    HSerPrintCRLF
+HSerPrint "Initial Values"
+HSerPrintCRLF
+ShowEEprom
+HSerPrintCRLF 2
+
+
+Do Forever
+    Set LEDD2 Off
+    Set LEDD3 Off
+    Set LEDD4 Off
+    Set LEDD5 Off
+    Outdata = Random
+
+    For EEPromAddress = 0 To 255
+        Outdata++
+        EPWrite ( EEPromAddress, Outdata )
+        EPRead  ( EEPromAddress, EEPROMArray(EEPromAddress) )
+    Next
+
     ShowEEprom
+
+    HSerPrint   "End of EEProm Program and Display"
     HSerPrintCRLF 2
+    HSerPrint   "Press the button!"
+    HSerPrintCRLF 2
+    Set LEDD2 On
+    Set LEDD3 On
+    Set LEDD4 On
+    Set LEDD5 On
 
-
-    Do Forever
-          Set LEDD2 off
-          Set LEDD3 off
-          Set LEDD4 off
-          Set LEDD5 off
-          Outdata = Random
-
-          For EEPromAddress = 0 to 255
-            Outdata++
-            EPWrite ( EEPromAddress, Outdata )
-            EPRead  ( EEPromAddress, EEPROMArray(EEPromAddress) )
-          Next
-
-          ShowEEprom
-
-          HSerPrint   "End of EEProm Program and Display"
-          HSerPrintCRLF 2
-          HSerPrint   "Press the button!"
-          HSerPrintCRLF 2
-          Set LEDD2 on
-          Set LEDD3 on
-          Set LEDD4 on
-          Set LEDD5 on
-
-          wait while SWITCH = Off
-    Loop
-    END
+    Wait While SWITCH = Off
+Loop
+End
 
 
 Sub ShowEEprom
 
-          HSerPrint "     "
-          for EEPromAddress = 0 to 15
-            HSerPrint hex(EEPromAddress)
-            HSerPrint " "
-          next
+    HSerPrint "     "
+    For EEPromAddress = 0 To 15
+        HSerPrint Hex(EEPromAddress)
+        HSerPrint " "
+    Next
 
-          for EEPromAddress = 0 to 255
-            DisplayNewLine = EEPromAddress % 16
-            if DisplayNewLine = 0 Then
-              HSerPrintCRLF
-              HserPrint hex(EEPromAddress)
-              HSerPrint ": "
-            end if
-            HSerPrint " "
-            HSerPrint  hex(EEPROMArray(EEPromAddress))
-          next
+    For EEPromAddress = 0 To 255
+        DisplayNewLine = EEPromAddress % 16
+        If DisplayNewLine = 0 Then
+            HSerPrintCRLF
+            HSerPrint Hex(EEPromAddress)
+            HSerPrint ": "
+        End If
+        HSerPrint " "
+        HSerPrint  Hex(EEPROMArray(EEPromAddress))
+    Next
 
-          HSerPrintCRLF 2
+    HSerPrintCRLF 2
 
 End Sub

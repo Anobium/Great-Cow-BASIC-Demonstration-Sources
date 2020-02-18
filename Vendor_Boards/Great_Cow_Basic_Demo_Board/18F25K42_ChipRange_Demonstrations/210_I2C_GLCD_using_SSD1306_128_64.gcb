@@ -17,146 +17,177 @@
 '''@date    22.10.2017
 ' ----- Configuration
 
-     'Chip Settings.
-    #chip 18f25k42, 64
-    #option Explicit
-    #config mclr=on
+'Chip Settings.
+#CHIP 18f25k42, 64
+#OPTION Explicit
+#CONFIG mclr=On
 
-    #startup InitPPS, 85
+#STARTUP InitPPS, 85
 
-    Sub InitPPS
+Sub InitPPS
 
-          RC4PPS =      0x22   'RC4->I2C1:SDA1
-          RC3PPS =      0x21   'RC3->I2C1:SCL1
-          I2C1SCLPPS =  0x13   'RC3->I2C1:SCL1
-          I2C1SDAPPS =  0x14   'RC4->I2C1:SDA1
+    'RC4->I2C1:SDA1
+    RC4PPS =      0x22
+    'RC3->I2C1:SCL1
+    RC3PPS =      0x21
+    'RC3->I2C1:SCL1
+    I2C1SCLPPS =  0x13
+    'RC4->I2C1:SDA1
+    I2C1SDAPPS =  0x14
 
-          'Module: UART1
-          RC6PPS = 0x0013     'TX1 > RC6
-          U1RXPPS = 0x0017    'RC7 > RX1
+    'Module: UART1
+    'TX1 > RC6
+    RC6PPS = 0x0013
+    'RC7 > RX1
+    U1RXPPS = 0x0017
 
-    End Sub
+End Sub
 
-    'Template comment at the end of the config file
-
-
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
-    ''-----------------------------------------
-    ''
-
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | ----------| O | I |-
-    ''-----------------------------------------
-    ''
-
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -S---S-------I---I-| X |---------
-    ''-----------------------------------------
-    ''
+'Template comment at the end of the config file
 
 
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define Potentiometer   PORTC.5
-    #define SwitchIn        PORTB.0
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
 
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     Potentiometer In   'this is the ANC5 port
-    Dir     SwitchIn      In
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | ----------| O | I |-
+''-----------------------------------------
+''
 
-    'Setup Serial port
-    #define USART_BAUD_RATE 9600
-    #define USART_TX_BLOCKING
-
-
-    ' Define I2C settings
-    #define HI2C_BAUD_RATE 100
-    #define HI2C_DATA PORTC.4
-    #define HI2C_CLOCK PORTC.3
-    'Initialise I2C
-    Dir HI2C_DATA out
-    Dir HI2C_CLOCK out
-    RC3I2C.TH0=1
-    RC4I2C.TH0=1
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -S---S-------I---I-| X |---------
+''-----------------------------------------
+''
 
 
-    #include <glcd.h>
-    #define GLCD_TYPE GLCD_TYPE_SSD1306
-    #define GLCD_I2C_Address 0x78
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE Potentiometer   PORTC.5
+#DEFINE SwitchIn        PORTB.0
 
-; ----- Define variables
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+'this is the ANC5 port
+Dir     Potentiometer In
+Dir     SwitchIn      In
 
-    'These constants allow you to change the GLCD memory usage.
-    #define GLCD_PROTECTOVERRUN
-
-; ----- Define variables
-
-  Dim BYTENUMBER, CCOUNT as Byte
-
-  CCount = 0
-  dim longNumber as long
-  longNumber = 123456 ' max value = 4294967290
-  dim wordNumber as Word
-  dim outstring as string
-  wordNumber = 0
-  byteNumber = 0
-
-; ----- Main program
-
-  GLCDPrint 0, 0,   "Great Cow BASIC"
-  GLCDPrint (0, 16, "Anobium 2017")
-  GLCDPrint (0, 32, "Portability Demo")
-  GLCDPrint (0, 48, ChipNameStr )
+'Setup Serial port
+#DEFINE USART_BAUD_RATE 9600
+#DEFINE USART_TX_BLOCKING
 
 
+' Define I2C settings
+#DEFINE HI2C_BAUD_RATE 100
+#DEFINE HI2C_DATA PORTC.4
+#DEFINE HI2C_CLOCK PORTC.3
+'Initialise I2C
+Dir HI2C_DATA Out
+Dir HI2C_CLOCK Out
+RC3I2C.TH0=1
+RC4I2C.TH0=1
 
 
-  wait 3 s
-  GLCDCLS
+#INCLUDE <glcd.h>
+#DEFINE GLCD_TYPE GLCD_TYPE_SSD1306
+#DEFINE GLCD_I2C_Address 0x78
 
-  ' Prepare the static components of the screen
-  GLCDPrint ( 0,   0, "PrintStr")                                ; Print some text
-  GLCDPrint ( 64,  0, "@")                                    ; Print some more text
-  GLCDPrint ( 72,  0, ChipMhz)                                   ; Print chip speed
-  GLCDPrint ( 86, 0, "Mhz")                                     ; Print some text
-  GLCDDrawString( 0,8,"DrawStr")                                 ; Draw some text
-  box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1                            ; Draw a box
-  box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1    ; Draw a box
-  Circle( 44,41,15)                                              ; Draw a circle
-  line 64,31,0,31                                                ; Draw a line
+' ----- Define variables
 
-  DO forever
+'These constants allow you to change the GLCD memory usage.
+#DEFINE GLCD_PROTECTOVERRUN
 
-     for CCount = 31 to 127
+' ----- Define variables
 
-          GLCDPrint ( 64 ,  36,  hex(longNumber_E ) )                 ; Print a HEX string
-          GLCDPrint ( 76 ,  36,  hex(longNumber_U ) )                 ; Print a HEX string
-          GLCDPrint ( 88 ,  36,  hex(longNumber_H ) )                 ; Print a HEX string
-          GLCDPrint ( 100 ,  36, hex(longNumber   ) )                 ; Print a HEX string
-          GLCDPrint ( 112 ,  36, "h" )                                ; Print a HEX string
+Dim BYTENUMBER, CCOUNT As Byte
+
+CCount = 0
+Dim longNumber As Long
+' max value = 4294967290
+longNumber = 123456
+Dim wordNumber As Word
+Dim outstring As String
+wordNumber = 0
+byteNumber = 0
+
+' ----- Main program
+
+GLCDPrint 0, 0,   "Great Cow BASIC"
+GLCDPrint (0, 16, "Anobium 2017")
+GLCDPrint (0, 32, "Portability Demo")
+GLCDPrint (0, 48, ChipNameStr )
 
 
-          GLCDPrint ( 64 ,  44, pad(str(wordNumber), 5 ) )           ; Print a padded string
-          GLCDPrint ( 64 ,  52, pad(str(byteNumber), 3 ) )           ; Print a padded string
 
 
-          box (46,9,56,19)                                           ; Draw a Box
-          GLCDDrawChar(48, 10, CCount )                              ; Draw a character
-          outString = str( CCount )                                  ; Prepare a string
-          GLCDDrawString(64, 9, pad(outString,3) )                   ; Draw a string
+Wait 3 s
+GLCDCLS
 
-          filledbox 3,43,11,51, wordNumber                           ; Draw a filled box
+' Prepare the static components of the screen
+' Print some text
+GLCDPrint ( 0,   0, "PrintStr")
+' Print some more text
+GLCDPrint ( 64,  0, "@")
+' Print chip speed
+GLCDPrint ( 72,  0, ChipMHz)
+' Print some text
+GLCDPrint ( 86, 0, "Mhz")
+' Draw some text
+GLCDDrawString( 0,8,"DrawStr")
+' Draw a box
+Box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1
+' Draw a box
+Box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1
+' Draw a circle
+Circle( 44,41,15)
+' Draw a line
+Line 64,31,0,31
 
-          FilledCircle( 44,41,9, longNumber xor 1)                   ; Draw a filled box
-          line 0,63,64,31                                            ; Draw a line
+Do Forever
 
-                                                                     ; Do some simple maths
-          longNumber = longNumber + 7 : wordNumber = wordNumber + 3 : byteNumber++
-      NEXT
-  LOOP
-  end
+    For CCount = 31 To 127
+
+        ' Print a HEX string
+        GLCDPrint ( 64 ,  36,  Hex(longNumber_E ) )
+        ' Print a HEX string
+        GLCDPrint ( 76 ,  36,  Hex(longNumber_U ) )
+        ' Print a HEX string
+        GLCDPrint ( 88 ,  36,  Hex(longNumber_H ) )
+        ' Print a HEX string
+        GLCDPrint ( 100 ,  36, Hex(longNumber   ) )
+        ' Print a HEX string
+        GLCDPrint ( 112 ,  36, "h" )
+
+
+        ' Print a padded string
+        GLCDPrint ( 64 ,  44, Pad(Str(wordNumber), 5 ) )
+        ' Print a padded string
+        GLCDPrint ( 64 ,  52, Pad(Str(byteNumber), 3 ) )
+
+
+        ' Draw a Box
+        Box (46,9,56,19)
+        ' Draw a character
+        GLCDDrawChar(48, 10, CCount )
+        ' Prepare a string
+        outString = Str( CCount )
+        ' Draw a string
+        GLCDDrawString(64, 9, Pad(outString,3) )
+
+        ' Draw a filled box
+        FilledBox 3,43,11,51, wordNumber
+
+        ' Draw a filled box
+        FilledCircle( 44,41,9, longNumber XOR 1)
+        ' Draw a line
+        Line 0,63,64,31
+
+        ' Do some simple maths
+        longNumber = longNumber + 7 : wordNumber = wordNumber + 3 : byteNumber++
+    Next
+Loop
+End

@@ -9,338 +9,338 @@
 '''@date   	14.02.2015
 '''********************************************************************************
 
-; ----- Configuration
- #chip mega168, 16
+' ----- Configuration
+#CHIP mega168, 16
 
-; ----- Constants
-  #define CodeFrequency 75
-  #define DotLength 5
-  #define DotSpace 25
-  #define BarLength 25
-  #define BarSpace 5
-  'Required when LCD Read Write is grounded
-  #define LCD_NO_RW
-  #define LCD_IO 4
+' ----- Constants
+#DEFINE CodeFrequency 75
+#DEFINE DotLength 5
+#DEFINE DotSpace 25
+#DEFINE BarLength 25
+#DEFINE BarSpace 5
+'Required when LCD Read Write is grounded
+#DEFINE LCD_NO_RW
+#DEFINE LCD_IO 4
 
-; ----- Define Hardware settings
-  #define LCD_RS PORTB.0
-  #define LCD_Enable PORTB.1
-  #define LCD_DB4 PORTC.3
-  #define LCD_DB5 PORTC.2
-  #define LCD_DB6 PORTC.1
-  #define LCD_DB7 PORTC.0
+' ----- Define Hardware settings
+#DEFINE LCD_RS PORTB.0
+#DEFINE LCD_Enable PORTB.1
+#DEFINE LCD_DB4 PORTC.3
+#DEFINE LCD_DB5 PORTC.2
+#DEFINE LCD_DB6 PORTC.1
+#DEFINE LCD_DB7 PORTC.0
 
-  #define PS2Clock PORTB.5
-  #define PS2Data PORTB.4
-  #define SoundOut PORTB.3
-
-
-; ----- Variables
-  Dim KeyLog(32)
-  Dim DataCount As byte
-  Dim KeyIn As byte
-  Dim DataPos As byte
-  Dim SendLetter As byte
-  Dim Letter As byte
+#DEFINE PS2Clock PORTB.5
+#DEFINE PS2Data PORTB.4
+#DEFINE SoundOut PORTB.3
 
 
+' ----- Variables
+Dim KeyLog(32)
+Dim DataCount As Byte
+Dim KeyIn As Byte
+Dim DataPos As Byte
+Dim SendLetter As Byte
+Dim Letter As Byte
 
 
-; ----- Main body of program commences here.
+
+
+' ----- Main body of program commences here.
+DataCount = 0
+KeyLog(1) = 32
+Print "GCBASIC Morse"
+Locate 1, 0
+Print "Code Transmitter"
+Main:
+KeyIn = INKEY
+If KeyIn = 0 Then
+    Goto Main
+End If
+Wait 150 ms
+
+'Allow key to be released
+'If ENTER is pressed, then send message
+If KeyIn = 13 Then
+    MorseSend
+    Goto Main
+End If
+
+'Act on key
+'Escape - clear message
+If KeyIn = 27 Then
     DataCount = 0
-    KeyLog(1) = 32
-    PRINT "GCBASIC Morse"
-    Locate 1, 0
-    PRINT "Code Transmitter"
-    Main:
-    KeyIn = INKEY
-    if KeyIn = 0 then
-              goto Main
-    end if
-    wait 150 ms
+    For DataPos = 1 To 32
+        KeyLog(DataPos) = 32
+    Next
+    Goto DisplayData
+End If
 
-    'Allow key to be released
-    'If ENTER is pressed, then send message
-    if KeyIn = 13 then
-              MorseSend
-              goto Main
-    end if
+'Backspace - delete last character
+If KeyIn = 8 Then
+    If DataCount = 0 Then
+        Goto Main
+    End If
+    KeyLog(DataCount) = 32
+    DataCount = DataCount - 1
+    Goto DisplayData
+End If
 
-    'Act on key
-    'Escape - clear message
-    if KeyIn = 27 then
-              DataCount = 0
-              for DataPos = 1 to 32
-                        KeyLog(DataPos) = 32
-              next
-              goto DisplayData
-    end if
+'Otherwise, add the character to the buffer
+DataCount = DataCount + 1
+KeyLog(DataCount) = KeyIn
+DisplayData:
 
-    'Backspace - delete last character
-    if KeyIn = 8 then
-              if DataCount = 0 then
-                        goto Main
-              end if
-              KeyLog(DataCount) = 32
-              DataCount = DataCount - 1
-              goto DisplayData
-    end if
+'Display key log contents
+CLS
+For DataPos = 1 To DataCount
+    If DataPos = 17 Then
+        Locate 1,0
+    End If
+    LCDWriteChar KeyLog(DataPos)
+Next
+Goto Main
 
-    'Otherwise, add the character to the buffer
-    DataCount = DataCount + 1
-    KeyLog(DataCount) = KeyIn
-    DisplayData:
+End
 
-    'Display key log contents
-    CLS
-    for DataPos = 1 to DataCount
-              if DataPos = 17 then
-                        locate 1,0
-              end if
-              LCDWriteChar KeyLog(DataPos)
-    next
-    goto Main
+' ----- Support methods.  Subroutines and Functions
 
-    end
+'''Send the contents of KeyLog as a Morse Code message
+Sub MorseSend
+    'Send out each letter as Morse Code
+    'Get each letter
+    For SendLetter = 1 To DataCount
+        Letter = KeyLog(SendLetter)
 
-; ----- Support methods.  Subroutines and Functions
+        'Then decide how to send the letter (or number)
+        'The numbers in the If icons are all ASCII codes for the letters
+        'Numbers
+        If Letter = 48 Then
+            Bar
+            Bar
+            Bar
+            Bar
+            Bar
+        End If
+        If Letter = 49 Then
+            Dot
+            Bar
+            Bar
+            Bar
+            Bar
+        End If
+        If Letter = 50 Then
+            Dot
+            Dot
+            Bar
+            Bar
+            Bar
+        End If
+        If Letter = 51 Then
+            Dot
+            Dot
+            Dot
+            Bar
+            Bar
+        End If
+        If Letter = 52 Then
+            Dot
+            Dot
+            Dot
+            Dot
+            Bar
+        End If
+        If Letter = 53 Then
+            Dot
+            Dot
+            Dot
+            Dot
+            Dot
+        End If
+        If Letter = 54 Then
+            Bar
+            Dot
+            Dot
+            Dot
+            Dot
+        End If
+        If Letter = 55 Then
+            Bar
+            Bar
+            Dot
+            Dot
+            Dot
+        End If
+        If Letter = 56 Then
+            Bar
+            Bar
+            Bar
+            Dot
+            Dot
+        End If
+        If Letter = 57 Then
+            Bar
+            Bar
+            Bar
+            Bar
+            Dot
+        End If
 
-  '''Send the contents of KeyLog as a Morse Code message
-  Sub MorseSend
-            'Send out each letter as Morse Code
-            'Get each letter
-            for SendLetter = 1 to DataCount
-                      Letter = KeyLog(SendLetter)
+        'Letters
+        If Letter >= 97 AND Letter <= 122 Then
+            Letter = Letter - 32
+        End If
+        If Letter = 65 Then
+            Dot
+            Bar
+        End If
+        If Letter = 66 Then
+            Bar
+            Dot
+            Dot
+            Dot
+        End If
+        If Letter = 67 Then
+            Bar
+            Dot
+            Bar
+            Dot
+        End If
+        If Letter = 68 Then
+            Bar
+            Dot
+            Dot
+        End If
+        If Letter = 69 Then
+            Dot
+        End If
+        If Letter = 70 Then
+            Dot
+            Dot
+            Bar
+            Dot
+        End If
+        If Letter = 71 Then
+            Bar
+            Bar
+            Dot
+        End If
+        If Letter = 72 Then
+            Dot
+            Dot
+            Dot
+            Dot
+        End If
+        If Letter = 73 Then
+            Dot
+            Dot
+        End If
+        If Letter = 74 Then
+            Dot
+            Bar
+            Bar
+            Bar
+        End If
+        If Letter = 75 Then
+            Bar
+            Dot
+            Bar
+        End If
+        If Letter = 76 Then
+            Dot
+            Bar
+            Dot
+            Dot
+        End If
+        If Letter = 77 Then
+            Bar
+            Bar
+        End If
+        If Letter = 78 Then
+            Bar
+            Dot
+        End If
+        If Letter = 79 Then
+            Bar
+            Bar
+            Bar
+        End If
+        If Letter = 80 Then
+            Dot
+            Bar
+            Bar
+            Dot
+        End If
+        If Letter = 81 Then
+            Bar
+            Bar
+            Dot
+            Bar
+        End If
+        If Letter = 82 Then
+            Dot
+            Bar
+            Dot
+        End If
+        If Letter = 83 Then
+            Dot
+            Dot
+            Dot
+        End If
+        If Letter = 84 Then
+            Bar
+        End If
+        If Letter = 85 Then
+            Dot
+            Dot
+            Bar
+        End If
+        If Letter = 86 Then
+            Dot
+            Dot
+            Dot
+            Bar
+        End If
+        If Letter = 87 Then
+            Dot
+            Bar
+            Bar
+        End If
+        If Letter = 88 Then
+            Bar
+            Dot
+            Dot
+            Bar
+        End If
+        If Letter = 89 Then
+            Bar
+            Dot
+            Bar
+            Bar
+        End If
+        If Letter = 90 Then
+            Bar
+            Bar
+            Dot
+            Dot
+        End If
 
-                      'Then decide how to send the letter (or number)
-                      'The numbers in the If icons are all ASCII codes for the letters
-                      'Numbers
-                      if Letter = 48 then
-                                Bar
-                                Bar
-                                Bar
-                                Bar
-                                Bar
-                      end if
-                      if Letter = 49 then
-                                Dot
-                                Bar
-                                Bar
-                                Bar
-                                Bar
-                      end if
-                      if Letter = 50 then
-                                Dot
-                                Dot
-                                Bar
-                                Bar
-                                Bar
-                      end if
-                      if Letter = 51 then
-                                Dot
-                                Dot
-                                Dot
-                                Bar
-                                Bar
-                      end if
-                      if Letter = 52 then
-                                Dot
-                                Dot
-                                Dot
-                                Dot
-                                Bar
-                      end if
-                      if Letter = 53 then
-                                Dot
-                                Dot
-                                Dot
-                                Dot
-                                Dot
-                      end if
-                      if Letter = 54 then
-                                Bar
-                                Dot
-                                Dot
-                                Dot
-                                Dot
-                      end if
-                      if Letter = 55 then
-                                Bar
-                                Bar
-                                Dot
-                                Dot
-                                Dot
-                      end if
-                      if Letter = 56 then
-                                Bar
-                                Bar
-                                Bar
-                                Dot
-                                Dot
-                      end if
-                      if Letter = 57 then
-                                Bar
-                                Bar
-                                Bar
-                                Bar
-                                Dot
-                      end if
+        'Misc
+        If Letter = 32 Then
+            Wait 30 10ms
+        End If
+    Next
+End Sub
 
-                      'Letters
-                      if Letter >= 97 and Letter <= 122 then
-                                Letter = Letter - 32
-                      end if
-                      if Letter = 65 then
-                                Dot
-                                Bar
-                      end if
-                      if Letter = 66 then
-                                Bar
-                                Dot
-                                Dot
-                                Dot
-                      end if
-                      if Letter = 67 then
-                                Bar
-                                Dot
-                                Bar
-                                Dot
-                      end if
-                      if Letter = 68 then
-                                Bar
-                                Dot
-                                Dot
-                      end if
-                      if Letter = 69 then
-                                Dot
-                      end if
-                      if Letter = 70 then
-                                Dot
-                                Dot
-                                Bar
-                                Dot
-                      end if
-                      if Letter = 71 then
-                                Bar
-                                Bar
-                                Dot
-                      end if
-                      if Letter = 72 then
-                                Dot
-                                Dot
-                                Dot
-                                Dot
-                      end if
-                      if Letter = 73 then
-                                Dot
-                                Dot
-                      end if
-                      if Letter = 74 then
-                                Dot
-                                Bar
-                                Bar
-                                Bar
-                      end if
-                      if Letter = 75 then
-                                Bar
-                                Dot
-                                Bar
-                      end if
-                      if Letter = 76 then
-                                Dot
-                                Bar
-                                Dot
-                                Dot
-                      end if
-                      if Letter = 77 then
-                                Bar
-                                Bar
-                      end if
-                      if Letter = 78 then
-                                Bar
-                                Dot
-                      end if
-                      if Letter = 79 then
-                                Bar
-                                Bar
-                                Bar
-                      end if
-                      if Letter = 80 then
-                                Dot
-                                Bar
-                                Bar
-                                Dot
-                      end if
-                      if Letter = 81 then
-                                Bar
-                                Bar
-                                Dot
-                                Bar
-                      end if
-                      if Letter = 82 then
-                                Dot
-                                Bar
-                                Dot
-                      end if
-                      if Letter = 83 then
-                                Dot
-                                Dot
-                                Dot
-                      end if
-                      if Letter = 84 then
-                                Bar
-                      end if
-                      if Letter = 85 then
-                                Dot
-                                Dot
-                                Bar
-                      end if
-                      if Letter = 86 then
-                                Dot
-                                Dot
-                                Dot
-                                Bar
-                      end if
-                      if Letter = 87 then
-                                Dot
-                                Bar
-                                Bar
-                      end if
-                      if Letter = 88 then
-                                Bar
-                                Dot
-                                Dot
-                                Bar
-                      end if
-                      if Letter = 89 then
-                                Bar
-                                Dot
-                                Bar
-                                Bar
-                      end if
-                      if Letter = 90 then
-                                Bar
-                                Bar
-                                Dot
-                                Dot
-                      end if
+'''Send a Morse Code dot
+Sub Dot
+    Tone CodeFrequency, DotLength
+    Wait DotSpace 10ms
+End Sub
 
-                      'Misc
-                      if Letter = 32 then
-                                wait 30 10ms
-                      end if
-            next
-  End Sub
-
-  '''Send a Morse Code dot
-  Sub Dot
-            Tone CodeFrequency, DotLength
-            wait DotSpace 10ms
-  End Sub
-
-  '''Send a Morse Code bar
-  Sub Bar
-            Tone CodeFrequency, BarLength
-            wait BarSpace 10ms
-  End Sub
+'''Send a Morse Code bar
+Sub Bar
+    Tone CodeFrequency, BarLength
+    Wait BarSpace 10ms
+End Sub
 

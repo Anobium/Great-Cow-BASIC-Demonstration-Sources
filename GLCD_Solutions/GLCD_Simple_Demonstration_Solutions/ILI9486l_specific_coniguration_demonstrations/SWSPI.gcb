@@ -14,24 +14,30 @@
 '''@date    24.01.2019
 '''********************************************************************************
 
-  'Chip Settings.
-  #chip mega328p, 16
-  #option explicit
+'Chip Settings.
+#CHIP mega328p, 16
+#OPTION Explicit
 
-    #include <glcd.h>
-    #include <uno_mega328p.h >
+#INCLUDE <glcd.h>
+#INCLUDE <uno_mega328p.h >
 
-    #define GLCD_TYPE GLCD_TYPE_ILI9486L
+#DEFINE GLCD_TYPE GLCD_TYPE_ILI9486L
 
-    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-    #define GLCD_DC       DIGITAL_8         ' Data command line
-    #define GLCD_CS       DIGITAL_10        ' Chip select line
-    #define GLCD_RST      DIGITAL_9         ' Reset line
+'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+' Data command line
+#DEFINE GLCD_DC       DIGITAL_8
+' Chip select line
+#DEFINE GLCD_CS       DIGITAL_10
+' Reset line
+#DEFINE GLCD_RST      DIGITAL_9
 
-    #define GLCD_DI       DIGITAL_12          ' Data in | MISO
-    #define GLCD_DO       DIGITAL_11          ' Data out | MOSI
-    #define GLCD_SCK      DIGITAL_13          ' Clock Line
+' Data in | MISO
+#DEFINE GLCD_DI       DIGITAL_12
+' Data out | MOSI
+#DEFINE GLCD_DO       DIGITAL_11
+' Clock Line
+#DEFINE GLCD_SCK      DIGITAL_13
 
-    GLCDCLS  TFT_BLUE
-    GLCDLocateString( 0, 1 )
-    GLCDPrintString "Software SPI"
+GLCDCLS  TFT_BLUE
+GLCDLocateString( 0, 1 )
+GLCDPrintString "Software SPI"

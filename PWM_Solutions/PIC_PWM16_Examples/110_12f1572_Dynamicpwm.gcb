@@ -13,24 +13,29 @@
 '''@version    2.2
 '''@date       10/8/2019
 '''*******************************************************************
-    #chip 12F1572, 32
+#CHIP 12F1572, 32
 
-    #define SWITCH_PORT PORTA.3
-    Dir SWITCH_PORT IN
+#DEFINE SWITCH_PORT PORTA.3
+Dir SWITCH_PORT In
 
-    Dir PORTA.1 Out       'default PWM1 port
-    Dir PORTA.2 Out       'default PWM3 port
+'default PWM1 port
+Dir PORTA.1 Out
+'default PWM3 port
+Dir PORTA.2 Out
 
 
-     Do
-        If SWITCH_PORT = 0 Then
+Do
+    If SWITCH_PORT = 0 Then
 
-          HPWM16(1, 10, 16384)   '10 kHz, 25% duty cycle (16384/65535)
+        '10 kHz, 25% duty cycle (16384/65535)
+        HPWM16(1, 10, 16384)
 
-      else
+    Else
 
-          HPWM16(1, 80, 16384)   '80 kHz, 25% duty cycle (16384/65535)
-          HPWM16(3, 30, 16384)   '30 kHz, 25% duty cycle (16384/65535)
+        '80 kHz, 25% duty cycle (16384/65535)
+        HPWM16(1, 80, 16384)
+        '30 kHz, 25% duty cycle (16384/65535)
+        HPWM16(3, 30, 16384)
 
-      End if
-    loop
+    End If
+Loop

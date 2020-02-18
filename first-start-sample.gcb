@@ -23,17 +23,18 @@
 '''************************************************************************
 
 ' ----- Configuration
-  #chip 16f877a           'Make into a comment to use the AVR chipset
+'Make into a comment to use the AVR chipset
+#CHIP 16f886
 '  #chip mega328p         'Uncomment to simply use the AVR chipset
 
 
 ' ----- Main body of program commences here.
-  Do Forever
+Do Forever
 
-     'Lighten Arduinos onboard LED for 100 milliseconds:
-     PulseOut PortB.5, 100 ms
+    'Lighten Arduinos onboard LED for 100 milliseconds:
+    PulseOut PortB.5, 100 ms
 
-     'Then wait 900 milliseconds after LED goes off:
-     Wait 900 ms
+    'Then wait 900 milliseconds after LED goes off:
+    Wait 900 ms
 
-  Loop
+Loop

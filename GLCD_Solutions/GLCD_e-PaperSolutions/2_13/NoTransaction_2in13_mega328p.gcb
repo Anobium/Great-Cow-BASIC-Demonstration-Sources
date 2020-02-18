@@ -1,84 +1,87 @@
 '''A demonstration program for Explicit-Paper from WaveShare.
- '''-------------------------------------------------------------------------
+'''-------------------------------------------------------------------------
 ' -------------------------------------------------------
- '''This has been tested using the hardware and software SPI option.
+'''This has been tested using the hardware and software SPI option.
 
- '''*************************************************************************
+'''*************************************************************************
 
 
-     'Chip Settings.
+'Chip Settings.
 
-     #chip mega328p, 16
-    #include <uno_mega328p.h>
-     #option explicit
+#CHIP mega328p, 16
+#INCLUDE <uno_mega328p.h>
+#OPTION Explicit
 
- '******************************************************************************************************
- '  The following should be used   '#define EPD_HARDWARESPI     'remove comment out if you want to use software SPI.
-     #define EPD_HARDWARESPI
-     #define HWSPIMode MasterULTRAFAST
- '***************************************************************************
+'******************************************************************************************************
+'  The following should be used   '#define EPD_HARDWARESPI     'remove comment out if you want to use software SPI.
+#DEFINE EPD_HARDWARESPI
+#DEFINE HWSPIMode MasterULTRAFAST
+'***************************************************************************
 '********************
 
-    'Setup the E-Paper
-     #include <glcd.h>
+'Setup the E-Paper
+#INCLUDE <glcd.h>
 
-     #define GLCD_TYPE GLCD_TYPE_EPD_EPD2in13D
-     #define GLCD_EXTENDEDFONTSET1
-     #define GLCD_TYPE_EPD2in13D_LOWMEMORY4_GLCD_MODE
-     #define GLCD_OLED_FONT
-     #define GLCD_PROTECTOVERRUN
+#DEFINE GLCD_TYPE GLCD_TYPE_EPD_EPD2in13D
+#DEFINE GLCD_EXTENDEDFONTSET1
+#DEFINE GLCD_TYPE_EPD2in13D_LOWMEMORY4_GLCD_MODE
+#DEFINE GLCD_OLED_FONT
+#DEFINE GLCD_PROTECTOVERRUN
 
-     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-     #define GLCD_DC     DIGITAL_9
-     #define GLCD_CS     DIGITAL_10
-     #define GLCD_RESET  DIGITAL_8
-     #define GLCD_DO     DIGITAL_11
-     #define GLCD_SCK    DIGITAL_13
-     #define GLCD_Busy   DIGITAL_7
+'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+#DEFINE GLCD_DC     DIGITAL_9
+#DEFINE GLCD_CS     DIGITAL_10
+#DEFINE GLCD_RESET  DIGITAL_8
+#DEFINE GLCD_DO     DIGITAL_11
+#DEFINE GLCD_SCK    DIGITAL_13
+#DEFINE GLCD_Busy   DIGITAL_7
 
-    Dim ind, counter, ind_raw, ind_col as word
-    Dim DataVar, dummy, Flag, VERBOSE as byte
-    Dim x_min, x_max, y_min, y_max as Word
-    Dim MyString, MyString1 as String
+Dim ind, counter, ind_raw, ind_col As Word
+Dim DataVar, dummy, Flag, VERBOSE As Byte
+Dim x_min, x_max, y_min, y_max As Word
+Dim MyString, MyString1 As String
 
- '******************************************************************************************************
 '******************************************************************************************************
-    'Main program
+'******************************************************************************************************
+'Main program
 
-    GLCDForeground = TFT_BLACK
-    GLCDBackground = TFT_WHITE
+GLCDForeground = TFT_BLACK
+GLCDBackground = TFT_WHITE
 
-    dim _GLCDPage as byte
-    dim _GLCDPagesL, _GLCDPagesH as byte
+Dim _GLCDPage As Byte
+Dim _GLCDPagesL, _GLCDPagesH As Byte
 
-    'We need to clear the page buffer first using the EPD2in13D private method
-    ClearPageData_EPD2in13D
+'We need to clear the page buffer first using the EPD2in13D private method
+ClearPageData_EPD2in13D
 
-    for _GLCDPage = _GLCDPagesL to _GLCDPagesH    '_GLCDPage is a global variable - DO NOT CHANGE!!!
+'_GLCDPage is a global variable - DO NOT CHANGE!!!
+For _GLCDPage = _GLCDPagesL To _GLCDPagesH
 
-      GLCDLocateString 0,0
-      GLCDPrint 0,0, "Test @ Default"
-      line 0,0,GLCDDeviceWidth, GLCDDeviceHeight
-      box 0,0,GLCDDeviceWidth, GLCDDeviceHeight
-      Circle GLCDDeviceWidth/2, GLCDDeviceHeight/2, 20
-      FilledBox( 12, 12,20, 80, GLCDForeground)  'Filled Rectangle
-      FilledTriangle(12,80, 20,80,16,90, GLCDForeground)  'Filled Triangle
-      GLCDPrintStringLN " line1"
-      GLCDLocateString (20, 4)
-      GLCDPrintStringLN "Line 4"
-      GLCDPrintStringLN "Line 5"
+    GLCDLocateString 0,0
+    GLCDPrint 0,0, "Test @ Default"
+    Line 0,0,GLCDDeviceWidth, GLCDDeviceHeight
+    Box 0,0,GLCDDeviceWidth, GLCDDeviceHeight
+    Circle GLCDDeviceWidth/2, GLCDDeviceHeight/2, 20
+    'Filled Rectangle
+    FilledBox( 12, 12,20, 80, GLCDForeground)
+    'Filled Triangle
+    FilledTriangle(12,80, 20,80,16,90, GLCDForeground)
+    GLCDPrintStringLn " line1"
+    GLCDLocateString (20, 4)
+    GLCDPrintStringLn "Line 4"
+    GLCDPrintStringLn "Line 5"
 
-      'This is required to send the page of GLCD data to the display using the EPD2in13D private method
-      UpdatePageData_EPD2in13D
+    'This is required to send the page of GLCD data to the display using the EPD2in13D private method
+    UpdatePageData_EPD2in13D
 
-    next
+Next
 
-    Refresh_EPD2in13D
-    GLCDDisplay off
-    wait 10 s
+Refresh_EPD2in13D
+GLCDDisplay Off
+Wait 10 s
 
-    GLCDDisplay on
-    GLCDCLS
-    GLCDDisplay off
+GLCDDisplay On
+GLCDCLS
+GLCDDisplay Off
 
-    end
+End

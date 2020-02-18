@@ -8,21 +8,21 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
-  #chip 16F886, 4
+' ----- Configuration
+#CHIP 16F886, 4
 
-; ----- Constants
-  #define SoundOut portc.2
-  Dim cnt as Word
+' ----- Constants
+#DEFINE SoundOut portc.2
+Dim cnt As Word
 
-; ----- Variables
-  ' No Variables specified in this example. All byte variables are defined upon use.
+' ----- Variables
+' No Variables specified in this example. All byte variables are defined upon use.
 
-; ----- Main body of program commences here.
-    Do
-        For cnt = 2000 to 0 step -5
-            Tone 440, 1000
-            wait 10 MS
-        Next
-    Loop
-    End
+' ----- Main body of program commences here.
+Do
+    For cnt = 2000 To 0 Step -5
+        Tone 440, 1000
+        Wait 10 ms
+    Next
+Loop
+End

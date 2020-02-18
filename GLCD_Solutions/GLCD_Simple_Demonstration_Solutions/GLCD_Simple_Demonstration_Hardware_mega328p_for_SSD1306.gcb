@@ -14,20 +14,20 @@
 '''@date   	25.5.15
 '''********************************************************************************
 
-; ----- Configuration
-  #chip mega328p,16
-  #include <glcd.h>
+' ----- Configuration
+#CHIP mega328p,16
+#INCLUDE <glcd.h>
 
-; ----- Define Hardware settings
-  ' Define I2C settings
-  #define HI2C_BAUD_RATE 400
-  #define HI2C_DATA
-  HI2CMode Master
+' ----- Define Hardware settings
+' Define I2C settings
+#DEFINE HI2C_BAUD_RATE 400
+#DEFINE HI2C_DATA
+HI2CMode Master
 
-; ----- Define GLCD Hardware settings
-  #define GLCD_TYPE GLCD_TYPE_SSD1306
-  #define GLCD_I2C_Address 0x78
+' ----- Define GLCD Hardware settings
+#DEFINE GLCD_TYPE GLCD_TYPE_SSD1306
+#DEFINE GLCD_I2C_Address 0x78
 
-  GLCDCLS
-  GLCDPrint 0, 0, "Great Cow Basic"
-  GLCDPrint (0, 16, "Anobium 2019")
+GLCDCLS
+GLCDPrint 0, 0, "Great Cow Basic"
+GLCDPrint (0, 16, "Anobium 2019")

@@ -11,26 +11,30 @@
 '''@date    23.06.2017
 '''********************************************************************************
 
-#chip mega328p, 16
+#CHIP mega328p, 16
 
 
-    'Set the PWM pin to output mode
-    DIR PORTD.5 out
+'Set the PWM pin to output mode
+Dir PORTD.5 Out
 
-    'Main code
-    #define PWM_Freq 87      'Frequency of PWM in KHz
-    #define PWM_Duty 50      'Duty cycle of PWM (%)
+'Main code
+'Frequency of PWM in KHz
+#DEFINE PWM_Freq 87
+'Duty cycle of PWM (%)
+#DEFINE PWM_Duty 50
 
-    do
+Do
 
-      PWMOn
+    PWMOn
 
-      'add lots and lots of user code and the PWM signal will remain until PWMOff
-      wait 5 s                'Wait 5s, could any user code. This wait is purely for the analysis of this demonstration.
+    'add lots and lots of user code and the PWM signal will remain until PWMOff
+    'Wait 5s, could any user code. This wait is purely for the analysis of this demonstration.
+    Wait 5 s
 
-      PWMOff
-      wait 1 s                'Wait 1s
+    PWMOff
+    'Wait 1s
+    Wait 1 s
 
-    loop
+Loop
 
-end
+End

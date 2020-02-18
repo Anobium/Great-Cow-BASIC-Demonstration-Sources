@@ -23,164 +23,174 @@
 
 
 'Chip Settings. Assumes the development board with with a 16F877a at 4 or 20 Mhz
-#chip 16F877a,20
+#CHIP 16F877a,20
 
 'Use LCD in 4 pin mode and define LCD pins
- #define LCD_IO 4
- #define LCD_RW PORTE.1
- #define LCD_RS PORTE.0
- #define LCD_Enable PORTE.2
- #define LCD_DB4 PORTD.4
- #define LCD_DB5 PORTD.5
- #define LCD_DB6 PORTD.6
- #define LCD_DB7 PORTD.7
- #define LCD_SPEED FAST
+#DEFINE LCD_IO 4
+#DEFINE LCD_RW PORTE.1
+#DEFINE LCD_RS PORTE.0
+#DEFINE LCD_Enable PORTE.2
+#DEFINE LCD_DB4 PORTD.4
+#DEFINE LCD_DB5 PORTD.5
+#DEFINE LCD_DB6 PORTD.6
+#DEFINE LCD_DB7 PORTD.7
+#DEFINE LCD_SPEED FAST
 
 
 'Main program
 
-   'Clear the LCD
-   CLS
-   'Display some text on both lines
-   Locate 0,0
-   Print "HOBBY COMPONENTS"
-   wait 1 s
-   CLS
-   print ChipNameStr +" @ "+str(ChipMhz) + "Mhz"
-   Locate 1,0
-   print "by Anobium"
+'Clear the LCD
+CLS
+'Display some text on both lines
+Locate 0,0
+Print "HOBBY COMPONENTS"
+Wait 1 s
+CLS
+Print ChipNameStr +" @ "+Str(ChipMHz) + "Mhz"
+Locate 1,0
+Print "by Anobium"
 
 
 
 
 
 '#define LCDNormalWriteByte myLCDNormalWriteByte
-sub myLCDNormalWriteByte(In LCDByte)
-	
+Sub myLCDNormalWriteByte(In LCDByte)
+
 ' *****    This sub modified by William Roth *****
 
 'Reduced enable pulse to 1 us
 'Added conditional delay for for LCD_SLOW
 
-	#IFNDEF LCD_NO_RW
-		#IFDEF LCD_IO 4,8
-			wait until LCDReady
-			set LCD_RW OFF 'Write mode
-		#ENDIF
-	#ENDIF
-	
-	#IFDEF LCD_IO 2
-		LCD2_NIBBLEOUT Swap4(LCDByte)  	'Swap byte; Most significant NIBBLE sent first
-		LCD2_NIBBLEOUT LCDByte		'Less Significant NIBBLE output
-	#ENDIF
-	
-	#IFDEF LCD_IO 4
-		'Set pins to output
-                    #IFNDEF LCD_LAT
-                        DIR LCD_DB4 OUT
-                        DIR LCD_DB5 OUT
-                        DIR LCD_DB6 OUT
-                        DIR LCD_DB7 OUT
-		#ENDIF
-                    #IFDEF LCD_LAT
-                        DIR _LCD_DB4 OUT
-                        DIR _LCD_DB5 OUT
-                        DIR _LCD_DB6 OUT
-                        DIR _LCD_DB7 OUT
-		#ENDIF
+    #IFNDEF LCD_NO_RW
+        #IFDEF LCD_IO 4,8
+            Wait Until LCDReady
+            'Write mode
+            Set LCD_RW Off
+        #ENDIF
+    #ENDIF
+
+    #IFDEF LCD_IO 2
+        'Swap byte; Most significant NIBBLE sent first
+        LCD2_NIBBLEOUT SWAP4(LCDByte)
+        'Less Significant NIBBLE output
+        LCD2_NIBBLEOUT LCDByte
+    #ENDIF
+
+    #IFDEF LCD_IO 4
+        'Set pins to output
+        #IFNDEF LCD_LAT
+            Dir LCD_DB4 Out
+            Dir LCD_DB5 Out
+            Dir LCD_DB6 Out
+            Dir LCD_DB7 Out
+        #ENDIF
+        #IFDEF LCD_LAT
+            Dir _LCD_DB4 Out
+            Dir _LCD_DB5 Out
+            Dir _LCD_DB6 Out
+            Dir _LCD_DB7 Out
+        #ENDIF
 
 
-		'Write upper nibble to output pins
-		set LCD_DB4 OFF
-		set LCD_DB5 OFF
-		set LCD_DB6 OFF
-		set LCD_DB7 OFF
-		if LCDByte.7 ON THEN SET LCD_DB7 ON
-		if LCDByte.6 ON THEN SET LCD_DB6 ON
-		if LCDByte.5 ON THEN SET LCD_DB5 ON
-		if LCDByte.4 ON THEN SET LCD_DB4 ON		
-		
-                  '************************************
-                    #IFDEF LCD_SLOW
-                       pulseout LCD_enable, 2 us
-                        Wait 1 us
-                    #ENDIF
+        'Write upper nibble to output pins
+        Set LCD_DB4 Off
+        Set LCD_DB5 Off
+        Set LCD_DB6 Off
+        Set LCD_DB7 Off
+        If LCDByte.7 On Then Set LCD_DB7 On
+        If LCDByte.6 On Then Set LCD_DB6 On
+        If LCDByte.5 On Then Set LCD_DB5 On
+        If LCDByte.4 On Then Set LCD_DB4 On
 
-                    #IFNDEF LCD_SLOW
-                       pulseout LCD_enable, 1 us
-                       wait 1 us
-                    #ENDIF
-                  '*************************************
+        '************************************
+        #IFDEF LCD_SLOW
+            PulseOut LCD_enable, 2 us
+            Wait 1 us
+        #ENDIF
 
-		'Write lower nibble to output pins
-		set LCD_DB4 OFF
-		set LCD_DB5 OFF
-		set LCD_DB6 OFF
-		set LCD_DB7 OFF
-		if LCDByte.3 ON THEN SET LCD_DB7 ON
-		if LCDByte.2 ON THEN SET LCD_DB6 ON
-		if LCDByte.1 ON THEN SET LCD_DB5 ON
-		if LCDByte.0 ON THEN SET LCD_DB4 ON		
+        #IFNDEF LCD_SLOW
+            PulseOut LCD_enable, 1 us
+            Wait 1 us
+        #ENDIF
+        '*************************************
 
-		
-                    'Pulse enable pin
-                 '*********************************
-                    #IFDEF LCD_SLOW
-                       pulseout LCD_enable, 2 us
-                       wait 1 us
-                  #ENDIF
+        'Write lower nibble to output pins
+        Set LCD_DB4 Off
+        Set LCD_DB5 Off
+        Set LCD_DB6 Off
+        Set LCD_DB7 Off
+        If LCDByte.3 On Then Set LCD_DB7 On
+        If LCDByte.2 On Then Set LCD_DB6 On
+        If LCDByte.1 On Then Set LCD_DB5 On
+        If LCDByte.0 On Then Set LCD_DB4 On
 
-                    #IFNDEF LCD_SLOW
-                       pulseout LCD_enable, 1 us
-                       wait 1 us
-                    #ENDIF
-                 '***********************************
 
-                   	'Set data pins low again
-		SET LCD_DB7 OFF
-		SET LCD_DB6 OFF
-		SET LCD_DB5 OFF
-		SET LCD_DB4 OFF
-              '*******************************************
-                     #IFDEF LCD_SLOW   'Character rate = 10K
-                        wait 65 us     'character delay time
-                     #ENDIF
+        'Pulse enable pin
+        '*********************************
+        #IFDEF LCD_SLOW
+            PulseOut LCD_enable, 2 us
+            Wait 1 us
+        #ENDIF
 
-                     #IFNDEF LCD_SLOW  'Charcter rate = 20K
-                        wait 17 us      'character delay time
-                     #ENDIF
-               '*********************************************
-	
-          #ENDIF
-	
-	#IFDEF LCD_IO 8
-		'Set data port to output, and write a value to it
-                    #IFNDEF LCD_LAT
-                            DIR LCD_DATA_PORT out
-		#ENDIF
-                    #IFDEF LCD_LAT
-                           DIR _LCD_DATA_PORT out
-		#ENDIF
-		LCD_DATA_PORT = LCDByte
-		
-               '********Added / Changed *************************	
-                    #IFDEF LCD_SLOW
-                        wait 2 us
-                        pulseout LCD_enable, 2 us
-                        Wait 2  us
-		    LCD_DATA_PORT = 0
-                        wait 80 us  'character rate = 10K
-                    #ENDIF
+        #IFNDEF LCD_SLOW
+            PulseOut LCD_enable, 1 us
+            Wait 1 us
+        #ENDIF
+        '***********************************
 
-                    #IFNDEF LCD_SLOW   'Fast
-                       wait 1 us
-                       pulseout LCD_enable, 1 us
-                       Wait 1  us
-		   LCD_DATA_PORT = 0
-                        wait 32 us  'character rate = 20K
-                     #ENDIF
-                '*********************************
+        'Set data pins low again
+        Set LCD_DB7 Off
+        Set LCD_DB6 Off
+        Set LCD_DB5 Off
+        Set LCD_DB4 Off
+        '*******************************************
+        'Character rate = 10K
+        #IFDEF LCD_SLOW
+            'character delay time
+            Wait 65 us
+        #ENDIF
 
-	#ENDIF
-	
-end sub
+        'Charcter rate = 20K
+        #IFNDEF LCD_SLOW
+            'character delay time
+            Wait 17 us
+        #ENDIF
+        '*********************************************
+
+    #ENDIF
+
+    #IFDEF LCD_IO 8
+        'Set data port to output, and write a value to it
+        #IFNDEF LCD_LAT
+            Dir LCD_DATA_PORT Out
+        #ENDIF
+        #IFDEF LCD_LAT
+            Dir _LCD_DATA_PORT Out
+        #ENDIF
+        LCD_DATA_PORT = LCDByte
+
+        '********Added / Changed *************************
+        #IFDEF LCD_SLOW
+            Wait 2 us
+            PulseOut LCD_enable, 2 us
+            Wait 2  us
+            LCD_DATA_PORT = 0
+            'character rate = 10K
+            Wait 80 us
+        #ENDIF
+
+        'Fast
+        #IFNDEF LCD_SLOW
+            Wait 1 us
+            PulseOut LCD_enable, 1 us
+            Wait 1  us
+            LCD_DATA_PORT = 0
+            'character rate = 20K
+            Wait 32 us
+        #ENDIF
+        '*********************************
+
+    #ENDIF
+
+End Sub

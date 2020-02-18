@@ -27,86 +27,88 @@
 '''  Date: 29.8.17
 '''
 ' ----- Configuration
-    'Chip Settings.
-    #chip 18f26k22, 16
-     #config MCLRE=on
-    #option Explicit
+'Chip Settings.
+#CHIP 18f26k22, 16
+#CONFIG MCLRE=On
+#OPTION Explicit
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | A |-------| O | I |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | A |-------| O | I |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---| TX|---|SDA|CLK| X |---------
-    ''-----------------------------------------
-    ''
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---| TX|---|SDA|CLK| X |---------
+''-----------------------------------------
+''
 
 
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define Potentiometer   PORTC.5
-    #define LDR             PORTB.4
-    #define SwitchIn        PORTB.0
-    #define LCDControl      PORTC.2
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE Potentiometer   PORTC.5
+#DEFINE LDR             PORTB.4
+#DEFINE SwitchIn        PORTB.0
+#DEFINE LCDControl      PORTC.2
 
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     Potentiometer In   'this is the AN17 port
-    Dir     LDR           In   'this is the AN11 port
-    Dir     SwitchIn      In
-    Dir     LCDControl    Out
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+'this is the AN17 port
+Dir     Potentiometer In
+'this is the AN11 port
+Dir     LDR           In
+Dir     SwitchIn      In
+Dir     LCDControl    Out
 
-    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
-    LCDControl = 1
+'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+LCDControl = 1
 
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
 
-    ' Define I2C settings
-    #define HI2C_BAUD_RATE 400
-    #define HI2C_DATA PORTC.4
-    #define HI2C_CLOCK PORTC.3
-    'Initialise I2C Slave
-    'I2C pins need to be input for SSP module - this is not an option
-    Dir HI2C_DATA in
-    Dir HI2C_CLOCK in
-    'MASTER
-    HI2CMode Master
+' Define I2C settings
+#DEFINE HI2C_BAUD_RATE 400
+#DEFINE HI2C_DATA PORTC.4
+#DEFINE HI2C_CLOCK PORTC.3
+'Initialise I2C Slave
+'I2C pins need to be input for SSP module - this is not an option
+Dir HI2C_DATA In
+Dir HI2C_CLOCK In
+'MASTER
+HI2CMode Master
 
-    #include <glcd.h>
-    #define GLCD_TYPE GLCD_TYPE_SSD1306
-    #define GLCD_I2C_Address 0x78
+#INCLUDE <glcd.h>
+#DEFINE GLCD_TYPE GLCD_TYPE_SSD1306
+#DEFINE GLCD_I2C_Address 0x78
 
-    'These constants allow you to change the GLCD memory usage.
-    #define GLCD_PROTECTOVERRUN
+'These constants allow you to change the GLCD memory usage.
+#DEFINE GLCD_PROTECTOVERRUN
 '*******************************************************************************************
-   #define GLCD_OLED_FONT
-   'Add this define to enable Text mode of operations
-   #define GLCD_TYPE_SSD1306_CHARACTER_MODE_ONLY
+#DEFINE GLCD_OLED_FONT
+'Add this define to enable Text mode of operations
+#DEFINE GLCD_TYPE_SSD1306_CHARACTER_MODE_ONLY
 
-   DIM myString as string * 28
-   myString = "Great Cow BASIC 2019"
+Dim myString As String * 28
+myString = "Great Cow BASIC 2019"
 
-   GLCDfntDefaultSize = 2
-   GLCDPrint(24, 0,"GCBASIC")
-   GLCDDrawString(20, 16,"Extensive")
-   GLCDDrawString(20, 32,"Libraries")
-   GLCDfntDefaultSize = 1
-   GLCDPrint(20, 48,"https://goo.gl/gjrxkp")
-   GLCDDrawString(20, 56,myString)
+GLCDfntDefaultSize = 2
+GLCDPrint(24, 0,"GCBASIC")
+GLCDDrawString(20, 16,"Extensive")
+GLCDDrawString(20, 32,"Libraries")
+GLCDfntDefaultSize = 1
+GLCDPrint(20, 48,"https://goo.gl/gjrxkp")
+GLCDDrawString(20, 56,myString)
 
 
-   'Graphical methods are not permitted in Text or Character Mode. So, this is REMarked out
-   ' Box (0, 0, 127 , 63 )
+'Graphical methods are not permitted in Text or Character Mode. So, this is REMarked out
+' Box (0, 0, 127 , 63 )
 
-   Do Forever
-   Loop
+Do Forever
+Loop

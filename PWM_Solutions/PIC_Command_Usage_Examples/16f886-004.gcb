@@ -2,25 +2,25 @@
 ' This uses a method to support the frequency and duty to be changed as the PWM parameters.
 ' This used CCP1/PMW
 '
-#chip 16f886, 8
+#CHIP 16f886, 8
 
-    'Set the CCP1 pin to output mode
-    DIR PORTC.2 out
+'Set the CCP1 pin to output mode
+Dir PORTC.2 Out
 
-    'Main code
-    'freq 40khz
-    'variable duty from 0% to 100%
-    do
-        'Turn up brightness over 2.5 seconds
-        For Bright = 1 to 255
-            HPWM 1, 40, Bright
-            wait 10 ms
-        next
-        'Turn down brightness over 2.5 seconds
-        For Bright = 255 to 1
-            HPWM 1, 40, Bright
-            wait 10 ms
-        next
-    loop
+'Main code
+'freq 40khz
+'variable duty from 0% to 100%
+Do
+    'Turn up brightness over 2.5 seconds
+    For Bright = 1 To 255
+        HPWM 1, 40, Bright
+        Wait 10 ms
+    Next
+    'Turn down brightness over 2.5 seconds
+    For Bright = 255 To 1
+        HPWM 1, 40, Bright
+        Wait 10 ms
+    Next
+Loop
 
-end
+End

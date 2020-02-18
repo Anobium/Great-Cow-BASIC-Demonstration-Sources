@@ -8,93 +8,104 @@
 '''@version    1.01
 '''@date       10.10.17
 '''********************************************************************************
-    #chip 18f25k42, 16
-    #option Explicit
-    #config mclr=on
+#CHIP 18f25k42, 16
+#OPTION Explicit
+#CONFIG mclr=On
 
-    #startup InitPPS, 85
+#STARTUP InitPPS, 85
 
-    Sub InitPPS
-          'Module: UART1
-          RC6PPS = 0x0013     'TX1 > RC6
-          U1RXPPS = 0x0017    'RC7 > RX1
-              'Setup Serial port
-    #define USART_BAUD_RATE 9600
-    #define USART_TX_BLOCKING
+Sub InitPPS
+    'Module: UART1
+    'TX1 > RC6
+    RC6PPS = 0x0013
+    'RC7 > RX1
+    U1RXPPS = 0x0017
+    'Setup Serial port
+    #DEFINE USART_BAUD_RATE 9600
+    #DEFINE USART_TX_BLOCKING
 
-            'Module: PWM5
-            RA0PPS = 0x000D    'PWM5 > RA0
-            'Module: PWM6
-            RA1PPS = 0x000E    'PWM6 > RA1
-            'Module: PWM7
-            RA2PPS = 0x000F    'PWM7 > RA2
-            'Module: PWM8
-            RA3PPS = 0x0010    'PWM8 > RA3
+    'Module: PWM5
+    'PWM5 > RA0
+    RA0PPS = 0x000D
+    'Module: PWM6
+    'PWM6 > RA1
+    RA1PPS = 0x000E
+    'Module: PWM7
+    'PWM7 > RA2
+    RA2PPS = 0x000F
+    'Module: PWM8
+    'PWM8 > RA3
+    RA3PPS = 0x0010
 
-    End Sub
+End Sub
 
-; ------ Start of main Program
-
-
-      'Do NOT forget to set the port direction... setting everything to out, is a bit of cheat! :-)
-      dir porta Out
-      dir portb Out
-      dir portc Out
-
-      'Define the variables for the channels
-      dim PWMChannel5_Frequency, PWMChannel6_Frequency,PWMChannel7_Frequency,PWMChannel8_Frequency as word
-      dim PWMChannel5_Duty, PWMChannel6_Duty,PWMChannel7_Duty,PWMChannel8_Duty as word
-      dim CCPPWMChannel1_Duty,CCPPWMChannel2_Duty,CCPPWMChannel3_Duty, CCPPWMChannel_Duty4 as Byte
-
-      'We will set each PWM module as follows, so you can test on a scope
-      '  PWM Channel 5 = 5
-      '  PWM Channel 6 = 66
-      '  PWM Channel 7 = 777
-      '  PWM Channel 8 = 888
-
-      'We will set each duty value so you can test on a scope.  These are 10bit values...
-      PWMChannel5_Duty = 511   ' 50%
-      PWMChannel6_Duty = 613   ' 60%
-      PWMChannel7_Duty = 716   ' 70%
-      PWMChannel8_Duty = 818   ' 80%
+' ------ Start of main Program
 
 
-      'Enable the PWM modules
-      HPWM 5, 5,  PWMChannel5_Duty,  2
-      HPWM 6, 66,  PWMChannel6_Duty, 4
-      HPWM 7, 777, PWMChannel7_Duty, 6
-      HPWM 8, 5,   PWMChannel8_Duty, 2       'We have to put one on the channels on the same timer, as we only have three timers to select from
+'Do NOT forget to set the port direction... setting everything to out, is a bit of cheat! :-)
+Dir porta Out
+Dir portb Out
+Dir portc Out
 
-      'Show the fixed frequency for 5 seconds
-      wait 5 s
+'Define the variables for the channels
+Dim PWMChannel5_Frequency, PWMChannel6_Frequency,PWMChannel7_Frequency,PWMChannel8_Frequency As Word
+Dim PWMChannel5_Duty, PWMChannel6_Duty,PWMChannel7_Duty,PWMChannel8_Duty As Word
+Dim CCPPWMChannel1_Duty,CCPPWMChannel2_Duty,CCPPWMChannel3_Duty, CCPPWMChannel_Duty4 As Byte
 
-      'Commence a variable PWM signal
-      do
+'We will set each PWM module as follows, so you can test on a scope
+'  PWM Channel 5 = 5
+'  PWM Channel 6 = 66
+'  PWM Channel 7 = 777
+'  PWM Channel 8 = 888
 
-          PWMChannel5_Frequency = ( PWMChannel5_Frequency + 1 ) mod 1000
-          PWMChannel6_Frequency = ( PWMChannel6_Frequency + 1 ) mod 1000
-          PWMChannel7_Frequency = ( PWMChannel7_Frequency + 1 ) mod 1000
-          PWMChannel8_Frequency = ( PWMChannel8_Frequency + 1 ) mod 1000
-
-          repeat 1024
-
-            PWMChannel5_Duty = ( PWMChannel5_Duty + 1 ) mod 1023
-            PWMChannel6_Duty = ( PWMChannel6_Duty + 1 ) mod 1023
-            PWMChannel7_Duty = ( PWMChannel7_Duty + 1 ) mod 1023
-            PWMChannel8_Duty = ( PWMChannel8_Duty + 1 ) mod 1023
-
-
-            HPWM 5, PWMChannel5_Frequency,  PWMChannel5_Duty,  2
-            HPWM 6, PWMChannel6_Frequency,  PWMChannel6_Duty,  2
-            HPWM 7, PWMChannel7_Frequency,  PWMChannel7_Duty,  2
-            HPWM 8, PWMChannel8_Frequency,  PWMChannel8_Duty,  2
-
-            'show for 1 ms
-            wait 1 ms
-
-          end repeat
+'We will set each duty value so you can test on a scope.  These are 10bit values...
+' 50%
+PWMChannel5_Duty = 511
+' 60%
+PWMChannel6_Duty = 613
+' 70%
+PWMChannel7_Duty = 716
+' 80%
+PWMChannel8_Duty = 818
 
 
-      loop
+'Enable the PWM modules
+HPWM 5, 5,  PWMChannel5_Duty,  2
+HPWM 6, 66,  PWMChannel6_Duty, 4
+HPWM 7, 777, PWMChannel7_Duty, 6
+'We have to put one on the channels on the same timer, as we only have three timers to select from
+HPWM 8, 5,   PWMChannel8_Duty, 2
+
+'Show the fixed frequency for 5 seconds
+Wait 5 s
+
+'Commence a variable PWM signal
+Do
+
+    PWMChannel5_Frequency = ( PWMChannel5_Frequency + 1 ) mod 1000
+    PWMChannel6_Frequency = ( PWMChannel6_Frequency + 1 ) mod 1000
+    PWMChannel7_Frequency = ( PWMChannel7_Frequency + 1 ) mod 1000
+    PWMChannel8_Frequency = ( PWMChannel8_Frequency + 1 ) mod 1000
+
+    Repeat 1024
+
+        PWMChannel5_Duty = ( PWMChannel5_Duty + 1 ) mod 1023
+        PWMChannel6_Duty = ( PWMChannel6_Duty + 1 ) mod 1023
+        PWMChannel7_Duty = ( PWMChannel7_Duty + 1 ) mod 1023
+        PWMChannel8_Duty = ( PWMChannel8_Duty + 1 ) mod 1023
+
+
+        HPWM 5, PWMChannel5_Frequency,  PWMChannel5_Duty,  2
+        HPWM 6, PWMChannel6_Frequency,  PWMChannel6_Duty,  2
+        HPWM 7, PWMChannel7_Frequency,  PWMChannel7_Duty,  2
+        HPWM 8, PWMChannel8_Frequency,  PWMChannel8_Duty,  2
+
+        'show for 1 ms
+        Wait 1 ms
+
+    End Repeat
+
+
+Loop
 
 End

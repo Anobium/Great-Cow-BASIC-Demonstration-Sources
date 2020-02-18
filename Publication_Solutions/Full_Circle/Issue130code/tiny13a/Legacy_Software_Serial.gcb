@@ -2,18 +2,18 @@
 #DEFINE RS232Out PORTB.1
 
 'Config Software-UART
-#DEFINE SendAHigh Set RS232Out ON
-#DEFINE SendALow Set RS232Out OFF
+#DEFINE SendAHigh Set RS232Out On
+#DEFINE SendALow Set RS232Out Off
 #DEFINE SerPrintCR
 #DEFINE SerPrintLF
 
-DIR RS232Out OUT
-DIR PortB.4 IN
+Dir RS232Out Out
+Dir PortB.4 In
 InitSer 1, r9600, 1+WaitForStart, 8, 1, none, normal
-DIM POTI AS BYTE
+Dim POTI As Byte
 
-DO
-    POTI = READAD(ADC2)
-    Sersend 1, POTI
-	WAIT 500 MS
-LOOP
+Do
+    POTI = ReadAD(ADC2)
+    SerSend 1, POTI
+    Wait 500 ms
+Loop

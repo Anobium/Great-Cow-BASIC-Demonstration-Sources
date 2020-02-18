@@ -24,100 +24,101 @@
 '''  Date: 29.8.17
 '''
 ' ----- Configuration
-    'Chip Settings.
-    #chip 18f25k22, 16
+'Chip Settings.
+#CHIP 18f25k22, 16
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---|RS |RW | E |D7 |D6 |D5 |D4
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---|RS |RW | E |D7 |D6 |D5 |D4
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | A |-------| O | I |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | A |-------| O | I |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---| TX| A |-------| X |---------
-    ''-----------------------------------------
-    ''
-
-
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define Potentiometer   PORTC.5
-    #define SwitchIn        PORTB.0
-    #define LCDControl      PORTC.2
-
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     Potentiometer In   'this is the AN17 port
-    Dir     SwitchIn      In
-    Dir     LCDControl    Out
-
-    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
-    LCDControl = 1
-
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---| TX| A |-------| X |---------
+''-----------------------------------------
+''
 
 
-    'Setup Serial port
-    #define USART_BAUD_RATE 9600
-    #define USART_TX_BLOCKING
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE Potentiometer   PORTC.5
+#DEFINE SwitchIn        PORTB.0
+#DEFINE LCDControl      PORTC.2
+
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+'this is the AN17 port
+Dir     Potentiometer In
+Dir     SwitchIn      In
+Dir     LCDControl    Out
+
+'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+LCDControl = 1
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
 
 
-    ' Now assumes Serial Terminal is operational
-    dim EEPromAddress as byte
-
-    Do Forever
-
-          HSerPrintCRLF
-          HSerPrint "EEPROM Test and Show EEProm Results"
-          HSerPrintCRLF 2
+'Setup Serial port
+#DEFINE USART_BAUD_RATE 9600
+#DEFINE USART_TX_BLOCKING
 
 
-          Set LEDD1 off
-          Set LEDD2 off
+' Now assumes Serial Terminal is operational
+Dim EEPromAddress As Byte
+
+Do Forever
+
+    HSerPrintCRLF
+    HSerPrint "EEPROM Test and Show EEProm Results"
+    HSerPrintCRLF 2
 
 
-          HSerPrint "     "
-          for EEPromAddress = 0 to 15
-            HSerPrint hex(EEPromAddress)
-            HSerPrint " "
-          next
+    Set LEDD1 Off
+    Set LEDD2 Off
 
-          for EEPromAddress = 0 to 255
-            DisplayNewLine = EEPromAddress % 16
-            if DisplayNewLine = 0 Then
-              HSerPrintCRLF
-              HserPrint hex(EEPromAddress)
-              HSerPrint ": "
-            end if
-            HSerPrint " "
 
-            Outdata = Random
-            'Outdata = EEPromAddress
-            EPWrite ( EEPromAddress, Outdata )
-            EPRead  ( EEPromAddress, Indata )
+    HSerPrint "     "
+    For EEPromAddress = 0 To 15
+        HSerPrint Hex(EEPromAddress)
+        HSerPrint " "
+    Next
 
-            if Outdata = Indata then
-              HSerPrint  hex(Indata)
-            Else
-              HSerPrint  "--"
-            end if
+    For EEPromAddress = 0 To 255
+        DisplayNewLine = EEPromAddress % 16
+        If DisplayNewLine = 0 Then
+            HSerPrintCRLF
+            HSerPrint Hex(EEPromAddress)
+            HSerPrint ": "
+        End If
+        HSerPrint " "
 
-          next
+        Outdata = Random
+        'Outdata = EEPromAddress
+        EPWrite ( EEPromAddress, Outdata )
+        EPRead  ( EEPromAddress, Indata )
 
-          HSerPrintCRLF 2
-          HSerPrint   "End of EEProm Program and Display"
-          HSerPrintCRLF 2
-          Set LEDD2 on
-          Set LEDD1 on
+        If Outdata = Indata Then
+            HSerPrint  Hex(Indata)
+        Else
+            HSerPrint  "--"
+        End If
 
-          wait while SwitchIn = On
-    Loop
-    END
+    Next
+
+    HSerPrintCRLF 2
+    HSerPrint   "End of EEProm Program and Display"
+    HSerPrintCRLF 2
+    Set LEDD2 On
+    Set LEDD1 On
+
+    Wait While SwitchIn = On
+Loop
+End

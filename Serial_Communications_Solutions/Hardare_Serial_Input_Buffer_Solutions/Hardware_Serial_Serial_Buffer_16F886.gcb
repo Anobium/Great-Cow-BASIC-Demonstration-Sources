@@ -9,45 +9,43 @@
 '''@date    31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
-  #chip 16F886, 16
-  #option explicit
+' ----- Configuration
+#CHIP 16F886, 16
+#OPTION Explicit
 
-; ----- Define Hardware settings
-  ' Pot port
-  DIR PORTA.0 IN
+' ----- Define Hardware settings
+' Pot port
+Dir PORTA.0 In
 
-; ----- Constants
-  ' Define the USART port
-  #define USART_BAUD_RATE 9600
-  #define USART_BLOCKING
-  #define USART_DELAY off
+' ----- Constants
+' Define the USART port
+#DEFINE USART_BAUD_RATE 9600
+#DEFINE USART_BLOCKING
+#DEFINE USART_DELAY Off
 
-  ' [[change to your config] Ensure these port addresses are correct
-  #define SerInPort PORTc.7
-  #define SerOutPort PORTc.6
-  'Set pin directions
-  Dir SerOutPort Out
-  Dir SerInPort In
+' [[change to your config] Ensure these port addresses are correct
+#DEFINE SerInPort PORTc.7
+#DEFINE SerOutPort PORTc.6
+'Set pin directions
+Dir SerOutPort Out
+Dir SerInPort In
 
-; Constants etc required for Buffer Ring
-  #define BUFFER_SIZE 8
-  #define bkbhit (next_in <> next_out)
-;  Variables for Buffer Ring
-  Dim buffer(BUFFER_SIZE)
-  Dim next_in as byte: next_in = 1
-  Dim next_out as byte: next_out = 1
-  Dim TEMPPNT as Byte
-
-
-; ----- Main body of program commences here.
-  'Interrupt Handlers
-  On Interrupt UsartRX1Ready Call readUSART
-
-  HSerPrint "Buffer Ring"
-  HSerPrintCRLF 2
+' Constants etc required for Buffer Ring
+#DEFINE BUFFER_SIZE 8
+#DEFINE bkbhit (next_in <> next_out)
+'  Variables for Buffer Ring
+Dim buffer(BUFFER_SIZE)
+Dim next_in As Byte: next_in = 1
+Dim next_out As Byte: next_out = 1
+Dim TEMPPNT As Byte
 
 
+' ----- Main body of program commences here.
+'Interrupt Handlers
+On Interrupt UsartRX1Ready Call readUSART
+
+HSerPrint "Buffer Ring"
+HSerPrintCRLF 2
 
 
 
@@ -55,36 +53,39 @@
 
 
 
-   Do
-
-          ' wait for incoming data
-          do while bkbhit
-
-            ' send back the last data byte received!!
-            HSerSend chr(bgetc)
-
-          Loop
-
-  Loop
-
-; ----- Support methods.  Subroutines and Functions
-
-    Sub readUSART
-
-        buffer(next_in) = HSerReceive
-        temppnt = next_in
-        next_in = ( next_in + 1 ) % BUFFER_SIZE
-        if ( next_in = next_out ) then  ' buffer is full!!
-           next_in = temppnt
-        end if
 
 
-    End Sub
+Do
+
+    ' wait for incoming data
+    Do While bkbhit
+
+        ' send back the last data byte received!!
+        HSerSend CHR(bgetc)
+
+    Loop
+
+Loop
+
+' ----- Support methods.  Subroutines and Functions
+
+Sub readUSART
+
+    buffer(next_in) = HSerReceive
+    temppnt = next_in
+    next_in = ( next_in + 1 ) % BUFFER_SIZE
+    If ( next_in = next_out ) Then
+        ' buffer is full!!
+        next_in = temppnt
+    End If
 
 
-    function bgetc
-       wait while !(bkbhit)
-       bgetc = buffer(next_out)
-       next_out=(next_out+1) % BUFFER_SIZE
-    end Function
+End Sub
+
+
+Function bgetc
+    Wait While !(bkbhit)
+    bgetc = buffer(next_out)
+    next_out=(next_out+1) % BUFFER_SIZE
+End Function
 

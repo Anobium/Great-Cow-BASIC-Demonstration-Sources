@@ -3,28 +3,30 @@
 '''This program demonstrates the capabilities of a LCD display using a 2-wire connection.
 '''The LCD is controlled via a shiftreg 74HC164/74LS164.
 '''For the LCD connection - please refer to the Helpfile.
-'''@author 	TheoL 
+'''@author 	TheoL
 '''@licence	GPL
 '''@version	1.0
 '''@date   	31.08.2015
 '''********************************************************************************
-; ----- Configuration
+' ----- Configuration
 
-  #chip mega8,8
+#CHIP mega8,8
 
-; ----- Define Hardware settings
-  ' Setup LCD Parameters
-  ' Use LCD in 2 wire mode with shift reg. 74LS164 / 74HC164
-  ' LCDBacklight is controling pin 11 74HC164/74LS164 (in LCD.h)
+' ----- Define Hardware settings
+' Setup LCD Parameters
+' Use LCD in 2 wire mode with shift reg. 74LS164 / 74HC164
+' LCDBacklight is controling pin 11 74HC164/74LS164 (in LCD.h)
 
-  #define LCD_IO 2_74XX164
-  #define LCD_DB PORTC.0           ; data bit
-  #define LCD_CB PORTC.1           ; clock bit
-  #define LCD_NO_RW
+#DEFINE LCD_IO 2_74XX164
+' data bit
+#DEFINE LCD_DB PORTC.0
+' clock bit
+#DEFINE LCD_CB PORTC.1
+#DEFINE LCD_NO_RW
 
-  LCDBacklight On
+LCDBacklight On
 
-  CLS
-  Print "Great Cow Basic"
-  Locate 1,0
-  Print "  Hello World."
+CLS
+Print "Great Cow Basic"
+Locate 1,0
+Print "  Hello World."

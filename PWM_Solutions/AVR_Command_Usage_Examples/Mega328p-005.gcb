@@ -15,37 +15,37 @@
 ' This uses a method to support the frequency and duty to be changed as the PWM parameters.
 ' This shows the FOUR things you HAVE to do to enable PWM on a single channel
 
-    #chip mega328p, 16
+#CHIP mega328p, 16
 
-    '#1
-    'Set the CLOCK Source as AVRTCx relates to PWM3
-    #define AVRTC1
+'#1
+'Set the CLOCK Source as AVRTCx relates to PWM3
+#DEFINE AVRTC1
 
-    '#2
-    'Set the AVR PWM Channel as enabled by defining this constants equates OC1A
-    #define AVRCHAN3
+'#2
+'Set the AVR PWM Channel as enabled by defining this constants equates OC1A
+#DEFINE AVRCHAN3
 
-    '#3
-    'Set the PWM pin to output mode.
-    DIR PORTB.1 out
+'#3
+'Set the PWM pin to output mode.
+Dir PORTB.1 Out
 
 
-    'Main code
-    'freq 40khz
-    'variable duty from 0% to 100%
-    do
-        'Turn up brightness over 2.5 seconds
-        For Bright = 0 to 255
-            '#4 - Call the method with the correct PWM channel
-            HPWM 3, 40, Bright
-            wait 10 ms
-        next
-        'Turn down brightness over 2.5 seconds
-        For Bright = 255 to 0
-            '#4 - Call the method with the correct PWM channel
-            HPWM 3, 40, Bright
-            wait 10 ms
-        next
-    loop
+'Main code
+'freq 40khz
+'variable duty from 0% to 100%
+Do
+    'Turn up brightness over 2.5 seconds
+    For Bright = 0 To 255
+        '#4 - Call the method with the correct PWM channel
+        HPWM 3, 40, Bright
+        Wait 10 ms
+    Next
+    'Turn down brightness over 2.5 seconds
+    For Bright = 255 To 0
+        '#4 - Call the method with the correct PWM channel
+        HPWM 3, 40, Bright
+        Wait 10 ms
+    Next
+Loop
 
-end
+End

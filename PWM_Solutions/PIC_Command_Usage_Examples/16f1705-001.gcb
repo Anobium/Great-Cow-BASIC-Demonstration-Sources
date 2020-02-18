@@ -1,12 +1,12 @@
 'Toggle the output port to ensure we have connectivity!
 
-#chip 16f1705, 32
+#CHIP 16f1705, 32
 
-#define outport portc.5
-dir outport out
+#DEFINE outport portc.5
+Dir outport Out
 
-do
+Do
 
-  outport = !outport
+    outport = !outport
 
-loop
+Loop

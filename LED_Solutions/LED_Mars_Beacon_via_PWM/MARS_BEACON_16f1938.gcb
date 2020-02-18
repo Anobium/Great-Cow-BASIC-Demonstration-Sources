@@ -1,79 +1,85 @@
- '''A demonstration program for GCGB and GCB.
- '''--------------------------------------------------------------------------------------------------------------------------------
- '''This program ia a demonstration of a Simulated MARS Beacon for Experimental / RC Aircraft
- '''You should see it on the aircraft using four 3 Watt Cree XR-E LED's.   
- '''Makes runway taxiing a lot safer for these smaller experimental aircraft.  And of course can be used on R/C Planes for a realistic looking beacon.  
- '''We Suggest using less expensive 8-Pin Device such as PIC12F683
- '''
- '''@author 	 EvanV on works of William Roth
- '''@licence	 GPL
- '''@version	 1.0a
- '''@date   	31.03.2015
- '''********************************************************************************
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program ia a demonstration of a Simulated MARS Beacon for Experimental / RC Aircraft
+'''You should see it on the aircraft using four 3 Watt Cree XR-E LED's.
+'''Makes runway taxiing a lot safer for these smaller experimental aircraft.  And of course can be used on R/C Planes for a realistic looking beacon.
+'''We Suggest using less expensive 8-Pin Device such as PIC12F683
+'''
+'''@author 	 EvanV on works of William Roth
+'''@licence	 GPL
+'''@version	 1.0a
+'''@date   	31.03.2015
+'''********************************************************************************
 
- ; ----- Configuration
+' ----- Configuration
 
-  #chip 16f1938, 8
+#CHIP 16f1938, 8
 
- ; ----- Constants
-   #define LED PORTC.2
-   
-   ' Adjust for Beacon Effect   
-   #define Max_Duty 120    '~50 % 
-   #define Flash_ON 110    ' ms
-   #define Flash_OFF 110   ' ms 
-   #define Delay 20        ' ramp delay       
-   
- ; ----- Define Hardware settings
-   'CCP1 Pin Direction
-   DIR LED OUT  'CCP1/P1A ( Pin 13)    
-      
+' ----- Constants
+#DEFINE LED PORTC.2
 
+' Adjust for Beacon Effect
+'~50 %
+#DEFINE Max_Duty 120
+' ms
+#DEFINE Flash_ON 110
+' ms
+#DEFINE Flash_OFF 110
+' ramp delay
+#DEFINE Delay 20
 
- ; ----- Variables
-   Dim Duty as Byte      
-   Duty = 10  'starting Value  
-
-    
-
- ; ----- Quick Command Reference:
-  'A MARS Beacon simulation for your enjoyment. I originally written for Picaxe Basic for an Experimental Aircraft owner/ pilot who  uses it on his Airplane.  
-  'It passed U.S. Federal regulations and was approved by the FAA inspector who really liked it.   
-  'To get best performance on a breadboard, use a general purpose NPN transistor (2N3904. etc )  to drive a  5mm LED.  
-  'Recommend a 220 Ohm resistor from 5v to the collector to limit current and a series resistor of 3K3  from the PIC CCP pin to the transistor base.  
+' ----- Define Hardware settings
+'CCP1 Pin Direction
+'CCP1/P1A ( Pin 13)
+Dir LED Out
 
 
 
+' ----- Variables
+Dim Duty As Byte
+'starting Value
+Duty = 10
 
- ; ----- Main body of program commences here.
- DO Forever   
-     ''' Ramp UP
-     Do while duty  < Max_Duty
-         Duty = Duty + 4 
-         HPWM 1,2, duty  
-         wait delay ms 
-     loop 
-     
-     ''' Flash 
-     HPWM 1,2, 255 
-     Wait FLASH_ON Ms
-     HPWM 1,2,max_duty
-     Wait FLASH_OFF ms   
-   
-     HPWM 1, 2, 255 
-     Wait FLASH_ON Ms
-     HPWM 1, 2, max_duty
-     Wait Flash_OFF ms
-     
-        'Ramp Dowm 
-     Do while duty  > 10 
-         Duty = Duty - 4 
-         HPWM 1,2, duty  
-         wait delay ms 
-     loop 
-   
- LOOP  
 
- end
 
- ; ----- Support methods.  Subroutines and Functions
+' ----- Quick Command Reference:
+'A MARS Beacon simulation for your enjoyment. I originally written for Picaxe Basic for an Experimental Aircraft owner/ pilot who  uses it on his Airplane.
+'It passed U.S. Federal regulations and was approved by the FAA inspector who really liked it.
+'To get best performance on a breadboard, use a general purpose NPN transistor (2N3904. etc )  to drive a  5mm LED.
+'Recommend a 220 Ohm resistor from 5v to the collector to limit current and a series resistor of 3K3  from the PIC CCP pin to the transistor base.
+
+
+
+
+' ----- Main body of program commences here.
+Do Forever
+    ''' Ramp UP
+    Do While duty  < Max_Duty
+        Duty = Duty + 4
+        HPWM 1,2, duty
+        Wait delay ms
+    Loop
+
+    ''' Flash
+    HPWM 1,2, 255
+    Wait FLASH_ON ms
+    HPWM 1,2,max_duty
+    Wait FLASH_OFF ms
+
+    HPWM 1, 2, 255
+    Wait FLASH_ON ms
+    HPWM 1, 2, max_duty
+    Wait Flash_OFF ms
+
+    'Ramp Dowm
+    Do While duty  > 10
+        Duty = Duty - 4
+        HPWM 1,2, duty
+        Wait delay ms
+    Loop
+
+Loop
+
+End
+
+' ----- Support methods.  Subroutines and Functions

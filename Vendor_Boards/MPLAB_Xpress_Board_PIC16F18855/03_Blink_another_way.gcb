@@ -13,20 +13,20 @@
 '''
 
 ' ----- Configuration
-    'Chip Settings.
-    #chip 16f18855,32
+'Chip Settings.
+#CHIP 16f18855,32
 
-    '' -------------------LATA-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D1 |-
-    ''-----------------------------------------
-    ''
+'' -------------------LATA-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D1 |-
+''-----------------------------------------
+''
 
-    dir porta.0 out
+Dir porta.0 Out
 
-    do
-        wait 1000 ms
-        'An alternative Great Cow BASIC method.
-        SetWith ( porta.0, FnNotBit (porta.0) )
+Do
+    Wait 1000 ms
+    'An alternative Great Cow BASIC method.
+    SetWith ( porta.0, FnNotBit (porta.0) )
 
-    loop
+Loop

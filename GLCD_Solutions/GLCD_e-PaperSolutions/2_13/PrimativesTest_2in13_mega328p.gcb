@@ -1,102 +1,119 @@
 '''A demonstration program for Explicit-Paper from WaveShare.
- '''-------------------------------------------------------------------------
+'''-------------------------------------------------------------------------
 ' -------------------------------------------------------
- '''This has been tested using the hardware and software SPI option.
+'''This has been tested using the hardware and software SPI option.
 
- '''*************************************************************************
-
-
-     'Chip Settings.
-
-   #chip mega328p, 16
-    #include <uno_mega328p.h>
-   #option explicit
-
- '***************************************************************************
+'''*************************************************************************
 
 
-    'Setup the E-Paper
-     #include <glcd.h>
-     #define GLCD_TYPE GLCD_TYPE_EPD_EPD2in13D
-     #define GLCD_TYPE_EPD2in13D_LOWMEMORY4_GLCD_MODE
+'Chip Settings.
+
+#CHIP mega328p, 16
+#INCLUDE <uno_mega328p.h>
+#OPTION Explicit
+
+'***************************************************************************
 
 
-     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-     #define GLCD_DC     DIGITAL_9
-     #define GLCD_CS     DIGITAL_10
-     #define GLCD_RESET  DIGITAL_8
-     #define GLCD_DO     DIGITAL_11
-     #define GLCD_SCK    DIGITAL_13
-     #define GLCD_Busy   DIGITAL_7
+'Setup the E-Paper
+#INCLUDE <glcd.h>
+#DEFINE GLCD_TYPE GLCD_TYPE_EPD_EPD2in13D
+#DEFINE GLCD_TYPE_EPD2in13D_LOWMEMORY4_GLCD_MODE
 
- '  The following should be used   '#define EPD_HARDWARESPI     'remove comment out if you want to use software SPI.
-     #define EPD_HARDWARESPI
-     #define HWSPIMode MasterULTRAFAST
+
+'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+#DEFINE GLCD_DC     DIGITAL_9
+#DEFINE GLCD_CS     DIGITAL_10
+#DEFINE GLCD_RESET  DIGITAL_8
+#DEFINE GLCD_DO     DIGITAL_11
+#DEFINE GLCD_SCK    DIGITAL_13
+#DEFINE GLCD_Busy   DIGITAL_7
+
+'  The following should be used   '#define EPD_HARDWARESPI     'remove comment out if you want to use software SPI.
+#DEFINE EPD_HARDWARESPI
+#DEFINE HWSPIMode MasterULTRAFAST
 
 '******************************************************************************************************
 'Main program
 
 
-  Dim CCOUNT, BYTENUMBER, OLDFONT, OLDFONT as Byte
+Dim CCOUNT, BYTENUMBER, OLDFONT, OLDFONT As Byte
 
-  CCount = 31
-  dim longNumber as long
-  longNumber = 0 ' max value = 4294967290
-  dim wordNumber as Word
-  wordNumber = 0
-  byteNumber = 0
-  dim outstring as string
+CCount = 31
+Dim longNumber As Long
+' max value = 4294967290
+longNumber = 0
+Dim wordNumber As Word
+wordNumber = 0
+byteNumber = 0
+Dim outstring As String
 
-  GLCDForeground=TFT_BLACK
-  GLCDBackground=TFT_WHITE
-  GLCDfntDefaultSize = 1
+GLCDForeground=TFT_BLACK
+GLCDBackground=TFT_WHITE
+GLCDfntDefaultSize = 1
 
-  GLCDRotate ( Landscape )
+GLCDRotate ( Landscape )
 
-  Do
+Do
 
-      GLCDDisplay On
+    GLCDDisplay On
 
-      GLCD_Open_PageTransaction
+    GLCD_Open_PageTransaction
 
-            GLCDPrint ( 1,   1, "PrintStr")                                ; Print some text
-            GLCDPrint ( 64,  1, "@")                                    ; Print some more text
-            GLCDPrint ( 72,  1, ChipMhz)                                   ; Print chip speed
-            GLCDPrint ( 86, 1, "Mhz")                                     ; Print some text
-            GLCDDrawString( 1,9,"DrawStr")                                 ; Draw some text
-            box 0,0,GLCDDeviceWidth, GLCDDeviceHeight                            ; Draw a box
-            box GLCDDeviceWidth-4, GLCDDeviceHeight-4,GLCDDeviceWidth, GLCDDeviceHeight    ; Draw a box
-            Circle( 44,24,5)                                              ; Draw a circle
-            line 0,GLCDDeviceHeight,44,19                                    ; Draw a line
-
-
-            GLCDPrint ( 52 ,  18,  "0x" )
-            GLCDPrint ( 64 ,  18,  hex(longNumber_E ) )                 ; Print a HEX string
-            GLCDPrint ( 76 ,  18,  hex(longNumber_U ) )                 ; Print a HEX string
-            GLCDPrint ( 88 ,  18,  hex(longNumber_H ) )                 ; Print a HEX string
-            GLCDPrint ( 100 , 18,  hex(longNumber ) )                   ; Print a HEX string
-
-
-            box (3,24,6,27)                                           ; Draw a Box
-            GLCDDrawChar(48, 9, CCount )                               ; Draw a character
-            outstring = str(CCount)
-
-            GLCDDrawString(64, 9, pad(outString,3) )                   ; Draw a string
-
-            Ellipse 118, 6, 7, 4
-            if CCOUNT < 63 then
-              FilledEllipse 118, 6, 5, 2
-            end if
+    ' Print some text
+    GLCDPrint ( 1,   1, "PrintStr")
+    ' Print some more text
+    GLCDPrint ( 64,  1, "@")
+    ' Print chip speed
+    GLCDPrint ( 72,  1, ChipMHz)
+    ' Print some text
+    GLCDPrint ( 86, 1, "Mhz")
+    ' Draw some text
+    GLCDDrawString( 1,9,"DrawStr")
+    ' Draw a box
+    Box 0,0,GLCDDeviceWidth, GLCDDeviceHeight
+    ' Draw a box
+    Box GLCDDeviceWidth-4, GLCDDeviceHeight-4,GLCDDeviceWidth, GLCDDeviceHeight
+    ' Draw a circle
+    Circle( 44,24,5)
+    ' Draw a line
+    Line 0,GLCDDeviceHeight,44,19
 
 
-     GLCD_Close_PageTransaction
+    GLCDPrint ( 52 ,  18,  "0x" )
+    ' Print a HEX string
+    GLCDPrint ( 64 ,  18,  Hex(longNumber_E ) )
+    ' Print a HEX string
+    GLCDPrint ( 76 ,  18,  Hex(longNumber_U ) )
+    ' Print a HEX string
+    GLCDPrint ( 88 ,  18,  Hex(longNumber_H ) )
+    ' Print a HEX string
+    GLCDPrint ( 100 , 18,  Hex(longNumber ) )
 
-     longNumber = longNumber + 7
-     CCOUNT++
 
-     GLCDDisplay Off
+    ' Draw a Box
+    Box (3,24,6,27)
+    ' Draw a character
+    GLCDDrawChar(48, 9, CCount )
+    outstring = Str(CCount)
 
-     wait 30 s
+    ' Draw a string
+    GLCDDrawString(64, 9, Pad(outString,3) )
 
-  Loop
+    Ellipse 118, 6, 7, 4
+    If CCOUNT < 63 Then
+        FilledEllipse 118, 6, 5, 2
+    End If
+
+
+    GLCD_Close_PageTransaction
+
+    longNumber = longNumber + 7
+    CCOUNT++
+
+    GLCDDisplay Off
+
+    Wait 30 s
+
+Loop
 

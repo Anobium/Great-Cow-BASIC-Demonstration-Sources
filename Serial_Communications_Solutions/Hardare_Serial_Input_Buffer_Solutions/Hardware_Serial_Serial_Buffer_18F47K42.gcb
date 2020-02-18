@@ -12,58 +12,64 @@
 '''@version 1.0a
 '''@date    26.07.2018
 '
-    #chip pic18f47k42, 64
+#CHIP pic18f47k42, 64
 
 
-    #startup InitPPS, 85
+#STARTUP InitPPS, 85
 
-    Sub InitPPS
+Sub InitPPS
 
-            'Module: UART1
-            U1RXPPS = 0x0017    'RC7 > RX1
-            RC6PPS = 0x0013    'TX1 > RC6
+    'Module: UART1
+    'RC7 > RX1
+    U1RXPPS = 0x0017
+    'TX1 > RC6
+    RC6PPS = 0x0013
 
-    End Sub
+End Sub
 
-  #define USART_BAUD_RATE 38400
-  #define USART_TX_BLOCKING
-  #define USART_BLOCKING
-  #define USART_DELAY OFF
+#DEFINE USART_BAUD_RATE 38400
+#DEFINE USART_TX_BLOCKING
+#DEFINE USART_BLOCKING
+#DEFINE USART_DELAY Off
 
-  dir portc.7 in
-  dir portc.6 out
+Dir portc.7 In
+Dir portc.6 Out
 
-  'Interrupt Handlers
-  On Interrupt UART1ReceiveInterrupt Call readUSART
+'Interrupt Handlers
+On Interrupt UART1ReceiveInterrupt Call readUSART
 
-  ' Constants etc required for Buffer Ring
-  #define BUFFER_SIZE 8
-  #define bkbhit (next_in <> next_out)
-  ;Variables
-  Dim buffer( BUFFER_SIZE - 1 ) 'we will use element 0 in the array as part of out buffer
-  Dim next_in as byte: next_in = 0
-  Dim next_out as byte: next_out = 0
+' Constants etc required for Buffer Ring
+#DEFINE BUFFER_SIZE 8
+#DEFINE bkbhit (next_in <> next_out)
+'Variables
+'we will use element 0 in the array as part of out buffer
+Dim buffer( BUFFER_SIZE - 1 )
+Dim next_in As Byte: next_in = 0
+Dim next_out As Byte: next_out = 0
 
 
-  Do
-      do while bkbhit  'have got data?
-          HSerPrint chr(bgetc)  'get data and show
-      Loop
-  Loop
+Do
+    'have got data?
+    Do While bkbhit
+        'get data and show
+        HSerPrint CHR(bgetc)
+    Loop
+Loop
 
-  end
+End
 
-  Sub readUSART
-      buffer(next_in) = HSerReceive
-      temppnt = next_in
-      next_in = ( next_in + 1 ) % BUFFER_SIZE
-      if ( next_in = next_out ) then  ' buffer is full!!
-          next_in = temppnt
-      end if
-  End Sub
+Sub readUSART
+    buffer(next_in) = HSerReceive
+    temppnt = next_in
+    next_in = ( next_in + 1 ) % BUFFER_SIZE
+    If ( next_in = next_out ) Then
+        ' buffer is full!!
+        next_in = temppnt
+    End If
+End Sub
 
-  function bgetc
-      wait while !(bkbhit)
-      bgetc = buffer(next_out)
-      next_out=(next_out+1) % BUFFER_SIZE
-  end Function
+Function bgetc
+    Wait While !(bkbhit)
+    bgetc = buffer(next_out)
+    next_out=(next_out+1) % BUFFER_SIZE
+End Function

@@ -6,11 +6,14 @@
 '''@date    03/05/2018
 '''********************************************************************
 
-#chip 16f18426    ' Specify the Device you are compiling for
+' Specify the Device you are compiling for
+#CHIP 16f18426
 
-Dir PortC OUT     ' Set Port C that has LED's attached to as an output
+' Set Port C that has LED's attached to as an output
+Dir PortC Out
 
-PortC = 0b0001111 ' Turn on the LEDs attached the four output ports PortC.0, PortC.1 ,PortC.2 and PortC.3
-                  ' This also clears, or, set to 0 the other ports.
+' Turn on the LEDs attached the four output ports PortC.0, PortC.1 ,PortC.2 and PortC.3
+PortC = 0b0001111
+' This also clears, or, set to 0 the other ports.
 
 End

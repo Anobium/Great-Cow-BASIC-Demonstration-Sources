@@ -9,28 +9,33 @@
 '''@date   	11.11.2015
 '''********************************************************************************
 
-; ----- Configuration
-  #chip 16F690, 4
+' ----- Configuration
+#CHIP 16F690, 4
 
 
-  ' #include
-  ' no solution specifc includes, default includes are always included                                  ; no solution specifc includes, default includes are always included
+' #include
+' no solution specifc includes, default includes are always included                                  ; no solution specifc includes, default includes are always included
 
 
-; ----- Define Hardware settings
+' ----- Define Hardware settings
 
-  ' this is required to tell the microprocessor the port is an output
-  ' (PORTC.0 = Pin 26 on PIC16f690)
-  Dir PORTC.0 Out
+' this is required to tell the microprocessor the port is an output
+' (PORTC.0 = Pin 26 on PIC16f690)
+Dir PORTC.0 Out
 
-; ----- Variables
+' ----- Variables
 ' none specified in the example. All byte variables are defined upon use.
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
-  Start:
-    Set PORTC.0 ON   'turn LED on
-    Wait 100 Ms      'wait 100 milliseconds
-    Set PORTC.0 OFF  'turn LED off
-    Wait 900 Ms      'wait 900 milliseconds
-  Goto Start         'jump back to the start of the program
+Start:
+'turn LED on
+Set PORTC.0 On
+'wait 100 milliseconds
+Wait 100 ms
+'turn LED off
+Set PORTC.0 Off
+'wait 900 milliseconds
+Wait 900 ms
+'jump back to the start of the program
+Goto Start

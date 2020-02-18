@@ -31,28 +31,28 @@
 '''
 
 
- #Chip 18F14K22, 8
- #config MCLRE_OFF
+#CHIP 18F14K22, 8
+#CONFIG MCLRE_OFF
 
 
-  dir portc.5 out
-  dim calculatedPWM as word
+Dir portc.5 Out
+Dim calculatedPWM As Word
 
-  do
+Do
 
-      wait 5 ms
+    Wait 5 ms
 
-      'Read the ADC  and store the result in the variable
-      myDelay = ReadAD ( AN0 , true )
+    'Read the ADC  and store the result in the variable
+    myDelay = ReadAD ( AN0 , TRUE )
 
-      'Store the maximum value of the ADC in the variable.  We are showing this to ensure the ADC has a dynamic range.
-      if myDelay > maxADCReading Then
-          maxADCReading = myDelay
-      end if
+    'Store the maximum value of the ADC in the variable.  We are showing this to ensure the ADC has a dynamic range.
+    If myDelay > maxADCReading Then
+        maxADCReading = myDelay
+    End If
 
-      'This scale will range from 0 to 255 this equate to 0% to 100%
-      calculatedPWM =  scale ( myDelay,  1, maxADCReading, 0, 255 )
+    'This scale will range from 0 to 255 this equate to 0% to 100%
+    calculatedPWM =  Scale ( myDelay,  1, maxADCReading, 0, 255 )
 
-      HPWM 1, 40, calculatedPWM
+    HPWM 1, 40, calculatedPWM
 
-  loop
+Loop

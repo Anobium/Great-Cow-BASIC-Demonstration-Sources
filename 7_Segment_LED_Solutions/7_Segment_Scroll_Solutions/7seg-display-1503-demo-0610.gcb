@@ -26,24 +26,27 @@
 '#include "setup_16f1503.h"
 
 'Chip settings
-  '#chip 16f1825, 1
-    #chip 16f1503, 8 '' 8Mhz
+'#chip 16f1825, 1
+'' 8Mhz
+#CHIP 16f1503, 8
 
 
-    'Meet the Outputs  only port A has Weak_Pull_Ups ~50kOhm
-     '' these are the 7segment display outputs
-      #DEFINE DISP_SEG_A  PORTC.4
-      #DEFINE DISP_SEG_B  PORTA.2
-      #DEFINE DISP_SEG_C  PORTC.0
-      #DEFINE DISP_SEG_D  PORTC.2
-      #DEFINE DISP_SEG_E  PORTC.1
-      #DEFINE DISP_SEG_F  PORTC.3
-      #DEFINE DISP_SEG_G  PORTC.5
+'Meet the Outputs  only port A has Weak_Pull_Ups ~50kOhm
+'' these are the 7segment display outputs
+#DEFINE DISP_SEG_A  PORTC.4
+#DEFINE DISP_SEG_B  PORTA.2
+#DEFINE DISP_SEG_C  PORTC.0
+#DEFINE DISP_SEG_D  PORTC.2
+#DEFINE DISP_SEG_E  PORTC.1
+#DEFINE DISP_SEG_F  PORTC.3
+#DEFINE DISP_SEG_G  PORTC.5
 
-     wpua.3 = 1 ' Weak Pull up: Set Blank to be a default of Display = ON
-     #DEFINE IBlank   PORTA.3  ' Active Low: Low = dispaly OFF, Hi = dispaly ON
+' Weak Pull up: Set Blank to be a default of Display = ON
+wpua.3 = 1
+' Active Low: Low = dispaly OFF, Hi = dispaly ON
+#DEFINE IBlank   PORTA.3
 TRISa = 0xFF
-;TRISb = 0xFF ' not on a 1503
+'TRISb = 0xFF ' not on a 1503
 TRISc = 0xFF
 
 
@@ -59,16 +62,20 @@ TRISc = 0xFF
 
 
 
-dim Blank     as Bit
-Dim Common    as bit  '0= Cathode, 1= Anode
+Dim Blank     As BIT
+'0= Cathode, 1= Anode
+Dim Common    As BIT
 
-dim dn        as Byte
-DIM Value     as Byte
-dim Letter1   as Byte
-dim Letter2   as Byte
-dim show_timer as Word  'milliseconds  suggested 500mS
-#define show_time = 500 'milliseconds
-dim Memo      as String * 24  ' store the text in here
+Dim dn        As Byte
+Dim Value     As Byte
+Dim Letter1   As Byte
+Dim Letter2   As Byte
+'milliseconds  suggested 500mS
+Dim show_timer As Word
+'milliseconds
+#DEFINE show_time = 500
+' store the text in here
+Dim Memo      As String * 24
 Dim Letter0 As String * 1
 
 
@@ -90,80 +97,89 @@ OPTION_REG.7 =0
 'Main Routine
 
 '******** LED Display type
- Common = 0  '0= Cathode, 1= Anode
+'0= Cathode, 1= Anode
+Common = 0
 
- Value= 0
+Value= 0
 
 '******
 ' comment out one of these two lines -- if using IBlank put in the main loop
-Blank = IBlank  ' read the pin a3  keep high to turn on the display or
-Blank = 1 ' Keep the Light on
+' read the pin a3  keep high to turn on the display or
+Blank = IBlank
+' Keep the Light on
+Blank = 1
 '******
 
 
 ' Roll the bar through the display one LED at a time.
-  value= 1
+value= 1
 
-  for dn= 0 to 6
-        Rotate value Right Simple
-          Show
-          wait 150 ms
-  next dn
+For dn= 0 To 6
+    Rotate value Right Simple
+    Show
+    Wait 150 ms
+Next dn
 
-  for dn= 6 to 0 step -1
-        Rotate value Left Simple
-          Show
-          wait 150 ms
-  next dn
-
-
-
-  show_timer = show_time
+For dn= 6 To 0 Step -1
+    Rotate value Left Simple
+    Show
+    Wait 150 ms
+Next dn
 
 
-  do
-       '   12345678901234567890 ' showing the 20 char lenght for the Memo varible
-  ' show the font
+
+show_timer = show_time
+
+
+Do
+    '   12345678901234567890 ' showing the 20 char lenght for the Memo varible
+    ' show the font
     Memo= "A B C D E F G H I "  : Display_Memo
     Memo= "J K L M N O P Q R "  : Display_Memo
     Memo= "S T U V W X Y Z - "  : Display_Memo
     Memo= "0 1 2 3 4 5 6 7 8 9 "  : Display_Memo
-  '
+    '
     Memo= "WELCOME TO "     : Display_Memo
     Memo= "GREAT COW BASIC "  : Display_Memo
     Memo= "HAP_PY CODING "  : Display_Memo
 
-    Do_Anouncments ' example of using a subroutine for more text
-  Loop
+    ' example of using a subroutine for more text
+    Do_Anouncments
+Loop
 
 End
 
 
 '******************************************
 Sub Do_Anouncments
-      Memo= " HI MOM"       : Display_Memo
-      Memo= "HEL_LO WORLD " : Display_Memo
-      Memo= " --- " : Display_Memo
+    Memo= " HI MOM"       : Display_Memo
+    Memo= "HEL_LO WORLD " : Display_Memo
+    Memo= " --- " : Display_Memo
 
-End sub
+End Sub
 
 
 
 '******************************************
-Sub Show ' call with the data loaded into -Value as the input var.
-  DoBlank
-  if Common then Value = !Value  ' If ICommon was high = Common Anode, then invert the display
-  ' this code puts each segment into the segments of the display
-  ' much more elegant looking than 'AND'ing each value.
-  '    DISP_SEG_A = Value & 0b01000000
-  DISP_SEG_A = Value.6
-  DISP_SEG_B = Value.5
-  DISP_SEG_C = Value.4
-  DISP_SEG_D = Value.3
-  DISP_SEG_E = Value.2
-  DISP_SEG_F = Value.1
-  DISP_SEG_G = Value.0
-End sub
+' call with the data loaded into -Value as the input var.
+Sub Show
+    DoBlank
+    If Common Then Value = !Value
+    ' If ICommon was high = Common Anode, then invert the display
+    ' this code puts each segment into the segments of the display
+    
+    ' much more elegant looking than 'AND'ing each value.
+    
+    '    DISP_SEG_A = Value & 0b01000000
+    
+    DISP_SEG_A = Value.6
+    DISP_SEG_B = Value.5
+    DISP_SEG_C = Value.4
+    DISP_SEG_D = Value.3
+    DISP_SEG_E = Value.2
+    DISP_SEG_F = Value.1
+    DISP_SEG_G = Value.0
+End Sub
 '******************************************
 
 '******************************************
@@ -171,142 +187,195 @@ End sub
 '     Low= Display is OFF
 '    High= Display is ON
 '******************************************
-Sub DoBlank ; Blank command is active low
-   if Blank then ' Blank is active Low, so HIGH = ON
-      ' Set as Outputs
-      dir DISP_SEG_A  out
-      dir DISP_SEG_B  out
-      dir DISP_SEG_C  out
-      dir DISP_SEG_D  out
-      dir DISP_SEG_E  out
-      dir DISP_SEG_F  out
-      dir DISP_SEG_G  out
-  else
-      ' Set in INputs - clear display
-      dir DISP_SEG_A  in
-      dir DISP_SEG_B  in
-      dir DISP_SEG_C  in
-      dir DISP_SEG_D  in
-      dir DISP_SEG_E  in
-      dir DISP_SEG_F  in
-      dir DISP_SEG_G  in
-  end if
-end sub
+' Blank command is active low
+Sub DoBlank
+    If Blank Then
+        ' Blank is active Low, so HIGH = ON
+        ' Set as Outputs
+        
+        Dir DISP_SEG_A  Out
+        Dir DISP_SEG_B  Out
+        Dir DISP_SEG_C  Out
+        Dir DISP_SEG_D  Out
+        Dir DISP_SEG_E  Out
+        Dir DISP_SEG_F  Out
+        Dir DISP_SEG_G  Out
+    Else
+        ' Set in INputs - clear display
+        Dir DISP_SEG_A  In
+        Dir DISP_SEG_B  In
+        Dir DISP_SEG_C  In
+        Dir DISP_SEG_D  In
+        Dir DISP_SEG_E  In
+        Dir DISP_SEG_F  In
+        Dir DISP_SEG_G  In
+    End If
+End Sub
 '******************************************
 
 '******************************************
 Sub Display_Memo
     ' Much smaller code then using MID()
-  for dn= 0 to len(Memo)
-      Value = ASC(Memo, dn ) ' get each in char from the string in a ASCII byte number format
-      Parse_Letters
+    For dn= 0 To Len(Memo)
+        ' get each in char from the string in a ASCII byte number format
+        Value = Asc(Memo, dn )
+        Parse_Letters
 
-  next dn
+    Next dn
 
-End sub
+End Sub
 
 
 ''******************************************
 
-Sub Parse_Letters '  Parse the Letters then display them using show
+'  Parse the Letters then display them using show
+Sub Parse_Letters
 ' Present VALUE from the string in a ASCII byte number format
 ' clear the temps
-  Letter1= 0
-  Letter2= 0
-     Select Case Value ' based on the ASCII values
-    Case 48: Letter1=  0b01111110 '0
-    Case 49: Letter1=  0b00110000 '1
-    Case 50: Letter1=  0b01101101 '2
-    Case 51: Letter1=  0b01111001 '3
-    Case 52: Letter1=  0b00110011 '4
-    Case 53: Letter1=  0b01011011 '5
-    Case 54: Letter1=  0b01011111 '6
-    Case 55: Letter1=  0b01110000 '7
-    Case 56: Letter1=  0b01111111 '8
-    Case 57: Letter1=  0b01111011 '9
-    Case 65: Letter1=  0b01110111 'A
-    Case 66: Letter1=  0b00011111 'B
-    Case 67: Letter1=  0b01001110 'C
-    Case 68: Letter1=  0b00111101 'D
-    Case 69: Letter1=  0b01001111 'E
-    Case 70: Letter1=  0b01000111 'F
-    case 71: letter1=  0b01011110 ' g
-    case 72: letter1=  0b00010111 ' h
-    case 73: letter1=  0b00000110 ' i
-    case 74: letter1=  0b00111100 ' j
-    case 75
-         letter1=   0b00110111  ' k1
-         letter2=   0b00010111  ' k2
-    case 76: letter1=  0b00001110 ' L
-    case 77
-             letter1=  0b01100010 ' M1 01100010
-             letter2=  0b00010101 ' m2
-    case 78: letter1=  0b01110110 ' n  01110110
-    case 79: letter1=  0b00011101 ' o
-    case 80: letter1=  0b01100111 ' p
-    case 81
-         letter1=   0b01110011  ' q1
-         letter2=   0b01111011  ' q2
-    case 82: letter1=  0b00000101 ' r  00000101
-    case 83: letter1=  0b01011011 ' s
-    case 84: letter1=  0b00001111 ' t
-    case 85: letter1=  0b00011100 ' u
-    case 86: letter1=  0b00111110 ' v1
-    case 87
-         letter1=   0b00100011  ' w1  00100011
-         letter2=   0b00011100  ' w2  00011100
-    case 88
-             letter1=  0b00010011 ' x1
-             letter2=  0b00100101 ' x2
-    case 89: letter1=  0b00111011 ' y
-    case 90
-        letter1=  0b01101101  ' z1
-        letter2=  0b01101100  ' z2
+    Letter1= 0
+    Letter2= 0
+    ' based on the ASCII values
+    Select Case Value
+    Case 48: Letter1=  0b01111110
+        '0
+    Case 49: Letter1=  0b00110000
+        '1
+    Case 50: Letter1=  0b01101101
+        '2
+    Case 51: Letter1=  0b01111001
+        '3
+    Case 52: Letter1=  0b00110011
+        '4
+    Case 53: Letter1=  0b01011011
+        '5
+    Case 54: Letter1=  0b01011111
+        '6
+    Case 55: Letter1=  0b01110000
+        '7
+    Case 56: Letter1=  0b01111111
+        '8
+    Case 57: Letter1=  0b01111011
+        '9
+    Case 65: Letter1=  0b01110111
+        'A
+    Case 66: Letter1=  0b00011111
+        'B
+    Case 67: Letter1=  0b01001110
+        'C
+    Case 68: Letter1=  0b00111101
+        'D
+    Case 69: Letter1=  0b01001111
+        'E
+    Case 70: Letter1=  0b01000111
+        'F
+    Case 71: letter1=  0b01011110
+        ' g
+    Case 72: letter1=  0b00010111
+        ' h
+    Case 73: letter1=  0b00000110
+        ' i
+    Case 74: letter1=  0b00111100
+        ' j
+    Case 75
+        ' k1
+        letter1=   0b00110111
+        ' k2
+        letter2=   0b00010111
+    Case 76: letter1=  0b00001110
+        ' L
+    Case 77
+        ' M1 01100010
+        letter1=  0b01100010
+        ' m2
+        letter2=  0b00010101
+    Case 78: letter1=  0b01110110
+        ' n  01110110
+    Case 79: letter1=  0b00011101
+        ' o
+    Case 80: letter1=  0b01100111
+        ' p
+    Case 81
+        ' q1
+        letter1=   0b01110011
+        ' q2
+        letter2=   0b01111011
+    Case 82: letter1=  0b00000101
+        ' r  00000101
+    Case 83: letter1=  0b01011011
+        ' s
+    Case 84: letter1=  0b00001111
+        ' t
+    Case 85: letter1=  0b00011100
+        ' u
+    Case 86: letter1=  0b00111110
+        ' v1
+    Case 87
+        ' w1  00100011
+        letter1=   0b00100011
+        ' w2  00011100
+        letter2=   0b00011100
+    Case 88
+        ' x1
+        letter1=  0b00010011
+        ' x2
+        letter2=  0b00100101
+    Case 89: letter1=  0b00111011
+        ' y
+    Case 90
+        ' z1
+        letter1=  0b01101101
+        ' z2
+        letter2=  0b01101100
 
-    case 45: letter1=  0b00000001 ' -
+    Case 45: letter1=  0b00000001
+        ' -
 
-    case 32: Letter1=   0 '  Space
+    Case 32: Letter1=   0
+        '  Space
 
-    case 95: Letter1=   0 '  Space
+    Case 95: Letter1=   0
+        '  Space
 
     End Select
 '
 
-    if Value= 95 Then   '  "_" put a short pause between double letters
-          value= 0 ' show a blank
-          show
-      wait show_timer/2 ms
+    If Value= 95 Then
+        '  "_" put a short pause between double letters
+        ' show a blank
+        value= 0
+        show
+        Wait show_timer/2 ms
     Else
-        if Letter2 =0 then
+        If Letter2 =0 Then
 
-           value= Letter1
-           show
-           wait show_timer  ms
+            value= Letter1
+            show
+            Wait show_timer  ms
 
-                else
-                   value= Letter1
-                   show
-                   wait show_timer/4 ms
-                   value= Letter2
-                   show
-                   wait show_timer/4 ms
+        Else
+            value= Letter1
+            show
+            Wait show_timer/4 ms
+            value= Letter2
+            show
+            Wait show_timer/4 ms
 
-                   value= Letter1
-                   show
-                   wait show_timer/4 ms
-                   value= Letter2
-                   show
-                   wait show_timer/4 ms
+            value= Letter1
+            show
+            Wait show_timer/4 ms
+            value= Letter2
+            show
+            Wait show_timer/4 ms
 
-                   value= Letter1
-                   show
-                   wait show_timer/4 ms
-                   value= Letter2
-                   show
-                   wait show_timer/4 ms
-         end if
-   end if
-End sub
+            value= Letter1
+            show
+            Wait show_timer/4 ms
+            value= Letter2
+            show
+            Wait show_timer/4 ms
+        End If
+    End If
+End Sub
 
 ' this version use 3x more Program and MANY more Bytes of RAM
 
@@ -368,5 +437,5 @@ End sub
 '
 '    End Select
 
-  'show_timer
+'show_timer
 

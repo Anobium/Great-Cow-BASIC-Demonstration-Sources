@@ -11,58 +11,58 @@
 '''@date    10.08.2016
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
- 'Chip Settings.
-  #chip 16f877a, 4
-  #option explicit
+'Chip Settings.
+#CHIP 16f877a, 4
+#OPTION Explicit
 
-; ----- Define Hardware settings
+' ----- Define Hardware settings
 
-  #define USART_BAUD_RATE 19200
-  #define USART_TX_BLOCKING
+#DEFINE USART_BAUD_RATE 19200
+#DEFINE USART_TX_BLOCKING
 
-; ----- Variables
-  'Dimension a word variable to hold our 16 bits.
-  dim CONSTAT as Word
+' ----- Variables
+'Dimension a word variable to hold our 16 bits.
+Dim CONSTAT As Word
 
-  'You can also use an alias to address a port than could have LEDs attached. Remove the ' and comment out the dim above.
+'You can also use an alias to address a port than could have LEDs attached. Remove the ' and comment out the dim above.
 '   dim CONSTAT as Word alias portb, portd
 '   dir portb Out
 '   dir portd Out
 
-; ----- Constants
+' ----- Constants
 
-  'Define the constants to address the bits within the word variable CONSTAT
-  #define SER_COM       CONSTAT.15
-  #define VAR_DIR       CONSTAT.14
-  #define BTTN_TYPE     CONSTAT.13
-  #define A2P_TOGGLE    CONSTAT.12
-  #define IN_PULSE      CONSTAT.11
-  #define OUT_PULSE     CONSTAT.10
-  #define LATCH         CONSTAT.9
-  #define MOMENTARY     CONSTAT.8
-  #define MOD_OUT       CONSTAT.7
-  #define IN_DIR        CONSTAT.6
-  #define OUT_DIR       CONSTAT.5
-  #define RUNNING_STATE CONSTAT.4
-  #define IN_BUTTON     CONSTAT.3
-  #define OUT_BUTTON    CONSTAT.2
-  #define A3P           CONSTAT.1
-  #define A2P           CONSTAT.0
+'Define the constants to address the bits within the word variable CONSTAT
+#DEFINE SER_COM       CONSTAT.15
+#DEFINE VAR_DIR       CONSTAT.14
+#DEFINE BTTN_TYPE     CONSTAT.13
+#DEFINE A2P_TOGGLE    CONSTAT.12
+#DEFINE IN_PULSE      CONSTAT.11
+#DEFINE OUT_PULSE     CONSTAT.10
+#DEFINE LATCH         CONSTAT.9
+#DEFINE MOMENTARY     CONSTAT.8
+#DEFINE MOD_OUT       CONSTAT.7
+#DEFINE IN_DIR        CONSTAT.6
+#DEFINE OUT_DIR       CONSTAT.5
+#DEFINE RUNNING_STATE CONSTAT.4
+#DEFINE IN_BUTTON     CONSTAT.3
+#DEFINE OUT_BUTTON    CONSTAT.2
+#DEFINE A3P           CONSTAT.1
+#DEFINE A2P           CONSTAT.0
 
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
-  'Set some initial values
+'Set some initial values
 
-  IN_BUTTON = On
-  VAR_DIR = On
-  SER_COM = On
-  MOD_OUT = On
-  MOMENTARY = On
+IN_BUTTON = On
+VAR_DIR = On
+SER_COM = On
+MOD_OUT = On
+MOMENTARY = On
 
-  do
+Do
 
     'Toggle some of the bits
     a2p =!a2p
@@ -77,10 +77,10 @@
     HSerPrint ByteToBin(CONSTAT_H)
     HSerPrint ByteToBin(CONSTAT)
     HSerPrintCRLF
-    wait 1 s
+    Wait 1 s
 
-  loop
+Loop
 
-  end
+End
 
-; ----- Support methods. Subroutines and Functions
+' ----- Support methods. Subroutines and Functions

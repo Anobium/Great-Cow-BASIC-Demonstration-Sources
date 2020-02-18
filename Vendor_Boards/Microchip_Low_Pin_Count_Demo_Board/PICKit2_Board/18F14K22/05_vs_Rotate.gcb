@@ -27,19 +27,19 @@
 '''
 
 
- #Chip 18F14K22, 8
- #config MCLRE_OFF
+#CHIP 18F14K22, 8
+#CONFIG MCLRE_OFF
 
-    dir portc out
-    'Set the whole port, all 8 bits to OFF-OFF-OFF-OFF-ON-OFF-OFF-OFF
-    'This will turn one specific LED on. Our startings LEDs
-    portc = 0b00001000
+Dir portc Out
+'Set the whole port, all 8 bits to OFF-OFF-OFF-OFF-ON-OFF-OFF-OFF
+'This will turn one specific LED on. Our startings LEDs
+portc = 0b00001000
 
-    do
-        wait  ( ( ReadAD10 ( AN0 )  / 4 ) + 1 ) ms
+Do
+    Wait  ( ( ReadAD10 ( AN0 )  / 4 ) + 1 ) ms
 
-        wait 5 ms
-        Set C off
-        Rotate portc right
-        if C = 1 then portc = 0b00001000
-    loop
+    Wait 5 ms
+    Set C Off
+    Rotate portc Right
+    If C = 1 Then portc = 0b00001000
+Loop

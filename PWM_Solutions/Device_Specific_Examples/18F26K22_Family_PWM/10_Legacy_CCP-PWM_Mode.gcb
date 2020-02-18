@@ -12,30 +12,35 @@
 '''@date    22.08.2018
 '''*************************************************************************
 
-    'Chip Settings
-    #chip 18F26K22, 64
+'Chip Settings
+#CHIP 18F26K22, 64
 
 
-    DIR portc.1 Out  'CCP2
+'CCP2
+Dir portc.1 Out
 
 
-    'Main code
+'Main code
 
-    #define PWM_Freq 38      'Frequency of PWM in KHz
-    #define PWM_Duty 50      'Duty cycle of PWM (%)
+'Frequency of PWM in KHz
+#DEFINE PWM_Freq 38
+'Duty cycle of PWM (%)
+#DEFINE PWM_Duty 50
 
-    do
-        PWMOn    'Will enable CCP1/PWM Only
+Do
+    'Will enable CCP1/PWM Only
+    PWMOn
 
-        wait 1 s
+    Wait 1 s
 
-        PWMOff   'Will disable CCP1/PWM Only
+    'Will disable CCP1/PWM Only
+    PWMOff
 
-        wait 1 s
-    loop
+    Wait 1 s
+Loop
 
 
-    end
+End
 
 
 

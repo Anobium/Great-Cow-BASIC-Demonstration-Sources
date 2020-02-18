@@ -71,59 +71,61 @@
 
 ' ----- Configuration
 
-  #Chip 16F18855, 32
+#CHIP 16F18855, 32
 
-  #option explicit
-  #include <smt_timers.h>
-  #config CLKOUTEN_ON
-
-
-    '' -------------------LATA-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D1 |-
-    ''-----------------------------------------
-    ''
-    #define LEDD2 PORTA.0
-    #define LEDD3 PORTA.1
-    #define LEDD4 PORTA.2
-    #define LEDD5 PORTA.3
-    #define Potentiometer   PORTA.4
-
-    Dir     LEDD2 OUT
-    Dir     LEDD3 OUT
-    Dir     LEDD4 OUT
-    Dir     LEDD5 OUT
-    DIR     Potentiometer In
+#OPTION Explicit
+#INCLUDE <smt_timers.h>
+#CONFIG CLKOUTEN_ON
 
 
-   SETSMT1PERIOD ( 4045000 )        ' 1.000s periodwith the parameters of SMT_FOSC and SMTPres_1 within the clock variance of the interclock
-                                    ' a perfect internal clock would be 4000000
+'' -------------------LATA-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D1 |-
+''-----------------------------------------
+''
+#DEFINE LEDD2 PORTA.0
+#DEFINE LEDD3 PORTA.1
+#DEFINE LEDD4 PORTA.2
+#DEFINE LEDD5 PORTA.3
+#DEFINE Potentiometer   PORTA.4
 
-   SETSMT2PERIOD ( 9322401 )        ' 4.600s period with the parameters of SMT_FOSC4 and SMTPres_8
-
-   InitSMT1(SMT_FOSC,SMTPres_1)
-   InitSMT2(SMT_FOSC4,SMTPres_8)
-
-
-   On Interrupt SMT1Overflow Call BlinkLEDD2
-   On interrupt SMT2Overflow Call BlinkLEDD3
-
-   StartSMT1
-   StartSMT2
-
-
-   Do
-     '// Waiting for interrupts
-
-   LOOP
+Dir     LEDD2 Out
+Dir     LEDD3 Out
+Dir     LEDD4 Out
+Dir     LEDD5 Out
+Dir     Potentiometer In
 
 
-  Sub BlinkLEDD2
+' 1.000s periodwith the parameters of SMT_FOSC and SMTPres_1 within the clock variance of the interclock
+SetSMT1Period ( 4045000 )
+' a perfect internal clock would be 4000000
+
+' 4.600s period with the parameters of SMT_FOSC4 and SMTPres_8
+SetSMT2Period ( 9322401 )
+
+InitSMT1(SMT_FOSC,SMTPres_1)
+InitSMT2(SMT_FOSC4,SMTPres_8)
+
+
+On Interrupt SMT1Overflow Call BlinkLEDD2
+On Interrupt SMT2Overflow Call BlinkLEDD3
+
+StartSMT1
+StartSMT2
+
+
+Do
+    '// Waiting for interrupts
+
+Loop
+
+
+Sub BlinkLEDD2
     LEDD2 = !LEDD2
-  End SUB
+End Sub
 
 
 
-  Sub BlinkLEDD3
+Sub BlinkLEDD3
     LEDD3 = !LEDD3
-  End SUB
+End Sub

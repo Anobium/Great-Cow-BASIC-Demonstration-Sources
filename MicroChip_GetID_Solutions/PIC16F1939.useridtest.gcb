@@ -1,16 +1,16 @@
 'read and write the UserID to EEProm read the value in PICkit+ GUI software
-  #chip 16f1938
-  #include <getuserid.h>
-  #Option Explicit
+#CHIP 16f1938
+#INCLUDE <GetUserID.h>
+#OPTION Explicit
 
-  dim Index as Byte
-  dim UserIDRegister as word
+Dim Index As Byte
+Dim UserIDRegister As Word
 
-  For Index = 0 to 0x03
+For Index = 0 To 0x03
     UserIDRegister = GetUserID(Index)
 
-    epwrite Index*2,   UserIDRegister_H
-    epwrite (Index*2)+1, UserIDRegister
+    EPWrite Index*2,   UserIDRegister_H
+    EPWrite (Index*2)+1, UserIDRegister
 
-  Next Index
+Next Index
 

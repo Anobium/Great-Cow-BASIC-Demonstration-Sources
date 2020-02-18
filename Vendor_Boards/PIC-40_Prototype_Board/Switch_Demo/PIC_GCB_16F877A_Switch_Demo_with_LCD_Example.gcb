@@ -9,76 +9,76 @@
 
 
 'Chip Settings. Assumes the development board with with a 16F877A
-#chip 16F877A,20
+#CHIP 16F877A,20
 
 
 'Use LCD in 4 pin mode and define LCD pins
- #define LCD_IO 4
- #define LCD_RW PORTE.1
- #define LCD_RS PORTE.0
- #define LCD_Enable PORTE.2
- #define LCD_DB4 PORTD.4
- #define LCD_DB5 PORTD.5
- #define LCD_DB6 PORTD.6
- #define LCD_DB7 PORTD.7
- #define LCD_Speed slow
+#DEFINE LCD_IO 4
+#DEFINE LCD_RW PORTE.1
+#DEFINE LCD_RS PORTE.0
+#DEFINE LCD_Enable PORTE.2
+#DEFINE LCD_DB4 PORTD.4
+#DEFINE LCD_DB5 PORTD.5
+#DEFINE LCD_DB6 PORTD.6
+#DEFINE LCD_DB7 PORTD.7
+#DEFINE LCD_SPEED SLOW
 
 'Define ports
- dir portb.0 in
- dir portb.1 in
- dir portb.2 in
- dir portb.4 in
+Dir portb.0 In
+Dir portb.1 In
+Dir portb.2 In
+Dir portb.4 In
 
- ' Enable enable weak pull-up function on portB.  This IS required.
- OPTION_REG.NOT_RBPU = 0
-
-
- CLS
- Print "Reset"
- wait 500 ms
- CLS
-
-do forever
-
-   locate 0,0
-   print "PortB"
-
-   locate 0,6
-   print "0"
-
-   locate 1,6
-   if portb.0 = 0 then
-      print on
-   else
-      print off
-   end if
-
-   locate 0,9
-   print "1"
-   locate 1,9
-   if portb.1 = 0 then
-      print on
-   else
-      print off
-   end if
-
-   locate 0,12
-   print "2"
-   locate 1,12
-   if portb.2 = 0 then
-      print on
-   else
-      print off
-   end if
-
-   locate 0,15
-   print "3"
-   locate 1,15
-   if portb.3 = 0 then
-      print on
-   else
-      print off
-   end if
+' Enable enable weak pull-up function on portB.  This IS required.
+OPTION_REG.NOT_RBPU = 0
 
 
-loop
+CLS
+Print "Reset"
+Wait 500 ms
+CLS
+
+Do Forever
+
+    Locate 0,0
+    Print "PortB"
+
+    Locate 0,6
+    Print "0"
+
+    Locate 1,6
+    If portb.0 = 0 Then
+        Print On
+    Else
+        Print Off
+    End If
+
+    Locate 0,9
+    Print "1"
+    Locate 1,9
+    If portb.1 = 0 Then
+        Print On
+    Else
+        Print Off
+    End If
+
+    Locate 0,12
+    Print "2"
+    Locate 1,12
+    If portb.2 = 0 Then
+        Print On
+    Else
+        Print Off
+    End If
+
+    Locate 0,15
+    Print "3"
+    Locate 1,15
+    If portb.3 = 0 Then
+        Print On
+    Else
+        Print Off
+    End If
+
+
+Loop

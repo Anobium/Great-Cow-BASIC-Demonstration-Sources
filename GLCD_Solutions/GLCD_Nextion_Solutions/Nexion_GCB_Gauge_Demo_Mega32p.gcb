@@ -25,32 +25,34 @@
 
 
 ' ----- Configuration
-    'Chip Settings.
-    #chip mega328p, 16
-    #option explicit
+'Chip Settings.
+#CHIP mega328p, 16
+#OPTION Explicit
 
 ' ----- Set up the Nextion GLCD
-    #include <glcd.h>
-    #define GLCD_TYPE GLCD_TYPE_Nextion
+#INCLUDE <glcd.h>
+#DEFINE GLCD_TYPE GLCD_TYPE_Nextion
 
 
-    ;VERY IMPORTANT!!
-    ;Change the width and height to match the rotation in the Nextion Editor
-    #define GLCD_WIDTH  320   'could be 320 | 400 | 272 | 480 but any valid dimension will work.
-    #define GLCD_HEIGHT 240  'could be 240 | 480 | 800 but any valid dimension will work.
+'VERY IMPORTANT!!
+'Change the width and height to match the rotation in the Nextion Editor
+'could be 320 | 400 | 272 | 480 but any valid dimension will work.
+#DEFINE GLCD_WIDTH  320
+'could be 240 | 480 | 800 but any valid dimension will work.
+#DEFINE GLCD_HEIGHT 240
 
 ' ----- End of set up for Nextion GLCD
 
 ' ----- Set up for Hardware Serial
-    ;VERY IMPORTANT!!
-    ;The Nextion MUST be setup for 9600 bps.
-    #define USART_BAUD_RATE 9600
-    #define USART_BLOCKING
+'VERY IMPORTANT!!
+'The Nextion MUST be setup for 9600 bps.
+#DEFINE USART_BAUD_RATE 9600
+#DEFINE USART_BLOCKING
 
-    ;VERY IMPORTANT!!
-    ;These two are optional, but very important. These constants are set in the library to use hardware serial by default.
-    #define GLCDSerialPrint HSerPrint
-    #define GLCDSerialSend  HSerSend
+'VERY IMPORTANT!!
+'These two are optional, but very important. These constants are set in the library to use hardware serial by default.
+#DEFINE GLCDSerialPrint HSerPrint
+#DEFINE GLCDSerialSend  HSerSend
 
 
 ' ----- Set up for Software Serial - this is optional - shown to explain the method.
@@ -72,31 +74,32 @@
 
 ' ----- Main program
 
-    'show front screen
-    wait 3 s
-    dim adcval as word
-    dim ScaledValue as Integer
-    dim myString as string * 32
+'show front screen
+Wait 3 s
+Dim adcval As Word
+Dim ScaledValue As Integer
+Dim myString As String * 32
 
-    'Send a page change to the device
-    GLCDSendOpInstruction_Nextion( "page",  "gauges" )
+'Send a page change to the device
+GLCDSendOpInstruction_Nextion( "page",  "gauges" )
 
-    do
+Do
 
-          'Read the ADC port AN4
-          adcval = ReadAD( AN4 )
-          'Scale the value to suit the gauge
-          ScaledValue = scale( adcval, 0, 255, -135, 135 )
+    'Read the ADC port AN4
+    adcval = ReadAD( AN4 )
+    'Scale the value to suit the gauge
+    ScaledValue = Scale( adcval, 0, 255, -135, 135 )
 
-          'Update Gauges with the values - these Nextion objects must exist
-          GLCDUpdateObject_Nextion( "z0.val",  ( 360 + ScaledValue ) mod 360 )    ' a number value for a .val object
-          GLCDUpdateObject_Nextion( "z1.val",  (180-ScaledValue) )
+    'Update Gauges with the values - these Nextion objects must exist
+    ' a number value for a .val object
+    GLCDUpdateObject_Nextion( "z0.val",  ( 360 + ScaledValue ) mod 360 )
+    GLCDUpdateObject_Nextion( "z1.val",  (180-ScaledValue) )
 
-          'Update t0.txt object with the ADC and the Scaled value - this Nextion objects must exist
-          myString = "ADC="+str(adcval)
-          myString = myString +":SCD="+str(( 360 + ScaledValue ) mod 360)
-          GLCDUpdateObject_Nextion( "t0.txt",  myString )
+    'Update t0.txt object with the ADC and the Scaled value - this Nextion objects must exist
+    myString = "ADC="+Str(adcval)
+    myString = myString +":SCD="+Str(( 360 + ScaledValue ) mod 360)
+    GLCDUpdateObject_Nextion( "t0.txt",  myString )
 
-          wait 1 ms
+    Wait 1 ms
 
-    loop
+Loop

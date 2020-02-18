@@ -27,21 +27,21 @@
 '''
 '''************************************************************************
 
-  #chip mega328p, 16
+#CHIP mega328p, 16
 
-  #define LED portb.5
-  dir LED out
+#DEFINE LED portb.5
+Dir LED Out
 
-  do Forever
+Do Forever
 
     'Read Sensor value
     ADVal = ReadAD(an0)
 
     'Is the sensor greater than 127 then turn LED on
-    if ADVal  > 127 then
-      LED = 1
-    else
-      LED = 0
-    end if
+    If ADVal  > 127 Then
+        LED = 1
+    Else
+        LED = 0
+    End If
 
-  loop
+Loop

@@ -9,28 +9,28 @@
 '''@version    1.01
 '''@date       10.10.17
 '''********************************************************************************
-    #chip 18f26k22, 16
+#CHIP 18f26k22, 16
 
 'This is the setup section for fixed mode PWM
 
 
 main:
 
-    'Do NOT forget to set the port direction... setting everything to out!
-    dir porta Out
-    dir portb Out
-    dir portc Out
+'Do NOT forget to set the port direction... setting everything to out!
+Dir porta Out
+Dir portb Out
+Dir portc Out
 
-    'Enable CCP channels
-    PWMOn
-    PWMOn ( 2 )
-    PWMOn ( 3 )
-    PWMOn ( 4 )
-    PWMOn ( 5 )
+'Enable CCP channels
+PWMOn
+PWMOn ( 2 )
+PWMOn ( 3 )
+PWMOn ( 4 )
+PWMOn ( 5 )
 
 
-    do
-    loop
+Do
+Loop
 
 End
 

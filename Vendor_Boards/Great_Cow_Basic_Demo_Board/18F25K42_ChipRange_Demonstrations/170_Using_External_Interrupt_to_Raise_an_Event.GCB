@@ -13,63 +13,68 @@
 '''@date    22.10.2017
 ' ----- Configuration
 
-    'Chip Settings.
-    'Chip Settings.
-    #chip 18f25k42, 64
-    #option Explicit
-    #config mclr=on
+'Chip Settings.
+'Chip Settings.
+#CHIP 18f25k42, 64
+#OPTION Explicit
+#CONFIG mclr=On
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | ----------| O | I |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | ----------| O | I |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------------------| X |---------
-    ''-----------------------------------------
-    ''
-
-
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define SwitchIn        PORTB.0
-
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     SwitchIn      In
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------------------| X |---------
+''-----------------------------------------
+''
 
 
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE SwitchIn        PORTB.0
+
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+Dir     SwitchIn      In
+
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
 
 
 
-    'Setup an Interrupt event when portb.0 goes negative.
-    IOCBN0 = 1
-    On Interrupt PORTChange  Call InterruptHandler
-    do
+'Setup an Interrupt event when portb.0 goes negative.
+IOCBN0 = 1
+On Interrupt PORTChange  Call InterruptHandler
+Do
 
-    loop
+Loop
 
 
-sub InterruptHandler
+Sub InterruptHandler
 
-    if IOCIF = 1 then                           'Is this our event?
-        IOCBN0  = 0                             'Prevent the event from reentering the InterruptHandler routine
-        IOCBF0  = 0                             'We must clear the flag in software
+    If IOCIF = 1 Then
+        'Is this our event?
+        'Prevent the event from reentering the InterruptHandler routine
+        IOCBN0  = 0
+        'We must clear the flag in software
+        IOCBF0  = 0
 
-        LEDD1 = !LEDD1                          'Toogle the LED
+        'Toogle the LED
+        LEDD1 = !LEDD1
 
-        IOCBN0  = 1                             'ReEnable the InterruptHandler routine
+        'ReEnable the InterruptHandler routine
+        IOCBN0  = 1
 
-    end if
+    End If
 
-end sub
+End Sub

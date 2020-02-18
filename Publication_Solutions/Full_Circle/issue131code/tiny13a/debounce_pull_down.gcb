@@ -1,8 +1,8 @@
-#chip tiny13a, 1.2
-#Option Explicit
-#Option Volatile LED
+#CHIP tiny13a, 1.2
+#OPTION Explicit
+#OPTION Volatile LED
 
-#include <softserial.h>
+#INCLUDE <softserial.h>
 
 #DEFINE SER1_BAUD 9600
 #DEFINE SER1_TXPORT PORTB
@@ -11,30 +11,33 @@
 #DEFINE LED PINB.0
 #DEFINE SWITCH PORTB.4
 
-DIM BUTTON as BYTE
-DIR TOGGLE OUT 'LED
-DIR SWITCH IN
+Dim BUTTON As Byte
+'LED
+Dir TOGGLE Out
+Dir SWITCH In
 
-SET SWITCH = 1
+Set SWITCH = 1
 
 'Main program:
-DO 'check if switch is pressed (1 = ON):
-  IF SWITCH = 1 THEN
-    Button = 0
-    DO WHILE SWITCH = 1
-      WAIT 40 MS
-      Ser1Print "Button pressed"
-      Ser1Send 13
-      Ser1Send 10
-      Button = Button + 1
-    LOOP
-    Ser1Print Button
-    Ser1Send 13
-    Ser1Send 10
-  END IF
+'check if switch is pressed (1 = ON):
+Do
+    If SWITCH = 1 Then
+        Button = 0
+        Do While SWITCH = 1
+            Wait 40 ms
+            Ser1Print "Button pressed"
+            Ser1Send 13
+            Ser1Send 10
+            Button = Button + 1
+        Loop
+        Ser1Print Button
+        Ser1Send 13
+        Ser1Send 10
+    End If
 
-  IF BUTTON > 3 THEN
-    TOGGLE = !LED
-    Ser1Print "." 'if something is wrong with the LED when pressing the 'button, the dots should appear on the serial monitor
-  END IF
-LOOP
+    If BUTTON > 3 Then
+        TOGGLE = !LED
+        'if something is wrong with the LED when pressing the 'button, the dots should appear on the serial monitor
+        Ser1Print "."
+    End If
+Loop

@@ -26,123 +26,123 @@
 
 '''
 ' ----- Configuration
-    #chip 16F18326,32
-    #option explicit
+#CHIP 16F18326,32
+#OPTION Explicit
 
 
-    '' -------------------LATC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
-    ''-----------------------------------------
-    ''
-    #define LEDD2  PORTC.0
-    #define LEDD3  PORTC.1
-    #define LEDD4  PORTC.2
-    #define LEDD5  PORTC.3
-    #define LEDBANK portc
+'' -------------------LATC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D2 |-
+''-----------------------------------------
+''
+#DEFINE LEDD2  PORTC.0
+#DEFINE LEDD3  PORTC.1
+#DEFINE LEDD4  PORTC.2
+#DEFINE LEDD5  PORTC.3
+#DEFINE LEDBANK portc
 
-    #define SWITCH_DOWN         0
-    #define SWITCH_UP           1
+#DEFINE SWITCH_DOWN         0
+#DEFINE SWITCH_UP           1
 
-    #define LED_RIGHT           TRUE
-    #define LED_LEFT            FAlSE
+#DEFINE LED_RIGHT           TRUE
+#DEFINE LED_LEFT            FALSE
 
-    #define SWITCH              PORTA.1
+#DEFINE SWITCH              PORTA.1
 
-    dim mydelay, leds  as byte
-    Dim DIRECTION as Byte
+Dim mydelay, leds  As Byte
+Dim DIRECTION As Byte
 
-    'start from the right to left
-    direction = LED_RIGHT
+'start from the right to left
+direction = LED_RIGHT
 
-    dir LEDBANK out
-    leds = 8
+Dir LEDBANK Out
+leds = 8
 
-    'Potentitor is connected to RA0...set as input
-    dir porta.0 in
+'Potentitor is connected to RA0...set as input
+Dir porta.0 In
 
-    'setup switch (SW1)
-    dir SWITCH in
+'setup switch (SW1)
+Dir SWITCH In
 
-    do
+Do
 
-        mydelay = ReadAD10( AN0 ) / 4
+    mydelay = ReadAD10( AN0 ) / 4
 
-   ' Factor the ADC reading to delay steps
-        mydelay = mydelay / 16
+    ' Factor the ADC reading to delay steps
+    mydelay = mydelay / 16
 
-       ' decrement the 4 LSbs of the ADC and delay 20ms for each
-        do while ( mydelay <> 0 )
-              mydelay--
-              wait 20 ms
-              if check_switch = true then
-                  ' toggle the direction
-                  direction = !direction
-              end if
-        loop
+    ' decrement the 4 LSbs of the ADC and delay 20ms for each
+    Do While ( mydelay <> 0 )
+        mydelay--
+        Wait 20 ms
+        If check_switch = TRUE Then
+            ' toggle the direction
+            direction = !direction
+        End If
+    Loop
 
-        LEDBANK = leds
+    LEDBANK = leds
 
-        if  direction = LED_RIGHT  then
-            'shift to the right by 1
+    If  direction = LED_RIGHT  Then
+        'shift to the right by 1
 
-            Rotate leds right simple
+        Rotate leds Right Simple
 
-            ' when the ROTATE moves the bit to bit 7, restart the pattern
-            if leds = 128 then
-               leds = 8
-            end if
+        ' when the ROTATE moves the bit to bit 7, restart the pattern
+        If leds = 128 Then
+            leds = 8
+        End If
 
-        else
-            'Set C off to ensure the carry bit does not impact
-            Set C off
-            Rotate leds left
+    Else
+        'Set C off to ensure the carry bit does not impact
+        Set C Off
+        Rotate leds Left
 
-            'when the last LED is lit, restart the pattern
-            if  leds = 16 then
-                leds = 1
-            end if
-        end if
+        'when the last LED is lit, restart the pattern
+        If  leds = 16 Then
+            leds = 1
+        End If
+    End If
 
-    loop
+Loop
 
 
 
-  'global variable - if button is held down, we don't want to keep on switching directions
-  dim previous_state as bit
-  previous_state = SWITCH_UP
+'global variable - if button is held down, we don't want to keep on switching directions
+Dim previous_state As BIT
+previous_state = SWITCH_UP
 
-  function  check_switch
-      'switch is normally open to 5V ...when pressed, RA3 is connected to GND
-      if (SWITCH = SWITCH_DOWN) then
-          'debounce by delaying and checking if switch is still pressed
-          wait 1 ms
-          if ( (previous_state =  SWITCH_DOWN) & (SWITCH = SWITCH_DOWN) ) then
-              ' don't toggle
-              check_switch = false
-              exit function
-          else
-              ' check if still down
-              if (SWITCH = SWITCH_DOWN) then
-                 previous_state = SWITCH_DOWN
-                 ' reverse the LEDs
-                 check_switch = true
-                 exit function
-             else
-              'switch not properly held down
-              previous_state = SWITCH_UP
-              ' don't reverse
-              check_switch = false
-              exit function
-             end if
-          end if
-      else
-         'switch not pressed
-          previous_state = SWITCH_UP
-          'don't reverse
-          check_switch = false
-          exit function
-      end if
+Function  check_switch
+    'switch is normally open to 5V ...when pressed, RA3 is connected to GND
+    If (SWITCH = SWITCH_DOWN) Then
+        'debounce by delaying and checking if switch is still pressed
+        Wait 1 ms
+        If ( (previous_state =  SWITCH_DOWN) & (SWITCH = SWITCH_DOWN) ) Then
+            ' don't toggle
+            check_switch = FALSE
+            Exit Function
+        Else
+            ' check if still down
+            If (SWITCH = SWITCH_DOWN) Then
+                previous_state = SWITCH_DOWN
+                ' reverse the LEDs
+                check_switch = TRUE
+                Exit Function
+            Else
+                'switch not properly held down
+                previous_state = SWITCH_UP
+                ' don't reverse
+                check_switch = FALSE
+                Exit Function
+            End If
+        End If
+    Else
+        'switch not pressed
+        previous_state = SWITCH_UP
+        'don't reverse
+        check_switch = FALSE
+        Exit Function
+    End If
 
-  end Function
+End Function
 

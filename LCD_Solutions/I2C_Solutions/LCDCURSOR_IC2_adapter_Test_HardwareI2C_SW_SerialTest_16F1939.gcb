@@ -13,196 +13,196 @@
 '''@date    17.02.2015
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
 
-  #chip 16f1939, 32
-  #option explicit
+#CHIP 16f1939, 32
+#OPTION Explicit
 
-  ; ----- Define Hardware settings
-  ' Define I2C settings - CHANGE PORTS
-  #define HI2C_BAUD_RATE 100
-  #define HI2C_DATA PORTC.4
-  #define HI2C_CLOCK PORTC.3
-  'Initialise I2C Slave
-  'I2C pins need to be input for SSP module
-  Dir HI2C_DATA in
-  Dir HI2C_CLOCK in
- 'MASTER
-  HI2CMode Master
-
-
-  '''Set up LCD
-   #define LCD_IO 10
-   #define LCD_I2C_Address_1 0x4E
-
-   'You may need to use SLOW or MEDIUM if your LCD is a slower device.
-   #define LCD_SPEED slow
-   'You may need to invert these states. Dependent of LCD I2C adapter.
-   #define LCD_Backlight_On_State  1
-   #define LCD_Backlight_Off_State 0
-
-   ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
-   ' USART settings - CHANGE PORTS if required
-   #define USART_BAUD_RATE 9600
-   Dir PORTc.6 Out
-   Dir PORTc.7 In
-   #define USART_TX_BLOCKING
-   wait 500 ms
-
-; ----- Constants
-  'None required beyond the scope of the hardware.
+' ----- Define Hardware settings
+' Define I2C settings - CHANGE PORTS
+#DEFINE HI2C_BAUD_RATE 100
+#DEFINE HI2C_DATA PORTC.4
+#DEFINE HI2C_CLOCK PORTC.3
+'Initialise I2C Slave
+'I2C pins need to be input for SSP module
+Dir HI2C_DATA In
+Dir HI2C_CLOCK In
+'MASTER
+HI2CMode Master
 
 
-; ----- Quick Command Reference:
+'''Set up LCD
+#DEFINE LCD_IO 10
+#DEFINE LCD_I2C_Address_1 0x4E
 
- '''Set LCD_10 to 10 for the YwRobot LCD1602 IIC V1 or the Sainsmart LCD_PIC I2C adapter
- '''Set LCD_10 to 12 for the Ywmjkdz I2C adapter with pot bent over top of chip
+'You may need to use SLOW or MEDIUM if your LCD is a slower device.
+#DEFINE LCD_SPEED SLOW
+'You may need to invert these states. Dependent of LCD I2C adapter.
+#DEFINE LCD_Backlight_On_State  1
+#DEFINE LCD_Backlight_Off_State 0
 
-;----- Variables
-  Dim DISPLAYNEWLINE as Byte
+' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
+' USART settings - CHANGE PORTS if required
+#DEFINE USART_BAUD_RATE 9600
+Dir PORTc.6 Out
+Dir PORTc.7 In
+#DEFINE USART_TX_BLOCKING
+Wait 500 ms
 
-
-; ----- Main body of program commences here.
-    PRINT "Great Cow Basic"
-    WAIT 1 s
-
-    Do Forever
-        SHOWI2C
-        CLS
-        WAIT 3 s
-        PRINT "START TEST"
-        locate 1,0
-        PRINT "DISPLAY ON"
-        wait 3 s
-
-        CLS
-        Locate 0,0
-        Print "Cursor ON"
-        Locate 1,0
-        LCDcursor CursorOn
-        wait 3 S
-        CLS
-        LCDcursor CursorOFF
-        locate 0,0
-        Print "Cursor OFF"
-        wait 3 s
-        CLS
-        Locate 0,0
-        Print "FLASH ON"
-        Locate 1,0
-        LCDcursor FLASHON
-        wait 3 s
-
-        CLS
-        locate 0,0
-        Print "FLASH OFF"
-        LCDCURSOR FLASHOFF
-        wait 3 sec
-
-        Locate 0,0
-        Print "CURSR & FLSH ON"
-        locate 1,0
-        LCDCURSOR CURSORON
-        LCDCURSOR FLASHON
-        Wait 3 sec
-
-        Locate 0,0
-        Print "CURSR & FLSH OFF"
-        locate 1,0
-        LCDCURSOR CursorOFF
-        LCDCURSOR FLASHOFF
-        Wait 3 sec
-
-        CLS
-        Locate 0,4
-        PRINT "Flashing"
-        Locate 1,4
-        Print "Display"
-        wait 500 ms
-
-        repeat 10
-            LCDCURSOR LCDOFF
-            wait 500 ms
-            LCDCURSOR LCDON
-            wait 500 ms
-        end repeat
-        CLS
-        Locate 0,0
-        Print "DISPLAY & BACKL."
-        Locate 1,0
-        Print "FOR 5 SEC"
-        Wait 2 SEC
-        LCDCURSOR LCDOFF
-        LCDBacklight OFF
-        WAIT 5 s
-        LCDBacklight ON
-        CLS
-        Locate 0,0
-        LCDCURSOR LCDON
-        Print "END TEST"
-        wait 3 s
-    loop
+' ----- Constants
+'None required beyond the scope of the hardware.
 
 
-end
+' ----- Quick Command Reference:
+
+'''Set LCD_10 to 10 for the YwRobot LCD1602 IIC V1 or the Sainsmart LCD_PIC I2C adapter
+'''Set LCD_10 to 12 for the Ywmjkdz I2C adapter with pot bent over top of chip
+
+'----- Variables
+Dim DISPLAYNEWLINE As Byte
 
 
-SUB SHOWI2C
-; ----- Main body of program commences here.
-  ' Now assumes Serial Terminal is operational
-  dim DeviceID as byte
+' ----- Main body of program commences here.
+Print "Great Cow Basic"
+Wait 1 s
 
-  HSerPrintCRLF
-  HSerPrint "Hardware I2C "
-  HSerPrintCRLF 2
+Do Forever
+    SHOWI2C
+    CLS
+    Wait 3 s
+    Print "START TEST"
+    Locate 1,0
+    Print "DISPLAY ON"
+    Wait 3 s
 
-      ' Now assumes Serial Terminal is operational
-      HSerPrintCRLF
-      HSerPrint "   "
-      'Create a horizontal row of numbers
-      for DeviceID = 0 to 15
-        HSerPrint hex(deviceID)
+    CLS
+    Locate 0,0
+    Print "Cursor ON"
+    Locate 1,0
+    LCDCursor CURSORON
+    Wait 3 s
+    CLS
+    LCDCursor CURSOROFF
+    Locate 0,0
+    Print "Cursor OFF"
+    Wait 3 s
+    CLS
+    Locate 0,0
+    Print "FLASH ON"
+    Locate 1,0
+    LCDCursor FLASHON
+    Wait 3 s
+
+    CLS
+    Locate 0,0
+    Print "FLASH OFF"
+    LCDCursor FLASHOFF
+    Wait 3 sec
+
+    Locate 0,0
+    Print "CURSR & FLSH ON"
+    Locate 1,0
+    LCDCursor CURSORON
+    LCDCursor FLASHON
+    Wait 3 sec
+
+    Locate 0,0
+    Print "CURSR & FLSH OFF"
+    Locate 1,0
+    LCDCursor CURSOROFF
+    LCDCursor FLASHOFF
+    Wait 3 sec
+
+    CLS
+    Locate 0,4
+    Print "Flashing"
+    Locate 1,4
+    Print "Display"
+    Wait 500 ms
+
+    Repeat 10
+        LCDCursor LCDOFF
+        Wait 500 ms
+        LCDCursor LCDON
+        Wait 500 ms
+    End Repeat
+    CLS
+    Locate 0,0
+    Print "DISPLAY & BACKL."
+    Locate 1,0
+    Print "FOR 5 SEC"
+    Wait 2 SEC
+    LCDCursor LCDOFF
+    LCDBacklight Off
+    Wait 5 s
+    LCDBacklight On
+    CLS
+    Locate 0,0
+    LCDCursor LCDON
+    Print "END TEST"
+    Wait 3 s
+Loop
+
+
+End
+
+
+Sub SHOWI2C
+' ----- Main body of program commences here.
+    ' Now assumes Serial Terminal is operational
+    Dim DeviceID As Byte
+
+    HSerPrintCRLF
+    HSerPrint "Hardware I2C "
+    HSerPrintCRLF 2
+
+    ' Now assumes Serial Terminal is operational
+    HSerPrintCRLF
+    HSerPrint "   "
+    'Create a horizontal row of numbers
+    For DeviceID = 0 To 15
+        HSerPrint Hex(deviceID)
         HSerPrint " "
-      next
+    Next
 
-      'Create a vertical column of numbers
-      for DeviceID = 0 to 255
+    'Create a vertical column of numbers
+    For DeviceID = 0 To 255
         DisplayNewLine = DeviceID % 16
-        if DisplayNewLine = 0 Then
-          HSerPrintCRLF
-          HserPrint hex(DeviceID)
-          if DisplayNewLine > 0 then
-            HSerPrint " "
-          end if
-        end if
+        If DisplayNewLine = 0 Then
+            HSerPrintCRLF
+            HSerPrint Hex(DeviceID)
+            If DisplayNewLine > 0 Then
+                HSerPrint " "
+            End If
+        End If
         HSerPrint " "
 
         'Do an initial Start
         HI2CStart
-        if HI2CWaitMSSPTimeout <> True then
+        If HI2CWaitMSSPTimeout <> TRUE Then
 
-          'Send to address to device
-          HI2CSend ( deviceID )
+            'Send to address to device
+            HI2CSend ( deviceID )
 
-          'Did device fail to respond?
-          if HI2CAckPollState = false then
-            HI2CSend ( 0 )
-            HI2CSend ( 0 )
-            HSerPrint   hex(deviceID)
-          Else
-            HSerPrint "--"
-          end if
+            'Did device fail to respond?
+            If HI2CAckpollState = FALSE Then
+                HI2CSend ( 0 )
+                HI2CSend ( 0 )
+                HSerPrint   Hex(deviceID)
+            Else
+                HSerPrint "--"
+            End If
 
-          'Do a stop.
-          HI2CStop
+            'Do a stop.
+            HI2CStop
 
-        end if
+        End If
 
-      next
+    Next
 
-      HSerPrintCRLF 2
-      HSerPrint   "End of Search"
-      HSerPrintCRLF 2
-      wait 1 s
-      END SUB
+    HSerPrintCRLF 2
+    HSerPrint   "End of Search"
+    HSerPrintCRLF 2
+    Wait 1 s
+End Sub

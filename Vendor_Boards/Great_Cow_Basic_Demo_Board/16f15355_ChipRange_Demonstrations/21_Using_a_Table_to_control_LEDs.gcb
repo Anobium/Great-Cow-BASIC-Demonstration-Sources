@@ -31,60 +31,60 @@
 
 
 
-    'Chip Settings.
-    #chip 16f15355,32
+'Chip Settings.
+#CHIP 16f15355,32
 
 
 
 
-  '' -------------------LATC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
-    ''-----------------------------------------
-    ''
-    #define LEDD2  PORTC.0
-    #define LEDD3  PORTC.1
-    #define LEDD4  PORTC.2
-    #define LEDD5  PORTC.3
-    #define LEDBANK PORTC
-    #define SWITCH      PORTA.1
+'' -------------------LATC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D2 |-
+''-----------------------------------------
+''
+#DEFINE LEDD2  PORTC.0
+#DEFINE LEDD3  PORTC.1
+#DEFINE LEDD4  PORTC.2
+#DEFINE LEDD5  PORTC.3
+#DEFINE LEDBANK PORTC
+#DEFINE SWITCH      PORTA.1
 
-    Dir     LEDD2 OUT
-    Dir     LEDD3 OUT
-    Dir     LEDD4 OUT
-    Dir     LEDD5 OUT
-    Dir      SWITCH IN
+Dir     LEDD2 Out
+Dir     LEDD3 Out
+Dir     LEDD4 Out
+Dir     LEDD5 Out
+Dir      SWITCH In
 
 '    Set LEDS off
-    LEDBANK = 0
+LEDBANK = 0
 
 
 
-    #define SWITCH_DOWN         1
-    #define SWITCH_UP           0
+#DEFINE SWITCH_DOWN         1
+#DEFINE SWITCH_UP           0
 
-     table gray_code
-        0
-        0
-        0
-        1
-        1
-        1
-        3
-        3
-        3
-        3
-        7
-        7
-        7
-        15
-        15
-        15
-     end table
+Table gray_code
+    0
+    0
+    0
+    1
+    1
+    1
+    3
+    3
+    3
+    3
+    7
+    7
+    7
+    15
+    15
+    15
+End Table
 
-    do
-        wait 5 ms
-        'Read the table value and set the port to the table value.
-        readtable gray_code, ( ReadAD ( AN0 )  / 16 ), LEDBANK
+Do
+    Wait 5 ms
+    'Read the table value and set the port to the table value.
+    ReadTable gray_code, ( ReadAD ( AN0 )  / 16 ), LEDBANK
 
-    loop
+Loop

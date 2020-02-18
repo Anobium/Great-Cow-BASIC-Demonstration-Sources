@@ -34,50 +34,53 @@
 '''
 
 
- #chip 16f1829,8
- #option explicit
+#CHIP 16f1829,8
+#OPTION Explicit
 
 
 
- #define DOWN                0
- #define UP                  1
+#DEFINE DOWN                0
+#DEFINE UP                  1
 
- #define SWITCH              PORTA.2
+#DEFINE SWITCH              PORTA.2
 
-   '' -------------------LATC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|DS4|DS3|DS2|DS1|-
-    ''-----------------------------------------
-    ''
+'' -------------------LATC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|DS4|DS3|DS2|DS1|-
+''-----------------------------------------
+''
 
-    Dim ADC_VALUE as Byte
+Dim ADC_VALUE As Byte
 
-    dir portc out
-    portc = 0
-    dir porta.2 in
-    dir porta.4 in
+Dir portc Out
+portc = 0
+Dir porta.2 In
+Dir porta.4 In
 
-    IOCAN2 = 1
-    IOCIE = 1
-    On Interrupt PORTChange  Call InterruptHandler
+IOCAN2 = 1
+IOCIE = 1
+On Interrupt PORTChange  Call InterruptHandler
 
-    do
-        EPRead ( 0, portc )
-        Sleep
+Do
+    EPRead ( 0, portc )
+    Sleep
 
-    loop
+Loop
 
 
-sub InterruptHandler
+Sub InterruptHandler
 
-    if IOCAF2 = 1 then                         ' SW1 was just pressed
-        IOCAF2 = 0                             'must clear the flag in software
-        wait 5 ms                              'debounce by waiting and seeing if still held down
-        if ( SWITCH = DOWN ) then
-            adc_value = readad ( AN3 )
+    If IOCAF2 = 1 Then
+        ' SW1 was just pressed
+        'must clear the flag in software
+        IOCAF2 = 0
+        'debounce by waiting and seeing if still held down
+        Wait 5 ms
+        If ( SWITCH = DOWN ) Then
+            adc_value = ReadAD ( AN3 )
             PORTC = adc_value
             EPWrite ( 0, adc_value )
-        end if
-    end if
+        End If
+    End If
 
-end sub
+End Sub

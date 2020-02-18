@@ -1,131 +1,131 @@
 '''A demonstration program for Explicit-Paper from WaveShare.
- '''-------------------------------------------------------------------------
+'''-------------------------------------------------------------------------
 ' -------------------------------------------------------
- '''This has been tested using the hardware and software SPI option.
+'''This has been tested using the hardware and software SPI option.
 
- '''*************************************************************************
-
-
-     'Chip Settings.
-
-     #chip mega328p, 16
-    #include <uno_mega328p.h>
-     #option explicit
-
- '******************************************************************************************************
-    'Setup the E-Paper
-     #include <glcd.h>
-
-     #define GLCD_TYPE GLCD_TYPE_EPD_EPD2in13D
-     #define GLCD_EXTENDEDFONTSET1
-     #define GLCD_TYPE_EPD2in13D_LOWMEMORY4_GLCD_MODE
-     #define GLCD_OLED_FONT
-     #define GLCD_PROTECTOVERRUN
+'''*************************************************************************
 
 
+'Chip Settings.
 
-     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-     #define GLCD_DC     DIGITAL_9
-     #define GLCD_CS     DIGITAL_10
-     #define GLCD_RESET  DIGITAL_8
-     #define GLCD_DO     DIGITAL_11
-     #define GLCD_SCK    DIGITAL_13
-     #define GLCD_Busy   DIGITAL_7
+#CHIP mega328p, 16
+#INCLUDE <uno_mega328p.h>
+#OPTION Explicit
 
- '  The following should be used   '#define EPD_HARDWARESPI     'remove comment out if you want to use software SPI.
-     #define EPD_HARDWARESPI
-     #define HWSPIMode MasterULTRAFAST
+'******************************************************************************************************
+'Setup the E-Paper
+#INCLUDE <glcd.h>
+
+#DEFINE GLCD_TYPE GLCD_TYPE_EPD_EPD2in13D
+#DEFINE GLCD_EXTENDEDFONTSET1
+#DEFINE GLCD_TYPE_EPD2in13D_LOWMEMORY4_GLCD_MODE
+#DEFINE GLCD_OLED_FONT
+#DEFINE GLCD_PROTECTOVERRUN
+
+
+
+'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+#DEFINE GLCD_DC     DIGITAL_9
+#DEFINE GLCD_CS     DIGITAL_10
+#DEFINE GLCD_RESET  DIGITAL_8
+#DEFINE GLCD_DO     DIGITAL_11
+#DEFINE GLCD_SCK    DIGITAL_13
+#DEFINE GLCD_Busy   DIGITAL_7
+
+'  The following should be used   '#define EPD_HARDWARESPI     'remove comment out if you want to use software SPI.
+#DEFINE EPD_HARDWARESPI
+#DEFINE HWSPIMode MasterULTRAFAST
 
 
 '******************************************************************************************************
 'Main program
 
-    GLCDForeground = TFT_BLACK
-    GLCDBackground = TFT_WHITE
+GLCDForeground = TFT_BLACK
+GLCDBackground = TFT_WHITE
 
-     GLCD_Open_PageTransaction
-        GLCDPrint 0,0, "Test @ Default"
-        line 0,0,GLCDDeviceWidth, GLCDDeviceHeight
-        box 0,0,GLCDDeviceWidth, GLCDDeviceHeight
-        Circle GLCDDeviceWidth/2, GLCDDeviceHeight/2, 20
-        GLCDPrintStringLN "Line X"
-        GLCDPrintStringLN "Line X+1"
-        GLCDLocateString (0, 4)
-        GLCDPrintStringLN "Line 4"
-     GLCD_Close_PageTransaction
-     wait 2 s
+GLCD_Open_PageTransaction
+GLCDPrint 0,0, "Test @ Default"
+Line 0,0,GLCDDeviceWidth, GLCDDeviceHeight
+Box 0,0,GLCDDeviceWidth, GLCDDeviceHeight
+Circle GLCDDeviceWidth/2, GLCDDeviceHeight/2, 20
+GLCDPrintStringLn "Line X"
+GLCDPrintStringLn "Line X+1"
+GLCDLocateString (0, 4)
+GLCDPrintStringLn "Line 4"
+GLCD_Close_PageTransaction
+Wait 2 s
 
-     GLCDRotate Portrait
-     GLCDForeground = TFT_WHITE
-     GLCDBackground = TFT_BLACK
+GLCDRotate Portrait
+GLCDForeground = TFT_WHITE
+GLCDBackground = TFT_BLACK
 
-     GLCD_Open_PageTransaction
-        GLCDPrint 0,0, "Test @ Portrait"
-        line 0,0,GLCDDeviceWidth, GLCDDeviceHeight
-        box 0,0,GLCDDeviceWidth, GLCDDeviceHeight
-        Circle GLCDDeviceWidth/2, GLCDDeviceHeight/2, 20
+GLCD_Open_PageTransaction
+GLCDPrint 0,0, "Test @ Portrait"
+Line 0,0,GLCDDeviceWidth, GLCDDeviceHeight
+Box 0,0,GLCDDeviceWidth, GLCDDeviceHeight
+Circle GLCDDeviceWidth/2, GLCDDeviceHeight/2, 20
 
-        GLCDPrintStringLN "Line X"
-        GLCDPrintStringLN "Line X+1"
-        GLCDLocateString (0, 4)
-        GLCDPrintStringLN "Line 4"
-     GLCD_Close_PageTransaction
-     wait 2 s
+GLCDPrintStringLn "Line X"
+GLCDPrintStringLn "Line X+1"
+GLCDLocateString (0, 4)
+GLCDPrintStringLn "Line 4"
+GLCD_Close_PageTransaction
+Wait 2 s
 
-     GLCDRotate Portrait_rev
-     GLCDForeground = TFT_BLACK
-     GLCDBackground = TFT_WHITE
+GLCDRotate Portrait_Rev
+GLCDForeground = TFT_BLACK
+GLCDBackground = TFT_WHITE
 
-     GLCD_Open_PageTransaction
-        GLCDPrint 0,0, "Test @ Portrait_rev"
-        line 0,0,GLCDDeviceWidth, GLCDDeviceHeight
-        box 0,0,GLCDDeviceWidth, GLCDDeviceHeight
-        Circle GLCDDeviceWidth/2, GLCDDeviceHeight/2, 20
+GLCD_Open_PageTransaction
+GLCDPrint 0,0, "Test @ Portrait_rev"
+Line 0,0,GLCDDeviceWidth, GLCDDeviceHeight
+Box 0,0,GLCDDeviceWidth, GLCDDeviceHeight
+Circle GLCDDeviceWidth/2, GLCDDeviceHeight/2, 20
 
-        GLCDPrintStringLN "Line X"
-        GLCDPrintStringLN "Line X+1"
-        GLCDLocateString (0, 4)
-        GLCDPrintStringLN "Line 4"
-     GLCD_Close_PageTransaction
-     wait 2 s
+GLCDPrintStringLn "Line X"
+GLCDPrintStringLn "Line X+1"
+GLCDLocateString (0, 4)
+GLCDPrintStringLn "Line 4"
+GLCD_Close_PageTransaction
+Wait 2 s
 
-     GLCDRotate Landscape
-     GLCDForeground = TFT_WHITE
-     GLCDBackground = TFT_BLACK
+GLCDRotate Landscape
+GLCDForeground = TFT_WHITE
+GLCDBackground = TFT_BLACK
 
-     GLCD_Open_PageTransaction
-        GLCDPrint 0,0, "Test @ Landscape"
-        line 0,0,GLCDDeviceWidth, GLCDDeviceHeight
-        box 0,0,GLCDDeviceWidth, GLCDDeviceHeight
-        Circle GLCDDeviceWidth/2, GLCDDeviceHeight/2, 20
+GLCD_Open_PageTransaction
+GLCDPrint 0,0, "Test @ Landscape"
+Line 0,0,GLCDDeviceWidth, GLCDDeviceHeight
+Box 0,0,GLCDDeviceWidth, GLCDDeviceHeight
+Circle GLCDDeviceWidth/2, GLCDDeviceHeight/2, 20
 
-        GLCDPrintStringLN "Line X"
-        GLCDPrintStringLN "Line X+1"
-        GLCDLocateString (0, 4)
-        GLCDPrintStringLN "Line 4"
-     GLCD_Close_PageTransaction
-     wait 2 s
+GLCDPrintStringLn "Line X"
+GLCDPrintStringLn "Line X+1"
+GLCDLocateString (0, 4)
+GLCDPrintStringLn "Line 4"
+GLCD_Close_PageTransaction
+Wait 2 s
 
-     GLCDRotate Landscape_Rev
-     GLCDForeground = TFT_BLACK
-     GLCDBackground = TFT_WHITE
+GLCDRotate Landscape_Rev
+GLCDForeground = TFT_BLACK
+GLCDBackground = TFT_WHITE
 
-     GLCD_Open_PageTransaction
-        GLCDPrint 0,0, "Test @ Landscape_Rev"
-        line 0,0,GLCDDeviceWidth, GLCDDeviceHeight
-        box 0,0,GLCDDeviceWidth, GLCDDeviceHeight
-        Circle GLCDDeviceWidth/2, GLCDDeviceHeight/2, 20
+GLCD_Open_PageTransaction
+GLCDPrint 0,0, "Test @ Landscape_Rev"
+Line 0,0,GLCDDeviceWidth, GLCDDeviceHeight
+Box 0,0,GLCDDeviceWidth, GLCDDeviceHeight
+Circle GLCDDeviceWidth/2, GLCDDeviceHeight/2, 20
 
-        GLCDPrintStringLN "Line X"
-        GLCDPrintStringLN "Line X+1"
-        GLCDLocateString (0, 4)
-        GLCDPrintStringLN "Line 4"
-     GLCD_Close_PageTransaction
-     wait 2 s
+GLCDPrintStringLn "Line X"
+GLCDPrintStringLn "Line X+1"
+GLCDLocateString (0, 4)
+GLCDPrintStringLn "Line 4"
+GLCD_Close_PageTransaction
+Wait 2 s
 
-     GLCDCLS
-     GLCDDisplay off
+GLCDCLS
+GLCDDisplay Off
 
-     do
+Do
 
-     loop
+Loop

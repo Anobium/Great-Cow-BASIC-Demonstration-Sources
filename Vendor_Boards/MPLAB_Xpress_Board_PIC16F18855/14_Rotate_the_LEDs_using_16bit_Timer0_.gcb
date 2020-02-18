@@ -24,33 +24,33 @@
 '''
 
 
-    'Chip Settings.
-    #chip 16f18855, 32
+'Chip Settings.
+#CHIP 16f18855, 32
 
-    '' -------------------LATA-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D1 |-
-    ''-----------------------------------------
-    ''
+'' -------------------LATA-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D1 |-
+''-----------------------------------------
+''
 
-    #define LEDD2 PORTA.0
-    #define LEDD3 PORTA.1
-    #define LEDD4 PORTA.2
-    #define LEDD5 PORTA.3
-    Dir     LEDD2 OUT
-    Dir     LEDD3 OUT
-    Dir     LEDD4 OUT
-    Dir     LEDD5 OUT
+#DEFINE LEDD2 PORTA.0
+#DEFINE LEDD3 PORTA.1
+#DEFINE LEDD4 PORTA.2
+#DEFINE LEDD5 PORTA.3
+Dir     LEDD2 Out
+Dir     LEDD3 Out
+Dir     LEDD4 Out
+Dir     LEDD5 Out
 
 '   Set the port as an ouput
-    dir porta out
+Dir porta Out
 '   Set the first LED on
-    Set LEDD2 on
+Set LEDD2 On
 
 
 '   Initialise the timer.
 '   Firstly tell the compiler to use a 16bit timer for this demonstration
-    #define TMR0_16BIT
+#DEFINE TMR0_16BIT
 
 '     For this we need the following:
 '       Prescaler
@@ -59,25 +59,25 @@
 '            NOT to sync Timer
 '       Post scaler
 '           1:2
-    InitTimer0 Osc, PRE0_256 + TMR0_HFINTOSC ,  POST0_2
+InitTimer0 Osc, PRE0_256 + TMR0_HFINTOSC ,  POST0_2
 '     Start the Timer
-    StartTimer 0
+StartTimer 0
 
-    'Every 1 sec
-    Settimer ( 0 , 0x0bdc  )
+'Every 1 sec
+SetTimer ( 0 , 0x0bdc  )
 
 
-    do
-            'wait for the event
-            wait while TMR0IF = 0
+Do
+    'wait for the event
+    Wait While TMR0IF = 0
 
-            ' Clearing Timer flag will reset event
-            TMR0IF = 0
-            Set C off
-            Rotate porta right
-            if C = 1 then porta.3 = 1
+    ' Clearing Timer flag will reset event
+    TMR0IF = 0
+    Set C Off
+    Rotate porta Right
+    If C = 1 Then porta.3 = 1
 
-            'Set timer to 1s before the next event occurs.  This as close as you can get to 1s
-             Settimer ( 0 , 0x0bdc )
+    'Set timer to 1s before the next event occurs.  This as close as you can get to 1s
+    SetTimer ( 0 , 0x0bdc )
 
-        loop
+Loop

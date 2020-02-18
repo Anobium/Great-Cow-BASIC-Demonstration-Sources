@@ -23,47 +23,69 @@
 
 
 'Chip settings
-  #chip 16F1789, 32    ' Select the chip and the chip speed
-  #option explicit
+' Select the chip and the chip speed
+#CHIP 16F1789, 32
+#OPTION Explicit
 
 ' Set ports
-  dir portd out          ' Set the portd as outputs
-  set portd = 255        ' Set the initial value of the state of the LEDs
+' Set the portd as outputs
+Dir portd Out
+' Set the initial value of the state of the LEDs
+Set portd = 255
 
 
 
 ' Set required variables
-  Dim DDELAY as Byte
-  ddelay = 125          ' Set the delay for the LEDs
+Dim DDELAY As Byte
+' Set the delay for the LEDs
+ddelay = 125
 
 
-  Repeat 5
+Repeat 5
 
-      PORTD=0xFF      'Turn off LED's on port D
-      wait 125 ms       'wait
+    'Turn off LED's on port D
+    PORTD=0xFF
+    'wait
+    Wait 125 ms
 
-      PORTD=0x00      ' Turn on LED's on port D
-      wait 125 ms       'wait
-  end repeat
+    ' Turn on LED's on port D
+    PORTD=0x00
+    'wait
+    Wait 125 ms
+End Repeat
 
-  PORTD=0xFF      'Turn off LED's on port D
-  wait 125 ms       'wait
+'Turn off LED's on port D
+PORTD=0xFF
+'wait
+Wait 125 ms
 
-  do forever                      ' Loop forever
+' Loop forever
+Do Forever
 
-    repeat 8                      ' Repeat this loop 8 times
-           Rotate PORTD Left      ' Rotate the portD to the left, shifting Carry Bit (equals 0 to first port)
-           wait ddelay ms         ' wait
+    ' Repeat this loop 8 times
+    Repeat 8
+        ' Rotate the portD to the left, shifting Carry Bit (equals 0 to first port)
+        Rotate PORTD Left
+        ' wait
+        Wait ddelay ms
 
-    end Repeat                    ' Loop
-    wait ddelay ms
+        ' Loop
+    End Repeat
+    Wait ddelay ms
 
-    repeat 7                      ' Repeat this loop 7 times, 7 prevents a double flash of one of the LEDs
-         Rotate PORTD Right       ' Rotate the portD to the right.
-         wait ddelay ms           ' wait
-    end Repeat                    ' loop
+    ' Repeat this loop 7 times, 7 prevents a double flash of one of the LEDs
+    Repeat 7
+        ' Rotate the portD to the right.
+        Rotate PORTD Right
+        ' wait
+        Wait ddelay ms
+        ' loop
+    End Repeat
 
-    set portd = 255               ' reinitialise the port
-    Set C off                     ' ensure the Carry Bit is 0
+    ' reinitialise the port
+    Set portd = 255
+    ' ensure the Carry Bit is 0
+    Set C Off
 
-  loop                            ' loop forever
+    ' loop forever
+Loop

@@ -1,67 +1,72 @@
-   #chip mega328p, 16
-   #include <uno_mega328p.h>
-   #option explicit
+#CHIP mega328p, 16
+#INCLUDE <uno_mega328p.h>
+#OPTION Explicit
 
- ' USART settings
-   #define USART_BAUD_RATE 57600
-   #define USART_DELAY 0 ms
-   #define USART_BLOCKING
-   #define USART_TX_BLOCKING
+' USART settings
+#DEFINE USART_BAUD_RATE 57600
+#DEFINE USART_DELAY 0 ms
+#DEFINE USART_BLOCKING
+#DEFINE USART_TX_BLOCKING
 
 
-    'SD card attached to SPI bus as follows:
-    '
-    'UNO:       MOSI - pin 11, MISO - pin 12, CLK - pin 13, CS - pin 4 (CS pin can be changed) and pin #10 (SS) must be an output
-    'Mega:      MOSI - pin 51, MISO - pin 50, CLK - pin 52, CS - pin 4 (CS pin can be changed) and pin #52 (SS) must be an output
-    'Leonardo:  Connect to hardware SPI via the ICSP header
+'SD card attached to SPI bus as follows:
+'
+'UNO:       MOSI - pin 11, MISO - pin 12, CLK - pin 13, CS - pin 4 (CS pin can be changed) and pin #10 (SS) must be an output
+'Mega:      MOSI - pin 51, MISO - pin 50, CLK - pin 52, CS - pin 4 (CS pin can be changed) and pin #52 (SS) must be an output
+'Leonardo:  Connect to hardware SPI via the ICSP header
 
-    #define SD_CS DIGITAL_10
-    #define SD_SCK DIGITAL_13
-    #define SD_DO DIGITAL_11
-    #define SD_DI DIGITAL_12
+#DEFINE SD_CS DIGITAL_10
+#DEFINE SD_SCK DIGITAL_13
+#DEFINE SD_DO DIGITAL_11
+#DEFINE SD_DI DIGITAL_12
 
-    #define SPISRAM_CS            DIGITAL_5         'Also known as SS, or Slave Select
-    #define SPISRAM_SCK           DIGITAL_13        'Also known as CLK
-    #define SPISRAM_DO            DIGITAL_11        'Also known as MOSI
-    #define SPISRAM_DI            DIGITAL_12        'Also known as MISO
+'Also known as SS, or Slave Select
+#DEFINE SPISRAM_CS            DIGITAL_5
+'Also known as CLK
+#DEFINE SPISRAM_SCK           DIGITAL_13
+'Also known as MOSI
+#DEFINE SPISRAM_DO            DIGITAL_11
+'Also known as MISO
+#DEFINE SPISRAM_DI            DIGITAL_12
 
-    #define SPISRAM_HARDWARESPI
-    #define SPISRAM_TYPE          SRAM_23LC1024
+#DEFINE SPISRAM_HARDWARESPI
+#DEFINE SPISRAM_TYPE          SRAM_23LC1024
 
-    #define HWSPIMode MASTERULTRAFAST              'MASTERSLOW | MASTER | MASTERFAST | MASTERULTRAFAST
+'MASTERSLOW | MASTER | MASTERFAST | MASTERULTRAFAST
+#DEFINE HWSPIMode MASTERULTRAFAST
 
 
 '********************************************************************************
 
 'Main program
 
-    'Wait 2 seconds to open the serial terminal
-    wait 2 s
+'Wait 2 seconds to open the serial terminal
+Wait 2 s
 
-    HSerPrintCRLF 2
+HSerPrintCRLF 2
 
-    dim spirambyteread as Byte
-    spirambyteread = 11
-    HSerPrintCRLF 2
-    dim EPD_Ind_raw,counter as long
-    counter = 0
-    HSerPrint "Reading..."
-    HSerPrintCRLF
-    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
-      'choose one....
-      'SRAMRead (  EPD_Ind_raw, spirambyteread )
+Dim spirambyteread As Byte
+spirambyteread = 11
+HSerPrintCRLF 2
+Dim EPD_Ind_raw,counter As Long
+counter = 0
+HSerPrint "Reading..."
+HSerPrintCRLF
+For EPD_Ind_raw=0 To SPISRAM_CAPACITY - 1
+    'choose one....
+    'SRAMRead (  EPD_Ind_raw, spirambyteread )
     'or, as a function
-      spirambyteread = SRAMRead (  EPD_Ind_raw )
-      if spirambyteread=0x00 then counter++
-      HSerPrint hex(spirambyteread)
-      HSerPrint ":"
-    Next
-    HSerPrintCRLF
-    HSerPrint "Wait..."
-    HSerPrint counter
-    HSerPrintCRLF
-    Wait 2 s
+    spirambyteread = SRAMRead (  EPD_Ind_raw )
+    If spirambyteread=0x00 Then counter++
+    HSerPrint Hex(spirambyteread)
+    HSerPrint ":"
+Next
+HSerPrintCRLF
+HSerPrint "Wait..."
+HSerPrint counter
+HSerPrintCRLF
+Wait 2 s
 
-do
+Do
 
-loop
+Loop

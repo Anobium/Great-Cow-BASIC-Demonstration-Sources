@@ -9,38 +9,42 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
- #chip 18F4550, 1
- #option explicit
+' ----- Configuration
+#CHIP 18F4550, 1
+#OPTION Explicit
 
 
-; ----- Define Hardware settings
-  Dir PORTC.6 Out   'Tx = Pin 25
-  Dir PORTC.7 In    'Rx = Pin 26
+' ----- Define Hardware settings
+'Tx = Pin 25
+Dir PORTC.6 Out
+'Rx = Pin 26
+Dir PORTC.7 In
 
 
-  'Config hardware UART
-  #define USART_BLOCKING
-  #define USART_BAUD_RATE 4800
+'Config hardware UART
+#DEFINE USART_BLOCKING
+#DEFINE USART_BAUD_RATE 4800
 
-  'Invert UART data polarity to connect without max232:
-  Set TXCKP On     'inverted transmit data polarity
-  Set RXDTP On     'inverted receive data polarity
-  Wait 100 Ms
+'Invert UART data polarity to connect without max232:
+'inverted transmit data polarity
+Set TXCKP On
+'inverted receive data polarity
+Set RXDTP On
+Wait 100 ms
 
 
-; ----- Variables
-  Dim INCHAR as Byte
+' ----- Variables
+Dim INCHAR As Byte
 
-; ----- Main body of program commences here.
-  HSerPrint "18F4550"
-  HSerPrintCRLF
+' ----- Main body of program commences here.
+HSerPrint "18F4550"
+HSerPrintCRLF
 
-  'Main routine
-  Start:
-    'wait for char from UART
-    HSerReceive InChar
-    'send back char to UART
-    HSerSend InChar
-  Goto Start
-  end
+'Main routine
+Start:
+'wait for char from UART
+HSerReceive InChar
+'send back char to UART
+HSerSend InChar
+Goto Start
+End

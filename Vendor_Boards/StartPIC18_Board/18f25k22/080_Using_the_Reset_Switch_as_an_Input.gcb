@@ -17,87 +17,88 @@
 '''  Date: 29.8.17
 '''
 ' ----- Configuration
-    'Chip Settings.
-    #chip 18f25k22, 16
-    'Ensure the reset switch is an input.  This will NOT reset the chip now!
-    #config mclre=off
-    #option Explicit
+'Chip Settings.
+#CHIP 18f25k22, 16
+'Ensure the reset switch is an input.  This will NOT reset the chip now!
+#CONFIG mclre=Off
+#OPTION Explicit
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | ----------| O | I |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | ----------| O | I |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------------------| X |---------
-    ''-----------------------------------------
-    ''
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------------------| X |---------
+''-----------------------------------------
+''
 
-    '' ------------------PORTE-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------| I |-------------
-    ''-----------------------------------------
-    ''
+'' ------------------PORTE-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------| I |-------------
+''-----------------------------------------
+''
 
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define Potentiometer   PORTC.5
-    #define SwitchIn        PORTB.0
-    #define LCDControl      PORTC.2
-    #define RSTButton       PORTE.3
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE Potentiometer   PORTC.5
+#DEFINE SwitchIn        PORTB.0
+#DEFINE LCDControl      PORTC.2
+#DEFINE RSTButton       PORTE.3
 
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     Potentiometer In   'this is the AN17 port
-    Dir     SwitchIn      In
-    Dir     LCDControl    Out
-    Dir     RSTButton     In
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+'this is the AN17 port
+Dir     Potentiometer In
+Dir     SwitchIn      In
+Dir     LCDControl    Out
+Dir     RSTButton     In
 
-    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
-    LCDControl = 1
+'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+LCDControl = 1
 
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
 
-     dim lastKeyDown as Byte
+Dim lastKeyDown As Byte
 
-    'Debouncing a switch
+'Debouncing a switch
 
-      Do forever
-                wait 10 ms
+Do Forever
+    Wait 10 ms
 
-                'This line is normally HIGH, so, we have to test when the line goes low.
-                if  SwitchIn = 0 then
+    'This line is normally HIGH, so, we have to test when the line goes low.
+    If  SwitchIn = 0 Then
 
-                    'push button pressed
-                    LEDD1 = 1
+        'push button pressed
+        LEDD1 = 1
 
-                Else
+    Else
 
-                    LEDD1 = 0
+        LEDD1 = 0
 
-                end if
-
-
-                'The reset line is always HIGH, so, we have to test when the line goes low.
-                if  RSTButton = 0 then
-
-                    'push button pressed
-                    LEDD2 = 1
-
-                else
-
-                    LEDD2 = 0
-
-                end if
+    End If
 
 
-      loop
+    'The reset line is always HIGH, so, we have to test when the line goes low.
+    If  RSTButton = 0 Then
+
+        'push button pressed
+        LEDD2 = 1
+
+    Else
+
+        LEDD2 = 0
+
+    End If
+
+
+Loop

@@ -23,64 +23,66 @@
 '''@date    21.12.2015
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
-     #Chip 18f45K22, 8
-
-
-; ----- Constants
-
-  #define LCD_IO 4
-  #define LCD_NO_RW
-  #define LCD_Speed SLOW 'FAST IS OK ON ARDUINO UNO R3
+#CHIP 18f45K22, 8
 
 
-  'Change as necessary
-  #define LCD_RS PortB.4
-  #define LCD_Enable PortB.5
-  #define LCD_DB4 PortB.0
-  #define LCD_DB5 PortB.1
-  #define LCD_DB6 PortB.2
-  #define LCD_DB7 PortB.3
+' ----- Constants
 
-; ----- Variables
-    DIM ad_val as integer 'lets read negative values also!
+#DEFINE LCD_IO 4
+#DEFINE LCD_NO_RW
+'FAST IS OK ON ARDUINO UNO R3
+#DEFINE LCD_SPEED SLOW
 
 
-; ----- Main body of program commences here.
-    'Show start up message
-    SPLASH
-    Wait 1 S
-    CLS
+'Change as necessary
+#DEFINE LCD_RS PortB.4
+#DEFINE LCD_Enable PortB.5
+#DEFINE LCD_DB4 PortB.0
+#DEFINE LCD_DB5 PortB.1
+#DEFINE LCD_DB6 PortB.2
+#DEFINE LCD_DB7 PortB.3
 
-    'Display fixed messages to display
-    Locate 0,0: Print  "ReadAD:"
-    Locate 1,0 : Print "ReadAD10:"
+' ----- Variables
+'lets read negative values also!
+Dim ad_val As Integer
 
-    Do
 
-      'read 8-bit value to Variable
-      ad_val = Readad(AN0)
-      Locate 0,10
-      Print ad_val
-      Print "   "
-      wait 20 ms
+' ----- Main body of program commences here.
+'Show start up message
+SPLASH
+Wait 1 s
+CLS
 
-     'read 10-bit value to Variable
-      ad_val = ReadAd10(AN0)
-      Locate 1,10
-      Print ad_val
-      Print "   "
-      wait 20 ms
+'Display fixed messages to display
+Locate 0,0: Print  "ReadAD:"
+Locate 1,0 : Print "ReadAD10:"
 
-    loop
+Do
 
-    End
+    'read 8-bit value to Variable
+    ad_val = ReadAD(AN0)
+    Locate 0,10
+    Print ad_val
+    Print "   "
+    Wait 20 ms
 
-; ----- Support methods.  Subroutines and Functions
+    'read 10-bit value to Variable
+    ad_val = ReadAD10(AN0)
+    Locate 1,10
+    Print ad_val
+    Print "   "
+    Wait 20 ms
 
-    Sub Splash
-      Locate 0,0 : Print "CHIP: ": Print ChipNameStr
-      Locate 1,0 : Print "RAM: ": Print  ChipRam: Print " Bytes"
-      Locate 2,0 : Print "MEMORY:" : Print ChipWords: Print " Words"
-    End sub
+Loop
+
+End
+
+' ----- Support methods.  Subroutines and Functions
+
+Sub Splash
+    Locate 0,0 : Print "CHIP: ": Print ChipNameStr
+    Locate 1,0 : Print "RAM: ": Print  ChipRAM: Print " Bytes"
+    Locate 2,0 : Print "MEMORY:" : Print ChipWords: Print " Words"
+End Sub

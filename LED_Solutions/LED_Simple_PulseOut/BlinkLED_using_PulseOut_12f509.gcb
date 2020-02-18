@@ -11,27 +11,27 @@
 '''@date    16/6/2019
 '''********************************************************************************
 
-; ----- Configuration
-  #chip 12F509, 4
-  #option explicit
+' ----- Configuration
+#CHIP 12F509, 4
+#OPTION Explicit
 
-; #include                  ; no solution specifc includes, default includes are always included
-
-
-; ----- Define Hardware settings
- ' none specified in the example.
+' #include                  ; no solution specifc includes, default includes are always included
 
 
-; ----- Variables
+' ----- Define Hardware settings
+' none specified in the example.
+
+
+' ----- Variables
 ' none specified in the example. All byte variables are defined upon use.
 
-; ----- Main body of program commences here.
-  Do Forever
+' ----- Main body of program commences here.
+Do Forever
 
-     'Pulse pin port (Change this if you change the chip)
-     PulseOut GPIO.2,1002 us
+    'Pulse pin port (Change this if you change the chip)
+    PulseOut GPIO.2,1002 us
 
-     'Then wait after the pin goes off
-     Wait 1002 us
+    'Then wait after the pin goes off
+    Wait 1002 us
 
-  Loop
+Loop

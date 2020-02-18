@@ -10,31 +10,33 @@
 '''@date   	23.02.15
 '''********************************************************************************
 
-; ----- Configuration
-  #chip mega8,8
-  #option explicit
+' ----- Configuration
+#CHIP mega8,8
+#OPTION Explicit
 
-; ----- Define Hardware settings
-  ' Define I2C settings - CHANGE PORTS
- #define I2C_MODE Master
- #define I2C_DATA PORTC.4
- #define I2C_CLOCK PORTC.5
- #define I2C_DISABLE_INTERRUPTS ON
-
-'---------------------------------------------------------
-;Setup LCD Parameters in IO-mode 2 with shift register 74LS164 / 74HC164 / 74LS174
- #define LCD_IO 2
- #define LCD_NO_RW
- #define LCD_DB PORTC.0       ; data
- #define LCD_CB PORTC.1       ; clock
+' ----- Define Hardware settings
+' Define I2C settings - CHANGE PORTS
+#DEFINE I2C_MODE Master
+#DEFINE I2C_DATA PORTC.4
+#DEFINE I2C_CLOCK PORTC.5
+#DEFINE I2C_DISABLE_INTERRUPTS On
 
 '---------------------------------------------------------
-;Setup LCD Parameters in IO-mode 4
+'Setup LCD Parameters in IO-mode 2 with shift register 74LS164 / 74HC164 / 74LS174
+#DEFINE LCD_IO 2
+#DEFINE LCD_NO_RW
+' data
+#DEFINE LCD_DB PORTC.0
+' clock
+#DEFINE LCD_CB PORTC.1
+
+'---------------------------------------------------------
+'Setup LCD Parameters in IO-mode 4
 '  #define LCD_IO 4
 '  #define LCD_NO_RW
 '  #define LCD_Speed MEDIUM
 
-  'Change as necessary
+'Change as necessary
 '  #define LCD_RS PortC.0
 '  #define LCD_Enable PortC.1
 '  #define LCD_DB4 Portd.4
@@ -43,90 +45,90 @@
 '  #define LCD_DB7 Portd.7
 
 '---------------------------------------------------------
-;Setup LCD Parameters in IO-mode 8
+'Setup LCD Parameters in IO-mode 8
 '  #define LCD_IO 8
 '  #define LCD_NO_RW
 '  #define LCD_Speed fast
 
-  'Change as necessary
+'Change as necessary
 '  #define LCD_RS PORTB.0
 '  #define LCD_Enable PORTB.1
 '  #define LCD_DATA_PORT PORTD
 
 '---------------------------------------------------------
 
-;----- Variables 
-  Dim DEVICEID as Byte
+'----- Variables
+Dim DEVICEID As Byte
 
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 Do
-  locate 0,0
-  Print "**Software TWI**"
-  Locate 1,0
-  Print "I2C Dev. Search "
-  Wait 3 s
-  For deviceID = 0 to 255
-     I2CStart
-     I2CSend ( deviceID )
-     If I2CSendState = True then
-        Cls
-        Locate 0,0
-        Print "ID: 0x"
-        Print hex(deviceID)
-        Select Case deviceID
-           Locate 1,0
-           case 48
-              print "DS2482_1Channel "
-           case 64
-              print "IC2/Serial_Expan"
-           case 68
-              print "IC2/Serial_Expan"
-           case 72
-              print "PCF8574 8bit I/O"
-           case 74
-              print "PCF8574 8bit I/O"
-           case 76
-              print "PCF8574 8bit I/O"
-           case 78
-              print "PCF8574 8bit I/O"
-           case 96
-              print "GCB Slave Device"
-           case 144
-              print "PCF8591 AD/DA   "
-           case 160
-              print "EEProm_Device   "
-           case 162
-              print "EEProm_Device   "
-           case 164
-              print "EEProm_Device   "
-           case 166
-              print "EEProm_Device   "
-           case 168
-              print "EEProm_Device   "
-           case 170
-              print "EEProm_Device   "
-           case 172
-              print "EEProm_Device   "
-           case 174
-              print "EEProm_Device   "
-           case 198
-              print "AXE033 I2C LCD  "
-           case 208
-              print "DS1307 RTC      "
-           case 248
-              print "FRAM_Device     "
-           case else
-              print "Unknown_Device  "
-        End select
-        deviceID++
-        wait 4 s
-     End if
-     I2CStop
-  next
-loop
+    Locate 0,0
+    Print "**Software TWI**"
+    Locate 1,0
+    Print "I2C Dev. Search "
+    Wait 3 s
+    For deviceID = 0 To 255
+        I2CStart
+        I2CSend ( deviceID )
+        If I2CSendState = TRUE Then
+            CLS
+            Locate 0,0
+            Print "ID: 0x"
+            Print Hex(deviceID)
+            Select Case deviceID
+                Locate 1,0
+            Case 48
+                Print "DS2482_1Channel "
+            Case 64
+                Print "IC2/Serial_Expan"
+            Case 68
+                Print "IC2/Serial_Expan"
+            Case 72
+                Print "PCF8574 8bit I/O"
+            Case 74
+                Print "PCF8574 8bit I/O"
+            Case 76
+                Print "PCF8574 8bit I/O"
+            Case 78
+                Print "PCF8574 8bit I/O"
+            Case 96
+                Print "GCB Slave Device"
+            Case 144
+                Print "PCF8591 AD/DA   "
+            Case 160
+                Print "EEProm_Device   "
+            Case 162
+                Print "EEProm_Device   "
+            Case 164
+                Print "EEProm_Device   "
+            Case 166
+                Print "EEProm_Device   "
+            Case 168
+                Print "EEProm_Device   "
+            Case 170
+                Print "EEProm_Device   "
+            Case 172
+                Print "EEProm_Device   "
+            Case 174
+                Print "EEProm_Device   "
+            Case 198
+                Print "AXE033 I2C LCD  "
+            Case 208
+                Print "DS1307 RTC      "
+            Case 248
+                Print "FRAM_Device     "
+            Case Else
+                Print "Unknown_Device  "
+            End Select
+            deviceID++
+            Wait 4 s
+        End If
+        I2CStop
+    Next
+Loop
 
-; ----- Support methods.  Subroutines and Functions
+' ----- Support methods.  Subroutines and Functions
 
 
 

@@ -8,42 +8,42 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
-  #chip mega328p,16
+#CHIP mega328p,16
 
-; ----- Define Hardware settings
-
-
-; ----- Constants
-  #define LED1 PORTB.1
-  #define LED2 PORTB.2
-  #define LED3 PORTB.3
-  #define LED4 PORTB.4
-
-  #define FlashDelay 125 ms
+' ----- Define Hardware settings
 
 
-; ----- Variables
-  ' No Variables specified in this example. All byte variables are defined upon use.
+' ----- Constants
+#DEFINE LED1 PORTB.1
+#DEFINE LED2 PORTB.2
+#DEFINE LED3 PORTB.3
+#DEFINE LED4 PORTB.4
+
+#DEFINE FlashDelay 125 ms
 
 
-; ----- Main body of program commences here.
+' ----- Variables
+' No Variables specified in this example. All byte variables are defined upon use.
+
+
+' ----- Main body of program commences here.
 start:
-    set LED4 OFF
-    set LED1 ON
-    wait FlashDelay
-    set LED1 OFF
-    set LED2 ON
-    wait FlashDelay
-    set LED2 OFF
-    set LED3 ON
-    wait FlashDelay
-    set LED3 OFF
-    set LED4 ON
-    wait FlashDelay
-goto start
-end
+Set LED4 Off
+Set LED1 On
+Wait FlashDelay
+Set LED1 Off
+Set LED2 On
+Wait FlashDelay
+Set LED2 Off
+Set LED3 On
+Wait FlashDelay
+Set LED3 Off
+Set LED4 On
+Wait FlashDelay
+Goto start
+End
 
 
 

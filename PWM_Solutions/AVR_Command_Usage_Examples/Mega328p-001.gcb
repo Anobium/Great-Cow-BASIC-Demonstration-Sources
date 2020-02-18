@@ -9,15 +9,15 @@
 '''@date    23.06.2017
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
-#chip mega328p, 16
+#CHIP mega328p, 16
 
-#define outport portd.5
-dir outport out
+#DEFINE outport portd.5
+Dir outport Out
 
-do
+Do
 
-  outport = !outport
+    outport = !outport
 
-loop
+Loop

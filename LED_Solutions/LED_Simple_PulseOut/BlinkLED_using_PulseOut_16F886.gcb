@@ -9,28 +9,28 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
-  #chip 16F886, 16
-;                                      ; no config. assumes defaults
+' ----- Configuration
+#CHIP 16F886, 16
+'                                      ; no config. assumes defaults
 
-; #include                                    ; no solution specifc includes, default includes are always included
-
-
-; ----- Define Hardware settings
- ' none specified in the example.
+' #include                                    ; no solution specifc includes, default includes are always included
 
 
-; ----- Variables
+' ----- Define Hardware settings
+' none specified in the example.
+
+
+' ----- Variables
 ' none specified in the example. All byte variables are defined upon use.
 
-; ----- Main body of program commences here.
-  Do Forever
+' ----- Main body of program commences here.
+Do Forever
 
-     'Pulse pin port (Change this if you change the chip)
-     PulseOut PORTB.5, 500 ms
+    'Pulse pin port (Change this if you change the chip)
+    PulseOut PORTB.5, 500 ms
 
-     'Then wait after the pin goes off
-     Wait 500 ms
-  Loop
+    'Then wait after the pin goes off
+    Wait 500 ms
+Loop
 
 

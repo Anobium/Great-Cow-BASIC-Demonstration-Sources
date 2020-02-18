@@ -9,44 +9,44 @@
 
 
 'Chip Settings. Assumes the development board with with a 16F877A
-#chip 16F1939,32
-#option explicit
+#CHIP 16F1939,32
+#OPTION Explicit
 
 
-#include <ds18b20.h>
-#include <glcd.h>
+#INCLUDE <ds18b20.h>
+#INCLUDE <glcd.h>
 
 
-#define GLCD_TYPE GLCD_TYPE_ST7920
-#define GLCD_IO 8
-#define GLCD_WIDTH 128
-#define GLCD_HEIGHT 64
+#DEFINE GLCD_TYPE GLCD_TYPE_ST7920
+#DEFINE GLCD_IO 8
+#DEFINE GLCD_WIDTH 128
+#DEFINE GLCD_HEIGHT 64
 
 ' read delay of 25 is required at 32mhz, this can be reduced to 0 for slower clock speeds
-#define ST7920ReadDelay 25
+#DEFINE ST7920ReadDelay 25
 ' write delay of 2 is required at 32mhz.  this can be reduced to 1 for slower clock speeds
-#define ST7920WriteDelay 2
+#DEFINE ST7920WriteDelay 2
 
 
-#define GLCD_RS PORTE.0
-#define GLCD_Enable PORTE.2
-#define GLCD_RW PORTE.1
-#define GLCD_RESET PORTA.0
-#define GLCD_DATA_PORT PORTD
+#DEFINE GLCD_RS PORTE.0
+#DEFINE GLCD_Enable PORTE.2
+#DEFINE GLCD_RW PORTE.1
+#DEFINE GLCD_RESET PORTA.0
+#DEFINE GLCD_DATA_PORT PORTD
 
-#define _GLCD_RS PORTE.0
-#define _GLCD_Enable PORTE.2
-#define _GLCD_RW PORTE.1
-#define _GLCD_RESET PORTA.0
-#define _GLCD_DATA_PORT PORTD
+#DEFINE _GLCD_RS PORTE.0
+#DEFINE _GLCD_Enable PORTE.2
+#DEFINE _GLCD_RW PORTE.1
+#DEFINE _GLCD_RESET PORTA.0
+#DEFINE _GLCD_DATA_PORT PORTD
 
-Dim POSX, CCOUNT, SIGNBIT, WHOLE, FRACT, DIG, MSG1LEN as Byte
-dim msg1 as string * 16
+Dim POSX, CCOUNT, SIGNBIT, WHOLE, FRACT, DIG, MSG1LEN As Byte
+Dim msg1 As String * 16
 
 
 GLCDCLS
 GLCDPrint 0, 1, "Great Cow Basic "
-wait 1 s
+Wait 1 s
 
 
 
@@ -54,92 +54,102 @@ wait 1 s
 ST7920GLCDEnableGraphics
 GLCDCLS
 
-    GLCDCLS
+GLCDCLS
 '   GLCDEnableGraphicsST7920          ;clear screen - not required
-     msg1 =  "ChipMhz@" + str(ChipMhz)
-    posx = positionmsg1( msg1 )
-    GLCDDrawString posx ,0 , msg1
+msg1 =  "ChipMhz@" + Str(ChipMHz)
+posx = positionmsg1( msg1 )
+GLCDDrawString posx ,0 , msg1
 
-    circle(10,10,10)            ;upper left
-    circle(117,10,10)           ;upper right
-    circle(63,31,10)            ;center
-    circle(63,31,20)            ;center
-    circle(10,53,10)            ;lower left
-    circle(117,53,10)           ;lower right
+'upper left
+Circle(10,10,10)
+'upper right
+Circle(117,10,10)
+'center
+Circle(63,31,10)
+'center
+Circle(63,31,20)
+'lower left
+Circle(10,53,10)
+'lower right
+Circle(117,53,10)
 
-      msg1 =  ChipNameStr
-      posx = positionmsg1( msg1 )
-    GLCDDrawString posx , 54 , msg1
-    wait 1 s                  ;wait
+msg1 =  ChipNameStr
+posx = positionmsg1( msg1 )
+GLCDDrawString posx , 54 , msg1
+'wait
+Wait 1 s
 
 
 
-  ' DS18B20 port settings - this is required
-  #define DQ PortC.3
+' DS18B20 port settings - this is required
+#DEFINE DQ PortC.3
 
-  dim TempC_100 as word   ' a variabler to handle the temperature calculations
-  ccount = 0
-  GLCDCLS          ;clear
+' a variabler to handle the temperature calculations
+Dim TempC_100 As Word
+ccount = 0
+'clear
+GLCDCLS
 
 Do
-   ' The function readtemp returns the integer value of the sensor
-   DSdata = readtemp
+    ' The function readtemp returns the integer value of the sensor
+    DSdata = ReadTemp
 
-   ' Display the integer value of the sensor on the GLCD
+    ' Display the integer value of the sensor on the GLCD
 
-   msg1 = hex(ccount)
-   msg1 = msg1 + " Int :"
-   msg1 = msg1 + str(DSdata)
-   msg1 = msg1 + "C"
-   GLCDDrawString 0,0, msg1
+    msg1 = Hex(ccount)
+    msg1 = msg1 + " Int :"
+    msg1 = msg1 + Str(DSdata)
+    msg1 = msg1 + "C"
+    GLCDDrawString 0,0, msg1
 
 
-   ' Display the integer and decimal value of the sensor on the GLCD
+    ' Display the integer and decimal value of the sensor on the GLCD
 
-   ' The function readtemp12 returns the raw value of the sensor.
-   ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
-   DSdata = readtemp12
-   SignBit = DSdata / 256 / 128
-   If SignBit = 0 Then goto Positive
-   ' its negative!
-   DSdata = ( DSdata # 0xffff ) + 1 ' take twos comp
+    ' The function readtemp12 returns the raw value of the sensor.
+    ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
+    DSdata = ReadTemp12
+    SignBit = DSdata / 256 / 128
+    If SignBit = 0 Then Goto Positive
+    ' its negative!
+    ' take twos comp
+    DSdata = ( DSdata # 0xffff ) + 1
 
 Positive:
 
-   ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
-   TempC_100 =  DSdata * 6
-   DSdata = ( DSdata * 25 ) / 100
-   TempC_100 = TempC_100 + DSdata
+    ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
+    TempC_100 =  DSdata * 6
+    DSdata = ( DSdata * 25 ) / 100
+    TempC_100 = TempC_100 + DSdata
 
-   Whole = TempC_100 / 100
-   Fract = TempC_100 % 100
+    Whole = TempC_100 / 100
+    Fract = TempC_100 % 100
 
 DisplayTemp:
 
-   msg1 = hex(ccount)
-   msg1 = msg1 + " Real:"
-   If SignBit = 0 Then
-      msg1 = msg1 + Str(Whole) + "."
-   else
-      msg1 = msg1 + "-"
-      msg1 = msg1 + Str(Whole) + "."
-   end if
+    msg1 = Hex(ccount)
+    msg1 = msg1 + " Real:"
+    If SignBit = 0 Then
+        msg1 = msg1 + Str(Whole) + "."
+    Else
+        msg1 = msg1 + "-"
+        msg1 = msg1 + Str(Whole) + "."
+    End If
 
 
-  ' To ensure the decimal part is two digits
-   Dig = Fract / 10
-   msg1 = msg1 + str( Dig )
-   Dig = Fract % 10
-   msg1 = msg1 + str( Dig )
-   msg1 = msg1 + "C"
-   msg1 = msg1 + "  "
-   GLCDDrawString 0,16, msg1
+    ' To ensure the decimal part is two digits
+    Dig = Fract / 10
+    msg1 = msg1 + Str( Dig )
+    Dig = Fract % 10
+    msg1 = msg1 + Str( Dig )
+    msg1 = msg1 + "C"
+    msg1 = msg1 + "  "
+    GLCDDrawString 0,16, msg1
 
-   wait 2 s
-   ccount++
+    Wait 2 s
+    ccount++
 
-loop
-function positionmsg1 ( in msg1 )
-      msg1len = ( ( len(msg1)  ) * GLCDFontWidth ) /2
-      positionmsg1 =  ( GLCD_Width / 2) - msg1len
-end function
+Loop
+Function positionmsg1 ( In msg1 )
+    msg1len = ( ( Len(msg1)  ) * GLCDFontWidth ) /2
+    positionmsg1 =  ( GLCD_Width / 2) - msg1len
+End Function

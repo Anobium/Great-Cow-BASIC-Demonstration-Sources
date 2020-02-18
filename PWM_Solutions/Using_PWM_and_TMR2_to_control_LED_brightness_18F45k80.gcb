@@ -28,80 +28,88 @@
 '''@version  1.0
 '''@date     29.07.2016
 
-  #chip 18F45K80, 16
+#CHIP 18F45K80, 16
 
-    #define LEDD2  PORTC.2
-    #define LEDD3  PORTC.6
-    #define LEDD4  PORTC.7
-    #define LEDD5  PORTB.5
+#DEFINE LEDD2  PORTC.2
+#DEFINE LEDD3  PORTC.6
+#DEFINE LEDD4  PORTC.7
+#DEFINE LEDD5  PORTB.5
 
-    'You do need to specfic the ports as outputs
-    Dir     LEDD2 OUT
-    Dir     LEDD3 OUT
-    Dir     LEDD4 OUT
-    Dir     LEDD5 OUT
-
-
-    'Optimise commands  for PWM modules to reduce the size of the code produced.
-    #define USE_HPWMCCP1 FALSE      ' not used Optimise
-    #define USE_HPWMCCP2 TRUE       ' not used Optimise
-    #define USE_HPWMCCP3 TRUE       ' not used Optimise
-    #define USE_HPWMCCP4 TRUE       ' not used Optimise
-    #define USE_HPWMCCP4 TRUE       ' not used Optimise
-
-    #define USE_HPWM6 FALSE         ' not used Optimise
-    #define USE_HPWM5 FALSE         ' not used Optimise
-
-    #define myFrequency 60
-    dim myDuty as byte
-    dim myPMWControl alias myDuty
-    myDuty = 127  'start at 50%
-
-    HPWM ( 2, myFrequency, myDuty )
-
-    Do Forever
-
-        Repeat 4
-              for myDuty = 0 to 255
-                  wait 1 ms
-                  HPWM ( 2, myFrequency, myDuty )
-                  HPWM ( 3, myFrequency, myDuty )
-                  HPWM ( 4, myFrequency, myDuty )
-                  HPWM ( 5, myFrequency, myDuty )
-            next
-        End Repeat
-
-        for myPMWControl = 2 to 5
-              HPWMOff ( myPMWControl )
-              wait 250 ms
-        next
-
-        for myPMWControl = 5 to 2
-              HPWM ( myPMWControl, myFrequency, 255 )
-              wait 250 ms
-        next
-
-        Repeat 4
-            for myDuty = 255 to 0
-                  wait 1 ms
-                  HPWM ( 2, myFrequency, myDuty )
-                  HPWM ( 3, myFrequency, myDuty )
-                  HPWM ( 4, myFrequency, myDuty )
-                  HPWM ( 5, myFrequency, myDuty )
-            next
-        End Repeat
-
-        for myPMWControl = 2 to 5
-              HPWM ( myPMWControl, myFrequency, 255 )
-              wait 250 ms
-        next
+'You do need to specfic the ports as outputs
+Dir     LEDD2 Out
+Dir     LEDD3 Out
+Dir     LEDD4 Out
+Dir     LEDD5 Out
 
 
-        for myPMWControl = 5 to 2
-              HPWMOff ( myPMWControl )
-              wait 250 ms
-        next
+'Optimise commands  for PWM modules to reduce the size of the code produced.
+' not used Optimise
+#DEFINE USE_HPWMCCP1 FALSE
+' not used Optimise
+#DEFINE USE_HPWMCCP2 TRUE
+' not used Optimise
+#DEFINE USE_HPWMCCP3 TRUE
+' not used Optimise
+#DEFINE USE_HPWMCCP4 TRUE
+' not used Optimise
+#DEFINE USE_HPWMCCP4 TRUE
+
+' not used Optimise
+#DEFINE USE_HPWM6 FALSE
+' not used Optimise
+#DEFINE USE_HPWM5 FALSE
+
+#DEFINE myFrequency 60
+Dim myDuty As Byte
+Dim myPMWControl Alias myDuty
+'start at 50%
+myDuty = 127
+
+HPWM ( 2, myFrequency, myDuty )
+
+Do Forever
+
+    Repeat 4
+        For myDuty = 0 To 255
+            Wait 1 ms
+            HPWM ( 2, myFrequency, myDuty )
+            HPWM ( 3, myFrequency, myDuty )
+            HPWM ( 4, myFrequency, myDuty )
+            HPWM ( 5, myFrequency, myDuty )
+        Next
+    End Repeat
+
+    For myPMWControl = 2 To 5
+        HPWMOff ( myPMWControl )
+        Wait 250 ms
+    Next
+
+    For myPMWControl = 5 To 2
+        HPWM ( myPMWControl, myFrequency, 255 )
+        Wait 250 ms
+    Next
+
+    Repeat 4
+        For myDuty = 255 To 0
+            Wait 1 ms
+            HPWM ( 2, myFrequency, myDuty )
+            HPWM ( 3, myFrequency, myDuty )
+            HPWM ( 4, myFrequency, myDuty )
+            HPWM ( 5, myFrequency, myDuty )
+        Next
+    End Repeat
+
+    For myPMWControl = 2 To 5
+        HPWM ( myPMWControl, myFrequency, 255 )
+        Wait 250 ms
+    Next
+
+
+    For myPMWControl = 5 To 2
+        HPWMOff ( myPMWControl )
+        Wait 250 ms
+    Next
 
 
 
-    Loop
+Loop

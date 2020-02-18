@@ -14,21 +14,21 @@
 '''
 
 ' ----- Configuration
-    'Chip Settings.
-    #chip 16f18855,32
+'Chip Settings.
+#CHIP 16f18855,32
 
-    '' -------------------LATA-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D1 |-
-    ''-----------------------------------------
-    ''
+'' -------------------LATA-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D1 |-
+''-----------------------------------------
+''
 
-    dir porta out
-    porta = 0b0001000
+Dir porta Out
+porta = 0b0001000
 
-    do
-        wait 1000 ms
-        Set C off
-        Rotate porta right
-        if C = 1 then porta.3 = 1
-    loop
+Do
+    Wait 1000 ms
+    Set C Off
+    Rotate porta Right
+    If C = 1 Then porta.3 = 1
+Loop

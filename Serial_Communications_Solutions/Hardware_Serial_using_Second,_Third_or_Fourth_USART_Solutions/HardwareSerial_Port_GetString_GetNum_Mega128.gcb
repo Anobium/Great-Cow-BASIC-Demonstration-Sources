@@ -18,76 +18,83 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
-#chip mega128, 16
-#option explicit
+' ----- Configuration
+#CHIP mega128, 16
+#OPTION Explicit
 
-; ----- Define USART settings
-    'Set the pin directions
-    #define USART_BAUD_RATE 9600
-    #define USART_BLOCKING
-    '#define USART_TX_BLOCKING					'Optionally you can set Transmit to blocking on USART1
-    #define USART2_BAUD_RATE 9600
-    '#define USART_TX_BLOCKING					'Optionally you can set Transmit to blocking
-    #define USART2_BLOCKING
-    '#define USART3_BAUD_RATE 9600			'Optionally you can setup USART3
-    '#define USART3_BLOCKING						'Optionally you can set receive on USART3 to blocking
-    '#define USART4_BAUD_RATE 9600			'Optionally you can setup USART4
-    '#define USART4_BLOCKING						'Optionally you can set receive on USART4 to blocking
-
-
-; ----- Define Hardware settings
-  'Set pin directions
-  Dir PortE.1 Out	'com1   USART0
-  Dir PortE.0 In
-	Dir PortD.3 Out	'com2   USART1
-  Dir PortD.2 In
-
-; ----- Variables
-  Dim myNum as Word
-  Dim myString as string
-  Dim INCHAR as Byte
+' ----- Define USART settings
+'Set the pin directions
+#DEFINE USART_BAUD_RATE 9600
+#DEFINE USART_BLOCKING
+'#define USART_TX_BLOCKING					'Optionally you can set Transmit to blocking on USART1
+#DEFINE USART2_BAUD_RATE 9600
+'#define USART_TX_BLOCKING					'Optionally you can set Transmit to blocking
+#DEFINE USART2_BLOCKING
+'#define USART3_BAUD_RATE 9600			'Optionally you can setup USART3
+'#define USART3_BLOCKING						'Optionally you can set receive on USART3 to blocking
+'#define USART4_BAUD_RATE 9600			'Optionally you can setup USART4
+'#define USART4_BLOCKING						'Optionally you can set receive on USART4 to blocking
 
 
-; ----- Main body of program commences here.
-		'Allow programmer to complete and terminal to reset
-    wait 3 s
+' ----- Define Hardware settings
+'Set pin directions
+'com1   USART0
+Dir PortE.1 Out
+Dir PortE.0 In
+'com2   USART1
+Dir PortD.3 Out
+Dir PortD.2 In
 
-    'Message after reset
-    HSerPrint "ATmega128  com test"
-    HSerPrintCRLF
+' ----- Variables
+Dim myNum As Word
+Dim myString As String
+Dim INCHAR As Byte
 
-    'Main routine  hook up serials connections and use terminal program to check
-    Do Forever
 
-        HSerPrint "SEND AnyKey 5 times",1		' Sends message on USART1 to terminal. Specifies USART 1
-        HSerSend(13, 1)											'Sends CR to USART1
-        Repeat 5
+' ----- Main body of program commences here.
+'Allow programmer to complete and terminal to reset
+Wait 3 s
 
-            Inchar = HSerReceiveFrom( 2 ) 'Receives a byte char  on USART2
-            HSerSend InChar,1							' Sends the byte back out on USART2
-            HSerSend(13,1)								'Sends a Carriage Return CR to jump to next line on terminal
+'Message after reset
+HSerPrint "ATmega128  com test"
+HSerPrintCRLF
 
-        End Repeat
+'Main routine  hook up serials connections and use terminal program to check
+Do Forever
 
-        HSerPrint "SEND a Number value 5 times with enter at the end of each number value",1
+    ' Sends message on USART1 to terminal. Specifies USART 1
+    HSerPrint "SEND AnyKey 5 times",1
+    'Sends CR to USART1
+    HSerSend(13, 1)
+    Repeat 5
+
+        'Receives a byte char  on USART2
+        Inchar = HSerReceiveFrom( 2 )
+        ' Sends the byte back out on USART2
+        HSerSend InChar,1
+        'Sends a Carriage Return CR to jump to next line on terminal
         HSerSend(13,1)
-        Repeat 5
 
-            HSerGetNum myNum,2
-            HSerPrint myNum,1
-            HSerSend(13,1)
+    End Repeat
 
-        End Repeat
+    HSerPrint "SEND a Number value 5 times with enter at the end of each number value",1
+    HSerSend(13,1)
+    Repeat 5
 
-        HSerPrint "SEND Any string 5 times with enter at the end of each string",1
+        HSerGetNum myNum,2
+        HSerPrint myNum,1
         HSerSend(13,1)
-        Repeat 5
 
-            HSerGetString MyString,2
-            HSerPrint MyString,1
-            HSerSend(13,1)
+    End Repeat
 
-        End Repeat
+    HSerPrint "SEND Any string 5 times with enter at the end of each string",1
+    HSerSend(13,1)
+    Repeat 5
 
-    Loop
+        HSerGetString MyString,2
+        HSerPrint MyString,1
+        HSerSend(13,1)
+
+    End Repeat
+
+Loop

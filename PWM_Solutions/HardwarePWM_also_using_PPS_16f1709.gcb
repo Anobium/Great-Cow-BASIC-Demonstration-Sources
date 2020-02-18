@@ -9,47 +9,52 @@
 '''@date   	02.12.2015
 '''********************************************************************************
 
-; ----- Configuration
-#chip 16f1709, 4
-#option explicit
+' ----- Configuration
+#CHIP 16f1709, 4
+#OPTION Explicit
 
 
-	'Set the PPS of the PWM and the RS232 ports.
-    Intoff
-  	PPSLOCK = 0x55
-    PPSLOCK = 0xAA
-    PPSLOCKED = 0x00 	'unlock PPS
+'Set the PPS of the PWM and the RS232 ports.
+IntOff
+PPSLOCK = 0x55
+PPSLOCK = 0xAA
+'unlock PPS
+PPSLOCKED = 0x00
 
-    'RC5PPS = 0x0C     'RC5->CCP1:CCP1
-    RA0PPS = 0x0C;     'RA0->CCP1:CCP1
-    RXPPS=0x0D        'Peripheral input is RB5
-		RB7PPS=0x14       'Pin RB7 source is TX/CK
-    PPSLOCK = 0x55
-    PPSLOCK = 0xAA
-    PPSLOCKED = 0x01  'lock PPS
-
-
-    DIR PORTC.5 out
-    DIR PORTA.0 out
-
-
-; ----- Variables
-  Dim BRIGHT as Byte
+'RC5PPS = 0x0C     'RC5->CCP1:CCP1
+'     'RA0->CCP1:CCP1
+RA0PPS = 0x0C
+'Peripheral input is RB5
+RXPPS=0x0D
+'Pin RB7 source is TX/CK
+RB7PPS=0x14
+PPSLOCK = 0x55
+PPSLOCK = 0xAA
+'lock PPS
+PPSLOCKED = 0x01
 
 
-; ----- Main body of program commences here.
+Dir PORTC.5 Out
+Dir PORTA.0 Out
 
-    do
-        'Turn up brightness over 2.5 seconds
-        For Bright = 0 to 255
-            HPWM 1, 40, Bright
-            wait 10 ms
-        next
-        wait 500 ms
-        'Turn down brightness over 2.5 seconds
-        For Bright = 255 to 0
-            HPWM 1, 40, Bright
-            wait 10 ms
-        next
-        wait 500 ms
-    loop
+
+' ----- Variables
+Dim BRIGHT As Byte
+
+
+' ----- Main body of program commences here.
+
+Do
+    'Turn up brightness over 2.5 seconds
+    For Bright = 0 To 255
+        HPWM 1, 40, Bright
+        Wait 10 ms
+    Next
+    Wait 500 ms
+    'Turn down brightness over 2.5 seconds
+    For Bright = 255 To 0
+        HPWM 1, 40, Bright
+        Wait 10 ms
+    Next
+    Wait 500 ms
+Loop

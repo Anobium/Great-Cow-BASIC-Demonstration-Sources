@@ -9,27 +9,32 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
-  #chip 18F14k50, 1
-  'Switch Low-Volt-Programming:
-   LVP = Off
+' ----- Configuration
+#CHIP 18F14k50, 1
+'Switch Low-Volt-Programming:
+LVP = Off
 
-  ' #include
-  ' no solution specifc includes, default includes are always included                                  ; no solution specifc includes, default includes are always included
+' #include
+' no solution specifc includes, default includes are always included                                  ; no solution specifc includes, default includes are always included
 
 
-; ----- Define Hardware settings
-  ' this is required to tell the microprocessor the port is an output
-  ' (PORTB.6 = Pin 11 on PIC18F14k50)
-  Dir PORTB.6 Out
+' ----- Define Hardware settings
+' this is required to tell the microprocessor the port is an output
+' (PORTB.6 = Pin 11 on PIC18F14k50)
+Dir PORTB.6 Out
 
-; ----- Variables
+' ----- Variables
 ' none specified in the example. All byte variables are defined upon use.
 
-; ----- Main body of program commences here.
-  Start:
-    Set PORTB.6 ON   'turn LED on
-    Wait 100 Ms      'wait 100 milliseconds
-    Set PORTB.6 OFF  'turn LED off
-    Wait 900 Ms      'wait 900 milliseconds
-  Goto Start               'jump back to the start of the program
+' ----- Main body of program commences here.
+Start:
+'turn LED on
+Set PORTB.6 On
+'wait 100 milliseconds
+Wait 100 ms
+'turn LED off
+Set PORTB.6 Off
+'wait 900 milliseconds
+Wait 900 ms
+'jump back to the start of the program
+Goto Start

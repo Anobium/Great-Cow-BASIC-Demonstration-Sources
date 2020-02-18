@@ -9,55 +9,55 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
- #chip 16F886, 16
- #option explicit
- #include <ds18b20.h>
+' ----- Configuration
+#CHIP 16F886, 16
+#OPTION Explicit
+#INCLUDE <ds18b20.h>
 
-; ----- Define Hardware settings
-  'Config Software-UART - Microchip direct to PC
-  Dir PORTc.6 Out
-  Dir PORTc.7 In
-  #define SendAHigh Set PORTc.6 On
-  #define SendALow Set PORTc.6 Off
-  #define RecAHigh PORTc.7 ON
-  #define RecALow PORTc.7 OFF
-  #define SerSendDelayms 10
-  InitSer 1, r4800, 1+WaitForStart, 8, 1, None, Invert
+' ----- Define Hardware settings
+'Config Software-UART - Microchip direct to PC
+Dir PORTc.6 Out
+Dir PORTc.7 In
+#DEFINE SendAHigh Set PORTc.6 On
+#DEFINE SendALow Set PORTc.6 Off
+#DEFINE RecAHigh PORTc.7 On
+#DEFINE RecALow PORTc.7 Off
+#DEFINE SerSendDelayms 10
+InitSer 1, r4800, 1+WaitForStart, 8, 1, None, Invert
 
-; ----- Constants
-  ' DS18B20 port settings
-  #define DQ PortC.3
+' ----- Constants
+' DS18B20 port settings
+#DEFINE DQ PortC.3
 
-; ----- Variables
-  Dim CCOUNT as Byte
+' ----- Variables
+Dim CCOUNT As Byte
 
-; ----- Main body of program commences here.
-  ccount = 1
+' ----- Main body of program commences here.
+ccount = 1
 
-  'Serial print two new line commands
-  SerSend 1, 13: SerSend 1, 10
-  SerSend 1, 13: SerSend 1, 10
-  'Serial print a start messagr
-  SerPrint 1, "Temperature Sensor"
-  SerSend 1, 13: SerSend 1, 10
-  SerSend 1, 13: SerSend 1, 10
-  do forever
-     ' The Readtemp function returns the integer value of the sensor
-     DSdata = readtemp
+'Serial print two new line commands
+SerSend 1, 13: SerSend 1, 10
+SerSend 1, 13: SerSend 1, 10
+'Serial print a start messagr
+SerPrint 1, "Temperature Sensor"
+SerSend 1, 13: SerSend 1, 10
+SerSend 1, 13: SerSend 1, 10
+Do Forever
+    ' The Readtemp function returns the integer value of the sensor
+    DSdata = ReadTemp
 
-     'Serial print the event count
-     SerPrint 1, hex(ccount)
-     SerPrint 1, ":"
-     'Serial print a tab
-     SerSend 1, 9
-     ' Serial print the integer value of the sensor on the LCD
-     SerPrint 1, DSdata
-     'Serial print a special character
-     SerPrint 1, chr(0xB0)+"C"
-     SerSend 1, 13: SerSend 1, 10
-     wait 2 s
-     ccount++
+    'Serial print the event count
+    SerPrint 1, Hex(ccount)
+    SerPrint 1, ":"
+    'Serial print a tab
+    SerSend 1, 9
+    ' Serial print the integer value of the sensor on the LCD
+    SerPrint 1, DSdata
+    'Serial print a special character
+    SerPrint 1, CHR(0xB0)+"C"
+    SerSend 1, 13: SerSend 1, 10
+    Wait 2 s
+    ccount++
 
-  loop
+Loop
 

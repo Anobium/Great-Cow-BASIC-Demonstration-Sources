@@ -7,29 +7,30 @@
 '''@date    03/05/2018
 '''********************************************************************
 
-  #Chip 16F18446
- #config MCLRE_OFF    ' Allow RA3 to be used as an Input
+#CHIP 16F18446
+' Allow RA3 to be used as an Input
+#CONFIG MCLRE_OFF
 
-  #define DOWN        0
-  #define UP          1
-  #define SWITCH      PORTA.3
-  #define LED         PortC.0
+#DEFINE DOWN        0
+#DEFINE UP          1
+#DEFINE SWITCH      PORTA.3
+#DEFINE LED         PortC.0
 
-  dir portc out
-  portc = 0
+Dir portc Out
+portc = 0
 
-  'setup switch (SW1)
-  dir porta.3 in
+'setup switch (SW1)
+Dir porta.3 In
 
-  do
-    if ( SWITCH = DOWN ) then
-      wait 10 ms
-      if ( SWITCH = DOWN ) Then
-        Set LED ON
-      end if
-    else
-      Set LED OFF
-    end if
-  loop
+Do
+    If ( SWITCH = DOWN ) Then
+        Wait 10 ms
+        If ( SWITCH = DOWN ) Then
+            Set LED On
+        End If
+    Else
+        Set LED Off
+    End If
+Loop
 
 End

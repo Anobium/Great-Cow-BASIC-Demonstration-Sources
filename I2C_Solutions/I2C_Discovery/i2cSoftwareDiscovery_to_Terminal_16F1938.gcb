@@ -10,60 +10,60 @@
 '''@date    14.02.15
 '''********************************************************************************
 
-; ----- Configuration
-  #chip 16F1938, 32
-  #option explicit
-  #include "displaydevices.h"
+' ----- Configuration
+#CHIP 16F1938, 32
+#OPTION Explicit
+#INCLUDE "displaydevices.h"
 
 
-; ----- Define Hardware settings
-  ' Define I2C settings - CHANGE PORTS
- #define I2C_MODE Master
- #define I2C_DATA PORTC.4
- #define I2C_CLOCK PORTC.3
- #define I2C_DISABLE_INTERRUPTS ON
+' ----- Define Hardware settings
+' Define I2C settings - CHANGE PORTS
+#DEFINE I2C_MODE Master
+#DEFINE I2C_DATA PORTC.4
+#DEFINE I2C_CLOCK PORTC.3
+#DEFINE I2C_DISABLE_INTERRUPTS On
 
- ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
- ' USART settings - CHANGE PORTS if required
- #define USART_BAUD_RATE 9600
- Dir PORTc.6 Out
- Dir PORTc.7 In
- #define USART_DELAY 5 ms
- #define SerSendDelayms 10
- #define USART_BLOCKING
- wait 500 ms
+' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
+' USART settings - CHANGE PORTS if required
+#DEFINE USART_BAUD_RATE 9600
+Dir PORTc.6 Out
+Dir PORTc.7 In
+#DEFINE USART_DELAY 5 ms
+#DEFINE SerSendDelayms 10
+#DEFINE USART_BLOCKING
+Wait 500 ms
 
-;----- Variables
-  Dim TESTID as Byte
+'----- Variables
+Dim TESTID As Byte
 
-; ----- Main body of program commences here.
-         ' Now assumes Serial Terminal is operational
-         HSerPrintCRLF
-         HSerPrint "Software I2C "
-         HSerPrintCRLF 2
+' ----- Main body of program commences here.
+' Now assumes Serial Terminal is operational
+HSerPrintCRLF
+HSerPrint "Software I2C "
+HSerPrintCRLF 2
 
-   wait 2 s
-  dim DeviceID as byte
+Wait 2 s
+Dim DeviceID As Byte
 
-      for DeviceID = 0 to 255
-        I2CStart
-        I2CSend ( deviceID )
-        I2CSend ( 0 )
-        i2cstop
+For DeviceID = 0 To 255
+    I2CStart
+    I2CSend ( deviceID )
+    I2CSend ( 0 )
+    I2CStop
 
-        if I2CSendState = True  then
-          HSerPrint   "__"
-          HSerPrint   "ID: 0x"
-          HSerPrint   hex(deviceID)
-          HSerPrint   " (d"
-          HSerPrint   Str(deviceID)
-          HSerPrint   ") - "
-          HSerSend  9
-          HSerPrint   "I2C Port "
-          testid = deviceID | 1
-          DisplayDevices
-          HSerPrintCRLF
-        end if
-      next
-      HSerPrint   "End of Search": HSerPrintCRLF 2
-  END
+    If I2CSendState = TRUE  Then
+        HSerPrint   "__"
+        HSerPrint   "ID: 0x"
+        HSerPrint   Hex(deviceID)
+        HSerPrint   " (d"
+        HSerPrint   Str(deviceID)
+        HSerPrint   ") - "
+        HSerSend  9
+        HSerPrint   "I2C Port "
+        testid = deviceID | 1
+        DisplayDevices
+        HSerPrintCRLF
+    End If
+Next
+HSerPrint   "End of Search": HSerPrintCRLF 2
+End

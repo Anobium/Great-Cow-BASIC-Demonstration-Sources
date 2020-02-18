@@ -18,58 +18,64 @@
 '''@date   		01.04.2015
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
- #chip 16F88, 8
- #option explicit
-
-
- #include <maths.h>
+#CHIP 16F88, 8
+#OPTION Explicit
 
 
-; ----- Constants
- #define LCD_IO      4           ;4-bit mode
- #define LCD_RS      PortB.2
- #define LCD_Enable  PortB.3
- #define LCD_DB4     PortB.4
- #define LCD_DB5     PortB.5
- #define LCD_DB6     PortB.6
- #define LCD_DB7     PortB.7
- #define LCD_NO_RW
-
-; ----- Define Hardware settings
- dir PortB out                   ;all outputs to the LCD
-
-; ----- Variables
- dim ii as word
- dim outStr, valStr as string
- Dim LENGTH as Byte
+#INCLUDE <maths.h>
 
 
-; ----- Main body of program commences here.
+' ----- Constants
+'4-bit mode
+#DEFINE LCD_IO      4
+#DEFINE LCD_RS      PortB.2
+#DEFINE LCD_Enable  PortB.3
+#DEFINE LCD_DB4     PortB.4
+#DEFINE LCD_DB5     PortB.5
+#DEFINE LCD_DB6     PortB.6
+#DEFINE LCD_DB7     PortB.7
+#DEFINE LCD_NO_RW
 
-  for ii = 0 to 100                ;print first 100 square roots
-    cls
-    print "sqrt("
-    print ii
-    print ")="
+' ----- Define Hardware settings
+'all outputs to the LCD
+Dir PortB Out
 
-    valStr = str(sqrt(ii))         ;format decimal nicely
-    length = len(valStr)
+' ----- Variables
+Dim ii As Word
+Dim outStr, valStr As String
+Dim LENGTH As Byte
 
-    select case length
-     case 1:
-        outStr = "0.00"           ;zero case
-     case 3:
-        outStr = left(valStr,1)+ "."+right(valStr,2)
-      case 4:
-        outStr = left(valStr,2)+ "."+right(valStr,2)
-      case 5:
-        outStr = left(valStr,3)+ "."+right(valStr,2)
-    end select
 
-    print outStr                  ;display results
-    wait 2 S
-  next ii
+' ----- Main body of program commences here.
 
-; ----- Support methods.  Subroutines and Functions
+'print first 100 square roots
+For ii = 0 To 100
+    CLS
+    Print "sqrt("
+    Print ii
+    Print ")="
+
+    'format decimal nicely
+    valStr = Str(Sqrt(ii))
+    length = Len(valStr)
+
+    Select Case length
+    Case 1:
+        'zero case
+        outStr = "0.00"
+    Case 3:
+        outStr = Left(valStr,1)+ "."+Right(valStr,2)
+    Case 4:
+        outStr = Left(valStr,2)+ "."+Right(valStr,2)
+    Case 5:
+        outStr = Left(valStr,3)+ "."+Right(valStr,2)
+    End Select
+
+    'display results
+    Print outStr
+    Wait 2 s
+Next ii
+
+' ----- Support methods.  Subroutines and Functions

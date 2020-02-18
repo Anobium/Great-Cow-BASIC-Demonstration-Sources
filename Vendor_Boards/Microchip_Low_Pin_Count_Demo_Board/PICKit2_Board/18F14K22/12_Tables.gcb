@@ -25,10 +25,10 @@
 ''''''*****************************************************************
 '''
 
- #chip 18F14K22,8
- #config MCLRE_OFF
+#CHIP 18F14K22,8
+#CONFIG MCLRE_OFF
 
- table gray_code
+Table gray_code
     0
     1
     3
@@ -45,28 +45,29 @@
     11
     9
     8
- end table
+End Table
 
-    dir portc out
-
-
-    dim maxADCReading, myArrayIndex, myADCReading as Word
-    maxADCReading = 0
+Dir portc Out
 
 
-    do
-        wait 5 ms
+Dim maxADCReading, myArrayIndex, myADCReading As Word
+maxADCReading = 0
 
-        'Read the ADC  and store the result in the variable
-        myADCReading = ReadAD10 ( AN0 , true )
 
-        'Store the maximum value of the ADC in the variable.  We are showing this to ensure the ADC has a dynamic range.
-        if myADCReading > maxADCReading Then
-            maxADCReading = myADCReading
-        end if
+Do
+    Wait 5 ms
 
-        myArrayIndex = scale ( myADCReading, 0, maxADCReading, 1, 16 )
+    'Read the ADC  and store the result in the variable
+    myADCReading = ReadAD10 ( AN0 , TRUE )
 
-        readtable gray_code, myArrayIndex , portc  ' calcualtion to ensure max value 15, equates to all 4 LEDS on
+    'Store the maximum value of the ADC in the variable.  We are showing this to ensure the ADC has a dynamic range.
+    If myADCReading > maxADCReading Then
+        maxADCReading = myADCReading
+    End If
 
-    loop
+    myArrayIndex = Scale ( myADCReading, 0, maxADCReading, 1, 16 )
+
+    ' calcualtion to ensure max value 15, equates to all 4 LEDS on
+    ReadTable gray_code, myArrayIndex , portc
+
+Loop

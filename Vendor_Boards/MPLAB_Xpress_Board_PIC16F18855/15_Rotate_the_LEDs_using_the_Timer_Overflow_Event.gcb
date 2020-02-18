@@ -24,60 +24,63 @@
 '''
 
 
-    'Chip Settings.
-    #chip 16f18855, 32
-    #option explicit
+'Chip Settings.
+#CHIP 16f18855, 32
+#OPTION Explicit
 
 
-    'Set the PPS of the PWM
-    'Set the PPS for this solution.
-  #startup InitPPS, 85
+'Set the PPS of the PWM
+'Set the PPS for this solution.
+#STARTUP InitPPS, 85
 
-  Sub InitPPS
+Sub InitPPS
     UNLOCKPPS
 
     'Set the PPS of the RS232 ports.
-      RC0PPS = 0x0010     'RC0->EUSART:TX;
-      RXPPS  = 0x0011     'RC1->EUSART:RX;
+    'RC0->EUSART:TX;
+    RC0PPS = 0x0010
+    'RC1->EUSART:RX;
+    RXPPS  = 0x0011
 
-      RB0PPS = 0x18;   //RB0->TMR0:TMR0;
-      LOCKPPS
-  End sub
+    '   //RB0->TMR0:TMR0;
+    RB0PPS = 0x18
+    LOCKPPS
+End Sub
 
-    '-------------------LATA-----------------
-    'Bit#:  -7---6---5---4---3---2---1---0---
-    'LED:   ---------------|D5 |D4 |D3 |D2 |-
-    ''-----------------------------------------
-    ''
+'-------------------LATA-----------------
+'Bit#:  -7---6---5---4---3---2---1---0---
+'LED:   ---------------|D5 |D4 |D3 |D2 |-
+''-----------------------------------------
+''
 
-    Dim TIMEOUT as Byte
+Dim TIMEOUT As Byte
 
-; ----- Constants
-    #define USART_BAUD_RATE 115200
-    #define USART_TX_BLOCKING
+' ----- Constants
+#DEFINE USART_BAUD_RATE 115200
+#DEFINE USART_TX_BLOCKING
 '
 
 
-    #define LEDD2 PORTA.0
-    #define LEDD3 PORTA.1
-    #define LEDD4 PORTA.2
-    #define LEDD5 PORTA.3
-    Dir     LEDD2 OUT
-    Dir     LEDD3 OUT
-    Dir     LEDD4 OUT
-    Dir     LEDD5 OUT
+#DEFINE LEDD2 PORTA.0
+#DEFINE LEDD3 PORTA.1
+#DEFINE LEDD4 PORTA.2
+#DEFINE LEDD5 PORTA.3
+Dir     LEDD2 Out
+Dir     LEDD3 Out
+Dir     LEDD4 Out
+Dir     LEDD5 Out
 
 '   Set portb.0 as out
-    dir portb.0 out
+Dir portb.0 Out
 '   Set the port as an ouput
-    dir porta out
+Dir porta Out
 '   Set the first LED on
-    Set LEDD5 on
+Set LEDD5 On
 
 
 '   Initialise the timer.
 '   Firstly tell the compiler to use a 16bit timer for this demonstration
-    #define TMR0_16BIT
+#DEFINE TMR0_16BIT
 
 '     For this timer we need the following:
 '       Prescaler
@@ -86,35 +89,37 @@
 '            NOT to sync Timer
 '       Post scaler
 '           1:2
-    InitTimer0 Osc, PRE0_256 + TMR0_HFINTOSC ,  POST0_2   'Event will be raised every 1.04s
+'Event will be raised every 1.04s
+InitTimer0 Osc, PRE0_256 + TMR0_HFINTOSC ,  POST0_2
 '   Set the type of event
-    On Interrupt Timer0Overflow call blink
-    SetTimer ( 0, 0x0bdc )
+On Interrupt Timer0Overflow Call blink
+SetTimer ( 0, 0x0bdc )
 '     Start the Timer - you need to start this Timer0!
-    StartTimer 0
+StartTimer 0
 
-    Do Forever
+Do Forever
 
-          if TimeOut = 1 then
+    If TimeOut = 1 Then
 
-           ' Rotate our LEDs
-            Set C off
-            Rotate porta right
-            if C = 1 then porta.3 = 1
+        ' Rotate our LEDs
+        Set C Off
+        Rotate porta Right
+        If C = 1 Then porta.3 = 1
 
-            TimeOut= 0
-            SetTimer ( 0, 0x0bdc ) ' Set timer to 1 second`
+        TimeOut= 0
+        ' Set timer to 1 second`
+        SetTimer ( 0, 0x0bdc )
 
-          end if
-
-
-
-
-    Loop
+    End If
 
 
-    Sub blink
-          TimeOut = 1
-          'Clear the Timer0 overflow event
-          TMR0IF = 0
-    End Sub
+
+
+Loop
+
+
+Sub blink
+    TimeOut = 1
+    'Clear the Timer0 overflow event
+    TMR0IF = 0
+End Sub

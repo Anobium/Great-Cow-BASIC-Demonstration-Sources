@@ -1,28 +1,28 @@
 'LCD connection settings
- #define LCD_IO 0
- #define LCD_NO_RW
- #define LCDWriteByte MySendToLCD
+#DEFINE LCD_IO 0
+#DEFINE LCD_NO_RW
+#DEFINE LCDWriteByte MySendToLCD
 
-; ----- Define Hardware settings
-  [todo]
-
-
-; ----- Variables
-  ' No Variables specified in this example. All byte variables are defined upon use.
-  [todo]
-
-; ----- Quick Command Reference:
-  [todo]
+' ----- Define Hardware settings
+[todo]
 
 
+' ----- Variables
+' No Variables specified in this example. All byte variables are defined upon use.
+[todo]
 
-; ----- Main body of program commences here.
-cls
-print "Hello World."
+' ----- Quick Command Reference:
+[todo]
 
-end
 
-; ----- Support methods.  Subroutines and Functions
+
+' ----- Main body of program commences here.
+CLS
+Print "Hello World."
+
+End
+
+' ----- Support methods.  Subroutines and Functions
 Sub MySendToLCD(In MyLCDByte)
 
     'Uses I2C

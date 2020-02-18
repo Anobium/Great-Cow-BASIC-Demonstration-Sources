@@ -13,31 +13,31 @@
 '''@date    31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
-  #chip 16F886, 4
+' ----- Configuration
+#CHIP 16F886, 4
 
 
-; ----- Define Hardware settings
- ' THIS CONFIG OF THE SERIAL PORT TO A PC TERMINAL via a TTL Converter
- ' USART settings
- #define USART_BAUD_RATE 9600
- Dir PORTc.6 Out
- Dir PORTc.7 In
- #define USART_DELAY 5 ms
- #define USART_BLOCKING
- SCKP = 1
+' ----- Define Hardware settings
+' THIS CONFIG OF THE SERIAL PORT TO A PC TERMINAL via a TTL Converter
+' USART settings
+#DEFINE USART_BAUD_RATE 9600
+Dir PORTc.6 Out
+Dir PORTc.7 In
+#DEFINE USART_DELAY 5 ms
+#DEFINE USART_BLOCKING
+SCKP = 1
 
-; ----- Variables
-  ' No Variables specified in this example. All byte variables are defined upon use.
+' ----- Variables
+' No Variables specified in this example. All byte variables are defined upon use.
 
-; ----- Main body of program commences here.
-  'Message after reset
-  wait 500 ms
-  do Forever
-   HSerPrint "Hello World"
-   ' "Carriage Return"
-   HSerSend 13
-   ' "Line Feed"
-   HSerSend 10
-  Loop
+' ----- Main body of program commences here.
+'Message after reset
+Wait 500 ms
+Do Forever
+    HSerPrint "Hello World"
+    ' "Carriage Return"
+    HSerSend 13
+    ' "Line Feed"
+    HSerSend 10
+Loop
 

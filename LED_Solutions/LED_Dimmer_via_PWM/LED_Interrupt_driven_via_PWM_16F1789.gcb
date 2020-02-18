@@ -9,66 +9,66 @@
 '''@date    14.02.2015
 '''********************************************************************************
 
-; ----- Configuration
- #chip 16F1789, 16
- #option explicit
+' ----- Configuration
+#CHIP 16F1789, 16
+#OPTION Explicit
 
 
-; ----- Define Hardware settings
-  Dir LED out
+' ----- Define Hardware settings
+Dir LED Out
 
-;----- Variables
-  Dim LEDPOWER, LEDLUM, PWMCOUNTER, PWMCOUNTER as Byte
-
-
-; ----- Constants
-  #define LED Portd.1
-
-; ----- Main body of program commences here.
-
-    'Call the initialisation routine
-    InitLEDConrol
-
-    Do
-        'Increase power to full over 2.5 seconds
-        For LEDPower = 0 to 100
-            LEDlum = LEDPower
-            Wait 25 ms
-        Next
-        'Hold LEDPower
-        Wait 1 s
-        'Decrease power to zero over 2.5 seconds
-        For LEDPower = 100 to 0
-            LEDlum = LEDPower
-            Wait 25 ms
-        Next
-        'Hold LEDPower
-        Wait 1 s
-    Loop
-
-; ----- Support methods.  Subroutines and Functions
-  'Setup routine
-  Sub InitLEDConrol
-      'Clear variables
-      LEDlum = 0
-      PWMCounter = 0
-
-      'Add a handler for the interrupt
-      On Interrupt Timer0Overflow Call PWMHandler
-
-      'Set up the timer
-      InitTimer0 Osc, PS0_2
-      'Timer 0 starts automatically on a PIC
-  End Sub
+'----- Variables
+Dim LEDPOWER, LEDLUM, PWMCOUNTER, PWMCOUNTER As Byte
 
 
-  'This will be called when Timer 0 overflows
-  Sub PWMHandler
-      If LEDlum > PWMCounter Then
-          Set LED On
-      Else
-          Set LED Off
-      End If
-      PWMCounter += 1
-      If PWMCounter = 100 Then PWMCounter = 0
-  End Sub
+' ----- Constants
+#DEFINE LED Portd.1
+
+' ----- Main body of program commences here.
+
+'Call the initialisation routine
+InitLEDConrol
+
+Do
+    'Increase power to full over 2.5 seconds
+    For LEDPower = 0 To 100
+        LEDlum = LEDPower
+        Wait 25 ms
+    Next
+    'Hold LEDPower
+    Wait 1 s
+    'Decrease power to zero over 2.5 seconds
+    For LEDPower = 100 To 0
+        LEDlum = LEDPower
+        Wait 25 ms
+    Next
+    'Hold LEDPower
+    Wait 1 s
+Loop
+
+' ----- Support methods.  Subroutines and Functions
+'Setup routine
+Sub InitLEDConrol
+    'Clear variables
+    LEDlum = 0
+    PWMCounter = 0
+
+    'Add a handler for the interrupt
+    On Interrupt Timer0Overflow Call PWMHandler
+
+    'Set up the timer
+    InitTimer0 Osc, PS0_2
+    'Timer 0 starts automatically on a PIC
+End Sub
+
+
+'This will be called when Timer 0 overflows
+Sub PWMHandler
+    If LEDlum > PWMCounter Then
+        Set LED On
+    Else
+        Set LED Off
+    End If
+    PWMCounter += 1
+    If PWMCounter = 100 Then PWMCounter = 0
+End Sub

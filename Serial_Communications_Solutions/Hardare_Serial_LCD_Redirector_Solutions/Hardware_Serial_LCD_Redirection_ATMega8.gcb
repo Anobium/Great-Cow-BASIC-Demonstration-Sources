@@ -9,50 +9,50 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
-  #chip mega8,8
-  #option explicit
-  #include <lcd2serialredirect.h>
+' ----- Configuration
+#CHIP mega8,8
+#OPTION Explicit
+#INCLUDE <lcd2serialredirect.h>
 
-  ; ----- Define Hardware settings
-  ; Required to LCD to Serial redirection
-   #define LCD_IO 0
-   #define USART_BAUD_RATE 9600
-   Dir PORTD.1 Out
-   Dir PORTD.0 In
-   #define USART_DELAY 10 ms
-   #define USART_BLOCKING
-   wait 500 ms
-   HSerSend 7
+' ----- Define Hardware settings
+' Required to LCD to Serial redirection
+#DEFINE LCD_IO 0
+#DEFINE USART_BAUD_RATE 9600
+Dir PORTD.1 Out
+Dir PORTD.0 In
+#DEFINE USART_DELAY 10 ms
+#DEFINE USART_BLOCKING
+Wait 500 ms
+HSerSend 7
 
-  Dim YPOS, XPOS as Byte
+Dim YPOS, XPOS As Byte
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
-    Do Forever
-        CLS
-        PRINT "START TEST"
-        locate 1,0
-        PRINT "DISPLAY ON"
-        wait 3 s
+Do Forever
+    CLS
+    Print "START TEST"
+    Locate 1,0
+    Print "DISPLAY ON"
+    Wait 3 s
 
-        locate 0,0
+    Locate 0,0
 
-        for ypos = 0 to 1
-            for xpos = 0 to 16
-               locate ypos, xpos
-               print "*"
-               ' flush HSerPrint buffer
-               print ""
-               wait 100 ms
-            next
-        next
+    For ypos = 0 To 1
+        For xpos = 0 To 16
+            Locate ypos, xpos
+            Print "*"
+            ' flush HSerPrint buffer
+            Print ""
+            Wait 100 ms
+        Next
+    Next
 
 
-        CLS
-        Locate 0,0
-        LCDCURSOR LCDON
-        Print "END TEST"
-        wait 3 s
+    CLS
+    Locate 0,0
+    LCDCursor LCDON
+    Print "END TEST"
+    Wait 3 s
 
-    loop
+Loop

@@ -34,49 +34,53 @@
 '''
 
 
- #chip 16f1829,8
+#CHIP 16f1829,8
 
 
 
 
 
- #define demo1
+#DEFINE demo1
 ' #define demo2
 
-    '' -------------------LATC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|DS4|DS3|DS2|DS1|-
-    ''-----------------------------------------
-    ''
+'' -------------------LATC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|DS4|DS3|DS2|DS1|-
+''-----------------------------------------
+''
 
-  #ifdef demo1
-      dir portc out
-      dir portc.3 out
-      do
-          wait 5 ms
-          HPWM 2, 40, ( ReadAD10 ( AN3 ) * 10 )   / 40
-      loop
-  #endif
+#IFDEF demo1
+    Dir portc Out
+    Dir portc.3 Out
+    Do
+        Wait 5 ms
+        HPWM 2, 40, ( ReadAD10 ( AN3 ) * 10 )   / 40
+    Loop
+#ENDIF
 
 ''' As CCP1 is connect to portc.x you have two choices....
 ''' 1. Connect the output of CCPx to the output of any of the existing LEDs ports, such as portc.0, portc.1, portc.2 or portc.3
 ''' 2. Or, connect an LED via a suitable resistor to portc.x then to 0v.  Like MCU portc.x ---> resistor 1kOhmns ----> Ov
 '''
 
-  #ifdef demo2
-    dir portc.5 out    ; CCP1
-    dir portc.3 out    ; CCP2
-    dir porta.2 out    ; CCP3
-    dir portc.6 out    ; CCP4
+#IFDEF demo2
+    ' CCP1
+    Dir portc.5 Out
+    ' CCP2
+    Dir portc.3 Out
+    ' CCP3
+    Dir porta.2 Out
+    ' CCP4
+    Dir portc.6 Out
 
-    do forever
-            For Bright = 1 to 255
-                HPWM 3, 40, Bright
-                HPWM 2, 40, Bright
-                HPWM 1, 40, Bright
-                HPWM 4, 40, Bright
-                wait 10 ms
-            next
+    Do Forever
+        For Bright = 1 To 255
+            HPWM 3, 40, Bright
+            HPWM 2, 40, Bright
+            HPWM 1, 40, Bright
+            HPWM 4, 40, Bright
+            Wait 10 ms
+        Next
 
-    loop
-  #endif
+    Loop
+#ENDIF

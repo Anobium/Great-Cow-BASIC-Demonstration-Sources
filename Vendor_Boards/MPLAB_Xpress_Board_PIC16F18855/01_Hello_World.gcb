@@ -14,23 +14,23 @@
 '''  Date: 13.3.2016
 '''
 ' ----- Configuration
-    'Chip Settings.
-    #chip 16f18855,32
+'Chip Settings.
+#CHIP 16f18855,32
 
-    '' -------------------LATA-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D1 |-
-    ''-----------------------------------------
-    ''
+'' -------------------LATA-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D1 |-
+''-----------------------------------------
+''
 
-    'Set the whole port as an output, we will use only one BIT
-    dir porta out
+'Set the whole port as an output, we will use only one BIT
+Dir porta Out
 
-    'Ensure the whole port is set off by setting to o
-    porta = 0
+'Ensure the whole port is set off by setting to o
+porta = 0
 
-    'Set one bit of the port on.
-    porta.0 = 1
+'Set one bit of the port on.
+porta.0 = 1
 
-    'End
-    end
+'End
+End

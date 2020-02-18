@@ -9,42 +9,42 @@
 '''@date   	14.02.2015
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
 
-  #chip mega168, 16 	
+#CHIP mega168, 16
 
 
-; ----- Define Hardware settings
-  'The pin used for A/D conversion to an input
-  dir PORTC.0 IN
+' ----- Define Hardware settings
+'The pin used for A/D conversion to an input
+Dir PORTC.0 In
 
-; ----- Constants
-  'Read the sensor on port ADC0
-  ' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
-  #define ReadSensor 0
+' ----- Constants
+'Read the sensor on port ADC0
+' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
+#DEFINE ReadSensor 0
 
 
-; ----- Variables
-  'Define variables
-  Dim DataCount As byte
-  Dim LastReading As byte
+' ----- Variables
+'Define variables
+Dim DataCount As Byte
+Dim LastReading As Byte
 
-  'Set the EEPROM data location to 0
-  DataCount = 0
+'Set the EEPROM data location to 0
+DataCount = 0
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
-  do
-	'Take a reading
-	LastReading = ReadAD( ReadSensor )
-	'Store it
-	EPWrite DataCount, LastReading
+Do
+    'Take a reading
+    LastReading = ReadAD( ReadSensor )
+    'Store it
+    EPWrite DataCount, LastReading
 
-	'Add to the reading count
-	DataCount = DataCount + 1
+    'Add to the reading count
+    DataCount = DataCount + 1
 
-	'Wait a minute before taking the next reading
-	Wait 1 m
-  loop
-  end
+    'Wait a minute before taking the next reading
+    Wait 1 m
+Loop
+End

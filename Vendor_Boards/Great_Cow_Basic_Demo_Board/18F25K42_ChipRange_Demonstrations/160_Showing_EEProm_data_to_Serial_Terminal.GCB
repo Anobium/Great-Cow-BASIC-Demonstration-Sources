@@ -20,111 +20,115 @@
 '''@date    22.10.2017
 ' ----- Configuration
 
-    'Chip Settings.
-    #chip 18f25k42, 64
-    #option Explicit
-    #config mclr=on
+'Chip Settings.
+#CHIP 18f25k42, 64
+#OPTION Explicit
+#CONFIG mclr=On
 
-    #startup InitPPS, 85
+#STARTUP InitPPS, 85
 
-    Sub InitPPS
+Sub InitPPS
 
-          'Module: UART1
-          RC6PPS = 0x0013     'TX1 > RC6
-          U1RXPPS = 0x0017    'RC7 > RX1
+    'Module: UART1
+    'TX1 > RC6
+    RC6PPS = 0x0013
+    'RC7 > RX1
+    U1RXPPS = 0x0017
 
-    End Sub
+End Sub
 
-    'Template comment at the end of the config file
-
-
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
-    ''-----------------------------------------
-    ''
-
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | ----------| O | I |-
-    ''-----------------------------------------
-    ''
-
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -S---S-------------| X |---------
-    ''-----------------------------------------
-    ''
+'Template comment at the end of the config file
 
 
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define SwitchIn        PORTB.0
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
 
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     SwitchIn      In
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | ----------| O | I |-
+''-----------------------------------------
+''
 
-
-    'Setup Serial port
-    #define USART_BAUD_RATE 9600
-    #define USART_TX_BLOCKING
-
-
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
-    ' Now assumes Serial Terminal is operational
-
-
-    dim EEPromAddress, DisplayNewLine, Outdata, Indata  as byte
-
-    Do Forever
-
-          HSerPrintCRLF
-          HSerPrint "EEPROM Test and Show EEProm Results"
-          HSerPrintCRLF 2
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -S---S-------------| X |---------
+''-----------------------------------------
+''
 
 
-          Set LEDD1 off
-          Set LEDD2 off
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE SwitchIn        PORTB.0
+
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+Dir     SwitchIn      In
 
 
-          HSerPrint "     "
-          for EEPromAddress = 0 to 15
-            HSerPrint hex(EEPromAddress)
-            HSerPrint " "
-          next
+'Setup Serial port
+#DEFINE USART_BAUD_RATE 9600
+#DEFINE USART_TX_BLOCKING
 
-          for EEPromAddress = 0 to 255
-            DisplayNewLine = EEPromAddress % 16
-            if DisplayNewLine = 0 Then
-              HSerPrintCRLF
-              HserPrint hex(EEPromAddress)
-              HSerPrint ": "
-            end if
-            HSerPrint " "
 
-            Outdata = Random
-            'Outdata = 0x55    'If you DON'T believe put your own value here!
-            'Outdata = EEPromAddress    'If you DON'T believe put your own value here!
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+' Now assumes Serial Terminal is operational
 
-            EPWrite ( EEPromAddress, Outdata )        'Writes
-            EPRead  ( EEPromAddress, Indata )         'Reads
 
-            if Outdata = Indata then
-              HSerPrint  hex(Indata)
-            Else
-              HSerPrint  "--"
-            end if
+Dim EEPromAddress, DisplayNewLine, Outdata, Indata  As Byte
 
-          next
+Do Forever
 
-          HSerPrintCRLF 2
-          HSerPrint   "End of EEProm Program and Display"
-          HSerPrintCRLF 2
-          Set LEDD2 on
-          Set LEDD1 on
+    HSerPrintCRLF
+    HSerPrint "EEPROM Test and Show EEProm Results"
+    HSerPrintCRLF 2
 
-          wait while SwitchIn = On
-    Loop
-    END
+
+    Set LEDD1 Off
+    Set LEDD2 Off
+
+
+    HSerPrint "     "
+    For EEPromAddress = 0 To 15
+        HSerPrint Hex(EEPromAddress)
+        HSerPrint " "
+    Next
+
+    For EEPromAddress = 0 To 255
+        DisplayNewLine = EEPromAddress % 16
+        If DisplayNewLine = 0 Then
+            HSerPrintCRLF
+            HSerPrint Hex(EEPromAddress)
+            HSerPrint ": "
+        End If
+        HSerPrint " "
+
+        Outdata = Random
+        'Outdata = 0x55    'If you DON'T believe put your own value here!
+        'Outdata = EEPromAddress    'If you DON'T believe put your own value here!
+
+        'Writes
+        EPWrite ( EEPromAddress, Outdata )
+        'Reads
+        EPRead  ( EEPromAddress, Indata )
+
+        If Outdata = Indata Then
+            HSerPrint  Hex(Indata)
+        Else
+            HSerPrint  "--"
+        End If
+
+    Next
+
+    HSerPrintCRLF 2
+    HSerPrint   "End of EEProm Program and Display"
+    HSerPrintCRLF 2
+    Set LEDD2 On
+    Set LEDD1 On
+
+    Wait While SwitchIn = On
+Loop
+End

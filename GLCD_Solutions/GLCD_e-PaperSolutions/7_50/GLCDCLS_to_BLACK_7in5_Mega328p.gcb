@@ -1,42 +1,43 @@
 '''A demonstration program for Explicit-Paper from WaveShare.
- '''-------------------------------------------------------------------------
+'''-------------------------------------------------------------------------
 ' -------------------------------------------------------
- '''This has been tested using the hardware and software SPI option.
+'''This has been tested using the hardware and software SPI option.
 
- '''*************************************************************************
-
-
-     #chip mega328p, 16
-    #include <uno_mega328p.h>
-     #option explicit
-
- '******************************************************************************************************
-
-    'Setup the E-Paper
-     #include <glcd.h>
-
-     #define GLCD_TYPE GLCD_TYPE_EPD_EPD7in5
-     #define GLCD_EXTENDEDFONTSET1
-     #define GLCD_OLED_FONT
-     #define GLCD_TYPE_EPD7in5_LOWMEMORY1_GLCD_MODE    'Only mode that works in 2k RAM chips
+'''*************************************************************************
 
 
-     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-     #define GLCD_DC     DIGITAL_9
-     #define GLCD_CS     DIGITAL_10
-     #define GLCD_RESET  DIGITAL_8
-     #define GLCD_DO     DIGITAL_11
-     #define GLCD_SCK    DIGITAL_13
-     #define GLCD_Busy   DIGITAL_7
+#CHIP mega328p, 16
+#INCLUDE <uno_mega328p.h>
+#OPTION Explicit
 
- '  The following should be used   '#define EPD_HardwareSPI     'remove comment out if you want to use software SPI.
-     #define EPD_HardwareSPI
-     #define HWSPIMode MasterUltraFast
+'******************************************************************************************************
+
+'Setup the E-Paper
+#INCLUDE <glcd.h>
+
+#DEFINE GLCD_TYPE GLCD_TYPE_EPD_EPD7in5
+#DEFINE GLCD_EXTENDEDFONTSET1
+#DEFINE GLCD_OLED_FONT
+'Only mode that works in 2k RAM chips
+#DEFINE GLCD_TYPE_EPD7in5_LOWMEMORY1_GLCD_MODE
+
+
+'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+#DEFINE GLCD_DC     DIGITAL_9
+#DEFINE GLCD_CS     DIGITAL_10
+#DEFINE GLCD_RESET  DIGITAL_8
+#DEFINE GLCD_DO     DIGITAL_11
+#DEFINE GLCD_SCK    DIGITAL_13
+#DEFINE GLCD_Busy   DIGITAL_7
+
+'  The following should be used   '#define EPD_HardwareSPI     'remove comment out if you want to use software SPI.
+#DEFINE EPD_HardwareSPI
+#DEFINE HWSPIMode MasterUltraFast
 
 
 '******************************************************************************************************
 
 'Main program
 
-    GLCDCLS TFT_BLACK
-    GLCDDisplay off
+GLCDCLS TFT_BLACK
+GLCDDisplay Off

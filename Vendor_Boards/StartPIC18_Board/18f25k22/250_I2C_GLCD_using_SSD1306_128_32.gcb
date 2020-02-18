@@ -23,175 +23,190 @@
 '''  Date: 29.8.17
 '''
 ' ----- Configuration
-    'Chip Settings.
-    #chip 18f25k22, 16
-     #config MCLRE=on
-    #option Explicit
+'Chip Settings.
+#CHIP 18f25k22, 16
+#CONFIG MCLRE=On
+#OPTION Explicit
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | A |-------| O | I |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | A |-------| O | I |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---| TX|---|SDA|CLK| X |---------
-    ''-----------------------------------------
-    ''
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---| TX|---|SDA|CLK| X |---------
+''-----------------------------------------
+''
 
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define Potentiometer   PORTC.5
-    #define LDR             PORTB.4
-    #define SwitchIn        PORTB.0
-    #define LCDControl      PORTC.2
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE Potentiometer   PORTC.5
+#DEFINE LDR             PORTB.4
+#DEFINE SwitchIn        PORTB.0
+#DEFINE LCDControl      PORTC.2
 
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     Potentiometer In   'this is the AN17 port
-    Dir     LDR           In   'this is the AN11 port
-    Dir     SwitchIn      In
-    Dir     LCDControl    Out
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+'this is the AN17 port
+Dir     Potentiometer In
+'this is the AN11 port
+Dir     LDR           In
+Dir     SwitchIn      In
+Dir     LCDControl    Out
 
-    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
-    LCDControl = 1
+'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+LCDControl = 1
 
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
 
-    ' Define I2C settings
-    #define HI2C_BAUD_RATE 400
-    #define HI2C_DATA PORTC.4
-    #define HI2C_CLOCK PORTC.3
-    'Initialise I2C Slave
-    'I2C pins need to be input for SSP module - this is not an option
-    Dir HI2C_DATA in
-    Dir HI2C_CLOCK in
-    'MASTER
-    HI2CMode Master
-
-
-    #include <glcd.h>
-    #define GLCD_TYPE GLCD_TYPE_SSD1306_32
-    #define GLCD_I2C_Address 0x78
-
-; ----- Define variables
-
-    'These constants allow you to change the GLCD memory usage.
-    'We have set this demonstration to use only 128bytes of RAM for GLCD operations.
-    #define GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
-    #define GLCD_TYPE_SSD1306_CHARACTER_MODE_ONLY
-    #define GLCD_PROTECTOVERRUN
-
-    Dim BYTENUMBER, CCOUNT as Byte
-
-    CCount = 0
-    dim longNumber as long
-    longNumber = 0 ' max value = 4294967290
-    dim wordNumber, adcval, ldrval as Word
-    dim outstring as string
-    wordNumber = 0
-    byteNumber = 0
-
-    Dir PORTB.1 Out
-    Dir PORTB.5 Out
-    DIR PORTB.0 In
-
-  ; ----- Main program
-
-      #ifdef GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
-        GLCD_Open_PageTransaction 0,3
-      #endif
-
-          GLCDPrint 0, 0,   "Great Cow BASIC"
-          GLCDPrint (0, 16, "Anobium 2019")
-          GLCDPrint (76, 16, GLCD_WIDTH )
-          GLCDPrint (96, 16, "*" )
-          GLCDPrint (104, 16, GLCD_HEIGHT )
-
-      #ifdef GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
-        GLCD_Close_PageTransaction
-      #endif
-
-    wait 3 s
-    GLCDCLS
-
-      #ifdef GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
-        GLCD_Open_PageTransaction 0, 3
-      #endif
-
-          GLCDPrint 0, 0,   "Version 0.98.00"
+' Define I2C settings
+#DEFINE HI2C_BAUD_RATE 400
+#DEFINE HI2C_DATA PORTC.4
+#DEFINE HI2C_CLOCK PORTC.3
+'Initialise I2C Slave
+'I2C pins need to be input for SSP module - this is not an option
+Dir HI2C_DATA In
+Dir HI2C_CLOCK In
+'MASTER
+HI2CMode Master
 
 
-          #ifdef GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
-              GLCDPrint (0, 16, "LM GLCD MODE")
-          #endif
+#INCLUDE <glcd.h>
+#DEFINE GLCD_TYPE GLCD_TYPE_SSD1306_32
+#DEFINE GLCD_I2C_Address 0x78
 
-          #ifndef GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
-              GLCDPrint (0, 16, "FULL GLCD MODE")
-          #endif
+' ----- Define variables
+
+'These constants allow you to change the GLCD memory usage.
+'We have set this demonstration to use only 128bytes of RAM for GLCD operations.
+#DEFINE GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+#DEFINE GLCD_TYPE_SSD1306_CHARACTER_MODE_ONLY
+#DEFINE GLCD_PROTECTOVERRUN
+
+Dim BYTENUMBER, CCOUNT As Byte
+
+CCount = 0
+Dim longNumber As Long
+' max value = 4294967290
+longNumber = 0
+Dim wordNumber, adcval, ldrval As Word
+Dim outstring As String
+wordNumber = 0
+byteNumber = 0
+
+Dir PORTB.1 Out
+Dir PORTB.5 Out
+Dir PORTB.0 In
+
+' ----- Main program
+
+#IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+    GLCD_Open_PageTransaction 0,3
+#ENDIF
+
+GLCDPrint 0, 0,   "Great Cow BASIC"
+GLCDPrint (0, 16, "Anobium 2019")
+GLCDPrint (76, 16, GLCD_WIDTH )
+GLCDPrint (96, 16, "*" )
+GLCDPrint (104, 16, GLCD_HEIGHT )
+
+#IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+    GLCD_Close_PageTransaction
+#ENDIF
+
+Wait 3 s
+GLCDCLS
+
+#IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+    GLCD_Open_PageTransaction 0, 3
+#ENDIF
+
+GLCDPrint 0, 0,   "Version 0.98.00"
 
 
-      #ifdef GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
-        GLCD_Close_PageTransaction
-      #endif
+#IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+    GLCDPrint (0, 16, "LM GLCD MODE")
+#ENDIF
 
-    wait 3 s
-    GLCDCLS
+#IFNDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+    GLCDPrint (0, 16, "FULL GLCD MODE")
+#ENDIF
 
 
-    DO forever
+#IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+    GLCD_Close_PageTransaction
+#ENDIF
 
-       for CCount = 32 to 127
+Wait 3 s
+GLCDCLS
 
-            outString = str( CCount )                                  ; Prepare a string
-            adcval = readad ( an17 )
-            ldrval = readad ( an11 )
 
-            GLCDSetContrast ( ldrval )
-            ' Prepare the static components of the screen
-            #ifdef GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
-              GLCD_Open_PageTransaction 0,3
-            #endif
+Do Forever
 
-              GLCDPrint ( 1,   1, "PrintStr")                                ; Print some text
-              GLCDPrint ( 64,  1, "@")                                    ; Print some more text
-              GLCDPrint ( 72,  1, ChipMhz)                                   ; Print chip speed
-              GLCDPrint ( 86, 1, "Mhz")                                     ; Print some text
-              GLCDDrawString( 1,11,"DrawStr")                                 ; Draw some text
-              box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1                            ; Draw a box
-              box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1    ; Draw a box
-              Circle( 44,24,5)                                              ; Draw a circle
-              line 0,GLCD_HEIGHT-1,44,19                                    ; Draw a line
+    For CCount = 32 To 127
 
-              GLCDPrint ( 75 ,  20,  "ADC:"+pad(str(adcval),4 ) )
-              GLCDPrint ( 75 ,  11,  "LDR:"+pad(str(ldrval),4 ) )
+        ' Prepare a string
+        outString = Str( CCount )
+        adcval = ReadAD ( an17 )
+        ldrval = ReadAD ( an11 )
 
-              box (3,24,6,27)                                           ; Draw a Box
+        GLCDSetContrast ( ldrval )
+        ' Prepare the static components of the screen
+        #IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+            GLCD_Open_PageTransaction 0,3
+        #ENDIF
 
-              GLCDDrawString(44, 11, chr(CCount)+"="+pad(outString,3) )                   ; Draw a string
+        ' Print some text
+        GLCDPrint ( 1,   1, "PrintStr")
+        ' Print some more text
+        GLCDPrint ( 64,  1, "@")
+        ' Print chip speed
+        GLCDPrint ( 72,  1, ChipMHz)
+        ' Print some text
+        GLCDPrint ( 86, 1, "Mhz")
+        ' Draw some text
+        GLCDDrawString( 1,11,"DrawStr")
+        ' Draw a box
+        Box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1
+        ' Draw a box
+        Box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1
+        ' Draw a circle
+        Circle( 44,24,5)
+        ' Draw a line
+        Line 0,GLCD_HEIGHT-1,44,19
 
-              Ellipse 118, 6, 7, 4
-              if ldrval > adcval then
-                FilledEllipse 118, 6, 5, 2
-              else
-                FilledEllipse 118, 6, 5, 2, GLCDBackground
-              end if
+        GLCDPrint ( 75 ,  20,  "ADC:"+Pad(Str(adcval),4 ) )
+        GLCDPrint ( 75 ,  11,  "LDR:"+Pad(Str(ldrval),4 ) )
 
-          #ifdef GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+        ' Draw a Box
+        Box (3,24,6,27)
+
+        ' Draw a string
+        GLCDDrawString(44, 11, CHR(CCount)+"="+Pad(outString,3) )
+
+        Ellipse 118, 6, 7, 4
+        If ldrval > adcval Then
+            FilledEllipse 118, 6, 5, 2
+        Else
+            FilledEllipse 118, 6, 5, 2, GLCDBackground
+        End If
+
+        #IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
             GLCD_Close_PageTransaction
-          #endif
+        #ENDIF
 
-          longNumber = longNumber + 7
+        longNumber = longNumber + 7
 
 
-        NEXT
-    LOOP
-    end
+    Next
+Loop
+End

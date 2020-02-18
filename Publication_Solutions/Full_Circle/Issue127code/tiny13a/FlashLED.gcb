@@ -1,7 +1,7 @@
-#chip tiny13a, 1.2
+#CHIP tiny13a, 1.2
 Do Forever
-   PulseOut PortB.4, 100 ms
-   Wait 900 ms
+    PulseOut PortB.4, 100 ms
+    Wait 900 ms
 Loop
 
 

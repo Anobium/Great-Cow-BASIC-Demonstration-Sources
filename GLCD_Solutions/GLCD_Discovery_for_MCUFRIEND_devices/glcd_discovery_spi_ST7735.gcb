@@ -15,126 +15,139 @@
 '''@date       03/11/19
 '''********************************************************************************
 
-  'Chip Settings.
-  #chip 18F4550, 48
-  #config FOSC=HSPLL_HS, PLLDIV=5, CPUDIV=OSC1_PLL2,  MCLRE=ON
+'Chip Settings.
+#CHIP 18F4550, 48
+#CONFIG FOSC=HSPLL_HS, PLLDIV=5, CPUDIV=OSC1_PLL2,  MCLRE=On
 
-    #include <glcd.h>
+#INCLUDE <glcd.h>
 
-    #define GLCD_TYPE GLCD_TYPE_ST7735R_160_80
+#DEFINE GLCD_TYPE GLCD_TYPE_ST7735R_160_80
 
-    #define ST7735TABCOLOR ST7735_GREENTAB  ' can be ST7735_BLACKTAB, ST7735_GREENTAB or ST7735_REDTAB.  Each tab is a different ST7735 configuration.
-                                            ' you may have to try all three - if you do not know what chipset you have.
-    #option Explicit
+' can be ST7735_BLACKTAB, ST7735_GREENTAB or ST7735_REDTAB.  Each tab is a different ST7735 configuration.
+#DEFINE ST7735TABCOLOR ST7735_GREENTAB
+' you may have to try all three - if you do not know what chipset you have.
+#OPTION Explicit
 
-   'Pin mappings for SPI ST7735
-    #define GLCD_DC         portE.2              'Data/Command select   Purple Wire
-    #define GLCD_CS         portB.2              'CS Chip select        White
-    #define GLCD_RESET      portC.6              '                      Gray
-    #define GLCD_DO         portC.7              'SPI SDO (MOSI)        Blue
-    #define GLCD_DI         portC.7              'SPI SDI (MISO)  assume bi-directional DO/DI
-    #define GLCD_SCK        portB.1              'SPI SCK               Green
+'Pin mappings for SPI ST7735
+'Data/Command select   Purple Wire
+#DEFINE GLCD_DC         portE.2
+'CS Chip select        White
+#DEFINE GLCD_CS         portB.2
+'                      Gray
+#DEFINE GLCD_RESET      portC.6
+'SPI SDO (MOSI)        Blue
+#DEFINE GLCD_DO         portC.7
+'SPI SDI (MISO)  assume bi-directional DO/DI
+#DEFINE GLCD_DI         portC.7
+'SPI SCK               Green
+#DEFINE GLCD_SCK        portB.1
 
 
 '*************************** GLCD Specific setup ************************************************
 
 '    GLCDRotate ( Landscape_rev )     ' optionally you can rotate the screen.
 
-    dim reg_result as long
-    reg_result=0
+Dim reg_result As Long
+reg_result=0
 
 
-    GLCDReadReg32 ( ST7735_RDDID , reg_result )
+GLCDReadReg32 ( ST7735_RDDID , reg_result )
 
-    GLCDfntDefaultsize = 1
+GLCDfntDefaultSize = 1
 
-    GLCDPrintString hex(reg_result_e)
-    GLCDPrintString hex(reg_result_u)
-    GLCDPrintString hex(reg_result_h)
-    GLCDPrintStringLn hex(reg_result)
-    GLCDLocateString 0,2
-
-
-    if ( reg_result_u = 0x89 and reg_result_h = 0xf0 ) then
-        GLCDPrintString "ST7735R"
-    end if
-    if ( reg_result_u = 0x80 and reg_result_h = 0x66 ) then
-        GLCDPrintString "ILI916C"
-    end if
-
-    GLCDPrint 4,50, ChipNameStr
-    GLCDPrint 4,66, "@ "+ Str(ChipMHz)+"Mhz"
+GLCDPrintString Hex(reg_result_e)
+GLCDPrintString Hex(reg_result_u)
+GLCDPrintString Hex(reg_result_h)
+GLCDPrintStringLn Hex(reg_result)
+GLCDLocateString 0,2
 
 
-    line 0,0,2,2
-    box 0,0,GLCDDeviceWidth, GLCDDeviceHeight, TFT_YELLOW
-    filledbox GLCDDeviceWidth-40, GLCDDeviceHeight-40,GLCDDeviceWidth, GLCDDeviceHeight, TFT_YELLOW
-    filledbox GLCDDeviceWidth-30, GLCDDeviceHeight-30,GLCDDeviceWidth, GLCDDeviceHeight, TFT_GREEN
-    filledbox GLCDDeviceWidth-20, GLCDDeviceHeight-20,GLCDDeviceWidth, GLCDDeviceHeight, TFT_BLUE
-    filledbox GLCDDeviceWidth-10, GLCDDeviceHeight-10,GLCDDeviceWidth, GLCDDeviceHeight, TFT_RED
+If ( reg_result_u = 0x89 AND reg_result_h = 0xf0 ) Then
+    GLCDPrintString "ST7735R"
+End If
+If ( reg_result_u = 0x80 AND reg_result_h = 0x66 ) Then
+    GLCDPrintString "ILI916C"
+End If
 
-    wait 100 ms
+GLCDPrint 4,50, ChipNameStr
+GLCDPrint 4,66, "@ "+ Str(ChipMHz)+"Mhz"
 
-end
 
-sub  GLCDReadReg32( IN SPISendByte as byte, OUT SPITempOut as long )
+Line 0,0,2,2
+Box 0,0,GLCDDeviceWidth, GLCDDeviceHeight, TFT_YELLOW
+FilledBox GLCDDeviceWidth-40, GLCDDeviceHeight-40,GLCDDeviceWidth, GLCDDeviceHeight, TFT_YELLOW
+FilledBox GLCDDeviceWidth-30, GLCDDeviceHeight-30,GLCDDeviceWidth, GLCDDeviceHeight, TFT_GREEN
+FilledBox GLCDDeviceWidth-20, GLCDDeviceHeight-20,GLCDDeviceWidth, GLCDDeviceHeight, TFT_BLUE
+FilledBox GLCDDeviceWidth-10, GLCDDeviceHeight-10,GLCDDeviceWidth, GLCDDeviceHeight, TFT_RED
 
-    dim SPITempOut as long
+Wait 100 ms
+
+End
+
+Sub  GLCDReadReg32( In SPISendByte As Byte, Out SPITempOut As Long )
+
+    Dim SPITempOut As Long
 
     SPITempOut = 0x00
 
-    set ST7735_CS OFF;
+    '
+    Set ST7735_CS Off
 
-    set ST7735_DC OFF;
-
-
-    repeat 8
-
-      if SPISendByte.7 = ON  then
-        set ST7735_DO ON;
-      else
-        set ST7735_DO OFF;
-      end if
-
-      SET GLCD_SCK OFF;
-
-      rotate SPISendByte left
-      set GLCD_SCK ON;
+    '
+    Set ST7735_DC Off
 
 
-    end repeat
+    Repeat 8
 
-    set GLCD_DC On
-    Dir GLCD_DI in
-    Dir GLCD_DO in
+        If SPISendByte.7 = On  Then
+            '
+            Set ST7735_DO On
+        Else
+            '
+            Set ST7735_DO Off
+        End If
 
-    wait 5 us
+        '
+        Set GLCD_SCK Off
+
+        Rotate SPISendByte Left
+        '
+        Set GLCD_SCK On
+
+
+    End Repeat
+
+    Set GLCD_DC On
+    Dir GLCD_DI In
+    Dir GLCD_DO In
+
+    Wait 5 us
     'dummy clock cycle
-    SET GLCD_SCK ON
-    wait 5 us
+    Set GLCD_SCK On
+    Wait 5 us
 
 
 
-    SET GLCD_SCK OFF
-    wait 5 us
+    Set GLCD_SCK Off
+    Wait 5 us
 
     'get the data
-    dim getbits as byte
-    for getbits = 0 to 31
+    Dim getbits As Byte
+    For getbits = 0 To 31
 
-      SET GLCD_SCK ON
+        Set GLCD_SCK On
 
-      if GLCD_DI = On then
-        set SPITempOut.0 On
-      Else
-        set SPITempOut.0 Off
-      end if
-      rotate SPITempOut left
-      SET GLCD_SCK OFF
-    next
+        If GLCD_DI = On Then
+            Set SPITempOut.0 On
+        Else
+            Set SPITempOut.0 Off
+        End If
+        Rotate SPITempOut Left
+        Set GLCD_SCK Off
+    Next
 
 
-      set ST7735_CS ON
-    Dir GLCD_DO out
+    Set ST7735_CS On
+    Dir GLCD_DO Out
 
-end Sub
+End Sub

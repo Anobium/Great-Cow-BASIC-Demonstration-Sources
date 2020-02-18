@@ -26,85 +26,90 @@
 '''@date   		May 2019
 '''********************************************************************************
 
-; ----- Configuration
-  #chip mega328p, 16
-  #include <uno_mega328p.h>
-  #include <mcp4xxxdigitalpot.h>
+' ----- Configuration
+#CHIP mega328p, 16
+#INCLUDE <uno_mega328p.h>
+#INCLUDE <mcp4xxxdigitalpot.h>
 
-; ----- Constants
+' ----- Constants
 
-  #define _ShowDialog
+#DEFINE _ShowDialog
 
-	' SPI SETUP
-  #define DigitalPot_CS DIGITAL_10
-  #define DigitalPot_SCK DIGITAL_13
-  #define DigitalPot_DO DIGITAL_11
-  #define DigitalPot_DI DIGITAL_12
-
-
-; ----- Define Hardware settings
-	' None
-; ----- Variables
-	dim loopx as word
+' SPI SETUP
+#DEFINE DigitalPot_CS DIGITAL_10
+#DEFINE DigitalPot_SCK DIGITAL_13
+#DEFINE DigitalPot_DO DIGITAL_11
+#DEFINE DigitalPot_DI DIGITAL_12
 
 
+' ----- Define Hardware settings
+' None
+' ----- Variables
+Dim loopx As Word
 
-; ------ Start of main Program
 
-  'Setup MCP Device using software SPI
-	#define _MCP4XXXSoftwareSPI
 
-	'Required to initialise the device
-  MCP4XXXInit
+' ------ Start of main Program
 
-; ----- Example code
+'Setup MCP Device using software SPI
+#DEFINE _MCP4XXXSoftwareSPI
 
-	HSerPrintCRLF 2
+'Required to initialise the device
+MCP4XXXInit
 
- 	'Example square wave
+' ----- Example code
 
-  		'SPI Settings gives a square wave as follows
-      '							Software		10.9khz		444khz
+HSerPrintCRLF 2
+
+'Example square wave
+
+'SPI Settings gives a square wave as follows
+'							Software		10.9khz		444khz
 '      do Forever
 '          DigitalPotSetWiperPosition(0, 0)    ' Set wiper to 0/128 = 0 Rab
 '          DigitalPotSetWiperPosition(128, 0)    ' Set wiper to 128/128 = 1 Rab
 '      loop
 
-	'Example setup of pot wiper
-      do Forever
+'Example setup of pot wiper
+Do Forever
 
-              DigitalPotSetWiperPosition(0, 0)    ' Set wiper to 0/128 = 0 Rab
-              wait 50 ms
+    ' Set wiper to 0/128 = 0 Rab
+    DigitalPotSetWiperPosition(0, 0)
+    Wait 50 ms
 
-              DigitalPotSetWiperPosition(32, 0)    ' Set wiper to 32/128 = 1/4 Rab
-              wait 50 ms
-
-
-              DigitalPotSetWiperPosition(64, 0)    ' Set wiper to 64/128 = 1/2 Rab
-              wait 50 ms
+    ' Set wiper to 32/128 = 1/4 Rab
+    DigitalPotSetWiperPosition(32, 0)
+    Wait 50 ms
 
 
-              DigitalPotSetWiperPosition(96, 0)    ' Set wiper to 96/128 = 3/4 Rab
-              wait 50 ms
+    ' Set wiper to 64/128 = 1/2 Rab
+    DigitalPotSetWiperPosition(64, 0)
+    Wait 50 ms
 
 
-              DigitalPotSetWiperPosition(128, 0)    ' Set wiper to 128/128 = 1 Rab
-              wait 50 ms
+    ' Set wiper to 96/128 = 3/4 Rab
+    DigitalPotSetWiperPosition(96, 0)
+    Wait 50 ms
+
+
+    ' Set wiper to 128/128 = 1 Rab
+    DigitalPotSetWiperPosition(128, 0)
+    Wait 50 ms
 
 
 
-              ' Decrement wiper 129 times
-              for loopx =0 to 128
-                  DigitalPotDecrement
-                  wait 1 ms
-              next
-              wait 8 ms
+    ' Decrement wiper 129 times
+    For loopx =0 To 128
+        DigitalPotDecrement
+        Wait 1 ms
+    Next
+    Wait 8 ms
 
-              ' Increment wiper 129 times
-              for loopx =0 to 128
-                  DigitalPotIncrement
-                  wait 1 ms
-              next
-              wait 8 ms
+    ' Increment wiper 129 times
+    For loopx =0 To 128
+        DigitalPotIncrement
+        Wait 1 ms
+    Next
+    Wait 8 ms
 
-      Loop
+Loop

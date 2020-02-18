@@ -12,93 +12,94 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
-  #chip 16F886,16
-  #option explicit
-
-
-; ----- Define Hardware settings
-  ' AN0
-  dir portA.0 in
-  ' Switch pulled high with 10k resistor
-  dir portB.1 in
-  ' Single LED
-  dir portB.2 out
-  ' LED Array
-  dir portC out
-
-; ----- Constants
-  #define button PORTB.1
-  #define LED PORTB.2
-
-  #define PulsePeriod 1 10us
-
-  #define Peak 0xdd 'Highest value recorded from potentiometer
-  #define GraphStep 27
-
-; ----- Variables
-  Counter = 0
-  Dim COUNTER, CONTROLVALUE, TEMP, STOPFLICKER, TEMP3, TEMP2 as Byte
+#CHIP 16F886,16
+#OPTION Explicit
 
 
-; ----- Main body of program commences here.
-  Main:
-     Counter = Counter + 1
-     ControlValue = ReadAD(AN0)
-     if Counter > ControlValue then set led off
-     if Counter => Peak then set led on: Counter = 0
-     Temp = ControlValue/GraphStep
-     BarGraph Temp
-     Wait PulsePeriod
-     if button off then Flicker
-  goto Main
+' ----- Define Hardware settings
+' AN0
+Dir portA.0 In
+' Switch pulled high with 10k resistor
+Dir portB.1 In
+' Single LED
+Dir portB.2 Out
+' LED Array
+Dir portC Out
 
-  end
+' ----- Constants
+#DEFINE button PORTB.1
+#DEFINE LED PORTB.2
 
-; ----- Support methods.  Subroutines and Functions
+#DEFINE PulsePeriod 1 10us
 
-  sub Flicker
-   wait until button on
-   wait 10 ms
-   StopFlicker = 0
+'Highest value recorded from potentiometer
+#DEFINE Peak 0xdd
+#DEFINE GraphStep 27
 
-  FlickerStart:
-   for Temp = 1 to 100
-    for Temp3 = 1 to 20
-     if button off then goto EndFlicker
-     for Temp2 = 1 to 100
-      set led off
-      if Temp > Temp2 then set led on
-      wait PulsePeriod
-     next
-    next
-   next
-   for Temp = 1 to 100
-    for Temp3 = 1 to 20
-     if button off then goto EndFlicker
-     for Temp2 = 1 to 100
-      set led on
-      if Temp > Temp2 then set led off
-      wait PulsePeriod
-     next
-    next
-   next
-  goto FlickerStart
+' ----- Variables
+Counter = 0
+Dim COUNTER, CONTROLVALUE, TEMP, STOPFLICKER, TEMP3, TEMP2 As Byte
 
-  EndFlicker:
-  wait until button on
-  wait 10 ms
-  end sub
 
-  sub BarGraph (level)
-   PORTC = 0
-   if level >= 1 then set PORTC.0 ON
-   if level >= 2 then set PORTC.1 ON
-   if level >= 3 then set PORTC.2 ON
-   if level >= 4 then set PORTC.3 ON
-   if level >= 5 then set PORTC.4 ON
-   if level >= 6 then set PORTC.5 ON
-   if level >= 7 then set PORTC.6 ON
-   if level >= 8 then set PORTC.7 ON
-  end sub
+' ----- Main body of program commences here.
+Main:
+Counter = Counter + 1
+ControlValue = ReadAD(AN0)
+If Counter > ControlValue Then Set led Off
+If Counter => Peak Then Set led On: Counter = 0
+Temp = ControlValue/GraphStep
+BarGraph Temp
+Wait PulsePeriod
+If button Off Then Flicker
+Goto Main
+
+End
+
+' ----- Support methods.  Subroutines and Functions
+
+Sub Flicker
+    Wait Until button On
+    Wait 10 ms
+    StopFlicker = 0
+
+FlickerStart:
+    For Temp = 1 To 100
+        For Temp3 = 1 To 20
+            If button Off Then Goto EndFlicker
+            For Temp2 = 1 To 100
+                Set led Off
+                If Temp > Temp2 Then Set led On
+                Wait PulsePeriod
+            Next
+        Next
+    Next
+    For Temp = 1 To 100
+        For Temp3 = 1 To 20
+            If button Off Then Goto EndFlicker
+            For Temp2 = 1 To 100
+                Set led On
+                If Temp > Temp2 Then Set led Off
+                Wait PulsePeriod
+            Next
+        Next
+    Next
+    Goto FlickerStart
+
+EndFlicker:
+    Wait Until button On
+    Wait 10 ms
+End Sub
+
+Sub BarGraph (level)
+    PORTC = 0
+    If level >= 1 Then Set PORTC.0 On
+    If level >= 2 Then Set PORTC.1 On
+    If level >= 3 Then Set PORTC.2 On
+    If level >= 4 Then Set PORTC.3 On
+    If level >= 5 Then Set PORTC.4 On
+    If level >= 6 Then Set PORTC.5 On
+    If level >= 7 Then Set PORTC.6 On
+    If level >= 8 Then Set PORTC.7 On
+End Sub

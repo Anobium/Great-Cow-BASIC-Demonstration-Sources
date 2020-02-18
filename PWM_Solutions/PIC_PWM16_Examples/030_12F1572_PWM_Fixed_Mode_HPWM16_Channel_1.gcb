@@ -14,15 +14,15 @@
 '
 
 
-    #chip 12F1572, 32
-    #config mclr=on
+#CHIP 12F1572, 32
+#CONFIG mclr=On
 
-    Dir PORTA Out
+Dir PORTA Out
 
-    #define HPWM16_1_Freq 38
-    #define HPWM16_1_Duty 50
-    HPWM16On ( 1 )
+#DEFINE HPWM16_1_Freq 38
+#DEFINE HPWM16_1_Duty 50
+HPWM16On ( 1 )
 
-    do Forever
-    loop
+Do Forever
+Loop
 

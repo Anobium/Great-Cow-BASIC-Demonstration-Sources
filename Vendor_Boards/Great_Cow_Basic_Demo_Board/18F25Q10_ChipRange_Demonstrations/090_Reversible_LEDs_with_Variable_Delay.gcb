@@ -14,186 +14,190 @@
 '''@date    27/10/2018
 '''****
 ' ----- Configuration
-    'Chip Settings.
-    #chip 18F25Q10
-    #option Explicit
+'Chip Settings.
+#CHIP 18F25Q10
+#OPTION Explicit
 
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------------------| I | A |-----
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------------------| I | A |-----
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------| O | O | O | O |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------| O | O | O | O |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
-    ''-----------------------------------------
-    ''
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
 
-    '' ------------------PORTE-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    XXXXXXXXXXXXXXX| I | XXXXXXXXXXXX
-    ''-----------------------------------------
-    ''
-
-
-    'Define constants to make things easier. We can reuse these at any time.
-    #define LEDPORT   PORTB
-    #define LEDD1     LEDPORT.0
-    #define LEDD2     LEDPORT.1
-    #define LEDD3     LEDPORT.2
-    #define LEDD4     LEDPORT.3
-
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     LEDD3         Out
-    Dir     LEDD4         Out
-
-    #define SWITCHPORT    PORTA
-    #define SwitchIn      SWITCHPORT.2
-    Dir     SwitchIn      In
-
-    #define RSTButton     PORTE.3
-
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
-
-    #define DOWN        0
-    #define UP          1
-
-    Dim DIRECTION as Byte
-    #define LED_RIGHT 0
-    #define LED_LEFT  1
-
-    'start from the right to left
-    direction = LED_RIGHT
-
-    'Set the LED states
-    LEDD1 = 1
-    LEDD2 = 0
-    LEDD3 = 0
-    LEDD4 = 0
-
-    Dim     LEDState as Byte
-    'We are only interested in the lower four bits, so, use a mask to extract the state of these bits.
-    LEDState = LEDPORT AND 0B00001111
-
-    dim ADCVal, MaxADCVal, ADCWait as word   'we have change to a larger variable to hold the range of 0 to 1023
-
-    MaxADCVal = 0
-
-    do
-
-        'Read the ADC for the cuttent value
-        ADCVal =  ReadAD10 ( ANA1, TRUE )
-
-        'Ensure the ADC value supports the widest range.
-        'Use the MaxADCVal as the top range measure then scale from 0 to the MaxADCVal
-        'You will have to swing the potentiometer through the complete range, but, do this once and you have a full range!
-        if ( ADCVal > MaxADCVal ) Then
-            MaxADCVal = ADCVal
-        end if
-
-        'Adapt the ADCVal to be representative delay between 20ms and 400ms
-        ADCWait = scale ( ADCVal, 0 , MaxADCVal, 2, 400 )
-
-        'Set the LEDs
-        if  direction = LED_RIGHT  then
-
-            'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
-            'Clear the C register bit, rotate the LEDState variable, check if the C register bit is set and set the LEDState variable.
-            Set C off                 ' Clear the carry flag
-            Rotate LEDState right        ' and shift the contents of LEDState
-            ' If the Carry is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
-            If C = 1 then
-               'Set the initial LED states
-                LEDD1 = 0
-                LEDD2 = 0
-                LEDD3 = 0
-                LEDD4 = 1
-                LEDState = LEDPORT AND 0B00001111
-            else
-                'Set the port
-                LEDPORT = LEDState
-            end if
+'' ------------------PORTE-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    XXXXXXXXXXXXXXX| I | XXXXXXXXXXXX
+''-----------------------------------------
+''
 
 
-        else
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDPORT   PORTB
+#DEFINE LEDD1     LEDPORT.0
+#DEFINE LEDD2     LEDPORT.1
+#DEFINE LEDD3     LEDPORT.2
+#DEFINE LEDD4     LEDPORT.3
 
-            'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
-            Rotate LEDState LEFT        ' and shift the contents of LEDState
-            ' If the bit 4 of LEDState is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
-            If LEDState.4 = 1 then
-               'Set the  LED state
-                LEDD1 = 1
-                LEDD2 = 0
-                LEDD3 = 0
-                LEDD4 = 0
-                LEDState = LEDPORT AND 0B00001111
-            else
-                'Set the port
-                LEDPORT = LEDState
-            end if
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+Dir     LEDD3         Out
+Dir     LEDD4         Out
 
-        end if
+#DEFINE SWITCHPORT    PORTA
+#DEFINE SwitchIn      SWITCHPORT.2
+Dir     SwitchIn      In
 
-        'wait, and then check the switch is DOWN
-        wait ADCWait ms
-        if check_switch = true then
-            ' toggle the direction
-            direction = !direction
-        end if
+#DEFINE RSTButton     PORTE.3
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+#DEFINE DOWN        0
+#DEFINE UP          1
+
+Dim DIRECTION As Byte
+#DEFINE LED_RIGHT 0
+#DEFINE LED_LEFT  1
+
+'start from the right to left
+direction = LED_RIGHT
+
+'Set the LED states
+LEDD1 = 1
+LEDD2 = 0
+LEDD3 = 0
+LEDD4 = 0
+
+Dim     LEDState As Byte
+'We are only interested in the lower four bits, so, use a mask to extract the state of these bits.
+LEDState = LEDPORT AND 0B00001111
+
+'we have change to a larger variable to hold the range of 0 to 1023
+Dim ADCVal, MaxADCVal, ADCWait As Word
+
+MaxADCVal = 0
+
+Do
+
+    'Read the ADC for the cuttent value
+    ADCVal =  ReadAD10 ( ANA1, TRUE )
+
+    'Ensure the ADC value supports the widest range.
+    'Use the MaxADCVal as the top range measure then scale from 0 to the MaxADCVal
+    'You will have to swing the potentiometer through the complete range, but, do this once and you have a full range!
+    If ( ADCVal > MaxADCVal ) Then
+        MaxADCVal = ADCVal
+    End If
+
+    'Adapt the ADCVal to be representative delay between 20ms and 400ms
+    ADCWait = Scale ( ADCVal, 0 , MaxADCVal, 2, 400 )
+
+    'Set the LEDs
+    If  direction = LED_RIGHT  Then
+
+        'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
+        'Clear the C register bit, rotate the LEDState variable, check if the C register bit is set and set the LEDState variable.
+        ' Clear the carry flag
+        Set C Off
+        ' and shift the contents of LEDState
+        Rotate LEDState Right
+        ' If the Carry is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
+        If C = 1 Then
+            'Set the initial LED states
+            LEDD1 = 0
+            LEDD2 = 0
+            LEDD3 = 0
+            LEDD4 = 1
+            LEDState = LEDPORT AND 0B00001111
+        Else
+            'Set the port
+            LEDPORT = LEDState
+        End If
+
+
+    Else
+
+        'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
+        ' and shift the contents of LEDState
+        Rotate LEDState Left
+        ' If the bit 4 of LEDState is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
+        If LEDState.4 = 1 Then
+            'Set the  LED state
+            LEDD1 = 1
+            LEDD2 = 0
+            LEDD3 = 0
+            LEDD4 = 0
+            LEDState = LEDPORT AND 0B00001111
+        Else
+            'Set the port
+            LEDPORT = LEDState
+        End If
+
+    End If
+
+    'wait, and then check the switch is DOWN
+    Wait ADCWait ms
+    If check_switch = TRUE Then
+        ' toggle the direction
+        direction = !direction
+    End If
 
 
 
-    loop
+Loop
 
 
 
-  'global variable - if button is held down, we don't want to keep on switching directions
-  #define SWITCH_UP   1
-  #define SWITCH_DOWN 0
+'global variable - if button is held down, we don't want to keep on switching directions
+#DEFINE SWITCH_UP   1
+#DEFINE SWITCH_DOWN 0
 
-  dim previous_state as bit
-  previous_state = SWITCH_UP
+Dim previous_state As BIT
+previous_state = SWITCH_UP
 
-  function  check_switch
-      'switch is normally open to 5V ...when pressed, button is connected to GND
-      if (SwitchIn = SWITCH_DOWN) then
-          'debounce by delaying and checking if switch is still pressed
-          wait 1 ms
-          if ( (previous_state =  SWITCH_DOWN) & (SwitchIn = SWITCH_DOWN) ) then
-              ' don't toggle
-              check_switch = false
-              exit function
-          else
-              ' check if still down
-              if (SwitchIn = SWITCH_DOWN) then
-                 previous_state = SWITCH_DOWN
-                 ' reverse the LEDs
-                 check_switch = true
-                 exit function
-             else
-              'switch not properly held down
-              previous_state = SWITCH_UP
-              ' don't reverse
-              check_switch = false
-              exit function
-             end if
-          end if
-      else
-         'switch not pressed
-          previous_state = SWITCH_UP
-          'don't reverse
-          check_switch = false
-          exit function
-      end if
+Function  check_switch
+    'switch is normally open to 5V ...when pressed, button is connected to GND
+    If (SwitchIn = SWITCH_DOWN) Then
+        'debounce by delaying and checking if switch is still pressed
+        Wait 1 ms
+        If ( (previous_state =  SWITCH_DOWN) & (SwitchIn = SWITCH_DOWN) ) Then
+            ' don't toggle
+            check_switch = FALSE
+            Exit Function
+        Else
+            ' check if still down
+            If (SwitchIn = SWITCH_DOWN) Then
+                previous_state = SWITCH_DOWN
+                ' reverse the LEDs
+                check_switch = TRUE
+                Exit Function
+            Else
+                'switch not properly held down
+                previous_state = SWITCH_UP
+                ' don't reverse
+                check_switch = FALSE
+                Exit Function
+            End If
+        End If
+    Else
+        'switch not pressed
+        previous_state = SWITCH_UP
+        'don't reverse
+        check_switch = FALSE
+        Exit Function
+    End If
 
-  end Function
+End Function

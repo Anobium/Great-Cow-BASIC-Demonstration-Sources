@@ -16,37 +16,37 @@
 '''  Date: 13.3.2016
 '''
 ' ----- Configuration
-    'Chip Settings.
-    #chip 16F18326,32
+'Chip Settings.
+#CHIP 16F18326,32
 
 
 
-    '' -------------------LATC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
-    ''-----------------------------------------
-    ''
+'' -------------------LATC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D2 |-
+''-----------------------------------------
+''
 
-    #define DOWN        0
-    #define UP          1
-    #define SWITCH      PORTA.1
-    #define LED         PortC.0
+#DEFINE DOWN        0
+#DEFINE UP          1
+#DEFINE SWITCH      PORTA.1
+#DEFINE LED         PortC.0
 
-    dir LED out
-    LED = 0
+Dir LED Out
+LED = 0
 
-    'setup switch (SW1)
-    dir SWITCH in
+'setup switch (SW1)
+Dir SWITCH In
 
-    do
+Do
 
-        if ( SWITCH = DOWN ) then
-           wait 10 ms
-           if ( SWITCH = DOWN ) Then
-              Set LED on
-           end if
-        else
-           Set LED off
-       end if
+    If ( SWITCH = DOWN ) Then
+        Wait 10 ms
+        If ( SWITCH = DOWN ) Then
+            Set LED On
+        End If
+    Else
+        Set LED Off
+    End If
 
-    loop
+Loop

@@ -3,25 +3,26 @@
 '''This program demonstrates the capabilities of a LCD display using a 1-wire connection.
 '''The LCD is controlled via a shiftreg 74HC595.
 '''For the LCD connection - please refer to the Helpfile.
-'''@author 	TheoL 
+'''@author 	TheoL
 '''@licence	GPL
 '''@version	1.0
 '''@date   	14.08.2015
 '''********************************************************************************
-; ----- Configuration
+' ----- Configuration
 
-  #chip mega8,8
+#CHIP mega8,8
 
-  ' Use LCD in 1-wire mode with 74HC595
-  ' LCDBacklight is controlling pin 4 74HC595 (in LCD.h)
+' Use LCD in 1-wire mode with 74HC595
+' LCDBacklight is controlling pin 4 74HC595 (in LCD.h)
 
-  #define LCD_IO 1
-  #define LCD_CD PORTD.1            ; clock & databit
-  #define LCD_NO_RW
+#DEFINE LCD_IO 1
+' clock & databit
+#DEFINE LCD_CD PORTD.1
+#DEFINE LCD_NO_RW
 
-  LCDBacklight On
+LCDBacklight On
 
-  CLS
-  Print "Great Cow Basic"
-  Locate 1,0
-  Print "  Hello World."
+CLS
+Print "Great Cow Basic"
+Locate 1,0
+Print "  Hello World."

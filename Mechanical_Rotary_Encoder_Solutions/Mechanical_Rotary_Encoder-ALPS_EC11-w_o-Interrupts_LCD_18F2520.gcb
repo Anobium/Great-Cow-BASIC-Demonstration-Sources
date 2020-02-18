@@ -23,150 +23,153 @@
 ''' CHANGE CHIP AND PORTS ACCORDING TO YOUR TESTING BOARD!
 ''' *****************************************
 
- ; ---- configuration
- #chip 18F2520, 8
+' ---- configuration
+#CHIP 18F2520, 8
 
- 'load encoder header file
- #include <alps-ec11.h>
+'load encoder header file
+#INCLUDE <alps-ec11.h>
 
- ; ---- Define Hardware settings
- #define TRISB 0
- #define TRISA 0
- #define TRISC 0
+' ---- Define Hardware settings
+#DEFINE TRISB 0
+#DEFINE TRISA 0
+#DEFINE TRISC 0
 
- 'make port A digital as output except A.0 and A.1
- DIR PORTA 0x03
+'make port A digital as output except A.0 and A.1
+Dir PORTA 0x03
 
- 'make port B 0 to 3 as input, 4 to 7 as output
- DIR PORTB 0x0F
+'make port B 0 to 3 as input, 4 to 7 as output
+Dir PORTB 0x0F
 
- ;set weak pullups on inputs port B
- INTCON2.7 = 0
+'set weak pullups on inputs port B
+INTCON2.7 = 0
 
- 'make port C as output
- Dir PortC 0x0
+'make port C as output
+Dir PortC 0x0
 
- ; ---- LCD-Settings
- #define LCD_SPEED fast
- #define LCD_IO 4
- #define LCD_NO_RW
- #define LCD_Enable PORTc.0
- #define LCD_RS PORTc.1
- #define LCD_DB4 PORTa.5
- #define LCD_DB5 PORTa.4
- #define LCD_DB6 PORTa.3
- #define LCD_DB7 PORTa.2
+' ---- LCD-Settings
+#DEFINE LCD_SPEED FAST
+#DEFINE LCD_IO 4
+#DEFINE LCD_NO_RW
+#DEFINE LCD_Enable PORTc.0
+#DEFINE LCD_RS PORTc.1
+#DEFINE LCD_DB4 PORTa.5
+#DEFINE LCD_DB5 PORTa.4
+#DEFINE LCD_DB6 PORTa.3
+#DEFINE LCD_DB7 PORTa.2
 
- 'encoder connections defined here
- #define ALPS_ENCODER_A PortB.0  'clk
+'encoder connections defined here
+'clk
+#DEFINE ALPS_ENCODER_A PortB.0
 
- #define ALPS_ENCODER_B PortB.2  'cw
+'cw
+#DEFINE ALPS_ENCODER_B PortB.2
 
- #define ALPS_ENCODER_SW PortB.3 'encoder-switch
+'encoder-switch
+#DEFINE ALPS_ENCODER_SW PortB.3
 '''--------------------------------------------
 '''-------End of board-specific settings-------
 '''--------------------------------------------
 
- ; ---- variables
- 'value to be displayed
- DIM result as integer
+' ---- variables
+'value to be displayed
+Dim result As Integer
 
- ; ---- main body of program begins here
- main:
- 'StartTimer-value to count
-   result = 0
- 'switch not pressed
-   Alps_ESB_Bit = OFF
+' ---- main body of program begins here
+main:
+'StartTimer-value to count
+result = 0
+'switch not pressed
+Alps_ESB_Bit = Off
 
- cls
-  PRINT "Rotary Enc. Demo"
-  Locate 1,0
-  PRINT "Great Cow Basic"
-  wait 2 s
-  CLS
-  Print "@Dec 2019"
-  Locate 1,0
-  PRINT "Immo's&Ano Code"
-  wait 2 s
-	CLS
+CLS
+Print "Rotary Enc. Demo"
+Locate 1,0
+Print "Great Cow Basic"
+Wait 2 s
+CLS
+Print "@Dec 2019"
+Locate 1,0
+Print "Immo's&Ano Code"
+Wait 2 s
+CLS
 
- 'Show what happening with encoder on the LCD
+'Show what happening with encoder on the LCD
 
-  locate 0,0
-  print "Counting enabled"
-  locate 1, 0
-  print "Rotate encoder  "
+Locate 0,0
+Print "Counting enabled"
+Locate 1, 0
+Print "Rotate encoder  "
 
- 'now begin working...
+'now begin working...
 count:
 
- 'get encoder values (from include File)
- 'returns only, when encoder is turned
- 'or encoder_sw has been pressed (Alps_ESB_Bit = 1)
-  if ! Alps_ESB_Bit then Alps_Encoder_Read
- '--------------------------
- 'here you can insert any stuff you want
- '
- '
- 'to get back to counting, press button again
- '--------------------------
- 'switch was pressed to escape reading loop
- if Alps_ESB_Bit = 1 then
-   ' show me
+'get encoder values (from include File)
+'returns only, when encoder is turned
+'or encoder_sw has been pressed (Alps_ESB_Bit = 1)
+If ! Alps_ESB_Bit Then Alps_Encoder_Read
+'--------------------------
+'here you can insert any stuff you want
+'
+'
+'to get back to counting, press button again
+'--------------------------
+'switch was pressed to escape reading loop
+If Alps_ESB_Bit = 1 Then
+    ' show me
 
-   locate 0, 0
-   print " count disabled "
-   locate 1, 0
-   print "  press button  "
-
-
-  'toggle Alps_ESB_Bit, if you want/need
-   Alps_Switch_Read
+    Locate 0, 0
+    Print " count disabled "
+    Locate 1, 0
+    Print "  press button  "
 
 
-    if ! Alps_ESB_Bit Then
-     'switch was pressed again
-     'show me old display
-     cls
-     locate 0, 0
-     print "Counting enabled"
-     locate 1, 0
-     print "                "
-     locate 1, 8
-     if result > -1 Then
-     print " "
-     end if
+    'toggle Alps_ESB_Bit, if you want/need
+    Alps_Switch_Read
 
-     print result
 
-    end if
-  'start work - loop counting
-  goto count
+    If ! Alps_ESB_Bit Then
+        'switch was pressed again
+        'show me old display
+        CLS
+        Locate 0, 0
+        Print "Counting enabled"
+        Locate 1, 0
+        Print "                "
+        Locate 1, 8
+        If result > -1 Then
+            Print " "
+        End If
 
- end if
+        Print result
 
- 'show detected direction of turning
-   locate 1, 0
-   if Alps_directN = 1 then
-   'if enc_directN = 1 then
-     print " CW (+) "
-   Else
-     print "CCW (-) "
-   end if
+    End If
+    'start work - loop counting
+    Goto count
 
- 'make new result
-   result = result + Alps_Count_delta
+End If
 
- 'show me at same place as negatives
-   if result > -1 Then
-    print " "
-   end if
+'show detected direction of turning
+Locate 1, 0
+If Alps_directN = 1 Then
+    'if enc_directN = 1 then
+    Print " CW (+) "
+Else
+    Print "CCW (-) "
+End If
 
-   print result
-   print "    "
+'make new result
+result = result + Alps_Count_delta
 
- goto count
+'show me at same place as negatives
+If result > -1 Then
+    Print " "
+End If
 
- end
- ; ---- Support methods only at include file ALPS-EC11.h
+Print result
+Print "    "
+
+Goto count
+
+End
+' ---- Support methods only at include file ALPS-EC11.h
 

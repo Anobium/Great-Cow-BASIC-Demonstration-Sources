@@ -7,47 +7,47 @@
 '''
 '''*****************************************************************************
 
-; Chip Settings
+' Chip Settings
 
-#chip 16F15356
-#option Explicit
-
-
-    #define TINYWIRE_CONTROL portc.3
-    dir     TINYWIRE_CONTROL out
-
-    do
-
-        'Set-up the LED controller per the datasheet, table 9.
-        TinyWireTX ( TINYWIRE_SLEW1,  0x55 )
-        TinyWireTX ( TINYWIRE_PULSE1, 0x55 )
-        TinyWireTX ( TINYWIRE_SLEW2,  0x55 )
-        TinyWireTX ( TINYWIRE_PULSE2, 0x00 )
-        TinyWireTX ( TINYWIRE_CONTROL,0x02 )
-        TINYWIRE_CONTROL = ON
-
-        wait 10 s
-
-        'Set-up the LED controller per the datasheet, table 10
-        TinyWireTX ( TINYWIRE_SLEW1,  0x55 )
-        TinyWireTX ( TINYWIRE_PULSE1, 0x55 )
-        TinyWireTX ( TINYWIRE_SLEW2,  0x00 )
-        TinyWireTX ( TINYWIRE_PULSE2, 0x00 )
-        TinyWireTX ( TINYWIRE_CONTROL,0x02 )
-        TINYWIRE_CONTROL = ON
+#CHIP 16F15356
+#OPTION Explicit
 
 
-        'Set-up the LED controller per the datasheet, table 11.
-        TinyWireTX ( TINYWIRE_SLEW1,  0x55 )
-        TinyWireTX ( TINYWIRE_PULSE1, 0xA9 )
-        TinyWireTX ( TINYWIRE_SLEW2,  0x11 )
-        TinyWireTX ( TINYWIRE_PULSE2, 0x25 )
-        TinyWireTX ( TINYWIRE_CONTROL,0x02 )
-        TINYWIRE_CONTROL = ON
+#DEFINE TINYWIRE_CONTROL portc.3
+Dir     TINYWIRE_CONTROL Out
 
-        wait 10 s
+Do
 
-    loop
+    'Set-up the LED controller per the datasheet, table 9.
+    TinyWireTX ( TINYWIRE_SLEW1,  0x55 )
+    TinyWireTX ( TINYWIRE_PULSE1, 0x55 )
+    TinyWireTX ( TINYWIRE_SLEW2,  0x55 )
+    TinyWireTX ( TINYWIRE_PULSE2, 0x00 )
+    TinyWireTX ( TINYWIRE_CONTROL,0x02 )
+    TINYWIRE_CONTROL = On
+
+    Wait 10 s
+
+    'Set-up the LED controller per the datasheet, table 10
+    TinyWireTX ( TINYWIRE_SLEW1,  0x55 )
+    TinyWireTX ( TINYWIRE_PULSE1, 0x55 )
+    TinyWireTX ( TINYWIRE_SLEW2,  0x00 )
+    TinyWireTX ( TINYWIRE_PULSE2, 0x00 )
+    TinyWireTX ( TINYWIRE_CONTROL,0x02 )
+    TINYWIRE_CONTROL = On
+
+
+    'Set-up the LED controller per the datasheet, table 11.
+    TinyWireTX ( TINYWIRE_SLEW1,  0x55 )
+    TinyWireTX ( TINYWIRE_PULSE1, 0xA9 )
+    TinyWireTX ( TINYWIRE_SLEW2,  0x11 )
+    TinyWireTX ( TINYWIRE_PULSE2, 0x25 )
+    TinyWireTX ( TINYWIRE_CONTROL,0x02 )
+    TINYWIRE_CONTROL = On
+
+    Wait 10 s
+
+Loop
 
 
 'end of program
@@ -55,23 +55,23 @@
 
 'Methods etc
 
-    #define TINYWIRETX_TRESET 300   us
-    #define TINYWIRETX_LOGIC0_ON  1 us
-    #define TINYWIRETX_LOGIC0_OFF 3 us
-    #define TINYWIRETX_LOGIC1_ON  5 us
-    #define TINYWIRETX_LOGIC1_OFF 1 us
-    #define TINYWIRE_SLEW1       0
-    #define TINYWIRE_PULSE1      1
-    #define TINYWIRE_SLEW2       2
-    #define TINYWIRE_PULSE2      3
-    #define TINYWIRE_CONTROL     4
+#DEFINE TINYWIRETX_TRESET 300   us
+#DEFINE TINYWIRETX_LOGIC0_ON  1 us
+#DEFINE TINYWIRETX_LOGIC0_OFF 3 us
+#DEFINE TINYWIRETX_LOGIC1_ON  5 us
+#DEFINE TINYWIRETX_LOGIC1_OFF 1 us
+#DEFINE TINYWIRE_SLEW1       0
+#DEFINE TINYWIRE_PULSE1      1
+#DEFINE TINYWIRE_SLEW2       2
+#DEFINE TINYWIRE_PULSE2      3
+#DEFINE TINYWIRE_CONTROL     4
 
-    #define TINYWIRE_CONTROL_FOLLOW     1
-    #define TINYWIRE_CONTROL_PLAY       2
-    #define TINYWIRE_CONTROL_SLOW       3
+#DEFINE TINYWIRE_CONTROL_FOLLOW     1
+#DEFINE TINYWIRE_CONTROL_PLAY       2
+#DEFINE TINYWIRE_CONTROL_SLOW       3
 
 
-Sub TinyWireTX ( in TinyWireTX_address as byte, in TinyWireTX_data as byte )
+Sub TinyWireTX ( In TinyWireTX_address As Byte, In TinyWireTX_data As Byte )
 
     TinyWireTX_SendBit TinyWireTX_address.0
     TinyWireTX_SendBit TinyWireTX_address.1
@@ -87,26 +87,26 @@ Sub TinyWireTX ( in TinyWireTX_address as byte, in TinyWireTX_data as byte )
     TinyWireTX_SendBit TinyWireTX_data.7
 
     TINYWIRE_CONTROL = 1
-    wait TINYWIRETX_LOGIC1_ON
+    Wait TINYWIRETX_LOGIC1_ON
     TINYWIRE_CONTROL = 0
-    wait TINYWIRETX_TRESET
+    Wait TINYWIRETX_TRESET
 
 
 
 End Sub
 
-Sub TinyWireTX_SendBit ( in TinyWireTX_bit as bit )
+Sub TinyWireTX_SendBit ( In TinyWireTX_bit As BIT )
 
-  if TinyWireTX_bit = 0 then
-      TINYWIRE_CONTROL = 1
-      wait TINYWIRETX_LOGIC0_ON
-      TINYWIRE_CONTROL = 0
-      wait TINYWIRETX_LOGIC0_OFF
-  else
-      TINYWIRE_CONTROL = 1
-      wait TINYWIRETX_LOGIC1_ON
-      TINYWIRE_CONTROL = 0
-      wait TINYWIRETX_LOGIC1_OFF
-  end if
+    If TinyWireTX_bit = 0 Then
+        TINYWIRE_CONTROL = 1
+        Wait TINYWIRETX_LOGIC0_ON
+        TINYWIRE_CONTROL = 0
+        Wait TINYWIRETX_LOGIC0_OFF
+    Else
+        TINYWIRE_CONTROL = 1
+        Wait TINYWIRETX_LOGIC1_ON
+        TINYWIRE_CONTROL = 0
+        Wait TINYWIRETX_LOGIC1_OFF
+    End If
 
 End Sub

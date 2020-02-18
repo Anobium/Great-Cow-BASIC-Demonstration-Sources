@@ -17,16 +17,21 @@
 '
 ' This example code is in the public domain.
 '
-#chip mega328p, 16    ' Declare the Target Processor and Speed
-#option explicit      ' Require Explicit declaration of Variables
+' Declare the Target Processor and Speed
+#CHIP mega328p, 16
+' Require Explicit declaration of Variables
+#OPTION Explicit
 
-#define LED PORTB.5   ' Define the LED Pin
+' Define the LED Pin
+#DEFINE LED PORTB.5
 
 ' Setup
-Dir LED Out           ' Make the LED Pin an Output
+' Make the LED Pin an Output
+Dir LED Out
 
 ' Main                ' This loop runs over and over forever.
 Do
-  LED = !LED          ' Toggle state of LED
-  wait 1 s
+    ' Toggle state of LED
+    LED = !LED
+    Wait 1 s
 Loop

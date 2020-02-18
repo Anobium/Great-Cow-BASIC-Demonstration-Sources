@@ -19,45 +19,46 @@
 '''@date    17.11.17
 '''********************************************************************************
 
-    ;Chip Settings.
-    #chip 16lf1939,32
-    #option explicit
+'Chip Settings.
+#CHIP 16lf1939,32
+#OPTION Explicit
 
-    #include <glcd.h>
+#INCLUDE <glcd.h>
 
-    #DEFINE GLCD_TYPE GLCD_TYPE_PCD8544
-    #DEFINE GLCD_TYPE_PCD8544_CHARACTER_MODE_ONLY
-    #define PCD8544_HardwareSPI     'comment out to use Software SPI
+#DEFINE GLCD_TYPE GLCD_TYPE_PCD8544
+#DEFINE GLCD_TYPE_PCD8544_CHARACTER_MODE_ONLY
+'comment out to use Software SPI
+#DEFINE PCD8544_HardwareSPI
 
 ' Pin mappings for SPI for Nokia 3310 Device
 ' None LAT configurations
-    #define GLCD_DO portc.5
-    #define GLCD_SCK portc.3
-    #define GLCD_DC portc.2
-    #define GLCD_CS portc.1
-    #define GLCD_RESET portc.0
+#DEFINE GLCD_DO portc.5
+#DEFINE GLCD_SCK portc.3
+#DEFINE GLCD_DC portc.2
+#DEFINE GLCD_CS portc.1
+#DEFINE GLCD_RESET portc.0
 
-    ' write delay of 0 is works at 32mhz.
-    #define PCD8544ClockDelay 0
-    ' write delay of 0 is works at 32mhz.
-    #define PCD8544WriteDelay 0
+' write delay of 0 is works at 32mhz.
+#DEFINE PCD8544ClockDelay 0
+' write delay of 0 is works at 32mhz.
+#DEFINE PCD8544WriteDelay 0
 
 
 
-    GLCDCLS
+GLCDCLS
 
-    GLCDPrintStringLn ( "1.First Ln" )
-    GLCDPrintStringLn ( "2.Second Ln" )
-    GLCDPrintStringLn ( "" )
-    GLCDPrintStringLn ( "4.Forth Ln" )
-    GLCDLocateString  ( 0, 5 )
-    GLCDPrintString  (  "5." )
-    GLCDPrintStringLn ( "Fifth Ln" )
+GLCDPrintStringLn ( "1.First Ln" )
+GLCDPrintStringLn ( "2.Second Ln" )
+GLCDPrintStringLn ( "" )
+GLCDPrintStringLn ( "4.Forth Ln" )
+GLCDLocateString  ( 0, 5 )
+GLCDPrintString  (  "5." )
+GLCDPrintStringLn ( "Fifth Ln" )
 
-    GLCDPrintStringLn ( "6.Sixth Ln" )
-    GLCDLocateString  ( 0, 3 )
-    dim val3 as Byte
-    val3 = 3
-    GLCDPrintStringLn ( str( val3 ) + ".Third Ln" )
+GLCDPrintStringLn ( "6.Sixth Ln" )
+GLCDLocateString  ( 0, 3 )
+Dim val3 As Byte
+val3 = 3
+GLCDPrintStringLn ( Str( val3 ) + ".Third Ln" )
 
-    end
+End

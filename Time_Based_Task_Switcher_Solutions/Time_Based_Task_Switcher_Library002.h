@@ -122,1007 +122,1022 @@
 
 
 
-#startup Init_Multitask     'Initialisation routine
+'Initialisation routine
+#STARTUP Init_Multitask
 
 
 Sub Init_Multitask
-    #ifndef base_time
-        #define base_time 1000
-    #endif
+    #IFNDEF base_time
+        #DEFINE base_time 1000
+    #ENDIF
 
-    #script
-        If PIC Then
-            'Dim timer0_val as byte
+#SCRIPT
+    If PIC Then
+        'Dim timer0_val as byte
 
-            MipsPic = ChipMHz/4
-            TMR0PresPic = 0
-            T0TOP_Pic = MipsPic*base_time/2
+        MipsPic = ChipMHz/4
+        TMR0PresPic = 0
+        T0TOP_Pic = MipsPic*base_time/2
 
-            if T0TOP_Pic > 255 then
-                TMR0PresPic = 1
-                T0TOP_Pic = MipsPic*base_time/4
-                if T0TOP_Pic > 255 then
-                    TMR0PresPic = 2
-                    T0TOP_Pic = MipsPic*base_time/8
-                    if T0TOP_Pic > 255 then
-                        TMR0PresPic = 3
-                        T0TOP_Pic = MipsPic*base_time/16
-                        if T0TOP_Pic > 255 then
-                            TMR0PresPic = 4
-                            T0TOP_Pic = MipsPic*base_time/32
-                            if T0TOP_Pic > 255 then
-                                TMR0PresPic = 5
-                                T0TOP_Pic = MipsPic*base_time/64
-                                if T0TOP_Pic > 255 then
-                                    TMR0PresPic = 6
-                                    T0TOP_Pic = MipsPic*base_time/128
-                                    if T0TOP_Pic > 255 then
-                                        TMR0PresPic = 7
-                                        T0TOP_Pic = MipsPic*base_time/256
-                                    end if
-                                end if
-                            end if
-                        end if
-                    end if
-                end if
-            end if
-            timer0_val = 255 - T0TOP_Pic
-      End If
-
-      If AVR Then
-            TMR0PresAvr = 1
-            T0TOP_Avr = ChipMHz*base_time
-
-            if T0TOP_Avr > 255 then
-                TMR0PresAvr = 2
-                T0TOP_Avr = ChipMHz*base_time/8
-                if T0TOP_Avr > 255 then
-                    TMR0PresAvr = 3
-                    T0TOP_Avr = ChipMHz*base_time/64
-                    if T0TOP_Avr > 255 then
-                        TMR0PresAvr = 4
-                        T0TOP_Avr = ChipMHz*base_time/256
-                        if T0TOP_Avr > 255 then
-                            TMR0PresAvr = 5
-                            T0TOP_Avr = ChipMHz*base_time/1024
-                        end if
-                    end if
-                end if
-            end if
+        If T0TOP_Pic > 255 Then
+            TMR0PresPic = 1
+            T0TOP_Pic = MipsPic*base_time/4
+            If T0TOP_Pic > 255 Then
+                TMR0PresPic = 2
+                T0TOP_Pic = MipsPic*base_time/8
+                If T0TOP_Pic > 255 Then
+                    TMR0PresPic = 3
+                    T0TOP_Pic = MipsPic*base_time/16
+                    If T0TOP_Pic > 255 Then
+                        TMR0PresPic = 4
+                        T0TOP_Pic = MipsPic*base_time/32
+                        If T0TOP_Pic > 255 Then
+                            TMR0PresPic = 5
+                            T0TOP_Pic = MipsPic*base_time/64
+                            If T0TOP_Pic > 255 Then
+                                TMR0PresPic = 6
+                                T0TOP_Pic = MipsPic*base_time/128
+                                If T0TOP_Pic > 255 Then
+                                    TMR0PresPic = 7
+                                    T0TOP_Pic = MipsPic*base_time/256
+                                End If
+                            End If
+                        End If
+                    End If
+                End If
+            End If
         End If
-    #endscript
+        timer0_val = 255 - T0TOP_Pic
+    End If
 
-    #ifdef PIC
-        #ifdef var(OPTION_REG)
-            OPTION_REG = 192 and OPTION_REG
-            OPTION_REG = TMR0PresPic or OPTION_REG
-        #endif
-        #ifdef var(T0CON)
-            T0CON = 192
-            T0CON = TMR0PresPic or T0CON
-        #endif
-        On Interrupt Timer0Overflow Call Interr_Timer0
-    #endif
+    If AVR Then
+        TMR0PresAvr = 1
+        T0TOP_Avr = ChipMHz*base_time
 
-    #ifdef AVR
-        #ifdef Var(OCR0)
-            OCR0  = T0TOP_Avr
-            TCCR0 = 64 + TMR0PresAvr ' CTC mode: TOP = OCR0
-        #endif
-        #ifdef Var(OCR0A)
-            OCR0A  = T0TOP_Avr
-            TCCR0A = 2  ' CTC mode: TOP = OCR0A
-            TCCR0B = TMR0PresAvr
-        #endif
-            On Interrupt Timer0Match1 Call Interr_Timer0
-    #endif
+        If T0TOP_Avr > 255 Then
+            TMR0PresAvr = 2
+            T0TOP_Avr = ChipMHz*base_time/8
+            If T0TOP_Avr > 255 Then
+                TMR0PresAvr = 3
+                T0TOP_Avr = ChipMHz*base_time/64
+                If T0TOP_Avr > 255 Then
+                    TMR0PresAvr = 4
+                    T0TOP_Avr = ChipMHz*base_time/256
+                    If T0TOP_Avr > 255 Then
+                        TMR0PresAvr = 5
+                        T0TOP_Avr = ChipMHz*base_time/1024
+                    End If
+                End If
+            End If
+        End If
+    End If
+#ENDSCRIPT
+
+#IFDEF PIC
+    #IFDEF Var(OPTION_REG)
+        OPTION_REG = 192 AND OPTION_REG
+        OPTION_REG = TMR0PresPic OR OPTION_REG
+    #ENDIF
+    #IFDEF Var(T0CON)
+        T0CON = 192
+        T0CON = TMR0PresPic OR T0CON
+    #ENDIF
+    On Interrupt Timer0Overflow Call Interr_Timer0
+#ENDIF
+
+#IFDEF AVR
+    #IFDEF Var(OCR0)
+        OCR0  = T0TOP_Avr
+        ' CTC mode: TOP = OCR0
+        TCCR0 = 64 + TMR0PresAvr
+    #ENDIF
+    #IFDEF Var(OCR0A)
+        OCR0A  = T0TOP_Avr
+        ' CTC mode: TOP = OCR0A
+        TCCR0A = 2
+        TCCR0B = TMR0PresAvr
+    #ENDIF
+    On Interrupt Timer0Match1 Call Interr_Timer0
+#ENDIF
 
 
 
-    #ifdef Task1
-        #ifdef Task1_us
-            time_Task1 = Task1_us/base_time
-        #endif
-        #ifdef Task1_ms
-            time_Task1 = Task1_ms*1000/base_time
-        #endif
-        #define flag_Task1 mtsk_flags.0
-    #endif
+#IFDEF Task1
+    #IFDEF Task1_us
+        time_Task1 = Task1_us/base_time
+    #ENDIF
+    #IFDEF Task1_ms
+        time_Task1 = Task1_ms*1000/base_time
+    #ENDIF
+    #DEFINE flag_Task1 mtsk_flags.0
+#ENDIF
 
-    #ifdef LTask1
-        dim time_LTask1 as word
-        dim cont_LTask1 as word
-        #ifdef LTask1_us
-            time_LTask1 = LTask1_us/base_time
-        #endif
-        #ifdef LTask1_ms
-            time_LTask1 = LTask1_ms*1000/base_time
-        #endif
-        #ifdef LTask1_s
-            time_LTask1 = LTask1_s*1000000/base_time
-        #endif
-        #define flag_LTask1 Lmtsk_flags.0
-    #endif
+#IFDEF LTask1
+    Dim time_LTask1 As Word
+    Dim cont_LTask1 As Word
+    #IFDEF LTask1_us
+        time_LTask1 = LTask1_us/base_time
+    #ENDIF
+    #IFDEF LTask1_ms
+        time_LTask1 = LTask1_ms*1000/base_time
+    #ENDIF
+    #IFDEF LTask1_s
+        time_LTask1 = LTask1_s*1000000/base_time
+    #ENDIF
+    #DEFINE flag_LTask1 Lmtsk_flags.0
+#ENDIF
 
-    call init_rest_of_tasks     'here only Task1 and LTask1 are defined
-                                'to show procedure, rest of task are defined
-                                'in: Sub init_rest_of_tasks
+'here only Task1 and LTask1 are defined
+Call init_rest_of_tasks
+'to show procedure, rest of task are defined
+'in: Sub init_rest_of_tasks
 End Sub
 
 
 Sub Interr_Timer0
 
-    #ifdef PIC
-        TMR0 = TMR0 + timer0_val              'init timer0 counter
-    #endif
+    #IFDEF PIC
+        'init timer0 counter
+        TMR0 = TMR0 + timer0_val
+    #ENDIF
 
-    #ifdef pwm_res
-        dim cont_pwm as byte
+    #IFDEF pwm_res
+        Dim cont_pwm As Byte
         cont_pwm += 1
-        if cont_pwm >= pwm_res then cont_pwm = 0
+        If cont_pwm >= pwm_res Then cont_pwm = 0
 
-        #ifdef pwm1_out
-          dim pwm1_duty as byte
+        #IFDEF pwm1_out
+            Dim pwm1_duty As Byte
 
-          if cont_pwm >= pwm1_duty then
-              pwm1_out = 0
-          else
-              pwm1_out = 1
-          End if
-      #endif
+            If cont_pwm >= pwm1_duty Then
+                pwm1_out = 0
+            Else
+                pwm1_out = 1
+            End If
+        #ENDIF
 
-      #ifdef pwm2_out
-          dim pwm2_duty as byte
+        #IFDEF pwm2_out
+            Dim pwm2_duty As Byte
 
-          if cont_pwm >= pwm2_duty then
-              pwm2_out = 0
-          else
-              pwm2_out = 1
-          End if
-      #endif
+            If cont_pwm >= pwm2_duty Then
+                pwm2_out = 0
+            Else
+                pwm2_out = 1
+            End If
+        #ENDIF
 
-      #ifdef pwm3_out
-          dim pwm3_duty as byte
+        #IFDEF pwm3_out
+            Dim pwm3_duty As Byte
 
-          if cont_pwm >= pwm3_duty then
-              pwm3_out = 0
-          else
-              pwm3_out = 1
-          End if
-      #endif
+            If cont_pwm >= pwm3_duty Then
+                pwm3_out = 0
+            Else
+                pwm3_out = 1
+            End If
+        #ENDIF
 
-      #ifdef pwm4_out
-          dim pwm4_duty as byte
+        #IFDEF pwm4_out
+            Dim pwm4_duty As Byte
 
-          if cont_pwm >= pwm4_duty then
-              pwm4_out = 0
-          else
-              pwm4_out = 1
-          End if
-      #endif
+            If cont_pwm >= pwm4_duty Then
+                pwm4_out = 0
+            Else
+                pwm4_out = 1
+            End If
+        #ENDIF
 
-      #ifdef pwm5_out
-          dim pwm5_duty as byte
+        #IFDEF pwm5_out
+            Dim pwm5_duty As Byte
 
-          if cont_pwm >= pwm5_duty then
-              pwm5_out = 0
-          else
-              pwm5_out = 1
-          End if
-      #endif
+            If cont_pwm >= pwm5_duty Then
+                pwm5_out = 0
+            Else
+                pwm5_out = 1
+            End If
+        #ENDIF
 
-      #ifdef pwm6_out
-          dim pwm6_duty as byte
+        #IFDEF pwm6_out
+            Dim pwm6_duty As Byte
 
-          if cont_pwm >= pwm6_duty then
-              pwm6_out = 0
-          else
-              pwm6_out = 1
-          End if
-      #endif
+            If cont_pwm >= pwm6_duty Then
+                pwm6_out = 0
+            Else
+                pwm6_out = 1
+            End If
+        #ENDIF
 
-      #ifdef pwm7_out
-          dim pwm7_duty as byte
+        #IFDEF pwm7_out
+            Dim pwm7_duty As Byte
 
-          if cont_pwm >= pwm7_duty then
-              pwm7_out = 0
-          else
-              pwm7_out = 1
-          End if
-      #endif
+            If cont_pwm >= pwm7_duty Then
+                pwm7_out = 0
+            Else
+                pwm7_out = 1
+            End If
+        #ENDIF
 
-      #ifdef pwm8_out
-          dim pwm8_duty as byte
+        #IFDEF pwm8_out
+            Dim pwm8_duty As Byte
 
-          if cont_pwm >= pwm8_duty then
-              pwm8_out = 0
-          else
-              pwm8_out = 1
-          End if
-      #endif
+            If cont_pwm >= pwm8_duty Then
+                pwm8_out = 0
+            Else
+                pwm8_out = 1
+            End If
+        #ENDIF
 
-      #ifdef pwm9_out
-          dim pwm9_duty as byte
+        #IFDEF pwm9_out
+            Dim pwm9_duty As Byte
 
-          if cont_pwm >= pwm9_duty then
-              pwm9_out = 0
-          else
-              pwm9_out = 1
-          End if
-      #endif
+            If cont_pwm >= pwm9_duty Then
+                pwm9_out = 0
+            Else
+                pwm9_out = 1
+            End If
+        #ENDIF
 
-  #endif
+    #ENDIF
 
-    #ifdef Task1
-        cont_Task1 += 1                   'increment task counter
-        if cont_Task1 >= time_Task1 then   'if task time reached
-            cont_Task1 = 0                'restart counter
-            flag_Task1 = 1                'set task flag
-        End if
-        #ifdef Run_Task1
+    #IFDEF Task1
+        'increment task counter
+        cont_Task1 += 1
+        If cont_Task1 >= time_Task1 Then
+            'if task time reached
+            'restart counter
+            cont_Task1 = 0
+            'set task flag
+            flag_Task1 = 1
+        End If
+        #IFDEF Run_Task1
             Do_Task1
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef Task2
+    #IFDEF Task2
         cont_Task2 += 1
-        if cont_Task2 >= time_Task2 then
+        If cont_Task2 >= time_Task2 Then
             cont_Task2 = 0
             flag_Task2 = 1
-        End if
-        #ifdef Run_Task2
+        End If
+        #IFDEF Run_Task2
             Do_Task2
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef Task3
+    #IFDEF Task3
         cont_Task3 += 1
-        if cont_Task3 >= time_Task3 then
+        If cont_Task3 >= time_Task3 Then
             cont_Task3 = 0
             flag_Task3 = 1
-        End if
-        #ifdef Run_Task3
+        End If
+        #IFDEF Run_Task3
             Do_Task3
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef Task4
+    #IFDEF Task4
         cont_Task4 += 1
-        if cont_Task4 >= time_Task4 then
+        If cont_Task4 >= time_Task4 Then
             cont_Task4 = 0
             flag_Task4 = 1
-        End if
-        #ifdef Run_Task4
+        End If
+        #IFDEF Run_Task4
             Do_Task4
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef Task5
+    #IFDEF Task5
         cont_Task5 += 1
-        if cont_Task5 >= time_Task5 then
+        If cont_Task5 >= time_Task5 Then
             cont_Task5 = 0
             flag_Task5 = 1
-        End if
-        #ifdef Run_Task5
+        End If
+        #IFDEF Run_Task5
             Do_Task5
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef Task6
+    #IFDEF Task6
         cont_Task6 += 1
-        if cont_Task6 >= time_Task6 then
+        If cont_Task6 >= time_Task6 Then
             cont_Task6 = 0
             flag_Task6 = 1
-        End if
-        #ifdef Run_Task6
+        End If
+        #IFDEF Run_Task6
             Do_Task6
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef Task7
+    #IFDEF Task7
         cont_Task7 += 1
-        if cont_Task7 >= time_Task7 then
+        If cont_Task7 >= time_Task7 Then
             cont_Task7 = 0
             flag_Task7 = 1
-        End if
-        #ifdef Run_Task7
+        End If
+        #IFDEF Run_Task7
             Do_Task7
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef Task8
+    #IFDEF Task8
         cont_Task8 += 1
-        if cont_Task8 >= time_Task8 then
+        If cont_Task8 >= time_Task8 Then
             cont_Task8 = 0
             flag_Task8 = 1
-        End if
-        #ifdef Run_Task8
+        End If
+        #IFDEF Run_Task8
             Do_Task8
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef Task9
-        cont_Task9 += 1                   'increment task counter
-        if cont_Task9 >= time_Task9 then   'if task time reached
-            cont_Task9 = 0                'restart counter
-            flag_Task9 = 1                'set task flag
-        End if
-        #ifdef Run_Task9
+    #IFDEF Task9
+        'increment task counter
+        cont_Task9 += 1
+        If cont_Task9 >= time_Task9 Then
+            'if task time reached
+            'restart counter
+            cont_Task9 = 0
+            'set task flag
+            flag_Task9 = 1
+        End If
+        #IFDEF Run_Task9
             Do_Task9
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef Task10
+    #IFDEF Task10
         cont_Task10 += 1
-        if cont_Task10 >= time_Task10 then
+        If cont_Task10 >= time_Task10 Then
             cont_Task10 = 0
             flag_Task10 = 1
-        End if
-        #ifdef Run_Task10
+        End If
+        #IFDEF Run_Task10
             Do_Task10
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef Task11
+    #IFDEF Task11
         cont_Task11 += 1
-        if cont_Task11 >= time_Task11 then
+        If cont_Task11 >= time_Task11 Then
             cont_Task11 = 0
             flag_Task11 = 1
-        End if
-        #ifdef Run_Task11
+        End If
+        #IFDEF Run_Task11
             Do_Task11
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef Task12
+    #IFDEF Task12
         cont_Task12 += 1
-        if cont_Task12 >= time_Task12 then
+        If cont_Task12 >= time_Task12 Then
             cont_Task12 = 0
             flag_Task12 = 1
-        End if
-        #ifdef Run_Task12
+        End If
+        #IFDEF Run_Task12
             Do_Task12
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef Task13
+    #IFDEF Task13
         cont_Task13 += 1
-        if cont_Task13 >= time_Task13 then
+        If cont_Task13 >= time_Task13 Then
             cont_Task13 = 0
             flag_Task13 = 1
-        End if
-        #ifdef Run_Task13
+        End If
+        #IFDEF Run_Task13
             Do_Task13
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef Task14
+    #IFDEF Task14
         cont_Task14 += 1
-        if cont_Task14 >= time_Task14 then
+        If cont_Task14 >= time_Task14 Then
             cont_Task14 = 0
             flag_Task14 = 1
-        End if
-        #ifdef Run_Task14
+        End If
+        #IFDEF Run_Task14
             Do_Task14
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef Task15
+    #IFDEF Task15
         cont_Task15 += 1
-        if cont_Task15 >= time_Task15 then
+        If cont_Task15 >= time_Task15 Then
             cont_Task15 = 0
             flag_Task15 = 1
-        End if
-        #ifdef Run_Task15
+        End If
+        #IFDEF Run_Task15
             Do_Task15
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef Task16
+    #IFDEF Task16
         cont_Task16 += 1
-        if cont_Task16 >= time_Task16 then
+        If cont_Task16 >= time_Task16 Then
             cont_Task16 = 0
             flag_Task16 = 1
-        End if
-        #ifdef Run_Task16
+        End If
+        #IFDEF Run_Task16
             Do_Task16
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
     '--------------------------- LONG TASKs -------------------------
 
-    #ifdef LTask1
-        dim time_LTask1 as word
-        dim cont_LTask1 as word
+    #IFDEF LTask1
+        Dim time_LTask1 As Word
+        Dim cont_LTask1 As Word
 
-        cont_LTask1 += 1               'increment LTask counter
-      if cont_LTask1 >= time_LTask1 then
+        'increment LTask counter
+        cont_LTask1 += 1
+        If cont_LTask1 >= time_LTask1 Then
             cont_LTask1 = 0
             flag_LTask1 = 1
-        End if
-        #ifdef Run_LTask1
+        End If
+        #IFDEF Run_LTask1
             Do_LTask1
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef LTask2
-        dim time_LTask2 as word
-        dim cont_LTask2 as word
+    #IFDEF LTask2
+        Dim time_LTask2 As Word
+        Dim cont_LTask2 As Word
 
         cont_LTask2 += 1
-      if cont_LTask2 >= time_LTask2 then
+        If cont_LTask2 >= time_LTask2 Then
             cont_LTask2 = 0
             flag_LTask2 = 1
-        End if
-        #ifdef Run_LTask2
+        End If
+        #IFDEF Run_LTask2
             Do_LTask2
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef LTask3
-        dim time_LTask3 as word
-        dim cont_LTask3 as word
+    #IFDEF LTask3
+        Dim time_LTask3 As Word
+        Dim cont_LTask3 As Word
 
         cont_LTask3 += 1
-      if cont_LTask3 >= time_LTask3 then
+        If cont_LTask3 >= time_LTask3 Then
             cont_LTask3 = 0
             flag_LTask3 = 1
-        End if
-        #ifdef Run_LTask3
+        End If
+        #IFDEF Run_LTask3
             Do_LTask3
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef LTask4
-        dim time_LTask4 as word
-        dim cont_LTask4 as word
+    #IFDEF LTask4
+        Dim time_LTask4 As Word
+        Dim cont_LTask4 As Word
 
         cont_LTask4 += 1
-      if cont_LTask4 >= time_LTask4 then
+        If cont_LTask4 >= time_LTask4 Then
             cont_LTask4 = 0
             flag_LTask4 = 1
-        End if
-        #ifdef Run_LTask4
+        End If
+        #IFDEF Run_LTask4
             Do_LTask4
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef LTask5
-        dim time_LTask5 as word
-        dim cont_LTask5 as word
+    #IFDEF LTask5
+        Dim time_LTask5 As Word
+        Dim cont_LTask5 As Word
 
         cont_LTask5 += 1
-      if cont_LTask5 >= time_LTask5 then
+        If cont_LTask5 >= time_LTask5 Then
             cont_LTask5 = 0
             flag_LTask5 = 1
-        End if
-        #ifdef Run_LTask5
+        End If
+        #IFDEF Run_LTask5
             Do_LTask5
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef LTask6
-        dim time_LTask6 as word
-        dim cont_LTask6 as word
+    #IFDEF LTask6
+        Dim time_LTask6 As Word
+        Dim cont_LTask6 As Word
 
         cont_LTask6 += 1
-      if cont_LTask6 >= time_LTask6 then
+        If cont_LTask6 >= time_LTask6 Then
             cont_LTask6 = 0
             flag_LTask6 = 1
-        End if
-        #ifdef Run_LTask6
+        End If
+        #IFDEF Run_LTask6
             Do_LTask6
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef LTask7
-        dim time_LTask7 as word
-        dim cont_LTask7 as word
+    #IFDEF LTask7
+        Dim time_LTask7 As Word
+        Dim cont_LTask7 As Word
 
         cont_LTask7 += 1
-      if cont_LTask7 >= time_LTask7 then
+        If cont_LTask7 >= time_LTask7 Then
             cont_LTask7 = 0
             flag_LTask7 = 1
-        End if
-        #ifdef Run_LTask7
+        End If
+        #IFDEF Run_LTask7
             Do_LTask7
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 
-    #ifdef LTask8
-        dim time_LTask8 as word
-        dim cont_LTask8 as word
+    #IFDEF LTask8
+        Dim time_LTask8 As Word
+        Dim cont_LTask8 As Word
 
         cont_LTask8 += 1
-      if cont_LTask8 >= time_LTask8 then
+        If cont_LTask8 >= time_LTask8 Then
             cont_LTask8 = 0
             flag_LTask8 = 1
-        End if
-        #ifdef Run_LTask8
+        End If
+        #IFDEF Run_LTask8
             Do_LTask8
-        #endif
-    #endif
+        #ENDIF
+    #ENDIF
 End Sub
 
-Sub init_rest_of_tasks          'Calculate ticks value from time value
-    #ifdef Task2
-        #ifdef Task2_us
+'Calculate ticks value from time value
+Sub init_rest_of_tasks
+    #IFDEF Task2
+        #IFDEF Task2_us
             time_Task2 = Task2_us/base_time
-        #endif
-        #ifdef Task2_ms
+        #ENDIF
+        #IFDEF Task2_ms
             time_Task2 = Task2_ms*1000/base_time
-        #endif
-        #define flag_Task2 mtsk_flags.1
-    #endif
+        #ENDIF
+        #DEFINE flag_Task2 mtsk_flags.1
+    #ENDIF
 
-    #ifdef Task3
-        #ifdef Task3_us
+    #IFDEF Task3
+        #IFDEF Task3_us
             time_Task3 = Task3_us/base_time
-        #endif
-        #ifdef Task3_ms
+        #ENDIF
+        #IFDEF Task3_ms
             time_Task3 = Task3_ms*1000/base_time
-        #endif
-        #define flag_Task3 mtsk_flags.2
-    #endif
+        #ENDIF
+        #DEFINE flag_Task3 mtsk_flags.2
+    #ENDIF
 
-    #ifdef Task4
-        #ifdef Task4_us
+    #IFDEF Task4
+        #IFDEF Task4_us
             time_Task4 = Task4_us/base_time
-        #endif
-        #ifdef Task4_ms
+        #ENDIF
+        #IFDEF Task4_ms
             time_Task4 = Task4_ms*1000/base_time
-        #endif
-        #define flag_Task4 mtsk_flags.3
-    #endif
+        #ENDIF
+        #DEFINE flag_Task4 mtsk_flags.3
+    #ENDIF
 
-    #ifdef Task5
-        #ifdef Task5_us
+    #IFDEF Task5
+        #IFDEF Task5_us
             time_Task5 = Task5_us/base_time
-        #endif
-        #ifdef Task5_ms
+        #ENDIF
+        #IFDEF Task5_ms
             time_Task5 = Task5_ms*1000/base_time
-        #endif
-        #define flag_Task5 mtsk_flags.4
-    #endif
+        #ENDIF
+        #DEFINE flag_Task5 mtsk_flags.4
+    #ENDIF
 
-    #ifdef Task6
-        #ifdef Task6_us
+    #IFDEF Task6
+        #IFDEF Task6_us
             time_Task6 = Task6_us/base_time
-        #endif
-        #ifdef Task6_ms
+        #ENDIF
+        #IFDEF Task6_ms
             time_Task6 = Task6_ms*1000/base_time
-        #endif
-        #define flag_Task6 mtsk_flags.5
-    #endif
+        #ENDIF
+        #DEFINE flag_Task6 mtsk_flags.5
+    #ENDIF
 
-    #ifdef Task7
-        #ifdef Task7_us
+    #IFDEF Task7
+        #IFDEF Task7_us
             time_Task7 = Task7_us/base_time
-        #endif
-        #ifdef Task7_ms
+        #ENDIF
+        #IFDEF Task7_ms
             time_Task7 = Task7_ms*1000/base_time
-        #endif
-        #define flag_Task7 mtsk_flags.6
-    #endif
+        #ENDIF
+        #DEFINE flag_Task7 mtsk_flags.6
+    #ENDIF
 
-    #ifdef Task8
-        #ifdef Task8_us
+    #IFDEF Task8
+        #IFDEF Task8_us
             time_Task8 = Task8_us/base_time
-        #endif
-        #ifdef Task8_ms
+        #ENDIF
+        #IFDEF Task8_ms
             time_Task8 = Task8_ms*1000/base_time
-        #endif
-        #define flag_Task8 mtsk_flags.7
-    #endif
+        #ENDIF
+        #DEFINE flag_Task8 mtsk_flags.7
+    #ENDIF
 
-    #ifdef Task9
-        #ifdef Task9_us
+    #IFDEF Task9
+        #IFDEF Task9_us
             time_Task9 = Task9_us/base_time
-        #endif
-        #ifdef Task9_ms
+        #ENDIF
+        #IFDEF Task9_ms
             time_Task9 = Task9_ms*1000/base_time
-        #endif
-        #define flag_Task9 mtsk_flags_H.0
-    #endif
+        #ENDIF
+        #DEFINE flag_Task9 mtsk_flags_H.0
+    #ENDIF
 
-    #ifdef Task10
-        #ifdef Task10_us
+    #IFDEF Task10
+        #IFDEF Task10_us
             time_Task10 = Task10_us/base_time
-        #endif
-        #ifdef Task10_ms
+        #ENDIF
+        #IFDEF Task10_ms
             time_Task10 = Task10_ms*1000/base_time
-        #endif
-        #define flag_Task10 mtsk_flags_H.1
-    #endif
+        #ENDIF
+        #DEFINE flag_Task10 mtsk_flags_H.1
+    #ENDIF
 
-    #ifdef Task11
-        #ifdef Task11_us
+    #IFDEF Task11
+        #IFDEF Task11_us
             time_Task11 = Task11_us/base_time
-        #endif
-        #ifdef Task11_ms
+        #ENDIF
+        #IFDEF Task11_ms
             time_Task11 = Task11_ms*1000/base_time
-        #endif
-        #define flag_Task11 mtsk_flags_H.2
-    #endif
+        #ENDIF
+        #DEFINE flag_Task11 mtsk_flags_H.2
+    #ENDIF
 
-    #ifdef Task12
-        #ifdef Task12_us
+    #IFDEF Task12
+        #IFDEF Task12_us
             time_Task12 = Task12_us/base_time
-        #endif
-        #ifdef Task12_ms
+        #ENDIF
+        #IFDEF Task12_ms
             time_Task12 = Task12_ms*1000/base_time
-        #endif
-        #define flag_Task12 mtsk_flags_H.3
-    #endif
+        #ENDIF
+        #DEFINE flag_Task12 mtsk_flags_H.3
+    #ENDIF
 
-    #ifdef Task13
-        #ifdef Task13_us
+    #IFDEF Task13
+        #IFDEF Task13_us
             time_Task13 = Task13_us/base_time
-        #endif
-        #ifdef Task13_ms
+        #ENDIF
+        #IFDEF Task13_ms
             time_Task13 = Task13_ms*1000/base_time
-        #endif
-        #define flag_Task13 mtsk_flags_H.4
-    #endif
+        #ENDIF
+        #DEFINE flag_Task13 mtsk_flags_H.4
+    #ENDIF
 
-    #ifdef Task14
-        #ifdef Task14_us
+    #IFDEF Task14
+        #IFDEF Task14_us
             time_Task14 = Task14_us/base_time
-        #endif
-        #ifdef Task14_ms
+        #ENDIF
+        #IFDEF Task14_ms
             time_Task14 = Task14_ms*1000/base_time
-        #endif
-        #define flag_Task14 mtsk_flags_H.5
-    #endif
+        #ENDIF
+        #DEFINE flag_Task14 mtsk_flags_H.5
+    #ENDIF
 
-    #ifdef Task15
-        #ifdef Task15_us
+    #IFDEF Task15
+        #IFDEF Task15_us
             time_Task15 = Task15_us/base_time
-        #endif
-        #ifdef Task15_ms
+        #ENDIF
+        #IFDEF Task15_ms
             time_Task15 = Task15_ms*1000/base_time
-        #endif
-        #define flag_Task15 mtsk_flags_H.6
-    #endif
+        #ENDIF
+        #DEFINE flag_Task15 mtsk_flags_H.6
+    #ENDIF
 
-    #ifdef Task16
-        #ifdef Task16_us
+    #IFDEF Task16
+        #IFDEF Task16_us
             time_Task16 = Task16_us/base_time
-        #endif
-        #ifdef Task16_ms
+        #ENDIF
+        #IFDEF Task16_ms
             time_Task16 = Task16_ms*1000/base_time
-        #endif
-        #define flag_Task16 mtsk_flags_H.7
-    #endif
+        #ENDIF
+        #DEFINE flag_Task16 mtsk_flags_H.7
+    #ENDIF
 
     '--------------------------- LONG TASKs -------------------------
 
 
-    #ifdef LTask2
-        dim time_LTask2 as word
-        dim cont_LTask2 as word
-        #ifdef LTask2_us
+    #IFDEF LTask2
+        Dim time_LTask2 As Word
+        Dim cont_LTask2 As Word
+        #IFDEF LTask2_us
             time_LTask2 = LTask2_us/base_time
-        #endif
-        #ifdef LTask2_ms
+        #ENDIF
+        #IFDEF LTask2_ms
             time_LTask2 = LTask2_ms*1000/base_time
-        #endif
-        #ifdef LTask2_s
+        #ENDIF
+        #IFDEF LTask2_s
             time_LTask2 = LTask2_s*1000000/base_time
-        #endif
-        #define flag_LTask2 Lmtsk_flags.1
-    #endif
+        #ENDIF
+        #DEFINE flag_LTask2 Lmtsk_flags.1
+    #ENDIF
 
-    #ifdef LTask3
-        dim time_LTask3 as word
-        dim cont_LTask3 as word
-        #ifdef LTask3_us
+    #IFDEF LTask3
+        Dim time_LTask3 As Word
+        Dim cont_LTask3 As Word
+        #IFDEF LTask3_us
             time_LTask3 = LTask3_us/base_time
-        #endif
-        #ifdef LTask3_ms
+        #ENDIF
+        #IFDEF LTask3_ms
             time_LTask3 = LTask3_ms*1000/base_time
-        #endif
-        #ifdef LTask3_s
+        #ENDIF
+        #IFDEF LTask3_s
             time_LTask3 = LTask3_s*1000000/base_time
-        #endif
-        #define flag_LTask3 Lmtsk_flags.2
-    #endif
+        #ENDIF
+        #DEFINE flag_LTask3 Lmtsk_flags.2
+    #ENDIF
 
-    #ifdef LTask4
-        dim time_LTask4 as word
-        dim cont_LTask4 as word
-        #ifdef LTask4_us
+    #IFDEF LTask4
+        Dim time_LTask4 As Word
+        Dim cont_LTask4 As Word
+        #IFDEF LTask4_us
             time_LTask4 = LTask4_us/base_time
-        #endif
-        #ifdef LTask4_ms
+        #ENDIF
+        #IFDEF LTask4_ms
             time_LTask4 = LTask4_ms*1000/base_time
-        #endif
-        #ifdef LTask4_s
+        #ENDIF
+        #IFDEF LTask4_s
             time_LTask4 = LTask4_s*1000000/base_time
-        #endif
-        #define flag_LTask4 Lmtsk_flags.3
-    #endif
+        #ENDIF
+        #DEFINE flag_LTask4 Lmtsk_flags.3
+    #ENDIF
 
-    #ifdef LTask5
-        dim time_LTask5 as word
-        dim cont_LTask5 as word
-        #ifdef LTask5_us
+    #IFDEF LTask5
+        Dim time_LTask5 As Word
+        Dim cont_LTask5 As Word
+        #IFDEF LTask5_us
             time_LTask5 = LTask5_us/base_time
-        #endif
-        #ifdef LTask5_ms
+        #ENDIF
+        #IFDEF LTask5_ms
             time_LTask5 = LTask5_ms*1000/base_time
-        #endif
-        #ifdef LTask5_s
+        #ENDIF
+        #IFDEF LTask5_s
             time_LTask5 = LTask5_s*1000000/base_time
-        #endif
-        #define flag_LTask5 Lmtsk_flags.4
-    #endif
+        #ENDIF
+        #DEFINE flag_LTask5 Lmtsk_flags.4
+    #ENDIF
 
-    #ifdef LTask6
-        dim time_LTask6 as word
-        dim cont_LTask6 as word
-        #ifdef LTask6_us
+    #IFDEF LTask6
+        Dim time_LTask6 As Word
+        Dim cont_LTask6 As Word
+        #IFDEF LTask6_us
             time_LTask6 = LTask6_us/base_time
-        #endif
-        #ifdef LTask6_ms
+        #ENDIF
+        #IFDEF LTask6_ms
             time_LTask6 = LTask6_ms*1000/base_time
-        #endif
-        #ifdef LTask6_s
+        #ENDIF
+        #IFDEF LTask6_s
             time_LTask6 = LTask6_s*1000000/base_time
-        #endif
-        #define flag_LTask6 Lmtsk_flags.5
-    #endif
+        #ENDIF
+        #DEFINE flag_LTask6 Lmtsk_flags.5
+    #ENDIF
 
-    #ifdef LTask7
-        dim time_LTask7 as word
-        dim cont_LTask7 as word
-        #ifdef LTask7_us
+    #IFDEF LTask7
+        Dim time_LTask7 As Word
+        Dim cont_LTask7 As Word
+        #IFDEF LTask7_us
             time_LTask7 = LTask7_us/base_time
-        #endif
-        #ifdef LTask7_ms
+        #ENDIF
+        #IFDEF LTask7_ms
             time_LTask7 = LTask7_ms*1000/base_time
-        #endif
-        #ifdef LTask7_s
+        #ENDIF
+        #IFDEF LTask7_s
             time_LTask7 = LTask7_s*1000000/base_time
-        #endif
-        #define flag_LTask7 Lmtsk_flags.6
-    #endif
+        #ENDIF
+        #DEFINE flag_LTask7 Lmtsk_flags.6
+    #ENDIF
 
-    #ifdef LTask8
-        dim time_LTask8 as word
-        dim cont_LTask8 as word
-        #ifdef LTask8_us
+    #IFDEF LTask8
+        Dim time_LTask8 As Word
+        Dim cont_LTask8 As Word
+        #IFDEF LTask8_us
             time_LTask8 = LTask8_us/base_time
-        #endif
-        #ifdef LTask8_ms
+        #ENDIF
+        #IFDEF LTask8_ms
             time_LTask8 = LTask8_ms*1000/base_time
-        #endif
-        #ifdef LTask8_s
+        #ENDIF
+        #IFDEF LTask8_s
             time_LTask8 = LTask8_s*1000000/base_time
-        #endif
-        #define flag_LTask8 Lmtsk_flags.7
-    #endif
+        #ENDIF
+        #DEFINE flag_LTask8 Lmtsk_flags.7
+    #ENDIF
 End Sub
 
 
-#ifdef Task1
-    Sub Do_Task1
-        if flag_Task1 on then
-            set flag_Task1 off
-            call Task1
-        End if
-    End Sub
-#endif
+#IFDEF Task1
+Sub Do_Task1
+    If flag_Task1 On Then
+        Set flag_Task1 Off
+        Call Task1
+    End If
+End Sub
+#ENDIF
 
-#ifdef Task2
-    Sub Do_Task2
-        if flag_Task2 on then
-            set flag_Task2 off
-            call Task2
-        End if
-    End Sub
-#endif
+#IFDEF Task2
+Sub Do_Task2
+    If flag_Task2 On Then
+        Set flag_Task2 Off
+        Call Task2
+    End If
+End Sub
+#ENDIF
 
-#ifdef Task3
-    Sub Do_Task3
-        if flag_Task3 on then
-            set flag_Task3 off
-            call Task3
-        End if
-    End Sub
-#endif
+#IFDEF Task3
+Sub Do_Task3
+    If flag_Task3 On Then
+        Set flag_Task3 Off
+        Call Task3
+    End If
+End Sub
+#ENDIF
 
-#ifdef Task4
-    Sub Do_Task4
-        if flag_Task4 on then
-            set flag_Task4 off
-            call Task4
-        End if
-    End Sub
-#endif
+#IFDEF Task4
+Sub Do_Task4
+    If flag_Task4 On Then
+        Set flag_Task4 Off
+        Call Task4
+    End If
+End Sub
+#ENDIF
 
-#ifdef Task5
-    Sub Do_Task5
-        if flag_Task5 on then
-            set flag_Task5 off
-            call Task5
-        End if
-    End Sub
-#endif
+#IFDEF Task5
+Sub Do_Task5
+    If flag_Task5 On Then
+        Set flag_Task5 Off
+        Call Task5
+    End If
+End Sub
+#ENDIF
 
-#ifdef Task6
-    Sub Do_Task6
-        if flag_Task6 on then
-            set flag_Task6 off
-            call Task6
-        End if
-    End Sub
-#endif
+#IFDEF Task6
+Sub Do_Task6
+    If flag_Task6 On Then
+        Set flag_Task6 Off
+        Call Task6
+    End If
+End Sub
+#ENDIF
 
-#ifdef Task7
-    Sub Do_Task7
-        if flag_Task7 on then
-            set flag_Task7 off
-            call Task7
-        End if
-    End Sub
-#endif
+#IFDEF Task7
+Sub Do_Task7
+    If flag_Task7 On Then
+        Set flag_Task7 Off
+        Call Task7
+    End If
+End Sub
+#ENDIF
 
-#ifdef Task8
-    Sub Do_Task8
-        if flag_Task8 on then
-            set flag_Task8 off
-            call Task8
-        End if
-    End Sub
-#endif
+#IFDEF Task8
+Sub Do_Task8
+    If flag_Task8 On Then
+        Set flag_Task8 Off
+        Call Task8
+    End If
+End Sub
+#ENDIF
 
-#ifdef Task9
-    Sub Do_Task9
-        if flag_Task9 on then
-            set flag_Task9 off
-            call Task9
-        End if
-    End Sub
-#endif
+#IFDEF Task9
+Sub Do_Task9
+    If flag_Task9 On Then
+        Set flag_Task9 Off
+        Call Task9
+    End If
+End Sub
+#ENDIF
 
-#ifdef Task10
-    Sub Do_Task10
-        if flag_Task10 on then
-            set flag_Task10 off
-            call Task10
-        End if
-    End Sub
-#endif
+#IFDEF Task10
+Sub Do_Task10
+    If flag_Task10 On Then
+        Set flag_Task10 Off
+        Call Task10
+    End If
+End Sub
+#ENDIF
 
-#ifdef Task11
-    Sub Do_Task11
-        if flag_Task11 on then
-            set flag_Task11 off
-            call Task11
-        End if
-    End Sub
-#endif
+#IFDEF Task11
+Sub Do_Task11
+    If flag_Task11 On Then
+        Set flag_Task11 Off
+        Call Task11
+    End If
+End Sub
+#ENDIF
 
-#ifdef Task12
-    Sub Do_Task12
-        if flag_Task12 on then
-            set flag_Task12 off
-            call Task12
-        End if
-    End Sub
-#endif
+#IFDEF Task12
+Sub Do_Task12
+    If flag_Task12 On Then
+        Set flag_Task12 Off
+        Call Task12
+    End If
+End Sub
+#ENDIF
 
-#ifdef Task13
-    Sub Do_Task13
-        if flag_Task13 on then
-            set flag_Task13 off
-            call Task13
-        End if
-    End Sub
-#endif
+#IFDEF Task13
+Sub Do_Task13
+    If flag_Task13 On Then
+        Set flag_Task13 Off
+        Call Task13
+    End If
+End Sub
+#ENDIF
 
-#ifdef Task14
-    Sub Do_Task14
-        if flag_Task14 on then
-            set flag_Task14 off
-            call Task14
-        End if
-    End Sub
-#endif
+#IFDEF Task14
+Sub Do_Task14
+    If flag_Task14 On Then
+        Set flag_Task14 Off
+        Call Task14
+    End If
+End Sub
+#ENDIF
 
-#ifdef Task15
-    Sub Do_Task15
-        if flag_Task15 on then
-            set flag_Task15 off
-            call Task15
-        End if
-    End Sub
-#endif
+#IFDEF Task15
+Sub Do_Task15
+    If flag_Task15 On Then
+        Set flag_Task15 Off
+        Call Task15
+    End If
+End Sub
+#ENDIF
 
-#ifdef Task16
-    Sub Do_Task16
-        if flag_Task16 on then
-            set flag_Task16 off
-            call Task16
-        End if
-    End Sub
-#endif
+#IFDEF Task16
+Sub Do_Task16
+    If flag_Task16 On Then
+        Set flag_Task16 Off
+        Call Task16
+    End If
+End Sub
+#ENDIF
 
-    '--------------------------- LONG TASKs -------------------------
+'--------------------------- LONG TASKs -------------------------
 
-#ifdef LTask1
-    Sub Do_LTask1
-        if flag_LTask1 on then
-            set flag_LTask1 off
-            call LTask1
-        End if
-    End Sub
-#endif
+#IFDEF LTask1
+Sub Do_LTask1
+    If flag_LTask1 On Then
+        Set flag_LTask1 Off
+        Call LTask1
+    End If
+End Sub
+#ENDIF
 
 
-#ifdef LTask2
-    Sub Do_LTask2
-        if flag_LTask2 on then
-            set flag_LTask2 off
-            call LTask2
-        End if
-    End Sub
-#endif
+#IFDEF LTask2
+Sub Do_LTask2
+    If flag_LTask2 On Then
+        Set flag_LTask2 Off
+        Call LTask2
+    End If
+End Sub
+#ENDIF
 
-#ifdef LTask3
-    Sub Do_LTask3
-        if flag_LTask3 on then
-            set flag_LTask3 off
-            call LTask3
-        End if
-    End Sub
-#endif
+#IFDEF LTask3
+Sub Do_LTask3
+    If flag_LTask3 On Then
+        Set flag_LTask3 Off
+        Call LTask3
+    End If
+End Sub
+#ENDIF
 
-#ifdef LTask4
-    Sub Do_LTask4
-        if flag_LTask4 on then
-            set flag_LTask4 off
-            call LTask4
-        End if
-    End Sub
-#endif
+#IFDEF LTask4
+Sub Do_LTask4
+    If flag_LTask4 On Then
+        Set flag_LTask4 Off
+        Call LTask4
+    End If
+End Sub
+#ENDIF
 
-#ifdef LTask5
-    Sub Do_LTask5
-        if flag_LTask5 on then
-            set flag_LTask5 off
-            call LTask5
-        End if
-    End Sub
-#endif
+#IFDEF LTask5
+Sub Do_LTask5
+    If flag_LTask5 On Then
+        Set flag_LTask5 Off
+        Call LTask5
+    End If
+End Sub
+#ENDIF
 
-#ifdef LTask6
-    Sub Do_LTask6
-        if flag_LTask6 on then
-            set flag_LTask6 off
-            call LTask6
-        End if
-    End Sub
-#endif
+#IFDEF LTask6
+Sub Do_LTask6
+    If flag_LTask6 On Then
+        Set flag_LTask6 Off
+        Call LTask6
+    End If
+End Sub
+#ENDIF
 
-#ifdef LTask7
-    Sub Do_LTask7
-        if flag_LTask7 on then
-            set flag_LTask7 off
-            call LTask7
-        End if
-    End Sub
-#endif
+#IFDEF LTask7
+Sub Do_LTask7
+    If flag_LTask7 On Then
+        Set flag_LTask7 Off
+        Call LTask7
+    End If
+End Sub
+#ENDIF
 
-#ifdef LTask8
-    Sub Do_LTask8
-        if flag_LTask8 on then
-            set flag_LTask8 off
-            call LTask8
-        End if
-    End Sub
-#endif
+#IFDEF LTask8
+Sub Do_LTask8
+    If flag_LTask8 On Then
+        Set flag_LTask8 Off
+        Call LTask8
+    End If
+End Sub
+#ENDIF
 
 
 

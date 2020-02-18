@@ -22,23 +22,23 @@
 ''''''*****************************************************************
 '''
 
- #chip 16f690
- #option explicit
+#CHIP 16f690
+#OPTION Explicit
 
 
 
-    '' -------------------LATC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|DS4|DS3|DS2|DS1|-
-    ''-----------------------------------------
-    ''
+'' -------------------LATC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|DS4|DS3|DS2|DS1|-
+''-----------------------------------------
+''
 
-    Dim CURRENTSTATE as Byte
+Dim CURRENTSTATE As Byte
 
-    dir portc.0 out
+Dir portc.0 Out
 
-    do
-        wait 1500 ms
-        currentstate = 1 XOR portc.0
-        portc.0 = currentstate
-    loop
+Do
+    Wait 1500 ms
+    currentstate = 1 XOR portc.0
+    portc.0 = currentstate
+Loop

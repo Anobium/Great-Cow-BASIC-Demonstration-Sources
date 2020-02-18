@@ -23,13 +23,13 @@
 ''''''*****************************************************************
 '''
 
- #chip 18F14K22,16
- #config MCLRE_OFF
+#CHIP 18F14K22,16
+#CONFIG MCLRE_OFF
 
-    'Set the while port DIRection as out
-    DIR portc out
+'Set the while port DIRection as out
+Dir portc Out
 
-    'Simply set the port to 1 to turn the LED on
-    portc.0 = 1
+'Simply set the port to 1 to turn the LED on
+portc.0 = 1
 
-    end
+End

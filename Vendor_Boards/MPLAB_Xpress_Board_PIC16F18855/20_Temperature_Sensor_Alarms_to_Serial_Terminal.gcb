@@ -31,271 +31,279 @@
 
 
 ' ----- Configuration
-    'Chip Settings.
-    #chip 16f18855,32
-    #option explicit
+'Chip Settings.
+#CHIP 16f18855,32
+#OPTION Explicit
 
-    #include <lowlevel\hwi2c2.h>
-    #include <emc1001.h>
+#INCLUDE <lowlevel\hwi2c2.h>
+#INCLUDE <emc1001.h>
 
 
-    #define SWITCH_DOWN         0
-    #define SWITCH_UP           1
+#DEFINE SWITCH_DOWN         0
+#DEFINE SWITCH_UP           1
 
-    #define SWITCH      PORTA.5
+#DEFINE SWITCH      PORTA.5
 
-    #define LEDD2 PORTA.0
-    #define LEDD3 PORTA.1
-    #define LEDD4 PORTA.2
-    #define LEDD5 PORTA.3
-    Dir     LEDD2 OUT
-    Dir     LEDD3 OUT
-    Dir     LEDD4 OUT
-    Dir     LEDD5 OUT
+#DEFINE LEDD2 PORTA.0
+#DEFINE LEDD3 PORTA.1
+#DEFINE LEDD4 PORTA.2
+#DEFINE LEDD5 PORTA.3
+Dir     LEDD2 Out
+Dir     LEDD3 Out
+Dir     LEDD4 Out
+Dir     LEDD5 Out
 
-    #DEFINE ALARM1  PORTA.7
-    #DEFINE ALARM2  PORTA.6
-    Dir     ALARM1  IN
-    Dir     ALARM2  IN
+#DEFINE ALARM1  PORTA.7
+#DEFINE ALARM2  PORTA.6
+Dir     ALARM1  In
+Dir     ALARM2  In
 
-    'Set the PPS of the PWM and the RS232 ports.
-    'Set the PPS for this solution.
-  #startup InitPPS, 85
+'Set the PPS of the PWM and the RS232 ports.
+'Set the PPS for this solution.
+#STARTUP InitPPS, 85
 
-  Sub InitPPS
+Sub InitPPS
     UNLOCKPPS
-        RC0PPS = 0x0010       'RC0->EUSART:TX;
-        RXPPS  = 0x0011       'RC1->EUSART:RX;
+    'RC0->EUSART:TX;
+    RC0PPS = 0x0010
+    'RC1->EUSART:RX;
+    RXPPS  = 0x0011
 
-        RC3PPS = 0x0017       'RC3->MSSP2:SDA2;
-        SSP2DATPPS = 0x0013   'RC3->MSSP2:SDA2;
-        SSP2CLKPPS = 0x0014   'RC4->MSSP2:SCL2;
-        RC4PPS = 0x0016       'RC4->MSSP2:SCL2;
-      LOCKPPS
-  End sub
+    'RC3->MSSP2:SDA2;
+    RC3PPS = 0x0017
+    'RC3->MSSP2:SDA2;
+    SSP2DATPPS = 0x0013
+    'RC4->MSSP2:SCL2;
+    SSP2CLKPPS = 0x0014
+    'RC4->MSSP2:SCL2;
+    RC4PPS = 0x0016
+    LOCKPPS
+End Sub
 
-    #define USART_BAUD_RATE 19200
-    #define USART_TX_BLOCKING
+#DEFINE USART_BAUD_RATE 19200
+#DEFINE USART_TX_BLOCKING
 
-; ----- Define Hardware settings for HWI2C2
-    ' Define I2C settings - CHANGE PORTS if required for your specific device.
-    #define HI2C2_BAUD_RATE 400
-    #define HI2C2_DATA PORTC.3
-    #define HI2C2_CLOCK PORTC.4
-    'Initialise I2C Master
-    'I2C pins need to be input for SSP2 module
-    Dir HI2C2_DATA in
-    Dir HI2C2_CLOCK in
-    'MASTER Second Port
-    HI2C2Mode Master
+' ----- Define Hardware settings for HWI2C2
+' Define I2C settings - CHANGE PORTS if required for your specific device.
+#DEFINE HI2C2_BAUD_RATE 400
+#DEFINE HI2C2_DATA PORTC.3
+#DEFINE HI2C2_CLOCK PORTC.4
+'Initialise I2C Master
+'I2C pins need to be input for SSP2 module
+Dir HI2C2_DATA In
+Dir HI2C2_CLOCK In
+'MASTER Second Port
+HI2C2Mode Master
 
-    Dim HI, LO, EMC_TEMP_H, SIGNBIT, WHOLE, FRACT, DIG, SHOWDEGREECHAR, DATA, OLDSTATUS as Byte
-    showDegreeChar = False
+Dim HI, LO, EMC_TEMP_H, SIGNBIT, WHOLE, FRACT, DIG, SHOWDEGREECHAR, DATA, OLDSTATUS As Byte
+showDegreeChar = FALSE
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
-    HSerPrintCRLF 2
-    HSerPrint "Great Cow Basic @2016": HSerPrintCRLF
-    HSerPrint "Xpress Demo Board": HSerPrintCRLF
-    HSerPrint "09 Temperature": HSerPrintCRLF 3
-    wait 1 s
+HSerPrintCRLF 2
+HSerPrint "Great Cow Basic @2016": HSerPrintCRLF
+HSerPrint "Xpress Demo Board": HSerPrintCRLF
+HSerPrint "09 Temperature": HSerPrintCRLF 3
+Wait 1 s
 
-    #define EMC1001_ADDRESS     0x70   '  slave device address
+'  slave device address
+#DEFINE EMC1001_ADDRESS     0x70
 
-    dim emc_temp as word
+Dim emc_temp As Word
 
-    EMC1001_Write ( EMC1001_TEMP_LIMIT_HI_H , 30)
-    EMC1001_Write ( EMC1001_TEMP_LIMIT_LO_H , 22)
+EMC1001_Write ( EMC1001_TEMP_LIMIT_HI_H , 30)
+EMC1001_Write ( EMC1001_TEMP_LIMIT_LO_H , 22)
 
-    EMC1001_Write ( EMC1001_TEMP_THERM_LIMIT, 30)
-    EMC1001_Write ( EMC1001_TEMP_THERM_HYSTERIS, 0x01)
-    EMC1001_Write ( EMC1001_TEMP_SMBus_Timeout, 0xFF)
+EMC1001_Write ( EMC1001_TEMP_THERM_LIMIT, 30)
+EMC1001_Write ( EMC1001_TEMP_THERM_HYSTERIS, 0x01)
+EMC1001_Write ( EMC1001_TEMP_SMBus_Timeout, 0xFF)
 
-    'Initiliase the character set.  If button is pressed at start... show the character
+'Initiliase the character set.  If button is pressed at start... show the character
 
-    if SWITCH = SWITCH_DOWN Then
-        showDegreeChar = True
-    end if
+If SWITCH = SWITCH_DOWN Then
+    showDegreeChar = TRUE
+End If
 
-    do
-        'Optionally, Send a bell alert to the terminal
-        'HSerSend 7
-        'Read Product ID register
-        EMC1001_Read( EMC1001_TEMP_PROD_ID ,  data )
-        if ( HI2C2WaitMSSPTimeout <> TRUE )  then
-          hserprint "Product ID:         EMC1001"
-          if data <> 0 then
+Do
+    'Optionally, Send a bell alert to the terminal
+    'HSerSend 7
+    'Read Product ID register
+    EMC1001_Read( EMC1001_TEMP_PROD_ID ,  data )
+    If ( HI2C2WaitMSSPTimeout <> TRUE )  Then
+        HSerPrint "Product ID:         EMC1001"
+        If data <> 0 Then
             HSerPrint "-"
             HSerPrintByteCRLF data
-          end if
-          HSerPrintCRLF
+        End If
+        HSerPrintCRLF
 
-        end if
+    End If
 
-        'Read Manufacturer ID register
-        EMC1001_Read( EMC1001_TEMP_MANUFACTURE_ID,  data )
-        if ( HI2C2WaitMSSPTimeout <> TRUE )  then
-          hserprint "Manufacturer ID:    0x"
-          HSerPrint hex(data)
-          HSerPrintCRLF
-        end if
+    'Read Manufacturer ID register
+    EMC1001_Read( EMC1001_TEMP_MANUFACTURE_ID,  data )
+    If ( HI2C2WaitMSSPTimeout <> TRUE )  Then
+        HSerPrint "Manufacturer ID:    0x"
+        HSerPrint Hex(data)
+        HSerPrintCRLF
+    End If
 
-        'Read Revision register
-        EMC1001_Read( EMC1001_TEMP_REV_NUMBER,  data )
-        if ( HI2C2WaitMSSPTimeout <> TRUE )  then
-          hserprint "Revision:           "
-          HSerPrintByteCRLF data
-        end if
+    'Read Revision register
+    EMC1001_Read( EMC1001_TEMP_REV_NUMBER,  data )
+    If ( HI2C2WaitMSSPTimeout <> TRUE )  Then
+        HSerPrint "Revision:           "
+        HSerPrintByteCRLF data
+    End If
 
-        'Read temp registers
-        EMC1001_Read( EMC1001_TEMP_HI,  hi )
-        EMC1001_Read( EMC1001_TEMP_LO,  lo )
+    'Read temp registers
+    EMC1001_Read( EMC1001_TEMP_HI,  hi )
+    EMC1001_Read( EMC1001_TEMP_LO,  lo )
 
-        if ( HI2C2WaitMSSPTimeout <> TRUE )  then
-          emc_temp = 0
-          emc_temp_h = hi
+    If ( HI2C2WaitMSSPTimeout <> TRUE )  Then
+        emc_temp = 0
+        emc_temp_h = hi
 
-          if ( HI2C2WaitMSSPTimeout <> TRUE )  then
+        If ( HI2C2WaitMSSPTimeout <> TRUE )  Then
             emc_temp = emc_temp + lo
-            hserprint "The temperature is: "
+            HSerPrint "The temperature is: "
 
             ' The sensor is read as a 8 bit value therefore each unit equates to 0.25 of a degree
-            dim DSdata as word
-            dim TempC_100 as word
+            Dim DSdata As Word
+            Dim TempC_100 As Word
 
             DSdata = emc_temp
             SignBit = DSdata.15
-            If SignBit = 0 Then goto Positive
+            If SignBit = 0 Then Goto Positive
             ' its negative!
-            DSdata = ( DSdata # 0xffff ) + 1 ' take twos comp
+            ' take twos comp
+            DSdata = ( DSdata # 0xffff ) + 1
 
-            Positive:
+Positive:
             TempC_100 =  FnLSR ( DSdata, 6 )
             TempC_100 = ( TempC_100 * 25 )
             Whole = TempC_100 / 100
             Fract = TempC_100 % 100
-            If SignBit = 0 Then goto DisplayTemp
-            hserprint "-"
+            If SignBit = 0 Then Goto DisplayTemp
+            HSerPrint "-"
 
-            DisplayTemp:
-            hserprint str(Whole)
-            hserprint "."
+DisplayTemp:
+            HSerPrint Str(Whole)
+            HSerPrint "."
             ' To ensure the decimal part is two digits
             Dig = Fract / 10
-            hserprint Dig
+            HSerPrint Dig
             Dig = Fract % 10
-            hserprint Dig
-            if showDegreeChar = true Then
-              hserprint chr(0xB0)
-            end if
-            hserprint "C"
+            HSerPrint Dig
+            If showDegreeChar = TRUE Then
+                HSerPrint CHR(0xB0)
+            End If
+            HSerPrint "C"
             HSerPrintCRLF
 
-          end if
-        end if
+        End If
+    End If
 
-        'Read Conversion register
-        EMC1001_Read( EMC1001_CONV_RATE ,  data )
-        if ( HI2C2WaitMSSPTimeout <> TRUE )  then
-          hserprint "Conversion rate is: "
-          HSerPrintByteCRLF data
-        end if
+    'Read Conversion register
+    EMC1001_Read( EMC1001_CONV_RATE ,  data )
+    If ( HI2C2WaitMSSPTimeout <> TRUE )  Then
+        HSerPrint "Conversion rate is: "
+        HSerPrintByteCRLF data
+    End If
 
-        'Read Hi limit register
-        EMC1001_Read(EMC1001_TEMP_LIMIT_HI_H,  data )
-        if ( HI2C2WaitMSSPTimeout <> TRUE )  then
-          hserprint "High limit is:      "
-          HSerPrint data
-          if showDegreeChar = true Then
-            hserprint chr(0xB0)
-          end if
-          hserprint "C"
-          HSerPrintCRLF
-        end if
+    'Read Hi limit register
+    EMC1001_Read(EMC1001_TEMP_LIMIT_HI_H,  data )
+    If ( HI2C2WaitMSSPTimeout <> TRUE )  Then
+        HSerPrint "High limit is:      "
+        HSerPrint data
+        If showDegreeChar = TRUE Then
+            HSerPrint CHR(0xB0)
+        End If
+        HSerPrint "C"
+        HSerPrintCRLF
+    End If
 
-        'Read Low Limit register
-        EMC1001_Read( EMC1001_TEMP_LIMIT_LO_H,  data )
-        if ( HI2C2WaitMSSPTimeout <> TRUE )  then
-          hserprint "Low limit is:       "
-          HSerPrint data
-          if showDegreeChar = true Then
-            hserprint chr(0xB0)
-          end if
-          hserprint "C"
-          HSerPrintCRLF
-        end if
+    'Read Low Limit register
+    EMC1001_Read( EMC1001_TEMP_LIMIT_LO_H,  data )
+    If ( HI2C2WaitMSSPTimeout <> TRUE )  Then
+        HSerPrint "Low limit is:       "
+        HSerPrint data
+        If showDegreeChar = TRUE Then
+            HSerPrint CHR(0xB0)
+        End If
+        HSerPrint "C"
+        HSerPrintCRLF
+    End If
 
 
-        'Read Status register
+    'Read Status register
+    EMC1001_Read( EMC1001_TEMP_STATUS,  data )
+    If ( HI2C2WaitMSSPTimeout <> TRUE )  Then
+        HSerPrint "Status is:          "
+        HSerPrint ByteToBin ( data )
+        HSerPrintCRLF
+    End If
+
+    oldStatus = data
+    Do While check_switch = check_switch
+        SetWith ( LEDD2 , FnNotBit ( LEDD2 ) )
+        Wait 100 ms
+        'Alarms
+        SetWith ( LEDD4 , FnEquBit ( ALARM1 ) )
+        SetWith ( LEDD5 , FnEquBit ( ALARM2 ) )
         EMC1001_Read( EMC1001_TEMP_STATUS,  data )
-        if ( HI2C2WaitMSSPTimeout <> TRUE )  then
-          hserprint "Status is:          "
-          HSerPrint ByteToBin ( data )
-          HSerPrintCRLF
-        end if
+        If data <> oldStatus Then
+            'Exit to show all the information
+            Exit Do
+        End If
+    Loop
 
-        oldStatus = data
-        do while check_switch = check_switch
-            SetWith ( LEDD2 , FnNotBit ( LEDD2 ) )
-            wait 100 ms
-            'Alarms
-            SetWith ( LEDD4 , FnEquBit ( ALARM1 ) )
-            SetWith ( LEDD5 , FnEquBit ( ALARM2 ) )
-            EMC1001_Read( EMC1001_TEMP_STATUS,  data )
-            if data <> oldStatus Then
-                'Exit to show all the information
-                Exit Do
-            end if
-        loop
-
-        HSerPrintCRLF 2
+    HSerPrintCRLF 2
 
 
 
 
 
-    loop
+Loop
 
 
 
-; ----- Support methods.  Subroutines and Functions
+' ----- Support methods.  Subroutines and Functions
 
-  'global variable - if button is held down, we don't want to keep on switching directions
-  dim previous_state as bit
-  previous_state = SWITCH_UP
+'global variable - if button is held down, we don't want to keep on switching directions
+Dim previous_state As BIT
+previous_state = SWITCH_UP
 
-  function  check_switch
-      'switch is normally open to 5V ...when pressed, RA3 is connected to GND
-      if (SWITCH = SWITCH_DOWN) then
-          'debounce by delaying and checking if switch is still pressed
-          wait 1 ms
-          if ( (previous_state =  SWITCH_DOWN) & (SWITCH = SWITCH_DOWN) ) then
-              ' don't toggle
-              check_switch = false
-              exit function
-          else
-              ' check if still down
-              if (SWITCH = SWITCH_DOWN) then
-                 previous_state = SWITCH_DOWN
-                 ' reverse the LEDs
-                 check_switch = true
-                 exit function
-             else
-              'switch not properly held down
-              previous_state = SWITCH_UP
-              ' don't reverse
-              check_switch = false
-              exit function
-             end if
-          end if
-      else
-         'switch not pressed
-          previous_state = SWITCH_UP
-          'don't reverse
-          check_switch = false
-          exit function
-      end if
+Function  check_switch
+    'switch is normally open to 5V ...when pressed, RA3 is connected to GND
+    If (SWITCH = SWITCH_DOWN) Then
+        'debounce by delaying and checking if switch is still pressed
+        Wait 1 ms
+        If ( (previous_state =  SWITCH_DOWN) & (SWITCH = SWITCH_DOWN) ) Then
+            ' don't toggle
+            check_switch = FALSE
+            Exit Function
+        Else
+            ' check if still down
+            If (SWITCH = SWITCH_DOWN) Then
+                previous_state = SWITCH_DOWN
+                ' reverse the LEDs
+                check_switch = TRUE
+                Exit Function
+            Else
+                'switch not properly held down
+                previous_state = SWITCH_UP
+                ' don't reverse
+                check_switch = FALSE
+                Exit Function
+            End If
+        End If
+    Else
+        'switch not pressed
+        previous_state = SWITCH_UP
+        'don't reverse
+        check_switch = FALSE
+        Exit Function
+    End If
 
-  end Function
+End Function
 
 

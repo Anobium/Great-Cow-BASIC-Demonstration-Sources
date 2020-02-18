@@ -4,27 +4,30 @@
 '''The LED array must be attached via appropiate resistors.
 '''********************************************************************************
 
-; ----- Configuration
-  #chip 16f1459, 48
-  #option bootloader 0x200   'must for usb Bootloader
-  #option NoConfig           'Tells compiler not to set config bits
-  #option explicit           'All variables must be declared!
+' ----- Configuration
+#CHIP 16f1459, 48
+'must for usb Bootloader
+#OPTION Bootloader 0x200
+'Tells compiler not to set config bits
+#OPTION NoConfig
+'All variables must be declared!
+#OPTION Explicit
 
-  #define timerWait 500
+#DEFINE timerWait 500
 
-; ----- Define Hardware settings
-  dir PORTa out
+' ----- Define Hardware settings
+Dir PORTa Out
 
 
-;----- Variables
+'----- Variables
 '  Dim PWMCOUNT, PWMLEVEL as Byte   ' to do
 
-; ----- Main body of program commences here.
- Main:
+' ----- Main body of program commences here.
+Main:
 
 
-  PulseOut PORTa.5, timerWait ms
-  wait timerWait ms
+PulseOut PORTa.5, timerWait ms
+Wait timerWait ms
 
- goto Main
- end
+Goto Main
+End

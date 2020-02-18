@@ -13,130 +13,141 @@
 '    End...
 
 
-     'Chip Settings.
-    #chip 18F47k42, 64
-    #config MCLRE = ON
-    #option explicit
+'Chip Settings.
+#CHIP 18F47k42, 64
+#CONFIG MCLRE = On
+#OPTION Explicit
 
 
-    'PPS Tool version: 0.0.5.27
-    'PinManager data: v1.78
-    'Generated for 18F47K42
-    '
-    'Template comment at the start of the config file
-    '
-    #startup InitPPS, 85
-    #define PPSToolPart 18F47K42
+'PPS Tool version: 0.0.5.27
+'PinManager data: v1.78
+'Generated for 18F47K42
+'
+'Template comment at the start of the config file
+'
+#STARTUP InitPPS, 85
+#DEFINE PPSToolPart 18F47K42
 
-    Sub InitPPS
-         'This has been added to turn off PPS SPI when in SPI software mode
-            #ifdef SPISRAM_HARDWARESPI
-                'Module: SPI1
-                RC3PPS = 0x001E    'SCK1 > RC3
-                SPI1SCKPPS = 0x0013    'RC3 > SCK1 (bi-directional)
-                RC5PPS = 0x001F    'SDO1 > RC5
-                SPI1SDIPPS = 0x0014    'RC4 > SDI1
-                'Module: UART pin directions
-            #endif
-            'Module: UART pin directions
-            Dir PORTC.6 Out    ' Make TX1 pin an output
-            'Module: UART1
-            RC6PPS = 0x0013    'TX1 > RC6
-    End Sub
-    'Template comment at the end of the config file
+Sub InitPPS
+    'This has been added to turn off PPS SPI when in SPI software mode
+    #IFDEF SPISRAM_HARDWARESPI
+        'Module: SPI1
+        'SCK1 > RC3
+        RC3PPS = 0x001E
+        'RC3 > SCK1 (bi-directional)
+        SPI1SCKPPS = 0x0013
+        'SDO1 > RC5
+        RC5PPS = 0x001F
+        'RC4 > SDI1
+        SPI1SDIPPS = 0x0014
+        'Module: UART pin directions
+    #ENDIF
+    'Module: UART pin directions
+    ' Make TX1 pin an output
+    Dir PORTC.6 Out
+    'Module: UART1
+    'TX1 > RC6
+    RC6PPS = 0x0013
+End Sub
+'Template comment at the end of the config file
 
 
- ' USART settings
-   #define USART_BAUD_RATE 57600
-   #define USART_DELAY 0 ms
-   #define USART_BLOCKING
-   #define USART_TX_BLOCKING
+' USART settings
+#DEFINE USART_BAUD_RATE 57600
+#DEFINE USART_DELAY 0 ms
+#DEFINE USART_BLOCKING
+#DEFINE USART_TX_BLOCKING
 
-    #define SPISRAM_CS            Porta.2           'Also known as SS, or Slave Select
-    #define SPISRAM_SCK           Portc.3           'Also known as CLK
-    #define SPISRAM_DO            Portc.5           'Also known as MOSI
-    #define SPISRAM_DI            Portc.4           'Also known as MISO
+'Also known as SS, or Slave Select
+#DEFINE SPISRAM_CS            Porta.2
+'Also known as CLK
+#DEFINE SPISRAM_SCK           Portc.3
+'Also known as MOSI
+#DEFINE SPISRAM_DO            Portc.5
+'Also known as MISO
+#DEFINE SPISRAM_DI            Portc.4
 
-    #define SPISRAM_HARDWARESPI
-    #define SPISRAM_TYPE          SRAM_23LC1024
+#DEFINE SPISRAM_HARDWARESPI
+#DEFINE SPISRAM_TYPE          SRAM_23LC1024
 
-    #define HWSPIMode MASTER
+#DEFINE HWSPIMode MASTER
 
 '********************************************************************************
 
 'Main program
 
-    'Wait 2 seconds to open the serial terminal
-    wait 2 s
-    dim sizeofSPIRAM as long
-    sizeofSPIRAM = SPISRAM_CAPACITY
-    HSerPrintCRLF 2
-    HSerPrint "Writing...SPISRAM_CAPACITY = 0x"
-    HSerPrint hex(sizeofSPIRAM_U)
-    HSerPrint hex(sizeofSPIRAM_H)
-    HSerPrint hex(sizeofSPIRAM)
-    HSerPrintCRLF
-    wait 100 ms
+'Wait 2 seconds to open the serial terminal
+Wait 2 s
+Dim sizeofSPIRAM As Long
+sizeofSPIRAM = SPISRAM_CAPACITY
+HSerPrintCRLF 2
+HSerPrint "Writing...SPISRAM_CAPACITY = 0x"
+HSerPrint Hex(sizeofSPIRAM_U)
+HSerPrint Hex(sizeofSPIRAM_H)
+HSerPrint Hex(sizeofSPIRAM)
+HSerPrintCRLF
+Wait 100 ms
 
-    Dim errorcount as long
-    errorcount = 0
-    dim EPD_Ind_raw as long
-    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
-      SRAMWrite ( [long]EPD_Ind_raw, EPD_Ind_raw and 255 )
-      if SRAMRead (  [long]EPD_Ind_raw ) <> ( EPD_Ind_raw and 255 ) then
-          errorcount++
-      end if
-    Next
-    HSerPrint "Error Count (should be 0) = "
-    HSerPrint errorcount
-    HSerPrintCRLF
+Dim errorcount As Long
+errorcount = 0
+Dim EPD_Ind_raw As Long
+For EPD_Ind_raw=0 To SPISRAM_CAPACITY - 1
+    SRAMWrite ( [Long]EPD_Ind_raw, EPD_Ind_raw AND 255 )
+    If SRAMRead (  [Long]EPD_Ind_raw ) <> ( EPD_Ind_raw AND 255 ) Then
+        errorcount++
+    End If
+Next
+HSerPrint "Error Count (should be 0) = "
+HSerPrint errorcount
+HSerPrintCRLF
 
 
-    dim spirambyteread as Byte
-    spirambyteread = 11  'could be any number....
-    HSerPrintCRLF 2
+Dim spirambyteread As Byte
+'could be any number....
+spirambyteread = 11
+HSerPrintCRLF 2
 
-    HSerPrint "Reading..."
-    HSerPrintCRLF
-    errorcount = 0
-    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
-      'choose one....
-      'SRAMRead (  EPD_Ind_raw, spirambyteread )
+HSerPrint "Reading..."
+HSerPrintCRLF
+errorcount = 0
+For EPD_Ind_raw=0 To SPISRAM_CAPACITY - 1
+    'choose one....
+    'SRAMRead (  EPD_Ind_raw, spirambyteread )
     'or, as a function
-      spirambyteread = SRAMRead (  [long]EPD_Ind_raw )
+    spirambyteread = SRAMRead (  [Long]EPD_Ind_raw )
 
-      if spirambyteread <> ( [long]EPD_Ind_raw and 255 ) then
-          errorcount++
-      end if
+    If spirambyteread <> ( [Long]EPD_Ind_raw AND 255 ) Then
+        errorcount++
+    End If
 
-    Next
-    HSerPrint "Error Count (should be 0) = "
-    HSerPrint errorcount
-    HSerPrintCRLF
-    HSerPrintCRLF
-    HSerPrint "Wait..."
-    HSerPrintCRLF
-    Wait 2 s
+Next
+HSerPrint "Error Count (should be 0) = "
+HSerPrint errorcount
+HSerPrintCRLF
+HSerPrintCRLF
+HSerPrint "Wait..."
+HSerPrintCRLF
+Wait 2 s
 
-    HSerPrint "Rewriting to 0x00 ..."
-    HSerPrintCRLF
-    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
-      SRAMWrite ( [long]EPD_Ind_raw, 0 )
-    Next
+HSerPrint "Rewriting to 0x00 ..."
+HSerPrintCRLF
+For EPD_Ind_raw=0 To SPISRAM_CAPACITY - 1
+    SRAMWrite ( [Long]EPD_Ind_raw, 0 )
+Next
 
-    errorcount = 0
-    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
-      SRAMRead (  [long]EPD_Ind_raw, spirambyteread )
-      if spirambyteread <> 0 then
-          errorcount++
-      end if
-    Next
-    HSerPrint "Error Count (should be 0) = "
-    HSerPrint errorcount
-    HSerPrintCRLF
-    HSerPrint "End..."
-    HSerPrintCRLF
+errorcount = 0
+For EPD_Ind_raw=0 To SPISRAM_CAPACITY - 1
+    SRAMRead (  [Long]EPD_Ind_raw, spirambyteread )
+    If spirambyteread <> 0 Then
+        errorcount++
+    End If
+Next
+HSerPrint "Error Count (should be 0) = "
+HSerPrint errorcount
+HSerPrintCRLF
+HSerPrint "End..."
+HSerPrintCRLF
 
-do
+Do
 
-loop
+Loop

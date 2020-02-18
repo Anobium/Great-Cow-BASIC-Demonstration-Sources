@@ -30,29 +30,29 @@
 '''@date   	01.11.15
 '''********************************************************************************
 
-; ----- Configuration
-  #chip mega328p,16
-  #option explicit
-  #option explicit
-  #include	<nunchuck.h>
+' ----- Configuration
+#CHIP mega328p,16
+#OPTION Explicit
+#OPTION Explicit
+#INCLUDE	<nunchuck.h>
 
 
-	#define UseSerial
+#DEFINE UseSerial
 
 
-	'Nunchuck uses I2C!
+'Nunchuck uses I2C!
 
-  #define NunChuck_Address 0xA4
-	#define Nunchuck_Read_DelayMs 2
-; ----- Define Hardware settings
-  ' Define I2C settings
-  #define HI2C_BAUD_RATE 100
-  #define HI2C_DATA PORTC.4
-  #define HI2C_CLOCK PORTC.5
-  'I2C pins need to be input for SSP module when used on Microchip device
+#DEFINE NunChuck_Address 0xA4
+#DEFINE Nunchuck_Read_DelayMs 2
+' ----- Define Hardware settings
+' Define I2C settings
+#DEFINE HI2C_BAUD_RATE 100
+#DEFINE HI2C_DATA PORTC.4
+#DEFINE HI2C_CLOCK PORTC.5
+'I2C pins need to be input for SSP module when used on Microchip device
 '  Dir HI2C_DATA in
 '  Dir HI2C_CLOCK in
-  HI2CMode Master
+HI2CMode Master
 
 ''; ----- Define Hardware settings
 '  ' Define I2C settings - CHANGE PORTS
@@ -66,127 +66,127 @@
 '  #define I2C_END_DELAY 10 us
 
 
-	#ifdef UseSerial
-     ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
-     ' USART settings - CHANGE PORTS if required
-     #define USART_BAUD_RATE 115200
-     Dir PORTc.6 Out
-     Dir PORTc.7 In
-     #define USART_TX_BLOCKING
-     #define USART_DELAY 1 ms
-     wait 2500 ms
-	#endif
- Dir portb.5 out
+#IFDEF UseSerial
+    ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
+    ' USART settings - CHANGE PORTS if required
+    #DEFINE USART_BAUD_RATE 115200
+    Dir PORTc.6 Out
+    Dir PORTc.7 In
+    #DEFINE USART_TX_BLOCKING
+    #DEFINE USART_DELAY 1 ms
+    Wait 2500 ms
+#ENDIF
+Dir portb.5 Out
 
-; ----- Variables
-  Dim Nunchuck_AccelX as Integer
-  Dim Nunchuck_AccelY as Integer
-  Dim Nunchuck_AccelZ as Integer
+' ----- Variables
+Dim Nunchuck_AccelX As Integer
+Dim Nunchuck_AccelY As Integer
+Dim Nunchuck_AccelZ As Integer
 
-  dim TenthSeconds as byte
-  Dim OLDJOYX, JOYY as Byte
-  dim Pnt, AA, AAA, BBB, XX, JOYX, OLDJOYY, NUNCHUCK_STATUS, OLDNUNCHUCK_STATUS, NUNCHUCK_SWITCHSTATE as byte
+Dim TenthSeconds As Byte
+Dim OLDJOYX, JOYY As Byte
+Dim Pnt, AA, AAA, BBB, XX, JOYX, OLDJOYY, NUNCHUCK_STATUS, OLDNUNCHUCK_STATUS, NUNCHUCK_SWITCHSTATE As Byte
 
-; ----- Main body of program commences here.
-
-
-				#ifdef UseSerial
-          ' Now assumes Serial Terminal is operational
-
-          'Clear Screen
-          HSerSend 27
-          wait 1 ms
-          HSerPrint "["
-          wait 1 ms
-          Hserprint "2"
-          wait 1 ms
-          HSerPrint "J"
-          wait 10 ms
-          HSerSend 27
-          HSerPrint "["
-          HSerPrint 1
-          HSerSend 59
-          HSerPrint 1
-          HSerPrint "H"
-          HSerPrint "Nunchuck Hardware I2C "
-          HSerPrint ChipNameStr
-          HSerPrintCRLF
-				#endif
-
-				Dim xvector, yvector as Integer
+' ----- Main body of program commences here.
 
 
- 				Nunchuck_Init
+#IFDEF UseSerial
+    ' Now assumes Serial Terminal is operational
+
+    'Clear Screen
+    HSerSend 27
+    Wait 1 ms
+    HSerPrint "["
+    Wait 1 ms
+    HSerPrint "2"
+    Wait 1 ms
+    HSerPrint "J"
+    Wait 10 ms
+    HSerSend 27
+    HSerPrint "["
+    HSerPrint 1
+    HSerSend 59
+    HSerPrint 1
+    HSerPrint "H"
+    HSerPrint "Nunchuck Hardware I2C "
+    HSerPrint ChipNameStr
+    HSerPrintCRLF
+#ENDIF
+
+Dim xvector, yvector As Integer
 
 
-				Goto ScrollDisplay
+Nunchuck_Init
+
+
+Goto ScrollDisplay
 '        Goto HexDisplay
 
-        end
+End
 
 
 
 
 HexDisplay:
-		#ifdef UseSerial
-       'Clear Screen
-       wait 1 s
-       HSerSend 27
-       wait 1 ms
-       HSerPrint "["
-       wait 1 ms
-       Hserprint "2"
-       wait 1 ms
-       HSerPrint "J"
-       wait 10 ms
-		#endif
+#IFDEF UseSerial
+    'Clear Screen
+    Wait 1 s
+    HSerSend 27
+    Wait 1 ms
+    HSerPrint "["
+    Wait 1 ms
+    HSerPrint "2"
+    Wait 1 ms
+    HSerPrint "J"
+    Wait 10 ms
+#ENDIF
 
-      pnt=1
-      dim mem(64)
-      dim new(64)
+pnt=1
+Dim mem(64)
+Dim new(64)
 
-      for aa =  1 to 64
-        mem(aa) = 0xff
-        new(aa)= 0xff
-      next
+For aa =  1 To 64
+    mem(aa) = 0xff
+    new(aa)= 0xff
+Next
 
-			#ifdef UseSerial
-        'Set Screen position
-        HSerSend 27
-        HSerPrint "["
-        HSerPrint 1
-        HSerSend 59
-        HSerPrint 1
-        HSerPrint "H"
-
-
-        Repeat 4
-          HSerPrint "FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF"
-          HSerPrintCRLF
-        end Repeat
-			#endif
+#IFDEF UseSerial
+    'Set Screen position
+    HSerSend 27
+    HSerPrint "["
+    HSerPrint 1
+    HSerSend 59
+    HSerPrint 1
+    HSerPrint "H"
 
 
-      do Forever
-           HI2CSTART
-           HI2CSEND ( NunChuck_address | 1 )
-           for aaa = 1 to 64
-           HI2CReceive ( new(aaa)  , ACK)
-           next
-           HI2CReceive ( new(255)  , NACK)
-           HI2CStop
-           wait 10 ms
-            Nunchuck_Send_Zero
-           pnt=1
-           for aaa = 0 to 3
-
-              for bbb = 0 to 15
+    Repeat 4
+        HSerPrint "FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF"
+        HSerPrintCRLF
+    End Repeat
+#ENDIF
 
 
-               if mem(pnt) <> new(pnt) then
+Do Forever
+    HI2CStart
+    HI2CSend ( NunChuck_address | 1 )
+    For aaa = 1 To 64
+        HI2CReceive ( new(aaa)  , ACK)
+    Next
+    HI2CReceive ( new(255)  , NACK)
+    HI2CStop
+    Wait 10 ms
+    Nunchuck_Send_Zero
+    pnt=1
+    For aaa = 0 To 3
 
-									#ifdef UseSerial
-            				'Set Screen position
+        For bbb = 0 To 15
+
+
+            If mem(pnt) <> new(pnt) Then
+
+                #IFDEF UseSerial
+                    'Set Screen position
                     xx = (bbb * 3)+1
                     HSerSend 27
                     HSerPrint "["
@@ -194,78 +194,78 @@ HexDisplay:
                     HSerSend 59
                     HSerPrint xx
                     HSerPrint "H"
-                    HSerPrint hex(new(pnt)) +" "
-                  #endif
-                    mem(pnt) = new(pnt)
+                    HSerPrint Hex(new(pnt)) +" "
+                #ENDIF
+                mem(pnt) = new(pnt)
 
-                end if
-                pnt++
+            End If
+            pnt++
 
-              Next
+        Next
 
-           next aaa
+    Next aaa
 
-      loop
+Loop
 
 
 
 ScrollDisplay:
-				 dim Outstring as string * 48
-         dim OutNum as word
-         OutNum = 1
+Dim Outstring As String * 48
+Dim OutNum As Word
+OutNum = 1
 
 
-				 Do Forever
+Do Forever
 
-            Nunchuck_Read_Sensors
-
-
-            if ( JoyX <> OldJoyX ) OR ( JoyY <> OldJoyY ) OR ( NunChuck_Status <> OldNunChuck_Status ) then
-
-            	#ifdef UseSerial
-              		OutNum++
-									'Create a nice string
-         					Outstring = pad ( str( OutNum ), 8)
-                  Outstring = Outstring + str( JoyX )
-                  Outstring = Outstring + ","
-                  Outstring = Outstring + str( JoyY )
-                  Outstring = pad( Outstring, 19 )
-                  Outstring = Outstring + "     acc:"
-                  Outstring = Outstring + pad ( str( Nunchuck_AccelX ), 3) + ","
-                  Outstring = Outstring + pad ( str( Nunchuck_AccelY ), 3) + ","
-                  Outstring = Outstring + pad ( str( Nunchuck_AccelZ ), 3)
-                  Outstring = Outstring + " but:"
-                  if ( Nunchuck_SwitchState AND 1 ) = 1 then
-                  		Outstring = Outstring + "0,"
-                  Else
-                  		Outstring = Outstring + "1,"
-                  end if
-                  if ( Nunchuck_SwitchState AND 2 ) = 2 then
-                  		Outstring = Outstring + "0"
-                  Else
-                  		Outstring = Outstring + "1"
-                  end if
-
-                  HSerPrint Outstring
-                  HSerPrintCRLF
-							#endif
-              'turn on/off LED
-							if Nunchuck_SwitchState = 0 then
-              	portb.5 =1
-              else
-              	portb.5 =0
-              end if
-
-              OldNunChuck_Status = NunChuck_Status
-              OldJoyX = JoyX
-              OldJoyY = JoyY
-
-            end if
-         Loop
+    Nunchuck_Read_Sensors
 
 
-         end
+    If ( JoyX <> OldJoyX ) OR ( JoyY <> OldJoyY ) OR ( NunChuck_Status <> OldNunChuck_Status ) Then
+
+        #IFDEF UseSerial
+            OutNum++
+            'Create a nice string
+            Outstring = Pad ( Str( OutNum ), 8)
+            Outstring = Outstring + Str( JoyX )
+            Outstring = Outstring + ","
+            Outstring = Outstring + Str( JoyY )
+            Outstring = Pad( Outstring, 19 )
+            Outstring = Outstring + "     acc:"
+            Outstring = Outstring + Pad ( Str( Nunchuck_AccelX ), 3) + ","
+            Outstring = Outstring + Pad ( Str( Nunchuck_AccelY ), 3) + ","
+            Outstring = Outstring + Pad ( Str( Nunchuck_AccelZ ), 3)
+            Outstring = Outstring + " but:"
+            If ( Nunchuck_SwitchState AND 1 ) = 1 Then
+                Outstring = Outstring + "0,"
+            Else
+                Outstring = Outstring + "1,"
+            End If
+            If ( Nunchuck_SwitchState AND 2 ) = 2 Then
+                Outstring = Outstring + "0"
+            Else
+                Outstring = Outstring + "1"
+            End If
+
+            HSerPrint Outstring
+            HSerPrintCRLF
+        #ENDIF
+        'turn on/off LED
+        If Nunchuck_SwitchState = 0 Then
+            portb.5 =1
+        Else
+            portb.5 =0
+        End If
+
+        OldNunChuck_Status = NunChuck_Status
+        OldJoyX = JoyX
+        OldJoyY = JoyY
+
+    End If
+Loop
 
 
-; ----- Support methods.  Subroutines and Functions
+End
+
+
+' ----- Support methods.  Subroutines and Functions
 

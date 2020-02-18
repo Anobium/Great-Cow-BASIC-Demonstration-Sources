@@ -14,65 +14,65 @@
 '''@date    30.05.15
 '''********************************************************************************
 
-; ----- Configuration
-  #Chip 16f1829, 32
-  #option explicit
+' ----- Configuration
+#CHIP 16f1829, 32
+#OPTION Explicit
 
-   ; ----- Define Hardware settings
+' ----- Define Hardware settings
 '  ' Define I2C settings - CHANGE PORTS
-   #define HI2C_BAUD_RATE 100
-   #define HI2C_DATA PORTB.4
-   #define HI2C_CLOCK PORTB.6
+#DEFINE HI2C_BAUD_RATE 100
+#DEFINE HI2C_DATA PORTB.4
+#DEFINE HI2C_CLOCK PORTB.6
 
-   Dir HI2C_DATA in
-   Dir HI2C_CLOCK in
+Dir HI2C_DATA In
+Dir HI2C_CLOCK In
 
-   HI2CMode Master
+HI2CMode Master
 
-; ----- Variables
-  Dim LOOPX as Byte
+' ----- Variables
+Dim LOOPX As Byte
 
-; ----- Main body of program commences here.
-  dir portc out
+' ----- Main body of program commences here.
+Dir portc Out
 
-  dim DeviceID as byte
+Dim DeviceID As Byte
 
-      for DeviceID = 0x00 to 0xff
-
-
-        HI2CStart
-        HI2CSend ( deviceID )
-        HI2CSend ( 0 )
-        Hi2cstop
-
-        if HI2CAckPollState = FALSE  then
-
-          for loopx = 1 to 4
-              portc = 255
-              wait 50 ms
-              portc = 0
-              wait 50 ms
-          next
-          wait 2 s
+For DeviceID = 0x00 To 0xff
 
 
-           Repeat ( ( deviceID / 16 )+1)
-              portc = 255
-              wait 300 ms
-              portc = 0
-              wait 300 ms
-           end Repeat
-           wait 2 s
-           Repeat (( deviceID & 0X0f )+1 )
-              portc = 255
-              wait 300 ms
-              portc = 0
-              wait 300 ms
-           end repeat
-           wait 2 s
+    HI2CStart
+    HI2CSend ( deviceID )
+    HI2CSend ( 0 )
+    HI2CStop
 
-        end if
+    If HI2CAckpollState = FALSE  Then
 
-      next
+        For loopx = 1 To 4
+            portc = 255
+            Wait 50 ms
+            portc = 0
+            Wait 50 ms
+        Next
+        Wait 2 s
 
-  END
+
+        Repeat ( ( deviceID / 16 )+1)
+            portc = 255
+            Wait 300 ms
+            portc = 0
+            Wait 300 ms
+        End Repeat
+        Wait 2 s
+        Repeat (( deviceID & 0X0f )+1 )
+            portc = 255
+            Wait 300 ms
+            portc = 0
+            Wait 300 ms
+        End Repeat
+        Wait 2 s
+
+    End If
+
+Next
+
+End

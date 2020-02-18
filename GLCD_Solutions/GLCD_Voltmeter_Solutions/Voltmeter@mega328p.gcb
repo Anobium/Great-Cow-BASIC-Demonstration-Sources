@@ -17,101 +17,104 @@
 
 
 
-;analogue 5V voltmeter and DVM. DVM and update display on volt change idea by Anobium
-#chip mega328p, 16
-    #option explicit
-    #include <glcd.h>
-    #include <trig2places.h>
-;
+'analogue 5V voltmeter and DVM. DVM and update display on volt change idea by Anobium
+#CHIP mega328p, 16
+#OPTION Explicit
+#INCLUDE <glcd.h>
+#INCLUDE <trig2places.h>
+'
 'GLCD selection
-    #define HI2C_BAUD_RATE 400
-    #define HI2C_DATA
-    HI2CMode Master
-    #define GLCD_TYPE GLCD_TYPE_SSD1306
-    #define GLCD_I2C_Address 0x78
-    GLCDfntDefaultsize=1
+#DEFINE HI2C_BAUD_RATE 400
+#DEFINE HI2C_DATA
+HI2CMode Master
+#DEFINE GLCD_TYPE GLCD_TYPE_SSD1306
+#DEFINE GLCD_I2C_Address 0x78
+GLCDfntDefaultSize=1
 
 
 
 'analogue port selection
-        #define ADCChannelSelected AN0
-        dir portc.0 in
-        #define ADSpeed LowSpeed
+#DEFINE ADCChannelSelected AN0
+Dir portc.0 In
+#DEFINE ADSpeed LowSpeed
 
-dim radius,xcentre,ycentre,xend,old_xend,yend,old_yend as byte
-dim angle,old_angle,adcval as word
-dim volts as string * 4
+Dim radius,xcentre,ycentre,xend,old_xend,yend,old_yend As Byte
+Dim angle,old_angle,adcval As Word
+Dim volts As String * 4
 xcentre=63
 ycentre=58
-;draw dial
+'draw dial
 GLCDCLS
-box 0,0,127,63
-for radius=144 to 141
-  dial
-next radius
-GLCDDrawChar (5,40,asc("0")):GLCDDrawChar (115,40,asc("5"))
+Box 0,0,127,63
+For radius=144 To 141
+    dial
+Next radius
+GLCDDrawChar (5,40,Asc("0")):GLCDDrawChar (115,40,Asc("5"))
 radius=120
 angle=1
 anglecheck
-;main
-do
-  old_angle=angle
-;--- DVM
-  adcval=ReadAD(ADCChannelSelected)
-  angle=adcval/2
-;
-  adcval=adcval*100
-  adcval=adcval/51
-  volts=str(adcval)
-  if adcval<10 then
-    volts="0.0"+left(volts,1,1)
-    goto volt_format_done
-  end if
-  if adcval<100 then
-    volts="0."+mid(volts,1,2)
-  else
-    volts=left(volts,1,1)+"."+mid(volts,2,2)
-  end if
-  volt_format_done:
-;---
-  anglecheck
-  old_xend = xcentre + radius  * sin (old_angle)/255
-  old_yend = ycentre - radius  * cos (old_angle)/255
-  xend = xcentre + radius  * sin (angle)/255
-  yend = ycentre - radius  * cos (angle)/255
-  if old_angle<>angle then ;-- update screen if volts has changed
-;   erase old needle
-    line (xcentre,ycentre,old_xend,old_yend,0)
-;   draw V
-    line (55,22,63,38):line (63,38,71,22)
-;   print new voltage
-    GLCDPrint (50,10,volts,1) ;print Voltage
-;   draw new needle
-    line (xcentre,ycentre,xend,yend,1)
-    wait 20 ms
-  end if
-loop
-;end main
-sub plotdial
-  xend = 63 + radius  * sin (angle)/255
-  yend = 58 - radius  * cos (angle)/255
-  pset (xend,yend,1)
-end sub
-;
-sub dial
-  for angle= 296 to 359
-    plotdial
-  next angle
-;
-  for angle= 0 to 63
-    plotdial
-  next angle
-end sub
-;
-sub anglecheck
-  if angle>127 then
-    angle =angle-127
-  else
-    angle =296+angle
-  end if
-end sub
+'main
+Do
+    old_angle=angle
+'--- DVM
+    adcval=ReadAD(ADCChannelSelected)
+    angle=adcval/2
+'
+    adcval=adcval*100
+    adcval=adcval/51
+    volts=Str(adcval)
+    If adcval<10 Then
+        volts="0.0"+Left(volts,1,1)
+        Goto volt_format_done
+    End If
+    If adcval<100 Then
+        volts="0."+Mid(volts,1,2)
+    Else
+        volts=Left(volts,1,1)+"."+Mid(volts,2,2)
+    End If
+volt_format_done:
+'---
+    anglecheck
+    old_xend = xcentre + radius  * sin (old_angle)/255
+    old_yend = ycentre - radius  * cos (old_angle)/255
+    xend = xcentre + radius  * sin (angle)/255
+    yend = ycentre - radius  * cos (angle)/255
+    If old_angle<>angle Then
+        '-- update screen if volts has changed
+'   erase old needle
+        
+        Line (xcentre,ycentre,old_xend,old_yend,0)
+'   draw V
+        Line (55,22,63,38):Line (63,38,71,22)
+'   print new voltage
+        'print Voltage
+        GLCDPrint (50,10,volts,1)
+'   draw new needle
+        Line (xcentre,ycentre,xend,yend,1)
+        Wait 20 ms
+    End If
+Loop
+'end main
+Sub plotdial
+    xend = 63 + radius  * sin (angle)/255
+    yend = 58 - radius  * cos (angle)/255
+    Pset (xend,yend,1)
+End Sub
+'
+Sub dial
+    For angle= 296 To 359
+        plotdial
+    Next angle
+'
+    For angle= 0 To 63
+        plotdial
+    Next angle
+End Sub
+'
+Sub anglecheck
+    If angle>127 Then
+        angle =angle-127
+    Else
+        angle =296+angle
+    End If
+End Sub

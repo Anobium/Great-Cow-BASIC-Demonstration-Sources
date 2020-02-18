@@ -9,491 +9,493 @@
 '''@date    01.02.2020
 '''********************************************************************************
 
-;Set chip model required:
-   #chip 16f877a, 8
-  ;Setup LCD Parameters
-  #define LCD_IO 404
-  #define LCD_NO_RW
-  #define LCD_Speed slow
+'Set chip model required:
+#CHIP 16f877a, 8
+'Setup LCD Parameters
+#DEFINE LCD_IO 404
+#DEFINE LCD_NO_RW
+#DEFINE LCD_SPEED SLOW
 
-  ;Change as necessary
-  #define LCD_RS PORTE.0
-  #define LCD_Enable1 PORTE.1
-  #define LCD_Enable2 PORTE.2
+'Change as necessary
+#DEFINE LCD_RS PORTE.0
+#DEFINE LCD_Enable1 PORTE.1
+#DEFINE LCD_Enable2 PORTE.2
 
-  #define LCD_DB4 PORTd.4
-  #define LCD_DB5 PORTd.5
-  #define LCD_DB6 PORTd.6
-  #define LCD_DB7 PORTd.7
+#DEFINE LCD_DB4 PORTd.4
+#DEFINE LCD_DB5 PORTd.5
+#DEFINE LCD_DB6 PORTd.6
+#DEFINE LCD_DB7 PORTd.7
 
 'Misc Settings
-#define SCROLL_DELAY 50 ms
+#DEFINE SCROLL_DELAY 50 ms
 'Main routine
 
-  'Test are split into two subs to ensure these routines fit into the 16f memory pages.
+'Test are split into two subs to ensure these routines fit into the 16f memory pages.
 
-  do
+Do
 
     testsuite1
 
     testsuite2
 
-  loop
-
-
-sub testsuite1
-
-         test1:
-       for ypos = 0 to 3
-          For StarPos = 0 To 39
-              If StarPos = 0 Then
-                  Put ypos-1, 39, 32
-                  Put ypos, 0, 42
-              Else
-                  Put ypos, StarPos - 1, 32
-                  Put ypos, StarPos, 42
-              End If
-              Wait SCROLL_DELAY
-          Next
-        next
-
-        for ypos = 0 to 3
-          For StarPos = 0 To 39
-              If StarPos = 0 Then
-                  locate ypos-1, 39
-                  print " "
-                  locate ypos, 0
-                  print "*"
-              Else
-                  locate ypos, StarPos - 1
-                  print " "
-                  locate ypos, StarPos
-                  print "*"
-              End If
-              Wait SCROLL_DELAY
-          Next
-        next
+Loop
+
+
+Sub testsuite1
+
+test1:
+    For ypos = 0 To 3
+        For StarPos = 0 To 39
+            If StarPos = 0 Then
+                Put ypos-1, 39, 32
+                Put ypos, 0, 42
+            Else
+                Put ypos, StarPos - 1, 32
+                Put ypos, StarPos, 42
+            End If
+            Wait SCROLL_DELAY
+        Next
+    Next
+
+    For ypos = 0 To 3
+        For StarPos = 0 To 39
+            If StarPos = 0 Then
+                Locate ypos-1, 39
+                Print " "
+                Locate ypos, 0
+                Print "*"
+            Else
+                Locate ypos, StarPos - 1
+                Print " "
+                Locate ypos, StarPos
+                Print "*"
+            End If
+            Wait SCROLL_DELAY
+        Next
+    Next
 
-       test2:
-
-        CLS
-        Print "CLS  - no parameter"
-        wait 1 s
-
-
-        CLS 1
-        Print "CLS - parameter #1"
-        wait 1 s
-
-
-        CLS 2
-        Print "CLS - parameter #2"
-        wait 1 s
-
-       CLS 3
-        Print "CLS - parameter #3"
-        wait 1 s
-
-
-        test3:
-
-        LCDHome
-        Print "Home - no parameter"
-        wait 1 s
-
-
-        LCDHome 1
-        Print "Home - parameter #1"
-        wait 1 s
-
-
-        LCDHome 2
-        Print "Home - parameter #2"
-        wait 1 s
-
-       LCDHome 3
-        Print "Home - parameter #3"
-        wait 1 s
-
-       test4:
-        locate 0,8
-        print "123456"
-        'Scroll display one character right (all lines)       28
-        '
-        lcdcmd 28
-        wait 1 s
-        lcdcmd 28
-        wait 1 s
-        lcdcmd 28
-        wait 1 s
-        lcdcmd 28
-        wait 1 s
-
-
-        'Scroll display one character left (all lines)        24
-        '
-        lcdcmd 24
-        wait 1 s
-        lcdcmd 24
-        wait 1 s
-        lcdcmd 24
-        wait 1 s
-        lcdcmd 24
-        wait 1 s
+test2:
+
+    CLS
+    Print "CLS  - no parameter"
+    Wait 1 s
+
+
+    CLS 1
+    Print "CLS - parameter #1"
+    Wait 1 s
+
+
+    CLS 2
+    Print "CLS - parameter #2"
+    Wait 1 s
+
+    CLS 3
+    Print "CLS - parameter #3"
+    Wait 1 s
+
+
+test3:
+
+    LCDHome
+    Print "Home - no parameter"
+    Wait 1 s
+
+
+    LCDHome 1
+    Print "Home - parameter #1"
+    Wait 1 s
+
+
+    LCDHome 2
+    Print "Home - parameter #2"
+    Wait 1 s
+
+    LCDHome 3
+    Print "Home - parameter #3"
+    Wait 1 s
+
+test4:
+    Locate 0,8
+    Print "123456"
+    'Scroll display one character right (all lines)       28
+    '
+    LCDCMD 28
+    Wait 1 s
+    LCDCMD 28
+    Wait 1 s
+    LCDCMD 28
+    Wait 1 s
+    LCDCMD 28
+    Wait 1 s
+
+
+    'Scroll display one character left (all lines)        24
+    '
+    LCDCMD 24
+    Wait 1 s
+    LCDCMD 24
+    Wait 1 s
+    LCDCMD 24
+    Wait 1 s
+    LCDCMD 24
+    Wait 1 s
 
 
 
 
-        'Home (move cursor to top/left character position)    2
-        '
-        lcdcursor flash
-        lcdcmd 2
-        wait 1 s
+    'Home (move cursor to top/left character position)    2
+    '
+    LCDCursor FLASH
+    LCDCMD 2
+    Wait 1 s
 
 
-        'Move cursor one character left                       16
-        '
-        lcdcursor flash
-        locate 0,8
-
-
-        lcdcmd 16
-        wait 1 s
-        lcdcmd 16
-        wait 1 s
-        lcdcmd 16
-        wait 1 s
-        lcdcmd 16
-        wait 1 s
-
-
-
-
-        'Move cursor one character right                      20
-        '
-        lcdcmd 20
-        wait 1 s
-        lcdcmd 20
-        wait 1 s
-        lcdcmd 20
-        wait 1 s
-        lcdcmd 20
-        wait 1 s
-
-      test4a:
-        locate 0,28
-        print "123456"
-        'Scroll display one character right (all lines)       28
-        '
-        lcdcmd 28
-        wait 1 s
-        lcdcmd 28
-        wait 1 s
-        lcdcmd 28
-        wait 1 s
-        lcdcmd 28
-        wait 1 s
-
-
-        'Scroll display one character left (all lines)        24
-        '
-        lcdcmd 24
-        wait 1 s
-        lcdcmd 24
-        wait 1 s
-        lcdcmd 24
-        wait 1 s
-        lcdcmd 24
-        wait 1 s
-
-
-
-
-        'Home (move cursor to top/left character position)    2
-        '
-        lcdcursor flash
-        lcdcmd 2
-        wait 1 s
-
-
-        'Move cursor one character left                       16
-        '
-        lcdcursor flash
-        locate 0,28
-
-
-        lcdcmd 16
-        wait 1 s
-        lcdcmd 16
-        wait 1 s
-        lcdcmd 16
-        wait 1 s
-        lcdcmd 16
-        wait 1 s
-
-
-
-
-        'Move cursor one character right                      20
-        '
-        lcdcmd 20
-        wait 1 s
-        lcdcmd 20
-        wait 1 s
-        lcdcmd 20
-        wait 1 s
-        lcdcmd 20
-        wait 1 s
-
-       test5:
-         'Print String
-          dim myString as string * 40
-          myString = "01234567890ABCDEFGHI01234567890abcdefghi"
-          Cls
-          print myString
-          locate 1, 0
-         print myString
-         locate 2, 0
-         print myString
-         locate 3, 0
-         print myString
-         wait 1 s
-
-end sub
-
-sub testsuite2
-
-    test6:
-      CLS
-      dim myByte as Byte
-      myByte = 255
-      print myByte
-      locate 3,20
-      print myByte
-      wait 1 s
-
-    test7:
-      cls
-      dim myWord as Word
-      myWord = 256
-      print myWord
-      locate 3,20
-      print myWord
-      wait 1 s
-
-    test8:
-      cls
-      dim myLong as Long
-      myLong = 0xffff
-      print myLong
-      locate 3,20
-      print myLong
-      wait 1 s
-
-    test9a:
-      cls
-      dim myInteger as Integer
-      myInteger = -100
-      print myInteger
-      locate 3,20
-      print myInteger
-      wait 1 s
-
-    test9b:
-      cls
-      dim myInteger as Integer
-      myInteger = 0
-      print myInteger
-      locate 3,20
-      print myInteger
-      wait 1 s
-
-    test10:
-      cls
-      LCDHex(255)
-      locate 3,20
-      LCDHex(16)
-      wait 1 s
-
-
-    test11a:
-
-          CLS
-          PRINT "START DEMO"
-          locate 1,0
-          PRINT "DISPLAY ON"
-
-
-          wait 1 s
-
-
-          CLS
-          Locate 0,0
-          Print "Cursor ON"
-          Locate 1,0
-          LCDcursor CursorOn
-          wait 1 s
-
-
-          CLS
-          LCDcursor CursorOFF
-          locate 0,0
-          Print "Cursor OFF"
-          wait 1 s
-
-
-          CLS
-          Locate 0,0
-          Print "FLASH ON"
-          Locate 1,0
-          LCDcursor FLASHON
-          wait 1 s
-
-
-          CLS
-          locate 0,0
-          Print "FLASH OFF"
-          LCDCURSOR FLASHOFF
-          wait 1 sec
-
-
-          Locate 0,0
-          Print "CURSOR&FLASH ON" 'Both are on at the same time
-          locate 1,0
-          LCDCURSOR CURSORON
-          LCDCURSOR FLASHON
-          wait 1 sec
-
-
-          Locate 0,0
-          Print "CURSOR FLASH OFF"
-          locate 1,0
-          LCDCURSOR CursorOFF
-          LCDCURSOR FLASHOFF
-          wait 1 sec
-
-
-          CLS
-          Locate 0,4
-          PRINT "Flashing"
-          Locate 1,4
-          Print "Display"
-          wait 500 ms
-
-
-          repeat 5
-              LCDCURSOR LCDOFF
-              wait 500 ms
-              LCDCURSOR LCDON
-              wait 500 ms
-          end repeat
-
-
-          CLS
-          Locate 0,0
-          Print "DISPLAY OFF"
-          Locate 1,0
-          Print "FOR 5 SEC"
-          Wait 2 SEC
-          LCDCURSOR LCDOFF
-          WAIT 5 s
-
-
-          CLS
-          Locate 0,0
-          LCDCURSOR LCDON
-          Print "END DEMO"
-          wait 1 s
-
-    test11b:
-
-          CLS
-          wait 1 s
-          locate 0, 20
-          PRINT "START DEMO"
-          locate 1,20
-          PRINT "DISPLAY ON"
-
-
-          wait 1 s
-
-
-          CLS
-          Locate 0,20
-          Print "Cursor ON"
-          Locate 1,20
-          LCDcursor CursorOn
-          wait 1 s
-
-
-          CLS
-          LCDcursor CursorOFF
-          locate 0,20
-          Print "Cursor OFF"
-          wait 1 s
-
-
-          CLS
-          Locate 0,20
-          Print "FLASH ON"
-          Locate 1,20
-          LCDcursor FLASHON
-          wait 1 s
-
-
-          CLS
-          locate 0,20
-          Print "FLASH OFF"
-          LCDCURSOR FLASHOFF
-          wait 1 sec
-
-
-          Locate 0,20
-          Print "CURSOR&FLASH ON" 'Both are on at the same time
-          locate 1,20
-          LCDCURSOR CURSORON
-          LCDCURSOR FLASHON
-          wait 1 sec
-
-
-          Locate 0,20
-          Print "CURSOR FLASH OFF"
-          locate 1,20
-          LCDCURSOR CursorOFF
-          LCDCURSOR FLASHOFF
-          wait 1 sec
-
-
-          CLS
-          Locate 0,24
-          PRINT "Flashing"
-          Locate 1,24
-          Print "Display"
-          wait 500 ms
-
-
-          repeat 5
-              LCDCURSOR LCDOFF
-              wait 500 ms
-              LCDCURSOR LCDON
-              wait 500 ms
-          end repeat
-
-
-          CLS
-          Locate 0,20
-          Print "DISPLAY OFF"
-          Locate 1,20
-          Print "FOR 5 SEC"
-          Wait 2 SEC
-          LCDCURSOR LCDOFF
-          WAIT 5 s
-
-
-          CLS
-          Locate 0,20
-          LCDCURSOR LCDON
-          Print "END DEMO"
-          wait 1 s
-
-end sub
+    'Move cursor one character left                       16
+    '
+    LCDCursor FLASH
+    Locate 0,8
+
+
+    LCDCMD 16
+    Wait 1 s
+    LCDCMD 16
+    Wait 1 s
+    LCDCMD 16
+    Wait 1 s
+    LCDCMD 16
+    Wait 1 s
+
+
+
+
+    'Move cursor one character right                      20
+    '
+    LCDCMD 20
+    Wait 1 s
+    LCDCMD 20
+    Wait 1 s
+    LCDCMD 20
+    Wait 1 s
+    LCDCMD 20
+    Wait 1 s
+
+test4a:
+    Locate 0,28
+    Print "123456"
+    'Scroll display one character right (all lines)       28
+    '
+    LCDCMD 28
+    Wait 1 s
+    LCDCMD 28
+    Wait 1 s
+    LCDCMD 28
+    Wait 1 s
+    LCDCMD 28
+    Wait 1 s
+
+
+    'Scroll display one character left (all lines)        24
+    '
+    LCDCMD 24
+    Wait 1 s
+    LCDCMD 24
+    Wait 1 s
+    LCDCMD 24
+    Wait 1 s
+    LCDCMD 24
+    Wait 1 s
+
+
+
+
+    'Home (move cursor to top/left character position)    2
+    '
+    LCDCursor FLASH
+    LCDCMD 2
+    Wait 1 s
+
+
+    'Move cursor one character left                       16
+    '
+    LCDCursor FLASH
+    Locate 0,28
+
+
+    LCDCMD 16
+    Wait 1 s
+    LCDCMD 16
+    Wait 1 s
+    LCDCMD 16
+    Wait 1 s
+    LCDCMD 16
+    Wait 1 s
+
+
+
+
+    'Move cursor one character right                      20
+    '
+    LCDCMD 20
+    Wait 1 s
+    LCDCMD 20
+    Wait 1 s
+    LCDCMD 20
+    Wait 1 s
+    LCDCMD 20
+    Wait 1 s
+
+test5:
+    'Print String
+    Dim myString As String * 40
+    myString = "01234567890ABCDEFGHI01234567890abcdefghi"
+    CLS
+    Print myString
+    Locate 1, 0
+    Print myString
+    Locate 2, 0
+    Print myString
+    Locate 3, 0
+    Print myString
+    Wait 1 s
+
+End Sub
+
+Sub testsuite2
+
+test6:
+    CLS
+    Dim myByte As Byte
+    myByte = 255
+    Print myByte
+    Locate 3,20
+    Print myByte
+    Wait 1 s
+
+test7:
+    CLS
+    Dim myWord As Word
+    myWord = 256
+    Print myWord
+    Locate 3,20
+    Print myWord
+    Wait 1 s
+
+test8:
+    CLS
+    Dim myLong As Long
+    myLong = 0xffff
+    Print myLong
+    Locate 3,20
+    Print myLong
+    Wait 1 s
+
+test9a:
+    CLS
+    Dim myInteger As Integer
+    myInteger = -100
+    Print myInteger
+    Locate 3,20
+    Print myInteger
+    Wait 1 s
+
+test9b:
+    CLS
+    Dim myInteger As Integer
+    myInteger = 0
+    Print myInteger
+    Locate 3,20
+    Print myInteger
+    Wait 1 s
+
+test10:
+    CLS
+    LCDHex(255)
+    Locate 3,20
+    LCDHex(16)
+    Wait 1 s
+
+
+test11a:
+
+    CLS
+    Print "START DEMO"
+    Locate 1,0
+    Print "DISPLAY ON"
+
+
+    Wait 1 s
+
+
+    CLS
+    Locate 0,0
+    Print "Cursor ON"
+    Locate 1,0
+    LCDCursor CURSORON
+    Wait 1 s
+
+
+    CLS
+    LCDCursor CURSOROFF
+    Locate 0,0
+    Print "Cursor OFF"
+    Wait 1 s
+
+
+    CLS
+    Locate 0,0
+    Print "FLASH ON"
+    Locate 1,0
+    LCDCursor FLASHON
+    Wait 1 s
+
+
+    CLS
+    Locate 0,0
+    Print "FLASH OFF"
+    LCDCursor FLASHOFF
+    Wait 1 sec
+
+
+    Locate 0,0
+    'Both are on at the same time
+    Print "CURSOR&FLASH ON"
+    Locate 1,0
+    LCDCursor CURSORON
+    LCDCursor FLASHON
+    Wait 1 sec
+
+
+    Locate 0,0
+    Print "CURSOR FLASH OFF"
+    Locate 1,0
+    LCDCursor CURSOROFF
+    LCDCursor FLASHOFF
+    Wait 1 sec
+
+
+    CLS
+    Locate 0,4
+    Print "Flashing"
+    Locate 1,4
+    Print "Display"
+    Wait 500 ms
+
+
+    Repeat 5
+        LCDCursor LCDOFF
+        Wait 500 ms
+        LCDCursor LCDON
+        Wait 500 ms
+    End Repeat
+
+
+    CLS
+    Locate 0,0
+    Print "DISPLAY OFF"
+    Locate 1,0
+    Print "FOR 5 SEC"
+    Wait 2 SEC
+    LCDCursor LCDOFF
+    Wait 5 s
+
+
+    CLS
+    Locate 0,0
+    LCDCursor LCDON
+    Print "END DEMO"
+    Wait 1 s
+
+test11b:
+
+    CLS
+    Wait 1 s
+    Locate 0, 20
+    Print "START DEMO"
+    Locate 1,20
+    Print "DISPLAY ON"
+
+
+    Wait 1 s
+
+
+    CLS
+    Locate 0,20
+    Print "Cursor ON"
+    Locate 1,20
+    LCDCursor CURSORON
+    Wait 1 s
+
+
+    CLS
+    LCDCursor CURSOROFF
+    Locate 0,20
+    Print "Cursor OFF"
+    Wait 1 s
+
+
+    CLS
+    Locate 0,20
+    Print "FLASH ON"
+    Locate 1,20
+    LCDCursor FLASHON
+    Wait 1 s
+
+
+    CLS
+    Locate 0,20
+    Print "FLASH OFF"
+    LCDCursor FLASHOFF
+    Wait 1 sec
+
+
+    Locate 0,20
+    'Both are on at the same time
+    Print "CURSOR&FLASH ON"
+    Locate 1,20
+    LCDCursor CURSORON
+    LCDCursor FLASHON
+    Wait 1 sec
+
+
+    Locate 0,20
+    Print "CURSOR FLASH OFF"
+    Locate 1,20
+    LCDCursor CURSOROFF
+    LCDCursor FLASHOFF
+    Wait 1 sec
+
+
+    CLS
+    Locate 0,24
+    Print "Flashing"
+    Locate 1,24
+    Print "Display"
+    Wait 500 ms
+
+
+    Repeat 5
+        LCDCursor LCDOFF
+        Wait 500 ms
+        LCDCursor LCDON
+        Wait 500 ms
+    End Repeat
+
+
+    CLS
+    Locate 0,20
+    Print "DISPLAY OFF"
+    Locate 1,20
+    Print "FOR 5 SEC"
+    Wait 2 SEC
+    LCDCursor LCDOFF
+    Wait 5 s
+
+
+    CLS
+    Locate 0,20
+    LCDCursor LCDON
+    Print "END DEMO"
+    Wait 1 s
+
+End Sub

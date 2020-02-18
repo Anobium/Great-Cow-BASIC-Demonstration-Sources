@@ -1,42 +1,43 @@
-  '''A demonstration program for GCGB and GCB.
-  '''--------------------------------------------------------------------------------------------------------------------------------
-  '''This program demostrates use of the FnNotBit command set.  This demonstration will flash the attached LED.
-  '''An LED isconnected to PortA.0 via A suitable resistor, 1k resistors should be adequate for a 5v supply voltage.
-  '''For the LED connection please see the program below.
-  ''':
-  '''This demonstration uses the state of a switch to set the state of the LED.
-  '''
-  '''@author 	ChrisR and EvanV
-  '''@licence	GPL
-  '''@version	1.01
-  '''@date   	22.02.2016
-  '''********************************************************************************
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demostrates use of the FnNotBit command set.  This demonstration will flash the attached LED.
+'''An LED isconnected to PortA.0 via A suitable resistor, 1k resistors should be adequate for a 5v supply voltage.
+'''For the LED connection please see the program below.
+''':
+'''This demonstration uses the state of a switch to set the state of the LED.
+'''
+'''@author 	ChrisR and EvanV
+'''@licence	GPL
+'''@version	1.01
+'''@date   	22.02.2016
+'''********************************************************************************
 
-  ; ----- Configuration
-  #chip 16f877a, 4
+' ----- Configuration
+#CHIP 16f877a, 4
 
-  ; ----- Constants
-    ' No Constants specified in this example.
+' ----- Constants
+' No Constants specified in this example.
 
-  ; ----- Define Hardware settings
-  #define LED PortA.0
-  #define SW1 PortA.1
+' ----- Define Hardware settings
+#DEFINE LED PortA.0
+#DEFINE SW1 PortA.1
 
-  ; ----- Variables
-    ' No Variables specified in this example. All byte variables are defined upon use.
+' ----- Variables
+' No Variables specified in this example. All byte variables are defined upon use.
 
-  ; ----- Quick Command Reference:
-  'See header for details
+' ----- Quick Command Reference:
+'See header for details
 
-  ; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
-  Do
-    LED = FnNotBit( SW1)  'LED = NOT SW1
-  Loop
+Do
+    'LED = NOT SW1
+    LED = FnNotBit( SW1)
+Loop
 
-  end
+End
 
-  ; ----- Support methods.  Subroutines and Functions
+' ----- Support methods.  Subroutines and Functions
 
 
 

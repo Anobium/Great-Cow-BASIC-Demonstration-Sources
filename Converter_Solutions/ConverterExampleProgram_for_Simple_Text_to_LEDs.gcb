@@ -11,52 +11,52 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
- #chip 16f877a, 16
- #option explicit
+#CHIP 16f877a, 16
+#OPTION Explicit
 
- ; This is the source data file that will be converted into a GCB table by the external converter program.
- #include <..\converters\infraredpatterns.txt>
+' This is the source data file that will be converted into a GCB table by the external converter program.
+#INCLUDE <..\converters\infraredpatterns.txt>
 
-; ----- Constants
-  ' No Constants specified in this example.
+' ----- Constants
+' No Constants specified in this example.
 
-; ----- Define Hardware settings
-  dir portb out
-
-
-; ----- Variables
-  ' These variables must be WORDs as this could be large table created by the conversion program
-  dim TableReadPosition, TableLen as word
-  Dim TRANSMISSIONPATTERN, PULSEDELAY as Byte
-
-; ----- Quick Command Reference:
-  'This is demonstration of the capabiliites of the GCB converter process.
+' ----- Define Hardware settings
+Dir portb Out
 
 
-; ----- Main body of program commences here.
+' ----- Variables
+' These variables must be WORDs as this could be large table created by the conversion program
+Dim TableReadPosition, TableLen As Word
+Dim TRANSMISSIONPATTERN, PULSEDELAY As Byte
 
-  'Read the table length from the first entry in the table.
-  TableReadPosition = 0
-  ReadTable DataSource, TableReadPosition, TableLen
-
-
-  'Read the rest of the table and use the dataset to to set the LEDs with an appropiate time delay.  These values are obtained from the source file.
-  DO Forever
-      For TableReadPosition = 1 to TableLen step 2
-          ReadTable DataSource, TableReadPosition, TransmissionPattern
-          ReadTable DataSource, TableReadPosition+1 , PulseDelay
-          'Set the port
-          portb = TransmissionPattern
-          wait PulseDelay ms
-      next
-  Loop
+' ----- Quick Command Reference:
+'This is demonstration of the capabiliites of the GCB converter process.
 
 
-  end
+' ----- Main body of program commences here.
 
-; ----- Support methods.  Subroutines and Functions
+'Read the table length from the first entry in the table.
+TableReadPosition = 0
+ReadTable DataSource, TableReadPosition, TableLen
+
+
+'Read the rest of the table and use the dataset to to set the LEDs with an appropiate time delay.  These values are obtained from the source file.
+Do Forever
+    For TableReadPosition = 1 To TableLen Step 2
+        ReadTable DataSource, TableReadPosition, TransmissionPattern
+        ReadTable DataSource, TableReadPosition+1 , PulseDelay
+        'Set the port
+        portb = TransmissionPattern
+        Wait PulseDelay ms
+    Next
+Loop
+
+
+End
+
+' ----- Support methods.  Subroutines and Functions
 
 
 

@@ -9,35 +9,35 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
-  #chip 16F886, 16
-  #option explicit
+' ----- Configuration
+#CHIP 16F886, 16
+#OPTION Explicit
 
-; ----- Define Hardware settings
-  ' No hardware configuration is required as outputs and inputs are set automatically within the methods used.
+' ----- Define Hardware settings
+' No hardware configuration is required as outputs and inputs are set automatically within the methods used.
 
-; ----- Constants
-  ' No Constants specified in this example.
+' ----- Constants
+' No Constants specified in this example.
 
-; ----- Variables
-  Dim COUNT as Byte
-
-
-; ----- Main body of program commences here.
+' ----- Variables
+Dim COUNT As Byte
 
 
-  main:
+' ----- Main body of program commences here.
 
-    count = ReadAD(AN0)
-    'Limit CW travel
-    if count < 75 then
-        count = 75					
-    end if
-    'Limit CCW travel
-    if count > 225 then
-       count = 225					
-    end if
-    pulseout PORTB.0 ,count 10us
-    wait 20 ms
 
-  goto main
+main:
+
+count = ReadAD(AN0)
+'Limit CW travel
+If count < 75 Then
+    count = 75
+End If
+'Limit CCW travel
+If count > 225 Then
+    count = 225
+End If
+PulseOut PORTB.0 ,count 10us
+Wait 20 ms
+
+Goto main

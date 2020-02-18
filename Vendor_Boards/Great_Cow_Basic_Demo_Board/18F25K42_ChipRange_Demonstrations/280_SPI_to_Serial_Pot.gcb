@@ -21,152 +21,167 @@
 '''@date    22.10.2017
 ' ----- Configuration
 
-    'Chip Settings.
-    #chip 18f25k42, 64
-    #option Explicit
-    #config mclr=on
+'Chip Settings.
+#CHIP 18f25k42, 64
+#OPTION Explicit
+#CONFIG mclr=On
 
-    #startup InitPPS, 85
+#STARTUP InitPPS, 85
 
-    Sub InitPPS
+Sub InitPPS
 
-          'Module: SPI1
-          SPI1SCKPPS = 0x13     ' RC3->SPI1:SCK1
-          RC5PPS = 0x1F         ' RC5->SPI1:SDO1
-          SPI1SDIPPS = 0x14     ' RC4->SPI1:SDI1
-          RC3PPS = 0x1E         ' RC3->SPI1:SCK1
+    'Module: SPI1
+    ' RC3->SPI1:SCK1
+    SPI1SCKPPS = 0x13
+    ' RC5->SPI1:SDO1
+    RC5PPS = 0x1F
+    ' RC4->SPI1:SDI1
+    SPI1SDIPPS = 0x14
+    ' RC3->SPI1:SCK1
+    RC3PPS = 0x1E
 
-          'Module: UART1
-          RC6PPS = 0x0013        'TX1 > RC6
-          U1RXPPS = 0x0017       'RC7 > RX1
+    'Module: UART1
+    'TX1 > RC6
+    RC6PPS = 0x0013
+    'RC7 > RX1
+    U1RXPPS = 0x0017
 
-    End Sub
+End Sub
 
-    'Template comment at the end of the config file
-
-
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------O---O---O---------------
-    ''-----------------------------------------
-    ''
-
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | ----------| O | I |-
-    ''-----------------------------------------
-    ''
-
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -S---S---O---I---C-| X |---------
-    ''----------------------------------------
-    ''
-
-    'Setup Serial port
-    #define USART_BAUD_RATE 9600
-    #define USART_TX_BLOCKING
-
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define SwitchIn        PORTB.0
-    #define LCDControl      PORTC.2
-
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     SwitchIn      In
-    Dir     LCDControl    Out
+'Template comment at the end of the config file
 
 
-    '******* BOARD SPECIFIC ABOVE HERE **********************
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------O---O---O---------------
+''-----------------------------------------
+''
 
-    #include <mcp4xxxdigitalpot.h>
-    #define DigitalPot_CS   Porta.5           ' Chip select line
-    #define DigitalPot_SCK  portc.3           ' Clock Line
-    #define DigitalPot_DO   portc.5           ' Data out | MOSI
-    #define DigitalPot_DI   portc.4           ' Data in | MISO
-    dir DigitalPot_CS   out
-    dir DigitalPot_SCK  out
-    dir DigitalPot_DO   out
-    dir DigitalPot_DI   in
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | ----------| O | I |-
+''-----------------------------------------
+''
 
-; ----- Variables
-  dim loopx as word
-  Dim DD as Byte
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -S---S---O---I---C-| X |---------
+''----------------------------------------
+''
+
+'Setup Serial port
+#DEFINE USART_BAUD_RATE 9600
+#DEFINE USART_TX_BLOCKING
+
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE SwitchIn        PORTB.0
+#DEFINE LCDControl      PORTC.2
+
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+Dir     SwitchIn      In
+Dir     LCDControl    Out
+
+
+'******* BOARD SPECIFIC ABOVE HERE **********************
+
+#INCLUDE <mcp4xxxdigitalpot.h>
+' Chip select line
+#DEFINE DigitalPot_CS   Porta.5
+' Clock Line
+#DEFINE DigitalPot_SCK  portc.3
+' Data out | MOSI
+#DEFINE DigitalPot_DO   portc.5
+' Data in | MISO
+#DEFINE DigitalPot_DI   portc.4
+Dir DigitalPot_CS   Out
+Dir DigitalPot_SCK  Out
+Dir DigitalPot_DO   Out
+Dir DigitalPot_DI   In
+
+' ----- Variables
+Dim loopx As Word
+Dim DD As Byte
 
 
 
-; ------ Start of main Program
+' ------ Start of main Program
 
 
-   ' Setup MCP Device using hardware SPI
-   #define _MCP4XXXHardwareSPI
-   'Required to initialise the device
-   MCP4XXXInit
-   SPIMode ( MasterFast, SPI_CPOL_0 + SPI_CPHA_0 )
+' Setup MCP Device using hardware SPI
+#DEFINE _MCP4XXXHardwareSPI
+'Required to initialise the device
+MCP4XXXInit
+SPIMode ( MasterFast, SPI_CPOL_0 + SPI_CPHA_0 )
 
-   HSerPrintCRLF 2
+HSerPrintCRLF 2
 
-   'Write to EEProm of the device
-   'DigitalWriteMemory ( 9bit number [0-511], EEProm address [6-9] )
-      DigitalWriteMemory ( (511) , 6 )
-      DigitalWriteMemory ( ( 7  ) , 7 )
-      DigitalWriteMemory ( ( 256 ) , 8 )
-      DigitalWriteMemory ( (  0 ) , 9 )
-      DigitalWriteMemory ( (  85 ) , 10 )
-      DigitalWriteMemory ( (  341 ) , 11 )
-      DigitalWriteMemory ( (  170 ) , 12 )
-      DigitalWriteMemory ( (  55 ) , 13 )
-      DigitalWriteMemory ( (  1 ) , 14 )
-      DigitalWriteMemory ( (  511 ) , 15 )
+'Write to EEProm of the device
+'DigitalWriteMemory ( 9bit number [0-511], EEProm address [6-9] )
+DigitalWriteMemory ( (511) , 6 )
+DigitalWriteMemory ( ( 7  ) , 7 )
+DigitalWriteMemory ( ( 256 ) , 8 )
+DigitalWriteMemory ( (  0 ) , 9 )
+DigitalWriteMemory ( (  85 ) , 10 )
+DigitalWriteMemory ( (  341 ) , 11 )
+DigitalWriteMemory ( (  170 ) , 12 )
+DigitalWriteMemory ( (  55 ) , 13 )
+DigitalWriteMemory ( (  1 ) , 14 )
+DigitalWriteMemory ( (  511 ) , 15 )
 
-      'Display EEProm Values
-      for dd = 0 to 15
-        HSerPrint Pad( str(dd)+") ", 5 )
-        HSerPrint DigitalReadMemory ( dd )
-        HSerPrintCRLF
-      next
+'Display EEProm Values
+For dd = 0 To 15
+    HSerPrint Pad( Str(dd)+") ", 5 )
+    HSerPrint DigitalReadMemory ( dd )
+    HSerPrintCRLF
+Next
 
-     'Example square wave - just uncomment
-     'SPI Settings for a square wave as follows
+'Example square wave - just uncomment
+'SPI Settings for a square wave as follows
 '      do Forever
 '          DigitalPotSetWiperPosition(0, 0)      ' Set wiper to 0/128 = 0 Rab
 '          DigitalPotSetWiperPosition(128, 0)    ' Set wiper to 128/128 = 1 Rab
 '      loop
 
-     'Example setup of pot wiper
-      do Forever
+'Example setup of pot wiper
+Do Forever
 
-              DigitalPotSetWiperPosition(0, 0)    ' Set wiper to 0/128 = 0 Rab
-              wait 50 ms
+    ' Set wiper to 0/128 = 0 Rab
+    DigitalPotSetWiperPosition(0, 0)
+    Wait 50 ms
 
-              DigitalPotSetWiperPosition(32, 0)    ' Set wiper to 32/128 = 1/4 Rab
-              wait 50 ms
-
-
-              DigitalPotSetWiperPosition(64, 0)    ' Set wiper to 64/128 = 1/2 Rab
-              wait 50 ms
+    ' Set wiper to 32/128 = 1/4 Rab
+    DigitalPotSetWiperPosition(32, 0)
+    Wait 50 ms
 
 
-              DigitalPotSetWiperPosition(96, 0)    ' Set wiper to 96/128 = 3/4 Rab
-              wait 50 ms
+    ' Set wiper to 64/128 = 1/2 Rab
+    DigitalPotSetWiperPosition(64, 0)
+    Wait 50 ms
 
 
-              DigitalPotSetWiperPosition(128, 0)    ' Set wiper to 128/128 = 1 Rab
-              wait 50 ms
+    ' Set wiper to 96/128 = 3/4 Rab
+    DigitalPotSetWiperPosition(96, 0)
+    Wait 50 ms
 
-              ' Decrement wiper 129 times
-              for loopx =0 to 128
-                  DigitalPotDecrement
-                  wait 1 ms
-              next
-              wait 8 ms
 
-              ' Increment wiper 129 times
-              for loopx =0 to 128
-                  DigitalPotIncrement
-                  wait 1 ms
-              next
-              wait 8 ms
+    ' Set wiper to 128/128 = 1 Rab
+    DigitalPotSetWiperPosition(128, 0)
+    Wait 50 ms
 
-      Loop
+    ' Decrement wiper 129 times
+    For loopx =0 To 128
+        DigitalPotDecrement
+        Wait 1 ms
+    Next
+    Wait 8 ms
+
+    ' Increment wiper 129 times
+    For loopx =0 To 128
+        DigitalPotIncrement
+        Wait 1 ms
+    Next
+    Wait 8 ms
+
+Loop

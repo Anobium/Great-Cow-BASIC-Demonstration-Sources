@@ -23,59 +23,59 @@
 '''  Board: Xpress Evaluation Board
 '''  Date: 13.3.2016
 '''
-    #chip 16f18855,32
-    #option Explicit
+#CHIP 16f18855,32
+#OPTION Explicit
 
-    dim speed, MotorSpeed, PWMCounter as byte
+Dim speed, MotorSpeed, PWMCounter As Byte
 
-    #define MOTOR PORTA.0
-    dir MOTOR out
+#DEFINE MOTOR PORTA.0
+Dir MOTOR Out
 
-    'Call the initialisation routine
-    InitMotorControl
+'Call the initialisation routine
+InitMotorControl
 
-    'Main routine
-    Do
-        'Increase speed to full over 2.5 seconds
-        For Speed = 0 to 100
-            MotorSpeed = Speed
-            Wait 25 ms
-        Next
-        'Hold speed
-        Wait 1 s
-        'Decrease speed to zero over 2.5 seconds
-        For Speed = 100 to 0
-            MotorSpeed = Speed
-            Wait 25 ms
-        Next
-        'Hold speed
-        Wait 1 s
-    Loop
+'Main routine
+Do
+    'Increase speed to full over 2.5 seconds
+    For Speed = 0 To 100
+        MotorSpeed = Speed
+        Wait 25 ms
+    Next
+    'Hold speed
+    Wait 1 s
+    'Decrease speed to zero over 2.5 seconds
+    For Speed = 100 To 0
+        MotorSpeed = Speed
+        Wait 25 ms
+    Next
+    'Hold speed
+    Wait 1 s
+Loop
 
-    'Setup routine
-    Sub InitMotorControl
-        'Clear variables
-        MotorSpeed = 0
-        PWMCounter = 0
+'Setup routine
+Sub InitMotorControl
+    'Clear variables
+    MotorSpeed = 0
+    PWMCounter = 0
 
-        'Add a handler for the interrupt
-        On Interrupt Timer0Overflow Call PWMHandler
-        InitTimer0(Osc, TMR0_FOSC4 + PRE0_1 , POST0_1)
-        StartTimer 0
+    'Add a handler for the interrupt
+    On Interrupt Timer0Overflow Call PWMHandler
+    InitTimer0(Osc, TMR0_FOSC4 + PRE0_1 , POST0_1)
+    StartTimer 0
 
-    End Sub
+End Sub
 
-    'PWM sub
-    'This will be called when Timer 0 overflows
-    Sub PWMHandler
+'PWM sub
+'This will be called when Timer 0 overflows
+Sub PWMHandler
 
-        If MotorSpeed > PWMCounter Then
-            Set MOTOR On
-        Else
-            Set MOTOR Off
-        End If
-        PWMCounter += 1
-        If PWMCounter = 100 Then PWMCounter = 0
+    If MotorSpeed > PWMCounter Then
+        Set MOTOR On
+    Else
+        Set MOTOR Off
+    End If
+    PWMCounter += 1
+    If PWMCounter = 100 Then PWMCounter = 0
 
-    End Sub
+End Sub
 

@@ -10,76 +10,76 @@
 '''@date    18.10.2015
 '''********************************************************************************
 
-; ----- Configuration
-  #chip tiny85
-  #option explicit
+' ----- Configuration
+#CHIP tiny85
+#OPTION Explicit
 
 
 
-; ----- Define Hardware settings
-  dir led out
+' ----- Define Hardware settings
+Dir led Out
 
-; ----- Constants
-  #define led Portb.1
+' ----- Constants
+#DEFINE led Portb.1
 
-;----- Variables
-  Dim LEDSpeed, LEDPOWER, LEDLUM, PWMCOUNTER, PWMCOUNTER as Byte
+'----- Variables
+Dim LEDSpeed, LEDPOWER, LEDLUM, PWMCOUNTER, PWMCOUNTER As Byte
 
-; ----- Main body of program commences here.
-  ;Call the initialisation routine
-  InitLEDControl
+' ----- Main body of program commences here.
+'Call the initialisation routine
+InitLEDControl
 
-  Do
-      ;Increase LED to full over 2.5 seconds
-      For LEDPower = 0 to 100 step 1
-          LEDSpeed = LEDPower
-          Wait 25 ms
-      Next
-      ;Hold LEDPower
-      Wait 1 s
-      ;Decrease LED to zero over 2.5 seconds
-      For LEDPower = 100 to 0 step - 1
-          LEDSpeed = LEDPower
-          Wait 25 ms
-      Next
-      ;Hold LEDPower
-      Wait 1 s
-  Loop
-  end
+Do
+    'Increase LED to full over 2.5 seconds
+    For LEDPower = 0 To 100 Step 1
+        LEDSpeed = LEDPower
+        Wait 25 ms
+    Next
+    'Hold LEDPower
+    Wait 1 s
+    'Decrease LED to zero over 2.5 seconds
+    For LEDPower = 100 To 0 Step - 1
+        LEDSpeed = LEDPower
+        Wait 25 ms
+    Next
+    'Hold LEDPower
+    Wait 1 s
+Loop
+End
 
-  ;Setup routine
-  Sub InitLEDControl
-      set LED off
-      'Clear variables
-      LEDSpeed = 0
-      PWMCounter = 0
+'Setup routine
+Sub InitLEDControl
+    Set LED Off
+    'Clear variables
+    LEDSpeed = 0
+    PWMCounter = 0
 
-      ;Add a handler for the interrupt
-      On Interrupt Timer0Overflow Call PWMHandler
+    'Add a handler for the interrupt
+    On Interrupt Timer0Overflow Call PWMHandler
 
-      ;Set up the timer
-      InitTimer0 Osc, PS_8
-      StartTimer 0
+    'Set up the timer
+    InitTimer0 Osc, PS_8
+    StartTimer 0
 
-  End Sub
+End Sub
 
 
-  ;PWM sub
-  ;This will be called when Timer 0 overflows
-  Sub PWMHandler
-      If LEDSpeed > PWMCounter Then
-          Set LED On
-      Else
-          Set LED Off
-      End If
-      PWMCounter += 1
-      If PWMCounter = 100 Then PWMCounter = 0
-  End Sub
+'PWM sub
+'This will be called when Timer 0 overflows
+Sub PWMHandler
+    If LEDSpeed > PWMCounter Then
+        Set LED On
+    Else
+        Set LED Off
+    End If
+    PWMCounter += 1
+    If PWMCounter = 100 Then PWMCounter = 0
+End Sub
 
-    end
+End
 
-  ; ----- Support methods.  Subroutines and Functions
-  'none
+' ----- Support methods.  Subroutines and Functions
+'none
 
 
 

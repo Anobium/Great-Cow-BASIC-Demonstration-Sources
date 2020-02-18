@@ -13,46 +13,49 @@
 ' Change #Define  ADC_Fudge to the value in EEPROM
 ' Recompile and Test - all LEDS should now be lit at maiximum
 
-  #Chip 16F18446
- #config MCLRE_OFF    ' Allows RA3 to be used as an Input
+#CHIP 16F18446
+' Allows RA3 to be used as an Input
+#CONFIG MCLRE_OFF
 
-  #Define  ADC_Fudge 0x0739   ' 12 Bit ADC maximum
+' 12 Bit ADC maximum
+#DEFINE  ADC_Fudge 0x0739
 
-  #define DOWN        0
-  #define UP          1
-  #define SWITCH      PortA.3
-  #define LED         PortC.0
+#DEFINE DOWN        0
+#DEFINE UP          1
+#DEFINE SWITCH      PortA.3
+#DEFINE LED         PortC.0
 
-  dir PortC out
-  PortC = 0
+Dir PortC Out
+PortC = 0
 
-  'setup switch (SW1)
-  dir SWITCH IN
+'setup switch (SW1)
+Dir SWITCH In
 
-  Dim ADC_Value as Word
+Dim ADC_Value As Word
 
 
-  do
+Do
 
     ' Scale the 12 bit ADC to display as a 4 bit binary Count
     ADC_Value = ReadAD12 ( AN0 )
     PortC = Scale( ADC_Value, 0, ADC_Fudge, 0, 15)
 
-    if ( SWITCH = DOWN ) then
-      wait 10 ms
-      if ( SWITCH = DOWN ) Then
-        Save_ADC_Value
-      end if
-    end if
+    If ( SWITCH = DOWN ) Then
+        Wait 10 ms
+        If ( SWITCH = DOWN ) Then
+            Save_ADC_Value
+        End If
+    End If
 
-  loop
+Loop
 
 End
 
 Sub Save_ADC_Value()
-  PortC = 0 ' Flash LED's to indicate action
-  EPWrite (0, ADC_Value)
-  wait 100 ms
-  EPWrite (1, ADC_Value_H)
-  wait 100 ms
+    ' Flash LED's to indicate action
+    PortC = 0
+    EPWrite (0, ADC_Value)
+    Wait 100 ms
+    EPWrite (1, ADC_Value_H)
+    Wait 100 ms
 End Sub

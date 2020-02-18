@@ -13,118 +13,118 @@
 '''@date   	17.02.2015
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
-  #chip 16f1938, 32
+#CHIP 16f1938, 32
 
-  ; ----- Define Hardware settings
-  ' Define I2C settings - CHANGE PORTS
-   #define I2C_MODE Master
-   #define I2C_DATA PORTC.4
-   #define I2C_CLOCK PORTC.3
-   #define I2C_DISABLE_INTERRUPTS ON
-   'Optionally, you can reduce the I2C timings.
+' ----- Define Hardware settings
+' Define I2C settings - CHANGE PORTS
+#DEFINE I2C_MODE Master
+#DEFINE I2C_DATA PORTC.4
+#DEFINE I2C_CLOCK PORTC.3
+#DEFINE I2C_DISABLE_INTERRUPTS On
+'Optionally, you can reduce the I2C timings.
 '   #define I2C_BIT_DELAY 0 us
 '   #define I2C_CLOCK_DELAY 1 us
 '   #define I2C_END_DELAY 0 us
 
-  '''Set up LCD
-   #define LCD_IO 10
+'''Set up LCD
+#DEFINE LCD_IO 10
 
-   'You may need to use SLOW or MEDIUM if your LCD is a slower device.
-   #define LCD_SPEED FAST
-   'You may need to invert these states. Dependent of LCD I2C adapter.
-   #define LCD_Backlight_On_State  1
-   #define LCD_Backlight_Off_State 0
+'You may need to use SLOW or MEDIUM if your LCD is a slower device.
+#DEFINE LCD_SPEED FAST
+'You may need to invert these states. Dependent of LCD I2C adapter.
+#DEFINE LCD_Backlight_On_State  1
+#DEFINE LCD_Backlight_Off_State 0
 
-; ----- Constants
-  'None required beyond the scope of the hardware.
+' ----- Constants
+'None required beyond the scope of the hardware.
 
-; ----- Quick Command Reference:
+' ----- Quick Command Reference:
 
- '''Set LCD_10 to 10 for the YwRobot LCD1602 IIC V1 or the Sainsmart LCD_PIC I2C adapter
- '''Set LCD_10 to 12 for the Ywmjkdz I2C adapter with pot bent over top of chip
+'''Set LCD_10 to 10 for the YwRobot LCD1602 IIC V1 or the Sainsmart LCD_PIC I2C adapter
+'''Set LCD_10 to 12 for the Ywmjkdz I2C adapter with pot bent over top of chip
 
-; ----- Main body of program commences here.
-    PRINT "Great Cow Basic"
-    WAIT 1 s
+' ----- Main body of program commences here.
+Print "Great Cow Basic"
+Wait 1 s
 
-    Do Forever
-        CLS
-        WAIT 3 s
-        PRINT "START TEST"
-        locate 1,0
-        PRINT "DISPLAY ON"
-        wait 3 s
+Do Forever
+    CLS
+    Wait 3 s
+    Print "START TEST"
+    Locate 1,0
+    Print "DISPLAY ON"
+    Wait 3 s
 
-        CLS
-        Locate 0,0
-        Print "Cursor ON"
-        Locate 1,0
-        LCDcursor CursorOn
-        wait 3 S
-        CLS
-        LCDcursor CursorOFF
-        locate 0,0
-        Print "Cursor OFF"
-        wait 3 s
-        CLS
-        Locate 0,0
-        Print "FLASH ON"
-        Locate 1,0
-        LCDcursor FLASHON
-        wait 3 s
+    CLS
+    Locate 0,0
+    Print "Cursor ON"
+    Locate 1,0
+    LCDCursor CURSORON
+    Wait 3 s
+    CLS
+    LCDCursor CURSOROFF
+    Locate 0,0
+    Print "Cursor OFF"
+    Wait 3 s
+    CLS
+    Locate 0,0
+    Print "FLASH ON"
+    Locate 1,0
+    LCDCursor FLASHON
+    Wait 3 s
 
-        CLS
-        locate 0,0
-        Print "FLASH OFF"
-        LCDCURSOR FLASHOFF
-        wait 3 sec
+    CLS
+    Locate 0,0
+    Print "FLASH OFF"
+    LCDCursor FLASHOFF
+    Wait 3 sec
 
-        Locate 0,0
-        Print "CURSR & FLSH ON"
-        locate 1,0
-        LCDCURSOR CURSORON
-        LCDCURSOR FLASHON
-        Wait 3 sec
+    Locate 0,0
+    Print "CURSR & FLSH ON"
+    Locate 1,0
+    LCDCursor CURSORON
+    LCDCursor FLASHON
+    Wait 3 sec
 
-        Locate 0,0
-        Print "CURSR & FLSH OFF"
-        locate 1,0
-        LCDCURSOR CursorOFF
-        LCDCURSOR FLASHOFF
-        Wait 3 sec
+    Locate 0,0
+    Print "CURSR & FLSH OFF"
+    Locate 1,0
+    LCDCursor CURSOROFF
+    LCDCursor FLASHOFF
+    Wait 3 sec
 
-        CLS
-        Locate 0,4
-        PRINT "Flashing"
-        Locate 1,4
-        Print "Display"
-        wait 500 ms
+    CLS
+    Locate 0,4
+    Print "Flashing"
+    Locate 1,4
+    Print "Display"
+    Wait 500 ms
 
-        repeat 10
-            LCDCURSOR LCDOFF
-            wait 500 ms
-            LCDCURSOR LCDON
-            wait 500 ms
-        end repeat
-        CLS
-        Locate 0,0
-        Print "DISPLAY & BACKL."
-        Locate 1,0
-        Print "FOR 5 SEC"
-        Wait 2 SEC
-        LCDCURSOR LCDOFF
-        LCDBacklight OFF
-        WAIT 5 s
-        LCDBacklight ON
-        CLS
-        Locate 0,0
-        LCDCURSOR LCDON
-        Print "END TEST"
-        wait 3 s
-    loop
+    Repeat 10
+        LCDCursor LCDOFF
+        Wait 500 ms
+        LCDCursor LCDON
+        Wait 500 ms
+    End Repeat
+    CLS
+    Locate 0,0
+    Print "DISPLAY & BACKL."
+    Locate 1,0
+    Print "FOR 5 SEC"
+    Wait 2 SEC
+    LCDCursor LCDOFF
+    LCDBacklight Off
+    Wait 5 s
+    LCDBacklight On
+    CLS
+    Locate 0,0
+    LCDCursor LCDON
+    Print "END TEST"
+    Wait 3 s
+Loop
 
 
-end
+End
 

@@ -16,42 +16,62 @@
 '''@date    27/10/2018
 '''********************************************************************
 
-    #chip 16F15356              'Specify the Device you are compiling for - this board is the 16F15356
-                                'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
+'Specify the Device you are compiling for - this board is the 16F15356
+#CHIP 16F15356
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
 
-    #option Explicit            'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+#OPTION Explicit
 
-    #define LEDOn  = 1      'Set a constant.  The LED can be de-activated by driving the connected I/O line to the supply voltage via a suitable resistor.
-    #define LEDOff = 0      'Set a constant.  The LED can be activated by driving the connected I/O line to GND.
+'Set a constant.  The LED can be de-activated by driving the connected I/O line to the supply voltage via a suitable resistor.
+#DEFINE LEDOn  = 1
+'Set a constant.  The LED can be activated by driving the connected I/O line to GND.
+#DEFINE LEDOff = 0
 
-    #define LED0 portc.1    'Set a constant to refer to the LED. Attach via a suitable resistor.
-    dir LED0 out            'Set LED as an output
+'Set a constant to refer to the LED. Attach via a suitable resistor.
+#DEFINE LED0 portc.1
+'Set LED as an output
+Dir LED0 Out
 
-    #define PWM_Out1 portc.1   'Setup the port as a SOFTWARE PWM output.  http://gcbasic.sourceforge.net/help/_pwmout.html
+'Setup the port as a SOFTWARE PWM output.  http://gcbasic.sourceforge.net/help/_pwmout.html
+#DEFINE PWM_Out1 portc.1
 
-    dim PWMValue as Byte       'Dimension a byte variable
+'Dimension a byte variable
+Dim PWMValue As Byte
 
-    ''' Most programs run in a loop such as this one
-    do
-        Repeat 8                                'Repeat 8 times
-            for PWMValue = 255 to 150           'Lower the LED instensity
-                PWMOut 1, PWMValue, 1           'Activate PWM software channel number 1, using the value of PWMValue for 1 cycle.
-            next
-            wait 5 ms                           'Wait
-            for PWMValue = 150 to 255           'Raise the LED instensity
-                PWMOut 1, PWMValue, 1           'Activate PWM software channel
-            next
-            wait 5 ms                           'Wait
-        end repeat
-        Repeat 2                                'Repeat 2 times
-            for PWMValue = 255 to 10            'Lower the LED instensity
-                PWMOut 1, PWMValue, 1           'Activate PWM software channel
-            next
-            for PWMValue = 10 to 255            'Raise the LED instensity
-                PWMOut 1, PWMValue, 1           'Activate PWM software channel
-            next
+''' Most programs run in a loop such as this one
+Do
+    'Repeat 8 times
+    Repeat 8
+        'Lower the LED instensity
+        For PWMValue = 255 To 150
+            'Activate PWM software channel number 1, using the value of PWMValue for 1 cycle.
+            PWMOut 1, PWMValue, 1
+        Next
+        'Wait
+        Wait 5 ms
+        'Raise the LED instensity
+        For PWMValue = 150 To 255
+            'Activate PWM software channel
+            PWMOut 1, PWMValue, 1
+        Next
+        'Wait
+        Wait 5 ms
+    End Repeat
+    'Repeat 2 times
+    Repeat 2
+        'Lower the LED instensity
+        For PWMValue = 255 To 10
+            'Activate PWM software channel
+            PWMOut 1, PWMValue, 1
+        Next
+        'Raise the LED instensity
+        For PWMValue = 10 To 255
+            'Activate PWM software channel
+            PWMOut 1, PWMValue, 1
+        Next
 
-        end repeat
-    loop
+    End Repeat
+Loop
 
-    end
+End

@@ -9,25 +9,30 @@
 '''@date   	31.12.2015
 '''********************************************************************************
 
-; ----- Configuration
-  #chip tiny85, 16
+' ----- Configuration
+#CHIP tiny85, 16
 
 ' #include                                    ; no solution specifc includes, default includes are always included
 
 
-; ----- Define Hardware settings
-  ' this is required to tell the microprocessor the port is an output
-  ' (PORTB.1 = Pin P2 on Digispark USB)
-  Dir PORTB.1 Out
+' ----- Define Hardware settings
+' this is required to tell the microprocessor the port is an output
+' (PORTB.1 = Pin P2 on Digispark USB)
+Dir PORTB.1 Out
 
-; ----- Variables
-  ' none specified in the example. All byte variables are defined upon use.
+' ----- Variables
+' none specified in the example. All byte variables are defined upon use.
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
-  Start:
-  	Set PORTB.1 ON   'turn LED on
-    Wait 500 ms      'wait 500 millisecond
-    Set PORTB.1 OFF  'turn LED off
-    Wait 500 ms      'wait 500 milliseconds
-  Goto Start         'jump back to the start of the program
+Start:
+'turn LED on
+Set PORTB.1 On
+'wait 500 millisecond
+Wait 500 ms
+'turn LED off
+Set PORTB.1 Off
+'wait 500 milliseconds
+Wait 500 ms
+'jump back to the start of the program
+Goto Start

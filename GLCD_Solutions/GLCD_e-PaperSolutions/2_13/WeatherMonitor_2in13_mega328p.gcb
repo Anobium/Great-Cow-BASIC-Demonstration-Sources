@@ -1,146 +1,155 @@
 '''A demonstration program for Explicit-Paper from WaveShare.
- '''-------------------------------------------------------------------------
+'''-------------------------------------------------------------------------
 ' -------------------------------------------------------
- '''This has been tested using the hardware and software SPI option.
+'''This has been tested using the hardware and software SPI option.
 
- '''*************************************************************************
+'''*************************************************************************
 
 
-     'Chip Settings.
+'Chip Settings.
 
-     #chip mega328p, 16
-    #include <uno_mega328p.h>
-     #option explicit
+#CHIP mega328p, 16
+#INCLUDE <uno_mega328p.h>
+#OPTION Explicit
 
-     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-     #define GLCD_DC     DIGITAL_9
-     #define GLCD_CS     DIGITAL_10
-     #define GLCD_RESET  DIGITAL_8
-     #define GLCD_DO     DIGITAL_11
-     #define GLCD_SCK    DIGITAL_13
-     #define GLCD_Busy   DIGITAL_7
+'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+#DEFINE GLCD_DC     DIGITAL_9
+#DEFINE GLCD_CS     DIGITAL_10
+#DEFINE GLCD_RESET  DIGITAL_8
+#DEFINE GLCD_DO     DIGITAL_11
+#DEFINE GLCD_SCK    DIGITAL_13
+#DEFINE GLCD_Busy   DIGITAL_7
 
-    'Setup the E-Paper
+'Setup the E-Paper
 
-     #include <glcd.h>
-     #define GLCD_TYPE GLCD_TYPE_EPD_EPD2in13D
+#INCLUDE <glcd.h>
+#DEFINE GLCD_TYPE GLCD_TYPE_EPD_EPD2in13D
 
 
 '     #define GLCD_TYPE_EPD2in13D_LOWMEMORY1_GLCD_MODE
 '     #define GLCD_TYPE_EPD2in13D_LOWMEMORY2_GLCD_MODE
 '     #define GLCD_TYPE_EPD2in13D_LOWMEMORY3_GLCD_MODE
-     #define GLCD_TYPE_EPD2in13D_LOWMEMORY4_GLCD_MODE
+#DEFINE GLCD_TYPE_EPD2in13D_LOWMEMORY4_GLCD_MODE
 
-     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-     #define GLCD_DC     portA.0   ' Data(hight)/ command(low) line
-     #define GLCD_CS     portC.1   ' Chip select line (negate)
-     #define GLCD_RESET  portD.2   ' Reset line       (negate)
-     #define GLCD_DO     portC.5   ' GLCD MOSI connect to MCU SDO
-     #define GLCD_SCK    portC.3   ' Clock Line
-     #define GLCD_Busy   portC.0   ' Busy Line
+'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+' Data(hight)/ command(low) line
+#DEFINE GLCD_DC     portA.0
+' Chip select line (negate)
+#DEFINE GLCD_CS     portC.1
+' Reset line       (negate)
+#DEFINE GLCD_RESET  portD.2
+' GLCD MOSI connect to MCU SDO
+#DEFINE GLCD_DO     portC.5
+' Clock Line
+#DEFINE GLCD_SCK    portC.3
+' Busy Line
+#DEFINE GLCD_Busy   portC.0
 
 '***************************************************************************
-  'main
+'main
 
-    #include "resources\monitorheader.BMP104"
-    #include "resources\cloudy.BMP104"
-    #include "resources\fine.BMP104"
+#INCLUDE "resources\monitorheader.BMP104"
+#INCLUDE "resources\cloudy.BMP104"
+#INCLUDE "resources\fine.BMP104"
 
-    GLCDForeground=TFT_BLACK
-    GLCDBackground=TFT_WHITE
-
-
-    'NOT using GLCDTransaction to ensure we can merge BMP and GLCD methods
-
-    'Fine
-          GLCDDisplay On
-
-          'We need to clear the page buffer first using the EPD2in13D private method
-          ClearPageData_EPD2in13D
-
-          for _GLCDPage = _GLCDPagesL to _GLCDPagesH    '_GLCDPage is a global variable - DO NOT CHANGE!!!
+GLCDForeground=TFT_BLACK
+GLCDBackground=TFT_WHITE
 
 
-            box 0,50, GLCDDeviceWidth, GLCDDeviceHeight
-            GLCDPrintLargeFont 10,60, "Fine"
-            GLCDPrintLargeFont 34,80, "28c"
+'NOT using GLCDTransaction to ensure we can merge BMP and GLCD methods
 
-            'This is required to send the page of GLCD data to the display using the EPD2in13D private method
-            UpdatePageData_EPD2in13D
+'Fine
+GLCDDisplay On
 
-          next
+'We need to clear the page buffer first using the EPD2in13D private method
+ClearPageData_EPD2in13D
 
-          EPD_LoadBMP  monitorheader, true
-          EPD_LoadBMP  fine, false
-          'Now update the display by using the EPD2in13D private method
-          Refresh_EPD2in13D
-
-          GLCDDisplay Off
-          wait 10 s
+'_GLCDPage is a global variable - DO NOT CHANGE!!!
+For _GLCDPage = _GLCDPagesL To _GLCDPagesH
 
 
-    'Cloudy
-          GLCDDisplay On
+    Box 0,50, GLCDDeviceWidth, GLCDDeviceHeight
+    GLCDPrintLargeFont 10,60, "Fine"
+    GLCDPrintLargeFont 34,80, "28c"
 
-          'We need to clear the page buffer first using the EPD2in13D private method
-          ClearPageData_EPD2in13D
+    'This is required to send the page of GLCD data to the display using the EPD2in13D private method
+    UpdatePageData_EPD2in13D
 
-          for _GLCDPage = _GLCDPagesL to _GLCDPagesH    '_GLCDPage is a global variable - DO NOT CHANGE!!!
+Next
 
+EPD_LoadBMP  monitorheader, TRUE
+EPD_LoadBMP  fine, FALSE
+'Now update the display by using the EPD2in13D private method
+Refresh_EPD2in13D
 
-            box 0,50, GLCDDeviceWidth, GLCDDeviceHeight
-            GLCDPrintLargeFont 10,60, "Cloudy"
-            GLCDPrintLargeFont 34,80, "17c"
-
-            'This is required to send the page of GLCD data to the display using the EPD2in13D private method
-            UpdatePageData_EPD2in13D
-
-          next
-
-          EPD_LoadBMP  monitorheader, true
-          EPD_LoadBMP  cloudy, false
-          'Now update the display by using the EPD2in13D private method
-          Refresh_EPD2in13D
-
-          GLCDDisplay Off
-          wait 10 s
+GLCDDisplay Off
+Wait 10 s
 
 
-    GLCDDisplay On
-    GLCDCLS TFT_WHITE
-    GLCDDisplay Off
+'Cloudy
+GLCDDisplay On
 
-    end
+'We need to clear the page buffer first using the EPD2in13D private method
+ClearPageData_EPD2in13D
 
-
-macro EPD_LoadBMP ( in epd_tablename, in epd_resetscreen  )
-
-      Dim EPD_Ind_raw, EPD_Ind_col as Word
-      Dim tableposition,tablelength as word
-      dim EPD2in13D_Data as byte
-
-      'table position is the length
-      Readtable  epd_tablename, 2, tablelength
+'_GLCDPage is a global variable - DO NOT CHANGE!!!
+For _GLCDPage = _GLCDPagesL To _GLCDPagesH
 
 
-      if epd_resetscreen = true then
-          'Send new data to EPD.
-          SendCommand_EPD2in13D(Data_Transmission_2)
-      end if
+    Box 0,50, GLCDDeviceWidth, GLCDDeviceHeight
+    GLCDPrintLargeFont 10,60, "Cloudy"
+    GLCDPrintLargeFont 34,80, "17c"
 
-      'Start of BMP is at table position 3
-      tableposition = 3
-      wait 2 ms
-      SET EPD_CS OFF
-      SET EPD_DC ON
-      for EPD_Ind_raw=1 to tablelength
-        for EPD_Ind_col=1 to 104 / 8 'divide by 8 as this is byte packed data
-          'Was.. speed optimised with macro
-          Readtable  epd_tablename, tableposition, EPD2in13D_Data
-          SendData_EPD2in13D_Macro
-          tableposition++
-        next
-      next
-      SET EPD_CS ON
+    'This is required to send the page of GLCD data to the display using the EPD2in13D private method
+    UpdatePageData_EPD2in13D
 
-end macro
+Next
+
+EPD_LoadBMP  monitorheader, TRUE
+EPD_LoadBMP  cloudy, FALSE
+'Now update the display by using the EPD2in13D private method
+Refresh_EPD2in13D
+
+GLCDDisplay Off
+Wait 10 s
+
+
+GLCDDisplay On
+GLCDCLS TFT_WHITE
+GLCDDisplay Off
+
+End
+
+
+Macro EPD_LoadBMP ( In epd_tablename, In epd_resetscreen  )
+
+    Dim EPD_Ind_raw, EPD_Ind_col As Word
+    Dim tableposition,tablelength As Word
+    Dim EPD2in13D_Data As Byte
+
+    'table position is the length
+    ReadTable  epd_tablename, 2, tablelength
+
+
+    If epd_resetscreen = TRUE Then
+        'Send new data to EPD.
+        SendCommand_EPD2in13D(Data_Transmission_2)
+    End If
+
+    'Start of BMP is at table position 3
+    tableposition = 3
+    Wait 2 ms
+    Set EPD_CS Off
+    Set EPD_DC On
+    For EPD_Ind_raw=1 To tablelength
+        'divide by 8 as this is byte packed data
+        For EPD_Ind_col=1 To 104 / 8
+            'Was.. speed optimised with macro
+            ReadTable  epd_tablename, tableposition, EPD2in13D_Data
+            SendData_EPD2in13D_Macro
+            tableposition++
+        Next
+    Next
+    Set EPD_CS On
+
+End Macro

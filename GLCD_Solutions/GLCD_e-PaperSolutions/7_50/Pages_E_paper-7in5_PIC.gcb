@@ -1,89 +1,98 @@
 '''A demonstration program for Explicit-Paper from WaveShare.
- '''-------------------------------------------------------------------------
+'''-------------------------------------------------------------------------
 ' -------------------------------------------------------
- '''This has been tested using the hardware and software SPI option.
+'''This has been tested using the hardware and software SPI option.
 
- '''*************************************************************************
-
-
-     'Chip Settings.
-     'Chip Settings.
-    #chip 18F47k42, 64
-        #option explicit
+'''*************************************************************************
 
 
-    'PPS Tool version: 0.0.5.27
-    'PinManager data: v1.78
-    'Generated for 18F47K42
-    '
-    'Template comment at the start of the config file
-    '
-    #startup InitPPS, 85
-    #define PPSToolPart 18F47K42
+'Chip Settings.
+'Chip Settings.
+#CHIP 18F47k42, 64
+#OPTION Explicit
 
-    Sub InitPPS
 
-           'This has been added to turn off PPS SPI when in SPI software mode
-             #ifdef EPD_HardwareSPI
-            'Module: SPI1
-            RC3PPS = 0x001E    'SCK1 > RC3
-            SPI1SCKPPS = 0x0013    'RC3 > SCK1 (bi-directional)
-            RC5PPS = 0x001F    'SDO1 > RC5
-            #endif
-    End Sub
-    'Template comment at the end of the config file
+'PPS Tool version: 0.0.5.27
+'PinManager data: v1.78
+'Generated for 18F47K42
+'
+'Template comment at the start of the config file
+'
+#STARTUP InitPPS, 85
+#DEFINE PPSToolPart 18F47K42
 
- '******************************************************************************************************
+Sub InitPPS
 
-    'Setup the E-Paper
-     #include <glcd.h>
+    'This has been added to turn off PPS SPI when in SPI software mode
+    #IFDEF EPD_HardwareSPI
+        'Module: SPI1
+        'SCK1 > RC3
+        RC3PPS = 0x001E
+        'RC3 > SCK1 (bi-directional)
+        SPI1SCKPPS = 0x0013
+        'SDO1 > RC5
+        RC5PPS = 0x001F
+    #ENDIF
+End Sub
+'Template comment at the end of the config file
 
-     #define GLCD_TYPE GLCD_TYPE_EPD_EPD7in5
-     #define GLCD_EXTENDEDFONTSET1
-     #define GLCD_OLED_FONT
+'******************************************************************************************************
+
+'Setup the E-Paper
+#INCLUDE <glcd.h>
+
+#DEFINE GLCD_TYPE GLCD_TYPE_EPD_EPD7in5
+#DEFINE GLCD_EXTENDEDFONTSET1
+#DEFINE GLCD_OLED_FONT
 '     #define GLCD_TYPE_EPD7in5_LOWMEMORY4_GLCD_MODE     fastest
 '     #define GLCD_TYPE_EPD7in5_LOWMEMORY3_GLCD_MODE
 '     #define GLCD_TYPE_EPD7in5_LOWMEMORY2_GLCD_MODE
-     #define GLCD_TYPE_EPD7in5_LOWMEMORY1_GLCD_MODE
+#DEFINE GLCD_TYPE_EPD7in5_LOWMEMORY1_GLCD_MODE
 
 
-     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-    #define GLCD_DC     portA.0   ' Data(hight)/ command(low) line
-    #define GLCD_CS     portC.1   ' Chip select line (negate)
-    #define GLCD_RESET  portD.2   ' Reset line       (negate)
-    #define GLCD_DO     portC.5   ' GLCD MOSI connect to MCU SDO
-    #define GLCD_SCK    portC.3   ' Clock Line
-    #define GLCD_Busy   portC.0   ' Busy Line
+'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+' Data(hight)/ command(low) line
+#DEFINE GLCD_DC     portA.0
+' Chip select line (negate)
+#DEFINE GLCD_CS     portC.1
+' Reset line       (negate)
+#DEFINE GLCD_RESET  portD.2
+' GLCD MOSI connect to MCU SDO
+#DEFINE GLCD_DO     portC.5
+' Clock Line
+#DEFINE GLCD_SCK    portC.3
+' Busy Line
+#DEFINE GLCD_Busy   portC.0
 
- '  The following should be used   '#define EPD_HardwareSPI     'remove comment out if you want to use software SPI.
-     #define EPD_HardwareSPI
- '***************************************************************************
- 'Main program
+'  The following should be used   '#define EPD_HardwareSPI     'remove comment out if you want to use software SPI.
+#DEFINE EPD_HardwareSPI
+'***************************************************************************
+'Main program
 
-  GLCDForeground=TFT_BLACK
-  GLCDBackground=TFT_WHITE
-  GLCDfntDefaultSize = 1
+GLCDForeground=TFT_BLACK
+GLCDBackground=TFT_WHITE
+GLCDfntDefaultSize = 1
 
-  GLCDDisplay on
-  GLCD_Open_PageTransaction
-
-
-      if _GLCDPage.0 = 0 then
-        GLCDPrint ( 0, _GLCDPage * EPD_PIXELS_PER_PAGE, _GLCDPage )
-        GLCDForeground =  TFT_WHITE
-        GLCDBackground = TFT_BLACK
-
-      else
-        GLCDPrint ( 0, _GLCDPage * EPD_PIXELS_PER_PAGE, _GLCDPage )
-        GLCDForeground=TFT_BLACK
-        GLCDBackground=TFT_WHITE
-
-      end if
+GLCDDisplay On
+GLCD_Open_PageTransaction
 
 
-  GLCD_Close_PageTransaction
+If _GLCDPage.0 = 0 Then
+    GLCDPrint ( 0, _GLCDPage * EPD_PIXELS_PER_PAGE, _GLCDPage )
+    GLCDForeground =  TFT_WHITE
+    GLCDBackground = TFT_BLACK
 
-  GLCDDisplay on
-  Wait 5 s
-  GLCDCLS TFT_WHITE
-  GLCDDisplay off
+Else
+    GLCDPrint ( 0, _GLCDPage * EPD_PIXELS_PER_PAGE, _GLCDPage )
+    GLCDForeground=TFT_BLACK
+    GLCDBackground=TFT_WHITE
+
+End If
+
+
+GLCD_Close_PageTransaction
+
+GLCDDisplay On
+Wait 5 s
+GLCDCLS TFT_WHITE
+GLCDDisplay Off

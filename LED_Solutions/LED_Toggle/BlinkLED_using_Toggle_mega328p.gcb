@@ -10,35 +10,35 @@
 '''********************************************************************************
 
 
-; ----- Configuration
-  #chip mega328p, 16
-;                                      ; no config. assumes defaults
+' ----- Configuration
+#CHIP mega328p, 16
+'                                      ; no config. assumes defaults
 
-; #include                                    ; no solution specifc includes, default includes are always included
-
-
-; ----- Define Hardware settings
- dir  PORTB out
+' #include                                    ; no solution specifc includes, default includes are always included
 
 
-; ----- Variables
+' ----- Define Hardware settings
+Dir  PORTB Out
+
+
+' ----- Variables
 ' none specified in the example. All byte variables are defined upon use.
 
-; ----- Main body of program commences here.
-  Do Forever
+' ----- Main body of program commences here.
+Do Forever
 
-     ' toggle the first bit - this equates to PORTB.5
-     Toggle @PORTB, 32
-     'Then wait after the pin toggles
-     Wait 1 s
+    ' toggle the first bit - this equates to PORTB.5
+    Toggle @PORTB, 32
+    'Then wait after the pin toggles
+    Wait 1 s
 
-  Loop
+Loop
 
 
-; ----- Support methods.  Subroutines and Functions
+' ----- Support methods.  Subroutines and Functions
 
 ' You can toggle any number of pins by addressing the bits using this method
 ' Toggle PORT, BIT
-Sub Toggle ( In DestPort As word, In DestBit )
-     Poke DestPort, Peek(DestPort) xor DestBit
-End sub
+Sub Toggle ( In DestPort As Word, In DestBit )
+    Poke DestPort, Peek(DestPort) XOR DestBit
+End Sub

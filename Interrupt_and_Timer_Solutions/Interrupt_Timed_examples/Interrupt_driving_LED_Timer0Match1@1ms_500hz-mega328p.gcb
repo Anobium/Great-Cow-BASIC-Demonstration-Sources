@@ -15,49 +15,49 @@
 '''@version 1.0a
 '''@date    31.03.2017
 ' ----- Configuration
-  #chip mega328p, 16
-  #option explicit
+#CHIP mega328p, 16
+#OPTION Explicit
 
 '  #define SimulatePWM 'comment this to just toggle the LED
 
-  'hardware
-  #define LED PORTB.5
-  dir LED out
+'hardware
+#DEFINE LED PORTB.5
+Dir LED Out
 
-  'Call the initialisation routine
-  InitLEDControl
+'Call the initialisation routine
+InitLEDControl
 
-  ;----- Variables
-    Dim LEDSPEED, PWMCOUNTER, PWMCOUNTER as Byte
+'----- Variables
+Dim LEDSPEED, PWMCOUNTER, PWMCOUNTER As Byte
 
 
 'Main routine
-  Do
+Do
 
-      #ifdef SimulatePWM
-          ;Increase LED to full over 2.5 seconds
-          For LEDSpeed = 0 to 100
-              Wait 25 ms
-          Next
-          ;Hold LEDPower
-          Wait 1 s
-          ;Decrease LED to zero over 2.5 seconds
-          For LEDSpeed = 100 to 0 step - 1
-              Wait 25 ms
-          Next
-          ;Hold LEDPower
-          Wait 1 s
-      #endif
+    #IFDEF SimulatePWM
+        'Increase LED to full over 2.5 seconds
+        For LEDSpeed = 0 To 100
+            Wait 25 ms
+        Next
+        'Hold LEDPower
+        Wait 1 s
+        'Decrease LED to zero over 2.5 seconds
+        For LEDSpeed = 100 To 0 Step - 1
+            Wait 25 ms
+        Next
+        'Hold LEDPower
+        Wait 1 s
+    #ENDIF
 
-  Loop
-  end
+Loop
+End
 
 
 
 'Setup routine
 Sub InitLEDControl
 
-    set LED off
+    Set LED Off
 
     'Clear variables
     LEDSpeed = 0
@@ -66,9 +66,10 @@ Sub InitLEDControl
     ' Add the handler for the interrupt
     On Interrupt Timer0Match1 Call InterruptHandler
 
-    Dim OCR0  AS byte alias OCR0A
-    Dim TCCR0 AS  byte alias TCCR0B
-    WGM01 = 1                'Timer in CTC mode - required
+    Dim OCR0  As Byte Alias OCR0A
+    Dim TCCR0 As  Byte Alias TCCR0B
+    'Timer in CTC mode - required
+    WGM01 = 1
 
     ' Set the correct regsisters.  These registers give us the correct timed Interrupt.
     ' Use the TimerCalculator from MikroElectronika to obtain the correct values for these registers.
@@ -79,7 +80,7 @@ Sub InitLEDControl
 
     OCR0 = 249
     TCCR0 = 0x28
-    TCCR0 = TCCR0 or 0x03
+    TCCR0 = TCCR0 OR 0x03
 
 End Sub
 
@@ -88,18 +89,18 @@ End Sub
 'This will be called when the Timer matches
 Sub InterruptHandler
 
-  #ifdef SimulatePWM
+    #IFDEF SimulatePWM
 
-    If LEDSpeed > PWMCounter Then
-        Set LED On
-    Else
-        Set LED Off
-    End If
-    PWMCounter += 1
-    If PWMCounter = 100 Then PWMCounter = 0
-  #endif
+        If LEDSpeed > PWMCounter Then
+            Set LED On
+        Else
+            Set LED Off
+        End If
+        PWMCounter += 1
+        If PWMCounter = 100 Then PWMCounter = 0
+    #ENDIF
 
-  #ifndef SimulatePWM
-    LED = !LED
-  #endif
+    #IFNDEF SimulatePWM
+        LED = !LED
+    #ENDIF
 End Sub

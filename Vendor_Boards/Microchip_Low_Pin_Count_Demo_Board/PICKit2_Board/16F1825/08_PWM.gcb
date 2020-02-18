@@ -33,69 +33,73 @@
 '''
 
 
- #chip 16f1825,8
+#CHIP 16f1825,8
 
- #define demo1
+#DEFINE demo1
 ' #define demo2
 
-    '' -------------------LATC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|DS4|DS3|DS2|DS1|-
-    ''-----------------------------------------
-    ''
+'' -------------------LATC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|DS4|DS3|DS2|DS1|-
+''-----------------------------------------
+''
 
- #script
-        'This script provides PWM results!
+#SCRIPT
+    'This script provides PWM results!
 
-        'reference voltage                        5v
-        'actual voltage at port when 100% Pot     4.15
-        'adc max                                  1023
-        'number of graduations requried           255
-        reference_voltage = 4.15
-        vcc = 5
-        numberofgrads = 255
-        maxADC = 1023
-        ADC_adjustment = int((reference_voltage*100)/(vcc*10))
-        ADC_adjustment = int(ADC_adjustment * maxADC / numberofgrads )
+    'reference voltage                        5v
+    'actual voltage at port when 100% Pot     4.15
+    'adc max                                  1023
+    'number of graduations requried           255
+    reference_voltage = 4.15
+    vcc = 5
+    numberofgrads = 255
+    maxADC = 1023
+    ADC_adjustment = int((reference_voltage*100)/(vcc*10))
+    ADC_adjustment = int(ADC_adjustment * maxADC / numberofgrads )
 
- #endscript
+#ENDSCRIPT
 
 ''' As CCP1 is connect to portc.5 you have two choices....
 ''' 1. Connect the output of portc.5 to the output of any of the existing LEDs ports, such as portc.0, portc.1, portc.2 or portc.3
 ''' 2. Or, connect an LED via a suitable resistor to portc.5 then to 0v.  Like MCU portc.5 ---> resistor 1kOhmns ----> Ov
 
-  #ifdef demo1
-      dir portc out
-      dir portc.3 out
-      dim calculatedPWM as word
+#IFDEF demo1
+    Dir portc Out
+    Dir portc.3 Out
+    Dim calculatedPWM As Word
 
-      do
-          wait 5 ms
-          calculatedPWM = ( ( ReadAD10 ( AN0 ) * 10  ) / ADC_adjustment   )
-          if calculatedPWM > 255 then calculatedPWM = 255
-          HPWM 2, 40, calculatedPWM
-      loop
+    Do
+        Wait 5 ms
+        calculatedPWM = ( ( ReadAD10 ( AN0 ) * 10  ) / ADC_adjustment   )
+        If calculatedPWM > 255 Then calculatedPWM = 255
+        HPWM 2, 40, calculatedPWM
+    Loop
 
-  #endif
+#ENDIF
 
 ''' As CCPx is connect to portc.x you have two choices....
 ''' 1. Connect the output of portc.x to the output of any of the existing LEDs ports, such as portc.0, portc.1, portc.2 or portc.3
 ''' 2. Or, connect an LED via a suitable resistor to portc.5 then to 0v.  Like MCU portc.x ---> resistor 1kOhmns ----> Ov
 
-  #ifdef demo2
-    dir portc.5 out    ; CCP1
-    dir portc.3 out    ; CCP2
-    dir porta.2 out    ; CCP3
-    dir portc.6 out    ; CCP4
+#IFDEF demo2
+    ' CCP1
+    Dir portc.5 Out
+    ' CCP2
+    Dir portc.3 Out
+    ' CCP3
+    Dir porta.2 Out
+    ' CCP4
+    Dir portc.6 Out
 
-    do forever
-            For Bright = 1 to 255
-                HPWM 3, 40, Bright
-                HPWM 2, 40, Bright
-                HPWM 1, 40, Bright
-                HPWM 4, 40, Bright
-                wait 10 ms
-            next
+    Do Forever
+        For Bright = 1 To 255
+            HPWM 3, 40, Bright
+            HPWM 2, 40, Bright
+            HPWM 1, 40, Bright
+            HPWM 4, 40, Bright
+            Wait 10 ms
+        Next
 
-    loop
-  #endif
+    Loop
+#ENDIF

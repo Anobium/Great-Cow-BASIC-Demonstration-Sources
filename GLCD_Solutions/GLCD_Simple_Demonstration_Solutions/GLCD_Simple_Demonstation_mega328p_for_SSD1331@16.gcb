@@ -13,141 +13,171 @@
 '''@date    24.04.2018
 '''********************************************************************************
 
-    'Chip Settings.
-    #chip mega328p, 16
-    #option explicit
+'Chip Settings.
+#CHIP mega328p, 16
+#OPTION Explicit
 
-    #include <glcd.h>
-    #include <uno_mega328p.h >
+#INCLUDE <glcd.h>
+#INCLUDE <uno_mega328p.h >
 
-    #define GLCD_TYPE GLCD_TYPE_SSD1331
+#DEFINE GLCD_TYPE GLCD_TYPE_SSD1331
 
-    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-    #define GLCD_DC       DIGITAL_8         ' Data command line
-    #define GLCD_CS       DIGITAL_10          ' Chip select line
-    #define GLCD_RESET    DIGITAL_9         ' Reset line
+'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+' Data command line
+#DEFINE GLCD_DC       DIGITAL_8
+' Chip select line
+#DEFINE GLCD_CS       DIGITAL_10
+' Reset line
+#DEFINE GLCD_RESET    DIGITAL_9
 
-    #define GLCD_DO       DIGITAL_11          ' Data out | MOSI
-    #define GLCD_SCK      DIGITAL_13          ' Clock Line
+' Data out | MOSI
+#DEFINE GLCD_DO       DIGITAL_11
+' Clock Line
+#DEFINE GLCD_SCK      DIGITAL_13
 
-    #define SSD1331_HardwareSPI    ' remove/comment out if you want to use software SPI.0
+' remove/comment out if you want to use software SPI.0
+#DEFINE SSD1331_HardwareSPI
 
-    'GLCD selected OLED font set.
-    #define GLCD_OLED_FONT
-    #define GLCD_PROTECTOVERRUN
-    GLCDfntDefaultsize = 1
+'GLCD selected OLED font set.
+#DEFINE GLCD_OLED_FONT
+#DEFINE GLCD_PROTECTOVERRUN
+GLCDfntDefaultSize = 1
 
-    GLCDCLS  ' supports GLCDBackground as default
-    'GLCDCLS  also support passing color parameter.
-    'GLCDCLS [color]
+' supports GLCDBackground as default
+GLCDCLS
+'GLCDCLS  also support passing color parameter.
+'GLCDCLS [color]
 '    GLCDRotate ( Landscape )
 
-    Dim CCOUNT, BYTENUMBER, OLDFONT, OLDFONT as Byte
+Dim CCOUNT, BYTENUMBER, OLDFONT, OLDFONT As Byte
 
-    CCount = 31
-    dim longNumber as long
-    longNumber = 0 ' max value = 4294967290
-    dim AnobiumTableAddres, wordNumber as Word
-    dim outstring as string
-    wordNumber = 0
-    byteNumber = 0
+CCount = 31
+Dim longNumber As Long
+' max value = 4294967290
+longNumber = 0
+Dim AnobiumTableAddres, wordNumber As Word
+Dim outstring As String
+wordNumber = 0
+byteNumber = 0
 
-    GLCDSetContrast ( 0x80 )
-    SetPowerMode_SSD1331(0x1A)                    'Explicit commmands for this device
-    SetBrightness_SSD1331( 0xFF )                 'Explicit commmands for this device - full brightness
+GLCDSetContrast ( 0x80 )
+'Explicit commmands for this device
+SetPowerMode_SSD1331(0x1A)
+'Explicit commmands for this device - full brightness
+SetBrightness_SSD1331( 0xFF )
 
-    GLCDPrintStringLN "Great Cow BASIC"
-    GLCDPrintStringLN ""
-    GLCDPrintStringLN "December 2019"
-    GLCDPrintStringLN "SSD1331 GLCD"
-    GLCDPrintStringLN ""
-    GLCDPrintStringLN "by Anobium"
-    wait 5 s
-
-
-    repeat 2
-
-            GLCDRotate ( Landscape )
-            GLCDCLS SSD1331_BLUE
-
-            GLCDForeground = SSD1331_MAROON
-            GLCDPrint ( 2, 2, "GLCDPrint String" )
-
-            GLCDForeground = SSD1331_WHITE
-            GLCDPrint ( 2, 12, "GLCDPrint String" )
-
-            GLCDForeground = SSD1331_GREEN
-            GLCDPrint ( 2,30, "GLCDPrint String" )
+GLCDPrintStringLn "Great Cow BASIC"
+GLCDPrintStringLn ""
+GLCDPrintStringLn "December 2019"
+GLCDPrintStringLn "SSD1331 GLCD"
+GLCDPrintStringLn ""
+GLCDPrintStringLn "by Anobium"
+Wait 5 s
 
 
-            FilledBox 50,40,55,45,SSD1331_RED
+Repeat 2
 
-            wait 2 s
+    GLCDRotate ( Landscape )
+    GLCDCLS SSD1331_BLUE
 
-            longNumber = 0xFFFFFFFF
-            wordNumber = 0xFFFF
-            byteNumber = 0xFF
+    GLCDForeground = SSD1331_MAROON
+    GLCDPrint ( 2, 2, "GLCDPrint String" )
 
-            GLCDRotate ( Portrait )
-            GLCDCLS SSD1331_GREEN
+    GLCDForeground = SSD1331_WHITE
+    GLCDPrint ( 2, 12, "GLCDPrint String" )
 
-            GLCDForeground = SSD1331_MAROON
-            GLCDPrint ( 2, 2, bytenumber )
-
-
-            GLCDForeground = SSD1331_BLACK
-            GLCDPrint ( 2, 12, wordNumber )
+    GLCDForeground = SSD1331_GREEN
+    GLCDPrint ( 2,30, "GLCDPrint String" )
 
 
-            GLCDForeground = SSD1331_CYAN
-            GLCDPrint ( 2,30, longnumber )
+    FilledBox 50,40,55,45,SSD1331_RED
 
-            wait 2 s
+    Wait 2 s
 
-    end Repeat
+    longNumber = 0xFFFFFFFF
+    wordNumber = 0xFFFF
+    byteNumber = 0xFF
 
+    GLCDRotate ( Portrait )
+    GLCDCLS SSD1331_GREEN
 
-  GLCDCLS SSD1331_BLUE
-  GLCDRotate ( Landscape )
-  GLCDForeground = SSD1331_White
-  ' Prepare the static components of the screen
-  GLCDPrint ( 2,   2, "SSD1331 Library")                                ; Print some text
-  GLCDPrint ( 2,   9, "PrintStr")                                ; Print some text
-  GLCDPrint ( 64,  2, "@")                                    ; Print some more text
-  GLCDPrint ( 72,  2, ChipMhz)                                   ; Print chip speed
-  GLCDPrint ( 80,  2, "Mhz")                                     ; Print some text
-  GLCDDrawString( 2,18,"DrawStr")                                 ; Draw some text
-  box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1                            ; Draw a box
-  box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1    ; Draw a box
-  Circle( 32,41,10)                                              ; Draw a circle
-  line 50,31,0,31                                                ; Draw a line
-
-  DO forever
-     for CCount = 32 to 127
-          outstring = hex(longNumber_E )
-          outstring = outstring+hex(longNumber_E )
-          outstring = outstring+hex(longNumber_H )
-          outstring = outstring+hex(longNumber )
-          outstring = outstring+"h"
-
-          GLCDPrint ( 46 ,  36,  Outstring  )                        ; Print a HEX string
-          GLCDPrint ( 46 ,  44, pad(str(wordNumber), 6 ) )           ; Print a padded string
-          GLCDPrint ( 46 ,  52, pad(str(byteNumber), 4 ) )           ; Print a padded string
+    GLCDForeground = SSD1331_MAROON
+    GLCDPrint ( 2, 2, bytenumber )
 
 
-          box (46,19,56,28)                                           ; Draw a Box
-          GLCDDrawChar(49, 20, CCount )                               ; Draw a character
-          outString = str( CCount )                                  ; Prepare a string
-          GLCDDrawString(64, 19, pad(outString,5) )                   ; Draw a string
+    GLCDForeground = SSD1331_BLACK
+    GLCDPrint ( 2, 12, wordNumber )
 
-          filledbox 3,43,11,51, wordNumber                           ; Draw a filled box
 
-          FilledCircle( 32,41,8, longNumber )                   ; Draw a filled box
-          line 0,63,50,31                                            ; Draw a line
+    GLCDForeground = SSD1331_CYAN
+    GLCDPrint ( 2,30, longnumber )
 
-                                                                     ; Do some simple maths
-          longNumber = longNumber + 7 : wordNumber = wordNumber + 3 : byteNumber++
-      NEXT
+    Wait 2 s
 
-  LOOP
-  end
+End Repeat
+
+
+GLCDCLS SSD1331_BLUE
+GLCDRotate ( Landscape )
+GLCDForeground = SSD1331_White
+' Prepare the static components of the screen
+' Print some text
+GLCDPrint ( 2,   2, "SSD1331 Library")
+' Print some text
+GLCDPrint ( 2,   9, "PrintStr")
+' Print some more text
+GLCDPrint ( 64,  2, "@")
+' Print chip speed
+GLCDPrint ( 72,  2, ChipMHz)
+' Print some text
+GLCDPrint ( 80,  2, "Mhz")
+' Draw some text
+GLCDDrawString( 2,18,"DrawStr")
+' Draw a box
+Box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1
+' Draw a box
+Box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1
+' Draw a circle
+Circle( 32,41,10)
+' Draw a line
+Line 50,31,0,31
+
+Do Forever
+    For CCount = 32 To 127
+        outstring = Hex(longNumber_E )
+        outstring = outstring+Hex(longNumber_E )
+        outstring = outstring+Hex(longNumber_H )
+        outstring = outstring+Hex(longNumber )
+        outstring = outstring+"h"
+
+        ' Print a HEX string
+        GLCDPrint ( 46 ,  36,  Outstring  )
+        ' Print a padded string
+        GLCDPrint ( 46 ,  44, Pad(Str(wordNumber), 6 ) )
+        ' Print a padded string
+        GLCDPrint ( 46 ,  52, Pad(Str(byteNumber), 4 ) )
+
+
+        ' Draw a Box
+        Box (46,19,56,28)
+        ' Draw a character
+        GLCDDrawChar(49, 20, CCount )
+        ' Prepare a string
+        outString = Str( CCount )
+        ' Draw a string
+        GLCDDrawString(64, 19, Pad(outString,5) )
+
+        ' Draw a filled box
+        FilledBox 3,43,11,51, wordNumber
+
+        ' Draw a filled box
+        FilledCircle( 32,41,8, longNumber )
+        ' Draw a line
+        Line 0,63,50,31
+
+        ' Do some simple maths
+        longNumber = longNumber + 7 : wordNumber = wordNumber + 3 : byteNumber++
+    Next
+
+Loop
+End

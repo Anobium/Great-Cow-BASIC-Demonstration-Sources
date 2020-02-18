@@ -1,16 +1,16 @@
 
 '
-#chip 16f1719, 20
+#CHIP 16f1719, 20
 
-#define outport portb.5
-dir outport out
+#DEFINE outport portb.5
+Dir outport Out
 
 'freq of 4.63khz
 'duty of 33%
 'period 216us
 
-do
+Do
 
-  outport = !outport
+    outport = !outport
 
-loop
+Loop

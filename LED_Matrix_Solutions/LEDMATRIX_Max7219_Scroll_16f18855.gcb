@@ -11,64 +11,68 @@
 '''@version 1.00
 '''@date    27.01.2017
 '''********************************************************************************
-; ----- Configuration
-  #chip 16f18855,32
-  #config MCLRE=on
-  #include <max7219_ledmatrix_driver.h>
-  #option Explicit
+' ----- Configuration
+#CHIP 16f18855,32
+#CONFIG MCLRE=On
+#INCLUDE <max7219_ledmatrix_driver.h>
+#OPTION Explicit
 
-  #startup InitPPS, 85
-  Sub InitPPS
-    #ifdef MAX7219_LEDMatrix_HardwareSPI
-      UNLOCKPPS
-            RB5PPS = 0x0015    'SDO1 > RB5
-            RB3PPS = 0x0014    'SCK1 > RB3
-            SSP1CLKPPS = 0x000B    'RB3 > SCK1
-      LOCKPPS
-    #endif
+#STARTUP InitPPS, 85
+Sub InitPPS
+    #IFDEF MAX7219_LEDMatrix_HardwareSPI
+        UNLOCKPPS
+        'SDO1 > RB5
+        RB5PPS = 0x0015
+        'SCK1 > RB3
+        RB3PPS = 0x0014
+        'RB3 > SCK1
+        SSP1CLKPPS = 0x000B
+        LOCKPPS
+    #ENDIF
 
-  End sub
-
-
-; ----- Constants
-  'Set SPI pins for the Max7219
-  #define Max7219_DI    portb.4
-  #define Max7219_DO    portb.5
-  #define Max7219_SCK   portb.3
-  #define Max7219_CS    portc.3
+End Sub
 
 
-  'Specifics for device configuration
-  #define MAX7219_X_Devices 4
-  #define MAX7219_LEDMatrix_HardwareSPI     ' remove and make a comment out if you want to use Software SPI for this device
+' ----- Constants
+'Set SPI pins for the Max7219
+#DEFINE Max7219_DI    portb.4
+#DEFINE Max7219_DO    portb.5
+#DEFINE Max7219_SCK   portb.3
+#DEFINE Max7219_CS    portc.3
 
-  'Choose one of the constants below to match the orientation of your LED Matrixes.
-  'All the LED Matrixes must have the same orientation.
-  #define Pset max7219_LEDMatrix_PSet_0
-  '#define Pset max7219_LEDMatrix_PSet_90
-  '#define Pset max7219_LEDMatrix_PSet_180
-  '#define Pset max7219_LEDMatrix_PSet_270
+
+'Specifics for device configuration
+#DEFINE MAX7219_X_Devices 4
+' remove and make a comment out if you want to use Software SPI for this device
+#DEFINE MAX7219_LEDMatrix_HardwareSPI
+
+'Choose one of the constants below to match the orientation of your LED Matrixes.
+'All the LED Matrixes must have the same orientation.
+#DEFINE Pset max7219_LEDMatrix_PSet_0
+'#define Pset max7219_LEDMatrix_PSet_90
+'#define Pset max7219_LEDMatrix_PSet_180
+'#define Pset max7219_LEDMatrix_PSet_270
 
 '; ----- Main body of program commences here.
 
-  dim myString as string  * 100
+Dim myString As String  * 100
 
-  Max7219_LEDMatrix_Brightness ( 7 )
+Max7219_LEDMatrix_Brightness ( 7 )
 
-  do Forever
+Do Forever
 
-      GLCDCLS
-      myString = "Hello      "
-      Max7219_LEDMatrix_ScrollMessage ( myString, 1 )
+    GLCDCLS
+    myString = "Hello      "
+    Max7219_LEDMatrix_ScrollMessage ( myString, 1 )
 
-      myString = "world      "
-      Max7219_LEDMatrix_ScrollMessage ( myString, 1 )
-      wait 2 s
+    myString = "world      "
+    Max7219_LEDMatrix_ScrollMessage ( myString, 1 )
+    Wait 2 s
 
 
-      GLCDCLS
-      myString = "made by Great Cow BASIC Signs Ltd.  2019       "
-      Max7219_LEDMatrix_ScrollMessage ( myString, 1 )
-      wait 1 s
+    GLCDCLS
+    myString = "made by Great Cow BASIC Signs Ltd.  2019       "
+    Max7219_LEDMatrix_ScrollMessage ( myString, 1 )
+    Wait 1 s
 
-  loop
+Loop

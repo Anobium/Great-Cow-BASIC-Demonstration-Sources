@@ -12,98 +12,98 @@
 '''@date   	20.02.2015
 '''********************************************************************************
 
- #chip mega168,16
- #option explicit
+#CHIP mega168,16
+#OPTION Explicit
 
-; ----- Define Hardware settings
-  'Config hardware UART
-  #define USART_BLOCKING
-  #define USART_BAUD_RATE 9600
-  #define USART_DELAY 10 ms
+' ----- Define Hardware settings
+'Config hardware UART
+#DEFINE USART_BLOCKING
+#DEFINE USART_BAUD_RATE 9600
+#DEFINE USART_DELAY 10 ms
 
-  'Required for switch_event method
-  Dir SwitchIn1 In
+'Required for switch_event method
+Dir SwitchIn1 In
 
-; ----- Constants
-  'Required for switch_event method
-  #Define BUTTON_UP 0
-  #Define BUTTON_PRESSED 1
-  #Define BUTTON_DOWN 2
-  #Define BUTTON_RELEASED 3
-  #Define BUTTON_UNKNOWN 4
-
-
-  'Required for switch_event method
-  #define SwitchIn1 PORTb.0
-  #define check_switch PORTb.0
-  #define state_switch ON
+' ----- Constants
+'Required for switch_event method
+#DEFINE BUTTON_UP 0
+#DEFINE BUTTON_PRESSED 1
+#DEFINE BUTTON_DOWN 2
+#DEFINE BUTTON_RELEASED 3
+#DEFINE BUTTON_UNKNOWN 4
 
 
-;----- Variables
-  Dim CURRENT_STATE, OLD_STATE, BTN as Byte
-  Dim ButtonPressCount as BYTE
-
-  ButtonPressCount = 0
-
-  'Required for switch_event method
-  Dim btn_pv
+'Required for switch_event method
+#DEFINE SwitchIn1 PORTb.0
+#DEFINE check_switch PORTb.0
+#DEFINE state_switch On
 
 
+'----- Variables
+Dim CURRENT_STATE, OLD_STATE, BTN As Byte
+Dim ButtonPressCount As Byte
 
-; ----- Main body of program commences here.
+ButtonPressCount = 0
 
-
-  'Enable portb.0 as the source of the interrupt. See the datasheet for more information.
-  'Trigger on change of PB0
-  PCINT0 = 1
-  On Interrupt PinChange0  Call ButtonPressed
-
-  HSerPrintCRLF 2
-  HSerPrint "Started"
-  HSerPrintCRLF
+'Required for switch_event method
+Dim btn_pv
 
 
-  'track button presses - required to manage serial display only
-  old_state = 0
 
-  do forever
-     'determine the state of the switch
-     current_state = switch_event
+' ----- Main body of program commences here.
 
-     'if the current state is not the same as the saved state then print current state
-     if current_state <> old_state then
+
+'Enable portb.0 as the source of the interrupt. See the datasheet for more information.
+'Trigger on change of PB0
+PCINT0 = 1
+On Interrupt PinChange0  Call ButtonPressed
+
+HSerPrintCRLF 2
+HSerPrint "Started"
+HSerPrintCRLF
+
+
+'track button presses - required to manage serial display only
+old_state = 0
+
+Do Forever
+    'determine the state of the switch
+    current_state = switch_event
+
+    'if the current state is not the same as the saved state then print current state
+    If current_state <> old_state Then
         HSerPrint current_state
         'save state
         old_state = current_state
-     end if
-     'if the current state is Released then show the count.
-     'count is incremented in the Interrupt routine.
-     if current_state = BUTTON_RELEASED then
+    End If
+    'if the current state is Released then show the count.
+    'count is incremented in the Interrupt routine.
+    If current_state = BUTTON_RELEASED Then
         HSerPrint "("
-        HserPrint ButtonPressCount
+        HSerPrint ButtonPressCount
         HSerPrint ")"
         ' Restore intterupt
         On Interrupt PinChange0  Call ButtonPressed
-     end if
-     'print only if the button is Pressed. Formatting display only.
-     if current_state = BUTTON_PRESSED then
+    End If
+    'print only if the button is Pressed. Formatting display only.
+    If current_state = BUTTON_PRESSED Then
         HSerPrint ":"
-     end if
+    End If
 
-  loop
-  end
+Loop
+End
 
-; ----- Support methods.  Subroutines and Functions
- sub ButtonPressed
+' ----- Support methods.  Subroutines and Functions
+Sub ButtonPressed
 
-     'Check port is depressed/down? If yes, then increment counter
-     if check_switch = 1 then
-         ButtonPressCount++
-         On Interrupt PinChange0  Ignore
-     end if
+    'Check port is depressed/down? If yes, then increment counter
+    If check_switch = 1 Then
+        ButtonPressCount++
+        On Interrupt PinChange0  Ignore
+    End If
 
 
- end sub
+End Sub
 
 
 
@@ -139,49 +139,49 @@
 '
 ' ***************************************************************************/
 
-  function switch_event()
-      dim ret As byte
-      Dim btn as Byte
+Function switch_event()
+    Dim ret As Byte
+    Dim btn As Byte
 
-      btn = check_switch = state_switch
+    btn = check_switch = state_switch
 
-     if !btn & !btn_pv then
-                ' button is not pressed now nor was it pressed previously
-          ret = BUTTON_UP
+    If !btn & !btn_pv Then
+        ' button is not pressed now nor was it pressed previously
+        ret = BUTTON_UP
 
-      END if
-      if btn & !btn_pv then
-                ' button is pressed now but it wasn't previously
-          ret = BUTTON_PRESSED
+    End If
+    If btn & !btn_pv Then
+        ' button is pressed now but it wasn't previously
+        ret = BUTTON_PRESSED
 
-      End if
-      if btn & btn_pv  then
-                ' button was pressed previously and is still pressed
-          ret = BUTTON_DOWN
+    End If
+    If btn & btn_pv  Then
+        ' button was pressed previously and is still pressed
+        ret = BUTTON_DOWN
 
-      end if
-      if !btn & btn_pv    then
-                ' button is not pressed now but it was previously
-          ret = BUTTON_RELEASED
-      End If
+    End If
+    If !btn & btn_pv    Then
+        ' button is not pressed now but it was previously
+        ret = BUTTON_RELEASED
+    End If
 
-      btn_pv = btn
-      switch_event = ret
-  End Function
+    btn_pv = btn
+    switch_event = ret
+End Function
 
-  ' Debounce button, Debounce switch
-  Function input_switch (  )
+' Debounce button, Debounce switch
+Function input_switch (  )
 
-      input_switch  = false
-      If check_switch = state_switch Then
-          ButtonCount = 0
-          Do While check_switch = state_switch and ButtonCount < 4
-              wait 5 ms
-              ButtonCount = ButtonCount + 1
-          Loop
-      end if
-      If ButtonCount > 3 then
-          input_switch  = true
-          ButtonCount = 0
-      end if
-  End Function
+    input_switch  = FALSE
+    If check_switch = state_switch Then
+        ButtonCount = 0
+        Do While check_switch = state_switch AND ButtonCount < 4
+            Wait 5 ms
+            ButtonCount = ButtonCount + 1
+        Loop
+    End If
+    If ButtonCount > 3 Then
+        input_switch  = TRUE
+        ButtonCount = 0
+    End If
+End Function

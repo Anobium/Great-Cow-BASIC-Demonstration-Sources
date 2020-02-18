@@ -62,302 +62,334 @@
 '''********************************************************************************
 '''
 '----- Configuration
-    'Chip Settings.
-    #chip 16f18855, 32
-    #option explicit
+'Chip Settings.
+#CHIP 16f18855, 32
+#OPTION Explicit
 
 
 Setup:
 
-    #define UseWS2812PWMSendData
-    #define WS2812SendData WS2812PWMSendData
+#DEFINE UseWS2812PWMSendData
+#DEFINE WS2812SendData WS2812PWMSendData
 
 '    #define UseWS2812BitBangSendData
 '    #define WS2812SendData WS2812BitBangSendData
 
-    #define DoTracer
-    #define DoXyLon
+#DEFINE DoTracer
+#DEFINE DoXyLon
 
-; ----- Define Hardware settings
-    'Set the PPS of the microcontroller
-    'Set the PPS for this solution.
-  #startup InitPPS, 85
+' ----- Define Hardware settings
+'Set the PPS of the microcontroller
+'Set the PPS for this solution.
+#STARTUP InitPPS, 85
 
-  Sub InitPPS
+Sub InitPPS
     UNLOCKPPS
 
-    #ifdef UseWS2812PWMSendData
-      'Setup CLC inputs and outputs
-      SSP1DATPPS = 0x0014    'RC4->MSSP1:SDI1
-      CLCIN0PPS = 0x0007     'RA7->CLC1:CLCIN0
-      CLCIN1PPS = 0x0007     'RA7->CLC1:CLCIN1
-      CLCIN2PPS = 0x000E     'RB6->CLC1:CLCIN2
-      CLCIN3PPS = 0x000F     'RB7->CLC1:CLCIN3
-      RB4PPS = 0x0009        'RB4->CCP1:CCP1
-      T2AINPPS = 0x0013      'RC3->TMR2:T2IN
+    #IFDEF UseWS2812PWMSendData
+        'Setup CLC inputs and outputs
+        'RC4->MSSP1:SDI1
+        SSP1DATPPS = 0x0014
+        'RA7->CLC1:CLCIN0
+        CLCIN0PPS = 0x0007
+        'RA7->CLC1:CLCIN1
+        CLCIN1PPS = 0x0007
+        'RB6->CLC1:CLCIN2
+        CLCIN2PPS = 0x000E
+        'RB7->CLC1:CLCIN3
+        CLCIN3PPS = 0x000F
+        'RB4->CCP1:CCP1
+        RB4PPS = 0x0009
+        'RC3->TMR2:T2IN
+        T2AINPPS = 0x0013
 
-      'Setup SPI and the outout for DIN
-      RB1PPS = 0x0015        'RB1->MSSP1:SDO1
-      RB0PPS = 0x0014        'RB0->MSSP1:SCK1
-      RC7PPS = 0x0001        'RC7->CLC1:CLC1OUT
+        'Setup SPI and the outout for DIN
+        'RB1->MSSP1:SDO1
+        RB1PPS = 0x0015
+        'RB0->MSSP1:SCK1
+        RB0PPS = 0x0014
+        'RC7->CLC1:CLC1OUT
+        RC7PPS = 0x0001
 
-      'Setup PWM
-      RA0PPS = 0x000E        'RA0->PWM6:PWM6OUT
-    #endif
+        'Setup PWM
+        'RA0->PWM6:PWM6OUT
+        RA0PPS = 0x000E
+    #ENDIF
 
-      'Setup RS232
-      RC0PPS = 0x0010        'RC0->EUSART:TX
-      RXPPS  = 0x0011        'RC1->EUSART:RX
+    'Setup RS232
+    'RC0->EUSART:TX
+    RC0PPS = 0x0010
+    'RC1->EUSART:RX
+    RXPPS  = 0x0011
 
-      LOCKPPS
-  End sub
+    LOCKPPS
+End Sub
 
-    '-------------------LATC-----------------
-    'Bit#:  -7---6---5---4---3---2---1---0---
-    '      |PWM|-----------------------------
-    '------|DIN|-----------------------------
-    '
+'-------------------LATC-----------------
+'Bit#:  -7---6---5---4---3---2---1---0---
+'      |PWM|-----------------------------
+'------|DIN|-----------------------------
+'
 
-; ----- Constants
+' ----- Constants
 
 
-    #define USART_BAUD_RATE 115200
-    #define USART_TX_BLOCKING
+#DEFINE USART_BAUD_RATE 115200
+#DEFINE USART_TX_BLOCKING
 
-    'STANDARD XPRESS BOARD CONSTANTS
-    #define LEDD2  PORTA.0
-    #define LEDD3  PORTA.1
-    #define LEDD4  PORTA.2
-    #define LEDD5  PORTA.3
-    Dir    LEDD2 OUT
-    Dir    LEDD3 OUT
-    Dir    LEDD4 OUT
-    Dir    LEDD5 OUT
+'STANDARD XPRESS BOARD CONSTANTS
+#DEFINE LEDD2  PORTA.0
+#DEFINE LEDD3  PORTA.1
+#DEFINE LEDD4  PORTA.2
+#DEFINE LEDD5  PORTA.3
+Dir    LEDD2 Out
+Dir    LEDD3 Out
+Dir    LEDD4 Out
+Dir    LEDD5 Out
 
-    #define Potentiometer      PORTA.4
-    DIR      Potentiometer In
+#DEFINE Potentiometer      PORTA.4
+Dir      Potentiometer In
 
-    #define SWITCH_DOWN         0
-    #define SWITCH_UP           1
-    #define SWITCH             PORTA.5
-    Dir    SWITCH              In
+#DEFINE SWITCH_DOWN         0
+#DEFINE SWITCH_UP           1
+#DEFINE SWITCH             PORTA.5
+Dir    SWITCH              In
 
-    'WS2812 SPECIFIC CONSTANTS
-    #define DIN PORTC.7
-    Dir     DIN out
-    #define SSPOutRegister SSP1BUF
+'WS2812 SPECIFIC CONSTANTS
+#DEFINE DIN PORTC.7
+Dir     DIN Out
+#DEFINE SSPOutRegister SSP1BUF
 
-; ----- Variables
+' ----- Variables
 
-    Dim YLOOP, PIXELCOUNT, XLOOP, XYLONELEMENTVALUE, LEDDISPLAYSTATE, SWITCHSTATE as Byte
+Dim YLOOP, PIXELCOUNT, XLOOP, XYLONELEMENTVALUE, LEDDISPLAYSTATE, SWITCHSTATE As Byte
 
-    PixelCount = 8              'Number of WS2812 LEDs
-    ColorofLED = 0              'Color to send to LEDs 6 byte  color address
-    CurrentAddessedLED = 1      'Curent LED being address - between 1 and the PixelCount
-    CurrentLEDColorSequence = 0 'Current LED sequence pointer. Simply points to the array of colors
-    LEDDisplayState = 1         'LEDDisplayState = 0 or 1.  0 = LEDs addressed is sequence 1-2-3-4 etc OR 1 = ALL on 'not' sequential
-    SwitchState = SWITCH_UP     'State of the switch tracker.  Toggle LEDDisplayState 1 | 0
+'Number of WS2812 LEDs
+PixelCount = 8
+'Color to send to LEDs 6 byte  color address
+ColorofLED = 0
+'Curent LED being address - between 1 and the PixelCount
+CurrentAddessedLED = 1
+'Current LED sequence pointer. Simply points to the array of colors
+CurrentLEDColorSequence = 0
+'LEDDisplayState = 0 or 1.  0 = LEDs addressed is sequence 1-2-3-4 etc OR 1 = ALL on 'not' sequential
+LEDDisplayState = 1
+'State of the switch tracker.  Toggle LEDDisplayState 1 | 0
+SwitchState = SWITCH_UP
 
-    dim CurrentAddessedLED, CurrentLEDColorSequence as Byte
-    dim ColortoSend, ColorofLED as long
+Dim CurrentAddessedLED, CurrentLEDColorSequence As Byte
+Dim ColortoSend, ColorofLED As Long
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
 MainCode:
 
-  WS2812_Init
+WS2812_Init
 
-  if SWITCH = SWITCH_DOWN then
+If SWITCH = SWITCH_DOWN Then
 
-      #ifdef DoXyLon
-
-
-          ' Data array of Xylon LEDs
-          #define XyLonSteps  6
-          dim XyLonArray( XyLonSteps )
-          XyLonArray(1)  = 0b10000001
-          XyLonArray(2)  = 0b01000010
-          XyLonArray(3)  = 0b00100100
-          XyLonArray(4)  = 0b00011000
-          XyLonArray(5)  = 0b00100100
-          XyLonArray(6)  = 0b01000010
-
-          do
-
-              'Send data
-              For yloop =1 to XyLonSteps
-
-                  #ifdef UseWS2812BitBangSendData
-                      'Ensure minimum delay has happended as the timing is critical
-                      'The delay is maintained by the timer0 Interrupt
-                      wait while timeoutocurred =  0
-                      intoff
-                  #endif
+    #IFDEF DoXyLon
 
 
-                  XyLonElementValue = XyLonArray(yloop)
+        ' Data array of Xylon LEDs
+        #DEFINE XyLonSteps  6
+        Dim XyLonArray( XyLonSteps )
+        XyLonArray(1)  = 0b10000001
+        XyLonArray(2)  = 0b01000010
+        XyLonArray(3)  = 0b00100100
+        XyLonArray(4)  = 0b00011000
+        XyLonArray(5)  = 0b00100100
+        XyLonArray(6)  = 0b01000010
 
-                  for xloop = 1 to PixelCount
+        Do
 
-                    if XyLonElementValue.7 = 1 then
-                        ColortoSend = 0x00ff00 ' Red
-                    else
-                        ColortoSend = 0 ' black
-                    end if
+            'Send data
+            For yloop =1 To XyLonSteps
+
+                #IFDEF UseWS2812BitBangSendData
+                    'Ensure minimum delay has happended as the timing is critical
+                    'The delay is maintained by the timer0 Interrupt
+                    Wait While timeoutocurred =  0
+                    IntOff
+                #ENDIF
+
+
+                XyLonElementValue = XyLonArray(yloop)
+
+                For xloop = 1 To PixelCount
+
+                    If XyLonElementValue.7 = 1 Then
+                        ' Red
+                        ColortoSend = 0x00ff00
+                    Else
+                        ' black
+                        ColortoSend = 0
+                    End If
 
                     'Send the data - either to the CLC or bit banging
                     WS2812SendData ( ColortoSend )
 
-                    Rotate XyLonElementValue left
+                    Rotate XyLonElementValue Left
 
-                  next
+                Next
 
-                  #ifdef UseWS2812BitBangSendData
-                      'Set InterPacketDelay running
-                      SetTimer(0, period_us)  ' Preload Count
-                      timeoutocurred =  0
-                      Inton
-                  #endif
+                #IFDEF UseWS2812BitBangSendData
+                    'Set InterPacketDelay running
+                    ' Preload Count
+                    SetTimer(0, period_us)
+                    timeoutocurred =  0
+                    IntOn
+                #ENDIF
 
-                  'The minimum delay is 50us. This will SURELY never happen....
-                  dim mydelay as word
-                  mydelay =  readad10( AN4 )
+                'The minimum delay is 50us. This will SURELY never happen....
+                Dim mydelay As Word
+                mydelay =  ReadAD10( AN4 )
 
-                  if mydelay > 0 then
-                    wait mydelay ms
-                  Else
-                    wait while readad10( AN4 ) = 0
-                  end if
-                  if mydelay > 1015 then
-                    do
+                If mydelay > 0 Then
+                    Wait mydelay ms
+                Else
+                    Wait While ReadAD10( AN4 ) = 0
+                End If
+                If mydelay > 1015 Then
+                    Do
 
-                    loop while readad10( AN4 ) > 1000
-                  end if
+                    Loop While ReadAD10( AN4 ) > 1000
+                End If
 
-              Next
+            Next
 
-          loop
+        Loop
 
-      #endif
+    #ENDIF
 
-  else
+Else
 
-      #ifdef DoTracer
+    #IFDEF DoTracer
 
-          ' Set of colors stored in an array for simplicity - they can be addressed with a pointer.
-          dim colorArray( 20)     ' 5 long element in the array = 5 * 4 = 20
+        ' Set of colors stored in an array for simplicity - they can be addressed with a pointer.
+        ' 5 long element in the array = 5 * 4 = 20
+        Dim colorArray( 20)
 
-          ' Set the values of the array to the colors.  Five colors are defined. You can add more.....
-          SetLongArrayValueHandler ( colorArray, 0, 0x00FF00 ) 'RED
-          SetLongArrayValueHandler ( colorArray, 1, 0xFFFF00 ) 'yellow
-          SetLongArrayValueHandler ( colorArray, 2, 0xFF0000 ) 'GREEN
-          SetLongArrayValueHandler ( colorArray, 3, 0xFFFFFF ) 'WHITE
-          SetLongArrayValueHandler ( colorArray, 4, 0x000000 ) 'BLACK
+        ' Set the values of the array to the colors.  Five colors are defined. You can add more.....
+        'RED
+        SetLongArrayValueHandler ( colorArray, 0, 0x00FF00 )
+        'yellow
+        SetLongArrayValueHandler ( colorArray, 1, 0xFFFF00 )
+        'GREEN
+        SetLongArrayValueHandler ( colorArray, 2, 0xFF0000 )
+        'WHITE
+        SetLongArrayValueHandler ( colorArray, 3, 0xFFFFFF )
+        'BLACK
+        SetLongArrayValueHandler ( colorArray, 4, 0x000000 )
 
-          do
+        Do
 
             'This gets the long value of color from the array - CurrentLEDColorSequence is a index into the array
             ColorofLED = GetLongArrayValueHandler ( ColorArray, CurrentLEDColorSequence )
 
             'first loop - as we interate through the first loop to get the tracer display working
-            for yloop = 1 to PixelCount
+            For yloop = 1 To PixelCount
 
-              #ifdef UseWS2812BitBangSendData
-                  'Ensure minimum delay has happended as the timing is critical
-                  'The delay is maintained by the timer0 Interrupt
-                  wait while timeoutocurred =  0
-                  intoff
-              #endif
+                #IFDEF UseWS2812BitBangSendData
+                    'Ensure minimum delay has happended as the timing is critical
+                    'The delay is maintained by the timer0 Interrupt
+                    Wait While timeoutocurred =  0
+                    IntOff
+                #ENDIF
 
-              ' second loop - loop sends data to the LEDs
-              for xloop = 1 to PixelCount
+                ' second loop - loop sends data to the LEDs
+                For xloop = 1 To PixelCount
 
-                      'Set the color or set to black
-                      if xloop = CurrentAddessedLED then
-                              ColortoSend = ColorofLED
-                      Else
-                          if LEDDisplayState = 1 then
-                              ColortoSend = 0x000000 'black
-                          Else
-                              'This has to reset here... why? As the output function destroys the long value when ROTATING the number.
-                              ColortoSend = ColorofLED
-                          end if
-                      end if
+                    'Set the color or set to black
+                    If xloop = CurrentAddessedLED Then
+                        ColortoSend = ColorofLED
+                    Else
+                        If LEDDisplayState = 1 Then
+                            'black
+                            ColortoSend = 0x000000
+                        Else
+                            'This has to reset here... why? As the output function destroys the long value when ROTATING the number.
+                            ColortoSend = ColorofLED
+                        End If
+                    End If
 
-                      'Send the data - either to the CLC or bit banging
-                      WS2812SendData ( ColortoSend )
+                    'Send the data - either to the CLC or bit banging
+                    WS2812SendData ( ColortoSend )
 
-              next
+                Next
 
-              'Increment the LED being addressed
-              CurrentAddessedLED++
+                'Increment the LED being addressed
+                CurrentAddessedLED++
 
-              'The minimum delay is 50us. This will SURELY never happen....
-              dim mydelay as word
-              mydelay =  readad10( AN4 )
+                'The minimum delay is 50us. This will SURELY never happen....
+                Dim mydelay As Word
+                mydelay =  ReadAD10( AN4 )
 
-              if mydelay > 0 then
-                wait mydelay ms
-              Else
-                wait while readad10( AN4 ) = 0
-              end if
-              if mydelay > 1015 then
-                do
+                If mydelay > 0 Then
+                    Wait mydelay ms
+                Else
+                    Wait While ReadAD10( AN4 ) = 0
+                End If
+                If mydelay > 1015 Then
+                    Do
 
-                loop while readad10( AN4 ) > 1000
-              end if
+                    Loop While ReadAD10( AN4 ) > 1000
+                End If
 
-              if Switch = SWITCH_DOWN and SwitchState = SWITCH_UP Then
-                  LEDDisplayState = !LEDDisplayState
-                  SwitchState = SWITCH_DOWN
-              end if
+                If Switch = SWITCH_DOWN AND SwitchState = SWITCH_UP Then
+                    LEDDisplayState = !LEDDisplayState
+                    SwitchState = SWITCH_DOWN
+                End If
 
-              if Switch = SWITCH_UP Then
-                  SwitchState = SWITCH_UP
-              end if
+                If Switch = SWITCH_UP Then
+                    SwitchState = SWITCH_UP
+                End If
 
-              #ifdef UseWS2812BitBangSendData
-                  'Set InterPacketDelay running
-                  SetTimer(0, period_us)  ' Preload Count
-                  timeoutocurred =  0
-                  Inton
-              #endif
+                #IFDEF UseWS2812BitBangSendData
+                    'Set InterPacketDelay running
+                    ' Preload Count
+                    SetTimer(0, period_us)
+                    timeoutocurred =  0
+                    IntOn
+                #ENDIF
 
-            next
+            Next
 
             'Reset the addressed LED
             CurrentAddessedLED = 1
             'Resequence LEDs the start of the color sequence
             CurrentLEDColorSequence = ( CurrentLEDColorSequence + 1 ) mod 4
 
-          loop
+        Loop
 
-      #endif
+    #ENDIF
 
-  end if
-end
+End If
+End
 
-; ----- Support methods.  Subroutines and Functions
+' ----- Support methods.  Subroutines and Functions
 
 'Initialise the LED device, timers etc.
-sub WS2812_Init
+Sub WS2812_Init
 
-    set DIN off
+    Set DIN Off
 
-    #ifdef UseWS2812BitBangSendData
+    #IFDEF UseWS2812BitBangSendData
         timeoutocurred =  0
-        #define period_us   0x1B00  'Period for LED internal processing
+        'Period for LED internal processing
+        #DEFINE period_us   0x1B00
         InitTimer0(Osc, TMR0_FOSC4 + PRE0_2 , POST0_1)
-        SetTimer(0, period_us)  ' Preload Count
+        ' Preload Count
+        SetTimer(0, period_us)
         StartTimer 0
-        On Interrupt Timer0Overflow call ISR0
+        On Interrupt Timer0Overflow Call ISR0
 
-        SET DIN On
-        SET DIN OFF
-        wait 500 us
-    #endif
+        Set DIN On
+        Set DIN Off
+        Wait 500 us
+    #ENDIF
 
-    #ifdef UseWS2812PWMSendData
+    #IFDEF UseWS2812PWMSendData
         ' SSPBUF updates ignoring BF for daisy-chained operation
         BOEN = 1
 
@@ -436,45 +468,45 @@ sub WS2812_Init
         ' Start TMR2
         StartTimer 2
 
-    #endif
+    #ENDIF
 End Sub
 
-Sub WS2812BitBangSendData ( in ColortoSend as long )
+Sub WS2812BitBangSendData ( In ColortoSend As Long )
 
-              repeat 24
-                IF ColortoSend.23 ON THEN
-                  'High for to 1 bit
-                  SET DIN ON
-                else
-                  'High and Low as fast as practical
-                  SET DIN ON
-                  SET DIN OFF
-                END IF
-                ROTATE ColortoSend left
-                'Low for the 1 bit
-                SET DIN OFF
-              end repeat
+    Repeat 24
+        If ColortoSend.23 On Then
+            'High for to 1 bit
+            Set DIN On
+        Else
+            'High and Low as fast as practical
+            Set DIN On
+            Set DIN Off
+        End If
+        Rotate ColortoSend Left
+        'Low for the 1 bit
+        Set DIN Off
+    End Repeat
 
 End Sub
 
 'Uses SSP1BUF as the output buffer - change the define at the top for your chip
-Sub WS2812PWMSendData ( in ColortoSend as long )
+Sub WS2812PWMSendData ( In ColortoSend As Long )
 
-              'Put byte to send into buffer
-              'Will start transfer
-              SSPOutRegister = ColortoSend_u
-              Wait While BF = Off
+    'Put byte to send into buffer
+    'Will start transfer
+    SSPOutRegister = ColortoSend_u
+    Wait While BF = Off
 
-              SSPOutRegister = ColortoSend_h
-              Wait While BF = Off
+    SSPOutRegister = ColortoSend_h
+    Wait While BF = Off
 
-              SSPOutRegister = ColortoSend
-              Wait While BF = Off
+    SSPOutRegister = ColortoSend
+    Wait While BF = Off
 
 End Sub
 
 'Returns the long of a color for a specific element
-function GetLongArrayValueHandler ( in AddressArray(),  ElementPointer ) as long
+Function GetLongArrayValueHandler ( In AddressArray(),  ElementPointer ) As Long
 
     ElementPointer = ( ElementPointer * 4 ) + ElementPointer
     GetLongArrayValueHandler = AddressArray(ElementPointer)
@@ -482,10 +514,10 @@ function GetLongArrayValueHandler ( in AddressArray(),  ElementPointer ) as long
     GetLongArrayValueHandler_U = AddressArray(ElementPointer+2)
     GetLongArrayValueHandler_E = AddressArray(ElementPointer+3)
 
-end function
+End Function
 
 'Sets the array element to a specific long value
-Sub SetLongArrayValueHandler ( in AddressArray(), ElementPointer, in ElementValue as Long )
+Sub SetLongArrayValueHandler ( In AddressArray(), ElementPointer, In ElementValue As Long )
 
     ElementPointer = ( ElementPointer * 4 ) + ElementPointer
     AddressArray(ElementPointer)   = ElementValue
@@ -493,13 +525,14 @@ Sub SetLongArrayValueHandler ( in AddressArray(), ElementPointer, in ElementValu
     AddressArray(ElementPointer+2) = ElementValue_U
     AddressArray(ElementPointer+3) = ElementValue_E
 
-end sub
+End Sub
 
-sub ISR0
+Sub ISR0
 
     TMR0IF = 0
     'Set InterPacketDelay running
-    SetTimer(0, period_us)  ' Preload Count
+    ' Preload Count
+    SetTimer(0, period_us)
     timeoutocurred =  1
 
-End sub
+End Sub

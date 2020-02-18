@@ -10,70 +10,108 @@
 '''@date   	17.06.2016
 '''********************************************************************************
 
-; ----- Configuration
-  #chip mega328p
-  #option explicit
+' ----- Configuration
+#CHIP mega328p
+#OPTION Explicit
 
-; ----- Define Hardware settings
-  #define SWX PORTb.1               ; input pin from pushbutton/switch
-  Dir SWX in                        ; set port as input for pushbutton/switch
+' ----- Define Hardware settings
+' input pin from pushbutton/switch
+#DEFINE SWX PORTb.1
+' set port as input for pushbutton/switch
+Dir SWX In
 
-; ----- Constants
-  #define SoundOut PORTd.5          ; output pin for tone
+' ----- Constants
+' output pin for tone
+#DEFINE SoundOut PORTd.5
 
-; ----- Variables
-  'Requires word size to hold note frequencies
-  dim note as word
-  Dim CNT as Byte
+' ----- Variables
+'Requires word size to hold note frequencies
+Dim note As Word
+Dim CNT As Byte
 
 
-; ----- Main body of program commences here.
-    Do
-        for cnt = 1 to 32
-        readtable mary, cnt, note ' Read notes from table
-        tone note, 50							' Play notes
-        next
-        wait 2 S
-        hold:
-        If SWX = 1 Then goto hold		' play music when switch is pressed
+' ----- Main body of program commences here.
+Do
+    For cnt = 1 To 32
+        ' Read notes from table
+        ReadTable mary, cnt, note
+        ' Play notes
+        Tone note, 50
+    Next
+    Wait 2 s
+hold:
+    If SWX = 1 Then Goto hold
+        ' play music when switch is pressed
 
-    Loop
+Loop
 
-    Table MARY
-    554 'C#
-    494 'B
-    440 'A
-    494 'B
-    554 'C#
-    0 	'SILENT
-    554 'C#
-    554 'C#
-    494 'B
-    0 	'SILENT
-    494 'B
-    0 	'SILENT
-    494 'B
-    554 'C#
-    659 'E
-    0 	'SILENT
-    659 'E
-    554 'C#
-    494 'B
-    440 'A
-    494 'B
-    554 'C#
-    0 	'SILENT
-    554 'C#
-    0 	'SILENT
-    554 'C#
-    494 'B
-    0 	'SILENT
-    494 'B
-    554 'C#
-    494 'B
-    440 'A
+Table MARY
+    'C#
+    554
+    'B
+    494
+    'A
+    440
+    'B
+    494
+    'C#
+    554
+    'SILENT
+    0
+    'C#
+    554
+    'C#
+    554
+    'B
+    494
+    'SILENT
+    0
+    'B
+    494
+    'SILENT
+    0
+    'B
+    494
+    'C#
+    554
+    'E
+    659
+    'SILENT
+    0
+    'E
+    659
+    'C#
+    554
+    'B
+    494
+    'A
+    440
+    'B
+    494
+    'C#
+    554
+    'SILENT
+    0
+    'C#
+    554
+    'SILENT
+    0
+    'C#
+    554
+    'B
+    494
+    'SILENT
+    0
+    'B
+    494
+    'C#
+    554
+    'B
+    494
+    'A
+    440
 
-    end table
+End Table
 
 
 'Tone.gcb

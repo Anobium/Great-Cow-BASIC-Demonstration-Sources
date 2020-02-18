@@ -23,52 +23,52 @@
 
 
 
-    #chip 16f18855,32
+#CHIP 16f18855,32
 
-    '' -------------------LATA-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D1 |-
-    ''-----------------------------------------
-    ''
-    #define LEDD2 PORTA.0
-    #define LEDD3 PORTA.1
-    #define LEDD4 PORTA.2
-    #define LEDD5 PORTA.3
-    #define Potentiometer   PORTA.4
+'' -------------------LATA-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D1 |-
+''-----------------------------------------
+''
+#DEFINE LEDD2 PORTA.0
+#DEFINE LEDD3 PORTA.1
+#DEFINE LEDD4 PORTA.2
+#DEFINE LEDD5 PORTA.3
+#DEFINE Potentiometer   PORTA.4
 
-    Dir     LEDD2 OUT
-    Dir     LEDD3 OUT
-    Dir     LEDD4 OUT
-    Dir     LEDD5 OUT
-    DIR     Potentiometer In
+Dir     LEDD2 Out
+Dir     LEDD3 Out
+Dir     LEDD4 Out
+Dir     LEDD5 Out
+Dir     Potentiometer In
 
 
-    #define NUM_READINGS 8
+#DEFINE NUM_READINGS 8
 
-    'Set up the variables
-    dim _sum as long
-    dim yloop, xloop as byte
+'Set up the variables
+Dim _sum As Long
+Dim yloop, xloop As Byte
+_sum = 0
+
+'Define the table
+Dim queue(8)
+queue = 0, 0, 0, 0, 0, 0, 0, 0
+
+Do
+    For xloop = 1 To NUM_READINGS
+        porta = average_reading ( queue() )
+        queue( xloop ) = ReadAD ( AN4 )
+    Next
+Loop
+
+
+Function average_reading ( In analyze_queue() ) As Word
+
     _sum = 0
-
-    'Define the table
-    dim queue(8)
-    queue = 0, 0, 0, 0, 0, 0, 0, 0
-
-    do
-        for xloop = 1 to NUM_READINGS
-            porta = average_reading ( queue() )
-            queue( xloop ) = ReadAD ( AN4 )
-        next
-    loop
-
-
-function average_reading ( in analyze_queue() ) as word
-
-    _sum = 0
-    for yloop = 1 to  NUM_READINGS
-        _sum = [long]queue ( yloop ) + _sum
-    next
+    For yloop = 1 To  NUM_READINGS
+        _sum = [Long]queue ( yloop ) + _sum
+    Next
 
     average_reading = _sum / NUM_READINGS
 
-end function
+End Function

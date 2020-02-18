@@ -9,29 +9,34 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
-  #chip 16F886, 16
-   LVP = Off
+' ----- Configuration
+#CHIP 16F886, 16
+LVP = Off
 
-  ' #include
-  ' no solution specifc includes, default includes are always included                                  ; no solution specifc includes, default includes are always included
+' #include
+' no solution specifc includes, default includes are always included                                  ; no solution specifc includes, default includes are always included
 
 
-; ----- Define Hardware settings
+' ----- Define Hardware settings
 
-  ' this is required to tell the microprocessor the port is an output
-  ' (PORTB.5 = LED2 on Chipinos PIC16f886)
-  ' (PORTB.5 = Pin 26 on chip)
-  Dir PORTB.5 Out
+' this is required to tell the microprocessor the port is an output
+' (PORTB.5 = LED2 on Chipinos PIC16f886)
+' (PORTB.5 = Pin 26 on chip)
+Dir PORTB.5 Out
 
-; ----- Variables
+' ----- Variables
 ' none specified in the example. All byte variables are defined upon use.
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
-  Start:
-    Set PORTB.5 ON   'turn LED on
-    Wait 100 Ms      'wait 100 milliseconds
-    Set PORTB.5 OFF  'turn LED off
-    Wait 900 Ms      'wait 900 milliseconds
-  Goto Start         'jump back to the start of the program
+Start:
+'turn LED on
+Set PORTB.5 On
+'wait 100 milliseconds
+Wait 100 ms
+'turn LED off
+Set PORTB.5 Off
+'wait 900 milliseconds
+Wait 900 ms
+'jump back to the start of the program
+Goto Start

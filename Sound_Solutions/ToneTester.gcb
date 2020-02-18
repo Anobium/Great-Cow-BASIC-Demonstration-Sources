@@ -14,32 +14,34 @@
 '''@date    16/6/2019
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
- #chip 12F509, 4
- #option explicit
+#CHIP 12F509, 4
+#OPTION Explicit
 
-    #define pulser GPIO.2
-    #define SWITCH_PORT GPIO.3
+#DEFINE pulser GPIO.2
+#DEFINE SWITCH_PORT GPIO.3
 
-    Dir pulser Out
-    Dir SWITCH_PORT In
+Dir pulser Out
+Dir SWITCH_PORT In
 
-    Do
-      If SWITCH_PORT = 0 Then
+Do
+    If SWITCH_PORT = 0 Then
 
-          'Pulse pin port
-         PulseOut GPIO.2,495 us '1Khz code section
+        'Pulse pin port
+        '1Khz code section
+        PulseOut GPIO.2,495 us
 
-         'Then wait after the pin goes off
-         Wait 495 us
+        'Then wait after the pin goes off
+        Wait 495 us
 
-      Else
+    Else
 
-         PulseOut GPIO.2,1002 us  '500Hz code section
+        '500Hz code section
+        PulseOut GPIO.2,1002 us
 
-         'Then wait after the pin goes off
-         Wait 1002 us
+        'Then wait after the pin goes off
+        Wait 1002 us
 
-      End If
-    Loop
+    End If
+Loop

@@ -16,28 +16,37 @@
 '''@date    27/10/2018
 '''********************************************************************
 
-    #chip 16F15376          'Specify the Device you are compiling for - this board is the 16F15376
-                            'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
-    #option Explicit        'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+'Specify the Device you are compiling for - this board is the 16F15376
+#CHIP 16F15376
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
+'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+#OPTION Explicit
 
-    #define LEDOn  = 1      'Set a constant.  The LED can be de-activated by driving the connected I/O line to the supply voltage via a suitable resistor.
-    #define LEDOff = 0      'Set a constant.  The LED can be activated by driving the connected I/O line to GND.
+'Set a constant.  The LED can be de-activated by driving the connected I/O line to the supply voltage via a suitable resistor.
+#DEFINE LEDOn  = 1
+'Set a constant.  The LED can be activated by driving the connected I/O line to GND.
+#DEFINE LEDOff = 0
 
-    #define LED0 portc.1    'Set a constant to refer to the LED. Attach via a suitable resistor.
-    dir LED0 out            'Set LED as an output
+'Set a constant to refer to the LED. Attach via a suitable resistor.
+#DEFINE LED0 portc.1
+'Set LED as an output
+Dir LED0 Out
 
 
-    #define SW0 portc.0     'Set a constant to refer to the switch
-    dir SW0 in              'Set the switch as an input
-    WPUC0 = 1               'Enable weak pullup
+'Set a constant to refer to the switch
+#DEFINE SW0 portc.0
+'Set the switch as an input
+Dir SW0 In
+'Enable weak pullup
+WPUC0 = 1
 
-    do forever
-        'the switch is pressed down then turn the LED on, else turn it off
-        if SW0 = Off then
-          LED0 = LEDOff
-        else
-          LED0 = LEDOn
-        end if
-    loop
+Do Forever
+    'the switch is pressed down then turn the LED on, else turn it off
+    If SW0 = Off Then
+        LED0 = LEDOff
+    Else
+        LED0 = LEDOn
+    End If
+Loop
 
-    end
+End

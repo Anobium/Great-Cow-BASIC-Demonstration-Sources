@@ -1,132 +1,138 @@
-  '''A program  for GCGB and GCB.
-  '''--------------------------------------------------------------------------------------------------------------------------------
-  '''This program demonstrates how to read the ADC and create an event at a specific ADC value.
-  '''
-  '''@author    EvanV & CRoper
-  '''@licence   GPL
-  '''@version   1.0
-  '''@date      6.7.2016
-  '''
-  '''  PIC: 16F18855 - Xpress Evaluation Board
-  '''  Compiler: GCB
-  '''  IDE: GCB@SYN
-  '''
-  '''
-  ''' The data sheet states interrupts are complete when the A/D conversion is done.
-  '''
-  ''' When the A/D conversion is complete, the result is loaded into
-  ''' this A/D result register pair, the GO/DONE bit (ADCON0<2>)
-  ''' is cleared and the A/D interrupt flag bit ADIF is set.
-  '''
-  '''
-  ''' Solution:
-  ''' You can create a periodic timer interrupt (using Timer0 for example)
-  ''' and read the A/D in the ISR. In effect you would be polling the A/D
-  ''' voltage. Then, set a flag or do something if the current value is
-  ''' sufficiently different from the previous value.
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demonstrates how to read the ADC and create an event at a specific ADC value.
+'''
+'''@author    EvanV & CRoper
+'''@licence   GPL
+'''@version   1.0
+'''@date      6.7.2016
+'''
+'''  PIC: 16F18855 - Xpress Evaluation Board
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''
+''' The data sheet states interrupts are complete when the A/D conversion is done.
+'''
+''' When the A/D conversion is complete, the result is loaded into
+''' this A/D result register pair, the GO/DONE bit (ADCON0<2>)
+''' is cleared and the A/D interrupt flag bit ADIF is set.
+'''
+'''
+''' Solution:
+''' You can create a periodic timer interrupt (using Timer0 for example)
+''' and read the A/D in the ISR. In effect you would be polling the A/D
+''' voltage. Then, set a flag or do something if the current value is
+''' sufficiently different from the previous value.
 
-  ''' If you were just looking for a interrupt if the input moved above or
-  ''' below a fixed voltage, then you could use the comparator, and use
-  ''' the INT_COMP interrupt. You could even change the reference voltage
-  ''' inside the ISR, to provide some hysteresis, and thereby reduce the
-  ''' effects of signal noise (to prevent getting lots of spurious interrupts
-  ''' if the input voltage is very close to the reference voltage).
-  '''
-  '''********************************************************************************
-  'Chip Settings.
-    #chip 16f18855,32
+''' If you were just looking for a interrupt if the input moved above or
+''' below a fixed voltage, then you could use the comparator, and use
+''' the INT_COMP interrupt. You could even change the reference voltage
+''' inside the ISR, to provide some hysteresis, and thereby reduce the
+''' effects of signal noise (to prevent getting lots of spurious interrupts
+''' if the input voltage is very close to the reference voltage).
+'''
+'''********************************************************************************
+'Chip Settings.
+#CHIP 16f18855,32
 
-    #define ADCTimeDelay 10       'this is in milliseconds - this therefore reads the ADC every... ms.
-                                  'There is a small processing overhead so the actual delay may a tiny bit out.
-    #define myADCLimit   131      'this is the alarm setting
+'this is in milliseconds - this therefore reads the ADC every... ms.
+#DEFINE ADCTimeDelay 10
+'There is a small processing overhead so the actual delay may a tiny bit out.
+'this is the alarm setting
+#DEFINE myADCLimit   131
 
-    Dim t0_millis             As long ' Critical - Used by the ISR'
-    ' working copy '
-    Dim curMillis             As Long
-    Dim currentACvalue        As Word
+' Critical - Used by the ISR'
+Dim t0_millis             As Long
+' working copy '
+Dim curMillis             As Long
+Dim currentACvalue        As Word
 
-    'Potentitor is connected to RA4...set as input
-    dir porta.4 in
+'Potentitor is connected to RA4...set as input
+Dir porta.4 In
 
-    'LED out
-    #define LEDD2 porta.0
-    dir LEDD2 out
-    LEDD2 = On
-    #define LEDD3 porta.1
-    dir LEDD3 out
-    LEDD3 = On
-    #define LEDD4 porta.2
-    dir LEDD4 out
-    LEDD4 = On
-    #define LEDD5 porta.3
-    dir LEDD5 out
-    LEDD5 = On
-
-
-    'Just to show we are operational!!
-    Repeat 16
-      LEDD2  = !LEDD2
-      LEDD3  = LEDD2
-      LEDD4  = LEDD2
-      LEDD5  = LEDD2
-      wait 125 ms
-    end Repeat
-    LEDD2 = off
-    LEDD3 = off
-    LEDD4 = off
-    LEDD5 = off
+'LED out
+#DEFINE LEDD2 porta.0
+Dir LEDD2 Out
+LEDD2 = On
+#DEFINE LEDD3 porta.1
+Dir LEDD3 Out
+LEDD3 = On
+#DEFINE LEDD4 porta.2
+Dir LEDD4 Out
+LEDD4 = On
+#DEFINE LEDD5 porta.3
+Dir LEDD5 Out
+LEDD5 = On
 
 
-    ' Set up the Interrupt
-    ' TMR0_Initialize()
-    #define TMR0_16bit
-    #define period_1ms   0xE0C0  'Period 1ms
-    InitTimer0(Osc, TMR0_FOSC4 + PRE0_1 , POST0_1)
-    SetTimer(0, period_1ms) ' Preload Count for 1ms
-    StartTimer 0
+'Just to show we are operational!!
+Repeat 16
+    LEDD2  = !LEDD2
+    LEDD3  = LEDD2
+    LEDD4  = LEDD2
+    LEDD5  = LEDD2
+    Wait 125 ms
+End Repeat
+LEDD2 = Off
+LEDD3 = Off
+LEDD4 = Off
+LEDD5 = Off
 
-    ' Add a handler for the interrupt
-    On Interrupt Timer0Overflow Call TMR0_ISR
 
-          'Loop forever
-    Do forever
-          'Get the current time in ms
-        curMillis = millis
+' Set up the Interrupt
+' TMR0_Initialize()
+#DEFINE TMR0_16bit
+'Period 1ms
+#DEFINE period_1ms   0xE0C0
+InitTimer0(Osc, TMR0_FOSC4 + PRE0_1 , POST0_1)
+' Preload Count for 1ms
+SetTimer(0, period_1ms)
+StartTimer 0
 
-        'is the current time greater than our specified time delay.
-        if curMillis => ADCTimeDelay  then
-            currentACvalue = ReadAD10 ( AN4 )
+' Add a handler for the interrupt
+On Interrupt Timer0Overflow Call TMR0_ISR
 
-            'Just to show we are here...
-            LEDD2  = !LEDD2
+'Loop forever
+Do Forever
+    'Get the current time in ms
+    curMillis = millis
 
-            'Is the ADC greater than the specified value?
-            if currentACvalue > myADCLimit then
-                LEDD5 = on
-            else
-                LEDD5 = off
-            end if
+    'is the current time greater than our specified time delay.
+    If curMillis => ADCTimeDelay  Then
+        currentACvalue = ReadAD10 ( AN4 )
 
-            ' disable interrupts while we reset our timer.
-            IntOff
-                t0_millis = 0
-            IntOn
+        'Just to show we are here...
+        LEDD2  = !LEDD2
 
-        end if
-    Loop
+        'Is the ADC greater than the specified value?
+        If currentACvalue > myADCLimit Then
+            LEDD5 = On
+        Else
+            LEDD5 = Off
+        End If
 
-  'Returns the current value of the timer.
-function millis as long
-  ' disable interrupts while we read t0_millis '
-  IntOff
-  millis = t0_millis
-  IntOn
-end Function
+        ' disable interrupts while we reset our timer.
+        IntOff
+        t0_millis = 0
+        IntOn
 
-  'This is called every time timer1 overflows.  We increment t0_millis so we can count things.
+    End If
+Loop
+
+'Returns the current value of the timer.
+Function millis As Long
+    ' disable interrupts while we read t0_millis '
+    IntOff
+    millis = t0_millis
+    IntOn
+End Function
+
+'This is called every time timer1 overflows.  We increment t0_millis so we can count things.
 Sub TMR0_ISR()
     ' reset count for 1ms compensated for isr time
-    SetTimer(0, period_1ms + 1)'tick
+    'tick
+    SetTimer(0, period_1ms + 1)
     ' Increment Millis()
     t0_millis += 1
 End Sub

@@ -1,17 +1,17 @@
 #CHIP tiny13a, 1.2
-#OPTION EXPLICIT
+#OPTION Explicit
 #RANDOMIZE_SEED Timer0
-#DEFINE AVRTC0             
-#DEFINE AVRCHAN2        
-#DEFINE LED1 PortB.1         
-#OPTION VOLATILE LED1        
+#DEFINE AVRTC0
+#DEFINE AVRCHAN2
+#DEFINE LED1 PortB.1
+#OPTION Volatile LED1
 
-DIM FREQ AS BYTE
-DIR LED1 OUT
-FREQ = 1            
+Dim FREQ As Byte
+Dir LED1 Out
+FREQ = 1
 
-DO
-    RANDOMIZE
-    HPWM 2, FREQ, RANDOM
-    WAIT RANDOM MS
-LOOP
+Do
+    Randomize
+    HPWM 2, FREQ, Random
+    Wait Random ms
+Loop

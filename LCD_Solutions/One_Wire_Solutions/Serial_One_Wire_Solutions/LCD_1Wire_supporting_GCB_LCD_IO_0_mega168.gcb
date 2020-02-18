@@ -17,91 +17,92 @@
 '''@date    14.02.2015
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
-  #chip mega168, 16
-  #option explicit
+#CHIP mega168, 16
+#OPTION Explicit
 
-  ; ----- Define Hardware settings
-  'Set up the Serial Port
-   #define USART_BAUD_RATE 9600
-   Dir PORTD.1 Out
-   Dir PORTD.0 In
-   ' A delay is required to enable to AXE133 Emulator to process
-   #define USART_DELAY 1 ms
-   #define USART_BLOCKING
-   wait 500 ms
+' ----- Define Hardware settings
+'Set up the Serial Port
+#DEFINE USART_BAUD_RATE 9600
+Dir PORTD.1 Out
+Dir PORTD.0 In
+' A delay is required to enable to AXE133 Emulator to process
+#DEFINE USART_DELAY 1 ms
+#DEFINE USART_BLOCKING
+Wait 500 ms
 
-; ----- Constants
-  #define LCD_IO 0
-  'Redirection to support LCD_IO 0
-  #define LCDWriteByte MySendToLCD
-  #define LCD_NO_RW
+' ----- Constants
+#DEFINE LCD_IO 0
+'Redirection to support LCD_IO 0
+#DEFINE LCDWriteByte MySendToLCD
+#DEFINE LCD_NO_RW
 
-;----- Variables
-  Dim DISPLAYEEPROMMESSAGE as Byte
-
-
+'----- Variables
+Dim DISPLAYEEPROMMESSAGE As Byte
 
 
-; ----- Quick Command Reference:
 
-;    OneWireLCDcmd = 255
-;        Outputs A.3, A.2, A.1 and A.0 are all controlled by the lower 3 bits of an output byte, which is prefixed by the number 255.
-;        OneWireLCDcmd 255, b'00000111'         ; all outputs on
-;        wait  1 s
-;        OneWireLCDcmd 255, b'00000000'         ; all outputs off
 
-;    OneWireLCDcmd = 253.
-;        Predefined messages are all prefixed by the number 253. There are up to 16 (0-15) predefined messages, all stored within the LCD firmware program.
-;        To reprogram the messages simply reprogram the AXE133 emulator chip.
-;
-;        OneWireLCDcmd 253 , 1         ; display predefined message 1
-;        wait 10 ms
+' ----- Quick Command Reference:
 
-; ----- Main body of program commences here.
+'    OneWireLCDcmd = 255
+'        Outputs A.3, A.2, A.1 and A.0 are all controlled by the lower 3 bits of an output byte, which is prefixed by the number 255.
+'        OneWireLCDcmd 255, b'00000111'         ; all outputs on
+'        wait  1 s
+'        OneWireLCDcmd 255, b'00000000'         ; all outputs off
 
-  do forever
+'    OneWireLCDcmd = 253.
+'        Predefined messages are all prefixed by the number 253. There are up to 16 (0-15) predefined messages, all stored within the LCD firmware program.
+'        To reprogram the messages simply reprogram the AXE133 emulator chip.
+'
+'        OneWireLCDcmd 253 , 1         ; display predefined message 1
+'        wait 10 ms
+
+' ----- Main body of program commences here.
+
+Do Forever
+    CLS
+    Print "START LCD TEST"
+    Locate 1, 0
+    Print "DISPLAY ON"
+    Wait 1 s
+
+    For displayEEPromMessage = 0 To 15
         CLS
-        Print "START LCD TEST"
-        Locate 1, 0
-        Print "DISPLAY ON"
-        wait 1 s
+        Print "EEProm Msg#"
+        Print displayEEPromMessage
+        'Second Line
+        Locate 1,0
+        'Display an EEprom message
+        OneWireLCDcmd 253, displayEEPromMessage
+        Wait 1 s
+    Next
+    'All LCD outputs on
+    OneWireLCDcmd 255, b'00000111'
+    Wait  1 s
+    'All LCD outputs off
+    ' all outputs off
+    OneWireLCDcmd  255, b'00000000'
+    Wait  1 s
 
-        for displayEEPromMessage = 0 to 15
-            CLS
-            Print "EEProm Msg#"
-            Print displayEEPromMessage
-            'Second Line
-            locate 1,0
-            'Display an EEprom message
-            OneWireLCDcmd 253, displayEEPromMessage
-            wait 1 s
-        next
-        'All LCD outputs on
-        OneWireLCDcmd 255, b'00000111'
-        wait  1 s
-        ;All LCD outputs off
-        OneWireLCDcmd  255, b'00000000'         ; all outputs off
-        wait  1 s
+Loop
 
-  loop
+' ----- Support methods.  Subroutines and Functions
 
-; ----- Support methods.  Subroutines and Functions
+'Required to support LCD_IO 0
+Sub MySendToLCD(In MyLCDByte)
 
-  'Required to support LCD_IO 0
-  Sub MySendToLCD(In MyLCDByte)
-
-     If LCD_RS = Off then
+    If LCD_RS = Off Then
         HSerSend 254
-     end if
-     HSerSend MyLCDByte
+    End If
+    HSerSend MyLCDByte
 
-  end sub
+End Sub
 
-  'The AXE133 specific commands to the LCD
-  sub OneWireLCDcmd ( In _LCDCmd2, _LCDValue )
-      HSerSend _LCDCmd2
-      HSerSend _LCDValue
+'The AXE133 specific commands to the LCD
+Sub OneWireLCDcmd ( In _LCDCmd2, _LCDValue )
+    HSerSend _LCDCmd2
+    HSerSend _LCDValue
 
-  end sub
+End Sub

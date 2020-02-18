@@ -18,373 +18,378 @@
 '''********************************************************************************
 
 'Chip Settings
-#chip mega2560, 16
-#option explicit
+#CHIP mega2560, 16
+#OPTION Explicit
 
 'Include files
-#include <glcd.h>
-#include <xpt2046.h>
+#INCLUDE <glcd.h>
+#INCLUDE <xpt2046.h>
 
 'GLCD Device Selection
-#define GLCD_TYPE GLCD_TYPE_SSD1289
-#define GLCD_EXTENDEDFONTSET1
+#DEFINE GLCD_TYPE GLCD_TYPE_SSD1289
+#DEFINE GLCD_EXTENDEDFONTSET1
 
 'Define ports for the SSD1289 display
-#define GLCD_WR   PORTG.2
-#define GLCD_CS   PORTG.1
-#define GLCD_RS   PORTD.7
-#define GLCD_RST  PORTG.0
-#define GLCD_DB0  PORTC.0
-#define GLCD_DB1  PORTC.1
-#define GLCD_DB2  PORTC.2
-#define GLCD_DB3  PORTC.3
-#define GLCD_DB4  PORTC.4
-#define GLCD_DB5  PORTC.5
-#define GLCD_DB6  PORTC.6
-#define GLCD_DB7  PORTC.7
-#define GLCD_DB8  PORTA.0
-#define GLCD_DB9  PORTA.1
-#define GLCD_DB10 PORTA.2
-#define GLCD_DB11 PORTA.3
-#define GLCD_DB12 PORTA.4
-#define GLCD_DB13 PORTA.5
-#define GLCD_DB14 PORTA.6
-#define GLCD_DB15 PORTA.7
+#DEFINE GLCD_WR   PORTG.2
+#DEFINE GLCD_CS   PORTG.1
+#DEFINE GLCD_RS   PORTD.7
+#DEFINE GLCD_RST  PORTG.0
+#DEFINE GLCD_DB0  PORTC.0
+#DEFINE GLCD_DB1  PORTC.1
+#DEFINE GLCD_DB2  PORTC.2
+#DEFINE GLCD_DB3  PORTC.3
+#DEFINE GLCD_DB4  PORTC.4
+#DEFINE GLCD_DB5  PORTC.5
+#DEFINE GLCD_DB6  PORTC.6
+#DEFINE GLCD_DB7  PORTC.7
+#DEFINE GLCD_DB8  PORTA.0
+#DEFINE GLCD_DB9  PORTA.1
+#DEFINE GLCD_DB10 PORTA.2
+#DEFINE GLCD_DB11 PORTA.3
+#DEFINE GLCD_DB12 PORTA.4
+#DEFINE GLCD_DB13 PORTA.5
+#DEFINE GLCD_DB14 PORTA.6
+#DEFINE GLCD_DB15 PORTA.7
 
 
-    '******************************************************************************************************
-    'Setup the XPT2046
+'******************************************************************************************************
+'Setup the XPT2046
 
-    'Typical calibration range for Hardware SPI when using XPT2046
-    'for 320 * 240 screeen... may be different for others
-    #define XPT2046XMIN   11
-    #define XPT2046YMIN   18
-    #define XPT2046XMAX   241
-    #define XPT2046YMAX   254
-    #define XPT2046_ReadSamples 15
-
-
-    #define XPT2046_Do       PORTG.5  ' Arduino Mega D4
-    #define XPT2046_Di       PORTE.5  ' Arduino Mega D3
-    #define XPT2046_SCK      PORTH.3  ' Arduino Mega D6
-    #define XPT2046_CS       PORTE.3  ' Arduino Mega D5
-    #define XPT2046_IRQ      PORTE.4  ' Arduino Mega D2
-    'The mega2560 does not suppport hardware SPI!! So, for this hardware configuration tested, using Software SPI by default
-
-    'Set the initial calibration - shown here to show the method.
-    'If you rotate the screen then you will have to call the method to reset these parameters.
-    SetCalibation_XPT2046 ( XPT2046XMIN, XPT2046XMAX, XPT2046YMIN, XPT2046YMAX, GLCD_HEIGHT, GLCD_WIDTH  )
-
-    '******************************************************************************************************
-    'Main program
-    GLCDRotate Portrait_Rev
-    GLCDCLS SSD1289_NAVY
+'Typical calibration range for Hardware SPI when using XPT2046
+'for 320 * 240 screeen... may be different for others
+#DEFINE XPT2046XMIN   11
+#DEFINE XPT2046YMIN   18
+#DEFINE XPT2046XMAX   241
+#DEFINE XPT2046YMAX   254
+#DEFINE XPT2046_ReadSamples 15
 
 
-    Dim text1 , text2 , Temptext , Restext as string
-    Dim Val1 , Val2 , ResVal as Long
-    Dim DIG, CALC as Byte
-    dim XTouchPoint_XPT2046, YTouchPoint_XPT2046, tempTouchPoint_XPT2046
-    dim Xconverge, Yconverge as Integer
-    dim convergeCounter as byte
+' Arduino Mega D4
+#DEFINE XPT2046_Do       PORTG.5
+' Arduino Mega D3
+#DEFINE XPT2046_Di       PORTE.5
+' Arduino Mega D6
+#DEFINE XPT2046_SCK      PORTH.3
+' Arduino Mega D5
+#DEFINE XPT2046_CS       PORTE.3
+' Arduino Mega D2
+#DEFINE XPT2046_IRQ      PORTE.4
+'The mega2560 does not suppport hardware SPI!! So, for this hardware configuration tested, using Software SPI by default
+
+'Set the initial calibration - shown here to show the method.
+'If you rotate the screen then you will have to call the method to reset these parameters.
+SetCalibation_XPT2046 ( XPT2046XMIN, XPT2046XMAX, XPT2046YMIN, XPT2046YMAX, GLCD_HEIGHT, GLCD_WIDTH  )
+
+'******************************************************************************************************
+'Main program
+GLCDRotate Portrait_Rev
+GLCDCLS SSD1289_NAVY
 
 
-  GLCDBackground = SSD1289_RED
-  GLCDRotate LANDSCAPE_REV
-  'We have the GLCD_WIDTH to scale the Touch Axis which is the Y Axis in this configuration, same therefore GLCD_HEIGHT being second
-  SetCalibation_XPT2046 ( XPT2046XMIN, XPT2046XMAX, XPT2046YMIN, XPT2046YMAX, GLCD_WIDTH, GLCD_HEIGHT)
+Dim text1 , text2 , Temptext , Restext As String
+Dim Val1 , Val2 , ResVal As Long
+Dim DIG, CALC As Byte
+Dim XTouchPoint_XPT2046, YTouchPoint_XPT2046, tempTouchPoint_XPT2046
+Dim Xconverge, Yconverge As Integer
+Dim convergeCounter As Byte
 
-  CreateButton 20 , 10, SSD1289_GLCD_WIDTH-20 , 50, SSD1289_BLUE, SSD1289_YELLOW , "Great Cow Basic v0.98" ,SSD1289_YELLOW , 2
+
+GLCDBackground = SSD1289_RED
+GLCDRotate Landscape_Rev
+'We have the GLCD_WIDTH to scale the Touch Axis which is the Y Axis in this configuration, same therefore GLCD_HEIGHT being second
+SetCalibation_XPT2046 ( XPT2046XMIN, XPT2046XMAX, XPT2046YMIN, XPT2046YMAX, GLCD_WIDTH, GLCD_HEIGHT)
+
+CreateButton 20 , 10, SSD1289_GLCD_WIDTH-20 , 50, SSD1289_BLUE, SSD1289_YELLOW , "Great Cow Basic v0.98" ,SSD1289_YELLOW , 2
 
 
-  CreateButton 20 , 60, 70, 90, SSD1289_BLUE, SSD1289_YELLOW , "7" ,SSD1289_YELLOW , 2
-  CreateButton 80 , 60, 130, 90, SSD1289_BLUE, SSD1289_YELLOW , "8" ,SSD1289_YELLOW , 2
-  CreateButton 140 , 60, 190, 90, SSD1289_BLUE, SSD1289_YELLOW , "9" ,SSD1289_YELLOW , 2
-  CreateButton 200 , 60, 250, 90, SSD1289_BLUE, SSD1289_YELLOW , "/" ,SSD1289_YELLOW , 2
-  CreateButton 20 , 100, 70, 130, SSD1289_BLUE, SSD1289_YELLOW , "4" ,SSD1289_YELLOW , 2
-  CreateButton 80 , 100, 130, 130, SSD1289_BLUE, SSD1289_YELLOW , "5" ,SSD1289_YELLOW , 2
-  CreateButton 140 , 100, 190, 130, SSD1289_BLUE, SSD1289_YELLOW , "6" ,SSD1289_YELLOW , 2
-  CreateButton 200 , 100, 250, 130, SSD1289_BLUE, SSD1289_YELLOW , "*" ,SSD1289_YELLOW , 2
-  CreateButton 20 , 140, 70, 170, SSD1289_BLUE, SSD1289_YELLOW , "1" ,SSD1289_YELLOW , 2
-  CreateButton 80 , 140, 130, 170, SSD1289_BLUE, SSD1289_YELLOW , "2" ,SSD1289_YELLOW , 2
-  CreateButton 140 , 140, 190, 170, SSD1289_BLUE, SSD1289_YELLOW , "3" ,SSD1289_YELLOW , 2
-  CreateButton 200 , 140, 250, 170, SSD1289_BLUE, SSD1289_YELLOW , "-" ,SSD1289_YELLOW , 2
-  CreateButton 20 , 180, 130, 210, SSD1289_BLUE, SSD1289_YELLOW , "0" ,SSD1289_YELLOW , 2
-  CreateButton 140 , 180, 190, 210, SSD1289_BLUE, SSD1289_YELLOW , "." ,SSD1289_YELLOW , 2
-  CreateButton 200 , 180, 250, 210, SSD1289_BLUE, SSD1289_YELLOW , "+" ,SSD1289_YELLOW , 2
-  CreateButton 260 , 60, 299, 130, SSD1289_BLUE, SSD1289_YELLOW , "C" ,SSD1289_YELLOW , 2
-  CreateButton 260 , 140, 299, 210, SSD1289_BLUE, SSD1289_YELLOW , "=" ,SSD1289_YELLOW , 2
+CreateButton 20 , 60, 70, 90, SSD1289_BLUE, SSD1289_YELLOW , "7" ,SSD1289_YELLOW , 2
+CreateButton 80 , 60, 130, 90, SSD1289_BLUE, SSD1289_YELLOW , "8" ,SSD1289_YELLOW , 2
+CreateButton 140 , 60, 190, 90, SSD1289_BLUE, SSD1289_YELLOW , "9" ,SSD1289_YELLOW , 2
+CreateButton 200 , 60, 250, 90, SSD1289_BLUE, SSD1289_YELLOW , "/" ,SSD1289_YELLOW , 2
+CreateButton 20 , 100, 70, 130, SSD1289_BLUE, SSD1289_YELLOW , "4" ,SSD1289_YELLOW , 2
+CreateButton 80 , 100, 130, 130, SSD1289_BLUE, SSD1289_YELLOW , "5" ,SSD1289_YELLOW , 2
+CreateButton 140 , 100, 190, 130, SSD1289_BLUE, SSD1289_YELLOW , "6" ,SSD1289_YELLOW , 2
+CreateButton 200 , 100, 250, 130, SSD1289_BLUE, SSD1289_YELLOW , "*" ,SSD1289_YELLOW , 2
+CreateButton 20 , 140, 70, 170, SSD1289_BLUE, SSD1289_YELLOW , "1" ,SSD1289_YELLOW , 2
+CreateButton 80 , 140, 130, 170, SSD1289_BLUE, SSD1289_YELLOW , "2" ,SSD1289_YELLOW , 2
+CreateButton 140 , 140, 190, 170, SSD1289_BLUE, SSD1289_YELLOW , "3" ,SSD1289_YELLOW , 2
+CreateButton 200 , 140, 250, 170, SSD1289_BLUE, SSD1289_YELLOW , "-" ,SSD1289_YELLOW , 2
+CreateButton 20 , 180, 130, 210, SSD1289_BLUE, SSD1289_YELLOW , "0" ,SSD1289_YELLOW , 2
+CreateButton 140 , 180, 190, 210, SSD1289_BLUE, SSD1289_YELLOW , "." ,SSD1289_YELLOW , 2
+CreateButton 200 , 180, 250, 210, SSD1289_BLUE, SSD1289_YELLOW , "+" ,SSD1289_YELLOW , 2
+CreateButton 260 , 60, 299, 130, SSD1289_BLUE, SSD1289_YELLOW , "C" ,SSD1289_YELLOW , 2
+CreateButton 260 , 140, 299, 210, SSD1289_BLUE, SSD1289_YELLOW , "=" ,SSD1289_YELLOW , 2
 
-  CreateButton 20 , 10, SSD1289_GLCD_WIDTH-20 , 50, SSD1289_BLUE, SSD1289_YELLOW , "@DimiK & EvanV" ,SSD1289_YELLOW , 2
-  Wait 1 s
+CreateButton 20 , 10, SSD1289_GLCD_WIDTH-20 , 50, SSD1289_BLUE, SSD1289_YELLOW , "@DimiK & EvanV" ,SSD1289_YELLOW , 2
+Wait 1 s
 
-  CreateButton 20 , 10, SSD1289_GLCD_WIDTH-20 , 50, SSD1289_BLUE, SSD1289_YELLOW , "GCBASIC Calculator" ,SSD1289_YELLOW , 2
+CreateButton 20 , 10, SSD1289_GLCD_WIDTH-20 , 50, SSD1289_BLUE, SSD1289_YELLOW , "GCBASIC Calculator" ,SSD1289_YELLOW , 2
 
-  dig=0
-  Calc=0
-  Restext=""
-  Temptext="                    "
+dig=0
+Calc=0
+Restext=""
+Temptext="                    "
 
-  Do Forever
+Do Forever
 
-    wait while isTouched_XPT2046
+    Wait While isTouched_XPT2046
 
-      do
-          repeat 5
-              'get the values -
-              GetXY_XPT2046( XTouchPoint_XPT2046, YTouchPoint_XPT2046 )
-          end Repeat
-          'test for settling by testing for convergance
-          if ABS( ( Xconverge - XTouchPoint_XPT2046 ) ) > 1  or  ABS( ( Yconverge - YTouchPoint_XPT2046 ) ) > 1  then
-              Xconverge = XTouchPoint_XPT2046
-              Yconverge = YTouchPoint_XPT2046
-              convergeCounter++
-          Else
-              'converged
-              exit do
-          end if
-      Loop
+    Do
+        Repeat 5
+            'get the values -
+            GetXY_XPT2046( XTouchPoint_XPT2046, YTouchPoint_XPT2046 )
+        End Repeat
+        'test for settling by testing for convergance
+        If ABS( ( Xconverge - XTouchPoint_XPT2046 ) ) > 1  OR  ABS( ( Yconverge - YTouchPoint_XPT2046 ) ) > 1  Then
+            Xconverge = XTouchPoint_XPT2046
+            Yconverge = YTouchPoint_XPT2046
+            convergeCounter++
+        Else
+            'converged
+            Exit Do
+        End If
+    Loop
 
-      'Flip the data to handle for the screen rotation.  The top left corner is 0, 0
-      'Remember the returned values are relative to the Touch Sensor NOTE the screen rotation, hence, the maths
-      tempTouchPoint_XPT2046 = XTouchPoint_XPT2046
-      XTouchPoint_XPT2046 = SSD1289_GLCD_WIDTH- YTouchPoint_XPT2046-1
-      YTouchPoint_XPT2046 = SSD1289_GLCD_HEIGHT - tempTouchPoint_XPT2046-1
+    'Flip the data to handle for the screen rotation.  The top left corner is 0, 0
+    'Remember the returned values are relative to the Touch Sensor NOTE the screen rotation, hence, the maths
+    tempTouchPoint_XPT2046 = XTouchPoint_XPT2046
+    XTouchPoint_XPT2046 = SSD1289_GLCD_WIDTH- YTouchPoint_XPT2046-1
+    YTouchPoint_XPT2046 = SSD1289_GLCD_HEIGHT - tempTouchPoint_XPT2046-1
 
-       'Numbers
-       if (XTouchPoint_XPT2046>=20 and XTouchPoint_XPT2046<=70) and (YTouchPoint_XPT2046>=60 and YTouchPoint_XPT2046<=90) Then
-           RoundRect 20 , 60 , 70 , 90  , SSD1289_RED
-           wait 100 ms
-           RoundRect 20 , 60 , 70 , 90 , SSD1289_YELLOW
-           Temptext= Temptext+"7"
-           dig++
-           Temptext=Right(Temptext,20)
-           FilledBox 22, 12, 297, 48, SSD1289_BLUE
-           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
-       end if
-       if (XTouchPoint_XPT2046>=80 and XTouchPoint_XPT2046<=130) and (YTouchPoint_XPT2046>=60 and YTouchPoint_XPT2046<=90) Then
-           RoundRect 80 , 60 , 130 , 90  , SSD1289_RED
-           wait 100 ms
-           RoundRect 80 , 60 , 130 , 90 , SSD1289_YELLOW
-           Temptext= Temptext+"8"
-           dig++
-           Temptext=Right(Temptext,20)
-           FilledBox 22, 12, 297, 48, SSD1289_BLUE
-           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
-       end if
-       if (XTouchPoint_XPT2046>=140 and XTouchPoint_XPT2046<=190) and (YTouchPoint_XPT2046>=60 and YTouchPoint_XPT2046<=90) Then
-           RoundRect 140 , 60 , 190 , 90  , SSD1289_RED
-           wait 100 ms
-           RoundRect 140 , 60 , 190 , 90 , SSD1289_YELLOW
-           Temptext= Temptext+"9"
-           dig++
-           Temptext=Right(Temptext,20)
-           FilledBox 22, 12, 297, 48, SSD1289_BLUE
-           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
-       end if
-       if (XTouchPoint_XPT2046>=20 and XTouchPoint_XPT2046<=70) and (YTouchPoint_XPT2046>=100 and YTouchPoint_XPT2046<=130) Then
-           RoundRect 20 , 100 , 70 , 130  , SSD1289_RED
-           wait 100 ms
-           RoundRect 20 , 100 , 70 , 130 , SSD1289_YELLOW
-           Temptext= Temptext+"4"
-           dig++
-           Temptext=Right(Temptext,20)
-           FilledBox 22, 12, 297, 48, SSD1289_BLUE
-           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
-       end if
-       if (XTouchPoint_XPT2046>=80 and XTouchPoint_XPT2046<=130) and (YTouchPoint_XPT2046>=100 and YTouchPoint_XPT2046<=130) Then
-           RoundRect 80 , 100 , 130 , 130  , SSD1289_RED
-           wait 100 ms
-           RoundRect 80 , 100 , 130 , 130 , SSD1289_YELLOW
-           Temptext= Temptext+"5"
-           dig++
-           Temptext=Right(Temptext,20)
-           FilledBox 22, 12, 297, 48, SSD1289_BLUE
-           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
-       end if
-       if (XTouchPoint_XPT2046>=140 and XTouchPoint_XPT2046<=190) and (YTouchPoint_XPT2046>=100 and YTouchPoint_XPT2046<=130) Then
-           RoundRect 140 , 100 , 190 , 130  , SSD1289_RED
-           wait 100 ms
-           RoundRect 140 , 100 , 190 , 130 , SSD1289_YELLOW
-           Temptext= Temptext+"6"
-           dig++
-           Temptext=Right(Temptext,20)
-           FilledBox 22, 12, 297, 48, SSD1289_BLUE
-           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
-       end if
-       if (XTouchPoint_XPT2046>=20 and XTouchPoint_XPT2046<=70) and (YTouchPoint_XPT2046>=140 and YTouchPoint_XPT2046<=170) Then
-           RoundRect 20 , 140 , 70 , 170  , SSD1289_RED
-           wait 100 ms
-           RoundRect 20 , 140 , 70 , 170 , SSD1289_YELLOW
-           Temptext= Temptext+"1"
-           dig++
-           Temptext=Right(Temptext,20)
-           FilledBox 22, 12, 297, 48, SSD1289_BLUE
-           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
-       end if
-       if (XTouchPoint_XPT2046>=80 and XTouchPoint_XPT2046<=130) and (YTouchPoint_XPT2046>=140 and YTouchPoint_XPT2046<=170) Then
-           RoundRect 80 , 140 , 130 , 170  , SSD1289_RED
-           wait 100 ms
-           RoundRect 80 , 140 , 130 , 170 , SSD1289_YELLOW
-           Temptext= Temptext+"2"
-           dig++
-           Temptext=Right(Temptext,20)
-           FilledBox 22, 12, 297, 48, SSD1289_BLUE
-           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
-       end if
-       if (XTouchPoint_XPT2046>=140 and XTouchPoint_XPT2046<=190) and (YTouchPoint_XPT2046>=140 and YTouchPoint_XPT2046<=170) Then
-           RoundRect 140 , 140 , 190 , 170  , SSD1289_RED
-           wait 100 ms
-           RoundRect 140 , 140 , 190 , 170 , SSD1289_YELLOW
-           Temptext= Temptext+"3"
-           dig++
-           Temptext=Right(Temptext,20)
-           FilledBox 22, 12, 297, 48, SSD1289_BLUE
-           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
-       end if
-       if (XTouchPoint_XPT2046>=20 and XTouchPoint_XPT2046<=130) and (YTouchPoint_XPT2046>=180 and YTouchPoint_XPT2046<=210) Then
-           RoundRect 20 , 180 , 130 , 210  , SSD1289_RED
-           wait 100 ms
-           RoundRect 20 , 180 , 130 , 210 , SSD1289_YELLOW
-           Temptext= Temptext+"0"
-           dig++
-           Temptext=Right(Temptext,20)
-           FilledBox 22, 12, 297, 48, SSD1289_BLUE
-           GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
-       end if
-       'praxeis
-       if (XTouchPoint_XPT2046>=200 and XTouchPoint_XPT2046<=250) and (YTouchPoint_XPT2046>=180 and YTouchPoint_XPT2046<=210) Then
-          RoundRect 200 , 180 , 250 , 210  , SSD1289_RED
-          wait 100 ms
-          RoundRect 200 , 180 , 250 , 210 , SSD1289_YELLOW
-          if calc=0 Then
-            if len(Restext)=0 Then
-               Text1=Right (Temptext, dig)
-               dig=0
-               Temptext="                    "
-            else
-               Text1=Restext
-               Restext(0)=0
-            end if
+    'Numbers
+    If (XTouchPoint_XPT2046>=20 AND XTouchPoint_XPT2046<=70) AND (YTouchPoint_XPT2046>=60 AND YTouchPoint_XPT2046<=90) Then
+        RoundRect 20 , 60 , 70 , 90  , SSD1289_RED
+        Wait 100 ms
+        RoundRect 20 , 60 , 70 , 90 , SSD1289_YELLOW
+        Temptext= Temptext+"7"
+        dig++
+        Temptext=Right(Temptext,20)
+        FilledBox 22, 12, 297, 48, SSD1289_BLUE
+        GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+    End If
+    If (XTouchPoint_XPT2046>=80 AND XTouchPoint_XPT2046<=130) AND (YTouchPoint_XPT2046>=60 AND YTouchPoint_XPT2046<=90) Then
+        RoundRect 80 , 60 , 130 , 90  , SSD1289_RED
+        Wait 100 ms
+        RoundRect 80 , 60 , 130 , 90 , SSD1289_YELLOW
+        Temptext= Temptext+"8"
+        dig++
+        Temptext=Right(Temptext,20)
+        FilledBox 22, 12, 297, 48, SSD1289_BLUE
+        GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+    End If
+    If (XTouchPoint_XPT2046>=140 AND XTouchPoint_XPT2046<=190) AND (YTouchPoint_XPT2046>=60 AND YTouchPoint_XPT2046<=90) Then
+        RoundRect 140 , 60 , 190 , 90  , SSD1289_RED
+        Wait 100 ms
+        RoundRect 140 , 60 , 190 , 90 , SSD1289_YELLOW
+        Temptext= Temptext+"9"
+        dig++
+        Temptext=Right(Temptext,20)
+        FilledBox 22, 12, 297, 48, SSD1289_BLUE
+        GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+    End If
+    If (XTouchPoint_XPT2046>=20 AND XTouchPoint_XPT2046<=70) AND (YTouchPoint_XPT2046>=100 AND YTouchPoint_XPT2046<=130) Then
+        RoundRect 20 , 100 , 70 , 130  , SSD1289_RED
+        Wait 100 ms
+        RoundRect 20 , 100 , 70 , 130 , SSD1289_YELLOW
+        Temptext= Temptext+"4"
+        dig++
+        Temptext=Right(Temptext,20)
+        FilledBox 22, 12, 297, 48, SSD1289_BLUE
+        GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+    End If
+    If (XTouchPoint_XPT2046>=80 AND XTouchPoint_XPT2046<=130) AND (YTouchPoint_XPT2046>=100 AND YTouchPoint_XPT2046<=130) Then
+        RoundRect 80 , 100 , 130 , 130  , SSD1289_RED
+        Wait 100 ms
+        RoundRect 80 , 100 , 130 , 130 , SSD1289_YELLOW
+        Temptext= Temptext+"5"
+        dig++
+        Temptext=Right(Temptext,20)
+        FilledBox 22, 12, 297, 48, SSD1289_BLUE
+        GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+    End If
+    If (XTouchPoint_XPT2046>=140 AND XTouchPoint_XPT2046<=190) AND (YTouchPoint_XPT2046>=100 AND YTouchPoint_XPT2046<=130) Then
+        RoundRect 140 , 100 , 190 , 130  , SSD1289_RED
+        Wait 100 ms
+        RoundRect 140 , 100 , 190 , 130 , SSD1289_YELLOW
+        Temptext= Temptext+"6"
+        dig++
+        Temptext=Right(Temptext,20)
+        FilledBox 22, 12, 297, 48, SSD1289_BLUE
+        GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+    End If
+    If (XTouchPoint_XPT2046>=20 AND XTouchPoint_XPT2046<=70) AND (YTouchPoint_XPT2046>=140 AND YTouchPoint_XPT2046<=170) Then
+        RoundRect 20 , 140 , 70 , 170  , SSD1289_RED
+        Wait 100 ms
+        RoundRect 20 , 140 , 70 , 170 , SSD1289_YELLOW
+        Temptext= Temptext+"1"
+        dig++
+        Temptext=Right(Temptext,20)
+        FilledBox 22, 12, 297, 48, SSD1289_BLUE
+        GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+    End If
+    If (XTouchPoint_XPT2046>=80 AND XTouchPoint_XPT2046<=130) AND (YTouchPoint_XPT2046>=140 AND YTouchPoint_XPT2046<=170) Then
+        RoundRect 80 , 140 , 130 , 170  , SSD1289_RED
+        Wait 100 ms
+        RoundRect 80 , 140 , 130 , 170 , SSD1289_YELLOW
+        Temptext= Temptext+"2"
+        dig++
+        Temptext=Right(Temptext,20)
+        FilledBox 22, 12, 297, 48, SSD1289_BLUE
+        GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+    End If
+    If (XTouchPoint_XPT2046>=140 AND XTouchPoint_XPT2046<=190) AND (YTouchPoint_XPT2046>=140 AND YTouchPoint_XPT2046<=170) Then
+        RoundRect 140 , 140 , 190 , 170  , SSD1289_RED
+        Wait 100 ms
+        RoundRect 140 , 140 , 190 , 170 , SSD1289_YELLOW
+        Temptext= Temptext+"3"
+        dig++
+        Temptext=Right(Temptext,20)
+        FilledBox 22, 12, 297, 48, SSD1289_BLUE
+        GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+    End If
+    If (XTouchPoint_XPT2046>=20 AND XTouchPoint_XPT2046<=130) AND (YTouchPoint_XPT2046>=180 AND YTouchPoint_XPT2046<=210) Then
+        RoundRect 20 , 180 , 130 , 210  , SSD1289_RED
+        Wait 100 ms
+        RoundRect 20 , 180 , 130 , 210 , SSD1289_YELLOW
+        Temptext= Temptext+"0"
+        dig++
+        Temptext=Right(Temptext,20)
+        FilledBox 22, 12, 297, 48, SSD1289_BLUE
+        GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+    End If
+    'praxeis
+    If (XTouchPoint_XPT2046>=200 AND XTouchPoint_XPT2046<=250) AND (YTouchPoint_XPT2046>=180 AND YTouchPoint_XPT2046<=210) Then
+        RoundRect 200 , 180 , 250 , 210  , SSD1289_RED
+        Wait 100 ms
+        RoundRect 200 , 180 , 250 , 210 , SSD1289_YELLOW
+        If calc=0 Then
+            If Len(Restext)=0 Then
+                Text1=Right (Temptext, dig)
+                dig=0
+                Temptext="                    "
+            Else
+                Text1=Restext
+                Restext(0)=0
+            End If
             calc=1
-          end if
-       end if
-       if (XTouchPoint_XPT2046>=200 and XTouchPoint_XPT2046<=250) and (YTouchPoint_XPT2046>=140 and YTouchPoint_XPT2046<=170) Then
-          RoundRect 200 , 140 , 250 , 170  , SSD1289_RED
-          wait 100 ms
-          RoundRect 200 , 140 , 250 , 170 , SSD1289_YELLOW
-          if calc=0 Then
-            if len(Restext)=0 Then
-               Text1=Right (Temptext, dig)
-               dig=0
-               Temptext="                    "
-            else
-               Text1=Restext
-               Restext(0)=0
-            end if
+        End If
+    End If
+    If (XTouchPoint_XPT2046>=200 AND XTouchPoint_XPT2046<=250) AND (YTouchPoint_XPT2046>=140 AND YTouchPoint_XPT2046<=170) Then
+        RoundRect 200 , 140 , 250 , 170  , SSD1289_RED
+        Wait 100 ms
+        RoundRect 200 , 140 , 250 , 170 , SSD1289_YELLOW
+        If calc=0 Then
+            If Len(Restext)=0 Then
+                Text1=Right (Temptext, dig)
+                dig=0
+                Temptext="                    "
+            Else
+                Text1=Restext
+                Restext(0)=0
+            End If
             calc=2
-          end if
-       end if
-       if (XTouchPoint_XPT2046>=200 and XTouchPoint_XPT2046<=250) and (YTouchPoint_XPT2046>=100 and YTouchPoint_XPT2046<=130) Then
-          RoundRect 200 , 100 , 250 , 130  , SSD1289_RED
-          wait 100 ms
-          RoundRect 200 , 100 , 250 , 130 , SSD1289_YELLOW
-          if calc=0 Then
-            if len(Restext)=0 Then
-               Text1=Right (Temptext, dig)
-               dig=0
-               Temptext="                    "
-            else
-               Text1=Restext
-               Restext(0)=0
-            end if
+        End If
+    End If
+    If (XTouchPoint_XPT2046>=200 AND XTouchPoint_XPT2046<=250) AND (YTouchPoint_XPT2046>=100 AND YTouchPoint_XPT2046<=130) Then
+        RoundRect 200 , 100 , 250 , 130  , SSD1289_RED
+        Wait 100 ms
+        RoundRect 200 , 100 , 250 , 130 , SSD1289_YELLOW
+        If calc=0 Then
+            If Len(Restext)=0 Then
+                Text1=Right (Temptext, dig)
+                dig=0
+                Temptext="                    "
+            Else
+                Text1=Restext
+                Restext(0)=0
+            End If
             calc=3
-          end if
-       end if
-       if (XTouchPoint_XPT2046>=200 and XTouchPoint_XPT2046<=250) and (YTouchPoint_XPT2046>=60 and YTouchPoint_XPT2046<=90) Then
-          RoundRect 200 , 60 , 250 , 90  , SSD1289_RED
-          wait 100 ms
-          RoundRect 200 , 60 , 250 , 90 , SSD1289_YELLOW
-          if calc=0 Then
-            if len(Restext)=0 Then
-               Text1=Right (Temptext, dig)
-               dig=0
-               Temptext="                    "
-            else
-               Text1=Restext
-               Restext(0)=0
-            end if
+        End If
+    End If
+    If (XTouchPoint_XPT2046>=200 AND XTouchPoint_XPT2046<=250) AND (YTouchPoint_XPT2046>=60 AND YTouchPoint_XPT2046<=90) Then
+        RoundRect 200 , 60 , 250 , 90  , SSD1289_RED
+        Wait 100 ms
+        RoundRect 200 , 60 , 250 , 90 , SSD1289_YELLOW
+        If calc=0 Then
+            If Len(Restext)=0 Then
+                Text1=Right (Temptext, dig)
+                dig=0
+                Temptext="                    "
+            Else
+                Text1=Restext
+                Restext(0)=0
+            End If
             calc=4
-          end if
-       end if
-       'C
-       if (XTouchPoint_XPT2046>=260 and XTouchPoint_XPT2046<=299) and (YTouchPoint_XPT2046>=60 and YTouchPoint_XPT2046<=130) Then
-          RoundRect 260 , 60 , 299 , 130  , SSD1289_RED
-          wait 100 ms
-          RoundRect 260 , 60 , 299 , 130 , SSD1289_YELLOW
-          Text1=""
-          Text2=""
-          calc=0
-          dig=0
-          val1=0
-          val2=0
-          Temptext="                   0"
-          GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
-          Temptext="                    "
-          Restext(0)=0
-       end if
-       '=
-        if (XTouchPoint_XPT2046>=260 and XTouchPoint_XPT2046<=299) and (YTouchPoint_XPT2046>=140 and YTouchPoint_XPT2046<=210) Then
-          RoundRect 260 , 140 , 299 , 210  , SSD1289_RED
-          wait 100 ms
-          RoundRect 260 , 140 , 299 , 210  , SSD1289_YELLOW
-          if calc<>0 then
-             Text2=Right (Temptext, dig)
-             dig=0
-             val1=val(Text1)
-             val2=val(Text2)
-             Temptext="                    "
-             Select case calc
-                case 1
-                     ResVal=val1+val2
-                     Restext=str(ResVal)
-                     Temptext= Temptext+Restext
-                     Temptext=Right(Temptext,20)
-                     FilledBox 22, 12, 297, 48, SSD1289_BLUE
-                     GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
-                case 2
-                     if val1>val2 Then
-                        ResVal=val1-val2
-                        Restext=str(ResVal)
-                     Else
-                        ResVal=val2-val1
-                        Restext="-"+str(ResVal)
-                     end if
-                     Temptext= Temptext+Restext
-                     Temptext=Right(Temptext,20)
-                     FilledBox 22, 12, 297, 48, SSD1289_BLUE
-                     GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
-                 case 3
-                     ResVal=val1*val2
-                     Restext=str(ResVal)
-                     Temptext= Temptext+Restext
-                     Temptext=Right(Temptext,20)
-                     FilledBox 22, 12, 297, 48, SSD1289_BLUE
-                     GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
-                 case 4
-                     ResVal=val1/val2
-                     Restext=str(ResVal)
-                     Temptext= Temptext+Restext
-                     Temptext=Right(Temptext,20)
-                     FilledBox 22, 12, 297, 48, SSD1289_BLUE
-                     GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
-             end Select
-             Temptext="                    "
-             calc=0
-             Restext(0)=0
-          end if
-        end if
+        End If
+    End If
+    'C
+    If (XTouchPoint_XPT2046>=260 AND XTouchPoint_XPT2046<=299) AND (YTouchPoint_XPT2046>=60 AND YTouchPoint_XPT2046<=130) Then
+        RoundRect 260 , 60 , 299 , 130  , SSD1289_RED
+        Wait 100 ms
+        RoundRect 260 , 60 , 299 , 130 , SSD1289_YELLOW
+        Text1=""
+        Text2=""
+        calc=0
+        dig=0
+        val1=0
+        val2=0
+        Temptext="                   0"
+        GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+        Temptext="                    "
+        Restext(0)=0
+    End If
+    '=
+    If (XTouchPoint_XPT2046>=260 AND XTouchPoint_XPT2046<=299) AND (YTouchPoint_XPT2046>=140 AND YTouchPoint_XPT2046<=210) Then
+        RoundRect 260 , 140 , 299 , 210  , SSD1289_RED
+        Wait 100 ms
+        RoundRect 260 , 140 , 299 , 210  , SSD1289_YELLOW
+        If calc<>0 Then
+            Text2=Right (Temptext, dig)
+            dig=0
+            val1=Val(Text1)
+            val2=Val(Text2)
+            Temptext="                    "
+            Select Case calc
+            Case 1
+                ResVal=val1+val2
+                Restext=Str(ResVal)
+                Temptext= Temptext+Restext
+                Temptext=Right(Temptext,20)
+                FilledBox 22, 12, 297, 48, SSD1289_BLUE
+                GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+            Case 2
+                If val1>val2 Then
+                    ResVal=val1-val2
+                    Restext=Str(ResVal)
+                Else
+                    ResVal=val2-val1
+                    Restext="-"+Str(ResVal)
+                End If
+                Temptext= Temptext+Restext
+                Temptext=Right(Temptext,20)
+                FilledBox 22, 12, 297, 48, SSD1289_BLUE
+                GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+            Case 3
+                ResVal=val1*val2
+                Restext=Str(ResVal)
+                Temptext= Temptext+Restext
+                Temptext=Right(Temptext,20)
+                FilledBox 22, 12, 297, 48, SSD1289_BLUE
+                GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+            Case 4
+                ResVal=val1/val2
+                Restext=Str(ResVal)
+                Temptext= Temptext+Restext
+                Temptext=Right(Temptext,20)
+                FilledBox 22, 12, 297, 48, SSD1289_BLUE
+                GLCDPrint  42 , 20, Temptext, SSD1289_YELLOW , 2
+            End Select
+            Temptext="                    "
+            calc=0
+            Restext(0)=0
+        End If
+    End If
 
     Wait 1 ms
 
-  Loop
+Loop

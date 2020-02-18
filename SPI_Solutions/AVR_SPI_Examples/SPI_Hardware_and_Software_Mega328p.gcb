@@ -26,109 +26,137 @@
 
 
 
-    #chip mega328p, 16
-    #option explicit
-    #include <uno_mega328p.h >
+#CHIP mega328p, 16
+#OPTION Explicit
+#INCLUDE <uno_mega328p.h >
 
-    #define SPI_HardwareSPI  'comment this out to make into Software SPI but, you may have to change clock lines
+'comment this out to make into Software SPI but, you may have to change clock lines
+#DEFINE SPI_HardwareSPI
 
-    'Pin mappings for SPI - this SPI driver supports Hardware SPI
-    #define SPI_DC       DIGITAL_8          ' Data command line
-    #define SPI_CS       DIGITAL_4          ' Chip select line
-    #define SPI_RESET    DIGITAL_9          ' Reset line
+'Pin mappings for SPI - this SPI driver supports Hardware SPI
+' Data command line
+#DEFINE SPI_DC       DIGITAL_8
+' Chip select line
+#DEFINE SPI_CS       DIGITAL_4
+' Reset line
+#DEFINE SPI_RESET    DIGITAL_9
 
-    #define SPI_DI       DIGITAL_12          ' Data in | MISO
-    #define SPI_DO       DIGITAL_11          ' Data out | MOSI
-    #define SPI_SCK      DIGITAL_13          ' Clock Line
+' Data in | MISO
+#DEFINE SPI_DI       DIGITAL_12
+' Data out | MOSI
+#DEFINE SPI_DO       DIGITAL_11
+' Clock Line
+#DEFINE SPI_SCK      DIGITAL_13
 
-    dir SPI_DC    out
-    dir SPI_CS    out
-    dir SPI_RESET out
-    dir SPI_DO    Out
-    dir SPI_DI    In
-    dir SPI_SCK   Out
+Dir SPI_DC    Out
+Dir SPI_CS    Out
+Dir SPI_RESET Out
+Dir SPI_DO    Out
+Dir SPI_DI    In
+Dir SPI_SCK   Out
 
-    'If DIGITAL_10 is NOT used as the SPI_CS (sometimes called SS) the port must and output or set as input/pulled high with a 10k resistor.
-    'As follows:
-    'If CS is configured as an input, it must be held high to ensure Master SPI operation.
-    'If the CS pin is driven low by peripheral circuitry when the SPI is configured as a Master with the SS pin defined as an input, the
-    'SPI system interprets this as another master selecting the SPI as a slave and starting to send data to it!
-    'If CS is an output SPI communications will commence with no flow control.
-    dir DIGITAL_10 Out
+'If DIGITAL_10 is NOT used as the SPI_CS (sometimes called SS) the port must and output or set as input/pulled high with a 10k resistor.
+'As follows:
+'If CS is configured as an input, it must be held high to ensure Master SPI operation.
+'If the CS pin is driven low by peripheral circuitry when the SPI is configured as a Master with the SS pin defined as an input, the
+'SPI system interprets this as another master selecting the SPI as a slave and starting to send data to it!
+'If CS is an output SPI communications will commence with no flow control.
+Dir DIGITAL_10 Out
 
-    DIM byte1 As byte
-    DIM byte2 As byte
-    DIM byte3 As byte
+Dim byte1 As Byte
+Dim byte2 As Byte
+Dim byte3 As Byte
 
-    byte1 = 100 ' temp values (will come from potentiometer later)
-    byte2 = 150
-    byte3 = 200
+' temp values (will come from potentiometer later)
+byte1 = 100
+byte2 = 150
+byte3 = 200
 
-    InitSPIMode
-
-
-    do forever
-        set SPI_CS OFF;
-        set SPI_DC OFF;
-        SendByteviaSPI (byte1)
-        set SPI_CS ON;
-        set SPI_DC ON
-
-        set SPI_CS OFF;
-        set SPI_DC OFF;
-        SendByteviaSPI (byte2)
-        set SPI_CS ON;
-        set SPI_DC ON
-
-        set SPI_CS OFF;
-        set SPI_DC OFF;
-        SendByteviaSPI (byte3)
-        set SPI_CS ON;
-        set SPI_DC ON
-
-        wait 10 ms
-    loop
+InitSPIMode
 
 
+Do Forever
+    '
+    Set SPI_CS Off
+    '
+    Set SPI_DC Off
+    SendByteviaSPI (byte1)
+    '
+    Set SPI_CS On
+    Set SPI_DC On
 
-sub InitSPIMode
+    '
+    Set SPI_CS Off
+    '
+    Set SPI_DC Off
+    SendByteviaSPI (byte2)
+    '
+    Set SPI_CS On
+    Set SPI_DC On
 
-      #ifdef SPI_HardwareSPI
-          SPIMode ( MasterFast, SPI_CPOL_0 + SPI_CPHA_0 )
-      #endif
+    '
+    Set SPI_CS Off
+    '
+    Set SPI_DC Off
+    SendByteviaSPI (byte3)
+    '
+    Set SPI_CS On
+    Set SPI_DC On
 
-      set SPI_DO OFF;
-      set SPI_CS ON;   therefore CPOL=0
-      set SPI_DC ON;   deselect
+    Wait 10 ms
+Loop
 
-End sub
 
-sub  SendByteviaSPI( in SPISendByte as byte )
 
-  set SPI_CS OFF
-  set SPI_DC OFF;
+Sub InitSPIMode
 
-  #ifdef SPI_HardwareSPI
-     FastHWSPITransfer  SPISendByte
-     set SPI_CS ON;
-     exit sub
-  #endif
+    #IFDEF SPI_HardwareSPI
+        SPIMode ( MasterFast, SPI_CPOL_0 + SPI_CPHA_0 )
+    #ENDIF
 
-  #ifndef SPI_HardwareSPI
-  repeat 8
+    '
+    Set SPI_DO Off
+    '   therefore CPOL=0
+    Set SPI_CS On
+    '   deselect
+    Set SPI_DC On
 
-    if SPISendByte.7 = ON  then
-      set SPI_DO ON;
-    else
-      set SPI_DO OFF;
-    end if
-    SET SPI_SCK On;           ; therefore CPOL=0 ==ON, and, where CPOL=1==ON
-    rotate SPISendByte left
-    set SPI_SCK Off;          ; therefore CPOL=0  =OFF, and, where CPOL=1==OFF
+End Sub
 
-  end repeat
-  set SPI_CS ON;
-  set SPI_DO OFF;
-  #endif
+Sub  SendByteviaSPI( In SPISendByte As Byte )
 
-end Sub
+    Set SPI_CS Off
+    '
+    Set SPI_DC Off
+
+    #IFDEF SPI_HardwareSPI
+        FastHWSPITransfer  SPISendByte
+        '
+        Set SPI_CS On
+        Exit Sub
+    #ENDIF
+
+    #IFNDEF SPI_HardwareSPI
+        Repeat 8
+
+            If SPISendByte.7 = On  Then
+                '
+                Set SPI_DO On
+            Else
+                '
+                Set SPI_DO Off
+            End If
+            '           ; therefore CPOL=0 ==ON, and, where CPOL=1==ON
+            Set SPI_SCK On
+            Rotate SPISendByte Left
+            '          ; therefore CPOL=0  =OFF, and, where CPOL=1==OFF
+            Set SPI_SCK Off
+
+        End Repeat
+        '
+        Set SPI_CS On
+        '
+        Set SPI_DO Off
+    #ENDIF
+
+End Sub

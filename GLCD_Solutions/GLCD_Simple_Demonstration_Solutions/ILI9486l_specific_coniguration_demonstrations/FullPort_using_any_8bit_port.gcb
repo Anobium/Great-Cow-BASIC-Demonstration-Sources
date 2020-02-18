@@ -14,25 +14,30 @@
 '''@date    24.01.2019
 '''********************************************************************************
 
-  'Chip Settings.
-    #chip 18f24k42, 64
-    #option explicit
-    #config EXTMCLR
+'Chip Settings.
+#CHIP 18f24k42, 64
+#OPTION Explicit
+#CONFIG EXTMCLR
 
-    #include <glcd.h>
+#INCLUDE <glcd.h>
 
-    #define GLCD_TYPE GLCD_TYPE_ILI9486
+#DEFINE GLCD_TYPE GLCD_TYPE_ILI9486
 
-    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-    #define GLCD_RD       portc.0          ' read command line
-    #define GLCD_WR       portc.1          ' write command line
-    #define GLCD_DC       portc.2          ' Command/Data line.
-    #define GLCD_CS       portc.3          ' Chip select line
-    #define GLCD_RST      portc.4          ' Reset line
+'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+' read command line
+#DEFINE GLCD_RD       portc.0
+' write command line
+#DEFINE GLCD_WR       portc.1
+' Command/Data line.
+#DEFINE GLCD_DC       portc.2
+' Chip select line
+#DEFINE GLCD_CS       portc.3
+' Reset line
+#DEFINE GLCD_RST      portc.4
 
-    #define GLCD_DataPort portb
+#DEFINE GLCD_DataPort portb
 
-    GLCDCLS  TFT_BLUE
-    GLCDLocateString( 0, 1 )
-    GLCDPrintString "Full Port Addressing"
+GLCDCLS  TFT_BLUE
+GLCDLocateString( 0, 1 )
+GLCDPrintString "Full Port Addressing"
 

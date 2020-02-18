@@ -30,41 +30,42 @@
 
 
 
- #chip 16f690
+#CHIP 16f690
 
-     '' -------------------LATC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|DS4|DS3|DS2|DS1|-
-    ''-----------------------------------------
-    ''
+'' -------------------LATC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|DS4|DS3|DS2|DS1|-
+''-----------------------------------------
+''
 
-    #define NUM_READINGS 8
+#DEFINE NUM_READINGS 8
 
-    dim _sum as long
-    dim yloop, xloop as byte
+Dim _sum As Long
+Dim yloop, xloop As Byte
+_sum = 0
+
+Dim queue(8)
+queue = 0, 0, 0, 0, 0, 0, 0, 0
+
+Dir portc Out
+
+Do
+    For xloop = 1 To NUM_READINGS
+        ' calcualtion to ensure max value 15, equates to all 4 LEDS on
+        portc = ( average_reading ( queue() ) * 10 / 138 )
+
+        queue( xloop ) = ReadAD ( AN0 )
+    Next
+Loop
+
+
+Function average_reading ( In analyze_queue() ) As Word
+
     _sum = 0
-
-    dim queue(8)
-    queue = 0, 0, 0, 0, 0, 0, 0, 0
-
-    dir portc out
-
-    do
-        for xloop = 1 to NUM_READINGS
-            portc = ( average_reading ( queue() ) * 10 / 138 )         ' calcualtion to ensure max value 15, equates to all 4 LEDS on
-
-            queue( xloop ) = ReadAD ( AN0 )
-        next
-    loop
-
-
-function average_reading ( in analyze_queue() ) as word
-
-    _sum = 0
-    for yloop = 1 to  NUM_READINGS
-        _sum = [long]queue ( yloop ) + _sum
-    next
+    For yloop = 1 To  NUM_READINGS
+        _sum = [Long]queue ( yloop ) + _sum
+    Next
 
     average_reading = _sum / NUM_READINGS
 
-end Function
+End Function

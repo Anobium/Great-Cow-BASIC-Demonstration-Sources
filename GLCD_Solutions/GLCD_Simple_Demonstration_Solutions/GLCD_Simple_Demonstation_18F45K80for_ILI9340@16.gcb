@@ -15,40 +15,42 @@
 '''@date    08/11/16
 '''********************************************************************************
 
-  'Chip Settings
-#chip 18f45k80, 16
-#config MCLRE=on
-#option Explicit
-#include <glcd.h>
+'Chip Settings
+#CHIP 18f45k80, 16
+#CONFIG MCLRE=On
+#OPTION Explicit
+#INCLUDE <glcd.h>
 
-#define GLCD_TYPE GLCD_TYPE_ILI9340
+#DEFINE GLCD_TYPE GLCD_TYPE_ILI9340
 
 'Pin mappings for ILI9340
-#define GLCD_DC portc.2
-#define GLCD_CS portc.0
-#define GLCD_RESET portc.1
+#DEFINE GLCD_DC portc.2
+#DEFINE GLCD_CS portc.0
+#DEFINE GLCD_RESET portc.1
 
 'As we are using Harware SPI this cannot be change on this chip. This is a non-PPS chip.
-#define GLCD_DI portc.4    '   Not used therefore not really required
-#define GLCD_DO portc.5
-#define GLCD_SCK portc.3
-#define ILI9340_hardwarespi
+'   Not used therefore not really required
+#DEFINE GLCD_DI portc.4
+#DEFINE GLCD_DO portc.5
+#DEFINE GLCD_SCK portc.3
+#DEFINE ILI9340_hardwarespi
 
 
 
-dir porta.3 out
-set porta.3 off 'ttf backlight pwr set on (pnp)
+Dir porta.3 Out
+'ttf backlight pwr set on (pnp)
+Set porta.3 Off
 
 
-glcdrotate(landscape_rev)
+GLCDRotate(Landscape_Rev)
 
 
-glcdcls
-glcdprint(100,100,"Great Cow Basic",ili9340_white)
+GLCDCLS
+GLCDPrint(100,100,"Great Cow Basic",ili9340_white)
 
-do
-dir porta.0 out
-porta.0 = !porta.0
-wait 100 ms
-loop
+Do
+    Dir porta.0 Out
+    porta.0 = !porta.0
+    Wait 100 ms
+Loop
 sleep

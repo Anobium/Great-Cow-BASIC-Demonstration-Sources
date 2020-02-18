@@ -11,68 +11,87 @@
 '''@date    28.05.2015
 '''********************************************************************************
 
-; ----- Configuration
- #chip 16F886,16
- #option explicit
- #include <glcd.h>
- #include <ds18b20.h>
+' ----- Configuration
+#CHIP 16F886,16
+#OPTION Explicit
+#INCLUDE <glcd.h>
+#INCLUDE <ds18b20.h>
 
 
-; ----- Define Hardware settings
-  ' Hardware is setup in the GLCD methods, therefore none are requied here.
+' ----- Define Hardware settings
+' Hardware is setup in the GLCD methods, therefore none are requied here.
 
-; ----- Constants
-  #define GLCD_TYPE GLCD_TYPE_KS0108               ' This is the Default value, not required.
-  ' the comments shows the Chipino connections
-  #define GLCD_RW PORTB.1  'D9 to pin 5 of LCD
-  #define GLCD_RESET PORTB.5 'D13 to pin 17 of LCD
-  #define GLCD_CS1 PORTB.3 'D12 to CS1
-  #define GLCD_CS2 PORTB.4 'D11 to CS2
-  #define GLCD_RS PORTB.0  'D8 to pin 4 D/I pin on LCD
-  #define GLCD_ENABLE PORTB.2 'D10 to Pin 6 on LCD
-  #define GLCD_DB0 PORTC.7 'D0 to pin 7 on LCD
-  #define GLCD_DB1 PORTC.6 'D1 to pin 8 on LCD
-  #define GLCD_DB2 PORTC.5 'D2 to pin 9 on LCD
-  #define GLCD_DB3 PORTC.4 'D3 to pin 10 on LCD
-  #define GLCD_DB4 PORTC.3 'D4 to pin 11 on LCD
-  #define GLCD_DB5 PORTC.2 'D5 to pin 12 on LCD
-  #define GLCD_DB6 PORTC.1 'D6 to pin 13 on LCD
-  #define GLCD_DB7 PORTC.0 'D7 to pin 14 on LCD
+' ----- Constants
+' This is the Default value, not required.
+#DEFINE GLCD_TYPE GLCD_TYPE_KS0108
+' the comments shows the Chipino connections
+'D9 to pin 5 of LCD
+#DEFINE GLCD_RW PORTB.1
+'D13 to pin 17 of LCD
+#DEFINE GLCD_RESET PORTB.5
+'D12 to CS1
+#DEFINE GLCD_CS1 PORTB.3
+'D11 to CS2
+#DEFINE GLCD_CS2 PORTB.4
+'D8 to pin 4 D/I pin on LCD
+#DEFINE GLCD_RS PORTB.0
+'D10 to Pin 6 on LCD
+#DEFINE GLCD_ENABLE PORTB.2
+'D0 to pin 7 on LCD
+#DEFINE GLCD_DB0 PORTC.7
+'D1 to pin 8 on LCD
+#DEFINE GLCD_DB1 PORTC.6
+'D2 to pin 9 on LCD
+#DEFINE GLCD_DB2 PORTC.5
+'D3 to pin 10 on LCD
+#DEFINE GLCD_DB3 PORTC.4
+'D4 to pin 11 on LCD
+#DEFINE GLCD_DB4 PORTC.3
+'D5 to pin 12 on LCD
+#DEFINE GLCD_DB5 PORTC.2
+'D6 to pin 13 on LCD
+#DEFINE GLCD_DB6 PORTC.1
+'D7 to pin 14 on LCD
+#DEFINE GLCD_DB7 PORTC.0
 
-  #define KS0108ReadDelay    4    ; = 2 normal usage, 6 or above is OK at 32 mhz!
-  #define KS0108WriteDelay   0    ; = 1 normal usage you may get away with 0, 2 or above is OK at 32 mhz!
-  #define KS0108ClockDelay   0     ; = 1 normal usage you may get away with 0, 2 or above is OK at 32 mhz!
+' = 2 normal usage, 6 or above is OK at 32 mhz!
+#DEFINE KS0108ReadDelay    4
+' = 1 normal usage you may get away with 0, 2 or above is OK at 32 mhz!
+#DEFINE KS0108WriteDelay   0
+' = 1 normal usage you may get away with 0, 2 or above is OK at 32 mhz!
+#DEFINE KS0108ClockDelay   0
 
 
-; ----- Constants
-  ' DS18B20 port settings
-  #define DQ PortC.4
+' ----- Constants
+' DS18B20 port settings
+#DEFINE DQ PortC.4
 
-; ----- Variables
-  dim TempC_100 as word   ' a variabler to handle the temperature calculations
-  Dim CCOUNT, DSDATA as Byte
+' ----- Variables
+' a variabler to handle the temperature calculations
+Dim TempC_100 As Word
+Dim CCOUNT, DSDATA As Byte
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
-    ccount = 1
-    GLCDCLS
-    GLCDPrint(0, 0, "GCBasic 2019" )
+ccount = 1
+GLCDCLS
+GLCDPrint(0, 0, "GCBasic 2019" )
 
-    GLCDPrint(0, 8, "DS18B20 Demo" )
+GLCDPrint(0, 8, "DS18B20 Demo" )
 
 
-    do forever
-       ' The function readtemp returns the integer value of the sensor
-       DSdata = readtemp
+Do Forever
+    ' The function readtemp returns the integer value of the sensor
+    DSdata = ReadTemp
 
-       GLCDPrint(0, 24, "Reading" )
-       GLCDPrint(48, 24,  hex(ccount) )
-       ' Display the integer value of the sensor on the LCD
-       GLCDPrint(66, 24,  str(DSdata) + "c" )
-       DSdata = ((( DSdata * 9) /5) + 32 )
-       GLCDPrint(66, 32,  str(DSdata) + "f" )
+    GLCDPrint(0, 24, "Reading" )
+    GLCDPrint(48, 24,  Hex(ccount) )
+    ' Display the integer value of the sensor on the LCD
+    GLCDPrint(66, 24,  Str(DSdata) + "c" )
+    DSdata = ((( DSdata * 9) /5) + 32 )
+    GLCDPrint(66, 32,  Str(DSdata) + "f" )
 
-       wait 2 s
-       ccount++
+    Wait 2 s
+    ccount++
 
-    loop
+Loop

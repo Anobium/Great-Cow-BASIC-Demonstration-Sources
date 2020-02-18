@@ -10,63 +10,65 @@
 '''@date    31.01.15
 '''********************************************************************************
 
-; ----- Configuration
-  #chip mega8, 8
-  #option explicit
-  #include "displaydevices.h"
+' ----- Configuration
+#CHIP mega8, 8
+#OPTION Explicit
+#INCLUDE "displaydevices.h"
 
-; ----- Define Hardware settings
-  HI2CMode Master
-  #define HI2C_DATA            ; This IS MANDATED!!!
-  #define HI2C_BAUD_RATE 400   ; 100 or 400 is valid
+' ----- Define Hardware settings
+HI2CMode Master
+' This IS MANDATED!!!
+#DEFINE HI2C_DATA
+' 100 or 400 is valid
+#DEFINE HI2C_BAUD_RATE 400
 
- ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
- ' USART settings - CHANGE PORTS if required
- #define USART_BAUD_RATE 9600
- Dir PORTD.1 Out
- Dir PORTD.0 In
- #define USART_DELAY 10 ms
- #define SerSendDelayms 10
- #define USART_BLOCKING
- wait 500 ms
+' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
+' USART settings - CHANGE PORTS if required
+#DEFINE USART_BAUD_RATE 9600
+Dir PORTD.1 Out
+Dir PORTD.0 In
+#DEFINE USART_DELAY 10 ms
+#DEFINE SerSendDelayms 10
+#DEFINE USART_BLOCKING
+Wait 500 ms
 
-;----- Variables
-  Dim DEVICEID, TESTID as Byte
+'----- Variables
+Dim DEVICEID, TESTID As Byte
 
-; ----- Main body of program commences here.
-        ' Now assumes Serial Terminal is operational
-         HSerPrintCRLF 2
-         HSerPrint "Hardware I2C "
-         HSerPrint ChipNameStr
-         HSerPrintCRLF
+' ----- Main body of program commences here.
+' Now assumes Serial Terminal is operational
+HSerPrintCRLF 2
+HSerPrint "Hardware I2C "
+HSerPrint ChipNameStr
+HSerPrintCRLF
 
-              for deviceID = 0 to 255
-                HI2CStart
-                if HI2CWaitMSSPTimeout <> True then
+For deviceID = 0 To 255
+    HI2CStart
+    If HI2CWaitMSSPTimeout <> TRUE Then
 
-                    HI2CSend ( deviceID )
+        HI2CSend ( deviceID )
 
-                    if HI2CAckPollState = false then
-                      HSerPrintCRLF
-                      HSerPrint   "ID: 0x"
-                      HSerPrint   hex(deviceID)
-                      HSerSend 9
-                      testid =  deviceID | 1
-                      DisplayDevices
-                      HI2CSend ( 0 )
+        If HI2CAckpollState = FALSE Then
+            HSerPrintCRLF
+            HSerPrint   "ID: 0x"
+            HSerPrint   Hex(deviceID)
+            HSerSend 9
+            testid =  deviceID | 1
+            DisplayDevices
+            HI2CSend ( 0 )
 
-                    end if
+        End If
 
-                   HI2CStop
+        HI2CStop
 
-                end if
-              next
+    End If
+Next
 
-              HSerPrintCRLF
-              HSerPrint   "End Search"
-         HSerPrintCRLF 2
+HSerPrintCRLF
+HSerPrint   "End Search"
+HSerPrintCRLF 2
 
-         end
+End
 
 
-; ----- Support methods.  Subroutines and Functions
+' ----- Support methods.  Subroutines and Functions

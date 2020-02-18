@@ -1,63 +1,63 @@
 '''A demonstration program for Explicit-Paper from WaveShare.
- '''-------------------------------------------------------------------------
+'''-------------------------------------------------------------------------
 ' -------------------------------------------------------
- '''This has been tested using the hardware and software SPI option.
+'''This has been tested using the hardware and software SPI option.
 
- '''*************************************************************************
+'''*************************************************************************
 
 
-     'Chip Settings.
+'Chip Settings.
 
-     #chip mega328p, 16
-    #include <uno_mega328p.h>
-     #option explicit
+#CHIP mega328p, 16
+#INCLUDE <uno_mega328p.h>
+#OPTION Explicit
 
-     #include <glcd.h>
-     #define GLCD_TYPE GLCD_TYPE_EPD_EPD2in13D
-     #define GLCD_TYPE_EPD2in13D_LOWMEMORY4_GLCD_MODE
-     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-     #define GLCD_DC     DIGITAL_9
-     #define GLCD_CS     DIGITAL_10
-     #define GLCD_RESET  DIGITAL_8
-     #define GLCD_DO     DIGITAL_11
-     #define GLCD_SCK    DIGITAL_13
-     #define GLCD_Busy   DIGITAL_7
+#INCLUDE <glcd.h>
+#DEFINE GLCD_TYPE GLCD_TYPE_EPD_EPD2in13D
+#DEFINE GLCD_TYPE_EPD2in13D_LOWMEMORY4_GLCD_MODE
+'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+#DEFINE GLCD_DC     DIGITAL_9
+#DEFINE GLCD_CS     DIGITAL_10
+#DEFINE GLCD_RESET  DIGITAL_8
+#DEFINE GLCD_DO     DIGITAL_11
+#DEFINE GLCD_SCK    DIGITAL_13
+#DEFINE GLCD_Busy   DIGITAL_7
 '***********************************************************************************************
 'Main program
 
-    GLCDForeground=TFT_BLACK
-    GLCDBackground=TFT_WHITE
+GLCDForeground=TFT_BLACK
+GLCDBackground=TFT_WHITE
 
-    dim xloop as byte
+Dim xloop As Byte
 
-     GLCD_Open_PageTransaction
-        for xloop = 1 to 27
-            GLCDPrintString ""
-            GLCDPrintString "Line "
-            GLCDPrintStringLN Str(xloop)
-        next
-     GLCD_Close_PageTransaction
+GLCD_Open_PageTransaction
+For xloop = 1 To 27
+    GLCDPrintString ""
+    GLCDPrintString "Line "
+    GLCDPrintStringLn Str(xloop)
+Next
+GLCD_Close_PageTransaction
 
-     GLCDDisplay Off
-     wait 2 s
-     GLCDDisplay On
+GLCDDisplay Off
+Wait 2 s
+GLCDDisplay On
 
-    GLCDForeground=TFT_WHITE
-    GLCDBackground=TFT_BLACK
-
-
-     GLCD_Open_PageTransaction
-        for xloop = 1 to 27
-            GLCDPrintString ""
-            GLCDPrintString "Line "
-            GLCDPrintStringLN Str(xloop)
-        next
-     GLCD_Close_PageTransaction
-
-     GLCDDisplay Off
-     wait 2 s
-     GLCDDisplay On
+GLCDForeground=TFT_WHITE
+GLCDBackground=TFT_BLACK
 
 
-     GLCDCLS TFT_WHITE
-     GLCDDisplay off
+GLCD_Open_PageTransaction
+For xloop = 1 To 27
+    GLCDPrintString ""
+    GLCDPrintString "Line "
+    GLCDPrintStringLn Str(xloop)
+Next
+GLCD_Close_PageTransaction
+
+GLCDDisplay Off
+Wait 2 s
+GLCDDisplay On
+
+
+GLCDCLS TFT_WHITE
+GLCDDisplay Off

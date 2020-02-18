@@ -17,65 +17,65 @@
 '''@date   	08.04.2015
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
-  #chip 16f1938,16
-  #option explicit
-
-
-
-; ----- Constants
-  #define KEYPAD_ROW_1 portb.3
-  #define KEYPAD_ROW_2 portb.2
-  #define KEYPAD_ROW_3 portb.1
-  #define KEYPAD_ROW_4 portb.0
-  #define KEYPAD_COL_1 portc.0
-  #define KEYPAD_COL_2 portc.1
-  #define KEYPAD_COL_3 portc.2
-  #define KEYPAD_COL_4 portc.3
-
-  #define LOCKED PORTc.4
-  #define UNLOCKED PORTc.5
-
-; ----- Define Hardware settings
-  'Set to locked initially
-  Set LOCKED On
-
-; ----- Variables
-  Dim PressedKey As byte
-  Dim KeyBuffer(4)
-  Dim RESETBUFFER as Byte
+#CHIP 16f1938,16
+#OPTION Explicit
 
 
-; ----- Main body of program commences here.
-  Do Forever
 
-  'Read current pressed key
-      PressedKey = KeypadData
+' ----- Constants
+#DEFINE KEYPAD_ROW_1 portb.3
+#DEFINE KEYPAD_ROW_2 portb.2
+#DEFINE KEYPAD_ROW_3 portb.1
+#DEFINE KEYPAD_ROW_4 portb.0
+#DEFINE KEYPAD_COL_1 portc.0
+#DEFINE KEYPAD_COL_2 portc.1
+#DEFINE KEYPAD_COL_3 portc.2
+#DEFINE KEYPAD_COL_4 portc.3
 
-      'If no key is pressed, KeypadData returns 255. Otherwise, it gives the pressed key.
-      If PressedKey <> 255 Then
+#DEFINE LOCKED PORTc.4
+#DEFINE UNLOCKED PORTc.5
 
-          'If a key is pressed, wait until it is released. (Multiple presses will be detected otherwise)
-          Wait Until KeypadData = 255
-          Wait 25 ms
+' ----- Define Hardware settings
+'Set to locked initially
+Set LOCKED On
 
-          'Store the pressed key in a list of pressed keys
-          StoreKey PressedKey
+' ----- Variables
+Dim PressedKey As Byte
+Dim KeyBuffer(4)
+Dim RESETBUFFER As Byte
 
-          'Check the list of pressed keys
-          CheckCode
 
-      End If
-  Loop
+' ----- Main body of program commences here.
+Do Forever
 
-  end
+    'Read current pressed key
+    PressedKey = KeypadData
 
-; ----- Support methods.  Subroutines and Functions
+    'If no key is pressed, KeypadData returns 255. Otherwise, it gives the pressed key.
+    If PressedKey <> 255 Then
+
+        'If a key is pressed, wait until it is released. (Multiple presses will be detected otherwise)
+        Wait Until KeypadData = 255
+        Wait 25 ms
+
+        'Store the pressed key in a list of pressed keys
+        StoreKey PressedKey
+
+        'Check the list of pressed keys
+        CheckCode
+
+    End If
+Loop
+
+End
+
+' ----- Support methods.  Subroutines and Functions
 
 '''Store a pressed key
 '''@param NewKey Key to store
-  Sub StoreKey (In NewKey)
+Sub StoreKey (In NewKey)
     'Move the last 3 keys along in the array
     KeyBuffer(1) = KeyBuffer(2)
     KeyBuffer(2) = KeyBuffer(3)
@@ -83,29 +83,29 @@
 
     'Store the most recently pressed key at the end of the array
     KeyBuffer(4) = NewKey
-  End Sub
+End Sub
 
 '''Check entered code
-  Sub CheckCode
+Sub CheckCode
     'Check each of the last 4 pressed keys to see if it matches the correct sequence.
     'The sequence is 4242, and can be changed by editing the If commands
     If KeyBuffer(1) = 4 Then
-      If KeyBuffer(2) = 2 Then
-        If KeyBuffer(3) = 4 Then
-          If KeyBuffer(4) = 2 Then
+        If KeyBuffer(2) = 2 Then
+            If KeyBuffer(3) = 4 Then
+                If KeyBuffer(4) = 2 Then
 
-            'If the correct sequence was entered, turn off the LOCKED output, and turn on the UNLOCKED output
-            Set LOCKED Off
-            Set UNLOCKED On
-            for ResetBuffer = 1 to 4
-                KeyBuffer(ResetBuffer) = 255
-            next
+                    'If the correct sequence was entered, turn off the LOCKED output, and turn on the UNLOCKED output
+                    Set LOCKED Off
+                    Set UNLOCKED On
+                    For ResetBuffer = 1 To 4
+                        KeyBuffer(ResetBuffer) = 255
+                    Next
 
-            'Then, exit from the subroutine to avoid the locking code below
-            Exit Sub
-          End If
+                    'Then, exit from the subroutine to avoid the locking code below
+                    Exit Sub
+                End If
+            End If
         End If
-      End If
     End If
 
     PulseOut locked, 10 ms
@@ -114,5 +114,5 @@
     'If the program gets to this point, then the code was incorrect. Lock again!
     Set LOCKED On
     Set UNLOCKED Off
-  End Sub
+End Sub
 

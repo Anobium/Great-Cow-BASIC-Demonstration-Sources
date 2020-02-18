@@ -10,60 +10,60 @@
 '''@date    02.10.2016
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
-  #chip mega8, 8
-  #option explicit
+#CHIP mega8, 8
+#OPTION Explicit
 
-; ----- Define Hardware settings
+' ----- Define Hardware settings
 
-; ----- Constants
-  ; You need to specify the port settings
-  #define DISP_SEG_A PORTB.0
-  #define DISP_SEG_B PORTB.1
-  #define DISP_SEG_C PORTB.2
-  #define DISP_SEG_D PORTB.3
-  #define DISP_SEG_E PORTB.4
-  #define DISP_SEG_F PORTB.5
-  #define DISP_SEG_G PORTB.6
-  #define DISP_SEL_1 PORTD.1
+' ----- Constants
+' You need to specify the port settings
+#DEFINE DISP_SEG_A PORTB.0
+#DEFINE DISP_SEG_B PORTB.1
+#DEFINE DISP_SEG_C PORTB.2
+#DEFINE DISP_SEG_D PORTB.3
+#DEFINE DISP_SEG_E PORTB.4
+#DEFINE DISP_SEG_F PORTB.5
+#DEFINE DISP_SEG_G PORTB.6
+#DEFINE DISP_SEL_1 PORTD.1
 
-  #define DISP_SEG_DOT PORTD.2
+#DEFINE DISP_SEG_DOT PORTD.2
 
 
 'Read the helpfile how to use 7 Segment Displays
-  #define 7Seg_CommonAnode
+#DEFINE 7Seg_CommonAnode
 
-; ----- Variables
-  Dim Temp, Counter as Byte
+' ----- Variables
+Dim Temp, Counter As Byte
 
-  Dim Message As String
-  Message = " ABCDEFGHIJKLMNOPQRSTUVWXYZ "
+Dim Message As String
+Message = " ABCDEFGHIJKLMNOPQRSTUVWXYZ "
 
-; ----- Main body of program commences here.
-  Do
+' ----- Main body of program commences here.
+Do
 
-  'show number (0-15) on 7 Segment Display
-  'Numbers > 9 will be translated into a HEX number
-    For Temp = 0 to 15
-      DisplayValue 1, Temp
-      wait 1 s
-    next
-
-    'Blink Segment dot, for Common Anode invert the DISP_SEG_DOT ON/OFF
-    wait 1 s
-    set DISP_SEG_DOT OFF
-    wait 500 ms
-    set DISP_SEG_DOT ON
-    wait 500 ms
-    set DISP_SEG_DOT OFF
-    wait 500 ms
-    set DISP_SEG_DOT ON
-
-    'Push message to 7 Segment Display
-    For Counter = 1 to 28
-      DisplayChar 1, Message(Counter)
-      Wait 750 ms
+    'show number (0-15) on 7 Segment Display
+    'Numbers > 9 will be translated into a HEX number
+    For Temp = 0 To 15
+        DisplayValue 1, Temp
+        Wait 1 s
     Next
 
-  Loop
+    'Blink Segment dot, for Common Anode invert the DISP_SEG_DOT ON/OFF
+    Wait 1 s
+    Set DISP_SEG_DOT Off
+    Wait 500 ms
+    Set DISP_SEG_DOT On
+    Wait 500 ms
+    Set DISP_SEG_DOT Off
+    Wait 500 ms
+    Set DISP_SEG_DOT On
+
+    'Push message to 7 Segment Display
+    For Counter = 1 To 28
+        DisplayChar 1, Message(Counter)
+        Wait 750 ms
+    Next
+
+Loop

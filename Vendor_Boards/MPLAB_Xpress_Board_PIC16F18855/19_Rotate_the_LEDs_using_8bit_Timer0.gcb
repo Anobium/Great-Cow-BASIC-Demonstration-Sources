@@ -24,40 +24,40 @@
 '''
 
 
-    'Chip Settings.
-    #chip 16f18855, 32
+'Chip Settings.
+#CHIP 16f18855, 32
 
-    '' -------------------LATA-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D1 |-
-    ''-----------------------------------------
-    ''
+'' -------------------LATA-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D1 |-
+''-----------------------------------------
+''
 
-    dir porta out
-    porta = b'00000001'
+Dir porta Out
+porta = b'00000001'
 
-    'Setup the timer.
-    'params    Source, Prescaler                , Postscaler
-    InitTimer0 Osc, PRE0_16384 + TMR0_HFINTOSC   , POST0_11
+'Setup the timer.
+'params    Source, Prescaler                , Postscaler
+InitTimer0 Osc, PRE0_16384 + TMR0_HFINTOSC   , POST0_11
 
-    ' Start the Timer by writing to TMR0ON bit
-    StartTimer 0
+' Start the Timer by writing to TMR0ON bit
+StartTimer 0
 
-    ' Set the Timer start value
-    SetTimer ( 0, 0xB1 )
+' Set the Timer start value
+SetTimer ( 0, 0xB1 )
 
-    do
-        wait while TMR0IF = 0
+Do
+    Wait While TMR0IF = 0
 
-        ' Clearing IF flag.
-        TMR0IF = 0
+    ' Clearing IF flag.
+    TMR0IF = 0
 
-        'Set the carry flag
-        C = 0
-        Rotate porta right
-        if C = 1 then porta.3 = 1
+    'Set the carry flag
+    C = 0
+    Rotate porta Right
+    If C = 1 Then porta.3 = 1
 
-        'Clear the timer to Zero.
-        ClearTimer 0
+    'Clear the timer to Zero.
+    ClearTimer 0
 
-    loop
+Loop

@@ -1,46 +1,51 @@
-  #chip mega328p, 16
-  #option explicit
+#CHIP mega328p, 16
+#OPTION Explicit
 
 
-    #include <glcd.h>
-    #include <uno_mega328p.h >
+#INCLUDE <glcd.h>
+#INCLUDE <uno_mega328p.h >
 
-    #define GLCD_TYPE GLCD_TYPE_HX8347
-    #define GLCD_OLED_FONT
+#DEFINE GLCD_TYPE GLCD_TYPE_HX8347
+#DEFINE GLCD_OLED_FONT
 
-    GLCDfntDefaultSize = 2
+GLCDfntDefaultSize = 2
 
-    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-    #define GLCD_RD       ANALOG_0          ' read command line
-    #define GLCD_WR       ANALOG_1          ' write command line
-    #define GLCD_RS       ANALOG_2          ' Command/Data line
-    #define GLCD_CS       ANALOG_3          ' Chip select line
-    #define GLCD_RST      ANALOG_4          ' Reset line
-
-
-
-    #define GLCD_DB0       DIGITAL_8
-    #define GLCD_DB1       DIGITAL_9
-    #define GLCD_DB2       DIGITAL_2
-    #define GLCD_DB3       DIGITAL_3
-    #define GLCD_DB4       DIGITAL_4
-    #define GLCD_DB5       DIGITAL_5
-    #define GLCD_DB6       DIGITAL_6
-    #define GLCD_DB7       DIGITAL_7
+'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+' read command line
+#DEFINE GLCD_RD       ANALOG_0
+' write command line
+#DEFINE GLCD_WR       ANALOG_1
+' Command/Data line
+#DEFINE GLCD_RS       ANALOG_2
+' Chip select line
+#DEFINE GLCD_CS       ANALOG_3
+' Reset line
+#DEFINE GLCD_RST      ANALOG_4
 
 
-    GLCDCLS HX8347_BLACK
-    GLCDPrintStringLn "Line 1"
-    GLCDPrintStringLn "Line 2"
-    GLCDPrintStringLn "Line 3"
-    GLCDLocateString ( 0, 1 )
-    GLCDPrintStringLn "Line 1"
 
-    wait 1 s
+#DEFINE GLCD_DB0       DIGITAL_8
+#DEFINE GLCD_DB1       DIGITAL_9
+#DEFINE GLCD_DB2       DIGITAL_2
+#DEFINE GLCD_DB3       DIGITAL_3
+#DEFINE GLCD_DB4       DIGITAL_4
+#DEFINE GLCD_DB5       DIGITAL_5
+#DEFINE GLCD_DB6       DIGITAL_6
+#DEFINE GLCD_DB7       DIGITAL_7
 
-    GLCDRotate ( Landscape )
-    GLCDCLS HX8347_BLACK
-    GLCDPrintString "Landscape"
-    wait 1 s
 
-    end
+GLCDCLS HX8347_BLACK
+GLCDPrintStringLn "Line 1"
+GLCDPrintStringLn "Line 2"
+GLCDPrintStringLn "Line 3"
+GLCDLocateString ( 0, 1 )
+GLCDPrintStringLn "Line 1"
+
+Wait 1 s
+
+GLCDRotate ( Landscape )
+GLCDCLS HX8347_BLACK
+GLCDPrintString "Landscape"
+Wait 1 s
+
+End

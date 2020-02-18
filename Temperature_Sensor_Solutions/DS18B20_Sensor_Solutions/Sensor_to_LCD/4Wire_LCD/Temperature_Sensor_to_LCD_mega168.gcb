@@ -9,94 +9,95 @@
 '''@date   	14.02.2015
 '''********************************************************************************
 
-; ----- Configuration
- #chip mega168, 16
- #option explicit
- #include <ds18b20.h>
+' ----- Configuration
+#CHIP mega168, 16
+#OPTION Explicit
+#INCLUDE <ds18b20.h>
 
-  ;Setup LCD Parameters
-  #define LCD_IO 4
-  #define LCD_NO_RW
-  #define LCD_Speed MEDIUM
+'Setup LCD Parameters
+#DEFINE LCD_IO 4
+#DEFINE LCD_NO_RW
+#DEFINE LCD_SPEED MEDIUM
 
-  'Change as necessary
-  #define LCD_RS PortC.0
-  #define LCD_Enable PortC.1
-  #define LCD_DB4 Portd.4
-  #define LCD_DB5 Portd.5
-  #define LCD_DB6 Portd.6
-  #define LCD_DB7 Portd.7
+'Change as necessary
+#DEFINE LCD_RS PortC.0
+#DEFINE LCD_Enable PortC.1
+#DEFINE LCD_DB4 Portd.4
+#DEFINE LCD_DB5 Portd.5
+#DEFINE LCD_DB6 Portd.6
+#DEFINE LCD_DB7 Portd.7
 
-; ----- Constants
-  ' DS18B20 port settings
-  #define DQ PortC.3
+' ----- Constants
+' DS18B20 port settings
+#DEFINE DQ PortC.3
 
-; ----- Variables
-  ' a variable to handle the temperature calculations
-  dim TempC_100 as word
-  Dim CCOUNT, SIGNBIT, WHOLE, FRACT, DIG as Byte
-
-
-; ----- Main body of program commences here.
-
-    ccount = 0
-    CLS
-    print "GCBasic 2019"
-    locate 1,0
-    print "DS18B20 Demo"
-  '  wait 2 s
-    CLS
-
-    do forever
-       ' The function readtemp returns the integer value of the sensor
-       DSdata = readtemp
-       ' Display the integer value of the sensor on the LCD
-       locate 0,0
-       print hex(ccount)
-       print " Ceil"
-       locate 0,8
-       print DSdata
-       print chr(223)+"C"
+' ----- Variables
+' a variable to handle the temperature calculations
+Dim TempC_100 As Word
+Dim CCOUNT, SIGNBIT, WHOLE, FRACT, DIG As Byte
 
 
+' ----- Main body of program commences here.
 
-       ' Display the integer and decimal value of the sensor on the LCD
+ccount = 0
+CLS
+Print "GCBasic 2019"
+Locate 1,0
+Print "DS18B20 Demo"
+'  wait 2 s
+CLS
 
-       ' The function readtemp12 returns the raw value of the sensor.
-       ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
-       DSdata = readtemp12
-       SignBit = DSdata / 256 / 128
-       If SignBit = 0 Then goto Positive
-       ' its negative!
-       DSdata = ( DSdata # 0xffff ) + 1 ' take twos comp
+Do Forever
+    ' The function readtemp returns the integer value of the sensor
+    DSdata = ReadTemp
+    ' Display the integer value of the sensor on the LCD
+    Locate 0,0
+    Print Hex(ccount)
+    Print " Ceil"
+    Locate 0,8
+    Print DSdata
+    Print CHR(223)+"C"
 
-    Positive:
 
-       ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
-       TempC_100 =  DSdata * 6
-       DSdata = ( DSdata * 25 ) / 100
-       TempC_100 = TempC_100 + DSdata
 
-       Whole = TempC_100 / 100
-       Fract = TempC_100 % 100
-       If SignBit = 0 Then goto DisplayTemp
-       Print "-"
+    ' Display the integer and decimal value of the sensor on the LCD
 
-    DisplayTemp:
-       locate 1,0
-       print hex(ccount)
-       print " Real"
-       locate 1,8
-       print str(Whole)
-       print "."
-      ' To ensure the decimal part is two digits
-       Dig = Fract / 10
-       print Dig
-       Dig = Fract % 10
-       print Dig
-       print chr(223)
-       print "C"
-       wait 2 s
-       ccount++
+    ' The function readtemp12 returns the raw value of the sensor.
+    ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
+    DSdata = ReadTemp12
+    SignBit = DSdata / 256 / 128
+    If SignBit = 0 Then Goto Positive
+    ' its negative!
+    ' take twos comp
+    DSdata = ( DSdata # 0xffff ) + 1
 
-    loop
+Positive:
+
+    ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
+    TempC_100 =  DSdata * 6
+    DSdata = ( DSdata * 25 ) / 100
+    TempC_100 = TempC_100 + DSdata
+
+    Whole = TempC_100 / 100
+    Fract = TempC_100 % 100
+    If SignBit = 0 Then Goto DisplayTemp
+    Print "-"
+
+DisplayTemp:
+    Locate 1,0
+    Print Hex(ccount)
+    Print " Real"
+    Locate 1,8
+    Print Str(Whole)
+    Print "."
+    ' To ensure the decimal part is two digits
+    Dig = Fract / 10
+    Print Dig
+    Dig = Fract % 10
+    Print Dig
+    Print CHR(223)
+    Print "C"
+    Wait 2 s
+    ccount++
+
+Loop

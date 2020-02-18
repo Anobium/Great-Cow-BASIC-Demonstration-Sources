@@ -9,52 +9,54 @@
 '''@date    14.11.2019
 '''********************************************************************************
 
-; ----- Configuration
-#chip 12F510
+' ----- Configuration
+#CHIP 12F510
 
-  ' #include
-  ' no solution specifc includes, default includes are always included
+' #include
+' no solution specifc includes, default includes are always included
 
-; ----- Define Hardware settings
-  ' this is required to tell the microprocessor the port is an output
+' ----- Define Hardware settings
+' this is required to tell the microprocessor the port is an output
 '  Dir GPIO.2 Out
 
-; ----- Variables
+' ----- Variables
 ' none specified in the example. All byte variables are defined upon use.
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
-  Do
+Do
 
-        Set GPIO.2 ON   'turn LED on
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
+    'turn LED on
+    Set GPIO.2 On
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
 
-        Set GPIO.2 OFF  'turn LED off
+    'turn LED off
+    Set GPIO.2 Off
 
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
-        NOP
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
 
 
-   Loop
-   End
+Loop
+End

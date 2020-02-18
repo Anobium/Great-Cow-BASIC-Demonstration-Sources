@@ -22,155 +22,160 @@
 '''  Date: 29.8.17
 '''
 ' ----- Configuration
-    'Chip Settings.
-    #chip 18f26k22, 16
-     #config MCLRE=on
-    #option Explicit
+'Chip Settings.
+#CHIP 18f26k22, 16
+#CONFIG MCLRE=On
+#OPTION Explicit
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | A |-------| O | I |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | A |-------| O | I |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---| TX|---|SDA|CLK| X |---------
-    ''-----------------------------------------
-    ''
-
-
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define Potentiometer   PORTC.5
-    #define LDR             PORTB.4
-    #define SwitchIn        PORTB.0
-    #define LCDControl      PORTC.2
-
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     Potentiometer In   'this is the AN17 port
-    Dir     LDR           In   'this is the AN11 port
-    Dir     SwitchIn      In
-    Dir     LCDControl    Out
-
-    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
-    LCDControl = 1
-
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
-
-    ' Define I2C settings
-    #define HI2C_BAUD_RATE 400
-    #define HI2C_DATA PORTC.4
-    #define HI2C_CLOCK PORTC.3
-    'Initialise I2C Slave
-    'I2C pins need to be input for SSP module - this is not an option
-    Dir HI2C_DATA in
-    Dir HI2C_CLOCK in
-    'MASTER
-    HI2CMode Master
-
-    #include <glcd.h>
-    #define GLCD_TYPE GLCD_TYPE_SSD1306
-    #define GLCD_I2C_Address 0x78
-
-    #include <trig2places.h>
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---| TX|---|SDA|CLK| X |---------
+''-----------------------------------------
+''
 
 
-    'These constants allow you to change the GLCD memory usage.
-    #define GLCD_PROTECTOVERRUN
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE Potentiometer   PORTC.5
+#DEFINE LDR             PORTB.4
+#DEFINE SwitchIn        PORTB.0
+#DEFINE LCDControl      PORTC.2
+
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+'this is the AN17 port
+Dir     Potentiometer In
+'this is the AN11 port
+Dir     LDR           In
+Dir     SwitchIn      In
+Dir     LCDControl    Out
+
+'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+LCDControl = 1
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+' Define I2C settings
+#DEFINE HI2C_BAUD_RATE 400
+#DEFINE HI2C_DATA PORTC.4
+#DEFINE HI2C_CLOCK PORTC.3
+'Initialise I2C Slave
+'I2C pins need to be input for SSP module - this is not an option
+Dir HI2C_DATA In
+Dir HI2C_CLOCK In
+'MASTER
+HI2CMode Master
+
+#INCLUDE <glcd.h>
+#DEFINE GLCD_TYPE GLCD_TYPE_SSD1306
+#DEFINE GLCD_I2C_Address 0x78
+
+#INCLUDE <trig2places.h>
+
+
+'These constants allow you to change the GLCD memory usage.
+#DEFINE GLCD_PROTECTOVERRUN
 '*******************************************************************************************
 
 
 
-    'analogue port selection
-    #define ADCChannelSelected AN11
+'analogue port selection
+#DEFINE ADCChannelSelected AN11
 
-    #define ADSpeed LowSpeed
+#DEFINE ADSpeed LowSpeed
 
-    dim radius,xcentre,ycentre,xend,old_xend,yend,old_yend as byte
-    dim angle,old_angle,adcval as word
-    dim volts as string * 4
-    xcentre=63
-    ycentre=58
-    ;draw dial
-    GLCDCLS
-    box 0,0,127,63
-    for radius=144 to 141
-      dial
-    next radius
-    GLCDDrawChar (5,40,asc("0")):GLCDDrawChar (115,40,asc("5"))
-    radius=120
-    angle=1
+Dim radius,xcentre,ycentre,xend,old_xend,yend,old_yend As Byte
+Dim angle,old_angle,adcval As Word
+Dim volts As String * 4
+xcentre=63
+ycentre=58
+'draw dial
+GLCDCLS
+Box 0,0,127,63
+For radius=144 To 141
+    dial
+Next radius
+GLCDDrawChar (5,40,Asc("0")):GLCDDrawChar (115,40,Asc("5"))
+radius=120
+angle=1
+anglecheck
+'main
+Do
+    old_angle=angle
+    '--- DVM
+    adcval=ReadAD(ADCChannelSelected)
+    angle=adcval/2
+    '
+    adcval=adcval*100
+    adcval=adcval/51
+    volts=Str(adcval)
+    If adcval<10 Then
+        volts="0.0"+Left(volts,1,1)
+        Goto volt_format_done
+    End If
+    If adcval<100 Then
+        volts="0."+Mid(volts,1,2)
+    Else
+        volts=Left(volts,1,1)+"."+Mid(volts,2,2)
+    End If
+volt_format_done:
+    '---
     anglecheck
-    ;main
-    do
-      old_angle=angle
-    ;--- DVM
-      adcval=ReadAD(ADCChannelSelected)
-      angle=adcval/2
-    ;
-      adcval=adcval*100
-      adcval=adcval/51
-      volts=str(adcval)
-      if adcval<10 then
-        volts="0.0"+left(volts,1,1)
-        goto volt_format_done
-      end if
-      if adcval<100 then
-        volts="0."+mid(volts,1,2)
-      else
-        volts=left(volts,1,1)+"."+mid(volts,2,2)
-      end if
-      volt_format_done:
-    ;---
-      anglecheck
-      old_xend = xcentre + radius  * sin (old_angle)/255
-      old_yend = ycentre - radius  * cos (old_angle)/255
-      xend = xcentre + radius  * sin (angle)/255
-      yend = ycentre - radius  * cos (angle)/255
-      if old_angle<>angle then ;-- update screen if volts has changed
-    ;   erase old needle
-        line (xcentre,ycentre,old_xend,old_yend,0)
-    ;   draw V
-        line (55,22,63,38):line (63,38,71,22)
-    ;   print new voltage
-        GLCDPrint (50,10,volts,1) ;print Voltage
-    ;   draw new needle
-        line (xcentre,ycentre,xend,yend,1)
-        wait 20 ms
-      end if
-    loop
-    ;end main
+    old_xend = xcentre + radius  * sin (old_angle)/255
+    old_yend = ycentre - radius  * cos (old_angle)/255
+    xend = xcentre + radius  * sin (angle)/255
+    yend = ycentre - radius  * cos (angle)/255
+    If old_angle<>angle Then
+        '-- update screen if volts has changed
+        '   erase old needle
+        
+        Line (xcentre,ycentre,old_xend,old_yend,0)
+        '   draw V
+        Line (55,22,63,38):Line (63,38,71,22)
+        '   print new voltage
+        'print Voltage
+        GLCDPrint (50,10,volts,1)
+        '   draw new needle
+        Line (xcentre,ycentre,xend,yend,1)
+        Wait 20 ms
+    End If
+Loop
+'end main
 
 
-    sub plotdial
-      xend = 63 + radius  * sin (angle)/255
-      yend = 58 - radius  * cos (angle)/255
-      pset (xend,yend,1)
-    end sub
-    ;
-    sub dial
-      for angle= 296 to 359
+Sub plotdial
+    xend = 63 + radius  * sin (angle)/255
+    yend = 58 - radius  * cos (angle)/255
+    Pset (xend,yend,1)
+End Sub
+'
+Sub dial
+    For angle= 296 To 359
         plotdial
-      next angle
-    ;
-      for angle= 0 to 63
+    Next angle
+    '
+    For angle= 0 To 63
         plotdial
-      next angle
-    end sub
-    ;
-    sub anglecheck
-      if angle>127 then
+    Next angle
+End Sub
+'
+Sub anglecheck
+    If angle>127 Then
         angle =angle-127
-      else
+    Else
         angle =296+angle
-      end if
-    end sub
+    End If
+End Sub

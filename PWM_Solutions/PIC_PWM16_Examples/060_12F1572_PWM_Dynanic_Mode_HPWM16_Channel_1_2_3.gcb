@@ -9,14 +9,17 @@
 '
 ' To set the parameters of Great Cow BASIC PWM dynamic mode for the three channels use the following:
 
-    #chip 12F1572, 32
-    #config mclr=on
+#CHIP 12F1572, 32
+#CONFIG mclr=On
 
-    Dir PORTA Out
+Dir PORTA Out
 
-    HPWM16(1, 10, 16384)   '10 kHz, 25% duty cycle (16384/65535)
-    HPWM16(2, 20, 16384)   '20 kHz, 25% duty cycle (16384/65535)
-    HPWM16(3, 30, 16384)   '30 kHz, 25% duty cycle (16384/65535)
+'10 kHz, 25% duty cycle (16384/65535)
+HPWM16(1, 10, 16384)
+'20 kHz, 25% duty cycle (16384/65535)
+HPWM16(2, 20, 16384)
+'30 kHz, 25% duty cycle (16384/65535)
+HPWM16(3, 30, 16384)
 
-    do Forever
-    loop
+Do Forever
+Loop

@@ -4,20 +4,22 @@
 #DEFINE ADSpeed MediumSpeed
 
 'Config Software-UART
-#DEFINE SendAHigh Set RS232Out ON
-#DEFINE SendALow Set RS232Out OFF
-#DEFINE RecAHigh Set RS232In ON
-#DEFINE RecALow Set RS232In OFF
-DIR RS232Out OUT
-DIR RS232In IN
-DIR PortB.4 IN
-DIM POTI AS BYTE
+#DEFINE SendAHigh Set RS232Out On
+#DEFINE SendALow Set RS232Out Off
+#DEFINE RecAHigh Set RS232In On
+#DEFINE RecALow Set RS232In Off
+Dir RS232Out Out
+Dir RS232In In
+Dir PortB.4 In
+Dim POTI As Byte
 InitSer 1, r9600, 1+WaitForStart, 8, 1, none, normal
 
-  DO
-      POTI = READAD(ADC2)
-      SerPrint 1, str(POTI)
-      SerSend 1, 13   'send new line to terminal
-      SerSend 1, 10   'send line feed to terminal
-      WAIT 100 MS
-  LOOP
+Do
+    POTI = ReadAD(ADC2)
+    SerPrint 1, Str(POTI)
+    'send new line to terminal
+    SerSend 1, 13
+    'send line feed to terminal
+    SerSend 1, 10
+    Wait 100 ms
+Loop

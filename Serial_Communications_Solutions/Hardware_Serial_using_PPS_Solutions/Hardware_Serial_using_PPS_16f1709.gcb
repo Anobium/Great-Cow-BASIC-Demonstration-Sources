@@ -9,37 +9,41 @@
 '''@date   	02.12.2015
 '''********************************************************************************
 
-; ----- Configuration
-#chip 16f1709, 4
+' ----- Configuration
+#CHIP 16f1709, 4
 
 
-	'Set the PPS of the PWM and the RS232 ports.
-    Intoff
-  	PPSLOCK = 0x55
-    PPSLOCK = 0xAA
-    PPSLOCKED = 0x00 	'unlock PPS
-    RXPPS=0x0D        'Pin RB5 source is an input for RX
-		RB7PPS=0x14       'Pin RB7 source is TX/CK
-    PPSLOCK = 0x55
-    PPSLOCK = 0xAA
-    PPSLOCKED = 0x01  'lock PPS
+'Set the PPS of the PWM and the RS232 ports.
+IntOff
+PPSLOCK = 0x55
+PPSLOCK = 0xAA
+'unlock PPS
+PPSLOCKED = 0x00
+'Pin RB5 source is an input for RX
+RXPPS=0x0D
+'Pin RB7 source is TX/CK
+RB7PPS=0x14
+PPSLOCK = 0x55
+PPSLOCK = 0xAA
+'lock PPS
+PPSLOCKED = 0x01
 
-    'USART settings - these MUST be set after the PPS settings
-    #define USART_BAUD_RATE 9600
-    #define USART_BLOCKING
-    #define USART_TX_BLOCKING
+'USART settings - these MUST be set after the PPS settings
+#DEFINE USART_BAUD_RATE 9600
+#DEFINE USART_BLOCKING
+#DEFINE USART_TX_BLOCKING
 
 
-; ----- Variables
-  ' No Variables specified in this example.
+' ----- Variables
+' No Variables specified in this example.
 
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
-    do
+Do
 
-    	HSerPrint "This is a demonstration of Hardware Serial"
-      HSerPrintCRLF
-      wait 1 s
+    HSerPrint "This is a demonstration of Hardware Serial"
+    HSerPrintCRLF
+    Wait 1 s
 
-    loop
+Loop

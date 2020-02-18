@@ -7,17 +7,19 @@
 ' #define PWM_Freq 38       'Frequency of PWM in KHz
 ' #define PWM_Duty 50       'Duty cycle of PWM
 
-  #chip 12F1572, 32
-   mclr=on
+#CHIP 12F1572, 32
+mclr=On
 
-  Dir PORTA Out
+Dir PORTA Out
 
-  'Change these constants to adapt the default channel PWM Settings
-  #define PWM_Freq 100       'Frequency of PWM in KHz
-  #define PWM_Duty 25       'Duty cycle of PWM
+'Change these constants to adapt the default channel PWM Settings
+'Frequency of PWM in KHz
+#DEFINE PWM_Freq 100
+'Duty cycle of PWM
+#DEFINE PWM_Duty 25
 
-  HPWM16On ( 1 )
+HPWM16On ( 1 )
 
-  do Forever
-  loop
+Do Forever
+Loop
 

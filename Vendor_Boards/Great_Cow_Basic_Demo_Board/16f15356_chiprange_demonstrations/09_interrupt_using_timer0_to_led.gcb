@@ -13,51 +13,64 @@
 '''@date    27/10/2018
 '''********************************************************************
 
-    #chip 16F15356          'Specify the Device you are compiling for - this board is the 16F15356
-                            'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
+'Specify the Device you are compiling for - this board is the 16F15356
+#CHIP 16F15356
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
 
-    #option Explicit        'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+#OPTION Explicit
 
 
 
-    #define LEDOn  = 1      'Set a constant.  The LED can be de-activated by driving the connected I/O line to the supply voltage via a suitable resistor.
-    #define LEDOff = 0      'Set a constant.  The LED can be activated by driving the connected I/O line to GND.
+'Set a constant.  The LED can be de-activated by driving the connected I/O line to the supply voltage via a suitable resistor.
+#DEFINE LEDOn  = 1
+'Set a constant.  The LED can be activated by driving the connected I/O line to GND.
+#DEFINE LEDOff = 0
 
-    #define LED0 portc.1    'Set a constant to refer to the LED. Attach via a suitable resistor.
-    dir LED0 out            'Set LED as an output
+'Set a constant to refer to the LED. Attach via a suitable resistor.
+#DEFINE LED0 portc.1
+'Set LED as an output
+Dir LED0 Out
 
 
 
 ''' Initialise the timer.
 
-    #define TMR0_16BIT                    'Firstly tell the compiler to use a 16bit timer for this demonstration
+'Firstly tell the compiler to use a 16bit timer for this demonstration
+#DEFINE TMR0_16BIT
 
-                                          'For this timer event we need the following settings
-                                          '  Prescaler
-                                          '      1:256
-                                          '       HF int Osc, and
-                                          '       NOT to sync Timer
-                                          '  Post scaler
-                                          '      1:2
-    InitTimer0 Osc, PRE0_256 + TMR0_HFINTOSC ,  POST0_2
+'For this timer event we need the following settings
+'  Prescaler
+'      1:256
+'       HF int Osc, and
+'       NOT to sync Timer
+'  Post scaler
+'      1:2
+InitTimer0 Osc, PRE0_256 + TMR0_HFINTOSC ,  POST0_2
 
-    StartTimer 0                          'Start the Timer.  You need to start the timer.
+'Start the Timer.  You need to start the timer.
+StartTimer 0
 
-    Settimer ( 0 , 0x0bdc  )              'Set the Interrupt every 1 sec which equates to the hex value of 0x0bdc
-                                          'To calculate this value use this tool  https://libstock.mikroe.com/projects/view/398/timer-calculator
+'Set the Interrupt every 1 sec which equates to the hex value of 0x0bdc
+SetTimer ( 0 , 0x0bdc  )
+'To calculate this value use this tool  https://libstock.mikroe.com/projects/view/398/timer-calculator
 
 
-    ''' Most programs run in a loop such as this one
-    do
+''' Most programs run in a loop such as this one
+Do
 
-      wait while !TMR0IF                  'Wait for the Interrupt event
+    'Wait for the Interrupt event
+    Wait While !TMR0IF
 
-      TMR0IF = 0                          'The Interrupt event must have happened!  Clear the timer event flag
+    'The Interrupt event must have happened!  Clear the timer event flag
+    TMR0IF = 0
 
-      LED0 = !LED0                        'The real work. Toggle the LED
+    'The real work. Toggle the LED
+    LED0 = !LED0
 
-      Settimer ( 0 , 0x0bdc )             'Set timer again to 1s. In 1s the next event will occur.
+    'Set timer again to 1s. In 1s the next event will occur.
+    SetTimer ( 0 , 0x0bdc )
 
-    loop
+Loop
 
 End

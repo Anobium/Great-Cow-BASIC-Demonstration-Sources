@@ -10,280 +10,280 @@
 
 
 'Chip Settings. Assumes the development board with with a 16F877A
- #chip 16F877a,20
- #option explicit
+#CHIP 16F877a,20
+#OPTION Explicit
 
-    #include <ds18b20.h>
-    #include <glcd.h>
-
-
-    #define GLCD_TYPE GLCD_TYPE_ST7920
-    #define GLCD_IO 8
-    #define GLCD_WIDTH 128
-    #define GLCD_HEIGHT 64
-
-    ' read delay of 25 is required at 32mhz, this can be reduced to 0 for slower clock speeds
-    #define ST7920ReadDelay 15
-    ' write delay of 2 is required at 32mhz.  this can be reduced to 1 for slower clock speeds
-    #define ST7920WriteDelay 2
+#INCLUDE <ds18b20.h>
+#INCLUDE <glcd.h>
 
 
-    #define GLCD_RS PORTE.0
-    #define GLCD_Enable PORTE.2
-    #define GLCD_RW PORTE.1
-    #define GLCD_RESET PORTA.0
-    #define GLCD_DATA_PORT PORTD
+#DEFINE GLCD_TYPE GLCD_TYPE_ST7920
+#DEFINE GLCD_IO 8
+#DEFINE GLCD_WIDTH 128
+#DEFINE GLCD_HEIGHT 64
 
-    ' DS18B20 port settings - this is required
-    #define DQ PortC.3
+' read delay of 25 is required at 32mhz, this can be reduced to 0 for slower clock speeds
+#DEFINE ST7920ReadDelay 15
+' write delay of 2 is required at 32mhz.  this can be reduced to 1 for slower clock speeds
+#DEFINE ST7920WriteDelay 2
 
-    Dim NEWNUMBER, READMODE, SCREENNUMBER, CURRENTGRAPHDRAWN, PIXELSTATE, TIMEDOUT, CELS, OLDCELS, LASTBRY, TLX, TLY, BRXX, BRY, LASTBRY, DRAWGRAPH, DRAWGRAPH, XCOLCOUNT, NUMBER, MOVEDATA as Byte
+
+#DEFINE GLCD_RS PORTE.0
+#DEFINE GLCD_Enable PORTE.2
+#DEFINE GLCD_RW PORTE.1
+#DEFINE GLCD_RESET PORTA.0
+#DEFINE GLCD_DATA_PORT PORTD
+
+' DS18B20 port settings - this is required
+#DEFINE DQ PortC.3
+
+Dim NEWNUMBER, READMODE, SCREENNUMBER, CURRENTGRAPHDRAWN, PIXELSTATE, TIMEDOUT, CELS, OLDCELS, LASTBRY, TLX, TLY, BRXX, BRY, LASTBRY, DRAWGRAPH, DRAWGRAPH, XCOLCOUNT, NUMBER, MOVEDATA As Byte
 
 
-    ST7920GLCDDisableGraphics
+ST7920GLCDDisableGraphics
+GLCDCLS
+GLCDPrint 0, 1, "Great Cow Basic "
+Wait 2 s
+
+'Define ports
+Dir portb.0 In
+
+' Enable enable weak pull-up function on portB.  This IS required.
+OPTION_REG.NOT_RBPU = 0
+
+
+ST7920GLCDEnableGraphics
+
+Dim numberstring As String * 4
+Dim ustring As String * 3
+Dim tstring As String * 3
+Dim hstring As String * 3
+Dim tempstring As String * 3
+Dim BarValues(11) As Byte
+Dim RealValues(11) As Byte
+
+newnumber = 0
+readmode = 1
+
+' Menus
+#DEFINE Intro_Screen 0
+#DEFINE Bar_Graph_Screen 1
+#DEFINE Change_Time_Setting_Menu 2
+#DEFINE Top_Level_Menu 3
+#DEFINE Change_Number_of_Samples_Menu 33
+#DEFINE Change_Number_MaxY_Menu 34
+#DEFINE Change_Number_MinY_Menu 35
+#DEFINE Line_Graph_Screen 40
+
+' EEPRom addresses
+#DEFINE Number_of_Samples 0
+#DEFINE write_pointer 1
+#DEFINE data_points_captured 2
+#DEFINE MaxYValue 3
+#DEFINE MinYValue 4
+#DEFINE Timer1High 5
+#DEFINE Timer1Low 6
+
+Dim tempcalc, secloop, ClockCounterValue, pixelcount As Word
+
+' Initilize value
+initBarGraphValues
+
+INTEDG = 0
+INTE = 1
+Dir portc.7 Out
+On Interrupt ExtInt0 Call ButtonPressed
+
+timedout = TRUE
+ScreenNumber = Bar_Graph_Screen
+currentGraphDrawn = ScreenNumber
+CreateScreen ( currentGraphDrawn )
+
+pixelstate = 0
+
+Do Forever
+    Wait 250 ms
+    ' toggle the 0,0 pixel
+    If pixelstate = 0 Then
+        Pset  0, 0 , 1
+        pixelstate = 1
+    Else
+        Pset  0, 0 , 0
+        pixelstate = 0
+    End If
+
+
+    ' read next sensor value when the button has been pressed
+    If timedout = TRUE Then
+        readSensor
+        timedout = FALSE
+        bargraph
+    End If
+
+    cels = ReadTemp
+    If cels <> oldcels Then
+        ' Button pressed set flag
+        bargraph
+        oldcels = cels
+    End If
+Loop
+End
+
+Sub readSensor
+
+    cels = ReadTemp
+    oldcels = cels
+
+End Sub
+
+
+Sub createscreen ( In ScreenNumber )
+
     GLCDCLS
-    GLCDPrint 0, 1, "Great Cow Basic "
-    wait 2 s
+    Line 0,63,127,63
+    GLCDDrawString 7,1,"C"
+    GLCDDrawString 19,1,"1"
+    GLCDDrawString 31,1,"2"
+    GLCDDrawString 43,1,"3"
+    GLCDDrawString 55,1,"4"
+    GLCDDrawString 67,1,"5"
+    GLCDDrawString 79,1,"6"
+    GLCDDrawString 91,1,"7"
+    GLCDDrawString 103,1,"8"
+    GLCDDrawString 115,1,"9"
 
-    'Define ports
-    dir portb.0 in
+    Line 0,13,3,13
 
-    ' Enable enable weak pull-up function on portB.  This IS required.
-    OPTION_REG.NOT_RBPU = 0
+    Line 0,23,3,23
 
+    Line 0,33,3,33
 
-    ST7920GLCDEnableGraphics
+    Line 0,43,3,43
 
-    dim numberstring as string * 4
-    dim ustring as string * 3
-    dim tstring as string * 3
-    dim hstring as string * 3
-    dim tempstring as string * 3
-    Dim BarValues(11) as byte
-    Dim RealValues(11) as byte
+    Line 0,53,3,53
 
-    newnumber = 0
-    readmode = 1
+    Line 126,18,127,18
 
-    ' Menus
-    #define Intro_Screen 0
-    #define Bar_Graph_Screen 1
-    #define Change_Time_Setting_Menu 2
-    #define Top_Level_Menu 3
-    #define Change_Number_of_Samples_Menu 33
-    #define Change_Number_MaxY_Menu 34
-    #define Change_Number_MinY_Menu 35
-    #define Line_Graph_Screen 40
+    Line 126,28,127,28
 
-    ' EEPRom addresses
-    #define Number_of_Samples 0
-    #define write_pointer 1
-    #define data_points_captured 2
-    #define MaxYValue 3
-    #define MinYValue 4
-    #define Timer1High 5
-    #define Timer1Low 6
+    Line 126,38,127,38
 
-    dim tempcalc, secloop, ClockCounterValue, pixelcount as word
+    Line 126,48,127,48
 
-    ' Initilize value
-    initBarGraphValues
+    Line 126,58,127,58
 
-    INTEDG = 0
-    INTE = 1
-    dir portc.7 out
-    On Interrupt ExtInt0 Call ButtonPressed
+End Sub
 
-    timedout = true
-    ScreenNumber = Bar_Graph_Screen
-    currentGraphDrawn = ScreenNumber
-    CreateScreen ( currentGraphDrawn )
-
-    pixelstate = 0
-
-        Do forever
-            wait 250 ms
-            ' toggle the 0,0 pixel
-            if pixelstate = 0 then
-               pset  0, 0 , 1
-               pixelstate = 1
-            else
-               pset  0, 0 , 0
-               pixelstate = 0
-            end if
+Sub initBarGraphValues
+    BarValues = 63,63,63,63,63,63,63,63,63,63,63
+    RealValues = 0,0,0,0,0,0,0,0,0,0,0
+    lastbry = 0
+End Sub
 
 
-            ' read next sensor value when the button has been pressed
-            if timedout = true then
-               readSensor
-               timedout = false
-               bargraph
-            end if
+Sub bargraph
 
-            cels = readTemp
-            if cels <> oldcels then
-                       ' Button pressed set flag
-                       bargraph
-                       oldcels = cels
-            end if
-        Loop
-    end
+    tlx = 5
+    tly = GLCD_HEIGHT - 1
+    brxx = 15
 
-    sub readSensor
+    BarValues( 1 )= tly - cels
+    ' out data into a variable and a string
+    RealValues ( 1 ) = cels
+    tempstring = Str(cels)
+    bry = tly - cels
 
-         cels = readTemp
-         oldcels = cels
+    ' draw the leftmost info box
+    Box ( tlx, bry,brxx,lastbry, 0)
+    Box ( tlx, tly, brxx, bry, 1 )
 
-    end sub
+    ' draw the values
+    Select Case Len(tempstring)
 
+    Case 3
+        hstring = Mid(tempstring,1,1)
+        tstring = Mid(tempstring,2,1)
+        ustring = Mid(tempstring,3,1)
 
-    sub createscreen ( in ScreenNumber )
+        GLCDDrawString 6, 38 ,hstring
+        GLCDDrawString 6, 46 ,tstring
+        GLCDDrawString 6, 54 ,ustring
 
-        GLCDCLS
-        LINE 0,63,127,63
-        GLCDDrawString 7,1,"C"
-        GLCDDrawString 19,1,"1"
-        GLCDDrawString 31,1,"2"
-        GLCDDrawString 43,1,"3"
-        GLCDDrawString 55,1,"4"
-        GLCDDrawString 67,1,"5"
-        GLCDDrawString 79,1,"6"
-        GLCDDrawString 91,1,"7"
-        GLCDDrawString 103,1,"8"
-        GLCDDrawString 115,1,"9"
+    Case 2
+        tstring = Mid(tempstring,1,1)
+        ustring = Mid(tempstring,2,1)
 
-        Line 0,13,3,13
+        GLCDDrawString 6, 46 ,tstring
+        GLCDDrawString 6, 54 ,ustring
 
-        Line 0,23,3,23
+    Case Else
+        GLCDDrawString 6, 46 , " "
+        GLCDDrawString 6, 54 ,tempstring
 
-        Line 0,33,3,33
+    End Select
 
-        Line 0,43,3,43
+    lastbry = bry
 
-        Line 0,53,3,53
+    ' draw the other older data boxes
+    For drawgraph  = 1 To 9
 
-        Line 126,18,127,18
-
-        Line 126,28,127,28
-
-        Line 126,38,127,38
-
-        Line 126,48,127,48
-
-        Line 126,58,127,58
-
-    end sub
-
-    sub initBarGraphValues
-        BarValues = 63,63,63,63,63,63,63,63,63,63,63
-        RealValues = 0,0,0,0,0,0,0,0,0,0,0
-        lastbry = 0
-    end sub
-
-
-    sub bargraph
-
-        tlx = 5
+        ' recall values from array
+        tlx = 5+(drawgraph * 10)+(2 * drawgraph )
         tly = GLCD_HEIGHT - 1
-        brxx = 15
-
-        BarValues( 1 )= tly - cels
-        ' out data into a variable and a string
-        RealValues ( 1 ) = cels
-        tempstring = str(cels)
-        bry = tly - cels
-
-        ' draw the leftmost info box
-        Box ( tlx, bry,brxx,lastbry, 0)
-        Box ( tlx, tly, brxx, bry, 1 )
-
-        ' draw the values
-        select case len(tempstring)
-
-          case 3
-               hstring = mid(tempstring,1,1)
-               tstring = mid(tempstring,2,1)
-               ustring = mid(tempstring,3,1)
-
-               GLCDDrawstring 6, 38 ,hstring
-               GLCDDrawstring 6, 46 ,tstring
-               GLCDDrawstring 6, 54 ,ustring
-
-          case 2
-               tstring = mid(tempstring,1,1)
-               ustring = mid(tempstring,2,1)
-
-               GLCDDrawstring 6, 46 ,tstring
-               GLCDDrawstring 6, 54 ,ustring
-
-          case else
-               GLCDDrawString 6, 46 , " "
-               GLCDDrawString 6, 54 ,tempstring
-
-        end select
-
-        lastbry = bry
-
-        ' draw the other older data boxes
-        for drawgraph  = 1 to 9
-
-            ' recall values from array
-            tlx = 5+(drawgraph * 10)+(2 * drawgraph )
-            tly = GLCD_HEIGHT - 1
-            brxx = 15+(drawgraph * 10)+(2 * drawgraph )
-            bry = BarValues(drawgraph+1)
+        brxx = 15+(drawgraph * 10)+(2 * drawgraph )
+        bry = BarValues(drawgraph+1)
 
 
-            Box ( tlx, bry,brxx,( BarValues( drawgraph+2 )), 0)
-            Box ( tlx, tly,brxx,bry,1)
+        Box ( tlx, bry,brxx,( BarValues( drawgraph+2 )), 0)
+        Box ( tlx, tly,brxx,bry,1)
 
 
-            xColCount = tlx + 1
-            number = GLCD_HEIGHT - 1 -bry
-            numberstring = str((GLCD_HEIGHT - 1 -bry))
-            tempstring =  str(realvalues(drawgraph+1))
+        xColCount = tlx + 1
+        number = GLCD_HEIGHT - 1 -bry
+        numberstring = Str((GLCD_HEIGHT - 1 -bry))
+        tempstring =  Str(realvalues(drawgraph+1))
 
         ' draw values
-        select case len(tempstring)
+        Select Case Len(tempstring)
 
-          case 3
-               hstring = mid(tempstring,1,1)
-               tstring = mid(tempstring,2,1)
-               ustring = mid(tempstring,3,1)
+        Case 3
+            hstring = Mid(tempstring,1,1)
+            tstring = Mid(tempstring,2,1)
+            ustring = Mid(tempstring,3,1)
 
-               GLCDDrawstring xColCount, 38 ,hstring
-               GLCDDrawstring xColCount, 46 ,tstring
-               GLCDDrawstring xColCount, 54 ,ustring
+            GLCDDrawString xColCount, 38 ,hstring
+            GLCDDrawString xColCount, 46 ,tstring
+            GLCDDrawString xColCount, 54 ,ustring
 
-          case 2
-               tstring = mid(tempstring,1,1)
-               ustring = mid(tempstring,2,1)
+        Case 2
+            tstring = Mid(tempstring,1,1)
+            ustring = Mid(tempstring,2,1)
 
-               GLCDDrawstring xColCount, 46 ,tstring
-               GLCDDrawstring xColCount, 54 ,ustring
+            GLCDDrawString xColCount, 46 ,tstring
+            GLCDDrawString xColCount, 54 ,ustring
 
-          case else
-               GLCDDrawString xColCount, 46 , " "
-               GLCDDrawString xColCount, 54 ,tempstring
+        Case Else
+            GLCDDrawString xColCount, 46 , " "
+            GLCDDrawString xColCount, 54 ,tempstring
 
-        end select
-        next
-
-
-
-       ' move data to right inarray = make data older....
-        for movedata= 11 to 2 step -1
-            BarValues(movedata) = BarValues(movedata-1)
-            RealValues(movedata) = RealValues(movedata-1)
-        next
+        End Select
+    Next
 
 
-    end sub
+
+    ' move data to right inarray = make data older....
+    For movedata= 11 To 2 Step -1
+        BarValues(movedata) = BarValues(movedata-1)
+        RealValues(movedata) = RealValues(movedata-1)
+    Next
 
 
-    sub ButtonPressed
+End Sub
 
-        ' Button pressed set flag
-         timedout = true
 
-    end sub
+Sub ButtonPressed
+
+    ' Button pressed set flag
+    timedout = TRUE
+
+End Sub

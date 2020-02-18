@@ -27,25 +27,25 @@
 ''''''*****************************************************************
 '''
 
- #chip 16f1825,2
+#CHIP 16f1825,2
 
 
 
-    '' -------------------LATC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|DS4|DS3|DS2|DS1|-
-    ''-----------------------------------------
-    ''
+'' -------------------LATC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|DS4|DS3|DS2|DS1|-
+''-----------------------------------------
+''
 
-    dir portc out
-    portc = 0
-    portc.5 = 1
+Dir portc Out
+portc = 0
+portc.5 = 1
 
-    InitTimer0 Osc, PS0_256
-    do
-        wait while !TMR0IF
-        T0IF = 0
-        Set C off
-        Rotate portc right
-        if C = 1 then portc.3 = 1
-    loop
+InitTimer0 Osc, PS0_256
+Do
+    Wait While !TMR0IF
+    T0IF = 0
+    Set C Off
+    Rotate portc Right
+    If C = 1 Then portc.3 = 1
+Loop

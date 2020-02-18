@@ -27,62 +27,76 @@
 '''@date    29.1.2019
 '''********************************************************************************
 
-; ----- Configuration
-#chip 16f648a, 4
-#option explicit
+' ----- Configuration
+#CHIP 16f648a, 4
+#OPTION Explicit
 
-;Setup LCD Parameters
-#define LCD_IO 3
+'Setup LCD Parameters
+#DEFINE LCD_IO 3
 
 'Change as necessary
-#define LCD_DB     PORTb.3            ; databit
-#define LCD_CB     PORTb.4            ; clockbit
-#define LCD_EB     PORTa.0            ; enable bit
+' databit
+#DEFINE LCD_DB     PORTb.3
+' clockbit
+#DEFINE LCD_CB     PORTb.4
+' enable bit
+#DEFINE LCD_EB     PORTa.0
 
-  ' Define I2C settings - CHANGE PORTS
- #define I2C_MODE Master
- #define I2C_DATA PORTa.4
- #define I2C_CLOCK PORTa.3
- #define I2C_DISABLE_INTERRUPTS ON
+' Define I2C settings - CHANGE PORTS
+#DEFINE I2C_MODE Master
+#DEFINE I2C_DATA PORTa.4
+#DEFINE I2C_CLOCK PORTa.3
+#DEFINE I2C_DISABLE_INTERRUPTS On
 
-; ----- Commence the Clock specific solution
-; ----- Define Clock include, clock addres and the input switch hardware settings
+' ----- Commence the Clock specific solution
+' ----- Define Clock include, clock addres and the input switch hardware settings
 
-  #include <PCF85X3.h>
-  #define DS_AddrWrite 0xA2
-  #define DS_AddrRead  0xA3
+#INCLUDE <PCF85X3.h>
+#DEFINE DS_AddrWrite 0xA2
+#DEFINE DS_AddrRead  0xA3
 
-  #define setBut      portb.1         ;Set pushbutton
-  #define modeBut     portb.2         ;Mode pushbutton
+'Set pushbutton
+#DEFINE setBut      portb.1
+'Mode pushbutton
+#DEFINE modeBut     portb.2
 
-  dir setBut in
-  dir modeBut in
+Dir setBut In
+Dir modeBut In
 
-  #define clocktype   1               ;0 is US or 1 is UK style
-  #define debounce    150 ms           ;settling time for switches
-  #define delay       150 ms          ;delay time for pushbutton
-  #define pressed     1               ;flag for pressed pushbutton
+'0 is US or 1 is UK style
+#DEFINE clocktype   1
+'settling time for switches
+#DEFINE debounce    150 ms
+'delay time for pushbutton
+#DEFINE delay       150 ms
+'flag for pressed pushbutton
+#DEFINE pressed     1
 
-  #define Alarm0 0x00                 ;a reference to the alarm 0
-  #define Alarm1 0x01                 ;a reference to the alarm 1
+'a reference to the alarm 0
+#DEFINE Alarm0 0x00
+'a reference to the alarm 1
+#DEFINE Alarm1 0x01
 
 
 
-;----- Variables
+'----- Variables
 
-  Dim DAYSMAX, DAYSMAX as Byte
-  dim changed as bit
-  dim hour, min, sec as byte
-  dim oldsec as byte
-  dim date, month, year, DOW as byte
-  dim dayMax as byte
-  oldsec = 255                        ;      init value
+Dim DAYSMAX, DAYSMAX As Byte
+Dim changed As BIT
+Dim hour, min, sec As Byte
+Dim oldsec As Byte
+Dim date, month, year, DOW As Byte
+Dim dayMax As Byte
+'      init value
+oldsec = 255
 
-;----- Tables
+'----- Tables
 
-  table monthDays                     ;# of days in months
+'# of days in months
+Table monthDays
     31
-    29                                ;leap years only
+    'leap years only
+    29
     31
     30
     31
@@ -93,171 +107,183 @@
     31
     30
     31
-  end table
+End Table
 
 
 
-;----- The user program
+'----- The user program
 
-  LCDCursor CURSOROFF
-  locate 0,0
-  Print "PCF85x3 Clock"
-  locate 1,0
-  Print "Great Cow Basic 2019"
-  wait 2 s
-  CLS
+LCDCursor CURSOROFF
+Locate 0,0
+Print "PCF85x3 Clock"
+Locate 1,0
+Print "Great Cow Basic 2019"
+Wait 2 s
+CLS
 
-  'Constants when calling PCF85x3_ResetClock that can/could be set.
+'Constants when calling PCF85x3_ResetClock that can/could be set.
 
-  #define  PCF85x3_DEFAULT_HOUR        8
-  #define  PCF85x3_DEFAULT_MIN         16
-  #define  PCF85x3_DEFAULT_SEC         0
-  #define  PCF85x3_DEFAULT_DAY         1
-  #define  PCF85x3_DEFAULT_WEEKDAY     5
-  #define  PCF85x3_DEFAULT_MONTH       2
-  #define  PCF85x3_DEFAULT_YEAR        19
-  'The constants above are used as the defaults when you reset the clock
-  PCF85x3_ResetClock
-  PCF85x3_Enable
+#DEFINE  PCF85x3_DEFAULT_HOUR        8
+#DEFINE  PCF85x3_DEFAULT_MIN         16
+#DEFINE  PCF85x3_DEFAULT_SEC         0
+#DEFINE  PCF85x3_DEFAULT_DAY         1
+#DEFINE  PCF85x3_DEFAULT_WEEKDAY     5
+#DEFINE  PCF85x3_DEFAULT_MONTH       2
+#DEFINE  PCF85x3_DEFAULT_YEAR        19
+'The constants above are used as the defaults when you reset the clock
+PCF85x3_ResetClock
+PCF85x3_Enable
 
-  'or, set the clock this way
+'or, set the clock this way
 '  PCF85x3_SetClock(        8,         16,       55 ,         29,          5,        2,          19)
 
-  'set the ClockOut by enabling like this
-  PCF85x3_SetClockout ( true )
+'set the ClockOut by enabling like this
+PCF85x3_SetClockout ( TRUE )
 
-  'set the ClockOut frequency like this, using the following Constants
-      'PCF85x3_CLKOUT_CTRL_REG_32_768_kHz
-      'PCF85x3_CLKOUT_CTRL_REG_1_024_kHz
-      'PCF85x3_CLKOUT_CTRL_REG_32_Hz
-      'PCF85x3_CLKOUT_CTRL_REG_1_Hz
-  PCF85x3_SetClockoutFrequency ( PCF85x3_CLKOUT_CTRL_REG_1_Hz )
+'set the ClockOut frequency like this, using the following Constants
+'PCF85x3_CLKOUT_CTRL_REG_32_768_kHz
+'PCF85x3_CLKOUT_CTRL_REG_1_024_kHz
+'PCF85x3_CLKOUT_CTRL_REG_32_Hz
+'PCF85x3_CLKOUT_CTRL_REG_1_Hz
+PCF85x3_SetClockoutFrequency ( PCF85x3_CLKOUT_CTRL_REG_1_Hz )
 
-  'set the alarm like this...
-  '      PCF85x3_SetAlarm( hour, mins )
-  'or
-  '      PCF85x3_SetAlarm( hour, mins, day of the week[0-6], day of the month [1-31] )
+'set the alarm like this...
+'      PCF85x3_SetAlarm( hour, mins )
+'or
+'      PCF85x3_SetAlarm( hour, mins, day of the week[0-6], day of the month [1-31] )
 
-  'set the alarm for 07:00 hrs
-  PCF85x3_SetAlarm( 7, 0 )
-  PCF85x3_ClearAlarm
+'set the alarm for 07:00 hrs
+PCF85x3_SetAlarm( 7, 0 )
+PCF85x3_ClearAlarm
 
-  'Set the Alarm for each minute, each hour and minute (therefore daily) by using these assertions.  You can create you own assertions, simple OR the constants.
-    'PCF85x3_Alarm_Off                                     0x00
-    'PCF85x3_AlarmAssertion_Minute                         0x01
-    'PCF85x3_AlarmAssertion_Hour                           0x02
-    'PCF85x3_AlarmAssertion_Date                           0x04
-    'PCF85x3_AlarmAssertion_DoW                            0x08
+'Set the Alarm for each minute, each hour and minute (therefore daily) by using these assertions.  You can create you own assertions, simple OR the constants.
+'PCF85x3_Alarm_Off                                     0x00
+'PCF85x3_AlarmAssertion_Minute                         0x01
+'PCF85x3_AlarmAssertion_Hour                           0x02
+'PCF85x3_AlarmAssertion_Date                           0x04
+'PCF85x3_AlarmAssertion_DoW                            0x08
 
-    'PCF85x3_AlarmAssertion_MinuteHour                     0x03       'at a specfic hour and every minute
+'PCF85x3_AlarmAssertion_MinuteHour                     0x03       'at a specfic hour and every minute
 
- ;Set by passing correct data
-  PCF85x3_EnableAlarm ( PCF85x3_AlarmAssertion_MinuteHour )
+'Set by passing correct data
+PCF85x3_EnableAlarm ( PCF85x3_AlarmAssertion_MinuteHour )
 
 
-;----- Main body of program commences here.
+'----- Main body of program commences here.
 
-  PCF85x3_ReadDate(date, DOW, month, year)   ;get initial date
+'get initial date
+PCF85x3_ReadDate(date, DOW, month, year)
 
-  do
+Do
 
-    updateDisp                        ;show time and date
-    if setBut = pressed then
-      changeSetting                   ;change time and date
-    end if
+    'show time and date
+    updateDisp
+    If setBut = pressed Then
+        'change time and date
+        changeSetting
+    End If
 
-    if modeBut = pressed then
-      ShowAlarm
-    end if
+    If modeBut = pressed Then
+        ShowAlarm
+    End If
 
-  loop
+Loop
 
-end
+End
 
-  ;----- Support User Subroutines
+'----- Support User Subroutines
 
-  sub printTime
+Sub printTime
 
-    if hour < 10 then                 ;left pad with zero
-      Print "0"
-    end if
+    If hour < 10 Then
+        'left pad with zero
+        Print "0"
+    End If
     Print hour
 
     Print ":"
-    if min < 10 then                  ;left pad with zero
-      Print "0"
-    end if
+    If min < 10 Then
+        'left pad with zero
+        Print "0"
+    End If
     Print min
 
     Print ":"
-    if sec < 10 then                  ;left pad with zero
-      Print "0"
-    end if
+    If sec < 10 Then
+        'left pad with zero
+        Print "0"
+    End If
     Print sec
 
-    Print "     "                    ;wipe out any garbage
+    'wipe out any garbage
+    Print "     "
 
-  end sub
+End Sub
 
-  ;-----
+'-----
 
-  sub printDate
+Sub printDate
 
-    select case DOW                   ;day of the week
-      case 0:
+    'day of the week
+    Select Case DOW
+    Case 0:
         Print "Sun."
-      case 1:
+    Case 1:
         Print "Mon."
-      case 2:
+    Case 2:
         Print "Tue."
-      case 3:
+    Case 3:
         Print "Wed."
-      case 4:
+    Case 4:
         Print "Thu."
-      case 5:
+    Case 5:
         Print "Fri."
-      case 6:
+    Case 6:
         Print "Sat."
-      case else
-        Print str(DOW)+":"
-    end select
+    Case Else
+        Print Str(DOW)+":"
+    End Select
 
-    if clocktype = 0 then
-      Print month
-      Print "/"
-      Print date
-      Print "/20"                       ;make four-digit year
-      if year < 10 then
-        Print "0"
-      end if
-    else
-      Print date
-      Print "/"
-      Print month
-      Print "/20"                       ;make four-digit year
-      if year < 10 then
-        Print "0"
-      end if
-    end if
+    If clocktype = 0 Then
+        Print month
+        Print "/"
+        Print date
+        'make four-digit year
+        Print "/20"
+        If year < 10 Then
+            Print "0"
+        End If
+    Else
+        Print date
+        Print "/"
+        Print month
+        'make four-digit year
+        Print "/20"
+        If year < 10 Then
+            Print "0"
+        End If
+    End If
     Print year
-    Print " "                        ;blank any garbage
-  end sub
+    'blank any garbage
+    Print " "
+End Sub
 
-  ;-----
+'-----
 
-  sub updateDisp
-    ;for best efficiency, date should be updated once a day
+Sub updateDisp
+    'for best efficiency, date should be updated once a day
     PCF85x3_ReadTime(hour, min, sec)
 
 
-    if oldsec <> sec then
+    If oldsec <> sec Then
 
-      if sec = 0 then                             ;time to update
-        PCF85x3_ReadDate( date, DOW, month, year)
+        If sec = 0 Then
+            'time to update
+            PCF85x3_ReadDate( date, DOW, month, year)
 
-        locate 0, 19
+            Locate 0, 19
 
-        'Show clock integrity or the alarm
+            'Show clock integrity or the alarm
 
             '' If PCF85x3_ReadVL is 0 then the clock integrity is good... show a happy face
             'if PCF85x3_ReadVL = 0 then
@@ -266,288 +292,352 @@ end
             'print "-"
             'end if
 
-        'has the Alarm gone off? this clears the alarms automatically
-           ' If PCF85x3_Alarm_bit ... show a happy face
-            if PCF85x3_ReadAlarmState = 1 then
+            'has the Alarm gone off? this clears the alarms automatically
+            ' If PCF85x3_Alarm_bit ... show a happy face
+            If PCF85x3_ReadAlarmState = 1 Then
                 Print "+"
-            else
-                print "-"
-            end if
+            Else
+                Print "-"
+            End If
 
-      end if
+        End If
 
-      locate 0,0                        ;home the cursor
-      printTime                         ;show time
+        'home the cursor
+        Locate 0,0
+        'show time
+        printTime
 
-      locate 1,0                        ;show the date
-      printDate
-      oldsec =  sec
+        'show the date
+        Locate 1,0
+        printDate
+        oldsec =  sec
 
-    end if
+    End If
 
-  end sub
+End Sub
 
-  ;-----
+'-----
 
-  sub changeSetting
-    changed = false                   ;assume no change will be made
+Sub changeSetting
+    'assume no change will be made
+    changed = FALSE
 
-    do while setBut = pressed         ;wait for Set release
-      wait debounce
-    loop
+    'wait for Set release
+    Do While setBut = pressed
+        Wait debounce
+    Loop
 
-    wait while ( setBut = pressed ) or ( modeBut = pressed )
+    Wait While ( setBut = pressed ) OR ( modeBut = pressed )
 
-    if clocktype = 0 then             ; handle US and UK clock type
-       SetMonth
-       SetDate
-    else
-       SetDate
-       SetMonth
-    end if
+    If clocktype = 0 Then
+        ' handle US and UK clock type
+        SetMonth
+        SetDate
+    Else
+        SetDate
+        SetMonth
+    End If
     SetYear
 
-    ;***** Day of the Week
+    '***** Day of the Week
 
-    cls
+    CLS
     Print "Set Weekday:"
-    locate 1,0
+    Locate 1,0
     printDate
 
-    do
-      do while modeBut = pressed      ;Mode button held
-        DOW++                         ;increment while pressed
-        if DOW > 6 then               ;0 = Sunday, etc.
-          DOW = 0
-        end if
+    Do
+        'Mode button held
+        Do While modeBut = pressed
+            'increment while pressed
+            DOW++
+            If DOW > 6 Then
+                '0 = Sunday, etc.
+                DOW = 0
+            End If
 
-        locate 1,0                    ;Print updated display
-        printDate
-        wait while modeBut = pressed  ;wait for repeat
-        changed = true                ;a change was made
-        wait while modeBut <> pressed  ;wait for repeat
-      loop
-    loop while setBut <> pressed
+            'Print updated display
+            Locate 1,0
+            printDate
+            'wait for repeat
+            Wait While modeBut = pressed
+            'a change was made
+            changed = TRUE
+            'wait for repeat
+            Wait While modeBut <> pressed
+        Loop
+    Loop While setBut <> pressed
 
-    do while setBut = pressed         ;wait for Set release
-      wait debounce
-    loop
+    'wait for Set release
+    Do While setBut = pressed
+        Wait debounce
+    Loop
 
-    ;***** Hour
+    '***** Hour
 
-    cls
+    CLS
     Print "Set Hours:"
-    locate 1,0
+    Locate 1,0
     printTime
 
-    do
-      do while modeBut = pressed      ;Mode button held
-        hour++                        ;increment while pressed
-        if hour > 23 then             ;remember, set in 24-hour mode
-          hour = 0
-        end if
+    Do
+        'Mode button held
+        Do While modeBut = pressed
+            'increment while pressed
+            hour++
+            If hour > 23 Then
+                'remember, set in 24-hour mode
+                hour = 0
+            End If
 
-        locate 1,0                    ;Print updated display
-        printTime
-        wait while modeBut = pressed  ;wait for repeat
-        changed = true                ;a change was made
-      loop
-    loop while setBut <> pressed
+            'Print updated display
+            Locate 1,0
+            printTime
+            'wait for repeat
+            Wait While modeBut = pressed
+            'a change was made
+            changed = TRUE
+        Loop
+    Loop While setBut <> pressed
 
-    do while setBut = pressed         ;wait for Set release
-      wait debounce
-    loop
+    'wait for Set release
+    Do While setBut = pressed
+        Wait debounce
+    Loop
 
-    ;***** Minutes
+    '***** Minutes
 
-    cls
+    CLS
     Print "Set Minutes:"
-    locate 1,0
+    Locate 1,0
     printTime
 
-    do
-      do while modeBut = pressed      ;Mode button held
-        min++                         ;increment while pressed
-        if min > 59 then              ;0 to 59 minutes
-          min = 0
-        end if
+    Do
+        'Mode button held
+        Do While modeBut = pressed
+            'increment while pressed
+            min++
+            If min > 59 Then
+                '0 to 59 minutes
+                min = 0
+            End If
 
-        locate 1,0                    ;Print updated display
-        printTime
-        wait while modeBut = pressed  ;wait for repeat
-        changed = true                ;a change was made
-      loop
-    loop while setBut <> pressed
+            'Print updated display
+            Locate 1,0
+            printTime
+            'wait for repeat
+            Wait While modeBut = pressed
+            'a change was made
+            changed = TRUE
+        Loop
+    Loop While setBut <> pressed
 
-    do while setBut = pressed         ;wait for Set release
-      wait debounce
-    loop
+    'wait for Set release
+    Do While setBut = pressed
+        Wait debounce
+    Loop
 
-    ;***** Second
+    '***** Second
 
-    cls
+    CLS
     Print "Set Seconds:"
-    locate 1,0
+    Locate 1,0
     printTime
 
-    do
-      do while modeBut = pressed      ;Mode button held
-        sec++                         ;increment while pressed
-        if sec > 59 then              ;0 to 59 seconds
-          sec = 0
-        end if
+    Do
+        'Mode button held
+        Do While modeBut = pressed
+            'increment while pressed
+            sec++
+            If sec > 59 Then
+                '0 to 59 seconds
+                sec = 0
+            End If
 
-        locate 1,0                    ;Print updated display
-        printTime
-        wait while modeBut = pressed  ;wait for repeat
-        changed = true                ;a change was made
-      loop
-    loop while setBut <> pressed
+            'Print updated display
+            Locate 1,0
+            printTime
+            'wait for repeat
+            Wait While modeBut = pressed
+            'a change was made
+            changed = TRUE
+        Loop
+    Loop While setBut <> pressed
 
-    do while setBut = pressed         ;wait for Set release
-      wait debounce
-    loop
+    'wait for Set release
+    Do While setBut = pressed
+        Wait debounce
+    Loop
 
-    ;***** Execute the new settings
+    '***** Execute the new settings
 
-    if changed then
-      cls
-      Print "Press Set, or"
-      locate 1,0
-      Print "Mode to revert"
+    If changed Then
+        CLS
+        Print "Press Set, or"
+        Locate 1,0
+        Print "Mode to revert"
 
-      do while (setBut <> pressed)          ;wait for the Set button
-        wait debounce
-        if ModeBut = pressed then
-           cls                               ;clear last message
-                                             ;do nothing - you could add setting the clock
-           exit Sub                          ;exit set routine
-        end if
-      loop
+        'wait for the Set button
+        Do While (setBut <> pressed)
+            Wait debounce
+            If ModeBut = pressed Then
+                'clear last message
+                CLS
+                'do nothing - you could add setting the clock
+                'exit set routine
+                Exit Sub
+            End If
+        Loop
 
-      PCF85x3_SetClock(hour, min, sec, DOW, date, month, year)
-    end if
+        PCF85x3_SetClock(hour, min, sec, DOW, date, month, year)
+    End If
 
-    do while (setBut = pressed)       ;wait for Set release
-    loop
+    'wait for Set release
+    Do While (setBut = pressed)
+    Loop
 
-    wait debounce                     ;let it settle
-    cls                               ;clear last message
-    PCF85x3_Enable                    ;ensure the clock is running
-  end sub
+    'let it settle
+    Wait debounce
+    'clear last message
+    CLS
+    'ensure the clock is running
+    PCF85x3_Enable
+End Sub
 
-  ;-----
+'-----
 
-  sub changeMode
-   'Does nothing
+Sub changeMode
+    'Does nothing
 
-    do while modeBut = pressed        ;wait for a release
-      wait debounce
-    loop
-  end sub
+    'wait for a release
+    Do While modeBut = pressed
+        Wait debounce
+    Loop
+End Sub
 
-  sub setMonth
-    ;***** Month
-    cls
+Sub setMonth
+    '***** Month
+    CLS
     Print "Set Month:"
-    locate 1,0
+    Locate 1,0
     printDate
 
-    do
-      do while modeBut = pressed      ;Mode button held
-        month++                       ;increment while pressed
-        if month > 12 then
-          month = 1
-        end if
+    Do
+        'Mode button held
+        Do While modeBut = pressed
+            'increment while pressed
+            month++
+            If month > 12 Then
+                month = 1
+            End If
 
-        locate 1,0                    ;Print updated display
-        printDate
-        wait while modeBut = pressed  ;wait for repeat
-        changed = true                ;a change was made
-      loop
-      wait debounce
-    loop while setBut <> pressed      ;Set moves you on
+            'Print updated display
+            Locate 1,0
+            printDate
+            'wait for repeat
+            Wait While modeBut = pressed
+            'a change was made
+            changed = TRUE
+        Loop
+        Wait debounce
+        'Set moves you on
+    Loop While setBut <> pressed
 
-    readTable monthDays, month, daysMax
+    ReadTable monthDays, month, daysMax
 
-    do while setBut = pressed         ;wait for Set release
-      wait debounce
-    loop
-  end Sub
+    'wait for Set release
+    Do While setBut = pressed
+        Wait debounce
+    Loop
+End Sub
 
 
 
-  sub SetDate
-    ;***** Date
+Sub SetDate
+    '***** Date
 
-    cls
+    CLS
     Print "Set Date:"
-    locate 1,0
+    Locate 1,0
     printDate
-    readTable monthDays, month, daysMax
-    do
-      do while modeBut = pressed      ;Mode button held
-        date++                        ;increment while pressed
-        if date > daysMax then        ;stay within legal days
-          date = 1
-        end if
+    ReadTable monthDays, month, daysMax
+    Do
+        'Mode button held
+        Do While modeBut = pressed
+            'increment while pressed
+            date++
+            If date > daysMax Then
+                'stay within legal days
+                date = 1
+            End If
 
-        locate 1,0                    ;Print updated display
-        printDate
-        wait while modeBut = pressed  ;wait for repeatt
-        changed = true                ;a change was made
-      loop
-      wait debounce
-    loop while setBut <> pressed
+            'Print updated display
+            Locate 1,0
+            printDate
+            'wait for repeatt
+            Wait While modeBut = pressed
+            'a change was made
+            changed = TRUE
+        Loop
+        Wait debounce
+    Loop While setBut <> pressed
 
-    do while setBut = pressed         ;wait for Set release
-      wait debounce
-    loop
-  end sub
+    'wait for Set release
+    Do While setBut = pressed
+        Wait debounce
+    Loop
+End Sub
 
 
-  sub SetYear
-    ;***** Year
+Sub SetYear
+    '***** Year
 
-    cls
+    CLS
     Print "Set Year:"
-    locate 1,0
+    Locate 1,0
     printDate
 
-    do
-      do while modeBut = pressed      ;Mode button held
-        year++                        ;increment while pressed
-        if year > 99 then             ;this millennium only
-          year = 0
-        end if
+    Do
+        'Mode button held
+        Do While modeBut = pressed
+            'increment while pressed
+            year++
+            If year > 99 Then
+                'this millennium only
+                year = 0
+            End If
 
-        locate 1,0                    ;Print updated display
-        printDate
-        wait while modeBut = pressed  ;wait for repeat
-        changed = true                ;a change was made
-      loop
-      wait debounce
-    loop while setBut <> pressed
+            'Print updated display
+            Locate 1,0
+            printDate
+            'wait for repeat
+            Wait While modeBut = pressed
+            'a change was made
+            changed = TRUE
+        Loop
+        Wait debounce
+    Loop While setBut <> pressed
 
-    do while setBut = pressed         ;wait for Set release
-      wait debounce
-    loop
+    'wait for Set release
+    Do While setBut = pressed
+        Wait debounce
+    Loop
 
 
-  end sub
+End Sub
 
 
-  Sub ShowAlarm
+Sub ShowAlarm
 
-      CLS
-      dim myreg as Byte
-      print "Alarm "
-      PCF85x3_ReadRegister ( PCF85x3_HOURS_ALARM_REG, myreg )
-      print leftpad( str(BcdToDec( myreg  & 0x7f )),2, "0" )
-      print ":"
-      PCF85x3_ReadRegister ( PCF85x3_MINS_ALARM_REG, myreg )
-      print leftpad( str(BcdToDec( myreg  & 0x7f )),2, "0" )
-      wait 5 s
+    CLS
+    Dim myreg As Byte
+    Print "Alarm "
+    PCF85x3_ReadRegister ( PCF85x3_HOURS_ALARM_REG, myreg )
+    Print LeftPad( Str(BcdToDec( myreg  & 0x7f )),2, "0" )
+    Print ":"
+    PCF85x3_ReadRegister ( PCF85x3_MINS_ALARM_REG, myreg )
+    Print LeftPad( Str(BcdToDec( myreg  & 0x7f )),2, "0" )
+    Wait 5 s
 
-  End Sub
+End Sub
 

@@ -15,59 +15,60 @@
 '''  Date: 29.8.17
 '''
 ' ----- Configuration
-    'Chip Settings.
-    #chip 18f26k22, 16
-    #option Explicit
+'Chip Settings.
+#CHIP 18f26k22, 16
+#OPTION Explicit
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -----------| A |-----------------
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -----------| A |-----------------
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | ----------| O | I |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | ----------| O | I |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------------------| X |---------
-    ''-----------------------------------------
-    ''
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------------------| X |---------
+''-----------------------------------------
+''
 
-    'Define constants to make things easier. We can reuse these at any time.
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define Potentiometer   PORTC.5
-    #define LCDControl      PORTC.2
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE Potentiometer   PORTC.5
+#DEFINE LCDControl      PORTC.2
 
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     Potentiometer In   'this is the AN17 port
-    Dir     LCDControl    Out
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+'this is the AN17 port
+Dir     Potentiometer In
+Dir     LCDControl    Out
 
-    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
-    LCDControl = 1
+'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+LCDControl = 1
 
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
-
-
-   'Set the LED states
-    LEDD1 = 1
-    LEDD2 = 0
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
 
 
-    do
-
-        'Wait for milliseconds
-        Wait 100 ms
-
-        'Flip the state of the LEDs
-        LEDD1 = NOT LEDD1
-        LEDD2 = NOT LEDD2
+'Set the LED states
+LEDD1 = 1
+LEDD2 = 0
 
 
-    loop
+Do
+
+    'Wait for milliseconds
+    Wait 100 ms
+
+    'Flip the state of the LEDs
+    LEDD1 = NOT LEDD1
+    LEDD2 = NOT LEDD2
+
+
+Loop

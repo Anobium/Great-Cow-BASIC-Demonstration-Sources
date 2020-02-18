@@ -32,51 +32,51 @@
 
 
 
-    #chip 10f322,16
+#CHIP 10f322,16
 
-    #define PMWOUT1  PORTA.0
-    Dir     PMWOUT1 OUT
+#DEFINE PMWOUT1  PORTA.0
+Dir     PMWOUT1 Out
 
-     ' PWM1POL active_hi, PWM1OE enabled and PWM1EN enabled
-     PWM1CON = 0xC0
+' PWM1POL active_hi, PWM1OE enabled and PWM1EN enabled
+PWM1CON = 0xC0
 
-     'Set PWM hi value
-     ' PWM1DCH 15
-     PWM1DCH = 0x0F
+'Set PWM hi value
+' PWM1DCH 15
+PWM1DCH = 0x0F
 
-     'Set PWM lo value
-     ' PWM1DCL 3
-     PWM1DCL = 0xC0
+'Set PWM lo value
+' PWM1DCL 3
+PWM1DCL = 0xC0
 
-    ' T2CKPS 1:1, TOUTPS 1:16 and TMR2ON off
-    T2CON = 0x78
+' T2CKPS 1:1, TOUTPS 1:16 and TMR2ON off
+T2CON = 0x78
 
-    ' PR2 31 - PWM pr2 value
+' PR2 31 - PWM pr2 value
+PR2 = 0x1F
+
+StartTimer 2
+
+'Show stable signal for 2 s
+Wait 2 s
+
+Do Forever
+
+    ' Changing PR2 to show Frequency changing
+    For PR2 = 1 To 255
+        Wait 10 ms
+    Next
+
+    ' Reset PR2
+    ' PR2 31
     PR2 = 0x1F
+    ' Show stable signal for 2 s
+    Wait 2 s
 
-    StartTimer 2
+    ' Create word variable to address the two bytes to show Width changing
+    Dim PWM1DC As Word Alias PWM1DCH, PWM1DCL
+    For PWM1DC = 0 To 0x1fff Step 256
+        Wait 100 ms
+    Next
+    Wait 100 ms
 
-    'Show stable signal for 2 s
-    wait 2 s
-
-    do forever
-
-        ' Changing PR2 to show Frequency changing
-        for PR2 = 1 to 255
-            wait 10 ms
-        next
-
-        ' Reset PR2
-        ' PR2 31
-        PR2 = 0x1F
-        ' Show stable signal for 2 s
-        wait 2 s
-
-        ' Create word variable to address the two bytes to show Width changing
-        dim PWM1DC as word Alias PWM1DCH, PWM1DCL
-        for PWM1DC = 0 to 0x1fff step 256
-            wait 100 ms
-        Next
-        wait 100 ms
-
-    loop
+Loop

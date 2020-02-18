@@ -8,31 +8,31 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
-  #chip mega328p, 16
+' ----- Configuration
+#CHIP mega328p, 16
 
-' #include                                    
-; no solution specifc includes, default includes are always included
+' #include
+' no solution specifc includes, default includes are always included
 
 
-; ----- Define Hardware settings
+' ----- Define Hardware settings
 
-  ' this is required to tell the microprocessor the port is an output
-  Dir PORTB.5 Out
+' this is required to tell the microprocessor the port is an output
+Dir PORTB.5 Out
 
-; ----- Variables
+' ----- Variables
 ' none specified in the example. All byte variables are defined upon use.
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
-  'Main routine
-  Start:
-      'Turn one LED on, the other off
-      PORTB = b'00100000'
-      wait 1 sec
-      'Now toggle the LEDs
-      PORTB = b'00000000'
-      wait 1 sec
-      'Jump back to the start of the program
-  goto Start
+'Main routine
+Start:
+'Turn one LED on, the other off
+PORTB = b'00100000'
+Wait 1 sec
+'Now toggle the LEDs
+PORTB = b'00000000'
+Wait 1 sec
+'Jump back to the start of the program
+Goto Start
 

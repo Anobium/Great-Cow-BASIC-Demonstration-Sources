@@ -16,37 +16,42 @@
 '''@date   		01.04.2015
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
-  #chip mega8,8
+#CHIP mega8,8
 
-  #include <maths.h>
+#INCLUDE <maths.h>
 
- 'Use LCD in 2-wire mode with 74LS164 / 74HC164
-  #define LCD_IO 2
-  #define LCD_DB PORTC.0            ; databit
-  #define LCD_CB PORTC.1            ; clockbit
-  #define LCD_NO_RW
-
-
-; ----- Variables
- dim ii, jj as byte
-
-; ----- Main body of program commences here.
-
- for ii = 1 to 10                 ;do all the way from
-   for jj = 0 to 9                ;1^0 on up to 10^9
-     cls
-     print ii
-     print"^"
-     print jj
-     print "="
-
-     locate 1,0
-     print power(ii,jj)            ;here's the invocation
-     wait 1 S
-   next jj
- next ii
+'Use LCD in 2-wire mode with 74LS164 / 74HC164
+#DEFINE LCD_IO 2
+' databit
+#DEFINE LCD_DB PORTC.0
+' clockbit
+#DEFINE LCD_CB PORTC.1
+#DEFINE LCD_NO_RW
 
 
-; ----- Support methods.  Subroutines and Functions
+' ----- Variables
+Dim ii, jj As Byte
+
+' ----- Main body of program commences here.
+
+'do all the way from
+For ii = 1 To 10
+    '1^0 on up to 10^9
+    For jj = 0 To 9
+        CLS
+        Print ii
+        Print"^"
+        Print jj
+        Print "="
+
+        Locate 1,0
+        'here's the invocation
+        Print Power(ii,jj)
+        Wait 1 s
+    Next jj
+Next ii
+
+
+' ----- Support methods.  Subroutines and Functions

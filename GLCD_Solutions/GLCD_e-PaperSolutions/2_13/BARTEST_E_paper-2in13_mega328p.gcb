@@ -1,127 +1,127 @@
 '''A demonstration program for Explicit-Paper from WaveShare.
- '''-------------------------------------------------------------------------
+'''-------------------------------------------------------------------------
 ' -------------------------------------------------------
- '''This has been tested using the hardware and software SPI option.
+'''This has been tested using the hardware and software SPI option.
 
- '''*************************************************************************
-
-
-     'Chip Settings.
-
-    #chip mega328p, 16
-    #include <uno_mega328p.h>
-    #option explicit
-
- '******************************************************************************************************
-
-     'Setup the E-Paper
-     #include <glcd.h>
-
-     #define GLCD_TYPE GLCD_TYPE_EPD_EPD2in13D
-     #define GLCD_EXTENDEDFONTSET1
-     #define GLCD_OLED_FONT
-     #define GLCD_PROTECTOVERRUN
-
-     #define GLCD_TYPE_EPD2in13D_LOWMEMORY4_GLCD_MODE
-
-     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-     #define GLCD_DC     DIGITAL_9
-     #define GLCD_CS     DIGITAL_10
-     #define GLCD_RESET  DIGITAL_8
-     #define GLCD_DO     DIGITAL_11
-     #define GLCD_SCK    DIGITAL_13
-     #define GLCD_Busy   DIGITAL_7
-
- '  The following should be used   '#define EPD_HARDWARESPI     'remove comment out if you want to use software SPI.
-     #define EPD_HARDWARESPI
-     #define HWSPIMode MasterULTRAFAST
+'''*************************************************************************
 
 
- '***********************************************************************************************
+'Chip Settings.
+
+#CHIP mega328p, 16
+#INCLUDE <uno_mega328p.h>
+#OPTION Explicit
+
+'******************************************************************************************************
+
+'Setup the E-Paper
+#INCLUDE <glcd.h>
+
+#DEFINE GLCD_TYPE GLCD_TYPE_EPD_EPD2in13D
+#DEFINE GLCD_EXTENDEDFONTSET1
+#DEFINE GLCD_OLED_FONT
+#DEFINE GLCD_PROTECTOVERRUN
+
+#DEFINE GLCD_TYPE_EPD2in13D_LOWMEMORY4_GLCD_MODE
+
+'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+#DEFINE GLCD_DC     DIGITAL_9
+#DEFINE GLCD_CS     DIGITAL_10
+#DEFINE GLCD_RESET  DIGITAL_8
+#DEFINE GLCD_DO     DIGITAL_11
+#DEFINE GLCD_SCK    DIGITAL_13
+#DEFINE GLCD_Busy   DIGITAL_7
+
+'  The following should be used   '#define EPD_HARDWARESPI     'remove comment out if you want to use software SPI.
+#DEFINE EPD_HARDWARESPI
+#DEFINE HWSPIMode MasterULTRAFAST
+
+
+'***********************************************************************************************
 
 
 'Main program
-    GLCDForeground = TFT_WHITE
-    GLCDBackground = TFT_BLACK
+GLCDForeground = TFT_WHITE
+GLCDBackground = TFT_BLACK
 
 
-     GLCD_Open_PageTransaction
-        GLCDPrintStringLn "Default"
-        GLCDPrintStringLn "BAR1"
-        GLCDPrintStringLn "BAR2"
-        GLCDPrintStringLn "BAR3"
-     GLCD_Close_PageTransaction
-     GLCDDisplay Off
+GLCD_Open_PageTransaction
+GLCDPrintStringLn "Default"
+GLCDPrintStringLn "BAR1"
+GLCDPrintStringLn "BAR2"
+GLCDPrintStringLn "BAR3"
+GLCD_Close_PageTransaction
+GLCDDisplay Off
 
-     wait 2 s
-    GLCDDisplay On
+Wait 2 s
+GLCDDisplay On
 
-     GLCDRotate Portrait
-     GLCDForeground = TFT_BLACK
-     GLCDBackground = TFT_WHITE
+GLCDRotate Portrait
+GLCDForeground = TFT_BLACK
+GLCDBackground = TFT_WHITE
 
-     GLCD_Open_PageTransaction
-        GLCDPrintStringLn "Portrait"
-        GLCDPrintStringLn "BAR1"
-        GLCDPrintStringLn "BAR2"
-        GLCDPrintStringLn "BAR3"
-     GLCD_Close_PageTransaction
+GLCD_Open_PageTransaction
+GLCDPrintStringLn "Portrait"
+GLCDPrintStringLn "BAR1"
+GLCDPrintStringLn "BAR2"
+GLCDPrintStringLn "BAR3"
+GLCD_Close_PageTransaction
 
-     GLCDDisplay Off
-     wait 2 s
-     GLCDDisplay On
-     GLCDRotate Portrait_rev
-     GLCDForeground = TFT_WHITE
-     GLCDBackground = TFT_BLACK
+GLCDDisplay Off
+Wait 2 s
+GLCDDisplay On
+GLCDRotate Portrait_Rev
+GLCDForeground = TFT_WHITE
+GLCDBackground = TFT_BLACK
 
-     GLCD_Open_PageTransaction
-        GLCDPrintStringLn "Portrait_rev"
-        GLCDPrintStringLn "BAR1"
-        GLCDPrintStringLn "BAR2"
-        GLCDPrintStringLn "BAR3"
+GLCD_Open_PageTransaction
+GLCDPrintStringLn "Portrait_rev"
+GLCDPrintStringLn "BAR1"
+GLCDPrintStringLn "BAR2"
+GLCDPrintStringLn "BAR3"
 
-     GLCD_Close_PageTransaction
+GLCD_Close_PageTransaction
 
-     GLCDDisplay Off
-     wait 2 s
-     GLCDDisplay On
+GLCDDisplay Off
+Wait 2 s
+GLCDDisplay On
 
-     GLCDRotate Landscape
-     GLCDForeground = TFT_BLACK
-     GLCDBackground = TFT_WHITE
+GLCDRotate Landscape
+GLCDForeground = TFT_BLACK
+GLCDBackground = TFT_WHITE
 
-     GLCD_Open_PageTransaction
-        GLCDPrintStringLn "Landscape"
-        GLCDPrintStringLn "BAR1"
-        GLCDPrintStringLn "BAR2"
-        GLCDPrintStringLn "BAR3"
-     GLCD_Close_PageTransaction
+GLCD_Open_PageTransaction
+GLCDPrintStringLn "Landscape"
+GLCDPrintStringLn "BAR1"
+GLCDPrintStringLn "BAR2"
+GLCDPrintStringLn "BAR3"
+GLCD_Close_PageTransaction
 
-     GLCDDisplay Off
-     wait 2 s
-     GLCDDisplay On
+GLCDDisplay Off
+Wait 2 s
+GLCDDisplay On
 
-     GLCDRotate Landscape_Rev
-     GLCDForeground = TFT_BLACK
-     GLCDBackground = TFT_WHITE
+GLCDRotate Landscape_Rev
+GLCDForeground = TFT_BLACK
+GLCDBackground = TFT_WHITE
 
-     GLCD_Open_PageTransaction
-        GLCDPrintStringLn "Landscape_Rev"
-        GLCDPrintStringLn "BAR1"
-        GLCDPrintStringLn "BAR2"
-        GLCDPrintStringLn "BAR3"
-     GLCD_Close_PageTransaction
+GLCD_Open_PageTransaction
+GLCDPrintStringLn "Landscape_Rev"
+GLCDPrintStringLn "BAR1"
+GLCDPrintStringLn "BAR2"
+GLCDPrintStringLn "BAR3"
+GLCD_Close_PageTransaction
 
-     GLCDDisplay Off
-     wait 2 s
-     GLCDDisplay On
-
-
-     GLCDCLS
-     GLCDDisplay off
+GLCDDisplay Off
+Wait 2 s
+GLCDDisplay On
 
 
+GLCDCLS
+GLCDDisplay Off
 
-     do
 
-     loop
+
+Do
+
+Loop

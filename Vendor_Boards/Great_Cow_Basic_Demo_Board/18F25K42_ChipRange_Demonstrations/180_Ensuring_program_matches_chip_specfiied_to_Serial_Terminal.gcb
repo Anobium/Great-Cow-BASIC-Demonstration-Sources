@@ -11,83 +11,85 @@
 ' ----- Configuration
 
 ' ----- Configuration
-    'Chip Settings.
-    #chip 18f25k42, 64
-    #option Explicit
-    #config mclr=on
+'Chip Settings.
+#CHIP 18f25k42, 64
+#OPTION Explicit
+#CONFIG mclr=On
 
-    #startup InitPPS, 85
+#STARTUP InitPPS, 85
 
-    Sub InitPPS
+Sub InitPPS
 
-          'Module: UART1
-          RC6PPS = 0x0013     'TX1 > RC6
-          U1RXPPS = 0x0017    'RC7 > RX1
+    'Module: UART1
+    'TX1 > RC6
+    RC6PPS = 0x0013
+    'RC7 > RX1
+    U1RXPPS = 0x0017
 
-    End Sub
+End Sub
 
-    'Template comment at the end of the config file
-
-
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
-    ''-----------------------------------------
-    ''
-
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | ----------| O | I |-
-    ''-----------------------------------------
-    ''
-
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -S---S-------------| X |---------
-    ''-----------------------------------------
-    ''
+'Template comment at the end of the config file
 
 
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define SwitchIn        PORTB.0
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
 
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     SwitchIn      In
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | ----------| O | I |-
+''-----------------------------------------
+''
 
-    'Setup Serial port
-    #define USART_BAUD_RATE 9600
-    #define USART_TX_BLOCKING
-
-
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
-    ' Now assumes Serial Terminal is operational
-
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -S---S-------------| X |---------
+''-----------------------------------------
+''
 
 
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE SwitchIn        PORTB.0
+
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+Dir     SwitchIn      In
+
+'Setup Serial port
+#DEFINE USART_BAUD_RATE 9600
+#DEFINE USART_TX_BLOCKING
+
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+' Now assumes Serial Terminal is operational
+
+
+
+HSerPrintCRLF
+HSerPrint  ChipNameStr + " Great Cow BASIC Demo"
+HSerPrintCRLF
+Wait 1 s
+
+If Trim( UCase( "18f25k42") )  <> ChipNameStr Then
+    HSerPrint "Wrong Microcontroller program intended for 18f25k42"
     HSerPrintCRLF
-    HSerPrint  ChipNameStr + " Great Cow BASIC Demo"
+    HSerPrint "The Microcontroller is a "+ChipNameStr
     HSerPrintCRLF
-    wait 1 s
-
-    if trim( UCase( "18f25k42") )  <> ChipNameStr then
-      HSerPrint "Wrong Microcontroller program intended for 18f25k42"
-      HSerPrintCRLF
-      HSerPrint "The Microcontroller is a "+ChipNameStr
-      HSerPrintCRLF
-      WAIT WHILE TRUE
-    else
-      HSerPrint "The Microcontroller program intended for the "+ChipNameStr
-      HSerPrintCRLF
-      WAIT WHILE TRUE
-    end if
+    Wait While TRUE
+Else
+    HSerPrint "The Microcontroller program intended for the "+ChipNameStr
+    HSerPrintCRLF
+    Wait While TRUE
+End If
 
 
 
 
 
-    end
+End
 
-; ----- Support methods.  Subroutines and Functions
+' ----- Support methods.  Subroutines and Functions

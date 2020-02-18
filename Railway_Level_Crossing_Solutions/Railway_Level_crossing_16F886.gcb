@@ -15,165 +15,170 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
- #chip 16F886, 16
- #option explicit
+' ----- Configuration
+#CHIP 16F886, 16
+#OPTION Explicit
 
 
 
 
-; ----- Define Hardware settings
-  #define LED1 PORTB.0
-  #define LED2 PORTB.1
-  #define GateUp PORTB.3
-  #define GateDown PORTB.4
-  #define SoundOut PORTB.5
+' ----- Define Hardware settings
+#DEFINE LED1 PORTB.0
+#DEFINE LED2 PORTB.1
+#DEFINE GateUp PORTB.3
+#DEFINE GateDown PORTB.4
+#DEFINE SoundOut PORTB.5
 
-  #define TrackSensor1 PORTA.1
-  #define TrackSensor2 PORTA.0
-  #define TrackSensor3 PORTA.7
-  #define TrackSensor4 PORTA.6
+#DEFINE TrackSensor1 PORTA.1
+#DEFINE TrackSensor2 PORTA.0
+#DEFINE TrackSensor3 PORTA.7
+#DEFINE TrackSensor4 PORTA.6
 
-  dir LED1 out
-  dir LED2 out
-  dir TrackSensor1 in
-  dir TrackSensor2 in
-  dir TrackSensor3 in
-  dir TrackSensor4 in
-  dir SoundOut out
-  dir GateUp out
-  dir GateDown out
+Dir LED1 Out
+Dir LED2 Out
+Dir TrackSensor1 In
+Dir TrackSensor2 In
+Dir TrackSensor3 In
+Dir TrackSensor4 In
+Dir SoundOut Out
+Dir GateUp Out
+Dir GateDown Out
 
-; ----- Constants
-  #define Timeout 50 ms 'Time for status of sensor to remain changed for before acting
-  #define AfterCount 0 'Times to flash lights after train is clear
-  #define UpTime 2 'Number of flashes taken for gate to rise
-  #define DownTime 2 'Number of flashes taken for gate to fall
-  #define GateDownComp 20 ms 'Extra time to move gate down for (was 40, 5)
-
-
-; ----- Variables
-  Dim RINGBELL, BELLTONE, GATEMOVING, TEMP, GATEMOVING as Byte
-
-; ----- Main body of program commences here.
-
-    Main:
-     'Turn off lights initially
-     SET LED1 OFF
-     SET LED2 OFF
-
-     'Wait for sensor to detect train
-     wait until TrainPresent
-
-     'Wait a while, then check again to avoid false triggering
-     wait Timeout
-     if NOT TrainPresent then goto Main
-
-     'Lower gate
-     LowerGate
-
-     'Flash while the sensor detects train
-    WinkLights:
-     do while TrainPresent
-      FlashLights
-     loop
-
-     'Flash again, then check to see if train is still absent
-     FlashLights
-     if TrainPresent then goto WinkLights
-
-     'Delay after train has left
-     if AfterCount <> 0 THEN
-      for Temp = 1 to AfterCount
-       FlashLights
-      next
-     end if
-
-     'Raise Gate
-     RaiseGate
-
-     'Simulate lights being randomly turned off
-     set LED1 on
-     set LED2 off
-     wait Random ms
-    goto Main
-    end
-
-; ----- Support methods.  Subroutines and Functions
+' ----- Constants
+'Time for status of sensor to remain changed for before acting
+#DEFINE Timeout 50 ms
+'Times to flash lights after train is clear
+#DEFINE AfterCount 0
+'Number of flashes taken for gate to rise
+#DEFINE UpTime 2
+'Number of flashes taken for gate to fall
+#DEFINE DownTime 2
+'Extra time to move gate down for (was 40, 5)
+#DEFINE GateDownComp 20 ms
 
 
+' ----- Variables
+Dim RINGBELL, BELLTONE, GATEMOVING, TEMP, GATEMOVING As Byte
+
+' ----- Main body of program commences here.
+
+Main:
+'Turn off lights initially
+Set LED1 Off
+Set LED2 Off
+
+'Wait for sensor to detect train
+Wait Until TrainPresent
+
+'Wait a while, then check again to avoid false triggering
+Wait Timeout
+If NOT TrainPresent Then Goto Main
+
+'Lower gate
+LowerGate
+
+'Flash while the sensor detects train
+WinkLights:
+Do While TrainPresent
+    FlashLights
+Loop
+
+'Flash again, then check to see if train is still absent
+FlashLights
+If TrainPresent Then Goto WinkLights
+
+'Delay after train has left
+If AfterCount <> 0 Then
+    For Temp = 1 To AfterCount
+        FlashLights
+    Next
+End If
+
+'Raise Gate
+RaiseGate
+
+'Simulate lights being randomly turned off
+Set LED1 On
+Set LED2 Off
+Wait Random ms
+Goto Main
+End
+
+' ----- Support methods.  Subroutines and Functions
 
 
-    function TrainPresent
-     TrainPresent = False
-     if TrackSensor1 ON then TrainPresent = True
-     if TrackSensor2 ON then TrainPresent = True
-     if TrackSensor3 ON then TrainPresent = True
-     if TrackSensor4 ON then TrainPresent = True
-    end function
 
-    sub FlashLights
-      set LED1 on
-      set LED2 off
-      BellDelay
-      set LED1 off
-      set LED2 on
-      BellDelay
-    end sub
 
-    sub BellDelay
-     'Must sound bell 3 times in 600 ms
+Function TrainPresent
+    TrainPresent = FALSE
+    If TrackSensor1 On Then TrainPresent = TRUE
+    If TrackSensor2 On Then TrainPresent = TRUE
+    If TrackSensor3 On Then TrainPresent = TRUE
+    If TrackSensor4 On Then TrainPresent = TRUE
+End Function
 
-     for RingBell = 1 to 3
-      ShortTone 50, 2
-      for BellTone = 150 to 250 step 2
-       ShortTone BellTone, 1
-      next
-      wait 150 ms
-     next
-    end sub
+Sub FlashLights
+    Set LED1 On
+    Set LED2 Off
+    BellDelay
+    Set LED1 Off
+    Set LED2 On
+    BellDelay
+End Sub
 
-    sub LowerGate
-     Temp = DownTime
-     GateMoving = 1
-     set GateUp off
-     set GateDown on
-     wait GateDownComp
+Sub BellDelay
+    'Must sound bell 3 times in 600 ms
 
-     do while GateMoving = 1
-      set LED1 on
-      set LED2 off
-      BellDelay
-      Temp -= 1
-      if Temp = 0 then set GateDown off: GateMoving = 0
+    For RingBell = 1 To 3
+        ShortTone 50, 2
+        For BellTone = 150 To 250 Step 2
+            ShortTone BellTone, 1
+        Next
+        Wait 150 ms
+    Next
+End Sub
 
-      set LED1 off
-      set LED2 on
-      BellDelay
-      Temp -= 1
-      if Temp = 0 then set GateDown off: GateMoving = 0
-     loop
+Sub LowerGate
+    Temp = DownTime
+    GateMoving = 1
+    Set GateUp Off
+    Set GateDown On
+    Wait GateDownComp
 
-    end sub
+    Do While GateMoving = 1
+        Set LED1 On
+        Set LED2 Off
+        BellDelay
+        Temp -= 1
+        If Temp = 0 Then Set GateDown Off: GateMoving = 0
 
-    sub RaiseGate
-     Temp = UpTime
-     GateMoving = 1
-     set GateDown off
-     set GateUp on
+        Set LED1 Off
+        Set LED2 On
+        BellDelay
+        Temp -= 1
+        If Temp = 0 Then Set GateDown Off: GateMoving = 0
+    Loop
 
-     do while GateMoving = 1
-      set LED1 on
-      set LED2 off
-      BellDelay
-      Temp -= 1
-      if Temp = 0 then set GateUp off: GateMoving = 0
+End Sub
 
-      set LED1 off
-      set LED2 on
-      BellDelay
-      Temp -= 1
-      if Temp = 0 then set GateUp off: GateMoving = 0
-     loop
+Sub RaiseGate
+    Temp = UpTime
+    GateMoving = 1
+    Set GateDown Off
+    Set GateUp On
 
-    end sub
+    Do While GateMoving = 1
+        Set LED1 On
+        Set LED2 Off
+        BellDelay
+        Temp -= 1
+        If Temp = 0 Then Set GateUp Off: GateMoving = 0
+
+        Set LED1 Off
+        Set LED2 On
+        BellDelay
+        Temp -= 1
+        If Temp = 0 Then Set GateUp Off: GateMoving = 0
+    Loop
+
+End Sub

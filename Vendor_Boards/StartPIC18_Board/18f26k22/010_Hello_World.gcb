@@ -14,40 +14,41 @@
 '''  Date: 29.8.17
 '''
 ' ----- Configuration
-    'Chip Settings.
-    #chip 18f26k22, 16
+'Chip Settings.
+#CHIP 18f26k22, 16
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | ----------| O | I |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | ----------| O | I |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------------------| X |---------
-    ''-----------------------------------------
-    ''
-
-
-    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
-    PORTC.2 = 1
-
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------------------| X |---------
+''-----------------------------------------
+''
 
 
-    'Set the a port as an output, we will use only one BIT to connect to the LED
-    dir portb.5 out
+'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+PORTC.2 = 1
 
-    'Set one bit of the port on.
-    portb.5 = 1       ' You can try set portb.1 - the other LED!
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
 
-    'End
-    end
+
+'Set the a port as an output, we will use only one BIT to connect to the LED
+Dir portb.5 Out
+
+'Set one bit of the port on.
+' You can try set portb.1 - the other LED!
+portb.5 = 1
+
+'End
+End

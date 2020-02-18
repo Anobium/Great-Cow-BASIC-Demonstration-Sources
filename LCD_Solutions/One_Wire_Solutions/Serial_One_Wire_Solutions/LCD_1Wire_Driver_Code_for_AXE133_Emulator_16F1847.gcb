@@ -15,128 +15,158 @@
 '''@date    14.02.2015
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
-  #chip 16F1847, 32
-  #option explicit
+#CHIP 16F1847, 32
+#OPTION Explicit
 
-; ----- Define Hardware settings
-  'LCD connection settings
-  #define LCD_IO 4
-  #define LCD_NO_RW
-  #define LCD_DB4 portB.4
-  #define LCD_DB5 portB.5
-  #define LCD_DB6 portB.6
-  #define LCD_DB7 portB.7
-  #define LCD_RS portA.7
-  #define LCD_Enable portA.6
+' ----- Define Hardware settings
+'LCD connection settings
+#DEFINE LCD_IO 4
+#DEFINE LCD_NO_RW
+#DEFINE LCD_DB4 portB.4
+#DEFINE LCD_DB5 portB.5
+#DEFINE LCD_DB6 portB.6
+#DEFINE LCD_DB7 portB.7
+#DEFINE LCD_RS portA.7
+#DEFINE LCD_Enable portA.6
 
-  ' turn on the RS232 and terminal port.
-  ' Define the USART port
-  #define USART_BAUD_RATE 9600
-  #define USART_BLOCKING
-  #define SerInPort PORTB.1
-  'Set pin directions
-  Dir SerInPort In
+' turn on the RS232 and terminal port.
+' Define the USART port
+#DEFINE USART_BAUD_RATE 9600
+#DEFINE USART_BLOCKING
+#DEFINE SerInPort PORTB.1
+'Set pin directions
+Dir SerInPort In
 
-  dir spare0 Out
-  dir spare1 Out
-  dir spare2 Out
-  dir spare3 Out
+Dir spare0 Out
+Dir spare1 Out
+Dir spare2 Out
+Dir spare3 Out
 
-; ----- Constants
-  #define spare0  = PORTA.0 ; spare output 0
-  #define spare1  = PORTA.1 ; spare output 1
-  #define spare2  = PORTA.2 ; spare output 2 (or optional backlight)
-  #define spare3  = PORTA.3 ; spare output 3
-
-
-;----- Variables
-  Dim B1, B2, XLOOP, LOCATION, ENDLOCATION, EEPROM_PTR, INASCVAL as Byte
-
-
-; ----- Main body of program commences here.
-  set spare0 off
-  set spare1 off
-  set spare2 off
-  set spare3 off
-
-  #define line_length = 16            ; change to 20 for displays with 20 character lines
-  EEPROM 0 ,   "   16f1847 v5   "   ; store msg in the EEPROM memory
-  EEPROM 0x10, "Anobium    @9600"   ; store msg in the EEPROM memory
-  EEPROM 0x20, "Up              "   ; store msg in the EEPROM memory
-  EEPROM 0x30, "Pressed         "   ; store msg in the EEPROM memory
-  EEPROM 0x40, "Down            "   ; store msg in the EEPROM memory
-  EEPROM 0x50, "Released        "   ; store msg in the EEPROM memory
-  EEPROM 0x60, "Button 1 is     "   ; store msg in the EEPROM memory
-  EEPROM 0x70, "Time :          "   ; store msg in the EEPROM memory
-  EEPROM 0x80, "Button 2 is     "   ; store msg in the EEPROM memory
-  EEPROM 0x90, "Used :          "   ; store msg in the EEPROM memory
-  EEPROM 0xA0, "Meter:          "   ; store msg in the EEPROM memory
-  EEPROM 0xB0, "Date :          "   ; store msg in the EEPROM memory
-  EEPROM 0xC0, "Pic Restarts:   "   ; store msg in the EEPROM memory
-  EEPROM 0xD0, "Since:          "   ; store msg in the EEPROM memory
-  EEPROM 0xE0, "Set Clock?      "   ; store msg in the EEPROM memory
-  EEPROM 0xF0, "Set Date?       "   ; store msg in the EEPROM memory
+' ----- Constants
+' spare output 0
+#DEFINE spare0  = PORTA.0
+' spare output 1
+#DEFINE spare1  = PORTA.1
+' spare output 2 (or optional backlight)
+#DEFINE spare2  = PORTA.2
+' spare output 3
+#DEFINE spare3  = PORTA.3
 
 
-  locate 0,0
-  msg 0
-  locate 1,0
-  msg 1
-  locate 0,0
-
-  main:
-  Set LCD_RS ON
-  HSerReceive b1
-
-  ; NB keep character mode test as first item in this list to optimise speeD
-     select case b1
-              case  < 253
-                      LCDNormalWriteByte b1
-                      goto main     ; quickly loop back to top
-              Case 254
-
-                      HSerReceive b2
-                      Set LCD_RS OFF
-                      LCDNormalWriteByte b2
-                      Set LCD_RS ON
-                      goto main
-              case 253
-                      HSerReceive b2
-                      msg b2               ; do the 16 character message
-                      goto main            ; back to top
-              case else                    ; must be 255
-                                           ; wait for the next byte
-                      HSerReceive b2
-                      set PortA = ( b2 & 0b00011111 ) | 0b10000000
-                                           ; output the data on A.0 to A.4, keep RS high
-                      goto main            ; back to top
-     end select
-  goto main
-
-  end
-
-; ----- Support methods.  Subroutines and Functions
-
-  sub eeprom ( in location as byte, in datastuff as string )
-      for xloop = 1 to datastuff(0)
-          EPWrite location, datastuff(xloop)
-          location++
-      next
-  end sub
+'----- Variables
+Dim B1, B2, XLOOP, LOCATION, ENDLOCATION, EEPROM_PTR, INASCVAL As Byte
 
 
-  sub  msg ( in location )
+' ----- Main body of program commences here.
+Set spare0 Off
+Set spare1 Off
+Set spare2 Off
+Set spare3 Off
 
-            location = ( location & 0b00001111) * line_length
-            ; EEPROM start address is 0 to 15 multiplied by 16
-            endlocation = location + line_length - 1 ; end address is start address + (line_length - 1)
+' change to 20 for displays with 20 character lines
+#DEFINE line_length = 16
+' store msg in the EEPROM memory
+EEPROM 0 ,   "   16f1847 v5   "
+' store msg in the EEPROM memory
+EEPROM 0x10, "Anobium    @9600"
+' store msg in the EEPROM memory
+EEPROM 0x20, "Up              "
+' store msg in the EEPROM memory
+EEPROM 0x30, "Pressed         "
+' store msg in the EEPROM memory
+EEPROM 0x40, "Down            "
+' store msg in the EEPROM memory
+EEPROM 0x50, "Released        "
+' store msg in the EEPROM memory
+EEPROM 0x60, "Button 1 is     "
+' store msg in the EEPROM memory
+EEPROM 0x70, "Time :          "
+' store msg in the EEPROM memory
+EEPROM 0x80, "Button 2 is     "
+' store msg in the EEPROM memory
+EEPROM 0x90, "Used :          "
+' store msg in the EEPROM memory
+EEPROM 0xA0, "Meter:          "
+' store msg in the EEPROM memory
+EEPROM 0xB0, "Date :          "
+' store msg in the EEPROM memory
+EEPROM 0xC0, "Pic Restarts:   "
+' store msg in the EEPROM memory
+EEPROM 0xD0, "Since:          "
+' store msg in the EEPROM memory
+EEPROM 0xE0, "Set Clock?      "
+' store msg in the EEPROM memory
+EEPROM 0xF0, "Set Date?       "
 
-            for eeprom_ptr = location to endlocation      ; for 16 times
-                      EPRead eeprom_ptr,inAscVal    ; read next character
-                      print chr(inAscVal)
-            next
-  end sub
+
+Locate 0,0
+msg 0
+Locate 1,0
+msg 1
+Locate 0,0
+
+main:
+Set LCD_RS On
+HSerReceive b1
+
+' NB keep character mode test as first item in this list to optimise speeD
+Select Case b1
+Case  < 253
+    LCDNormalWriteByte b1
+    ' quickly loop back to top
+    Goto main
+Case 254
+
+    HSerReceive b2
+    Set LCD_RS Off
+    LCDNormalWriteByte b2
+    Set LCD_RS On
+    Goto main
+Case 253
+    HSerReceive b2
+    ' do the 16 character message
+    msg b2
+    ' back to top
+    Goto main
+Case Else
+    ' must be 255
+    ' wait for the next byte
+    
+    HSerReceive b2
+    Set PortA = ( b2 & 0b00011111 ) | 0b10000000
+    ' output the data on A.0 to A.4, keep RS high
+    ' back to top
+    Goto main
+End Select
+Goto main
+
+End
+
+' ----- Support methods.  Subroutines and Functions
+
+Sub eeprom ( In location As Byte, In datastuff As String )
+    For xloop = 1 To datastuff(0)
+        EPWrite location, datastuff(xloop)
+        location++
+    Next
+End Sub
+
+
+Sub  msg ( In location )
+
+    location = ( location & 0b00001111) * line_length
+    ' EEPROM start address is 0 to 15 multiplied by 16
+    ' end address is start address + (line_length - 1)
+    endlocation = location + line_length - 1
+
+    ' for 16 times
+    For eeprom_ptr = location To endlocation
+        ' read next character
+        EPRead eeprom_ptr,inAscVal
+        Print CHR(inAscVal)
+    Next
+End Sub
 
 

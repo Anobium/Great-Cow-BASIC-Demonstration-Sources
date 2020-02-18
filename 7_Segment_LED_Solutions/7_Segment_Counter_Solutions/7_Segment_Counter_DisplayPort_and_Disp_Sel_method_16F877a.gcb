@@ -12,37 +12,45 @@
 '''@date    02.10.2016
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
 #CHIP 16F877A, 4
 
-; ----- Define Hardware settings
-  ; No hardware specifics setting for 7-Segment display shown below using the constants
-  ; You MUST specify constants as show below in the constants section.
+' ----- Define Hardware settings
+' No hardware specifics setting for 7-Segment display shown below using the constants
+' You MUST specify constants as show below in the constants section.
 
-; ----- Constants
-  ; You NEED to specify the port settings
+' ----- Constants
+' You NEED to specify the port settings
 
-#DEFINE DisplayPortA PORTB          ;Set the 7 segment port for the first 7-Segment display
-#DEFINE DisplayPortB PORTB          ;Set the 7 segment as the same port as the second display
-#DEFINE DisplayPortC PORTB          ;Set the 7 segment as the same port as the third display
-#DEFINE DisplayPortD PORTB          ;Set the 7 segment as the same port as the forth display
+'Set the 7 segment port for the first 7-Segment display
+#DEFINE DisplayPortA PORTB
+'Set the 7 segment as the same port as the second display
+#DEFINE DisplayPortB PORTB
+'Set the 7 segment as the same port as the third display
+#DEFINE DisplayPortC PORTB
+'Set the 7 segment as the same port as the forth display
+#DEFINE DisplayPortD PORTB
 
-#DEFINE Disp_Sel_1 PortA.0          ;The enable pin for the first 7-Segment display
-#DEFINE Disp_Sel_2 PortA.1          ;The enable pin for the second 7-Segment display
-#DEFINE Disp_Sel_3 PortA.2          ;The enable pin for the thirf 7-Segment display
-#DEFINE Disp_Sel_4 PortA.3          ;The enable pin for the forth 7-Segment display
+'The enable pin for the first 7-Segment display
+#DEFINE Disp_Sel_1 PortA.0
+'The enable pin for the second 7-Segment display
+#DEFINE Disp_Sel_2 PortA.1
+'The enable pin for the thirf 7-Segment display
+#DEFINE Disp_Sel_3 PortA.2
+'The enable pin for the forth 7-Segment display
+#DEFINE Disp_Sel_4 PortA.3
 
-; ----- Variables
+' ----- Variables
 Dim DigitCounter As Byte
 
-; ----- Main body of program commences here.
+' ----- Main body of program commences here.
 
 Do Forever
 
     For DigitCounter = 0 To 9
 
-            ;Show the value on all four 7-Segment displays
+        'Show the value on all four 7-Segment displays
         Repeat 125
             DisplayValue 1, DigitCounter
             Wait 2 ms

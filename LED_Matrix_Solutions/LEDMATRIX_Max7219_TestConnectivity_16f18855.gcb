@@ -9,37 +9,37 @@
 '''@version 1.00
 '''@date    27.01.2017
 '''********************************************************************************
-; ----- Configuration
-  #chip 16f18855,32
-  #config MCLRE=on
-  #option Explicit
+' ----- Configuration
+#CHIP 16f18855,32
+#CONFIG MCLRE=On
+#OPTION Explicit
 
-; ----- Constants
-  'Set SPI pins for the Max7219
-  #define Max7219_DI    portb.4
+' ----- Constants
+'Set SPI pins for the Max7219
+#DEFINE Max7219_DI    portb.4
 
-  #define Max7219_DO    portb.5
-  #define Max7219_SCK   portb.3
-  #define Max7219_CS    portc.3
+#DEFINE Max7219_DO    portb.5
+#DEFINE Max7219_SCK   portb.3
+#DEFINE Max7219_CS    portc.3
 
-  ' This purely toggles the control lines  - not needed for production code
+' This purely toggles the control lines  - not needed for production code
 
-    wait 1 s
-    dir Max7219_DO out
-    dir Max7219_SCK out
-    dir Max7219_CS out
+Wait 1 s
+Dir Max7219_DO Out
+Dir Max7219_SCK Out
+Dir Max7219_CS Out
 
-    do
+Do
 
-      set Max7219_DO on
-      set Max7219_SCK on
-      set Max7219_CS on
+    Set Max7219_DO On
+    Set Max7219_SCK On
+    Set Max7219_CS On
 
-      set Max7219_DO off
-      set Max7219_SCK off
-      set Max7219_CS off
+    Set Max7219_DO Off
+    Set Max7219_SCK Off
+    Set Max7219_CS Off
 
-    loop
+Loop
 
 
-    end
+End

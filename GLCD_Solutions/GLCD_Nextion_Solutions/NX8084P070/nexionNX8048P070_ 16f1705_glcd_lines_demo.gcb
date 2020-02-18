@@ -23,41 +23,44 @@
 
 
 ' ----- Configuration
-    'Chip Settings.
-    #chip 16f1705
-    #option explicit
+'Chip Settings.
+#CHIP 16f1705
+#OPTION Explicit
 
 ' ----- Set up the Nextion GLCD
-    #include <glcd.h>
-    #define GLCD_TYPE GLCD_TYPE_Nextion
+#INCLUDE <glcd.h>
+#DEFINE GLCD_TYPE GLCD_TYPE_Nextion
 
 
-    ;VERY IMPORTANT!!
-    ;Change the width and height to match the rotation in the Nextion Editor
-    #define GLCD_WIDTH  800
-    #define GLCD_HEIGHT 480
+'VERY IMPORTANT!!
+'Change the width and height to match the rotation in the Nextion Editor
+#DEFINE GLCD_WIDTH  800
+#DEFINE GLCD_HEIGHT 480
 
 
-    ;VERY IMPORTANT!!
-    ;Fonts installed in the Nextion MUST match the fonts parameters loading to the GLCD.
-    ;Obtain parameters from Nextion Editor/Font dialog.
-    #define NextionFont0      0, 8, 16    'Arial 8x16
-    #define NextionFont1      1, 12, 24   '24point 12x24 charset
-    #define NextionFont2      2, 16, 32   '32point 16x32 charset
+'VERY IMPORTANT!!
+'Fonts installed in the Nextion MUST match the fonts parameters loading to the GLCD.
+'Obtain parameters from Nextion Editor/Font dialog.
+'Arial 8x16
+#DEFINE NextionFont0      0, 8, 16
+'24point 12x24 charset
+#DEFINE NextionFont1      1, 12, 24
+'32point 16x32 charset
+#DEFINE NextionFont2      2, 16, 32
 
 ' ----- End of set up for Nextion GLCD
 
 ' ----- Set up for Hardware Serial
-    ;VERY IMPORTANT!!
-    ;The Nextion MUST be setup for 9600 bps.
-    #define USART_BAUD_RATE 9600
-    #define USART_TX_BLOCKING
-    #define USART_DELAY 0 MS
+'VERY IMPORTANT!!
+'The Nextion MUST be setup for 9600 bps.
+#DEFINE USART_BAUD_RATE 9600
+#DEFINE USART_TX_BLOCKING
+#DEFINE USART_DELAY 0 ms
 
-    ;VERY IMPORTANT!!
-    ;These two are optional. These constants are set in the library.
-    #define GLCD_NextionSerialPrint HSerPrint
-    #define GLCD_NextionSerialSend  HSerSend
+'VERY IMPORTANT!!
+'These two are optional. These constants are set in the library.
+#DEFINE GLCD_NextionSerialPrint HSerPrint
+#DEFINE GLCD_NextionSerialSend  HSerSend
 
 
 ' ----- Set up for Software Serial - this is optional - shown to explain the method.
@@ -78,72 +81,74 @@
 ' ----- End of set up for Serial
 
 
-    'PPS Tool version: 0.0.5.27
-    'PinManager data: v1.78
-    'Generated for 16F1705
-    '
-    'Template comment at the start of the config file
-    '
-    #startup InitPPS, 85
-    #define PPSToolPart 16F1705
+'PPS Tool version: 0.0.5.27
+'PinManager data: v1.78
+'Generated for 16F1705
+'
+'Template comment at the start of the config file
+'
+#STARTUP InitPPS, 85
+#DEFINE PPSToolPart 16F1705
 
-    Sub InitPPS
+Sub InitPPS
 
-            'Module: EUSART
-            RXPPS = 0x0015    'RC5 > RX
-            RC4PPS = 0x0014    'TX > RC4
+    'Module: EUSART
+    'RC5 > RX
+    RXPPS = 0x0015
+    'TX > RC4
+    RC4PPS = 0x0014
 
-    End Sub
-    'Template comment at the end of the config file
+End Sub
+'Template comment at the end of the config file
 
 
 
 
 ' ----- Main program
 
-    'show front screen
-    wait 3 s
+'show front screen
+Wait 3 s
 
 
-  dim scalefactor as Word
-  dim outstring as String * 40
+Dim scalefactor As Word
+Dim outstring As String * 40
 
-  if GLCD_WIDTH > GLCD_HEIGHT then
+If GLCD_WIDTH > GLCD_HEIGHT Then
     scalefactor = GLCD_HEIGHT * 100
-  else
+Else
     scalefactor = GLCD_WIDTH * 100
-  end if
-  scalefactor = scalefactor / 255
+End If
+scalefactor = scalefactor / 255
 
 
 
-  GLCDLocateString_Nextion 1,1
-  GLCDPrintDefaultFont_Nextion ( NextionFont2 )
-  outstring = "Scalefactor = "+ str(scalefactor)
-  GLCDPrintString_Nextion ( outstring)
-  wait 2 s
+GLCDLocateString_Nextion 1,1
+GLCDPrintDefaultFont_Nextion ( NextionFont2 )
+outstring = "Scalefactor = "+ Str(scalefactor)
+GLCDPrintString_Nextion ( outstring)
+Wait 2 s
 
-  GLCDBackground = ILI9341_BLUE
-  ;- hide will remove component visually, touch events on the objects will be disabled
-  GLCDSendOpInstruction_Nextion( "vis",  "255,0" )
-  GLCDCLS
+GLCDBackground = ILI9341_BLUE
+'- hide will remove component visually, touch events on the objects will be disabled
+GLCDSendOpInstruction_Nextion( "vis",  "255,0" )
+GLCDCLS
 
-  dim ccc, xpos, ypos, xpos1, ypos1 as word
-  do Forever
+Dim ccc, xpos, ypos, xpos1, ypos1 As Word
+Do Forever
 
-              repeat 500
-                xpos = (random * scalefactor  ):xpos = xpos/100
-                ypos = (random * scalefactor ):ypos = ypos/100
-                xpos1 = (random * scalefactor ):xpos1 = xpos1/100
-                ypos1 = (random * scalefactor ):ypos1 = ypos1/100
+    Repeat 500
+        xpos = (Random * scalefactor  ):xpos = xpos/100
+        ypos = (Random * scalefactor ):ypos = ypos/100
+        xpos1 = (Random * scalefactor ):xpos1 = xpos1/100
+        ypos1 = (Random * scalefactor ):ypos1 = ypos1/100
 
-                ccc = Random
-                ccc_h = Random
+        ccc = Random
+        ccc_h = Random
 
-                box(xpos,ypos,(xpos+xpos1),(ypos+ypos1),ccc)
+        Box(xpos,ypos,(xpos+xpos1),(ypos+ypos1),ccc)
 
-                end repeat
-          GLCDCLS
+    End Repeat
+    GLCDCLS
 
 
-  loop
+Loop

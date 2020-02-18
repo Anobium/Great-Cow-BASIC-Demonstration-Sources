@@ -17,112 +17,114 @@
 '''@date    03/05/2018
 '''****
 ' ----- Configuration
-    'Chip Settings.
-    #chip 18F27K40, 32
-    #option Explicit
+'Chip Settings.
+#CHIP 18F27K40, 32
+#OPTION Explicit
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------------------| I | A |-----
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------------------| I | A |-----
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------| O | O | O | O |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------| O | O | O | O |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---------------------------------
-    ''-----------------------------------------
-    ''
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
 
-    'Define constants to make things easier. We can reuse these at any time.
-    #define LEDPORT PORTB
-    #define LEDD1   LEDPORT.0
-    #define LEDD2   LEDPORT.1
-    #define LEDD3   LEDPORT.2
-    #define LEDD4   LEDPORT.3
-
-
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     LEDD3         Out
-    Dir     LEDD4         Out
-
-    #define SWITCHPORT    PORTA
-    #define SwitchIn      SWITCHPORT.2
-    Dir     SwitchIn      In
-
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
-
-     dim lastKeyDown as Byte
-
-    'Set the initial LED states
-     LEDD1 = 0
-     LEDD2 = 0
-     LEDD3 = 0
-     LEDD4 = 1
-
-     dim     LEDState as Byte
-     'We are only interested in the lower four bits, so, use a mask to extract the state of these bits.
-     LEDState = LEDPORT AND 0B00001111
-
-     'Debouncing a switch
-
-      Do forever
-                wait 10 ms
-
-                if  keyPressed( lastKeyDown ) = true then
-
-                    'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
-                    'Clear the C register bit, rotate the LEDState variable, check if the C register bit is set and set the LEDState variable.
-                    Set C off                 ' Clear the carry flag
-                    Rotate LEDState right        ' and shift the contents of LEDState
-                    ' If the Carry is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
-                    If C = 1 then
-                       'Set the initial LED states
-                        LEDD1 = 0
-                        LEDD2 = 0
-                        LEDD3 = 0
-                        LEDD4 = 1
-                        LEDState = LEDPORT AND 0B00001111
-                    else
-                        'Set the port
-                        LEDPORT = LEDState
-                    end if
-
-                end if
-
-      loop
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDPORT PORTB
+#DEFINE LEDD1   LEDPORT.0
+#DEFINE LEDD2   LEDPORT.1
+#DEFINE LEDD3   LEDPORT.2
+#DEFINE LEDD4   LEDPORT.3
 
 
-  function  keyPressed ( in lastKeyDown )
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+Dir     LEDD3         Out
+Dir     LEDD4         Out
 
-        dim actKeyDown as byte
+#DEFINE SWITCHPORT    PORTA
+#DEFINE SwitchIn      SWITCHPORT.2
+Dir     SwitchIn      In
 
-        wait 5 ms
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
 
-        if ( !SwitchIn ) then
+Dim lastKeyDown As Byte
 
-            actKeyDown = true
+'Set the initial LED states
+LEDD1 = 0
+LEDD2 = 0
+LEDD3 = 0
+LEDD4 = 1
 
-        else
+Dim     LEDState As Byte
+'We are only interested in the lower four bits, so, use a mask to extract the state of these bits.
+LEDState = LEDPORT AND 0B00001111
 
-            actKeyDown = false
+'Debouncing a switch
 
-        end if
+Do Forever
+    Wait 10 ms
 
-        if (actKeyDown <> lastKeyDown) then
-            lastKeyDown = actKeyDown
-            keyPressed =  actKeyDown
-        else
-            keyPressed = false
-        end if
+    If  keyPressed( lastKeyDown ) = TRUE Then
+
+        'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
+        'Clear the C register bit, rotate the LEDState variable, check if the C register bit is set and set the LEDState variable.
+        ' Clear the carry flag
+        Set C Off
+        ' and shift the contents of LEDState
+        Rotate LEDState Right
+        ' If the Carry is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
+        If C = 1 Then
+            'Set the initial LED states
+            LEDD1 = 0
+            LEDD2 = 0
+            LEDD3 = 0
+            LEDD4 = 1
+            LEDState = LEDPORT AND 0B00001111
+        Else
+            'Set the port
+            LEDPORT = LEDState
+        End If
+
+    End If
+
+Loop
+
+
+Function  keyPressed ( In lastKeyDown )
+
+    Dim actKeyDown As Byte
+
+    Wait 5 ms
+
+    If ( !SwitchIn ) Then
+
+        actKeyDown = TRUE
+
+    Else
+
+        actKeyDown = FALSE
+
+    End If
+
+    If (actKeyDown <> lastKeyDown) Then
+        lastKeyDown = actKeyDown
+        keyPressed =  actKeyDown
+    Else
+        keyPressed = FALSE
+    End If
 
 
 
-  end function
+End Function

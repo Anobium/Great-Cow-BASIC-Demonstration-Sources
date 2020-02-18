@@ -12,107 +12,113 @@
 '''@date    6.9.2016
 '''********************************************************************************
 
-; ----- Configuration
-  #chip 16F1709, 16
-  #option explicit
+' ----- Configuration
+#CHIP 16F1709, 16
+#OPTION Explicit
 
-  'Set the PPS for this solution.
-  #startup InitPPS, 85
+'Set the PPS for this solution.
+#STARTUP InitPPS, 85
 
-  Sub InitPPS
+Sub InitPPS
     UNLOCKPPS
 
-    RXPPS=0x0D        'Pin RB5 source is an input for RX
-    RB7PPS=0x14       'Pin RB7 source is TX/CK
+    'Pin RB5 source is an input for RX
+    RXPPS=0x0D
+    'Pin RB7 source is TX/CK
+    RB7PPS=0x14
 
-    RB4PPS = 0x11     'RB4->MSSP:SDA
-    RB6PPS = 0x10     'RB6->MSSP:SCL
-    SSPDATPPS = 0x0C  'RB4->MSSP:SDA
-    SSPCLKPPS = 0x0E  'RB6->MSSP:SCL
+    'RB4->MSSP:SDA
+    RB4PPS = 0x11
+    'RB6->MSSP:SCL
+    RB6PPS = 0x10
+    'RB4->MSSP:SDA
+    SSPDATPPS = 0x0C
+    'RB6->MSSP:SCL
+    SSPCLKPPS = 0x0E
 
     LOCKPPS
-  End sub
+End Sub
 
-; ----- Define Hardware settings
-  ' Define I2C settings - CHANGE PORTS if required
-  #define HI2C_BAUD_RATE 400
-  #define HI2C_DATA PORTC.1
-  #define HI2C_CLOCK PORTC.0
-  'Initialise I2C Slave
-  'I2C pins need to be input for SSP module
-  Dir HI2C_DATA in
-  Dir HI2C_CLOCK in
- 'MASTER
-  HI2CMode Master
+' ----- Define Hardware settings
+' Define I2C settings - CHANGE PORTS if required
+#DEFINE HI2C_BAUD_RATE 400
+#DEFINE HI2C_DATA PORTC.1
+#DEFINE HI2C_CLOCK PORTC.0
+'Initialise I2C Slave
+'I2C pins need to be input for SSP module
+Dir HI2C_DATA In
+Dir HI2C_CLOCK In
+'MASTER
+HI2CMode Master
 
- ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
- ' USART settings - CHANGE PORTS if required
- #define USART_BAUD_RATE 9600
- Dir PORTb.7 Out
- Dir PORTb.5 In
- #define USART_TX_BLOCKING
- wait 500 ms
-
-
-  Dim DISPLAYNEWLINE as Byte
+' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
+' USART settings - CHANGE PORTS if required
+#DEFINE USART_BAUD_RATE 9600
+Dir PORTb.7 Out
+Dir PORTb.5 In
+#DEFINE USART_TX_BLOCKING
+Wait 500 ms
 
 
-; ----- Main body of program commences here.
-  ' Now assumes Serial Terminal is operational
-  dim DeviceID as byte
+Dim DISPLAYNEWLINE As Byte
 
-  HSerPrintCRLF
-  HSerPrint "Hardware I2C "
-  HSerPrintCRLF 2
 
-      ' Now assumes Serial Terminal is operational
-      HSerPrintCRLF
-      HSerPrint "   "
-      'Create a horizontal row of numbers
-      for DeviceID = 0 to 15
-        HSerPrint hex(deviceID)
-        HSerPrint " "
-      next
+' ----- Main body of program commences here.
+' Now assumes Serial Terminal is operational
+Dim DeviceID As Byte
 
-      'Create a vertical column of numbers
-      for DeviceID = 0 to 255
-        DisplayNewLine = DeviceID % 16
-        if DisplayNewLine = 0 Then
-          HSerPrintCRLF
-          HserPrint hex(DeviceID)
-          if DisplayNewLine > 0 then
+HSerPrintCRLF
+HSerPrint "Hardware I2C "
+HSerPrintCRLF 2
+
+' Now assumes Serial Terminal is operational
+HSerPrintCRLF
+HSerPrint "   "
+'Create a horizontal row of numbers
+For DeviceID = 0 To 15
+    HSerPrint Hex(deviceID)
+    HSerPrint " "
+Next
+
+'Create a vertical column of numbers
+For DeviceID = 0 To 255
+    DisplayNewLine = DeviceID % 16
+    If DisplayNewLine = 0 Then
+        HSerPrintCRLF
+        HSerPrint Hex(DeviceID)
+        If DisplayNewLine > 0 Then
             HSerPrint " "
-          end if
-        end if
-        HSerPrint " "
+        End If
+    End If
+    HSerPrint " "
 
-        'Do an initial Start
-        HI2CStart
-        if HI2CWaitMSSPTimeout <> True then
+    'Do an initial Start
+    HI2CStart
+    If HI2CWaitMSSPTimeout <> TRUE Then
 
-          'Send to address to device
-          HI2CSend ( deviceID )
+        'Send to address to device
+        HI2CSend ( deviceID )
 
-          'Did device fail to respond?
-          if HI2CAckPollState = false then
+        'Did device fail to respond?
+        If HI2CAckpollState = FALSE Then
             HI2CSend ( 0 )
-            HSerPrint   hex(deviceID)
-          Else
+            HSerPrint   Hex(deviceID)
+        Else
             HSerPrint "--"
-          end if
+        End If
 
-          'Do a stop.
-          HI2CStop
+        'Do a stop.
+        HI2CStop
 
-        end if
+    End If
 
-      next
+Next
 
-      HSerPrintCRLF 2
-      HSerPrint   "End of Search"
-      HSerPrintCRLF 2
-      wait 1 s
-      END
+HSerPrintCRLF 2
+HSerPrint   "End of Search"
+HSerPrintCRLF 2
+Wait 1 s
+End
 
 
-; ----- Support methods.  Subroutines and Functions
+' ----- Support methods.  Subroutines and Functions

@@ -18,67 +18,73 @@
 '''  Date: 29.8.17
 '''
 ' ----- Configuration
-    'Chip Settings.
-    #chip 18f25k22, 16
+'Chip Settings.
+#CHIP 18f25k22, 16
 
-    '' -------------------PORTA----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---|RS |RW | E |D7 |D6 |D5 |D4
-    ''-----------------------------------------
-    ''
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---|RS |RW | E |D7 |D6 |D5 |D4
+''-----------------------------------------
+''
 
-    '' -------------------PORTB----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    -------| O | A |-------| O | I |-
-    ''-----------------------------------------
-    ''
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -------| O | A |-------| O | I |-
+''-----------------------------------------
+''
 
-    '' ------------------PORTC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' IO:    ---| TX| A |-------| X |---------
-    ''-----------------------------------------
-    ''
-
-
-    #define LEDD1 PORTB.1
-    #define LEDD2 PORTB.5
-    #define Potentiometer   PORTC.5
-    #define SwitchIn        PORTB.0
-    #define LCDControl      PORTC.2
-    #define EventPort       PORTB.7
-
-    Dir     LEDD1         Out
-    Dir     LEDD2         Out
-    Dir     Potentiometer In   'this is the AN17 port
-    Dir     SwitchIn      In
-    Dir     LCDControl    Out
-
-    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
-    LCDControl = 1
-
-    '*****************************************************************************************************
-    'Main program commences here.. everything before this is setup for the board.
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---| TX| A |-------| X |---------
+''-----------------------------------------
+''
 
 
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.5
+#DEFINE Potentiometer   PORTC.5
+#DEFINE SwitchIn        PORTB.0
+#DEFINE LCDControl      PORTC.2
+#DEFINE EventPort       PORTB.7
 
-    'Setup an Interrupt event when portb.7 goes negative.
-    IOCB7 = 1
-    On Interrupt PORTChange  Call InterruptHandler
-    do
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+'this is the AN17 port
+Dir     Potentiometer In
+Dir     SwitchIn      In
+Dir     LCDControl    Out
 
-    loop
+'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+LCDControl = 1
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
 
 
-sub InterruptHandler
 
-    if EventPort = 0 then                     'Is this our event?
-        IOCB7 = 0                             'Prevent the event from reentering the InterruptHandler routine
-        RBIF  = 0                             'We must clear the flag in software
+'Setup an Interrupt event when portb.7 goes negative.
+IOCB7 = 1
+On Interrupt PORTChange  Call InterruptHandler
+Do
 
-        LEDD1 = !LEDD1                        'Toogle the LED
+Loop
 
-        IOCB7 = 1                             'ReEnable the InterruptHandler routine
 
-    end if
+Sub InterruptHandler
 
-end sub
+    If EventPort = 0 Then
+        'Is this our event?
+        'Prevent the event from reentering the InterruptHandler routine
+        IOCB7 = 0
+        'We must clear the flag in software
+        RBIF  = 0
+
+        'Toogle the LED
+        LEDD1 = !LEDD1
+
+        'ReEnable the InterruptHandler routine
+        IOCB7 = 1
+
+    End If
+
+End Sub

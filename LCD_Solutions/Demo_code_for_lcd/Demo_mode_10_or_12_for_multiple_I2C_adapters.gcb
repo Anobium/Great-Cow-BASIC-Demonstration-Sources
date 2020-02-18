@@ -1,19 +1,24 @@
-; ----- Define Hardware settings
+' ----- Define Hardware settings
 ' Define I2C settings - CHANGE PORTS
-   #define I2C_MODE Master
-   #define I2C_DATA PORTC.4
-   #define I2C_CLOCK PORTC.5
-   #define I2C_DISABLE_INTERRUPTS ON
+#DEFINE I2C_MODE Master
+#DEFINE I2C_DATA PORTC.4
+#DEFINE I2C_CLOCK PORTC.5
+#DEFINE I2C_DISABLE_INTERRUPTS On
 
 '''Set up LCD
-   #define LCD_IO 10					  ; Or LCD_IO 12
-   #define LCD_I2C_Address_1 0x4E                ; LCD 1
-   #define LCD_I2C_Address_2 0x4C                ; LCD 2
-   #define LCD_I2C_Address_2 0x4A                ; LCD 3
-   #define LCD_I2C_Address_2 0x49                ; LCD 4    
+' Or LCD_IO 12
+#DEFINE LCD_IO 10					
+' LCD 1
+#DEFINE LCD_I2C_Address_1 0x4E
+' LCD 2
+#DEFINE LCD_I2C_Address_2 0x4C
+' LCD 3
+#DEFINE LCD_I2C_Address_2 0x4A
+' LCD 4
+#DEFINE LCD_I2C_Address_2 0x49
 
-;Change to the correct LCD by setting.
-;LCD_I2C_Address_Current to the correct address then write to LCD.
+'Change to the correct LCD by setting.
+'LCD_I2C_Address_Current to the correct address then write to LCD.
 LCD_I2C_Address_Current = LCD_I2C_Address_1
 Print "Adapter #1"
 LCD_I2C_Address_Current = LCD_I2C_Address_2
@@ -22,7 +27,7 @@ LCD_I2C_Address_Current = LCD_I2C_Address_3
 Print "Adapter #3"
 LCD_I2C_Address_Current = LCD_I2C_Address_4
 Print "Adapter #4"
-wait 4 s
+Wait 4 s
 LCD_I2C_Address_Current = LCD_I2C_Address_1:  CLS
 LCD_I2C_Address_Current = LCD_I2C_Address_2:  CLS
 LCD_I2C_Address_Current = LCD_I2C_Address_3:  CLS

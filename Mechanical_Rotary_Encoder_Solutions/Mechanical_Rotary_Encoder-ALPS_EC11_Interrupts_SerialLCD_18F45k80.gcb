@@ -21,135 +21,138 @@
 ''' CHANGE CHIP AND PORTS ACCORDING TO YOUR TESTING BOARD!
 ''' *****************************************
 
-; ----- Configuration
-  #chip 18F45k80, 8
-  #option explicit
+' ----- Configuration
+#CHIP 18F45k80, 8
+#OPTION Explicit
 
-	' Load encoder header file
-  #include <alps-ec11.h>
+' Load encoder header file
+#INCLUDE <alps-ec11.h>
 
-  #include <lcd2serialredirect.h>
-; ----- Define Hardware settings
-  ; Required to LCD to Serial redirection
-   #define LCD_IO 0
+#INCLUDE <lcd2serialredirect.h>
+' ----- Define Hardware settings
+' Required to LCD to Serial redirection
+#DEFINE LCD_IO 0
 
-   #define USART_BAUD_RATE 9600
-   #define USART_DELAY 10 ms
-   #define USART_BLOCKING
-   wait 500 ms
+#DEFINE USART_BAUD_RATE 9600
+#DEFINE USART_DELAY 10 ms
+#DEFINE USART_BLOCKING
+Wait 500 ms
 
-; ----- Define Hardware settings
-  'Set weak pullups on inputs port B
-  RBPU = 0
+' ----- Define Hardware settings
+'Set weak pullups on inputs port B
+RBPU = 0
 
-  'Encoder connections defined here
-  #define Alps_ENCODER_A		PortB.2  	'Clock
+'Encoder connections defined here
+'Clock
+#DEFINE Alps_ENCODER_A		PortB.2
 
-  #define Alps_ENCODER_B		PortB.0		'CW
+'CW
+#DEFINE Alps_ENCODER_B		PortB.0
 
-  #define Alps_ENCODER_SW	PortB.3			'encoder-switch
+'encoder-switch
+#DEFINE Alps_ENCODER_SW	PortB.3
 
-   #define Alps_ENCODER_ENC_READ_DELAY 100
+#DEFINE Alps_ENCODER_ENC_READ_DELAY 100
 
-;---- variables
-  Dim REFRESHLCD as Byte
-
-
-
-
-; ----- Main body of program commences here.
-
-;****************************************************************************
-	'Enable portb.3, which is External Interrupt #3, as the source of the interrupt.
-  'See the datasheet for more information.
-  #define ExternalEventSource_Switch ExtInt3
-  #define SetExternalEventEnable_Switch INT3IE
-  #define ClearExternalEvent_Switch INT3IF
-
-  SetExternalEventEnable_Switch = 1
-  On Interrupt ExternalEventSource_Switch Call Alps_ENCODER_SW_Pressed
-
-;****************************************************************************
-  'Enable portb.2, which is External Interrupt #2, as the source of the interrupt.
-  'See the datasheet for more information.
-  #define ExternalEventSource_Clock ExtInt2
-  #define SetExternalEventEnable_Clock INT2IE
-  #define ClearExternalEvent_Clock INT2IF
-  #define SetExternalEdge_Clock INTEDG2
-
-	SetExternalEdge_Clock = 1
-  SetExternalEventEnable_Clock = 1
-  On Interrupt ExternalEventSource_Clock Call Alps_ENCODER_Clock_Event
-  ;****************************************************************************
-  'Prevent events from firing during initial LCD update
-	IntOff
-	CLS
-  PRINT "Rotary Enc. Demo"
-  Locate 1,0
-  PRINT "Great Cow Basic"
-  wait 2 s
-  CLS
-  Print "@Dec 2019"
-  Locate 1,0
-  PRINT "Immo's&Ano Code"
-  wait 2 s
-	CLS
-
-	'Show what happening with encoder on the LCD
-  locate 0,0
-  print "Counting enabled"
-  locate 1, 0
-  print "Rotate encoder  "
+'---- variables
+Dim REFRESHLCD As Byte
 
 
-  RefreshLCD = True
-	inton
 
-  do Forever
 
-			' Alps_ESB_Bit is a bit that is exposed to detect state of button.  Detects event has occurred
-			if Alps_ESB_Bit = 1 then
+' ----- Main body of program commences here.
 
-				'Update screen once on button button change
-				if 	RefreshLCD = true then
-						RefreshLCD = False
+'****************************************************************************
+'Enable portb.3, which is External Interrupt #3, as the source of the interrupt.
+'See the datasheet for more information.
+#DEFINE ExternalEventSource_Switch ExtInt3
+#DEFINE SetExternalEventEnable_Switch INT3IE
+#DEFINE ClearExternalEvent_Switch INT3IF
 
-						CLS
-        		locate 0,0
-          	print "Counting enabled"
+SetExternalEventEnable_Switch = 1
+On Interrupt ExternalEventSource_Switch Call Alps_ENCODER_SW_Pressed
 
-				end if
+'****************************************************************************
+'Enable portb.2, which is External Interrupt #2, as the source of the interrupt.
+'See the datasheet for more information.
+#DEFINE ExternalEventSource_Clock ExtInt2
+#DEFINE SetExternalEventEnable_Clock INT2IE
+#DEFINE ClearExternalEvent_Clock INT2IF
+#DEFINE SetExternalEdge_Clock INTEDG2
 
-				' Alps_EncoderEvent is a bit that is exposed to detect state of button.  Detects event has occurred
-				if Alps_EncoderEvent = 1  then
+SetExternalEdge_Clock = 1
+SetExternalEventEnable_Clock = 1
+On Interrupt ExternalEventSource_Clock Call Alps_ENCODER_Clock_Event
+'****************************************************************************
+'Prevent events from firing during initial LCD update
+IntOff
+CLS
+Print "Rotary Enc. Demo"
+Locate 1,0
+Print "Great Cow Basic"
+Wait 2 s
+CLS
+Print "@Dec 2019"
+Locate 1,0
+Print "Immo's&Ano Code"
+Wait 2 s
+CLS
 
-					Alps_EncoderEvent = 0
+'Show what happening with encoder on the LCD
+Locate 0,0
+Print "Counting enabled"
+Locate 1, 0
+Print "Rotate encoder  "
 
-          locate 1,0
-          'Alps_CurrentPosition is a public Integer value that is the current rotational value
-          print Alps_CurrentPosition
 
-					'Alps_Directn is a public bit that is the current direction of the encoder
-          if Alps_Directn = 1 then
-            print " (+) "
-          Else
-            print " (-) "
-          end if
+RefreshLCD = TRUE
+IntOn
 
-				end if
+Do Forever
 
-      else
+    ' Alps_ESB_Bit is a bit that is exposed to detect state of button.  Detects event has occurred
+    If Alps_ESB_Bit = 1 Then
 
-        locate 0, 0
-        print "Count disabled  "
-        locate 1, 0
-        print "  press button  "
-				RefreshLCD= True
+        'Update screen once on button button change
+        If 	RefreshLCD = TRUE Then
+            RefreshLCD = FALSE
 
-      end if
+            CLS
+            Locate 0,0
+            Print "Counting enabled"
 
-  loop
+        End If
 
-	End
+        ' Alps_EncoderEvent is a bit that is exposed to detect state of button.  Detects event has occurred
+        If Alps_EncoderEvent = 1  Then
 
-; ----- Support methods.  Subroutines and Functions
+            Alps_EncoderEvent = 0
+
+            Locate 1,0
+            'Alps_CurrentPosition is a public Integer value that is the current rotational value
+            Print Alps_CurrentPosition
+
+            'Alps_Directn is a public bit that is the current direction of the encoder
+            If Alps_Directn = 1 Then
+                Print " (+) "
+            Else
+                Print " (-) "
+            End If
+
+        End If
+
+    Else
+
+        Locate 0, 0
+        Print "Count disabled  "
+        Locate 1, 0
+        Print "  press button  "
+        RefreshLCD= TRUE
+
+    End If
+
+Loop
+
+End
+
+' ----- Support methods.  Subroutines and Functions

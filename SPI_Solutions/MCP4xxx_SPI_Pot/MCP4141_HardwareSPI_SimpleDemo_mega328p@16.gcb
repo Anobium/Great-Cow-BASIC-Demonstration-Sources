@@ -26,110 +26,115 @@
 '''@date   		May 2019
 '''********************************************************************************
 
-; ----- Configuration
-  #chip mega328p, 16
-  #option explicit
-  #include <uno_mega328p.h>
-  #include <mcp4xxxdigitalpot.h>
+' ----- Configuration
+#CHIP mega328p, 16
+#OPTION Explicit
+#INCLUDE <uno_mega328p.h>
+#INCLUDE <mcp4xxxdigitalpot.h>
 
-; ----- Constants
+' ----- Constants
 
-  #define _ShowDialog
+#DEFINE _ShowDialog
 
-	' SPI SETUP
-  #define DigitalPot_CS DIGITAL_10
-  #define DigitalPot_SCK DIGITAL_13
-  #define DigitalPot_DO DIGITAL_11
-  #define DigitalPot_DI DIGITAL_12
+' SPI SETUP
+#DEFINE DigitalPot_CS DIGITAL_10
+#DEFINE DigitalPot_SCK DIGITAL_13
+#DEFINE DigitalPot_DO DIGITAL_11
+#DEFINE DigitalPot_DI DIGITAL_12
 
-; ----- Define Hardware settings
-	' None
-; ----- Variables
-  dim loopx as word
-  Dim DD as Byte
-
-
-
-; ------ Start of main Program
+' ----- Define Hardware settings
+' None
+' ----- Variables
+Dim loopx As Word
+Dim DD As Byte
 
 
-  ' Setup MCP Device using hardware SPI
-   #define _MCP4XXXHardwareSPI
-	'Required to initialise the device
-   MCP4XXXInit
-   SPIMode MasterFast, 0
 
-; ----- Example code
+' ------ Start of main Program
 
-	HSerPrintCRLF 2
 
-  'Write to EEProme
-  'DigitalWriteMemory ( 9bit number [0-511], EEProm address [6-9] )
-      DigitalWriteMemory ( (511) , 6 )
-      DigitalWriteMemory ( ( 7  ) , 7 )
-      DigitalWriteMemory ( ( 256 ) , 8 )
-      DigitalWriteMemory ( (  0 ) , 9 )
-      DigitalWriteMemory ( (  85 ) , 10 )
-      DigitalWriteMemory ( (  341 ) , 11 )
-      DigitalWriteMemory ( (  170 ) , 12 )
-      DigitalWriteMemory ( (  55 ) , 13 )
-      DigitalWriteMemory ( (  1 ) , 14 )
-      DigitalWriteMemory ( (  511 ) , 15 )
+' Setup MCP Device using hardware SPI
+#DEFINE _MCP4XXXHardwareSPI
+'Required to initialise the device
+MCP4XXXInit
+SPIMode MasterFast, 0
 
-	'Display EEProm Values
-  for dd = 0 to 15
-		HSerPrint Pad( str(dd)+") ", 5 )
-  	HSerPrint DigitalReadMemory ( dd )
-		HSerPrintCRLF
-  next
+' ----- Example code
 
-	'Example square wave
+HSerPrintCRLF 2
 
-  		'SPI Settings gives a square wave as follows
-      '							Hardware		MasterFast			32khz			4mhz
-      '							Hardware		Master					18khz			1mhz
-      '						  Hardware		MasterSlow			8.6khz		250khz
-      '							Software		NotApplicable		10.9khz		444khz
+'Write to EEProme
+'DigitalWriteMemory ( 9bit number [0-511], EEProm address [6-9] )
+DigitalWriteMemory ( (511) , 6 )
+DigitalWriteMemory ( ( 7  ) , 7 )
+DigitalWriteMemory ( ( 256 ) , 8 )
+DigitalWriteMemory ( (  0 ) , 9 )
+DigitalWriteMemory ( (  85 ) , 10 )
+DigitalWriteMemory ( (  341 ) , 11 )
+DigitalWriteMemory ( (  170 ) , 12 )
+DigitalWriteMemory ( (  55 ) , 13 )
+DigitalWriteMemory ( (  1 ) , 14 )
+DigitalWriteMemory ( (  511 ) , 15 )
+
+'Display EEProm Values
+For dd = 0 To 15
+    HSerPrint Pad( Str(dd)+") ", 5 )
+    HSerPrint DigitalReadMemory ( dd )
+    HSerPrintCRLF
+Next
+
+'Example square wave
+
+'SPI Settings gives a square wave as follows
+'							Hardware		MasterFast			32khz			4mhz
+'							Hardware		Master					18khz			1mhz
+'						  Hardware		MasterSlow			8.6khz		250khz
+'							Software		NotApplicable		10.9khz		444khz
 '      do Forever
 '          DigitalPotSetWiperPosition(0, 0)    ' Set wiper to 0/128 = 0 Rab
 '          DigitalPotSetWiperPosition(128, 0)    ' Set wiper to 128/128 = 1 Rab
 '      loop
 
-	'Example setup of pot wiper
-      do Forever
+'Example setup of pot wiper
+Do Forever
 
-              DigitalPotSetWiperPosition(0, 0)    ' Set wiper to 0/128 = 0 Rab
-              wait 50 ms
+    ' Set wiper to 0/128 = 0 Rab
+    DigitalPotSetWiperPosition(0, 0)
+    Wait 50 ms
 
-              DigitalPotSetWiperPosition(32, 0)    ' Set wiper to 32/128 = 1/4 Rab
-              wait 50 ms
-
-
-              DigitalPotSetWiperPosition(64, 0)    ' Set wiper to 64/128 = 1/2 Rab
-              wait 50 ms
+    ' Set wiper to 32/128 = 1/4 Rab
+    DigitalPotSetWiperPosition(32, 0)
+    Wait 50 ms
 
 
-              DigitalPotSetWiperPosition(96, 0)    ' Set wiper to 96/128 = 3/4 Rab
-              wait 50 ms
+    ' Set wiper to 64/128 = 1/2 Rab
+    DigitalPotSetWiperPosition(64, 0)
+    Wait 50 ms
 
 
-              DigitalPotSetWiperPosition(128, 0)    ' Set wiper to 128/128 = 1 Rab
-              wait 50 ms
+    ' Set wiper to 96/128 = 3/4 Rab
+    DigitalPotSetWiperPosition(96, 0)
+    Wait 50 ms
+
+
+    ' Set wiper to 128/128 = 1 Rab
+    DigitalPotSetWiperPosition(128, 0)
+    Wait 50 ms
 
 
 
-              ' Decrement wiper 129 times
-              for loopx =0 to 128
-                  DigitalPotDecrement
-                  wait 1 ms
-              next
-              wait 8 ms
+    ' Decrement wiper 129 times
+    For loopx =0 To 128
+        DigitalPotDecrement
+        Wait 1 ms
+    Next
+    Wait 8 ms
 
-              ' Increment wiper 129 times
-              for loopx =0 to 128
-                  DigitalPotIncrement
-                  wait 1 ms
-              next
-              wait 8 ms
+    ' Increment wiper 129 times
+    For loopx =0 To 128
+        DigitalPotIncrement
+        Wait 1 ms
+    Next
+    Wait 8 ms
 
-      Loop
+Loop

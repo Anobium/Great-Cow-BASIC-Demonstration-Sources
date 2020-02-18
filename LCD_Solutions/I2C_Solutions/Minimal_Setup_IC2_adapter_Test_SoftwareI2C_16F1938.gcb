@@ -13,56 +13,56 @@
 '''@date   	17.02.2015
 '''********************************************************************************
 
-; ----- Configuration
+' ----- Configuration
 
-  #chip 16f1938, 32
-  #option explicit
-
-
-  ; ----- Define Hardware settings
-  ' Define I2C settings - CHANGE PORTS
-   #define I2C_MODE Master
-   #define I2C_DATA PORTC.4
-   #define I2C_CLOCK PORTC.3
-   #define I2C_DISABLE_INTERRUPTS ON
-   'Optionally, you can reduce the I2C timings.
-   #define I2C_BIT_DELAY 0 us
-   #define I2C_CLOCK_DELAY 1 us
-   #define I2C_END_DELAY 0 us
+#CHIP 16f1938, 32
+#OPTION Explicit
 
 
-  '''Set up LCD
-   #define LCD_IO 10
-   '   #define LCD_I2C_Address_1 0x4C ; default to 0x4E
-
-; ----- Constants
-  'None required beyond the scope of the hardware.
-
-; ----- Quick Command Reference:
-
- '''Set LCD_10 to 10 for the YwRobot LCD1602 IIC V1 or the Sainsmart LCD_PIC I2C adapter
- '''Set LCD_10 to 12 for the Ywmjkdz I2C adapter with pot bent over top of chip
-
-;----- Variables
-  Dim LCD_I2C_ADDRESS_CURRENT as Byte
+' ----- Define Hardware settings
+' Define I2C settings - CHANGE PORTS
+#DEFINE I2C_MODE Master
+#DEFINE I2C_DATA PORTC.4
+#DEFINE I2C_CLOCK PORTC.3
+#DEFINE I2C_DISABLE_INTERRUPTS On
+'Optionally, you can reduce the I2C timings.
+#DEFINE I2C_BIT_DELAY 0 us
+#DEFINE I2C_CLOCK_DELAY 1 us
+#DEFINE I2C_END_DELAY 0 us
 
 
-; ----- Main body of program commences here.
-do forever
-      CLS
-      PRINT "Great Cow Basic"
-      Locate 1,0
-      PRINT "I2C LCD Driver"
-      Wait 4 s
+'''Set up LCD
+#DEFINE LCD_IO 10
+'   #define LCD_I2C_Address_1 0x4C ; default to 0x4E
 
-      CLS
-      PRINT "Great Cow Basic"
-      Locate 1,0
-      PRINT "Minimal Setup"
-      Wait 4 s
+' ----- Constants
+'None required beyond the scope of the hardware.
 
-      cls
-      Print "Current I2C: ": LCDHex(  LCD_I2C_Address_Current, 2)
-      wait 3 s
+' ----- Quick Command Reference:
 
- loop
+'''Set LCD_10 to 10 for the YwRobot LCD1602 IIC V1 or the Sainsmart LCD_PIC I2C adapter
+'''Set LCD_10 to 12 for the Ywmjkdz I2C adapter with pot bent over top of chip
+
+'----- Variables
+Dim LCD_I2C_Address_Current As Byte
+
+
+' ----- Main body of program commences here.
+Do Forever
+    CLS
+    Print "Great Cow Basic"
+    Locate 1,0
+    Print "I2C LCD Driver"
+    Wait 4 s
+
+    CLS
+    Print "Great Cow Basic"
+    Locate 1,0
+    Print "Minimal Setup"
+    Wait 4 s
+
+    CLS
+    Print "Current I2C: ": LCDHex(  LCD_I2C_Address_Current, 2)
+    Wait 3 s
+
+Loop

@@ -22,43 +22,43 @@
 '''
 
 
-    'Chip Settings.
-    #chip 16f18855,32
+'Chip Settings.
+#CHIP 16f18855,32
 
-    '' -------------------LATA-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D1 |-
-    ''-----------------------------------------
-    ''
+'' -------------------LATA-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D1 |-
+''-----------------------------------------
+''
 
-     table gray_code
-        0
-        0
-        0
-        1
-        1
-        1
-        3
-        3
-        3
-        3
-        7
-        7
-        7
-        15
-        15
-        15
-     end table
+Table gray_code
+    0
+    0
+    0
+    1
+    1
+    1
+    3
+    3
+    3
+    3
+    7
+    7
+    7
+    15
+    15
+    15
+End Table
 
-    dir porta out
+Dir porta Out
 
 
-    'Potentitor is connected to RA4...set as input
-    dir porta.4 in
+'Potentitor is connected to RA4...set as input
+Dir porta.4 In
 
-    do
-        wait 5 ms
-        'Read the table value and set the port to the table value.
-        readtable gray_code, ( ReadAD ( AN4 )  / 16 ), porta
+Do
+    Wait 5 ms
+    'Read the table value and set the port to the table value.
+    ReadTable gray_code, ( ReadAD ( AN4 )  / 16 ), porta
 
-    loop
+Loop

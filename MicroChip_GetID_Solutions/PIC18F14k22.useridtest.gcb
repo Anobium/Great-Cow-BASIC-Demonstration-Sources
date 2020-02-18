@@ -28,33 +28,33 @@
 '''********************************************************************************
 
 
-  #chip PIC18F14k22
+#CHIP PIC18F14k22
 
-  #include <getuserid.h>
-
-
-  #define USART_BAUD_RATE 19200
-  #define USART_TX_BLOCKING
-
-  'Implement ANSI escaope code for serial terminal NOT using a LCD!
-  #define ESC   chr(27)
-  #define CLS   HSerPrint(ESC+"[2J")
-  #define HOME  HSerPrint(ESC+"[H")
-  #define Print HSerPrint
-
-  CLS
-  HOME
-
-  dim UserIDRegister as word
+#INCLUDE <GetUserID.h>
 
 
-  For NVIndex = 0 to 0xF
+#DEFINE USART_BAUD_RATE 19200
+#DEFINE USART_TX_BLOCKING
+
+'Implement ANSI escaope code for serial terminal NOT using a LCD!
+#DEFINE ESC   CHR(27)
+#DEFINE CLS   HSerPrint(ESC+"[2J")
+#DEFINE HOME  HSerPrint(ESC+"[H")
+#DEFINE Print HSerPrint
+
+CLS
+HOME
+
+Dim UserIDRegister As Word
+
+
+For NVIndex = 0 To 0xF
     UserIDRegister = GetUserID( NVIndex )
-    HserPrint "80" + hex( NVIndex )
-    HserPrint " : "
-    HserPrint hex( UserIDRegister_H )
-    HserPrint hex( UserIDRegister   )
-    HserPrintCRLF
-  Next Index
+    HSerPrint "80" + Hex( NVIndex )
+    HSerPrint " : "
+    HSerPrint Hex( UserIDRegister_H )
+    HSerPrint Hex( UserIDRegister   )
+    HSerPrintCRLF
+Next Index
 
 End

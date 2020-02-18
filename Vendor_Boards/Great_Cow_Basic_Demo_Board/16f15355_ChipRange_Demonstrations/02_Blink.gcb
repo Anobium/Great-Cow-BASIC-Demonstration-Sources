@@ -19,22 +19,22 @@
 '''@date     04.12.2016
 
 ' ----- Configuration
-    'Chip Settings.
-    #chip 16f15355,32
+'Chip Settings.
+#CHIP 16f15355,32
 
 
 
-    '' -------------------LATC-----------------
-    '' Bit#:  -7---6---5---4---3---2---1---0---
-    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
-    ''-----------------------------------------
-    ''
+'' -------------------LATC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D2 |-
+''-----------------------------------------
+''
 
-    dir PORTC.0 out
+Dir PORTC.0 Out
 
-    do
-        wait 1000 ms
-        'Set Current state to the NOT the current status
-        PORTC.0 = !PORTC.0
+Do
+    Wait 1000 ms
+    'Set Current state to the NOT the current status
+    PORTC.0 = !PORTC.0
 
-    loop
+Loop

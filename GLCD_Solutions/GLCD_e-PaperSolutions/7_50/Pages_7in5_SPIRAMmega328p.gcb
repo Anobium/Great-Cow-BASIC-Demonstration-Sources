@@ -1,79 +1,80 @@
 '''A demonstration program for Explicit-Paper from WaveShare.
- '''-------------------------------------------------------------------------
+'''-------------------------------------------------------------------------
 ' -------------------------------------------------------
- '''This has been tested using the hardware and software SPI option.
+'''This has been tested using the hardware and software SPI option.
 
- '''*************************************************************************
-
-
-     'Chip Settings.
-
-     #chip mega328p, 16
-    #include <uno_mega328p.h>
-     #option explicit
+'''*************************************************************************
 
 
- '******************************************************************************************************
+'Chip Settings.
 
-    'Setup the E-Paper
-     #include <glcd.h>
+#CHIP mega328p, 16
+#INCLUDE <uno_mega328p.h>
+#OPTION Explicit
 
-     #define GLCD_TYPE GLCD_TYPE_EPD_EPD7in5
-     #define GLCD_EXTENDEDFONTSET1
-     #define GLCD_OLED_FONT
-
-     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-     #define GLCD_DC     DIGITAL_9
-     #define GLCD_CS     DIGITAL_10
-     #define GLCD_RESET  DIGITAL_8
-     #define GLCD_DO     DIGITAL_11
-     #define GLCD_SCK    DIGITAL_13
-     #define GLCD_Busy   DIGITAL_7
-
- '  The following should be used   '#define EPD_HardwareSPI     'remove comment out if you want to use software SPI.
-     #define EPD_HardwareSPI
-     #define HWSPIMode MasterUltraFast
 
 '******************************************************************************************************
 
-    #define SPISRAM_CS            DIGITAL_5
-    #define SPISRAM_SCK           DIGITAL_13
-    #define SPISRAM_DO            DIGITAL_11
-    #define SPISRAM_DI            DIGITAL_12
+'Setup the E-Paper
+#INCLUDE <glcd.h>
 
-    #define SPISRAM_HARDWARESPI
-    #define SPISRAM_TYPE          SRAM_23LC1024
+#DEFINE GLCD_TYPE GLCD_TYPE_EPD_EPD7in5
+#DEFINE GLCD_EXTENDEDFONTSET1
+#DEFINE GLCD_OLED_FONT
+
+'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+#DEFINE GLCD_DC     DIGITAL_9
+#DEFINE GLCD_CS     DIGITAL_10
+#DEFINE GLCD_RESET  DIGITAL_8
+#DEFINE GLCD_DO     DIGITAL_11
+#DEFINE GLCD_SCK    DIGITAL_13
+#DEFINE GLCD_Busy   DIGITAL_7
+
+'  The following should be used   '#define EPD_HardwareSPI     'remove comment out if you want to use software SPI.
+#DEFINE EPD_HardwareSPI
+#DEFINE HWSPIMode MasterUltraFast
 
 '******************************************************************************************************
 
-    'Main program
+#DEFINE SPISRAM_CS            DIGITAL_5
+#DEFINE SPISRAM_SCK           DIGITAL_13
+#DEFINE SPISRAM_DO            DIGITAL_11
+#DEFINE SPISRAM_DI            DIGITAL_12
 
-  GLCDForeground=TFT_BLACK
-  GLCDBackground=TFT_WHITE
-  GLCDfntDefaultSize = 1
-  GLCDDisplay on
-  GLCD_Open_PageTransaction
+#DEFINE SPISRAM_HARDWARESPI
+#DEFINE SPISRAM_TYPE          SRAM_23LC1024
 
+'******************************************************************************************************
 
-      GLCDPrint (10, 0, "x10,y0 is here", TFT_BLACK)    'black to show if the background is white
+'Main program
 
-      if _GLCDPage.0 = 0 then
-        GLCDPrint ( 0, _GLCDPage * EPD_PIXELS_PER_PAGE, _GLCDPage )
-        GLCDForeground =  TFT_WHITE
-        GLCDBackground = TFT_BLACK
-
-      else
-        GLCDPrint ( 0, _GLCDPage * EPD_PIXELS_PER_PAGE, _GLCDPage )
-        GLCDForeground=TFT_BLACK
-        GLCDBackground=TFT_WHITE
-
-      end if
+GLCDForeground=TFT_BLACK
+GLCDBackground=TFT_WHITE
+GLCDfntDefaultSize = 1
+GLCDDisplay On
+GLCD_Open_PageTransaction
 
 
-  GLCD_Close_PageTransaction
+'black to show if the background is white
+GLCDPrint (10, 0, "x10,y0 is here", TFT_BLACK)
 
-  GLCDDisplay off
-  wait 5 s
-  GLCDDisplay on
-  GLCDCLS
-  GLCDDisplay off
+If _GLCDPage.0 = 0 Then
+    GLCDPrint ( 0, _GLCDPage * EPD_PIXELS_PER_PAGE, _GLCDPage )
+    GLCDForeground =  TFT_WHITE
+    GLCDBackground = TFT_BLACK
+
+Else
+    GLCDPrint ( 0, _GLCDPage * EPD_PIXELS_PER_PAGE, _GLCDPage )
+    GLCDForeground=TFT_BLACK
+    GLCDBackground=TFT_WHITE
+
+End If
+
+
+GLCD_Close_PageTransaction
+
+GLCDDisplay Off
+Wait 5 s
+GLCDDisplay On
+GLCDCLS
+GLCDDisplay Off

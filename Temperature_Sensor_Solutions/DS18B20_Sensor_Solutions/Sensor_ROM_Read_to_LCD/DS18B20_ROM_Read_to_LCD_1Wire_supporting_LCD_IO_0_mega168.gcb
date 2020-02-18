@@ -8,133 +8,142 @@
 '''@date   	14.02.15
 '''********************************************************************************
 
-; ----- Configuration
-  #chip mega168, 16
-  #option explicit
-  #include <ds18b20.h>
+' ----- Configuration
+#CHIP mega168, 16
+#OPTION Explicit
+#INCLUDE <ds18b20.h>
 
-  ; ----- Define Hardware settings
-  'Set up the Serial Port for ONEWIRE LCD
-   #define USART_BAUD_RATE 9600
-   Dir PORTD.1 Out
-   Dir PORTD.0 In
-   ' A delay is required to enable to AXE133 Emulator to process
-   #define USART_DELAY 1 ms
-   #define USART_BLOCKING
-   wait 500 ms
-
-
-
-; ----- Constants
-  ' DS18B20 port settings - this is required
-  #define DQ PortC.3
-
-  'Set up LCD
-  #define LCD_IO 0
-  'Redirection to support LCD_IO 0
-  #define LCDWriteByte MySendToLCD
-  #define LCD_NO_RW
-
-
-;----- Variables 
-  Dim YPOS, OLDDSDATA, XPOS, EIGHTBYTES, CLOCKS as Byte
-
-; ----- Quick Command Reference:
-
- ; READ ROM [33h]
- ; This command can only be used when there is one slave on the bus.
- ; It allows the bus master to read the slave’s 64-bit ROM code without using the Search ROM procedure.
- ; If this command is used when there is more than one slave present on the bus, a data collision will occur when all the slaves attempt to respond at the same time.
-
- ; 64-BIT LASERED ROM CODE
- ; Each DS18B20 contains a unique 64–bit code (see Figure 6) stored in ROM.
- ; The least significant 8 bits of the ROM code contain the DS18B20’s 1-Wire family code: 28h.
- ; The next 48 bits contain a unique serial number.
- ; The most significant 8 bits contain a cyclic redundancy check (CRC) byte that is calculated from the first 56 bits of the ROM code. A detailed explanation of the CRC bits is provided in the CRC Generation section. The 64-bit ROM code and associated ROM function control logic allow the DS18B20 to operate as a 1-Wire device using the protocol detailed in the 1-Wire Bus System section.
- ; 64-Bit Lasered ROM Code
- ;
- ; 8-BIT CRC      48-BIT SERIAL NUMBER          8-BIT FAMILY CODE (28h)
- ; MSB  LSB       MSB              LSB          MSB                 LSB
-
-; ----- Main body of program commences here.
-  'Main loop
-  cls
-  print "Great Cow Basic "
-  locate 1 , 0
-  print "DS18B20   @2015 "
-  wait 3 s
-  cls
-  print "SHOW 64BIT LASERED"
-  locate 1 , 0
-  print "ROM CODE ON LCD"
-  wait 3 s
-  cls
-  ypos = 0        ' Ypos on the LCD
-
-  ' show 64-BIT LASERED ROM CODE on both rows of the LCD
-     wait 100 ms
-     MasterRST      ' Reset ds18b20
-     PPulse         ' Request a presence pulse
-     wait 100 us
-     OWout ReadRom  ' Send 64-BIT LASERED ROM CODE read code
-     wait 100 us
-     OWinRom        ' Process and display the 64-BIT LASERED ROM CODE
-
-
-      oldDSdata = 255
-      do forever
-       ' The function readtemp returns the integer value of the sensor
-       DSdata = readtemp
-
-       if oldDSdata <> DSdata then
-           ' Display the integer value of the sensor on the LCD
-           locate 1,0
-           print "Currently "
-           print DSdata
-           print chr(223)+"C "
-           oldDSdata = DSdata
-       end if
-    loop
+' ----- Define Hardware settings
+'Set up the Serial Port for ONEWIRE LCD
+#DEFINE USART_BAUD_RATE 9600
+Dir PORTD.1 Out
+Dir PORTD.0 In
+' A delay is required to enable to AXE133 Emulator to process
+#DEFINE USART_DELAY 1 ms
+#DEFINE USART_BLOCKING
+Wait 500 ms
 
 
 
+' ----- Constants
+' DS18B20 port settings - this is required
+#DEFINE DQ PortC.3
 
-; ----- Support methods.  Subroutines and Functions
+'Set up LCD
+#DEFINE LCD_IO 0
+'Redirection to support LCD_IO 0
+#DEFINE LCDWriteByte MySendToLCD
+#DEFINE LCD_NO_RW
 
-  'Required to support LCD_IO 0
-  Sub MySendToLCD(In MyLCDByte)
 
-     If LCD_RS = Off then
+'----- Variables
+Dim YPOS, OLDDSDATA, XPOS, EIGHTBYTES, CLOCKS As Byte
+
+' ----- Quick Command Reference:
+
+' READ ROM [33h]
+' This command can only be used when there is one slave on the bus.
+' It allows the bus master to read the slave’s 64-bit ROM code without using the Search ROM procedure.
+' If this command is used when there is more than one slave present on the bus, a data collision will occur when all the slaves attempt to respond at the same time.
+
+' 64-BIT LASERED ROM CODE
+' Each DS18B20 contains a unique 64–bit code (see Figure 6) stored in ROM.
+' The least significant 8 bits of the ROM code contain the DS18B20’s 1-Wire family code: 28h.
+' The next 48 bits contain a unique serial number.
+' The most significant 8 bits contain a cyclic redundancy check (CRC) byte that is calculated from the first 56 bits of the ROM code. A detailed explanation of the CRC bits is provided in the CRC Generation section. The 64-bit ROM code and associated ROM function control logic allow the DS18B20 to operate as a 1-Wire device using the protocol detailed in the 1-Wire Bus System section.
+' 64-Bit Lasered ROM Code
+'
+' 8-BIT CRC      48-BIT SERIAL NUMBER          8-BIT FAMILY CODE (28h)
+' MSB  LSB       MSB              LSB          MSB                 LSB
+
+' ----- Main body of program commences here.
+'Main loop
+CLS
+Print "Great Cow Basic "
+Locate 1 , 0
+Print "DS18B20   @2015 "
+Wait 3 s
+CLS
+Print "SHOW 64BIT LASERED"
+Locate 1 , 0
+Print "ROM CODE ON LCD"
+Wait 3 s
+CLS
+' Ypos on the LCD
+ypos = 0
+
+' show 64-BIT LASERED ROM CODE on both rows of the LCD
+Wait 100 ms
+' Reset ds18b20
+MasterRST
+' Request a presence pulse
+PPulse
+Wait 100 us
+' Send 64-BIT LASERED ROM CODE read code
+OWout ReadRom
+Wait 100 us
+' Process and display the 64-BIT LASERED ROM CODE
+OWinRom
+
+
+oldDSdata = 255
+Do Forever
+    ' The function readtemp returns the integer value of the sensor
+    DSdata = ReadTemp
+
+    If oldDSdata <> DSdata Then
+        ' Display the integer value of the sensor on the LCD
+        Locate 1,0
+        Print "Currently "
+        Print DSdata
+        Print CHR(223)+"C "
+        oldDSdata = DSdata
+    End If
+Loop
+
+
+
+
+' ----- Support methods.  Subroutines and Functions
+
+'Required to support LCD_IO 0
+Sub MySendToLCD(In MyLCDByte)
+
+    If LCD_RS = Off Then
         HSerSend 254
-     end if
-     HSerSend MyLCDByte
+    End If
+    HSerSend MyLCDByte
 
-  end sub
+End Sub
 
-  'The AXE133 specific commands to the LCD
-  sub OneWireLCDcmd ( In LCDCmd, LCDValue )
-      HSerSend LCDCmd
-      HSerSend LCDValue
+'The AXE133 specific commands to the LCD
+Sub OneWireLCDcmd ( In LCDCMD, LCDValue )
+    HSerSend LCDCMD
+    HSerSend LCDValue
 
-  end sub
+End Sub
 
 
-  Sub OWinRom
-     xpos = 14       ' XPos on the LCD
-     For EightBytes = 1 to 8
-        For Clocks = 1 to 8
-           Rotate RxData Right 'The DS18s20 wants data LSB first
-           Dir DQ Out
-           Set DQ Off  'Read time slot
-           wait 4 us
-           Dir DQ In   'Release bus for one wire transmission
-           wait 7 us
-           If DQ On  Then Set RxData.7 1
-           If DQ Off Then Set RxData.7 0
-           wait 25 us
-          Next
-         locate ypos , xpos
-         Print hex(RxData)
-         xpos = xpos - 2
-     Next
- end sub
+Sub OWinRom
+    ' XPos on the LCD
+    xpos = 14
+    For EightBytes = 1 To 8
+        For Clocks = 1 To 8
+            'The DS18s20 wants data LSB first
+            Rotate RxData Right
+            Dir DQ Out
+            'Read time slot
+            Set DQ Off
+            Wait 4 us
+            'Release bus for one wire transmission
+            Dir DQ In
+            Wait 7 us
+            If DQ On  Then Set RxData.7 1
+            If DQ Off Then Set RxData.7 0
+            Wait 25 us
+        Next
+        Locate ypos , xpos
+        Print Hex(RxData)
+        xpos = xpos - 2
+    Next
+End Sub

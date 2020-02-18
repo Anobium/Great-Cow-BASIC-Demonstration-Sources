@@ -8,41 +8,47 @@
 '''********************************************************************************
 
 
-; ----- Configuration
-  #chip 16f1939, 4
-  #option explicit
+' ----- Configuration
+#CHIP 16f1939, 4
+#OPTION Explicit
 
-; ----- Define Hardware settings
-  ' see uart for critical port settings
-
-
-  'Config Hardware-UART to send with
-  #define USART_BAUD_RATE 2400
-  #define USART_BLOCKING
-  'Invert UART Tx polarity to connect without max232
-  Set SCKP ON
-  'Set UART transmit pin to output (Tx)
-  Dir PORTC.6 Out  'Pin 25
-
-  'Config Software-UART to receive with
-  #define RecAHigh PORTB.7 ON
-  #define RecALow PORTB.7 OFF
-  InitSer 1, r2400, 1+WaitForStart, 8, 1, None, Invert
-  'Set the pin direction
-  Dir PORTB.7 In    'receive on Pin 40 (RB7/PGD)
-  Wait 100 Ms
+' ----- Define Hardware settings
+' see uart for critical port settings
 
 
-; ----- Variables
-  Dim INCHAR as Byte
+'Config Hardware-UART to send with
+#DEFINE USART_BAUD_RATE 2400
+#DEFINE USART_BLOCKING
+'Invert UART Tx polarity to connect without max232
+Set SCKP On
+'Set UART transmit pin to output (Tx)
+'Pin 25
+Dir PORTC.6 Out
 
-; ----- Main body of program commences here.
-    'Message after reset
-    HSerPrint " PIC 16f1939"
-    HSerSend 13  ' "Carriage Return"
-    HSerSend 10  ' "Line Feed"
+'Config Software-UART to receive with
+#DEFINE RecAHigh PORTB.7 On
+#DEFINE RecALow PORTB.7 Off
+InitSer 1, r2400, 1+WaitForStart, 8, 1, None, Invert
+'Set the pin direction
+'receive on Pin 40 (RB7/PGD)
+Dir PORTB.7 In
+Wait 100 ms
 
-    Start:
-      SerReceive 1, InChar  'wait for char from Software-UART
-      HSerSend InChar       'send back char to Hardware-UART
-    Goto Start
+
+' ----- Variables
+Dim INCHAR As Byte
+
+' ----- Main body of program commences here.
+'Message after reset
+HSerPrint " PIC 16f1939"
+' "Carriage Return"
+HSerSend 13
+' "Line Feed"
+HSerSend 10
+
+Start:
+'wait for char from Software-UART
+SerReceive 1, InChar
+'send back char to Hardware-UART
+HSerSend InChar
+Goto Start

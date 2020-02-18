@@ -22,13 +22,13 @@
 ''''''*****************************************************************
 '''
 
-    #Chip 18F14K22, 8
+#CHIP 18F14K22, 8
 
-    'Set the while port DIRection as out
-    DIR portc out
+'Set the while port DIRection as out
+Dir portc Out
 
-    do
-        'Toggle port by using the NOT statement
-        portc.0 = NOT portc.0
-        wait 1500 ms
-    loop
+Do
+    'Toggle port by using the NOT statement
+    portc.0 = NOT portc.0
+    Wait 1500 ms
+Loop

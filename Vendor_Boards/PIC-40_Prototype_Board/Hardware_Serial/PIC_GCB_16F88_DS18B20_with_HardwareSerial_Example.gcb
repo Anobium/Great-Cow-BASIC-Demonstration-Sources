@@ -9,82 +9,84 @@
 
 
 'Chip Settings. Assumes the development board with with a 16F877A
-#chip 16F88,4
-#option explicit
-#include <ds18b20.h>
+#CHIP 16F88,4
+#OPTION Explicit
+#INCLUDE <ds18b20.h>
 
 'USART settings
- #define USART_BAUD_RATE 9600
- Dir PORTB.5 Out
- Dir PORTB.2 In
- #define USART_DELAY 1 ms
- #define USART_BLOCKING
+#DEFINE USART_BAUD_RATE 9600
+Dir PORTB.5 Out
+Dir PORTB.2 In
+#DEFINE USART_DELAY 1 ms
+#DEFINE USART_BLOCKING
 
 
-  ' DS18B20 port settings - this is required
-  #define DQ PortB.3
+' DS18B20 port settings - this is required
+#DEFINE DQ PortB.3
 
-  Dim CCOUNT, SIGNBIT, WHOLE, FRACT, DIG as Byte
-  dim TempC_100 as word   ' a variabler to handle the temperature calculations
-  ccount = 0
+Dim CCOUNT, SIGNBIT, WHOLE, FRACT, DIG As Byte
+' a variabler to handle the temperature calculations
+Dim TempC_100 As Word
+ccount = 0
 
-  HSerPrint ChipNameStr
-  HSerPrint "@"
-  HSerPrint str(ChipMhz)
-  HSerPrint "mhz"
-  HSerPrintCRLF (2)
+HSerPrint ChipNameStr
+HSerPrint "@"
+HSerPrint Str(ChipMHz)
+HSerPrint "mhz"
+HSerPrintCRLF (2)
 
-do forever
-   ' The function readtemp returns the integer value of the sensor
-   DSdata = readtemp
+Do Forever
+    ' The function readtemp returns the integer value of the sensor
+    DSdata = ReadTemp
 
-   ' Display the integer value of the sensor on the Terminal, ANSI codes.
+    ' Display the integer value of the sensor on the Terminal, ANSI codes.
 
-   HSerPrint hex(ccount)
-   HSerSend 9
-   HSerPrint DSdata
-   HSerPrint chr(223)+"C"
-   HSerPrintCRLF (1)
+    HSerPrint Hex(ccount)
+    HSerSend 9
+    HSerPrint DSdata
+    HSerPrint CHR(223)+"C"
+    HSerPrintCRLF (1)
 
 
-   ' Display the integer and decimal value of the sensor on the terminal
+    ' Display the integer and decimal value of the sensor on the terminal
 
-   ' The function readtemp12 returns the raw value of the sensor.
-   ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
-   DSdata = readtemp12
-   SignBit = DSdata / 256 / 128
-   If SignBit = 0 Then goto Positive
-   ' its negative!
-   DSdata = ( DSdata # 0xffff ) + 1 ' take twos comp
+    ' The function readtemp12 returns the raw value of the sensor.
+    ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
+    DSdata = ReadTemp12
+    SignBit = DSdata / 256 / 128
+    If SignBit = 0 Then Goto Positive
+    ' its negative!
+    ' take twos comp
+    DSdata = ( DSdata # 0xffff ) + 1
 
 Positive:
 
-   ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
-   TempC_100 =  DSdata * 6		
-   DSdata = ( DSdata * 25 ) / 100
-   TempC_100 = TempC_100 + DSdata
+    ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
+    TempC_100 =  DSdata * 6
+    DSdata = ( DSdata * 25 ) / 100
+    TempC_100 = TempC_100 + DSdata
 
-   Whole = TempC_100 / 100
-   Fract = TempC_100 % 100
-   If SignBit = 0 Then goto DisplayTemp
-   HSerPrint "-"
+    Whole = TempC_100 / 100
+    Fract = TempC_100 % 100
+    If SignBit = 0 Then Goto DisplayTemp
+    HSerPrint "-"
 
 DisplayTemp:
 
-   HSerPrint hex(ccount)
-   HSerPrint " Real"
-   HSerSend 9
-   HSerPrint str(Whole)
-   HSerPrint "."
-  ' To ensure the decimal part is two digits
-   Dig = Fract / 10
-   HSerPrint Dig
-   Dig = Fract % 10
-   HSerPrint Dig
-   HSerPrint chr(223)
-   HSerPrint "C"
-   HSerPrintCRLF (2)
-   wait 2 s
-   ccount++
+    HSerPrint Hex(ccount)
+    HSerPrint " Real"
+    HSerSend 9
+    HSerPrint Str(Whole)
+    HSerPrint "."
+    ' To ensure the decimal part is two digits
+    Dig = Fract / 10
+    HSerPrint Dig
+    Dig = Fract % 10
+    HSerPrint Dig
+    HSerPrint CHR(223)
+    HSerPrint "C"
+    HSerPrintCRLF (2)
+    Wait 2 s
+    ccount++
 
-loop
+Loop

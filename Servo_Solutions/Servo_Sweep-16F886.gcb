@@ -7,40 +7,40 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-; ----- Configuration
- #chip 16F886, 16
- #option explicit
+' ----- Configuration
+#CHIP 16F886, 16
+#OPTION Explicit
 
 
-; ----- Variables
-  Dim PulseTime As byte
+' ----- Variables
+Dim PulseTime As Byte
 
 
-; ----- Main body of program commences here.
-  Do Forever
+' ----- Main body of program commences here.
+Do Forever
 
-            'Rotate servo
-            '(Gradually change pulse length from 650 to 2250 us)
-            For PulseTime = 65 to 225
+    'Rotate servo
+    '(Gradually change pulse length from 650 to 2250 us)
+    For PulseTime = 65 To 225
 
-                      'Send the right length pulse
-                      PulseOut PORTB.0, PulseTime 10us
+        'Send the right length pulse
+        PulseOut PORTB.0, PulseTime 10us
 
-                      'After sending pulse, wait a bit before sending the next one
-                      Wait 6 ms
-            Next
+        'After sending pulse, wait a bit before sending the next one
+        Wait 6 ms
+    Next
 
-            'Then rotate it back
-            '(Gradually change pulse length from 2250 to 650 us)
-            For PulseTime = 225 to 65
+    'Then rotate it back
+    '(Gradually change pulse length from 2250 to 650 us)
+    For PulseTime = 225 To 65
 
-                      'Send the right length pulse
-                      PulseOut PORTB.0, PulseTime 10us
+        'Send the right length pulse
+        PulseOut PORTB.0, PulseTime 10us
 
-                      'After sending pulse, wait a bit before sending the next one
-                      Wait 6 ms
-            Next
-  Loop
+        'After sending pulse, wait a bit before sending the next one
+        Wait 6 ms
+    Next
+Loop
 
-  end
+End
 

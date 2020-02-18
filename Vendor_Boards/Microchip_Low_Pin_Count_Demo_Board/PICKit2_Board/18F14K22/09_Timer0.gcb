@@ -27,27 +27,27 @@
 ''''''*****************************************************************
 '''
 
- #chip 18F14K22, 2
- #config MCLRE_OFF
+#CHIP 18F14K22, 2
+#CONFIG MCLRE_OFF
 
-    dir portc out
-    portc = 0
-    portc.3 = 1
+Dir portc Out
+portc = 0
+portc.3 = 1
 
-    'Set up the timer
-    InitTimer0 Osc, PS0_256
+'Set up the timer
+InitTimer0 Osc, PS0_256
 
-    do
+Do
 
-        'While for the timer to reach 0
-        wait while !TMR0IF
+    'While for the timer to reach 0
+    Wait While !TMR0IF
 
-        'Clear the timer
-        T0IF = 0
+    'Clear the timer
+    T0IF = 0
 
-        'Clear C, rotate and restart
-        Set C off
-        Rotate portc right
-        if C = 1 then portc.3 = 1
+    'Clear C, rotate and restart
+    Set C Off
+    Rotate portc Right
+    If C = 1 Then portc.3 = 1
 
-    loop
+Loop
