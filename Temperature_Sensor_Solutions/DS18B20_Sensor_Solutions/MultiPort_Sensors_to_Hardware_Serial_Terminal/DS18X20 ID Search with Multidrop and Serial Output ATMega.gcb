@@ -1,0 +1,435 @@
+'''Rom ID Finder for Multidrop and hardware serial output with Atmega8
+'''------------------------------------------------------------------------
+'''
+'''This program is based on the Search Algorythm described in MAXIM AN817.
+'''The variable names are (as far as possible) identical to the application note.
+'''The CRC8 algorythm is based on public sources found on the internet.
+'''
+'''The program searches and finds the Rom ID's of multiple 1-wire devices
+'''connected to a so called Multidrop. A Multidrop is a line with 2 or more
+'''1-wire devices connected in Normal or Parasite Power mode.
+'''
+'''Choose the right connections for your Hardware UART and OW input pin.
+'''
+'''@Theo Loermans
+'''@licence GPL
+'''@version 1.1a
+'''@date    18.03.2016
+'''********************************************************************************
+
+  #chip mega328p, 16
+
+  ; ----- Define Hardware settings
+  ; Required to LCD to Serial redirection
+  #define LCD_IO 0
+  #define USART_BAUD_RATE 115200
+  Dir PORTD.1 Out
+  Dir PORTD.0 In
+  #define USART_BLOCKING
+
+  ''#define debug           ' if activate, the script produces additional output
+  #define DQ PortB.0        ' input/output pin for 1-wire device(s), normal power mode with pullup 4K7 +10K parallel
+  Dim ROM_NO(9) as byte     ' 9 ROM_NO bytes to store ID Bytes + CRC; don't use ROM_NO(0)
+
+  'DS18X20 Settings
+  #define SearchRom 240     ' 0xF0 (240) 'Command for identifying Rom ID-codes,
+  #define ReadPowerSup 180  ' 0XB4 (180) 'Read Power Supply mode
+  #define SkipRom 204       ' 0xCC (204) 'Command for addressing all devices simultaneously
+  #define MatchRom 85       ' 0x55 (085)
+  #define ConvertT 68       ' 0x44 (68)  'Protocol for Single Temp Conversion
+  #define ReadScratch 190   ' 0xBE (190)
+
+      'Protocol for Read Scratchpad
+      'Command for master to identify a specific slave code
+   dim tsign as string
+   dim tint as word 'int
+   dim tfloat as integer    'int16
+   dim temperature as integer 'int16
+   dim NOut as Bit
+
+  ' Init Variable
+  TotDevF = 0
+  LastDiscrepancy = 0
+  LastFamilyDiscrepancy = 0
+  LastDeviceFlag = 0
+  Returnvalue = 0
+  NOut = 1 ' Nice output: 0 or 1; 0 produces table, 1 produces nice output
+
+  'Start main program
+   if NOut=1 then
+     HSerPrint "Multidrop Rom ID-Code search: "
+   Else
+      HserPrint "Table RomID as Byte.":CRLF
+   End if
+
+  MasterRST               ' reset and check presence of sensor(s)
+  If command = 1 then
+    HSerPrint "No device(s) detected!":CRLF
+    End                   ' exit script for now, future expand
+  End if
+
+  If command = 2 then
+    HSerPrint "Check line, shorted?":CRLF
+    End                   ' exit script, resolve problem
+  End if
+
+  OWout SkipRom             ' sequence for checking Power Supply Mode
+  OWout ReadPowerSup        ' read power Supply Mode
+  OWinBit Command           ' get response bit
+  If NOut=1 Then
+    If Command Then
+      HSerPrint "Normal Power Mode detected.":CRLF
+      PMF = 0               ' Normal Power Mode
+    Else
+      HSerPrint "Parasite Power Mode detected.":CRLF
+      PMF = 1               ' Parasitepower Mode
+    End If
+  End If
+
+  if NOut=1 then
+    CRLF
+    HSerPrint "No. Family ID-Number                       CRC    Status"
+    CRLF
+  end if
+
+
+  Search                  ' Start ID Search, this is the first Search
+
+  Do
+    If Returnvalue = 1 then
+      #ifdef debug
+        HSerPrint "Returnvalue = 1":CRLF
+        HSerPrint "LastDeviceFlag = ":HSerPrint LastDeviceFlag:CRLF
+      #Endif
+
+      If NOut=1 then
+        ' Print Rom id(s)
+        if TotDevF < 10 then HSerPrint " "
+          HSerPrint TotDevF:HSerPrint "  "
+      End if
+      HSerprint "0x":HSerPrint HEX(ROM_NO(1)):HSerPrint "   "
+      If NOut=0 then
+        CRLF
+      End if
+
+      For Bytenum = 2 to 7
+        HSerprint "0x":HSerPrint HEX(ROM_NO(Bytenum)):HSerPrint " "
+        If NOut=0 then
+          CRLF
+        end if
+      Next
+      HSerprint "  0x":HSerPrint HEX(ROM_NO(8)):HSerPrint "   "
+
+      #ifdef debug
+        HSerPrint "0x":HSerPrint HEX(CRC):HSerPrint "   "
+      #Endif
+
+      If NOut=1 then
+        If CRC = ROM_NO(8) Then ' Calculated CRC identical to ROM CRC?'
+          HSerPrint "OK :-)"
+        Else
+          HSerPrint "Error :-("
+        end if
+      end if
+      ; Calctemp
+      CRLF
+   Else
+      CRLF
+      If NOut=1 then
+        HSerPrint "ROM ID-Code search finished." : CRLF
+      Else
+        Hserprint "End Table"
+      End if
+      End             ' stop program
+   End if
+   Search ' second and further Search until Returnvalue = false
+Loop
+
+'-------------------------SUB------------------------------------
+
+Sub Search          ' Start ID Search
+  MasterRST
+  If LastDeviceFlag = 1 Then
+    Returnvalue = 0
+    Goto Ready  'Search Finished
+  end if
+
+  id_bit_number = 0
+  last_zero = 0
+  Bytenum = 1
+  BPiB = 0 ' Bit position in Byte (ROM_NO)
+
+  OWout SearchRom
+
+  Do While id_bit_number < 64 ; (0-63)
+    OWInBit id_bit          ' read 1 bit from device
+    OWInBit cmp_id_bit      ' read 1 bit (complement) from device
+
+    if id_bit = 1 AND cmp_id_bit = 1 Then 'invalid value's
+      HserPrint "No answer from device(s)!":CRLF
+      Returnvalue = 0
+      Goto Ready
+    end if
+
+    If id_bit = 0 AND cmp_id_bit = 0 Then ' 2 or more devices have the same bit value in common
+      #ifdef debug
+        HserPrint "0-0 Discrepancy ":CRLF
+      #Endif
+
+      If id_bit_number = LastDiscrepancy Then
+        Search_Direction = 1
+      else
+        If id_bit_number > LastDiscrepancy Then
+          Search_Direction = 0
+        Else
+            CalcBPiB
+            Select Case BPiB
+              Case 0
+                Set Search_Direction = ROM_NO(Bytenum).0
+              Case 1
+                Set Search_Direction = ROM_NO(Bytenum).1
+              Case 2
+                Set Search_Direction = ROM_NO(Bytenum).2
+              Case 3
+                Set Search_Direction = ROM_NO(Bytenum).3
+              Case 4
+                Set Search_Direction = ROM_NO(Bytenum).4
+              Case 5
+                Set Search_Direction = ROM_NO(Bytenum).5
+              Case 6
+                Set Search_Direction = ROM_NO(Bytenum).6
+              Case 7
+                Set Search_Direction = ROM_NO(Bytenum).7
+            End Select
+
+            #ifdef debug
+              HSerPrint "Bytenum= ":HSerPrint Bytenum:HSerPrint " BPiB= ":HSerPrint BPiB
+              HSerPrint " Search dir= ":HserPrint Search_direction : CRLF
+            #Endif
+        end if
+      end if
+
+      If Search_Direction = 0 Then
+        last_zero = id_bit_number
+        If last_zero < 8 Then
+          LastFamilyDiscrepancy = last_zero
+        end if
+      end if
+    Else
+      Search_Direction = id_bit
+    End if
+    CalcBPiB
+
+    Select Case BPiB
+      Case 0
+      SetWith (ROM_NO(Bytenum).0,Search_Direction)
+      Case 1
+      SetWith (ROM_NO(Bytenum).1,Search_Direction)
+      Case 2
+      SetWith (ROM_NO(Bytenum).2,Search_Direction)
+      Case 3
+      SetWith (ROM_NO(Bytenum).3,Search_Direction)
+      Case 4
+      SetWith (ROM_NO(Bytenum).4,Search_Direction)
+      Case 5
+      SetWith (ROM_NO(Bytenum).5,Search_Direction)
+      Case 6
+      SetWith (ROM_NO(Bytenum).6,Search_Direction)
+      Case 7
+      SetWith (ROM_NO(Bytenum).7,Search_Direction)
+    End Select
+
+      #ifdef debug
+            if id_bit_number < 10 then HSerPrint " "
+            HSerPrint id_bit_number: HSerPrint ")"
+            HSerPrint " id_bit=":HSerPrint id_bit
+            HSerPrint "  cmp_id_bit=":HSerPrint cmp_id_bit
+            HSerPrint "  Bytenum=":HSerPrint Bytenum
+            HSerPrint "  BPiB=":HSerPrint BPiB
+            HSerPrint "  ROM_NO(":HSerPrint Bytenum:HSerPrint ")=0x"
+            HSerPrint Hex(ROM_NO(Bytenum))
+            HSerPrint "  Search dir=":HSerPrint Search_Direction
+            HSerPrint "  last_zero=":HSerPrint last_zero
+            HSerPrint "  LastDiscrepancy=":HSerPrint LastDiscrepancy
+            HSerPrint "  LastFamilyDiscrepancy=":HSerPrint LastFamilyDiscrepancy:CRLF
+        #Endif
+
+    OWoutBit Search_Direction         ' send search_direction bit to device
+
+    Bytenum = (id_bit_number/8) + 1   ' calculate Byte number (1-8) for ROM_NO bytes
+    id_bit_number = id_bit_number + 1 ' increment ID bit number (0-63)
+  Loop
+  LastDiscrepancy = last_zero
+  If LastDiscrepancy = 0 Then
+    LastDeviceFlag = 1
+  end if
+  CalcCRC
+  Returnvalue = 1
+  Ready:
+  if Returnvalue = 0 then
+    LastDiscrepancy = 0
+    LastFamilyDiscrepancy = 0
+    LastDeviceFlag = 0
+  end if
+    TotDevF = TotDevF + 1 ' Increment Total Devices Found
+end Sub
+
+Sub CRLF                ' Carriage return, Line feed
+  HSerSend 13
+  HSerSend 10
+End sub
+
+Sub CalcBPiB            ' by using bytes for the variables there are no fractions if you divide
+  Bytenum = (id_bit_number/8)+1                ' calculate Byte number (1-8)
+  BPiB = id_bit_number - ((id_bit_number/8)*8) ' calculate Bit position in Byte (0-7)
+end Sub
+
+Sub OWin (Command)
+ IntOff                                     ' Interrupt Disabled
+ Repeat 8
+  Rotate Command Right                      ' LSB first
+  Dir DQ Out
+  Set DQ Off                                ' Start time slot
+  wait 6 us
+  Dir DQ In                                 ' Release bus for one wire Reception
+  wait 9 us
+  If DQ On  Then Set Command.7 1
+  If DQ Off Then Set Command.7 0
+  wait 55 us
+ End Repeat
+ IntOn                                      ' Interrupt Enabled
+end sub
+
+Sub OWinBit (Command)
+ IntOff
+ Dir DQ Out
+ Set DQ Off  ' Start time slot
+ wait 6 us
+ Dir DQ In   ' Release bus for one wire Reception
+ wait 9 us
+ If DQ On  Then Set Command = 1
+ if DQ Off then Set Command = 0
+  wait 55 us
+ IntOn
+end sub
+
+Sub OWout (In Command)
+ IntOff
+ Repeat 8
+  wait 1 us   ' Recovery time between write cycles
+  Dir DQ Out
+  Set DQ Off  ' Start time slot
+  wait 6 us
+  If Command.0 On then
+   Dir DQ In
+  End if
+  wait 60 us
+  Dir DQ In
+  ROTATE Command Right  ' LSB first
+ End Repeat
+ IntOn
+end sub
+
+Sub OWoutBit (In Command)
+ IntOff
+ wait 1 us      ' Recovery time between write cycles
+ Dir DQ Out
+ Set DQ Off
+ wait 6 us
+ If Command.0 On then
+   Dir DQ In
+ End if
+ wait 60 us
+ Dir DQ In
+ IntOn
+end sub
+
+Sub MasterRST (optional command=0)
+ IntOff
+ Dir DQ Out
+ Set DQ Off
+ wait 480 us
+ Dir DQ In
+ wait 86 us ' 70 us default. Tested with 15mtr line: low 30, High 143; (143-30)/2=56+30=86
+ If DQ On then ' No sensor(s) found
+   command = 1
+ end if
+ wait 410 us '410 us default: tested 394
+ if DQ Off then ' line still low after end time slot: shorted?
+   Command = 2
+ end if
+ IntOn
+end sub
+
+Sub WaitLoop     ; wait for DS after ConvertT
+;SET DQ ON
+;DIR DQ OUT
+;wait 700 ms ; 750 default
+;Dir DQ IN
+Lcount = 0
+   Set DQ Off
+   Dir DQ out
+   wait 4 us
+   Dir DQ In
+   wait 7 us
+Do
+   If DQ = 1 Then
+    hserprint "LCount:":hserprint Lcount:hserprint " "
+    wait 60 us 'minimum 60 us time slots between reads
+    Exit Do
+   end if
+Lcount = Lcount +1
+Loop
+end sub
+
+Sub CalcCRC
+  CRC = 0            ' Calculate CRC8: DALLAS/MAXIM, reversed Polynomial
+  For index = 1 to 7
+    Tmp1 = ROM_NO(index)
+    Repeat 8
+      Tmp2 = (Tmp1 XOR crc) AND 1
+      CRC = CRC/2
+      Tmp1 = Tmp1/2
+      if Tmp2 = 1 then
+        CRC = CRC XOR 140 ' 0x8C
+      end if
+    end Repeat
+  next
+end sub
+
+Sub Calctemp
+ OWOut ConvertT
+ Waitloop
+ MasterRST
+ OWout MatchRom
+ for index = 1 to 8
+   OWout ROM_NO(index)  ' send ID
+ next
+ OWout ReadScratch
+ for index = 1 to 9
+   Owin ROM_NO(index)   ' read tmp e.a.
+ next
+CalcCRC
+      If CRC = ROM_NO(8) Then ' Calculated CRC identical to ROM CRC?'
+        HSerPrint "CRC OK. "
+      Else
+        HSerPrint "CRC Error. "
+      end if
+   temperature = ROM_NO(0)
+   temperature_H = ROM_NO(1)
+   tsign = "+"
+
+   If temperature.11 = 1 then   ' if (bit_test(temperature,11))
+      tsign = "-"
+      temperature = (temperature XOR 0xFFFF) + 1 ; two's complement
+   end if
+
+   tint   = (FnLSR(temperature,4) AND 0x7F)
+   tfloat = ((temperature AND 0x000F)*625)
+
+   hserprint " Temp: "
+   hserprint tsign
+   hserprint tint : hserprint ","
+   hserprint tfloat: hserprint " C."
+   CRLF
+end sub
