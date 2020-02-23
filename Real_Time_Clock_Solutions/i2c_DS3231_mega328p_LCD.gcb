@@ -28,66 +28,54 @@
 '''@date    17.02.15
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP mega328p, 16
-#OPTION Explicit
+; ----- Configuration
+ #chip mega328p, 16
+ #option explicit
 
-#INCLUDE <ds3231.h>
-' memory chips: at24c32 (storage capacity 32k)
-#INCLUDE <i2ceeprom.h>
+ #include <ds3231.h>
+ #include <i2ceeprom.h>                  ; memory chips: at24c32 (storage capacity 32k)
 
-'Eeprom address
-#DEFINE    AT24C32  0xAE
+ #define    AT24C32  0xAE                  ;Eeprom address
 
-' ----- Define Hardware settings
-Dir setBut In
-Dir modeBut In
+; ----- Define Hardware settings
+  dir setBut in
+  dir modeBut in
 
-' Define Hardware I2C settings
-' Define I2C settings
-#DEFINE HI2C_BAUD_RATE 100
-#DEFINE HI2C_DATA PORTC.5
-#DEFINE HI2C_CLOCK PORTC.4
-HI2CMode Master
+; Define Hardware I2C settings
+  ' Define I2C settings
+  #define HI2C_BAUD_RATE 100
+  #define HI2C_DATA PORTC.5
+  #define HI2C_CLOCK PORTC.4
+  HI2CMode Master
 
-' Define LCD settings
-#DEFINE LCD_IO 10
-#DEFINE LCD_I2C_Address_1 0x4C
+; Define LCD settings
+  #define LCD_IO 10
+  #define LCD_I2C_Address_1 0x4C
 
 
-'0 is US or 1 is UK style
-#DEFINE clocktype   1
-'settling time for switches
-#DEFINE debounce    50 ms
-'delay time for pushbutton
-#DEFINE delay       150 ms
-'flag for pressed pushbutton
-#DEFINE pressed     1
-'Set pushbutton
-#DEFINE setBut      portb.0
-'Mode pushbutton
-#DEFINE modeBut     portb.1
+  #define clocktype   1               ;0 is US or 1 is UK style
+  #define debounce    50 mS            ;settling time for switches
+  #define delay       150 mS          ;delay time for pushbutton
+  #define pressed     1               ;flag for pressed pushbutton
+  #define setBut      portb.0         ;Set pushbutton
+  #define modeBut     portb.1         ;Mode pushbutton
 
-'----- Variables
+;----- Variables
 
-Dim Alarm1track, Alarm2track, CENTURY_FLAG, POWERLOSS, EEPROMVAL, DAYSMAX, DAYSMAX As Byte
+  Dim Alarm1track, Alarm2track, CENTURY_FLAG, POWERLOSS, EEPROMVAL, DAYSMAX, DAYSMAX as Byte
 
-Dim changed As BIT
-Dim hour, min, sec, am_pm As Byte
-Dim oldsec As Byte
-Dim date, month, year, DOW, century As Byte
-Dim mode, Oldmode, dayMax As Byte
-' init value
-oldsec = 255
-' will be updated by Century calculation... if a century roll ever occurs!! Required in this example code.
-century = 20
-'----- Tables
+  dim changed as bit
+  dim hour, min, sec, am_pm as byte
+  dim oldsec as byte
+  dim date, month, year, DOW, century as byte
+  dim mode, Oldmode, dayMax as byte
+  oldsec = 255                        ; init value
+  century = 20                        ; will be updated by Century calculation... if a century roll ever occurs!! Required in this example code.
+;----- Tables
 
-'# of days in months. Required in this example code.
-Table monthDays
+  table monthDays                     ;# of days in months. Required in this example code.
     31
-    'leap years only
-    29
+    29                                ;leap years only
     31
     30
     31
@@ -98,716 +86,602 @@ Table monthDays
     31
     30
     31
-End Table
+  end table
 
 
 
-'----- Program
-CLS
+;----- Program
+  CLS
 
-#IFDEF HI2C_DATA
-    Locate 0, 12
-    Print "i2cHW"
-    ' is DS3231 present?
-    HI2CReStart
-    HI2CSend(DS_AddrWrite)
-    HI2CStop
+  #ifdef HI2C_DATA
+        Locate 0, 12
+        Print "i2cHW"
+        HI2CReStart                          ; is DS3231 present?
+        HI2CSend(DS_AddrWrite)
+        HI2CStop
 
-    If HI2CAckpollState = TRUE  Then
-        ' is DS3231 present?
-        ' user message
-        Print "No DS3231"
-        Locate 1,0
-        ' user message
-        Print "Stopped"
-    End
-End If
-#ENDIF
+        if HI2CAckPollState = True  then  ; is DS3231 present?
+           Print "No DS3231"              ; user message
+           locate 1,0
+           Print "Stopped"                ; user message
+           end
+        end if
+  #endif
 
-#IFDEF I2C_DATA
-    Locate 0, 12
-    Print "i2cSW"
-    ' is DS3231 present?
-    I2CStart
-    I2CSend(DS_AddrWrite)
-    I2CStop
+  #ifdef I2C_DATA
+        Locate 0, 12
+        Print "i2cSW"
+        I2CStart                          ; is DS3231 present?
+        I2CSend(DS_AddrWrite)
+        I2CStop
 
-    If I2CSendState = FALSE  Then
-        ' is DS3231 present?
-        ' user message
-        Print "No DS3231"
-        Locate 1,0
-        ' user message
-        Print "Stopped"
-    End
-End If
-#ENDIF
+        if I2CSendState = False  then     ; is DS3231 present?
+           Print "No DS3231"              ; user message
+           locate 1,0
+           Print "Stopped"                ; user message
+           end
+        end if
+   #endif
 
-Locate 0,0
-Print "DS3231"
-Locate 1,0
-Print "Great Cow Basic"
-Wait 2 s
-CLS
+  locate 0,0
+  Print "DS3231"
+  locate 1,0
+  Print "Great Cow Basic"
+  wait 2 s
+  CLS
 
-' example uses of the DS3231 functions
-'
-' aging offset, if resquired
-' DS3231_WriteRegister ( 0x10, 0b0000001 )
+  ; example uses of the DS3231 functions
+  ;
+  ; aging offset, if resquired
+  ' DS3231_WriteRegister ( 0x10, 0b0000001 )
 
-'  print ByteToBin( DS3231_ReadRegister ( 0x10) )
-' Example of setting the clock
-'   DS3231_SetClock( 15, 33 , 0 , 1 , 4 , 1 , 15 )  ;h ours, minutes, seconds, day of week, date, month, year
-'get initial date
-DS3231_ReadDate(DOW, date, month, year, century_flag )
-If century_flag = 1 Then
-    DS3231_HandleCentury ( century_flag, Century )
-End If
+  ;  print ByteToBin( DS3231_ReadRegister ( 0x10) )
+  ; Example of setting the clock
+  ;   DS3231_SetClock( 15, 33 , 0 , 1 , 4 , 1 , 15 )  ;h ours, minutes, seconds, day of week, date, month, year
+  DS3231_ReadDate(DOW, date, month, year, century_flag )   ;get initial date
+  if century_flag = 1 then
+     DS3231_HandleCentury ( century_flag, Century )
+  end if
 
-'and the current mode
-DS3231_ReadHourMode(mode)
-'update hour mode from RTC
-DS3231_SetHourMode(mode)
-'and, ensure the clock is running
-DS3231_EnableOscillator( TRUE )
+  DS3231_ReadHourMode(mode)                 ;and the current mode
+  DS3231_SetHourMode(mode)                  ;update hour mode from RTC
+  DS3231_EnableOscillator( true )           ;and, ensure the clock is running
 
-'
-'Example of configuration of the 32K output and the SQW
-'
-'and, enable the 32kHz Output (EN32kHz).
-DS3231_Set32kHz ( TRUE )
-DS3231_EnableSQW
-'and, turn ON output as we will use as the alarm port!
-DS3231_SetSQW 0
-DS3231_DisableSQW
+  ;
+  ;Example of configuration of the 32K output and the SQW
+  ;
+  DS3231_Set32kHz ( true )                  ;and, enable the 32kHz Output (EN32kHz).
+  DS3231_EnableSQW
+  DS3231_SetSQW 0                           ;and, turn ON output as we will use as the alarm port!
+  DS3231_DisableSQW
 
-'Another method to turn off SQW by masking the current state of the control address
-'state = DS3231_ReadControl
-'state = state and 0b00111111
-'DS3231_SetControl ( state )
+  ;Another method to turn off SQW by masking the current state of the control address
+  ;state = DS3231_ReadControl
+  ;state = state and 0b00111111
+  ;DS3231_SetControl ( state )
 
-'Another method  to turn ON SQW by masking the current state
-'state = DS3231_ReadControl
-'state = state AND 0b11111011
-'state = state OR  0b01000000
-'DS3231_SetControl ( state )
+  ;Another method  to turn ON SQW by masking the current state
+  ;state = DS3231_ReadControl
+  ;state = state AND 0b11111011
+  ;state = state OR  0b01000000
+  ;DS3231_SetControl ( state )
 
 
 
 
-'Examples of how to set the Alarms
-'You must do the following:
-'1. DS3231_SetAlarm1 (  hour, minute, second, DOW, date ) or DS3231_SetAlarm2
-'2. DS3231_SetAlarmMask1 ( DS3231_Alarm1Assertion_Seconds ) to set the mask, see below for the options.
-'3. DS3231_ClearAlarm1 or DS3231_ClearAlarm2
-'4. DS3231_EnableAlarm1Interrupt if you want to raise the SQW as external interrupt
-'5. DS3231_EnableSQWInterruptControl
+  ;Examples of how to set the Alarms
+  ;You must do the following:
+      ;1. DS3231_SetAlarm1 (  hour, minute, second, DOW, date ) or DS3231_SetAlarm2
+      ;2. DS3231_SetAlarmMask1 ( DS3231_Alarm1Assertion_Seconds ) to set the mask, see below for the options.
+      ;3. DS3231_ClearAlarm1 or DS3231_ClearAlarm2
+      ;4. DS3231_EnableAlarm1Interrupt if you want to raise the SQW as external interrupt
+      ;5. DS3231_EnableSQWInterruptControl
 
-'You can test the status of the alarm by raising an interrupt in your PIC but you can also test DS3231_Alarm[1|2]Status.  DS3231_Alarm[1|2]Status. will return true | false.
-'After the alarm event has occured you MUST clear the alarm, using DS3231_ClearAlarm1 or DS3231_ClearAlarm2
-
-
-'DS3231_DisableAlarm1Interrupt                           ;turn off the SQW interrupt
-'DS3231_DisableAlarm2Interrupt                           ;turn off the SQW  interrupt
+  ;You can test the status of the alarm by raising an interrupt in your PIC but you can also test DS3231_Alarm[1|2]Status.  DS3231_Alarm[1|2]Status. will return true | false.
+  ;After the alarm event has occured you MUST clear the alarm, using DS3231_ClearAlarm1 or DS3231_ClearAlarm2
 
 
-' set Alarm1 - alert every time the Seconds is each 30th second
-'DS3231_SetAlarm ( [0 |  1] , hour, minute, second, DOW, date )
-DS3231_SetAlarm1 ( 11, 45, 30, 0, 1 )
+   ;DS3231_DisableAlarm1Interrupt                           ;turn off the SQW interrupt
+   ;DS3231_DisableAlarm2Interrupt                           ;turn off the SQW  interrupt
 
-' These are defined for usage
-' DS3231_Alarm1Assertion_EverySecond                    = 0x0F
-' DS3231_Alarm1Assertion_Seconds                        = 0x0E
-' DS3231_Alarm1Assertion_MinutesSeconds                 = 0x0C
-' DS3231_Alarm1Assertion_HoursMinutesSeconds            = 0x08
-' DS3231_Alarm1Assertion_DateHoursMinutesSeconds        = 0x00
-' DS3231_Alarm1Assertion_DayHoursMinutesSeconds         = 0x00
 
-'DS3231_SetAlarmMask1 ( alarmAssertionMatch )
-DS3231_SetAlarmMask1 ( DS3231_Alarm1Assertion_Seconds )
-DS3231_ClearAlarm1
-DS3231_EnableAlarm1Interrupt
-DS3231_ReadAlarm1( hour, min, sec, DOW, date )
+    ; set Alarm1 - alert every time the Seconds is each 30th second
+    DS3231_SetAlarm1 ( 11, 45, 30, 0, 1 )    ;DS3231_SetAlarm ( [0 |  1] , hour, minute, second, DOW, date )
 
-' set Alarm2 - alert every Minute
-'DS3231_SetAlarm2 ( hour, minute, DOW, date )
-DS3231_SetAlarm2 ( 10, 1, 0, 1 )
+        ; These are defined for usage
+        ; DS3231_Alarm1Assertion_EverySecond                    = 0x0F
+        ; DS3231_Alarm1Assertion_Seconds                        = 0x0E
+        ; DS3231_Alarm1Assertion_MinutesSeconds                 = 0x0C
+        ; DS3231_Alarm1Assertion_HoursMinutesSeconds            = 0x08
+        ; DS3231_Alarm1Assertion_DateHoursMinutesSeconds        = 0x00
+        ; DS3231_Alarm1Assertion_DayHoursMinutesSeconds         = 0x00
 
-' These are defined for usage
-' DS3231_Alarm2Assertion_EveryMinute                    = 0x07
-' DS3231_Alarm2Assertion_Minutes                        = 0x06
-' DS3231_Alarm2Assertion_HoursMinutes                   = 0x04
-' DS3231_Alarm2Assertion_DateHoursMinutes               = 0x00
-' DS3231_Alarm2Assertion_DayHoursMinutesSeconds         = 0x00
+    DS3231_SetAlarmMask1 ( DS3231_Alarm1Assertion_Seconds ) ;DS3231_SetAlarmMask1 ( alarmAssertionMatch )
+    DS3231_ClearAlarm1
+    DS3231_EnableAlarm1Interrupt
+    DS3231_ReadAlarm1( hour, min, sec, DOW, date )
 
-DS3231_SetAlarmMask2 ( DS3231_Alarm2Assertion_EveryMinute )
-DS3231_ClearAlarm2
-DS3231_EnableAlarm2Interrupt
-' just an example....
-DS3231_ReadAlarm2( hour, min, DOW, date )
+    ; set Alarm2 - alert every Minute
+    DS3231_SetAlarm2 ( 10, 1, 0, 1 )    ;DS3231_SetAlarm2 ( hour, minute, DOW, date )
 
-' enable output on SQW on alarm
-DS3231_EnableSQWInterruptControl
+        ; These are defined for usage
+        ; DS3231_Alarm2Assertion_EveryMinute                    = 0x07
+        ; DS3231_Alarm2Assertion_Minutes                        = 0x06
+        ; DS3231_Alarm2Assertion_HoursMinutes                   = 0x04
+        ; DS3231_Alarm2Assertion_DateHoursMinutes               = 0x00
+        ; DS3231_Alarm2Assertion_DayHoursMinutesSeconds         = 0x00
 
-'DS3231_DisableAlarm1            ; if you want to turn the alarm off
-'DS3231_DisableAlarm2            ; if you want to turn the alarm off
+    DS3231_SetAlarmMask2 ( DS3231_Alarm2Assertion_EveryMinute )
+    DS3231_ClearAlarm2
+    DS3231_EnableAlarm2Interrupt
+    DS3231_ReadAlarm2( hour, min, DOW, date )                 ; just an example....
 
-'End of example Alarm setup commands
+    DS3231_EnableSQWInterruptControl ; enable output on SQW on alarm
 
-'Main body of program commences here.
-'get initial date. This is required for main routine.
-DS3231_ReadDate(DOW, date, month, year, century_flag )
-If century_flag = 1 Then
-    DS3231_HandleCentury ( century_flag, Century )
-End If
-'and the current mode
-DS3231_ReadHourMode(mode)
+    ;DS3231_DisableAlarm1            ; if you want to turn the alarm off
+    ;DS3231_DisableAlarm2            ; if you want to turn the alarm off
 
-' initialise a tracking varaible
-powerloss = FALSE
-Dim EEpromAddress As Word
-EEpromAddress = 0
+   ;End of example Alarm setup commands
 
-' display all registers realtime display
-' uncomment to display
-'  do forever
-'     updateDisp
-'        for xloop = 0 to 0x12
-'          locate xloop+3, 0
-'          lcdhex(xloop,LeadingZeroActive)
-'          print "h :"
-'          print ByteToBin( DS3231_ReadRegister ( xloop) )
-'        next
-'        if DS3231_Alarm1Status = 1 then    ; display message
-'         DS3231_ClearAlarm1
-'        end if
-'
-'
-'        if DS3231_Alarm2Status = 1 then    ; display message
-'           DS3231_ClearAlarm2
-'
-'        end if
-'
-'  loop
+;Main body of program commences here.
+  DS3231_ReadDate(DOW, date, month, year, century_flag )   ;get initial date. This is required for main routine.
+  if century_flag = 1 then
+     DS3231_HandleCentury ( century_flag, Century )
+  end if
+  DS3231_ReadHourMode(mode)                 ;and the current mode
 
-Do
+  ' initialise a tracking varaible
+  powerloss = false
+  dim EEpromAddress as word
+  EEpromAddress = 0
 
-    If DS3231_OscillatorStopFlagStatus = TRUE Then
-        ' has a power loss occurred? and the oscillator has stopped?
-        powerloss = TRUE
-        DS3231_ClearOscillatorStopFlag
-    End If
-    If powerloss = TRUE Then
-        Locate 0, 13
-        Print "!"
-    End If
+  ; display all registers realtime display
+  ; uncomment to display
+  '  do forever
+  '     updateDisp
+  '        for xloop = 0 to 0x12
+  '          locate xloop+3, 0
+  '          lcdhex(xloop,LeadingZeroActive)
+  '          print "h :"
+  '          print ByteToBin( DS3231_ReadRegister ( xloop) )
+  '        next
+  '        if DS3231_Alarm1Status = 1 then    ; display message
+  '         DS3231_ClearAlarm1
+  '        end if
+  '
+  '
+  '        if DS3231_Alarm2Status = 1 then    ; display message
+  '           DS3231_ClearAlarm2
+  '
+  '        end if
+  '
+  '  loop
 
-    'show time and date
-    updateDisp
-    If setBut = pressed Then
-        'change time and date
-        changeSetting
-    End If
+  do
 
-    If modeBut = pressed Then
-        '12 or 24 hour mode
-        changeMode
-    End If
+    if DS3231_OscillatorStopFlagStatus = true then           ; has a power loss occurred? and the oscillator has stopped?
+      powerloss = true
+      DS3231_ClearOscillatorStopFlag
+    end if
+    if powerloss = true then
+       locate 0, 13
+       print "!"
+    end if
 
-    'Alarm Handling code. Simply tests the status and displays a message on the LCD
+    updateDisp                        ;show time and date
+    if setBut = pressed then
+      changeSetting                   ;change time and date
+    end if
 
-    If DS3231_Alarm1Status = 1 Then
-        ' display message
-        Locate 0,15
-        Print "*1"
-        DS3231_ClearAlarm1
-        Alarm1track = sec
-    End If
+    if modeBut = pressed then
+      changeMode                      ;12 or 24 hour mode
+    end if
 
-    If DS3231_Alarm2Status = 1 Then
-        ' display message
-        Locate 1,15
-        Print "*2"
-        DS3231_ClearAlarm2
-        Alarm2track = sec
-    End If
+    ;Alarm Handling code. Simply tests the status and displays a message on the LCD
 
-    If ((Alarm1track + 4) % 60 ) < sec Then
-        ' clear the line after time delay of 4 secs
-        Locate 0,15
-        Print "  "
-    End If
+            if DS3231_Alarm1Status = 1 then    ; display message
+               locate 0,15
+               print "*1"
+               DS3231_ClearAlarm1
+               Alarm1track = sec
+            end if
 
-    If ((Alarm2track + 4) % 60 ) < sec Then
-        ' clear the line after time delay of 4 secs
-        Locate 1,15
-        Print "  "
-    End If
-    'End of Alarm Handling code.
+            if DS3231_Alarm2Status = 1 then    ; display message
+               locate 1,15
+               print "*2"
+               DS3231_ClearAlarm2
+               Alarm2track = sec
+            end if
+
+            if ((Alarm1track + 4) % 60 ) < sec then     ; clear the line after time delay of 4 secs
+               locate 0,15
+               print "  "
+            end if
+
+            if ((Alarm2track + 4) % 60 ) < sec then     ; clear the line after time delay of 4 secs
+               locate 1,15
+               print "  "
+            end if
+    ;End of Alarm Handling code.
 
     eeprom_wr_byte ( AT24C32 , EEpromAddress,  sec )
 
     eeprom_rd_byte ( AT24C32 , EEpromAddress,  eepromval )
 
-    If sec <> eepromval Then
-        Locate 1,0
-        Print "!"
-    End If
+    if sec <> eepromval then
+       locate 1,0
+       print "!"
+    end if
     EEpromAddress++
     EEpromAddress = EEpromAddress % 4096
 
-Loop
-End
-'----- Subroutines
+  loop
+end
+  ;----- Subroutines
 
-Sub printTime
-    If mode = 24 Then
-        If hour < 10 Then
-            'left pad with zero
-            Print "0"
-        End If
-    End If
+  sub printTime
+    if mode = 24 then
+      if hour < 10 then               ;left pad with zero
+        Print "0"
+      end if
+    end if
     Print hour
 
     Print ":"
-    If min < 10 Then
-        'left pad with zero
-        Print "0"
-    End If
+    if min < 10 then                  ;left pad with zero
+      Print "0"
+    end if
     Print min
 
     Print ":"
-    If sec < 10 Then
-        'left pad with zero
-        Print "0"
-    End If
+    if sec < 10 then                  ;left pad with zero
+      Print "0"
+    end if
     Print sec
 
-    If mode = 12 Then
-        'Print a.m or p.m
-        If am_pm Then
-            'only in 12-hour mode
-            Print " p.m. "
-        Else
-            Print " a.m. "
-        End If
-    Else
-        'wipe out garbage
-        Print "     "
-    End If
-End Sub
+    if mode = 12 then                 ;Print a.m or p.m
+      if am_pm then                   ;only in 12-hour mode
+        Print " p.m. "
+      else
+        Print " a.m. "
+      end if
+    else
+      Print "     "                   ;wipe out garbage
+    end if
+  end sub
 
-'-----
+  ;-----
 
-Sub printDate
-    'day of the week
-    Select Case DOW
-    Case 1:
+  sub printDate
+    select case DOW                   ;day of the week
+      case 1:
         Print "Sun:"
-    Case 2:
+      case 2:
         Print "Mon:"
-    Case 3:
+      case 3:
         Print "Tue:"
-    Case 4:
+      case 4:
         Print "Wed:"
-    Case 5:
+      case 5:
         Print "Thu:"
-    Case 6:
+      case 6:
         Print "Fri:"
-    Case 7:
+      case 7:
         Print "Sat:"
-    Case Else
+      case else
         Print "Err:"
-    End Select
+    end select
 
-    If clocktype = 0 Then
-        Print month
-        Print "/"
-        Print date
-        'make four-digit year
-        Print "/"
-        Print century
-        If year < 10 Then
-            Print "0"
-        End If
+    if clocktype = 0 then
+      Print month
+      Print "/"
+      Print date
+      Print "/"                       ;make four-digit year
+      Print century
+      if year < 10 then
+        Print "0"
+      end if
 
-    Else
-        Print date
-        Print "/"
-        Print month
-        'make four-digit year
-        Print "/"
-        Print century
-        If year < 10 Then
-            Print "0"
-        End If
-    End If
+    else
+      Print date
+      Print "/"
+      Print month
+      Print "/"                       ;make four-digit year
+      Print century
+      if year < 10 then
+        Print "0"
+      end if
+    end if
     Print year
-    'blank any garbage
-    Print " "
-End Sub
+    Print " "                        ;blank any garbage
+  end sub
 
-'-----
+  ;-----
 
-Sub updateDisp
-    'for best efficiency, date is only updated once a day
+  sub updateDisp
+    ;for best efficiency, date is only updated once a day
     DS3231_ReadTime(hour, min, sec, am_pm)
-    If oldsec <> sec Then
-        If !(hour | min | sec) Then
-            'time to update
-            DS3231_ReadDate(DOW, date, month, year, century_flag )
-            If century_flag = 1 Then
-                DS3231_HandleCentury ( century_flag, Century )
-                CLS
-            End If
-        End If
+    if oldsec <> sec then
+      if !(hour | min | sec) then       ;time to update
+        DS3231_ReadDate(DOW, date, month, year, century_flag )
+        if century_flag = 1 then
+           DS3231_HandleCentury ( century_flag, Century )
+           CLS
+        end if
+      end if
 
-        'home the cursor
-        Locate 0,0
-        'show time
-        printTime
+      locate 0,0                        ;home the cursor
+      printTime                         ;show time
 
-        'show the date
-        Locate 1,0
-        printDate
-        oldsec =  sec
-    End If
-End Sub
+      locate 1,0                        ;show the date
+      printDate
+      oldsec =  sec
+    end if
+  end sub
 
-'-----
+  ;-----
 
-Sub changeSetting
-    'assume no change will be made
-    changed = FALSE
-    'and the current mode
-    DS3231_ReadHourMode(Oldmode)
-    'ensure the display is correct
-    mode = 24
-    'change settings in 24-hour mode
-    DS3231_SetHourMode(24)
+  sub changeSetting
+    changed = false                   ;assume no change will be made
+    DS3231_ReadHourMode(Oldmode)      ;and the current mode
+    mode = 24                         ;ensure the display is correct
+    DS3231_SetHourMode(24)            ;change settings in 24-hour mode
 
-    'wait for Set release
-    Do While setBut = pressed
-        Wait debounce
-    Loop
+    do while setBut = pressed         ;wait for Set release
+      wait debounce
+    loop
 
-    Wait While ( setBut = pressed ) OR ( modeBut = pressed )
+    wait while ( setBut = pressed ) or ( modeBut = pressed )
 
-    If clocktype = 0 Then
-        ' handle US and UK clock type
-        SetMonth
-        SetDate
-    Else
-        SetDate
-        SetMonth
-    End If
+    if clocktype = 0 then             ; handle US and UK clock type
+       SetMonth
+       SetDate
+    else
+       SetDate
+       SetMonth
+    end if
     SetYear
 
-    '***** Day of the Week
+    ;***** Day of the Week
 
-    CLS
+    cls
     Print "Set Weekday:"
-    Locate 1,0
+    locate 1,0
     printDate
 
-    Do
-        'Mode button held
-        Do While modeBut = pressed
-            'increment while pressed
-            DOW++
-            If DOW > 7 Then
-                '1 = Sunday, etc.
-                DOW = 1
-            End If
+    do
+      do while modeBut = pressed      ;Mode button held
+        DOW++                         ;increment while pressed
+        if DOW > 7 then               ;1 = Sunday, etc.
+          DOW = 1
+        end if
 
-            'Print updated display
-            Locate 1,0
-            printDate
-            'wait for repeat
-            Wait While modeBut = pressed
-            'a change was made
-            changed = TRUE
-        Loop
-    Loop While setBut <> pressed
+        locate 1,0                    ;Print updated display
+        printDate
+        wait while modeBut = pressed  ;wait for repeat
+        changed = true                ;a change was made
+      loop
+    loop while setBut <> pressed
 
-    'wait for Set release
-    Do While setBut = pressed
-        Wait debounce
-    Loop
+    do while setBut = pressed         ;wait for Set release
+      wait debounce
+    loop
 
-    '***** Hour
+    ;***** Hour
 
-    CLS
+    cls
     Print "Set Hours:"
-    Locate 1,0
-    If OldMode = 12 AND am_pm Then
-        ' make correction of AM_PM mode by adding 12 hours to handle mode changes
-        hour = hour + 12
-    End If
+    locate 1,0
+    if OldMode = 12 and am_pm then    ; make correction of AM_PM mode by adding 12 hours to handle mode changes
+       hour = hour + 12
+    end if
 
     printTime
 
-    Do
-        'Mode button held
-        Do While modeBut = pressed
-            'increment while pressed
-            hour++
-            If hour > 23 Then
-                'remember, set in 24-hour mode
-                hour = 0
-            End If
+    do
+      do while modeBut = pressed      ;Mode button held
+        hour++                        ;increment while pressed
+        if hour > 23 then             ;remember, set in 24-hour mode
+          hour = 0
+        end if
 
-            'Print updated display
-            Locate 1,0
-            printTime
-            'wait for repeat
-            Wait While modeBut = pressed
-            'a change was made
-            changed = TRUE
-        Loop
-    Loop While setBut <> pressed
+        locate 1,0                    ;Print updated display
+        printTime
+        wait while modeBut = pressed  ;wait for repeat
+        changed = true                ;a change was made
+      loop
+    loop while setBut <> pressed
 
-    'wait for Set release
-    Do While setBut = pressed
-        Wait debounce
-    Loop
+    do while setBut = pressed         ;wait for Set release
+      wait debounce
+    loop
 
-    '***** Minutes
+    ;***** Minutes
 
-    CLS
+    cls
     Print "Set Minutes:"
-    Locate 1,0
+    locate 1,0
     printTime
 
-    Do
-        'Mode button held
-        Do While modeBut = pressed
-            'increment while pressed
-            min++
-            If min > 59 Then
-                '0 to 59 minutes
-                min = 0
-            End If
+    do
+      do while modeBut = pressed      ;Mode button held
+        min++                         ;increment while pressed
+        if min > 59 then              ;0 to 59 minutes
+          min = 0
+        end if
 
-            'Print updated display
-            Locate 1,0
-            printTime
-            'wait for repeat
-            Wait While modeBut = pressed
-            'a change was made
-            changed = TRUE
-        Loop
-    Loop While setBut <> pressed
+        locate 1,0                    ;Print updated display
+        printTime
+        wait while modeBut = pressed  ;wait for repeat
+        changed = true                ;a change was made
+      loop
+    loop while setBut <> pressed
 
-    'wait for Set release
-    Do While setBut = pressed
-        Wait debounce
-    Loop
+    do while setBut = pressed         ;wait for Set release
+      wait debounce
+    loop
 
-    '***** Second
+    ;***** Second
 
-    CLS
+    cls
     Print "Set Seconds:"
-    Locate 1,0
+    locate 1,0
     printTime
 
-    Do
-        'Mode button held
-        Do While modeBut = pressed
-            'increment while pressed
-            sec++
-            If sec > 59 Then
-                '0 to 59 seconds
-                sec = 0
-            End If
+    do
+      do while modeBut = pressed      ;Mode button held
+        sec++                         ;increment while pressed
+        if sec > 59 then              ;0 to 59 seconds
+          sec = 0
+        end if
 
-            'Print updated display
-            Locate 1,0
-            printTime
-            'wait for repeat
-            Wait While modeBut = pressed
-            'a change was made
-            changed = TRUE
-        Loop
-    Loop While setBut <> pressed
+        locate 1,0                    ;Print updated display
+        printTime
+        wait while modeBut = pressed  ;wait for repeat
+        changed = true                ;a change was made
+      loop
+    loop while setBut <> pressed
 
-    'wait for Set release
-    Do While setBut = pressed
-        Wait debounce
-    Loop
+    do while setBut = pressed         ;wait for Set release
+      wait debounce
+    loop
 
-    '***** Execute the new settings
+    ;***** Execute the new settings
 
-    If changed Then
-        CLS
-        Print "Press Set, or"
-        Locate 1,0
-        Print "Mode to revert"
+    if changed then
+      cls
+      Print "Press Set, or"
+      locate 1,0
+      Print "Mode to revert"
 
-        'wait for the Set button
-        Do While (setBut <> pressed)
-            Wait debounce
-            If ModeBut = pressed Then
-                'clear last message
-                CLS
-                'restore current mode
-                DS3231_SetHourMode(Oldmode)
-                'do not set, exit set routine
-                Exit Sub
-            End If
-        Loop
+      do while (setBut <> pressed)          ;wait for the Set button
+        wait debounce
+        if ModeBut = pressed then
+           cls                               ;clear last message
+           DS3231_SetHourMode(Oldmode)       ;restore current mode
+           exit Sub                          ;do not set, exit set routine
+        end if
+      loop
 
-        'change settings in 24-hour mode
-        DS3231_SetHourMode(24)
-        DS3231_SetClock(hour, min, sec, DOW, date, month, year)
-        ' reset tracker variable
-        powerloss  = FALSE
-        DS3231_ClearOscillatorStopFlag
-    End If
+      DS3231_SetHourMode(24)                 ;change settings in 24-hour mode
+      DS3231_SetClock(hour, min, sec, DOW, date, month, year)
+      powerloss  = false                      ; reset tracker variable
+      DS3231_ClearOscillatorStopFlag
+    end if
 
-    'wait for Set release
-    Do While (setBut = pressed)
-    Loop
+    do while (setBut = pressed)       ;wait for Set release
+    loop
 
-    'let it settle
-    Wait debounce
-    'clear last message
-    CLS
-    'restore current mode
-    DS3231_SetHourMode(Oldmode)
-    'restore mode
-    mode = Oldmode
-End Sub
+    wait debounce                     ;let it settle
+    cls                               ;clear last message
+    DS3231_SetHourMode(Oldmode)      ;restore current mode
+    mode = Oldmode                    ;restore mode
+  end sub
 
-'-----
+  ;-----
 
-Sub changeMode
-    'change settings in 24-hour mode
-    DS3231_SetHourMode(24)
+  sub changeMode
+    DS3231_SetHourMode(24)            ;change settings in 24-hour mode
 
-    If mode = 12 Then
-        'toggle between 12 and 24
-        mode = 24
-    Else
-        mode = 12
-    End If
+    if mode = 12 then                 ;toggle between 12 and 24
+      mode = 24
+    else
+      mode = 12
+    end if
 
-    'change to new mode
-    DS3231_SetHourMode(mode)
+    DS3231_SetHourMode(mode)          ;change to new mode
 
-    'wait for a release
-    Do While modeBut = pressed
-        Wait debounce
-    Loop
-End Sub
+    do while modeBut = pressed        ;wait for a release
+      wait debounce
+    loop
+  end sub
 
-Sub setMonth
-    '***** Month
-    CLS
+  sub setMonth
+    ;***** Month
+    cls
     Print "Set Month:"
-    Locate 1,0
+    locate 1,0
     printDate
 
-    Do
-        'Mode button held
-        Do While modeBut = pressed
-            'increment while pressed
-            month++
-            If month > 12 Then
-                month = 1
-            End If
+    do
+      do while modeBut = pressed      ;Mode button held
+        month++                       ;increment while pressed
+        if month > 12 then
+          month = 1
+        end if
 
-            'Print updated display
-            Locate 1,0
-            printDate
-            'wait for repeat
-            Wait While modeBut = pressed
-            'a change was made
-            changed = TRUE
-        Loop
-        Wait debounce
-        'Set moves you on
-    Loop While setBut <> pressed
+        locate 1,0                    ;Print updated display
+        printDate
+        wait while modeBut = pressed  ;wait for repeat
+        changed = true                ;a change was made
+      loop
+      wait debounce
+    loop while setBut <> pressed      ;Set moves you on
 
-    ReadTable monthDays, month, daysMax
+    readTable monthDays, month, daysMax
 
-    'wait for Set release
-    Do While setBut = pressed
-        Wait debounce
-    Loop
-End Sub
+    do while setBut = pressed         ;wait for Set release
+      wait debounce
+    loop
+  end Sub
 
 
 
-Sub SetDate
-    '***** Date
+  sub SetDate
+    ;***** Date
 
-    CLS
+    cls
     Print "Set Date:"
-    Locate 1,0
+    locate 1,0
     printDate
-    ReadTable monthDays, month, daysMax
-    Do
-        'Mode button held
-        Do While modeBut = pressed
-            'increment while pressed
-            date++
-            If date > daysMax Then
-                'stay within legal days
-                date = 1
-            End If
+    readTable monthDays, month, daysMax
+    do
+      do while modeBut = pressed      ;Mode button held
+        date++                        ;increment while pressed
+        if date > daysMax then        ;stay within legal days
+          date = 1
+        end if
 
-            'Print updated display
-            Locate 1,0
-            printDate
-            'wait for repeatt
-            Wait While modeBut = pressed
-            'a change was made
-            changed = TRUE
-        Loop
-        Wait debounce
-    Loop While setBut <> pressed
+        locate 1,0                    ;Print updated display
+        printDate
+        wait while modeBut = pressed  ;wait for repeatt
+        changed = true                ;a change was made
+      loop
+      wait debounce
+    loop while setBut <> pressed
 
-    'wait for Set release
-    Do While setBut = pressed
-        Wait debounce
-    Loop
-End Sub
+    do while setBut = pressed         ;wait for Set release
+      wait debounce
+    loop
+  end sub
 
 
-Sub SetYear
-    '***** Year
+  sub SetYear
+    ;***** Year
 
-    CLS
+    cls
     Print "Set Year:"
-    Locate 1,0
+    locate 1,0
     printDate
 
-    Do
-        'Mode button held
-        Do While modeBut = pressed
-            'increment while pressed
-            year++
-            If year > 99 Then
-                'this millennium only
-                year = 0
-            End If
+    do
+      do while modeBut = pressed      ;Mode button held
+        year++                        ;increment while pressed
+        if year > 99 then             ;this millennium only
+          year = 0
+        end if
 
-            'Print updated display
-            Locate 1,0
-            printDate
-            'wait for repeat
-            Wait While modeBut = pressed
-            'a change was made
-            changed = TRUE
-        Loop
-        Wait debounce
-    Loop While setBut <> pressed
+        locate 1,0                    ;Print updated display
+        printDate
+        wait while modeBut = pressed  ;wait for repeat
+        changed = true                ;a change was made
+      loop
+      wait debounce
+    loop while setBut <> pressed
 
-    'wait for Set release
-    Do While setBut = pressed
-        Wait debounce
-    Loop
+    do while setBut = pressed         ;wait for Set release
+      wait debounce
+    loop
 
 
-End Sub
+  end sub

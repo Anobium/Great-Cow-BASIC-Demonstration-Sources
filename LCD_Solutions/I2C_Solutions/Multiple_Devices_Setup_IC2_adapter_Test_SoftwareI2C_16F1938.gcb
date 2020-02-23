@@ -24,64 +24,64 @@
 '''@date   	14.02.2015
 '''********************************************************************************
 
-' ----- Configuration
+; ----- Configuration
 
-#CHIP 16f1938, 32
-#OPTION Explicit
-
-
-' ----- Define Hardware settings
-' Define I2C settings - CHANGE PORTS
-#DEFINE I2C_MODE Master
-#DEFINE I2C_DATA PORTC.4
-#DEFINE I2C_CLOCK PORTC.3
-#DEFINE I2C_DISABLE_INTERRUPTS On
-'Optionally, you can reduce the I2C timings.
-#DEFINE I2C_BIT_DELAY 0 us
-#DEFINE I2C_CLOCK_DELAY 1 us
-#DEFINE I2C_END_DELAY 0 us
+  #chip 16f1938, 32
+  #option explicit
 
 
-'''Set up LCD
-#DEFINE LCD_IO 10
-#DEFINE LCD_I2C_Address_1 0x4E
-#DEFINE LCD_I2C_Address_2 0x4C
-
-' ----- Constants
-'None required beyond the scope of the hardware.
-
-'----- Variables
-Dim LCD_I2C_Address_Current As Byte
-
-' ----- Quick Command Reference:
-
-'''Set LCD_10 to 10 for the YwRobot LCD1602 IIC V1 or the Sainsmart LCD_PIC I2C adapter
-'''Set LCD_10 to 12 for the Ywmjkdz I2C adapter with pot bent over top of chip
-
-'''   #define LCD_I2C_Address 0x4e            'This is the default value, change as appropiate
-'''   #define LCD_I2C_Address_1 0x4e          'set when multiples are on the bus
-'''   #define LCD_I2C_Address_2 0x4c
-'''   #define LCD_I2C_Address_3 0x4a
-'''   #define LCD_I2C_Address_4 0x49
-'''
-'''   Use LCD_I2C_Address_Current = LCD_I2C_Address to change the LCD output routines to a specific device.
-'''       LCD_I2C_Address_Current = LCD_I2C_Address
-'''       Print "LCD Address is now": LCDHex(  LCD_I2C_Address_Current, 2)
+  ; ----- Define Hardware settings
+  ' Define I2C settings - CHANGE PORTS
+   #define I2C_MODE Master
+   #define I2C_DATA PORTC.4
+   #define I2C_CLOCK PORTC.3
+   #define I2C_DISABLE_INTERRUPTS ON
+   'Optionally, you can reduce the I2C timings.
+   #define I2C_BIT_DELAY 0 us
+   #define I2C_CLOCK_DELAY 1 us
+   #define I2C_END_DELAY 0 us
 
 
-' ----- Main body of program commences here.
-Do Forever
+  '''Set up LCD
+   #define LCD_IO 10
+   #define LCD_I2C_Address_1 0x4E
+   #define LCD_I2C_Address_2 0x4C
+
+; ----- Constants
+  'None required beyond the scope of the hardware.
+
+;----- Variables
+  Dim LCD_I2C_ADDRESS_CURRENT as Byte
+
+; ----- Quick Command Reference:
+
+ '''Set LCD_10 to 10 for the YwRobot LCD1602 IIC V1 or the Sainsmart LCD_PIC I2C adapter
+ '''Set LCD_10 to 12 for the Ywmjkdz I2C adapter with pot bent over top of chip
+
+ '''   #define LCD_I2C_Address 0x4e            'This is the default value, change as appropiate
+ '''   #define LCD_I2C_Address_1 0x4e          'set when multiples are on the bus
+ '''   #define LCD_I2C_Address_2 0x4c
+ '''   #define LCD_I2C_Address_3 0x4a
+ '''   #define LCD_I2C_Address_4 0x49
+ '''
+ '''   Use LCD_I2C_Address_Current = LCD_I2C_Address to change the LCD output routines to a specific device.
+ '''       LCD_I2C_Address_Current = LCD_I2C_Address
+ '''       Print "LCD Address is now": LCDHex(  LCD_I2C_Address_Current, 2)
+
+
+; ----- Main body of program commences here.
+do forever
     LCD_I2C_Address_Current = LCD_I2C_Address_1
     CLS
-    Print "Great Cow Basic"
+    PRINT "Great Cow Basic"
     Locate 1,0
-    Print "I2C LCD Driver"
+    PRINT "I2C LCD Driver"
 
 
 
     LCD_I2C_Address_Current = LCD_I2C_Address_2
     CLS
-    Print "Great Cow Basic"
+    PRINT "Great Cow Basic"
     Locate 1,0
     Print "I2C LCD Driver"
     Locate 2,0
@@ -92,24 +92,24 @@ Do Forever
 
 
     LCD_I2C_Address_Current = LCD_I2C_Address_1
-    Repeat 2
-        CLS
-        Print "Great Cow Basic"
-        Locate 1,0
-        Print "Multiple Devices!"
+    repeat 2
+      CLS
+      PRINT "Great Cow Basic"
+      Locate 1,0
+      PRINT "Multiple Devices!"
 
-        LCD_I2C_Address_Current = LCD_I2C_Address_2
-    End Repeat
-    Wait 3 s
+      LCD_I2C_Address_Current = LCD_I2C_Address_2
+    end repeat
+    wait 3 s
 
     LCD_I2C_Address_Current = LCD_I2C_Address_1
-    Repeat 2
-        CLS
-        Print "I2C address:"
-        Locate 1,0
-        Print "0x": LCDHex(  LCD_I2C_Address_Current, 2)
-        LCD_I2C_Address_Current = LCD_I2C_Address_2
-    End Repeat
+    repeat 2
+      cls
+      Print "I2C address:"
+      locate 1,0
+      Print "0x": LCDHex(  LCD_I2C_Address_Current, 2)
+      LCD_I2C_Address_Current = LCD_I2C_Address_2
+    end repeat
 
-    Wait 3 s
-Loop
+    wait 3 s
+ loop

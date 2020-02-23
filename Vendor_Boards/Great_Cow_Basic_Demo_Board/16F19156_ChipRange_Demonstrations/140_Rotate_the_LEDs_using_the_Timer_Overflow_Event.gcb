@@ -20,48 +20,48 @@
 '''@date    03/05/2018
 '''****
 ' ----- Configuration
-'Chip Settings.
-#CHIP 16F19156, 32
-#OPTION Explicit
+    'Chip Settings.
+    #chip 16F19156, 32
+    #option Explicit
 
 
-'' -------------------PORTA----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---|RS |RW | E |D7 |D6 |D5 |D4
-''-----------------------------------------
-''
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---|RS |RW | E |D7 |D6 |D5 |D4
+    ''-----------------------------------------
+    ''
 
-'' -------------------PORTB----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    -------| O | A |-------| O | I |-
-''-----------------------------------------
-''
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | A |-------| O | I |-
+    ''-----------------------------------------
+    ''
 
-'' ------------------PORTC-----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---| TX| A |---------------------
-''-----------------------------------------
-''
-
-
-#DEFINE LEDD1 PORTB.1
-#DEFINE LEDD2 PORTB.5
-#DEFINE SwitchIn        PORTB.0
-
-Dir     LEDD1         Out
-Dir     LEDD2         Out
-Dir     SwitchIn      In
-
-'*****************************************************************************************************
-'Main program commences here.. everything before this is setup for the board.
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---| TX| A |---------------------
+    ''-----------------------------------------
+    ''
 
 
-Dim TIMEOUT As Byte
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define SwitchIn        PORTB.0
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     SwitchIn      In
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+
+    Dim TIMEOUT as Byte
 
 
 '   Initialise the timer.
 '   Firstly tell the compiler to use a 16bit timer for this demonstration
-#DEFINE TMR0_16BIT
+    #define TMR0_16BIT
 
 '     For this we need the following:
 '       Prescaler
@@ -70,43 +70,42 @@ Dim TIMEOUT As Byte
 '            NOT to sync Timer
 '       Post scaler
 '           1:2
-InitTimer0 Osc, PRE0_256 + TMR0_HFINTOSC ,  POST0_2
+    InitTimer0 Osc, PRE0_256 + TMR0_HFINTOSC ,  POST0_2
 
-On Interrupt Timer0Overflow Call blink
+    On Interrupt Timer0Overflow call blink
 
-'Set timer to 1 second`
-SetTimer ( 0, 0x0bdc )
+    'Set timer to 1 second`
+    SetTimer ( 0, 0x0bdc )
 
 '     Start the Timer - you need to start this Timer0!
-StartTimer 0
+    StartTimer 0
 
-'Set the LED states
-LEDD1 = 0
-LEDD2 = 1
+    'Set the LED states
+    LEDD1 = 0
+    LEDD2 = 1
 
 
-Do Forever
+    Do Forever
 
-    If TimeOut = 1 Then
+          if TimeOut = 1 then
 
-        'Set the LED states
-        LEDD1 = !LEDD1
-        LEDD2 = !LEDD2
+            'Set the LED states
+            LEDD1 = !LEDD1
+            LEDD2 = !LEDD2
 
-        TimeOut= 0
-        ' Set timer to 1 second`
-        SetTimer ( 0, 0x0bdc )
+            TimeOut= 0
+            SetTimer ( 0, 0x0bdc ) ' Set timer to 1 second`
 
-    End If
-
+          end if
 
 
 
-Loop
+
+    Loop
 
 
-Sub blink
-    TimeOut = 1
-    'Clear the Timer0 overflow event
-    TMR0IF = 0
-End Sub
+    Sub blink
+          TimeOut = 1
+          'Clear the Timer0 overflow event
+          TMR0IF = 0
+    End Sub

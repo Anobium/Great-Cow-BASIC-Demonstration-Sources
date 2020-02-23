@@ -9,24 +9,23 @@
 '''@version    1.01
 '''@date       10.10.17
 '''********************************************************************************
-'Use a chip with the correct operating frequency!
-#CHIP 16f1939,4
+#chip 16f1939,4      'Use a chip with the correct operating frequency!
 
 'This chip only support CCP
 
 
 main:
 
-'Do NOT forget to set the port direction... setting everything to out!
-Dir portc Out
+    'Do NOT forget to set the port direction... setting everything to out!
+    dir portc Out
 
 
 
-'Enable CCP/PWM channels 1 and 2
-PWMOn
-PWMOn ( 2 )
+    'Enable CCP/PWM channels 1 and 2
+    PWMOn
+    PWMOn ( 2 )
 
 
-Do
-Loop
+    do
+    loop
 

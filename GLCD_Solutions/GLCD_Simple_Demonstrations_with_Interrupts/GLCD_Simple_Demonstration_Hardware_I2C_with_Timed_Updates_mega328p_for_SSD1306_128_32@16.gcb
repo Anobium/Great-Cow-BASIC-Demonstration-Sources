@@ -17,103 +17,87 @@
 '''@date    25.3.17
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP mega328p, 16
+; ----- Configuration
+    #chip mega328p, 16
 
-#OPTION Explicit
+    #option explicit
 
-#INCLUDE <glcd.h>
+    #include <glcd.h>
 
-' ----- Define Hardware settings
-' Define I2C settings
-#DEFINE hi2c_BAUD_RATE 400
-#DEFINE hi2c_DATA
-
-
-' ----- Define GLCD Hardware settings
-#DEFINE GLCD_TYPE GLCD_TYPE_SSD1306_32
-#DEFINE GLCD_I2C_Address 0x78
-' ----- Define variables
-
-Dim BYTENUMBER, CCOUNT, TogglePixels As Byte
-
-CCount = 0
-Dim longNumber As Long
-' max value = 4294967290
-longNumber = 123456
-Dim wordNumber As Word
-Dim outstring As String
-wordNumber = 0
-byteNumber = 0
-
-'Call the initialisation routine
-InitLEDControl
-
-' ----- Main program
-GLCDfntDefaultSize = 2
-GLCDPrint 0, 0,   "Great Cow"
-GLCDPrint 0, 15,  "  BASIC"
-
-Wait 3 s
-GLCDCLS
-
-GLCDfntDefaultSize = 1
-GLCDPrint (0, 0, "Anobium 2019")
-GLCDPrint (0, 9, "Timed pixel demo")
-GLCDPrint (76, 18, GLCD_WIDTH )
-GLCDPrint (96, 18, "*" )
-GLCDPrint (104, 18, GLCD_HEIGHT )
+; ----- Define Hardware settings
+    ' Define I2C settings
+    #define hi2c_BAUD_RATE 400
+    #define hi2c_DATA
 
 
+; ----- Define GLCD Hardware settings
+  #define GLCD_TYPE GLCD_TYPE_SSD1306_32
+  #define GLCD_I2C_Address 0x78
+; ----- Define variables
 
-Wait 3 s
-GLCDCLS
+  Dim BYTENUMBER, CCOUNT, TogglePixels as Byte
 
-' Prepare the static components of the screen
-' Print some text
-GLCDPrint ( 0,   0, "PrintStr")
-' Print some more text
-GLCDPrint ( 64,  0, "@")
-' Print chip speed
-GLCDPrint ( 72,  0, ChipMHz)
-' Print some text
-GLCDPrint ( 86, 0, "Mhz")
-' Draw some text
-GLCDDrawString( 0,8,"DrawStr")
-' Draw a box
-Box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1
-' Draw a box
-Box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1
-' Draw a circle
-Circle( 44,24,5)
-' Draw a line
-Line 0,GLCD_HEIGHT-1,44,19
-' Draw a line
-Line 0,19,44,19
+  CCount = 0
+  dim longNumber as long
+  longNumber = 123456 ' max value = 4294967290
+  dim wordNumber as Word
+  dim outstring as string
+  wordNumber = 0
+  byteNumber = 0
+
+  'Call the initialisation routine
+  InitLEDControl
+
+; ----- Main program
+  GLCDfntDefaultSize = 2
+  GLCDPrint 0, 0,   "Great Cow"
+  GLCDPrint 0, 15,  "  BASIC"
+
+  wait 3 s
+  GLCDCLS
+
+  GLCDfntDefaultSize = 1
+  GLCDPrint (0, 0, "Anobium 2019")
+  GLCDPrint (0, 9, "Timed pixel demo")
+  GLCDPrint (76, 18, GLCD_WIDTH )
+  GLCDPrint (96, 18, "*" )
+  GLCDPrint (104, 18, GLCD_HEIGHT )
 
 
-Do Forever
 
-    For CCount = 32 To 127
+  wait 3 s
+  GLCDCLS
 
-        ' Print a HEX string
-        GLCDPrint ( 64 ,  36,  Hex(longNumber_E ) )
+  ' Prepare the static components of the screen
+  GLCDPrint ( 0,   0, "PrintStr")                                ; Print some text
+  GLCDPrint ( 64,  0, "@")                                    ; Print some more text
+  GLCDPrint ( 72,  0, ChipMhz)                                   ; Print chip speed
+  GLCDPrint ( 86, 0, "Mhz")                                     ; Print some text
+  GLCDDrawString( 0,8,"DrawStr")                                 ; Draw some text
+  box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1                            ; Draw a box
+  box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1    ; Draw a box
+  Circle( 44,24,5)                                              ; Draw a circle
+  line 0,GLCD_HEIGHT-1,44,19                                    ; Draw a line
+  line 0,19,44,19                                               ; Draw a line
 
-        FilledBox (80,24,83,27, TogglePixels )
-        ' Draw a Box
-        Box (3,24,6,27, !TogglePixels )
-        ' Draw a character
-        GLCDDrawChar(48, 9, CCount )
-        ' Prepare a string
-        outString = Str( CCount )
-        ' Draw a string
-        GLCDDrawString(64, 9, Pad(outString,3) )
-        longNumber = longNumber + 7
 
-    Next
+  DO forever
 
-Loop
-End
+     for CCount = 32 to 127
+
+          GLCDPrint ( 64 ,  36,  hex(longNumber_E ) )                 ; Print a HEX string
+
+          filledbox (80,24,83,27, TogglePixels )
+          box (3,24,6,27, !TogglePixels )                                           ; Draw a Box
+          GLCDDrawChar(48, 9, CCount )                               ; Draw a character
+          outString = str( CCount )                                  ; Prepare a string
+          GLCDDrawString(64, 9, pad(outString,3) )                   ; Draw a string
+          longNumber = longNumber + 7
+
+      NEXT
+
+  LOOP
+  end
 
 
 
@@ -129,10 +113,8 @@ Sub InitLEDControl
     StartTimer 1
     ' Set the OCRnA register to give us the corrent timed Interrupt.
     ' This means there are 255-OCRnA+1 clocks cycles to the next event. Why 1? Becuase the TOP value is 0 not 255.
-    'this OCR1A Register is used to manipulate the counter resolution.
-    OCR1AH = 0xF4
-    'this OCR1A Register is used to manipulate the counter resolution.
-    OCR1AL = 0x23
+    OCR1AH = 0xF4 'this OCR1A Register is used to manipulate the counter resolution.
+    OCR1AL = 0x23 'this OCR1A Register is used to manipulate the counter resolution.
     TCCR1A = 0x80
     TCCR1B = 0x0C
 

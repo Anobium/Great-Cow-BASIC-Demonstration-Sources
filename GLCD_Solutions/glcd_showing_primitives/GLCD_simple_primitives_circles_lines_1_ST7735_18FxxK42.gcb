@@ -14,203 +14,182 @@
 '''********************************************************************************
 
 
-#CHIP 18F47K42, 64
-#OPTION Explicit
+        #chip 18F47K42, 64
+        #option explicit
 
-#INCLUDE <glcd.h>
+        #include <glcd.h>
 
 '************************ Setup ST7735 ***********************
 
-#DEFINE GLCD_TYPE GLCD_TYPE_ST7735
+        #define GLCD_TYPE GLCD_TYPE_ST7735
 
-'The slection of the TAB below enable the selection of the three type of ST7735
-'ST7735_BLACKTAB  can ST7735_GREENTAB or ST7735_REDTAB
-#DEFINE ST7735TABCOLOR ST7735_BLACKTAB
+        'The slection of the TAB below enable the selection of the three type of ST7735
+        #define ST7735TABCOLOR ST7735_BLACKTAB  'ST7735_BLACKTAB  can ST7735_GREENTAB or ST7735_REDTAB
 
 
 '************************ Setup SPI for the ST7735 **********************************************************
 '************************ You can use hardware SPI, ensure you setup PPS, if required ***********************
 
-'Pin mappings for Software SPI
-#DEFINE GLCD_DO  portc.5
-#DEFINE GLCD_SCK portc.3
+        'Pin mappings for Software SPI
+        #define GLCD_DO  portc.5
+        #define GLCD_SCK portc.3
 
-#DEFINE GLCD_DC portA.0
-#DEFINE GLCD_CS portC.1
-#DEFINE GLCD_RESET portC.0
+        #define GLCD_DC portA.0
+        #define GLCD_CS portC.1
+        #define GLCD_RESET portC.0
 
-' #define ST7735_HardwareSPI     ' Remove to enable hardware SPI, ensure you setup PPS, if required
+        ' #define ST7735_HardwareSPI     ' Remove to enable hardware SPI, ensure you setup PPS, if required
 
 
 '************************ Graphics Main program ***********************
 
-#DEFINE x_C GLCD_WIDTH/2
-#DEFINE y_C GLCD_HEIGHT/2
-#DEFINE xx2 GLCD_WIDTH
-#DEFINE yy2 GLCD_HEIGHT
+    #define x_C GLCD_WIDTH/2
+    #define y_C GLCD_HEIGHT/2
+    #define xx2 GLCD_WIDTH
+    #define yy2 GLCD_HEIGHT
 
-Table Colors As Word
-    'BLACK
-    TFT_BLACK
-    'Navy
-    TFT_NAVY
-    'DARKGREEN
-    TFT_DARKGREEN
-    'DARKCYAN
-    TFT_DARKCYAN
-    'MAROON
-    TFT_MAROON
-    'PURPLE
-    TFT_PURPLE
-    'OLIVE
-    TFT_OLIVE
-    'LIGHTGREY
-    TFT_LIGHTGREY
-    'DARKGREY
-    TFT_DARKGREY
-    'BLUE
-    TFT_BLUE
-    'GREEN
-    TFT_GREEN
-    'CYAN
-    TFT_CYAN
-    'RED
-    TFT_RED
-    'MAGENTA
-    TFT_MAGENTA
-    'YELLOW
-    TFT_YELLOW
-    'WHITE
-    TFT_WHITE
-    'ORANGE
-    TFT_ORANGE
-    'GREENYELLOW
-    TFT_GREENYELLOW
-    'PINK
-    TFT_PINK
-End Table
+    Table Colors as Word
+        TFT_BLACK       'BLACK
+        TFT_NAVY        'Navy
+        TFT_DARKGREEN   'DARKGREEN
+        TFT_DARKCYAN    'DARKCYAN
+        TFT_MAROON      'MAROON
+        TFT_PURPLE      'PURPLE
+        TFT_OLIVE       'OLIVE
+        TFT_LIGHTGREY   'LIGHTGREY
+        TFT_DARKGREY    'DARKGREY
+        TFT_BLUE        'BLUE
+        TFT_GREEN       'GREEN
+        TFT_CYAN        'CYAN
+        TFT_RED         'RED
+        TFT_MAGENTA     'MAGENTA
+        TFT_YELLOW      'YELLOW
+        TFT_WHITE       'WHITE
+        TFT_ORANGE      'ORANGE
+        TFT_GREENYELLOW 'GREENYELLOW
+        TFT_PINK        'PINK
+    End Table
 
-Dim port_rev          As Byte
-Dim cleared           As Byte
-Dim delx,dely,ind     As Byte
-Dim nx, ny            As Byte
-Dim n_color           As Byte
-Dim xx1,yy1           As Word
-Dim color             As Word
+    Dim port_rev          as byte
+    Dim cleared           as byte
+    Dim delx,dely,ind     as byte
+    Dim nx, ny            as byte
+    Dim n_color           as byte
+    Dim xx1,yy1           as Word
+    Dim color             as word
 
-'black'white 'NAVY
-GLCDCLS(ST7735_NAVY)
+    GLCDCLS(ST7735_NAVY)'black'white 'NAVY
 
-n_color=19
-delx=10
-dely=10
-nx=(GLCD_WIDTH/delx)+1
-ny=(GLCD_HEIGHT/dely)+1
-xx1=0
-yy1=0
-Do
-    'scan circle
-    ScanCircle(x_C,y_C)
-    'from center
-    scanx(x_C,y_C,xx1,yy1,1)
-    scany(x_C,y_C,xx2,yy1,1)
-    scanx(x_C,y_C,xx2,yy2,2)
-    scany(x_C,y_C,xx1,yy2,2)
-    'from angles case 1
-    scany(xx1,yy1,xx2,yy1,1)
-    scanx(xx1,yy1,xx2,yy2,2)
-    scanx(xx1,yy1,xx1,yy2,1)
-    scany(xx1,yy1,xx2,yy2,2)
-    'case2
-    scanx(xx2,yy1,xx2,yy2,2)
-    scany(xx2,yy1,xx1,yy2,2)
-    scany(xx2,yy1,xx1,yy1,1)
-    scanx(xx2,yy1,xx1,yy2,1)
-    'case3
-    scany(xx2,yy2,xx1,yy2,2)
-    scanx(xx2,yy2,xx1,yy1,1)
-    scanx(xx2,yy2,xx2,yy1,2)
-    scany(xx2,yy2,xx1,yy1,1)
-    'case4
-    scanx(xx1,yy2,xx1,yy1,1)
-    scany(xx1,yy2,xx2,yy1,1)
-    scany(xx1,yy2,xx2,yy2,2)
-    scanx(xx1,yy2,xx2,yy1,2)
+    n_color=19
+    delx=10
+    dely=10
+    nx=(GLCD_WIDTH/delx)+1
+    ny=(GLCD_HEIGHT/dely)+1
+    xx1=0
+    yy1=0
+do
+            'scan circle
+      ScanCircle(x_C,y_C)
+            'from center
+      scanx(x_C,y_C,xx1,yy1,1)
+      scany(x_C,y_C,xx2,yy1,1)
+      scanx(x_C,y_C,xx2,yy2,2)
+      scany(x_C,y_C,xx1,yy2,2)
+            'from angles case 1
+      scany(xx1,yy1,xx2,yy1,1)
+      scanx(xx1,yy1,xx2,yy2,2)
+      scanx(xx1,yy1,xx1,yy2,1)
+      scany(xx1,yy1,xx2,yy2,2)
+            'case2
+      scanx(xx2,yy1,xx2,yy2,2)
+      scany(xx2,yy1,xx1,yy2,2)
+      scany(xx2,yy1,xx1,yy1,1)
+      scanx(xx2,yy1,xx1,yy2,1)
+           'case3
+      scany(xx2,yy2,xx1,yy2,2)
+      scanx(xx2,yy2,xx1,yy1,1)
+      scanx(xx2,yy2,xx2,yy1,2)
+      scany(xx2,yy2,xx1,yy1,1)
+            'case4
+      scanx(xx1,yy2,xx1,yy1,1)
+      scany(xx1,yy2,xx2,yy1,1)
+      scany(xx1,yy2,xx2,yy2,2)
+      scanx(xx1,yy2,xx2,yy1,2)
 
-    ScanEllipse(x_C,y_C)
+      ScanEllipse(x_C,y_C)
 
-    Wait 1 s
+      wait 1 s
 
-    GLCDCLS(ST7735_NAVY)
+      GLCDCLS(ST7735_NAVY)
 
-Loop
+loop
 
 
-Sub scany(x_1,y_1,x_2,y_2,incr)
+sub scany(x_1,y_1,x_2,y_2,incr)
 
-    Dim x_1,x_2,y_1,y_2 As Word
-    Dim ind, del    As Word
-    Dim ind1,ind2,  As Word
-    Dim ycurr       As Word
-    If incr=1 Then
-        del=dely
-        ycurr=y_2-del
-    Else
-        del=-dely
-        ycurr=y_2-del
-    End If
-    For ind=1  To ny
-        ycurr=ycurr+del
-        ReadTable colors,ind%n_color,color
-        Line(x_1,y_1,x_2,ycurr,color)
-    Next
+    Dim x_1,x_2,y_1,y_2 as Word
+    Dim ind, del    as word
+    Dim ind1,ind2,  as Word
+    Dim ycurr       as Word
+    if incr=1 then
+      del=dely
+      ycurr=y_2-del
+    else
+      del=-dely
+      ycurr=y_2-del
+    end if
+    for ind=1  to ny
+      ycurr=ycurr+del
+      readtable colors,ind%n_color,color
+      line(x_1,y_1,x_2,ycurr,color)
+    next
 
-End Sub
+end sub
 
-Sub scanx(x_1,y_1,x_2,y_2,incr)
+sub scanx(x_1,y_1,x_2,y_2,incr)
 
-    Dim x_1, x_2, y_1, y_2 As Word
-    Dim ind, del   As Word
-    Dim ind1,ind2, As Word
-    Dim xcurr      As Word
-    If incr=1 Then
-        del=delx
-        xcurr=x_2-del
-    Else
-        del=-delx
-        xcurr=x_2-del
-    End If
-    For ind=1  To nx
-        xcurr=xcurr+del
-        ReadTable colors,ind%n_color,color
-        Line(x_1,y_1,xcurr,y_2,color)
-    Next
+    Dim x_1, x_2, y_1, y_2 as Word
+    Dim ind, del   as Word
+    Dim ind1,ind2, as Word
+    Dim xcurr      as Word
+    if incr=1 then
+      del=delx
+      xcurr=x_2-del
+    else
+      del=-delx
+      xcurr=x_2-del
+    end if
+    for ind=1  to nx
+      xcurr=xcurr+del
+      readtable colors,ind%n_color,color
+      line(x_1,y_1,xcurr,y_2,color)
+    next
 
-End Sub
+end sub
 
-Sub ScanCircle(x0,y0)
+sub ScanCircle(x0,y0)
 
-    Dim x0,y0,delrad, rad, ind As Word
-    Dim color As Word
+    Dim x0,y0,delrad, rad, ind as word
+    Dim color as Word
     delrad=0
-    For ind=1 To 102
-        delrad=delrad+1
-        ReadTable colors,ind%n_color,color
-        Circle(x0,y0,delrad,color)
-    Next
+    for ind=1 to 102
+      delrad=delrad+1
+      readtable colors,ind%n_color,color
+      circle(x0,y0,delrad,color)
+    next
 
-End Sub
+end sub
 
-Sub ScanEllipse(x0,y0)
+sub ScanEllipse(x0,y0)
 
-    Dim x0,y0,radx, rady, ind As Word
-    Dim color As Word
+    Dim x0,y0,radx, rady, ind as word
+    Dim color as Word
     radx=0
-    For ind=1 To 40
-        radx=radx+1
-        rady=2*radx
-        ReadTable colors,ind%n_color,color
-        Ellipse(x0,y0,radx,rady,color)
-    Next
+    for ind=1 to 40
+      radx=radx+1
+      rady=2*radx
+      readtable colors,ind%n_color,color
+      Ellipse(x0,y0,radx,rady,color)
+    next
 
-End Sub
+end sub

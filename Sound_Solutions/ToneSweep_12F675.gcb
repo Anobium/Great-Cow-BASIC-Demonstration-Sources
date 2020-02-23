@@ -8,17 +8,14 @@
 '''@version v0.1
 '''@date    19.06.2019
 '''********************************************************************************
-#CHIP 12f675, 4
-#OPTION Explicit
+#chip 12f675, 4
+#option explicit
 
 
-'Create a word variable
-Dim SND As Word
-#DEFINE SoundOut GPIO.2
-Do Forever
-    'frequency controls
-    For SND = 100 To 1000 Step 10
-        ' sweep-rate control
-        Tone SND, 5
+DIM SND as word 'Create a word variable
+#define SoundOut GPIO.2
+Do forever
+    For SND = 100 to 1000 step 10 'frequency controls
+        Tone SND, 5 ' sweep-rate control
     Next
-Loop
+loop

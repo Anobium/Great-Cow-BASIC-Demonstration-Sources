@@ -23,55 +23,54 @@
 '''@date    03/05/2018
 '''****
 ' ----- Configuration
-'Chip Settings.
-#CHIP 16F19156, 32
-#OPTION Explicit
+    'Chip Settings.
+    #chip 16F19156, 32
+    #option Explicit
 
-'' -------------------PORTA----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---------------------------------
-''-----------------------------------------
-''
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
 
-'' -------------------PORTB----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    -------| O | A |--------| O | I |-
-''-----------------------------------------
-''
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | A |--------| O | I |-
+    ''-----------------------------------------
+    ''
 
-'' ------------------PORTC-----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---------------------------------
-''-----------------------------------------
-''
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
 
-'Define constants to make things easier. We can reuse these at any time.
-#DEFINE LEDD1 PORTB.1
-#DEFINE LEDD2 PORTB.5
-#DEFINE LDR             PORTB.4
-#DEFINE SwitchIn        PORTB.0
+    'Define constants to make things easier. We can reuse these at any time.
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define LDR             PORTB.4
+    #define SwitchIn        PORTB.0
 
-Dir     LEDD1         Out
-Dir     LEDD2         Out
-'this is the ANB4 port
-Dir     LDR           In
-Dir     SwitchIn      In
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     LDR           In    'this is the ANB4 port
+    Dir     SwitchIn      In
 
-'*****************************************************************************************************
-'Main program commences here.. everything before this is setup for the board.
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
 
-Dim ADCVal As Byte
+    dim ADCVal as byte
 
-Do
+    do
 
-    ADCVal =  ReadAD ( ANB4 )
+        ADCVal =  ReadAD ( ANB4 )
 
-    If ADCVal > 127 Then
-        LEDD1 = 1
-        LEDD2 = 0
-    Else
-        LEDD1 = 0
-        LEDD2 = 1
-    End If
+        if ADCVal > 127 then
+            LEDD1 = 1
+            LEDD2 = 0
+        else
+            LEDD1 = 0
+            LEDD2 = 1
+        end if
 
-Loop
+    loop

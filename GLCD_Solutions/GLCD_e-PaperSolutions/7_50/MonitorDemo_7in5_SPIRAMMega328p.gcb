@@ -1,130 +1,130 @@
 '''A demonstration program for Explicit-Paper from WaveShare.
-'''-------------------------------------------------------------------------
+ '''-------------------------------------------------------------------------
 ' -------------------------------------------------------
-'''This has been tested using the hardware and software SPI option.
+ '''This has been tested using the hardware and software SPI option.
 
-'''*************************************************************************
+ '''*************************************************************************
 
 
-#CHIP mega328p, 16
-#INCLUDE <uno_mega328p.h>
-#OPTION Explicit
+     #chip mega328p, 16
+    #include <uno_mega328p.h>
+     #option explicit
+
+ '******************************************************************************************************
+
+    'Setup the E-Paper
+     #include <glcd.h>
+
+     #define GLCD_TYPE GLCD_TYPE_EPD_EPD7in5
+     #define GLCD_EXTENDEDFONTSET1
+     #define GLCD_OLED_FONT
+
+     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+     #define GLCD_DC     DIGITAL_9
+     #define GLCD_CS     DIGITAL_10
+     #define GLCD_RESET  DIGITAL_8
+     #define GLCD_DO     DIGITAL_11
+     #define GLCD_SCK    DIGITAL_13
+     #define GLCD_Busy   DIGITAL_7
+
+ '  The following should be used   '#define EPD_HardwareSPI     'remove comment out if you want to use software SPI.
+     #define EPD_HardwareSPI
+     #define HWSPIMode MasterUltraFast
+
+  '******************************************************************************************************
+
+
+    #define SPISRAM_CS            DIGITAL_5
+    #define SPISRAM_SCK           DIGITAL_13
+    #define SPISRAM_DO            DIGITAL_11
+    #define SPISRAM_DI            DIGITAL_12
+
+    #define SPISRAM_HARDWARESPI
+    #define SPISRAM_TYPE          SRAM_23LC1024
 
 '******************************************************************************************************
 
-'Setup the E-Paper
-#INCLUDE <glcd.h>
+  'main
 
-#DEFINE GLCD_TYPE GLCD_TYPE_EPD_EPD7in5
-#DEFINE GLCD_EXTENDEDFONTSET1
-#DEFINE GLCD_OLED_FONT
+    #include "resources\emptyspace.bmp640"
+    #include "resources\fine.bmp640"
+    #include "resources\intermittent.bmp640"
 
-'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-#DEFINE GLCD_DC     DIGITAL_9
-#DEFINE GLCD_CS     DIGITAL_10
-#DEFINE GLCD_RESET  DIGITAL_8
-#DEFINE GLCD_DO     DIGITAL_11
-#DEFINE GLCD_SCK    DIGITAL_13
-#DEFINE GLCD_Busy   DIGITAL_7
+    GLCDForeground=TFT_BLACK
+    GLCDBackground=TFT_WHITE
+    GLCDfntDefaultSize = 2
 
-'  The following should be used   '#define EPD_HardwareSPI     'remove comment out if you want to use software SPI.
-#DEFINE EPD_HardwareSPI
-#DEFINE HWSPIMode MasterUltraFast
+    GLCDRotate ( Landscape )
 
-'******************************************************************************************************
+    GLCDDisplay on
+    EPD_LoadBMP  emptyspace, true,  TFT_BLACK
+    SendCommand_EPD2in13D(DISPLAY_REFRESH)
+
+   GLCDDisplay on
 
 
-#DEFINE SPISRAM_CS            DIGITAL_5
-#DEFINE SPISRAM_SCK           DIGITAL_13
-#DEFINE SPISRAM_DO            DIGITAL_11
-#DEFINE SPISRAM_DI            DIGITAL_12
+   GLCD_Open_PageTransaction
+        localnews
+        GLCDPrintLargeFont ( 20 ,  100 , tempstring )
+        GLCDPrintLargeFont ( 20 ,  60 , "Preston" )
+        GLCDPrintLargeFont ( 200 , GLCDDeviceHeight - 100 , "Fine Weather today" )
+        GLCDPrintLargeFont ( 200 , GLCDDeviceHeight - 60 , "Great Cow BASIC" )
 
-#DEFINE SPISRAM_HARDWARESPI
-#DEFINE SPISRAM_TYPE          SRAM_23LC1024
+    GLCD_Close_PageTransaction
 
-'******************************************************************************************************
+    EPD_LoadBMP  emptyspace, true,  TFT_BLACK
+    EPD_LoadBMP  fine,       false, TFT_BLACK
+    SendCommand_EPD2in13D(DISPLAY_REFRESH)
 
-'main
+    wait 5 s
 
-#INCLUDE "resources\emptyspace.bmp640"
-#INCLUDE "resources\fine.bmp640"
-#INCLUDE "resources\intermittent.bmp640"
+    GLCDDisplay on
+    GLCD_Open_PageTransaction
+        localnews
+        GLCDPrintLargeFont ( 20 ,  100 , tempstring )
+        GLCDPrintLargeFont ( 20 ,  60 , "Johannesburg" )
+        GLCDPrintLargeFont ( 200 , GLCDDeviceHeight - 100 , "Sunny and cloudy today" )
+        GLCDPrintLargeFont ( 200 , GLCDDeviceHeight - 60 , "Great Cow BASIC" )
 
-GLCDForeground=TFT_BLACK
-GLCDBackground=TFT_WHITE
-GLCDfntDefaultSize = 2
+    GLCD_Close_PageTransaction
 
-GLCDRotate ( Landscape )
-
-GLCDDisplay On
-EPD_LoadBMP  emptyspace, TRUE,  TFT_BLACK
-SendCommand_EPD2in13D(DISPLAY_REFRESH)
-
-GLCDDisplay On
-
-
-GLCD_Open_PageTransaction
-localnews
-GLCDPrintLargeFont ( 20 ,  100 , tempstring )
-GLCDPrintLargeFont ( 20 ,  60 , "Preston" )
-GLCDPrintLargeFont ( 200 , GLCDDeviceHeight - 100 , "Fine Weather today" )
-GLCDPrintLargeFont ( 200 , GLCDDeviceHeight - 60 , "Great Cow BASIC" )
-
-GLCD_Close_PageTransaction
-
-EPD_LoadBMP  emptyspace, TRUE,  TFT_BLACK
-EPD_LoadBMP  fine,       FALSE, TFT_BLACK
-SendCommand_EPD2in13D(DISPLAY_REFRESH)
-
-Wait 5 s
-
-GLCDDisplay On
-GLCD_Open_PageTransaction
-localnews
-GLCDPrintLargeFont ( 20 ,  100 , tempstring )
-GLCDPrintLargeFont ( 20 ,  60 , "Johannesburg" )
-GLCDPrintLargeFont ( 200 , GLCDDeviceHeight - 100 , "Sunny and cloudy today" )
-GLCDPrintLargeFont ( 200 , GLCDDeviceHeight - 60 , "Great Cow BASIC" )
-
-GLCD_Close_PageTransaction
-
-EPD_LoadBMP  emptyspace, TRUE,  TFT_BLACK
-EPD_LoadBMP  intermittent,       FALSE, TFT_BLACK
-SendCommand_EPD2in13D(DISPLAY_REFRESH)
+    EPD_LoadBMP  emptyspace, true,  TFT_BLACK
+    EPD_LoadBMP  intermittent,       false, TFT_BLACK
+    SendCommand_EPD2in13D(DISPLAY_REFRESH)
 
 
-GLCDDisplay Off
-Wait 5 s
+    GLCDDisplay Off
+    wait 5 s
 
 
-Wait 30 s
-GLCDDisplay On
-GLCDForeground=TFT_BLACK
-GLCDBackground=TFT_WHITE
-GLCDCLS
-GLCDDisplay Off
+    wait 30 s
+    GLCDDisplay On
+    GLCDForeground=TFT_BLACK
+    GLCDBackground=TFT_WHITE
+    GLCDCLS
+    GLCDDisplay Off
 
-End
+    end
 
 '***************************************************************************
 
 
-Dim advalue As Integer
-Dim tempstring As String
+   dim advalue as Integer
+   dim tempstring as string
 
 
-Sub localnews
+   sub localnews
 
-    Box 0, 70, 180, 200
-    GLCDPrint  ( 42, 192, "Local News" )
+      box 0, 70, 180, 200
+      GLCDPrint  ( 42, 192, "Local News" )
 
-    Dim advalue As Integer
-    advalue = ReadAD(AN1)
-    advalue = Scale(advalue, 0,255, -40, 40)
-    Dim tempstring As String
-    tempstring = StrInteger (advalue)+"c"
+      dim advalue as Integer
+      advalue = ReadAD(AN1)
+      advalue = Scale(advalue, 0,255, -40, 40)
+      dim tempstring as string
+      tempstring = StrInteger (advalue)+"c"
 
-End Sub
+   End sub
 
 
 
@@ -144,110 +144,109 @@ End Sub
 '''  table name, clear the screen, color
 '''
 
-Macro EPD_LoadBMP ( In epd_tablename, In epd_resetscreen, In epd_color )
-    'version 1.01
-    'Source BMP MUST BE 640 width
-    Dim EPD2in13D_Data As Word
-    Dim EPD7in5_Data_Black, EPD7in5_Data As Word
-    Dim tableposition As Word
-    'Requires a long
-    Dim monoData As Long
-    Dim dibHeader_Width, dibHeader_Height As Long
+macro EPD_LoadBMP ( in epd_tablename, in epd_resetscreen, in epd_color )
+      'version 1.01
+      'Source BMP MUST BE 640 width
+      Dim EPD2in13D_Data as word
+      Dim EPD7in5_Data_Black, EPD7in5_Data as word
+      Dim tableposition as word
+      'Requires a long
+      Dim monoData as long
+      Dim dibHeader_Width, dibHeader_Height as long
 
 
-    'read table - not key information to this method
-    ReadTable  epd_tablename, 1 ,  dibHeader_Width
-    ReadTable  epd_tablename, 2 ,  dibHeader_Height
+      'read table - not key information to this method
+      Readtable  epd_tablename, 1 ,  dibHeader_Width
+      Readtable  epd_tablename, 2 ,  dibHeader_Height
 
 
 
-    'Set up the variables
-    monoData = 0
-    tableposition = 3
-    EPD7in5_Data_Black=epd_color
+      'Set up the variables
+      monoData = 0
+      tableposition = 3
+      EPD7in5_Data_Black=epd_color
 
-    If epd_resetscreen = TRUE Then
-        'Send new data is coming commmand to EPD.
-        SendCommand_EPD2in13D(Data_Transmission_1)
-    End If
+      if epd_resetscreen = true then
+          'Send new data is coming commmand to EPD.
+          SendCommand_EPD2in13D(Data_Transmission_1)
+      end if
 
-    Dim sendDataFlag As Byte
-    sendDataFlag = 0
-    EPD7in5_Data = 0
+      dim sendDataFlag as byte
+      sendDataFlag = 0
+      EPD7in5_Data = 0
 
 
-    'Now to unpack the table data
+     'Now to unpack the table data
 
-    Set EPD_CS Off
-    Set EPD_DC On
+      SET EPD_CS OFF
+      SET EPD_DC ON
 
-    'Protect from crazt tables - if not 640 set to 0xffff... do nothing.
-    If dibHeader_Width <> 640 Then monoData = 0xffff
+      'Protect from crazt tables - if not 640 set to 0xffff... do nothing.
+      if dibHeader_Width <> 640 then monoData = 0xffff
 
-    '0xffff is the end of table marker, as we do not know the length of the table.
-    Do While monoData <> 0xFFFF
+      Do while monoData <> 0xFFFF   '0xffff is the end of table marker, as we do not know the length of the table.
 
-        ReadTable  epd_tablename, tableposition ,  monoData
-        tableposition++
+          Readtable  epd_tablename, tableposition ,  monoData
+          tableposition++
 
-        If monoData <> 0xFFFF Then
+          if monoData <> 0xFFFF then
 
             'Repeat a number of times - we have a pixel state of 0 or 1 in EPD7in5_Data_Black
             'initally EPD7in5_Data  is 0 so we work thru the variable setting bits as needed
             Repeat monoData
 
-                'First time through sendDataFlag = 0 so, set the bit.  Then, sendDataFlag =1, so the next test !if sendDataFlag = 2 then" moves the lower nibble to the upper nibble
-                If sendDataFlag < 2 Then
+                  'First time through sendDataFlag = 0 so, set the bit.  Then, sendDataFlag =1, so the next test !if sendDataFlag = 2 then" moves the lower nibble to the upper nibble
+                  if sendDataFlag < 2 then
 
-                    If EPD7in5_Data_Black= 0 Then
-                        EPD7in5_Data.0  = 0
-                    Else
-                        EPD7in5_Data.0  = 1
-                    End If
+                      if EPD7in5_Data_Black= 0 then
+                          EPD7in5_Data.0  = 0
+                      else
+                          EPD7in5_Data.0  = 1
+                      end if
 
-                    sendDataFlag++
+                      sendDataFlag++
 
-                End If
+                  end if
 
 
-                If sendDataFlag = 2 Then
-                    'When sendDataFlag = 2.. the following has happen
-                    'the byte that is about to be sent has the folowing.
-                    '00110011 where this is setting the pixels to 0x0303, or
-                    '00000000 where this is 0x0000.
-                    '
-                    'Why use this method?
-                    '
-                    'We do not know that all the table data of bits is an even number.  We need to address when this happens...   0x0003 or 0x0300
-                    'The sendDataFlag ensure that if the table in odd the correct sequence of bits in  the byte are correct.
+                  if sendDataFlag = 2 then
+                      'When sendDataFlag = 2.. the following has happen
+                      'the byte that is about to be sent has the folowing.
+                      '00110011 where this is setting the pixels to 0x0303, or
+                      '00000000 where this is 0x0000.
+                      '
+                      'Why use this method?
+                      '
+                      'We do not know that all the table data of bits is an even number.  We need to address when this happens...   0x0003 or 0x0300
+                      'The sendDataFlag ensure that if the table in odd the correct sequence of bits in  the byte are correct.
 
-                    'This macro assumes the use of the variable EPD7in5_Data
-                    SendData_EPD7in5_Macro
+                      'This macro assumes the use of the variable EPD7in5_Data
+                      SendData_EPD7in5_Macro
 
-                    'reset the flag as we need to construct a new byte to be sent
-                    sendDataFlag = 0
+                      'reset the flag as we need to construct a new byte to be sent
+                      sendDataFlag = 0
 
-                Else
+                  else
 
-                    'Shift the nibble to the left
-                    Repeat 4
+                      'Shift the nibble to the left
+                      repeat 4
                         Set C Off
-                        Rotate EPD7in5_Data Left
-                    End Repeat
+                        rotate EPD7in5_Data left
+                      end repeat
 
-                End If
+                  end if
 
-            End Repeat
+            end repeat
 
             'Change pixel 'color'
-            If EPD7in5_Data_Black = 0 Then
-                EPD7in5_Data_Black = 1
-            Else
-                EPD7in5_Data_Black = 0
-            End If
+            if EPD7in5_Data_Black = 0 then
+              EPD7in5_Data_Black = 1
+            else
+              EPD7in5_Data_Black = 0
+            end if
 
-        End If
-    Loop
-    Set EPD_CS On
+          end if
+      Loop
+      SET EPD_CS ON
 
-End Macro
+end macro

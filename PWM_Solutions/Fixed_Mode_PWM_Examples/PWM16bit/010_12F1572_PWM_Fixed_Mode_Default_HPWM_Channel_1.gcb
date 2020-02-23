@@ -7,13 +7,13 @@
 ' #define PWM_Freq 38       'Frequency of PWM in KHz
 ' #define PWM_Duty 50       'Duty cycle of PWM
 
-#CHIP 12F1572, 32
-#CONFIG mclr=On
+    #chip 12F1572, 32
+    #config mclr=on
 
-Dir PORTA Out
+    Dir PORTA Out
 
-HPWM16On ( 1 )
+    HPWM16On ( 1 )
 
-Do Forever
-Loop
+    do Forever
+    loop
 

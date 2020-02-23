@@ -9,51 +9,48 @@
 '''@date   	23.01.2015
 '''********************************************************************************
 
-'Set chip model required:
-#CHIP 16f877a, 8
-#OPTION Explicit
-'Setup LCD Parameters
-#DEFINE LCD_IO 4
-#DEFINE LCD_NO_RW
-'FAST IS OK ON 16f877a
-#DEFINE LCD_SPEED FAST
+;Set chip model required:
+   #chip 16f877a, 8
+   #option explicit
+  ;Setup LCD Parameters
+  #define LCD_IO 4
+  #define LCD_NO_RW
+  #define LCD_Speed fast 'FAST IS OK ON 16f877a
 
-'Change as necessary
-#DEFINE LCD_RS PortB.2
-#DEFINE LCD_Enable PortB.3
-#DEFINE LCD_DB4 PortB.4
-#DEFINE LCD_DB5 PortB.5
-#DEFINE LCD_DB6 PortB.6
-#DEFINE LCD_DB7 PortB.7
+  ;Change as necessary
+  #define LCD_RS PortB.2
+  #define LCD_Enable PortB.3
+  #define LCD_DB4 PortB.4
+  #define LCD_DB5 PortB.5
+  #define LCD_DB6 PortB.6
+  #define LCD_DB7 PortB.7
 
-'----- Variables
-Dim BV As Byte
+;----- Variables
+  Dim BV as Byte
 
 'Program Start
 
-Do Forever
-    CLS
-    Wait 2 s
-    Print "Test LCDHex "
-    Wait 3 s
-    CLS
-    Wait 1 s
+  DO Forever
+       CLS
+       WAIT 2 s
+       PRINT "Test LCDHex "
+       wait 3 s
+       CLS
+       wait 1 s
 
 
-    For bv = 0 To 255
-        Locate 0,0
-        Print "DEC " : Print BV
-        Locate 1,0
-        Print "HEX "
-        ' dislay leading Zero
-        LCDHex BV, LeadingZeroActive
-        Locate 1,8
-        Print "HEX "
-        ' do not display leading zero
-        LCDHex BV
-        Wait 1 s
-    Next
-    CLS
-    Wait 1 s
-    Print "END TEST"
-Loop
+       for bv = 0 to 255
+          locate 0,0
+          Print "DEC " : Print BV
+          locate 1,0
+          Print "HEX "
+          LCDHex BV, LeadingZeroActive ; dislay leading Zero
+          locate 1,8
+          Print "HEX "
+          LCDHex BV         ; do not display leading zero
+          wait 1 s
+       next
+       CLS
+       wait 1 s
+       Print "END TEST"
+  LOOP

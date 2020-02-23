@@ -9,29 +9,23 @@
 '
 ' To set the parameters of Great Cow BASIC PWM fixed mode for the three channels use the following:
 
-#CHIP 12F1572, 32
-#CONFIG mclr=On
+    #chip 12F1572, 32
+    #config mclr=on
 
-Dir PORTA Out
+    Dir PORTA Out
 
-'100khz
-#DEFINE HPWM16_1_Freq 100
-'40% duty
-#DEFINE HPWM16_1_Duty 40
-HPWM16On ( 1 )
+    #define HPWM16_1_Freq 100         '100khz
+    #define HPWM16_1_Duty 40          '40% duty
+    HPWM16On ( 1 )
 
-'200khz
-#DEFINE HPWM16_2_Freq 200
-'50% duty
-#DEFINE HPWM16_2_Duty 50
-HPWM16On ( 2 )
+    #define HPWM16_2_Freq 200         '200khz
+    #define HPWM16_2_Duty 50          '50% duty
+    HPWM16On ( 2 )
 
-'300khz
-#DEFINE HPWM16_3_Freq 300
-'60% duty
-#DEFINE HPWM16_3_Duty 60
-HPWM16On ( 3 )
+    #define HPWM16_3_Freq 300         '300khz
+    #define HPWM16_3_Duty 60          '60% duty
+    HPWM16On ( 3 )
 
-Do Forever
-Loop
+    do Forever
+    loop
 

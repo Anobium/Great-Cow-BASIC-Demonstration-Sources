@@ -1,79 +1,77 @@
-'''A demonstration program for GCGB and GCB.
-'''--------------------------------------------------------------------------------------------------------------------------------
-'''This program demostrates use of the FnLsl and FnLsr command set.
-'''A set eigth LEDs are connected to PortC via eigth suitable resistors, 1k resistors should be adequate for a 5v supply voltage.
-'''A switch is pulled high (to the supply voltage) which is then connected to the microchip.
-'''For the LED and Switch connection please see the program below.
-''':
-'''This demonstration shifts the LED to the left which turns on each LED in sequence, when the switch is pressed the sequence is reversed.
-''':
-'''@author 	ChrisR and EvanV
-'''@licence	GPL
-'''@version	1.01
-'''@date   	22.02.2016
-'''********************************************************************************
+  '''A demonstration program for GCGB and GCB.
+  '''--------------------------------------------------------------------------------------------------------------------------------
+  '''This program demostrates use of the FnLsl and FnLsr command set.
+  '''A set eigth LEDs are connected to PortC via eigth suitable resistors, 1k resistors should be adequate for a 5v supply voltage.
+  '''A switch is pulled high (to the supply voltage) which is then connected to the microchip.
+  '''For the LED and Switch connection please see the program below.
+  ''':
+  '''This demonstration shifts the LED to the left which turns on each LED in sequence, when the switch is pressed the sequence is reversed.
+  ''':
+  '''@author 	ChrisR and EvanV
+  '''@licence	GPL
+  '''@version	1.01
+  '''@date   	22.02.2016
+  '''********************************************************************************
 
-' ----- Configuration
-#CHIP 16f877a, 4
-#OPTION Explicit
+  ; ----- Configuration
+  #chip 16f877a, 4
+  #option explicit
 
-' ----- Constants
-#DEFINE SW1 PortA.2
-#DEFINE LEDs PortC
+  ; ----- Constants
+  #define SW1 PortA.2
+  #define LEDs PortC
 
-' ----- Define Hardware settings
-Dir PortC Out
-Dir PortA.2 In
+  ; ----- Define Hardware settings
+  Dir PortC Out
+  Dir PortA.2 in
 
-' ----- Variables
-Dim LEDDirection As Byte
-Dim SWITCHSTATE As Byte
+  ; ----- Variables
+  dim LEDDirection as byte
+  Dim SWITCHSTATE as Byte
 
-' ----- Quick Command Reference:
-'See header for details
+  ; ----- Quick Command Reference:
+  'See header for details
 
 
 
-' ----- Main body of program commences here.
+  ; ----- Main body of program commences here.
 
-Do
+  Do
 
-    Wait 500 ms
+    wait 500 ms
 
-    If LEDDirection Then
+    if LEDDirection then
         ' Rotate left
-        ' LEDs = LEDs << 1
-        LEDs = FnLSL ( LEDs , 1 )
-        If LEDs.4 Then
-            LEDs = 1
-        End If
-    Else
+        LEDs = FnLsl ( LEDs , 1 )  ' LEDs = LEDs << 1
+        if LEDs.4 then
+           LEDs = 1
+        end if
+    else
         ' Rotate right
-        ' LEDs = LEDs >> 1
-        LEDs = FnLSR ( LEDs , 1 )
-        If LEDs = 0 Then
-            LEDs.3 = 1
-        End If
-    End If
+        LEDs = FnLsr ( LEDs , 1 )  ' LEDs = LEDs >> 1
+        if LEDs = 0 then
+           LEDs.3 = 1
+        end if
+    end if
 
     ' As this demostration assumes the switch is ON when pressed, the next command is commented out.
     ' Enable command if switch is OFF when pressed.
 
-    '  isNot(SwitchState, SW1)      ' SW1 = NOT SW1
+  '  isNot(SwitchState, SW1)      ' SW1 = NOT SW1
 
     ' or, enable this command if switch is ON when pressed.
     SwitchState = SW1
 
-    If SwitchState = On Then LEDDirection = NOT LEDDirection
+    if SwitchState = on then LEDDirection = NOT LEDDirection
 
     ' Debounce
-    Wait While SW1 = On
+    wait while SW1 = on
 
-Loop
+  Loop
 
-End
+  end
 
-' ----- Support methods.  Subroutines and Functions
+  ; ----- Support methods.  Subroutines and Functions
 
 
 

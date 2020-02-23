@@ -24,83 +24,82 @@
 '''@date   	21.12.2015
 '''********************************************************************************
 
-' ----- Configuration
+; ----- Configuration
 
-#CHIP 18F45K80, 4
+     #Chip 18F45K80, 4
 
-#CONFIG MCLRE_OFF
+    #config MCLRE_OFF
 
-' ----- Constants
-
-
-' ----- Define Hardware settings
-
-'Setup LCD Parameters
-#DEFINE LCD_IO 4
-#DEFINE LCD_NO_RW
-#DEFINE LCD_SPEED FAST
-
-' ----- Define Hardware settings
-#DEFINE LCD_RS PORTB.1
-#DEFINE LCD_Enable PORTB.0
-#DEFINE LCD_DB4 PORTC.4
-#DEFINE LCD_DB5 PORTC.5
-#DEFINE LCD_DB6 PORTC.6
-#DEFINE LCD_DB7 PORTC.7
-
-' ----- Variables
-'lets read negative values also!
-Dim ad_val As Integer
+; ----- Constants
 
 
-' ----- Main body of program commences here.
-'Show start up message
-SPLASH
-Wait 1 s
-CLS
+; ----- Define Hardware settings
 
-'Display fixed messages to display
-Locate 0,0: Print  "ReadAD:"
-Locate 1,0 : Print "ReadAD10:"
-Locate 2,0 : Print "ReadAD12:"
+      ;Setup LCD Parameters
+      #define LCD_IO 4
+      #define LCD_NO_RW
+      #define LCD_Speed fast
+
+      ; ----- Define Hardware settings
+      #define LCD_RS PORTB.1
+      #define LCD_Enable PORTB.0
+      #define LCD_DB4 PORTC.4
+      #define LCD_DB5 PORTC.5
+      #define LCD_DB6 PORTC.6
+      #define LCD_DB7 PORTC.7
+
+; ----- Variables
+    DIM ad_val as integer 'lets read negative values also!
 
 
-'***  Note ***
-'Check datasheet for you specific chip
+; ----- Main body of program commences here.
+		'Show start up message
+    SPLASH
+    Wait 1 S
+    CLS
+
+		'Display fixed messages to display
+    Locate 0,0: Print  "ReadAD:"
+    Locate 1,0 : Print "ReadAD10:"
+    Locate 2,0 : Print "ReadAD12:"
 
 
-Do
+		'***  Note ***
+    'Check datasheet for you specific chip
 
-    'read 8-bit value to Variable
-    ad_val = ReadAD(AN9)
-    Locate 0,10
-    Print ad_val
-    Print "   "
-    Wait 20 ms
 
-    'read 10-bit value to Variable
-    ad_val = ReadAD10(AN9)
-    Locate 1,10
-    Print ad_val
-    Print "   "
-    Wait 20 ms
+    Do
 
-    'read 12-bit value to Variable
-    ad_val = ReadAD12(AN9)
-    Locate 2,10
-    Print ad_val
-    Print "   "
-    Wait 20 ms
+    	'read 8-bit value to Variable
+      ad_val = Readad(AN9)
+      Locate 0,10
+      Print ad_val
+      Print "   "
+			wait 20 ms
 
-Loop
+     'read 10-bit value to Variable
+      ad_val = ReadAd10(AN9)
+      Locate 1,10
+      Print ad_val
+			Print "   "
+      wait 20 ms
 
-End
+			'read 12-bit value to Variable
+      ad_val = ReadAD12(AN9)
+      Locate 2,10
+      Print ad_val
+      Print "   "
+      wait 20 ms
 
-' ----- Support methods.  Subroutines and Functions
+    loop
 
-Sub Splash
-    Locate 0,0 : Print "CHIP: ": Print ChipNameStr
-    Locate 1,0 : Print "RAM: ": Print  ChipRAM: Print " Bytes"
-    Locate 2,0 : Print "MEMORY:" : Print ChipWords: Print " Words"
-End Sub
+		End
+
+; ----- Support methods.  Subroutines and Functions
+
+    Sub Splash
+      Locate 0,0 : Print "CHIP: ": Print ChipNameStr
+      Locate 1,0 : Print "RAM: ": Print  ChipRam: Print " Bytes"
+      Locate 2,0 : Print "MEMORY:" : Print ChipWords: Print " Words"
+    End sub
 

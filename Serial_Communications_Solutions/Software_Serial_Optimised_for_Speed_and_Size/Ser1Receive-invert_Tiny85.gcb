@@ -11,56 +11,40 @@
 '''@date    14.01.2017
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP tiny85, 1
-#OPTION Explicit
+; ----- Configuration
+#chip tiny85, 1
+#option Explicit
 
-' ----- Include library
-#INCLUDE <softserial.h>
+; ----- Include library
+#include <softserial.h>
 
-' ----- Config Serial UART :
-' baudrate must be defined
-#DEFINE SER1_BAUD 19200
-' databits optional (default = 8)
-#DEFINE SER1_DATABITS 8
-' stopbits optional (default = 1)
-#DEFINE SER1_STOPBITS 1
-' inverted polarity optional (default = Off)
-#DEFINE SER1_INVERT On
-' Config I/O ports for transmitting:
-' I/O port (without .bit) must be defined
-#DEFINE SER1_TXPORT PORTB
-' portbit  must be defined
-#DEFINE SER1_TXPIN 1
-' Config I/O ports for receiving:
-' I/O port (without .bit) must be defined
-#DEFINE SER1_RXPORT PORTB
-' portbit  must be defined
-#DEFINE SER1_RXPIN 0
-' don't wait for stopbit optional (default = Off)
-#DEFINE SER1_RXNOWAIT Off
+; ----- Config Serial UART :
+#define SER1_BAUD 19200    ; baudrate must be defined
+#define SER1_DATABITS 8    ; databits optional (default = 8)
+#define SER1_STOPBITS 1    ; stopbits optional (default = 1)
+#define SER1_INVERT On    ; inverted polarity optional (default = Off)
+; Config I/O ports for transmitting:
+#define SER1_TXPORT PORTB  ; I/O port (without .bit) must be defined
+#define SER1_TXPIN 1       ; portbit  must be defined
+; Config I/O ports for receiving:
+#define SER1_RXPORT PORTB  ; I/O port (without .bit) must be defined
+#define SER1_RXPIN 0       ; portbit  must be defined
+#define SER1_RXNOWAIT Off  ; don't wait for stopbit optional (default = Off)
 
-' ----- Variables
+; ----- Variables
 Dim RecByte As Byte
 
-' ----- Main body of program commences here.
-'new line in Terminal
-Ser1Send 10
-Ser1Send 13
-'send a text
-Ser1Print "Please send a byte!"
+; ----- Main body of program commences here.
+ Ser1Send 10   'new line in Terminal
+ Ser1Send 13
+ Ser1Print "Please send a byte!"  'send a text
 
-Do Forever
+ Do Forever
 
-    'receive one byte - wait until detecting startbit
-    RecByte = Ser1Receive
-    'new line in Terminal
-    Ser1Send  13
-    '
-    Ser1Send  10
-    'send a text
-    Ser1Print "You sent: "
-    'send the sign representing the byte
-    Ser1Send RecByte
+  RecByte = Ser1Receive      'receive one byte - wait until detecting startbit
+  Ser1Send  13               'new line in Terminal
+  Ser1Send  10               '
+  Ser1Print "You sent: "  'send a text
+  Ser1Send RecByte           'send the sign representing the byte
 
-Loop
+ Loop

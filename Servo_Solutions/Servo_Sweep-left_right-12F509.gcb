@@ -14,29 +14,27 @@
 '''@date    17/6/2019
 
 
-#CHIP 12F509, 4
-#OPTION Explicit
+ #chip 12F509, 4
+    #option Explicit
 
-#DEFINE SWITCH_PORT GPIO.3
+    #define SWITCH_PORT GPIO.3
 
-Dir SWITCH_PORT In
+    Dir SWITCH_PORT In
 
-Do
-    If SWITCH_PORT = 0 Then
+    Do
+      If SWITCH_PORT = 0 Then
 
-        'Pulse pin port
-        'servo left'
-        PulseOut GPIO.2,1 ms
-        'Then wait after the pin goes off
-        Wait 17 ms
+          'Pulse pin port
+         PulseOut GPIO.2,1 ms 'servo left'
+         'Then wait after the pin goes off
+         Wait 17 ms
 
-    Else
+      Else
 
-        'servo right'
-        PulseOut GPIO.2,2 ms
+         PulseOut GPIO.2,2 ms  'servo right'
 
-        'Then wait after the pin goes off
-        Wait 16 ms
+         'Then wait after the pin goes off
+         Wait 16 ms
 
-    End If
-Loop
+      End If
+    Loop

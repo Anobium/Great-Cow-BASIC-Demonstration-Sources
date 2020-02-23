@@ -1,24 +1,24 @@
 ' This program will use fix mode PWM signals, then, fix the offset to the of the two signals
 
 
-#CHIP 12F1572, 32
-#CONFIG mclr=On
+    #chip 12F1572, 32
+    #config mclr=on
 
-Dir PORTA Out
+    Dir PORTA Out
 
-#DEFINE HPWM16_1_Freq 38
-#DEFINE HPWM16_1_Duty 50
-HPWM16On ( 1 )
+    #define HPWM16_1_Freq 38
+    #define HPWM16_1_Duty 50
+    HPWM16On ( 1 )
 
 
-#DEFINE HPWM16_2_Freq 38
-#DEFINE HPWM16_2_Duty 50
-HPWM16On ( 2 )
+    #define HPWM16_2_Freq 38
+    #define HPWM16_2_Duty 50
+    HPWM16On ( 2 )
 
-Wait 3 s
+    wait 3 s
 
-Dim localDuty As Word
-localDuty = HPWM16_1_Duty_RegWord
+    dim localDuty as word
+    localDuty = HPWM16_1_Duty_RegWord
 
 
 '    These are 36 system wide aliases  1..12
@@ -26,30 +26,27 @@ localDuty = HPWM16_1_Duty_RegWord
 '    HPWM16_1_Period_RegWord
 '    HPWM16_1_Phase_RegWord
 
-'This will align the PWM1 and PWM2
-' this value is the adjustment equates to 4.2us
-HPWM16_1_Phase_RegWord = 136
-HPWM16_1_Duty_RegWord = HPWM16_1_Duty_RegWord + HPWM16_1_Phase_RegWord
-'Load buffers
-Set PWM1LD On
+    'This will align the PWM1 and PWM2
+    HPWM16_1_Phase_RegWord = 136  ' this value is the adjustment equates to 4.2us
+    HPWM16_1_Duty_RegWord = HPWM16_1_Duty_RegWord + HPWM16_1_Phase_RegWord
+    'Load buffers
+    Set PWM1LD ON
 
-Wait 3 s
-Do
+    wait 3 s
+    Do
 
-    For HPWM16_1_Phase_RegWord = 0 To localDuty
-        HPWM16_1_Duty_RegWord = localDuty + HPWM16_1_Phase_RegWord
-        ' Load buffers
-        Set PWM1LD On
-        Wait 5 ms
-    Next
-    Wait 250 ms
+      for HPWM16_1_Phase_RegWord = 0 to localDuty
+          HPWM16_1_Duty_RegWord = localDuty + HPWM16_1_Phase_RegWord
+          Set PWM1LD ON ' Load buffers
+          wait 5 ms
+      Next
+      wait 250 ms
 
-    For HPWM16_1_Phase_RegWord = localDuty To 0 Step - 1
-        HPWM16_1_Duty_RegWord = localDuty + HPWM16_1_Phase_RegWord
-        ' Load buffers
-        Set PWM1LD On
-        Wait 5 ms
-    Next
-    Wait 250 ms
+       for HPWM16_1_Phase_RegWord = localDuty to 0 step - 1
+          HPWM16_1_Duty_RegWord = localDuty + HPWM16_1_Phase_RegWord
+          Set PWM1LD ON ' Load buffers
+          wait 5 ms
+      Next
+      wait 250 ms
 
-Loop
+    Loop

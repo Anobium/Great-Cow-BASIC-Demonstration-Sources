@@ -13,38 +13,33 @@
 '''@version 1.0
 '''@date    03.04.2019
 '''********************************************************************************
-#CHIP mega328p, 16
-#OPTION Explicit
+  #chip mega328p, 16
+  #option explicit
 
 
-#INCLUDE <glcd.h>
-#INCLUDE <uno_mega328p.h >
+    #include <glcd.h>
+    #include <uno_mega328p.h >
 
-#DEFINE GLCD_TYPE GLCD_TYPE_HX8347
-#DEFINE GLCD_OLED_FONT
+    #define GLCD_TYPE GLCD_TYPE_HX8347
+    #define GLCD_OLED_FONT
 
-'Pin mappings for device
-' read command line
-#DEFINE GLCD_RD       ANALOG_0
-' write command line
-#DEFINE GLCD_WR       ANALOG_1
-' Command/Data line
-#DEFINE GLCD_RS       ANALOG_2
-' Chip select line
-#DEFINE GLCD_CS       ANALOG_3
-' Reset line
-#DEFINE GLCD_RST      ANALOG_4
+    'Pin mappings for device
+    #define GLCD_RD       ANALOG_0          ' read command line
+    #define GLCD_WR       ANALOG_1          ' write command line
+    #define GLCD_RS       ANALOG_2          ' Command/Data line
+    #define GLCD_CS       ANALOG_3          ' Chip select line
+    #define GLCD_RST      ANALOG_4          ' Reset line
 
 
 
-#DEFINE GLCD_DB0       DIGITAL_8
-#DEFINE GLCD_DB1       DIGITAL_9
-#DEFINE GLCD_DB2       DIGITAL_2
-#DEFINE GLCD_DB3       DIGITAL_3
-#DEFINE GLCD_DB4       DIGITAL_4
-#DEFINE GLCD_DB5       DIGITAL_5
-#DEFINE GLCD_DB6       DIGITAL_6
-#DEFINE GLCD_DB7       DIGITAL_7
+    #define GLCD_DB0       DIGITAL_8
+    #define GLCD_DB1       DIGITAL_9
+    #define GLCD_DB2       DIGITAL_2
+    #define GLCD_DB3       DIGITAL_3
+    #define GLCD_DB4       DIGITAL_4
+    #define GLCD_DB5       DIGITAL_5
+    #define GLCD_DB6       DIGITAL_6
+    #define GLCD_DB7       DIGITAL_7
 
 '    'GLCDCLS  supports GLCDBackground as default
 '    'GLCDCLS  also support passing color parameter.
@@ -73,143 +68,140 @@
 '    'HX8347_FUCHSIA
 
 
-GLCDRotate ( Portrait )
-GLCDCLS HX8347_RED
-GLCDPrint 0,0, "Portrait"
-Wait 1 s
-
-GLCDRotate ( Landscape )
-GLCDCLS HX8347_BLACK
-GLCDPrint 0,0, "Landscape"
-Wait 1 s
-
-GLCDRotate ( Portrait_Rev )
-GLCDCLS HX8347_RED
-GLCDPrint 0,0, "PortraitRev"
-Wait 1 s
-
-GLCDRotate ( Landscape_Rev )
-GLCDCLS HX8347_BLACK
-GLCDPrint 0,0, "LandscapeRev"
-Wait 1 s
-
-GLCDRotate ( Portrait )
-GLCDCLS HX8347_RED
-GLCDPrint 0,0, "Portrait"
-Wait 1 s
-
-
-Repeat 2
+    GLCDRotate ( Portrait )
+    GLCDCLS HX8347_RED
+    GLCDPrint 0,0, "Portrait"
+    wait 1 s
 
     GLCDRotate ( Landscape )
-    GLCDCLS HX8347_BLUE
+    GLCDCLS HX8347_BLACK
+    GLCDPrint 0,0, "Landscape"
+    wait 1 s
 
-    GLCDForeground = HX8347_MAROON
-    GLCDfntDefaultSize = 1
-    GLCDPrint ( 2, 2, "GLCDPrint String" )
+    GLCDRotate ( Portrait_Rev )
+    GLCDCLS HX8347_RED
+    GLCDPrint 0,0, "PortraitRev"
+    wait 1 s
 
-
-    GLCDForeground = HX8347_WHITE
-    GLCDfntDefaultSize = 2
-    GLCDPrint ( 2, 12, "GLCDPrint String" )
-
-
-    GLCDForeground = HX8347_YELLOW
-    GLCDPrint ( 2,30, "GLCDPrint String" )
-
-    longNumber = 0xFFFFFFFF
-    wordNumber = 0xFFFF
-    byteNumber = 0xFF
-
-    Wait 1 s
+    GLCDRotate ( Landscape_Rev )
+    GLCDCLS HX8347_BLACK
+    GLCDPrint 0,0, "LandscapeRev"
+    wait 1 s
 
     GLCDRotate ( Portrait )
-    GLCDCLS HX8347_WHITE
-
-    GLCDForeground = HX8347_MAROON
-    GLCDfntDefaultSize = 1
-    GLCDPrint ( 2, 2, bytenumber )
+    GLCDCLS HX8347_RED
+    GLCDPrint 0,0, "Portrait"
+    wait 1 s
 
 
-    GLCDForeground = HX8347_BLACK
-    GLCDfntDefaultSize = 2
-    GLCDPrint ( 2, 12, wordNumber )
+    repeat 2
+
+            GLCDRotate ( Landscape )
+            GLCDCLS HX8347_BLUE
+
+            GLCDForeground = HX8347_MAROON
+            GLCDfntDefaultsize = 1
+            GLCDPrint ( 2, 2, "GLCDPrint String" )
 
 
-    GLCDForeground = HX8347_CYAN
-    GLCDPrint ( 2,30, longnumber )
-
-    Wait 2 s
-
-End Repeat
+            GLCDForeground = HX8347_WHITE
+            GLCDfntDefaultsize = 2
+            GLCDPrint ( 2, 12, "GLCDPrint String" )
 
 
-Dim CCOUNT, BYTENUMBER, OLDFONT, OLDFONT As Byte
-Dim longNumber As Long
-Dim wordNumber As Word
-GLCDCLS HX8347_BLUE
-'Set font size.
-GLCDfntDefaultSize = 2
-' max value = 4294967290
-longNumber = 0
-wordNumber = 0
-byteNumber = 0
+            GLCDForeground = HX8347_YELLOW
+            GLCDPrint ( 2,30, "GLCDPrint String" )
 
-GLCDRotate ( Portrait )
+            longNumber = 0xFFFFFFFF
+            wordNumber = 0xFFFF
+            byteNumber = 0xFF
 
-GLCDDrawString (2, 1, "GCB",HX8347_WHITE)
-GLCDDrawString (56,1,"v.98.01",HX8347_YELLOW)
-GLCDDrawString (2, 18, "DrawStr",HX8347_WHITE)
+            wait 1 s
 
-GLCDDrawString ( 2, 52, "Long:" )
-GLCDDrawString ( 2, 70, "Word:" )
-GLCDDrawString ( 2, 88, "Byte:" )
+            GLCDRotate ( PORTRAIT )
+            GLCDCLS HX8347_WHITE
 
-GLCDDrawString ( 128, 18, "Asc:"+"  " )
+            GLCDForeground = HX8347_MAROON
+            GLCDfntDefaultsize = 1
+            GLCDPrint ( 2, 2, bytenumber )
 
-Box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1, HX8347_YELLOW
-Box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1, HX8347_WHITE
 
-'center
-Circle( GLCD_WIDTH/2, GLCD_HEIGHT/2, 50, HX8347_WHITE )
-FilledCircle( GLCD_WIDTH/2, GLCD_HEIGHT/2, 25, HX8347_DARKGREY  )
+            GLCDForeground = HX8347_BLACK
+            GLCDfntDefaultsize = 2
+            GLCDPrint ( 2, 12, wordNumber )
 
-Line 0,  GLCD_HEIGHT-1 , GLCD_WIDTH/2 +100,  (GLCD_HEIGHT /2) - 50, HX8347_CYAN
-Line  0, (GLCD_HEIGHT /2) - 50, GLCD_WIDTH/2 +100, (GLCD_HEIGHT /2) - 50, HX8347_CYAN
 
-FilledBox 2,GLCD_HEIGHT/2+10,42,GLCD_HEIGHT/2+50, HX8347_RED
+            GLCDForeground = HX8347_CYAN
+            GLCDPrint ( 2,30, longnumber )
 
-oldfont = GLCDfntDefaultSize
-GLCDfntDefaultSize = 2
-GLCDDrawString ( 68, GLCDDeviceHeight - 60 , "HX8347 Driver" , HX8347_WHITE )
+            wait 2 s
 
-GLCDfntDefaultSize = 1
-GLCDDrawString ( GLCD_WIDTH - 40, 2 , "Mar 2019" , HX8347_WHITE )
-GLCDDrawString ( GLCD_WIDTH - 44, 10 , "UNO Shield" , HX8347_WHITE )
+    end Repeat
 
-GLCDForeground = HX8347_WHITE
-GLCDfntDefaultSize = 2
-GLCDDrawString ( 42 , GLCD_HEIGHT - 30 , "Great Cow BASIC" )
 
-'Revert the font size
-GLCDfntDefaultSize = 2
-Do Forever
+  Dim CCOUNT, BYTENUMBER, OLDFONT, OLDFONT as Byte
+  Dim longNumber as Long
+  Dim wordNumber as Word
+  GLCDCLS HX8347_BLUE
+  'Set font size.
+  GLCDfntDefaultsize = 2
+  longNumber = 0 ' max value = 4294967290
+  wordNumber = 0
+  byteNumber = 0
+
+  GLCDRotate ( Portrait )
+
+  GLCDDrawString (2, 1, "GCB",HX8347_WHITE)
+  GLCDDrawString (56,1,"v.98.01",HX8347_YELLOW)
+  GLCDDrawString (2, 18, "DrawStr",HX8347_WHITE)
+
+  GLCDDrawString ( 2, 52, "Long:" )
+  GLCDDrawString ( 2, 70, "Word:" )
+  GLCDDrawString ( 2, 88, "Byte:" )
+
+  GLCDDrawString ( 128, 18, "Asc:"+"  " )
+
+  box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1, HX8347_YELLOW
+  box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1, HX8347_WHITE
+
+  Circle( GLCD_WIDTH/2, GLCD_HEIGHT/2, 50, HX8347_WHITE )            ;center
+  FilledCircle( GLCD_WIDTH/2, GLCD_HEIGHT/2, 25, HX8347_DARKGREY  )
+
+  line 0,  GLCD_HEIGHT-1 , GLCD_WIDTH/2 +100,  (GLCD_HEIGHT /2) - 50, HX8347_CYAN
+  line  0, (GLCD_HEIGHT /2) - 50, GLCD_WIDTH/2 +100, (GLCD_HEIGHT /2) - 50, HX8347_CYAN
+
+  filledbox 2,GLCD_HEIGHT/2+10,42,GLCD_HEIGHT/2+50, HX8347_RED
+
+  oldfont = GLCDfntDefaultsize
+  GLCDfntDefaultsize = 2
+  GLCDDrawString ( 68, GLCDDeviceHeight - 60 , "HX8347 Driver" , HX8347_WHITE )
+
+  GLCDfntDefaultsize = 1
+  GLCDDrawString ( GLCD_WIDTH - 40, 2 , "Mar 2019" , HX8347_WHITE )
+  GLCDDrawString ( GLCD_WIDTH - 44, 10 , "UNO Shield" , HX8347_WHITE )
+
+  GLCDForeground = HX8347_WHITE
+  GLCDfntDefaultsize = 2
+  GLCDDrawString ( 42 , GLCD_HEIGHT - 30 , "Great Cow BASIC" )
+
+  'Revert the font size
+  GLCDfntDefaultsize = 2
+  DO forever
 
     GLCDPrint ( 64 , 52, longNumber)
-    GLCDPrint ( 64 , 70, Pad( Str(wordnumber),5))
-    GLCDPrint ( 64 , 88, Pad( Str(bytenumber),3))
+    GLCDPrint ( 64 , 70, pad( str(wordnumber),5))
+    GLCDPrint ( 64 , 88, pad( str(bytenumber),3))
 
     GLCDDrawChar(102, 24, CCount )
-    'Draw a box around the Char below
-    Box 98,19,117,43, HX8347_WHITE
+    Box 98,19,117,43, HX8347_WHITE               'Draw a box around the Char below
 
-    GLCDPrint ( 180, 22 , Pad( Str(CCount),3) )
+    GLCDPrint ( 180, 22 , pad( str(CCount),3) )
 
     CCount++
-    If CCount = 0 Then CCount = 31
-    If CCount = 127 Then CCount = 31
+    if CCount = 0 then CCount = 31
+    if CCount = 127 then CCount = 31
     longNumber = longNumber + 7
     wordNumber = wordNumber + 3
     byteNumber++
 
-Loop
+  LOOP

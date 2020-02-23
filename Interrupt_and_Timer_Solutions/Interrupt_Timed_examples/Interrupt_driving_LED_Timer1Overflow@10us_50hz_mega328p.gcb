@@ -19,50 +19,50 @@
 '''@date    31.03.2017
 
 ' ----- Configuration
-#CHIP mega328p
-#OPTION Explicit
+  #chip mega328p
+  #option explicit
 
-'Make the line below a comment this to just toggle the LED to a square wave.
+  'Make the line below a comment this to just toggle the LED to a square wave.
 '  #define SimulatePWM
 
-'Hardware attached
-#DEFINE LED PORTB.5
-Dir LED Out
+  'Hardware attached
+  #define LED PORTB.5
+  dir LED out
 
-'Call the initialisation routine
-InitLEDControl
+  'Call the initialisation routine
+  InitLEDControl
 
-'----- Variables
-Dim LEDSPEED, PWMCOUNTER, PWMCOUNTER As Byte
+  ;----- Variables
+    Dim LEDSPEED, PWMCOUNTER, PWMCOUNTER as Byte
 
 
 'Main routine
-Do
+  Do
 
-    #IFDEF SimulatePWM
-        'Increase LED to full over 2.5 seconds
-        For LEDSpeed = 0 To 100
-            Wait 25 ms
-        Next
-        'Hold LEDPower
-        Wait 1 s
-        'Decrease LED to zero over 2.5 seconds
-        For LEDSpeed = 100 To 0 Step - 1
-            Wait 25 ms
-        Next
-        'Hold LEDPower
-        Wait 1 s
-    #ENDIF
+      #ifdef SimulatePWM
+          ;Increase LED to full over 2.5 seconds
+          For LEDSpeed = 0 to 100
+              Wait 25 ms
+          Next
+          ;Hold LEDPower
+          Wait 1 s
+          ;Decrease LED to zero over 2.5 seconds
+          For LEDSpeed = 100 to 0 step - 1
+              Wait 25 ms
+          Next
+          ;Hold LEDPower
+          Wait 1 s
+      #endif
 
-Loop
-End
+  Loop
+  end
 
 
 
 'Setup routine
 Sub InitLEDControl
 
-    Set LED Off
+    set LED off
 
     'Clear variables
     LEDSpeed = 0
@@ -75,10 +75,9 @@ Sub InitLEDControl
     InitTimer1 Osc, PS_1_1
     ' Start the timer - this is required
     StartTimer 1
-    ' Use the Timer Calc' application that is part of Mister E PIC Mutl-calc tookset to calculate the value.
-    ' Ensure you set the Prescaler in the InitTimer1 shown above
-    '~10us
-    SetTimer 1, 0xFF94
+  ' Use the Timer Calc' application that is part of Mister E PIC Mutl-calc tookset to calculate the value.
+  ' Ensure you set the Prescaler in the InitTimer1 shown above
+    Settimer 1, 0xFF94 '~10us
 
 
 End Sub
@@ -89,29 +88,28 @@ End Sub
 Sub InterruptHandler
 
 
-    ' Use Settimer to set the TIMER register to give us the timed Interrupt.
-    ' This means we need to adjust the timing parameter to allow for the internal microcontroller overhead.
-    ' An unadjused calculation would be 0xFF6F
-    ' Use the Timer Calc' application that is part of Mister E PIC Mutl-calc tookset to calculate the value.
-    ' Ensure you set the Prescaler in the InitTimer1 shown above
-    '~10us
-    SetTimer 1, 0xFF94
+  ' Use Settimer to set the TIMER register to give us the timed Interrupt.
+  ' This means we need to adjust the timing parameter to allow for the internal microcontroller overhead.
+  ' An unadjused calculation would be 0xFF6F
+  ' Use the Timer Calc' application that is part of Mister E PIC Mutl-calc tookset to calculate the value.
+  ' Ensure you set the Prescaler in the InitTimer1 shown above
+  Settimer 1, 0xFF94 '~10us
 
 
 
-    #IFDEF SimulatePWM
+  #ifdef SimulatePWM
 
-        If LEDSpeed > PWMCounter Then
-            Set LED On
-        Else
-            Set LED Off
-        End If
-        PWMCounter += 1
-        If PWMCounter = 100 Then PWMCounter = 0
-    #ENDIF
+    If LEDSpeed > PWMCounter Then
+        Set LED On
+    Else
+        Set LED Off
+    End If
+    PWMCounter += 1
+    If PWMCounter = 100 Then PWMCounter = 0
+  #endif
 
-    #IFNDEF SimulatePWM
-        LED = !LED
-    #ENDIF
+  #ifndef SimulatePWM
+    LED = !LED
+  #endif
 
 End Sub

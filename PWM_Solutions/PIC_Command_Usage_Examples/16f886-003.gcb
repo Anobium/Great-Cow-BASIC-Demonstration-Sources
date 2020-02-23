@@ -2,30 +2,26 @@
 ' This uses two constants to fix the PWM parameters.
 ' This method can ONLY use CCP1
 
-#CHIP 16f886,8
+#chip 16f886,8
 
 
-'Set the CCP1 pin to output mode
-Dir PORTC.2 Out
+    'Set the CCP1 pin to output mode
+    DIR PORTC.2 out
 
-'Main code
-'Frequency of PWM in KHz
-#DEFINE PWM_Freq 87
-'Duty cycle of PWM (%)
-#DEFINE PWM_Duty 50
+    'Main code
+    #define PWM_Freq 87      'Frequency of PWM in KHz
+    #define PWM_Duty 50      'Duty cycle of PWM (%)
 
-Do
+    do
 
-    PWMOn
-    'Wait 5s, could any user code. This wait is purely for the analysis of this demonstration.
-    Wait 5 s
+      PWMOn
+      wait 5 s                'Wait 5s, could any user code. This wait is purely for the analysis of this demonstration.
 
-    'add lots and lots of user code and the PWM signal will remain until PWMOff
+      'add lots and lots of user code and the PWM signal will remain until PWMOff
 
-    PWMOff
-    'Wait 1s
-    Wait 1 s
+      PWMOff
+      wait 1 s                'Wait 1s
 
-Loop
+    loop
 
-End
+end

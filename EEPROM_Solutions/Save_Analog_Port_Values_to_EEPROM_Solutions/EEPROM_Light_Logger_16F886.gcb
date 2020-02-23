@@ -9,47 +9,47 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-' ----- Configuration
+; ----- Configuration
 
-'PIC 16F886 running at 16 MHz
-#CHIP 16F886, 16
+  'PIC 16F886 running at 16 MHz
+  #chip 16F886, 16
 
-'Turn off MCLR. WDT and LVP disabled and HS OSC selected automatically
-#CONFIG MCLRE_OFF
-
-
-
-' ----- Define Hardware settings
-'The pin used for A/D conversion to an input
-Dir PORTA.0 In
-
-' ----- Constants
-'Read the sensor on port AN0
-' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
-#DEFINE ReadSensor AN0
+  'Turn off MCLR. WDT and LVP disabled and HS OSC selected automatically
+ #config MCLRE_OFF
 
 
-' ----- Variables
-'Define variables
-Dim DataCount As Byte
-Dim LastReading As Byte
 
-'Set the EEPROM data location to 0
-DataCount = 0
+; ----- Define Hardware settings
+  'The pin used for A/D conversion to an input
+  dir PORTA.0 IN
 
-' ----- Main body of program commences here.
+; ----- Constants
+  'Read the sensor on port AN0
+  ' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
+  #define ReadSensor AN0
 
-Do
-    'Take a reading
-    LastReading = ReadAD( ReadSensor )
 
-    'Store it
-    EPWrite DataCount, LastReading
+; ----- Variables
+  'Define variables
+  Dim DataCount As byte
+  Dim LastReading As byte
 
-    'Add to the reading count
-    DataCount = DataCount + 1
+  'Set the EEPROM data location to 0
+  DataCount = 0
 
-    'Wait a minute before taking the next reading
-    Wait 1 m
-Loop
-End
+; ----- Main body of program commences here.
+
+  do
+	'Take a reading
+          LastReading = ReadAD( ReadSensor )
+
+	'Store it
+	EPWrite DataCount, LastReading
+
+	'Add to the reading count
+	DataCount = DataCount + 1
+
+	'Wait a minute before taking the next reading
+	Wait 1 m
+  loop
+  end

@@ -18,47 +18,47 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 18f26k22, 16
+; ----- Configuration
+#chip 18f26k22, 16
 
-' ----- Define USART settings
-'Set the pin directions
-#DEFINE USART_BAUD_RATE 9600
-#DEFINE USART_BLOCKING
-#DEFINE USART2_BAUD_RATE 9600
-#DEFINE USART2_BLOCKING
+; ----- Define USART settings
+    'Set the pin directions
+    #define USART_BAUD_RATE 9600
+    #define USART_BLOCKING
+    #define USART2_BAUD_RATE 9600
+    #define USART2_BLOCKING
 
-#DEFINE SerInPort PORTc.7
-#DEFINE SerOutPort PORTc.6
+     #define SerInPort PORTc.7
+     #define SerOutPort PORTc.6
 
-' ----- Define Hardware settings
-'Set pin directions
-Dir SerOutPort Out
-Dir SerInPort In
+; ----- Define Hardware settings
+    'Set pin directions
+    Dir SerOutPort Out
+    Dir SerInPort In
 
-Dir PORTB.6 Out
-Dir PORTB.7 In
+    Dir PORTB.6 Out
+    Dir PORTB.7 In
 
-Dir PORTB.0 Out
-Dir PORTB.1 Out
+    Dir PORTB.0 Out
+    Dir PORTB.1 Out
 
-' ----- Variables
-' No Variables specified in this example. All byte variables are defined upon use.
+; ----- Variables
+  ' No Variables specified in this example. All byte variables are defined upon use.
 
-' ----- Main body of program commences here.
+; ----- Main body of program commences here.
 
-Wait 100 ms
-'Message after reset
-HSerPrint "18F26k22"
-HSerPrintCRLF
+    Wait 100 Ms
+    'Message after reset
+    HSerPrint "18F26k22"
+    HSerPrintCRLF
 
-'Main routine
-Do Forever
+    'Main routine
+    Do Forever
 
-    'wait for char from UART 1
-    InChar = HSerReceive
+        'wait for char from UART 1
+         InChar = HSerReceive
 
-    'send back char to UART 2
-    HSerSend( InChar,2)
+        'send back char to UART 2
+        HSerSend( InChar,2)
 
-Loop
+    Loop

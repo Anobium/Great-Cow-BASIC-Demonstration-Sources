@@ -14,15 +14,14 @@
 '
 
 
-#CHIP 12F1572, 32
-#CONFIG mclr=On
+    #chip 12F1572, 32
+    #config mclr=on
 
-Dir PORTA Out
+    Dir PORTA Out
 
-'800Hz to greater than 1mhz... greater than 1mhz at a clock speed of 32hz provides a clipped square wave.
-#DEFINE HPWM16_1_Freq 400
-#DEFINE HPWM16_1_Duty 50
-HPWM16On ( 1 )
+    #define HPWM16_1_Freq 400         '800Hz to greater than 1mhz... greater than 1mhz at a clock speed of 32hz provides a clipped square wave.
+    #define HPWM16_1_Duty 50
+    HPWM16On ( 1 )
 
-Do Forever
-Loop
+    do Forever
+    loop

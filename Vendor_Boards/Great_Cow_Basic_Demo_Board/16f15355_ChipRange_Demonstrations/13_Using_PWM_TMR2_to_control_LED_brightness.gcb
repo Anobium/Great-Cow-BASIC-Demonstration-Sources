@@ -30,35 +30,31 @@
 
 
 
-#CHIP 16f15355,32
-#OPTION Explicit
+    #chip 16f15355,32
+    #option explicit
 
 
 
 
-'Set the PPS of the PWM and the RS232 ports.
-'Set the PPS for this solution.
-#STARTUP InitPPS, 85
+    'Set the PPS of the PWM and the RS232 ports.
+    'Set the PPS for this solution.
+  #startup InitPPS, 85
 
-Sub InitPPS
+  Sub InitPPS
     UNLOCKPPS
 
-    'RC0->PWM6:PWM6OUT;
-    RC0PPS = 0x0E
-    'RC3->PWM6:PWM6OUT;
-    RC3PPS = 0x0E
-    'RC1->PWM6:PWM6OUT;
-    RC1PPS = 0x0E
-    'RC2->PWM6:PWM6OUT;
-    RC2PPS = 0x0E
+      RC0PPS = 0x0E      'RC0->PWM6:PWM6OUT;
+      RC3PPS = 0x0E      'RC3->PWM6:PWM6OUT;
+      RC1PPS = 0x0E      'RC1->PWM6:PWM6OUT;
+      RC2PPS = 0x0E      'RC2->PWM6:PWM6OUT;
 
-    LOCKPPS
-End Sub
+      LOCKPPS
+  End sub
 
-#DEFINE USART_BAUD_RATE 19200
-#DEFINE USART_TX_BLOCKING
+    #define USART_BAUD_RATE 19200
+    #define USART_TX_BLOCKING
 
-'You Optimise the code... but, beware.. if you do not set a capability to TRUE... it will not be avaialbe to you!
+    'You Optimise the code... but, beware.. if you do not set a capability to TRUE... it will not be avaialbe to you!
 '    #define USE_HPWM7 TRUE         ' Not avaiable on this chip
 '    #define USE_HPWM6 TRUE          ' used so compile
 '    #define USE_HPWM5 TRUE         ' not used Optimise
@@ -66,34 +62,34 @@ End Sub
 '    #define USE_HPWM_TIMER4 TRUE    ' not used Optimise
 '    #define USE_HPWM_TIMER6 TRUE    ' not used Optimise
 
-'' -------------------LATC-----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' LED:   ---------------|D5 |D4 |D3 |D2 |-
-''-----------------------------------------
-''
-#DEFINE LEDD2  PORTC.0
-#DEFINE LEDD3  PORTC.1
-#DEFINE LEDD4  PORTC.2
-#DEFINE LEDD5  PORTC.3
-#DEFINE LEDBANK PORTC
+    '' -------------------LATC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
+    ''-----------------------------------------
+    ''
+    #define LEDD2  PORTC.0
+    #define LEDD3  PORTC.1
+    #define LEDD4  PORTC.2
+    #define LEDD5  PORTC.3
+    #define LEDBANK PORTC
 
-Dir     LEDD2 Out
-Dir     LEDD3 Out
-Dir     LEDD4 Out
-Dir     LEDD5 Out
+    Dir     LEDD2 OUT
+    Dir     LEDD3 OUT
+    Dir     LEDD4 OUT
+    Dir     LEDD5 OUT
 
-Dim BRIGHT As Byte
+    Dim BRIGHT as Byte
 
 
-Do Forever
-    For bright = 0 To 255
-        Wait 10 ms
-        'Four parameters
-        ' 1. PWM channel - check the datasheet - you must ensure the PPS is set!!
-        ' 2. frequency
-        ' 3. duty
-        ' 4. timer to be used - check the datasheet typically. 2, 4 or 6
-        HPWM ( 6, 62, bright , 2  )
-    Next
-    Wait 10 ms
-Loop
+    Do Forever
+          for bright = 0 to 255
+              wait 10 ms
+              'Four parameters
+              ' 1. PWM channel - check the datasheet - you must ensure the PPS is set!!
+              ' 2. frequency
+              ' 3. duty
+              ' 4. timer to be used - check the datasheet typically. 2, 4 or 6
+              HPWM ( 6, 62, bright , 2  )
+        next
+        wait 10 ms
+    Loop

@@ -26,9 +26,9 @@
 '''
 
 '********************************************************************************
-'
+;
 
-#CHIP 18F25K42, 16
+#chip 18F25K42, 16
 
 
 '#chip 16F1769, 16
@@ -43,65 +43,56 @@
 '#chip 18F26K83, 16
 
 
-#OPTION Explicit
-'// Use with PPS Chips
-#STARTUP InitPPS, 85
+#option explicit
+#startup InitPPS, 85  '// Use with PPS Chips
 
-' Config UART
-#DEFINE USART_BLOCKING TRUE
-#DEFINE USART_BAUD_RATE 19200
+; Config UART
+#define USART_BLOCKING true
+#define USART_BAUD_RATE 19200
 'See InitPPS sub for TX Port/Pin
 
 '--- Variables ---
-Dim TMP_LONG As Long
+DIM TMP_LONG as LONG
 
 '----- Main Code
 Wait 500 ms
 
-HSerPrintCRLF 2
-HSerPrint "HEF - SAF Discovery"
-HSerPrintCRLF 2
-'Based upon constants read from Chipdata and HEFLASH.h
-Call HEF_SAF_DISCOVER
-End
+HserPrintCRLF 2
+Hserprint "HEF - SAF Discovery"
+HserPrintCRLF 2
+Call HEF_SAF_DISCOVER   'Based upon constants read from Chipdata and HEFLASH.h
+end
 
 
 '-------------- Sub Routines -----
 
 Sub HEF_SAF_DISCOVER
 
-#SCRIPT
-    'Necessary if missing from datfile
-    ChipHEFMemWords = ChipHEFMemWords + 0
-    'Necessary if missing from datfile
-    ChipSAFMemWords = ChipSAFMemWords + 0
+ #SCRIPT
+   ChipHEFMemWords = ChipHEFMemWords + 0 'Necessary if missing from datfile
+   ChipSAFMemWords = ChipSAFMemWords + 0 'Necessary if missing from datfile
 
 
-    If ChipHEFMemWords = 128 AND ChipFamily = 15 Then
-        '16F with HEF
-        '16F with HEF and PMCON instead of NVMCON
-        
+    If ChipHEFMemWords = 128 and ChipFamily = 15 then '16F with HEF
+         '16F with HEF and PMCON instead of NVMCON
 
-        Erase_Row_Words = ChipEraseRowSizeWords
-        'same as words on 16F
-        Erase_Row_Bytes = ChipEraseRowSizeWords
+         Erase_Row_Words = ChipEraseRowSizeWords
+         Erase_Row_Bytes = ChipEraseRowSizeWords 'same as words on 16F
 
-        'Bytes for 16F
-        F_ROWSIZE_BYTES = ChipEraseRowSizeWords
-        'Words or Bytes
-        F_WORDS = ChipHEFMemWords
-        F_BYTES = ChipHEFMemWords
-        F_START_ADDR = ChipWords - ChipHEFMemWords
-        F_NUM_BLOCKS = ChipHEFMemWords / ChipEraseRowSizeWords
+         F_ROWSIZE_BYTES = ChipEraseRowSizeWords  'Bytes for 16F
+         F_WORDS = ChipHEFMemWords  'Words or Bytes
+         F_BYTES = ChipHEFMemWords
+         F_START_ADDR = Chipwords - ChipHEFMemWords
+         F_NUM_BLOCKS = ChipHEFMemWords / ChipEraseRowSizeWords
 
-        If F_NUM_BLOCKS = 4  Then
+        If F_NUM_BLOCKS = 4  then
             F_BLOCK0_ADDR = F_START_ADDR
             F_BLOCK1_ADDR = F_START_ADDR + 32
             F_BLOCK2_ADDR = F_START_ADDR + 64
             F_BLOCK3_ADDR = F_START_ADDR + 96
-        End If
+         End if
 
-        If HEF_NUM_BLOCKS = 8  Then
+         If HEF_NUM_BLOCKS = 8  then
             F_BLOCK0_ADDR = F_START_ADDR
             F_BLOCK1_ADDR = F_START_ADDR + 16
             F_BLOCK2_ADDR = F_START_ADDR + 32
@@ -110,262 +101,248 @@ Sub HEF_SAF_DISCOVER
             F_BLOCK5_ADDR = F_START_ADDR + 80
             F_BLOCK6_ADDR = F_START_ADDR + 96
             F_BLOCK7_ADDR = F_START_ADDR + 112
-        End If
-    End If
+         END IF
+    End IF
 
-    If ChipSAFMemWords = 128 AND ChipFamily = 15 Then
-        '16F with SAF and NVMCON instead of PMCON no TABLAT
-        Erase_Row_Words = ChipEraseRowSizeWords
-        Erase_Row_Bytes = ChipEraseRowSizeWords
+    If ChipSAFMemWords = 128 and ChipFamily = 15 then
+       '16F with SAF and NVMCON instead of PMCON no TABLAT
+       Erase_Row_Words = ChipEraseRowSizeWords
+       Erase_Row_Bytes = ChipEraseRowSizeWords
 
-        F_ROWSIZE_BYTES = ChipEraseRowSizeWords
-        F_START_ADDR = ChipWords - ChipSAFMemWords
-        F_WORDS = ChipSAFMemWords
-        'Bytes
-        F_BYTES = ChipSAFMemWords
-        F_NUM_BLOCKS = ChipSAFMemWords / ChipEraseRowSizeWords
+       F_ROWSIZE_BYTES = ChipEraseRowSizeWords
+       F_START_ADDR = Chipwords - ChipSAFMemWords
+       F_WORDS = ChipSAFMemWords
+       F_BYTES = ChipSAFMemWords  'Bytes
+       F_NUM_BLOCKS = ChipSAFMemWords / ChipEraseRowSizeWords
 
-        If F_NUM_BLOCKS = 4 Then
+       If F_NUM_BLOCKS = 4 then
             F_BLOCK0_ADDR = F_START_ADDR
             F_BLOCK1_ADDR = F_START_ADDR + 32
             F_BLOCK2_ADDR = F_START_ADDR + 64
             F_BLOCK3_ADDR = F_START_ADDR + 96
-        End If
-    End If
+       End if
+    End IF
 
-    If ChipSAFMemWords = 128 AND ChipFamily = 16  Then
+    IF ChipSAFMemWords = 128 and ChipFamily = 16  Then
 
         '18F with 256 bytes SAF - Uses Table Reads
-        'Bytes
-        ChipBytes = ChipWords * 2
+        ChipBytes = ChipWords * 2        'Bytes
         Erase_Row_Words = ChipEraseRowSizeWords
         Erase_Row_Bytes = ChipEraseRowSizeWords * 2
 
         F_ROWSIZE_BYTES = ChipEraseRowSizeWords * 2
-        F_START_ADDR = (ChipWords * 2) - (ChipSAFMemWords * 2)
+        F_START_ADDR = (Chipwords * 2) - (ChipSAFMemWords * 2)
         F_WORDS = ChipSAFMemWords
-        'Bytes
-        F_BYTES = ChipSAFMemWords * 2
+        F_BYTES = ChipSAFMemWords * 2  'Bytes
         F_NUM_BLOCKS = F_BYTES / Erase_Row_Bytes
 
-        If F_NUM_BLOCKS = 2 Then
-            F_BLOCK0_ADDR = F_START_ADDR
-            F_BLOCK1_ADDR = F_START_ADDR + 128
-        End If
+        If F_NUM_BLOCKS = 2 then
+           F_BLOCK0_ADDR = F_START_ADDR
+           F_BLOCK1_ADDR = F_START_ADDR + 128
+        End if
 
-        If F_NUM_BLOCKS = 4 Then
-            F_BLOCK0_ADDR  = F_START_ADDR
-            F_BLOCK1_ADDR  = F_START_ADDR + 64
-            F_BLOCK2_ADDR  = F_START_ADDR + 128
-            F_BLOCK3_ADDR  = F_START_ADDR + 192
-        End If
-    End If
+        If F_NUM_BLOCKS = 4 then
+           F_BLOCK0_ADDR  = F_START_ADDR
+           F_BLOCK1_ADDR  = F_START_ADDR + 64
+           F_BLOCK2_ADDR  = F_START_ADDR + 128
+           F_BLOCK3_ADDR  = F_START_ADDR + 192
+        End if
+    END IF
 
 #ENDSCRIPT
 
-Dim TMP_LONG As Long
+  DIM TMP_LONG as LONG
 
-HSerPrint "Device: " : HSerPrint ChipNameStr
-HSerPrintCRLF
+  Hserprint "Device: " : Hserprint ChipNameStr
+  HSerprintCRLF
 
-HSerPrint "Chip Family: "
-HSerPrint ChipFamily
-HSerPrintCRLF
+  HSerprint "Chip Family: "
+  HSerprint ChipFamily
+  HSerprintCRLF
 
-HSerPrint "Program Words: "
-HSerPrint ChipWords
-HSerPrintCRLF
+  HSerprint "Program Words: "
+  Hserprint Chipwords
+  HSerprintCRLF
 
-HSerPrint "RAM Bytes: "
-HSerPrint ChipRAM
-HSerPrintCRLF
+  HserPrint "RAM Bytes: "
+  HserPrint ChipRAM
+  HSerprintCRLF
 
-HSerPrint "PPS: "
-#IFDEF Var(RA0PPS)
-    HSerPrint "Yes"
-#ENDIF
+  HSerprint "PPS: "
+  #IFDEF VAR(RA0PPS)
+     HSerprint "Yes"
+  #ENDIF
 
-#IFNDEF Var(RA0PPS)
-    HSerPrint "No"
-#ENDIF
-HSerPrintCRLF 2
+  #IFNDEF VAR(RA0PPS)
+     HSerprint "No"
+  #ENDIF
+  HSerprintCRLF 2
 
-#IF ChipHEFMemWords <> 128 AND ChipSAFMemWords <> 128
-    HSerPrint ChipNameStr
-    HSerPrint " Does Not Support HEF Or SAF"
-    HSerPrintCRLF 2
-#ENDIF
+  #IF ChipHEFMemWords <> 128 AND ChipSAFMemWords <> 128
+     HSerprint ChipNameStr
+     Hserprint " Does Not Support HEF Or SAF"
+     HSerprintCRLF 2
+  #ENDIF
 
-#IFDEF ChipHEFMemWords 128
+  #IFDEF ChipHEFMemWords 128
 
-    HSerPrint "---- Constants ----"
-    HSerPrintCRLF 2
+     HSerprint "---- Constants ----"
+     HSerprintCRLF 2
 
-    HSerPrint "HEF_BYTES: "
-    HSerPrint F_BYTES
-    HSerPrintCRLF
+     Hserprint "HEF_BYTES: "
+     Hserprint F_BYTES
+     HSerprintCRLF
 
-    HSerPrint "HEF_ROWSIZE_BYTES: "
-    HSerPrint F_ROWSIZE_BYTES
-    HSerPrintCRLF
+     Hserprint "HEF_ROWSIZE_BYTES: "
+     HserPrint F_ROWSIZE_BYTES
+     HserprintCRLF
 
-    HSerPrint "HEF_BLOCKS: "
-    HSerPrint F_NUM_BLOCKS
-    HSerPrintCRLF 2
+     HserPrint "HEF_BLOCKS: "
+     Hserprint F_NUM_BLOCKS
+     HSerprintCRLF 2
 
-    HSerPrint "HEF_BLOCK0_ADDR: "
-    TMP_LONG = F_Block0_Addr
-    HSerPrint Hex(TMP_LONG_H)
-    HSerPrint Hex(TMP_LONG)
-    HSerPrintCRLF
+      HserPrint "HEF_BLOCK0_ADDR: "
+       TMP_LONG = F_Block0_Addr
+       HSerprint Hex(TMP_LONG_H)
+       HSerprint Hex(TMP_LONG)
+       HSerprintCRLF
 
-    HSerPrint "HEF_BLOCK1_ADDR: "
-    TMP_LONG = F_Block1_Addr
-    HSerPrint Hex(TMP_LONG_H)
-    HSerPrint Hex(TMP_LONG)
-    HSerPrintCRLF
+       HserPrint "HEF_BLOCK1_ADDR: "
+       TMP_LONG = F_Block1_Addr
+       HSerprint Hex(TMP_LONG_H)
+       HSerprint Hex(TMP_LONG)
+       HSerprintCRLF
 
-    #IF F_NUM_BLOCKS > 2
-        HSerPrint "HEF_BLOCK2_ADDR: "
-        TMP_LONG = F_Block2_Addr
-        HSerPrint Hex(TMP_LONG_H)
-        HSerPrint Hex(TMP_LONG)
-        HSerPrintCRLF
+      #If F_NUM_BLOCKS > 2
+          HserPrint "HEF_BLOCK2_ADDR: "
+          TMP_LONG = F_Block2_Addr
+          HSerprint Hex(TMP_LONG_H)
+          HSerprint Hex(TMP_LONG)
+          HSerprintCRLF
 
-        HSerPrint "HEF_BLOCK3_ADDR: "
-        TMP_LONG = F_Block3_Addr
-        HSerPrint Hex(TMP_LONG_H)
-        HSerPrint Hex(TMP_LONG)
-        HSerPrintCRLF
-    #ENDIF
+          HserPrint "HEF_BLOCK3_ADDR: "
+          TMP_LONG = F_Block3_Addr
+          HSerprint Hex(TMP_LONG_H)
+          HSerprint Hex(TMP_LONG)
+          HSerprintCRLF
+      #ENDIF
 
-    #IF F_NUM_BLOCKS > 4
-        HSerPrint "HEF_BLOCK4_ADDR: "
-        TMP_LONG = F_Block4_Addr
-        HSerPrint Hex(TMP_LONG_H)
-        HSerPrint Hex(TMP_LONG)
-        HSerPrintCRLF
+      #IF F_NUM_BLOCKS > 4
+          HserPrint "HEF_BLOCK4_ADDR: "
+          TMP_LONG = F_Block4_Addr
+          HSerprint Hex(TMP_LONG_H)
+          HSerprint Hex(TMP_LONG)
+          HSerprintCRLF
 
-        HSerPrint "HEF_BLOCK5_ADDR: "
-        TMP_LONG = F_Block5_Addr
-        HSerPrint Hex(TMP_LONG_H)
-        HSerPrint Hex(TMP_LONG)
-        HSerPrintCRLF
+          HserPrint "HEF_BLOCK5_ADDR: "
+          TMP_LONG = F_Block5_Addr
+          HSerprint Hex(TMP_LONG_H)
+          HSerprint Hex(TMP_LONG)
+          HSerprintCRLF
 
-        HSerPrint "HEF_BLOCK6_ADDR:"
-        TMP_LONG = F_Block6_Addr
-        HSerPrint Hex(TMP_LONG_H)
-        HSerPrint Hex(TMP_LONG)
-        HSerPrintCRLF
+          HserPrint "HEF_BLOCK6_ADDR:"
+          TMP_LONG = F_Block6_Addr
+          HSerprint Hex(TMP_LONG_H)
+          HSerprint Hex(TMP_LONG)
+          HSerprintCRLF
 
-        HSerPrint "HEF_BLOCK7_ADDR:"
-        TMP_LONG = F_Block7_Addr
-        HSerPrint Hex(TMP_LONG_H)
-        HSerPrint Hex(TMP_LONG)
-        HSerPrintCRLF 2
-    #ENDIF
-    HSerPrint "---------------------"
-#ENDIF
+          HserPrint "HEF_BLOCK7_ADDR:"
+          TMP_LONG = F_Block7_Addr
+          HSerprint Hex(TMP_LONG_H)
+          HSerprint Hex(TMP_LONG)
+          HSerprintCRLF 2
+      #ENDIF
+      HserPrint "---------------------"
+  #ENDIF
 
-#IFDEF ChipSAFMemWords 128
+  #IFDEF ChipSAFMemWords 128
 
-    HSerPrint "---- Constants ----"
-    HSerPrintCRLF 2
+     HSerprint "---- Constants ----"
+     HSerprintCRLF 2
 
-    HSerPrint "SAF_BYTES: "
-    HSerPrint F_BYTES
-    HSerPrintCRLF
+     Hserprint "SAF_BYTES: "
+     Hserprint F_BYTES
+     HSerprintCRLF
 
-    HSerPrint "SAF_ROWSIZE_BYTES: "
-    HSerPrint F_ROWSIZE_BYTES
-    HSerPrintCRLF
+     Hserprint "SAF_ROWSIZE_BYTES: "
+     HserPrint F_ROWSIZE_BYTES
+     HserprintCRLF
 
-    HSerPrint "SAF_BLOCKS: "
-    HSerPrint F_NUM_BLOCKS
-    HSerPrintCRLF 2
+     HserPrint "SAF_BLOCKS: "
+     Hserprint F_NUM_BLOCKS
+     HSerprintCRLF 2
 
-    HSerPrint "SAF_BLOCK0_ADDR: "
-    TMP_LONG = F_Block0_Addr
-    HSerPrint Hex(TMP_LONG_H)
-    HSerPrint Hex(TMP_LONG)
-    HSerPrintCRLF
+     HserPrint "SAF_BLOCK0_ADDR: "
+     TMP_LONG = F_Block0_Addr
+     HSerprint Hex(TMP_LONG_H)
+     HSerprint Hex(TMP_LONG)
+     HSerprintCRLF
 
-    HSerPrint "SAF_BLOCK1_ADDR: "
-    TMP_LONG = F_Block1_Addr
-    HSerPrint Hex(TMP_LONG_H)
-    HSerPrint Hex(TMP_LONG)
-    HSerPrintCRLF
+     HserPrint "SAF_BLOCK1_ADDR: "
+     TMP_LONG = F_Block1_Addr
+     HSerprint Hex(TMP_LONG_H)
+     HSerprint Hex(TMP_LONG)
+     HSerprintCRLF
 
-    #IF F_NUM_BLOCKS > 2
-        HSerPrint "SAF_BLOCK2_ADDR: "
-        TMP_LONG = F_Block2_Addr
-        HSerPrint Hex(TMP_LONG_H)
-        HSerPrint Hex(TMP_LONG)
-        HSerPrintCRLF
+      #If F_NUM_BLOCKS > 2
+          HserPrint "SAF_BLOCK2_ADDR: "
+          TMP_LONG = F_Block2_Addr
+          HSerprint Hex(TMP_LONG_H)
+          HSerprint Hex(TMP_LONG)
+          HSerprintCRLF
 
-        HSerPrint "SAF_BLOCK3_ADDR: "
-        TMP_LONG = F_Block3_Addr
-        HSerPrint Hex(TMP_LONG_H)
-        HSerPrint Hex(TMP_LONG)
-        HSerPrintCRLF
-    #ENDIF
-    HSerPrint "---------------------"
-#ENDIF
+          HserPrint "SAF_BLOCK3_ADDR: "
+          TMP_LONG = F_Block3_Addr
+          HSerprint Hex(TMP_LONG_H)
+          HSerprint Hex(TMP_LONG)
+          HSerprintCRLF
+      #ENDIF
+      HserPrint "---------------------"
+  #ENDIF
 
-End Sub
+End SUB
 
 Sub InitPPS
 
-    #IFDEF ChipName 18F25K83, 18F26K83, 18F25K42, 18F26K42
-        'TX1 > RC4
-        RC4PPS = 0x0013
-        'Clear TRIS control bit
-        Dir PORTC.4 Out
-    #ENDIF
+  #IFDEF Chipname 18F25K83, 18F26K83, 18F25K42, 18F26K42
+    RC4PPS = 0x0013     'TX1 > RC4
+    Dir PORTC.4 Out     'Clear TRIS control bit
+  #ENDIF
 
-    #IFDEF ChipName 16F1574, 16F1575, 16F1578, 16F1579
-        'TX > RC4
-        RC4PPS = 0x0009
-    #ENDIF
+  #IFDEF Chipname 16F1574, 16F1575, 16F1578, 16F1579
+    RC4PPS = 0x0009    'TX > RC4
+  #ENDIF
 
-    #IFDEF ChipName 16F1614, 16F618
-        'TX > RC4
-        RC4PPS = 0x0006
-    #ENDIF
+  #IFDEF Chipname 16F1614, 16F618
+    RC4PPS = 0x0006    'TX > RC4
+  #ENDIF
 
-    #IFDEF ChipName 16F1615, 16F619
-        'TX > RC4
-        RC4PPS = 0x0012
-    #ENDIF
+ #IFDEF Chipname 16F1615, 16F619
+    RC4PPS = 0x0012    'TX > RC4
+ #ENDIF
 
-    #IFDEF ChipName 16F15323, 16F15324, 16F155325, 16F15355
-        'TX1 > RC4
-        RC4PPS = 0x000F
-    #ENDIF
+ #IFDEF Chipname 16F15323, 16F15324, 16F155325, 16F15355
+     RC4PPS = 0x000F    'TX1 > RC4
+ #ENDIF
 
-    #IFDEF ChipName 16F15356, 16F15375, 16F15376
-        'TX1 > RC4
-        RC4PPS = 0x000F
-    #ENDIF
+ #IFDEF Chipname 16F15356, 16F15375, 16F15376
+     RC4PPS = 0x000F    'TX1 > RC4
+ #ENDIF
 
-    #IFDEF ChipName 16F1704, 16F1705, 16F1708, 16F1709
-        'TX > RC4
-        RC4PPS = 0x0014
-    #ENDIF
+ #IFDEF Chipname 16F1704, 16F1705, 16F1708, 16F1709
+    RC4PPS = 0x0014    'TX > RC4
+ #ENDIF
 
-    #IFDEF ChipName 16F1713, 16F1716, 16F1718, 16F1719
-        'TX > RC4
-        RC4PPS = 0x0014
-    #ENDIF
+ #IFDEF Chipname 16F1713, 16F1716, 16F1718, 16F1719
+    RC4PPS = 0x0014    'TX > RC4
+ #ENDIF
 
-    #IFDEF ChipName 16F1764, 16F1765, 16F1768, 16F1769
-        'TX > RC4
-        RC4PPS = 0x0016
-    #ENDIF
+ #IFDEF Chipname 16F1764, 16F1765, 16F1768, 16F1769
+    RC4PPS = 0x0016    'TX > RC4
+ #ENDIF
 
-    #IFDEF ChipName 16F1773, 16F1776, 16F1777, 16F1778, 16F1779
-        'TX > RC4
-        RC4PPS = 0x0024
-    #ENDIF
+ #IFDEF Chipname 16F1773, 16F1776, 16F1777, 16F1778, 16F1779
+    RC4PPS = 0x0024    'TX > RC4
+ #ENDIF
 
-End Sub
+End SUB

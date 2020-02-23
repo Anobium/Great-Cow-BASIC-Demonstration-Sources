@@ -45,147 +45,136 @@
 '''   So a byte of data stored in rel address 184 is
 '''   located in the 56th  location of block 2
 
-'Chip Settings.
-#CHIP 18F25K42, 16
-#OPTION Explicit
+ 'Chip Settings.
+ #chip 18F25K42, 16
+ #option Explicit
 
-#STARTUP InitPPS, 85
-#DEFINE PPSToolPart 18F25K42
-' *** Do not use -R **
-#DEFINE Programmer PK3mpec
+ #startup InitPPS, 85
+ #define PPSToolPart 18F25K42
+ #define Programmer PK3mpec  ' *** Do not use -R **
 
-'Setup Serial port
-#DEFINE USART_BAUD_RATE 19200
-#DEFINE USART_TX_BLOCKING
+  'Setup Serial port
+  #define USART_BAUD_RATE 19200
+  #define USART_TX_BLOCKING
 
-Dim Rel_Address, numbytes, DataByte, Index As Byte
-' Absolute Address
-Dim NVM_Address As Long
-Dim  DataWord As Word
-Dim MyBuffer(SAF_ROWSIZE_BYTES)
+  Dim Rel_Address, numbytes, DataByte, Index as Byte
+  Dim NVM_Address as Long  ' Absolute Address
+  Dim  DataWord as Word
+  Dim MyBuffer(SAF_ROWSIZE_BYTES)
 
-'Stabilize
-Wait 200 ms
+  Wait 200 ms 'Stabilize
 
 ' ------- Main Program Starts Here --------------
 
-''' Store 8 Bytes of Data in SAF Memory using SAFWriteBlock
-''' MyBuffer is sized using the system constant SAF_ROWSIZE_BYTES
-'''------------------------------------------------------------------
+ ''' Store 8 Bytes of Data in SAF Memory using SAFWriteBlock
+ ''' MyBuffer is sized using the system constant SAF_ROWSIZE_BYTES
+ '''------------------------------------------------------------------
 
-'Write  8 Bytes of data into the buffer/array
-MyBuffer = 32, 44, 88, 91, 78, 31, 63, 99
+  'Write  8 Bytes of data into the buffer/array
+  MyBuffer = 32, 44, 88, 91, 78, 31, 63, 99
 
-'Write the 8 bytes to SAF Block 0
-numbytes = 8
-SAFWriteBlock (0, MyBuffer,numbytes)
+  'Write the 8 bytes to SAF Block 0
+   numbytes = 8
+   SAFWriteBlock (0, MyBuffer,numbytes)
 
-' *** Read the 8 stored bytes using SAFReadBlock ***
-HEFReadBlock (0, MyBuffer, numbytes)
+  ' *** Read the 8 stored bytes using SAFReadBlock ***
+    HEFReadBlock (0, MyBuffer, numbytes)
 
-'Output the 8 bytes to a terminal
-HSerPrintCRLF 2
-For index = 1 To numbytes
-    HSerPrint MyBuffer(index)
-    'space
-    HSerSend 32
-Next
+   'Output the 8 bytes to a terminal
+    HSerPrintCRLF 2
+    For index = 1 to numbytes
+        Hserprint MyBuffer(index)
+        Hsersend 32 'space
+    Next
 
-' *** Read the stored bytes using SAFRead ***
-' The relative memory address or location is
-' offset by 1 relative to the buffer address
+   ' *** Read the stored bytes using SAFRead ***
+   ' The relative memory address or location is
+   ' offset by 1 relative to the buffer address
 
-HSerPrintCRLF 2
-For rel_address = 0 To 7
-    SAFRead (Rel_Address, Databyte)
-    HSerPrint DataByte
-    'space
-    HSerSend 32
-Next
+    HserprintCRLF 2
+    For rel_address = 0 to 7
+        SAFRead (Rel_Address, Databyte)
+        Hserprint DataByte
+        hsersend 32 'space
+    Next
 '=========================================================
 
-''' Store 4 Words  of Data in SAF Memory using SAFWrite
-'''------------------------------------------------------
-Dim Word1, Word2, Word3, Word4 As Word
-Word1 = 23471
-Word2 = 496
-Word3 = 53873
-Word4 = 65535
+ ''' Store 4 Words  of Data in SAF Memory using SAFWrite
+ '''------------------------------------------------------
+  Dim Word1, Word2, Word3, Word4 as Word
+  Word1 = 23471
+  Word2 = 496
+  Word3 = 53873
+  Word4 = 65535
 
-'Write the words staring at saf location 8
-'Which is the next address past the 8 bytes
-' use even numbered adresses
-SAFWriteWord (8, Word1)
-SAFWriteWord (10, Word2)
-SAFWriteWord (12, Word3)
-SAFWriteWord (14, Word4)
+  'Write the words staring at saf location 8
+  'Which is the next address past the 8 bytes
+  SAFwriteWord (8, Word1)   ' use even numbered adresses
+  SAFwriteWord (10, Word2)
+  SAFwriteWord (12, Word3)
+  SAFwriteWord (14, Word4)
 
-'Read the Words using HEFReadWord & output to terminal
-Rel_Address = 8
-HSerPrintCRLF 2
-Repeat 4
-    SAFReadWord(Rel_Address, DataWord)
-    HSerPrint DataWord
-    HSerSend 32
-    'increment address by 2
-    Rel_Address +=2
-End Repeat
-HSerPrintCRLF 2
-HEFM_DUMP
+  'Read the Words using HEFReadWord & output to terminal
+  Rel_Address = 8
+  HserprintCRLF 2
+  Repeat 4
+      SAFReadWord(Rel_Address, DataWord)
+      HSerprint DataWord
+      Hsersend 32
+      Rel_Address +=2  'increment address by 2
+  End repeat
+  HSerprintCRLF 2
+  HEFM_DUMP
 
 '=========================================================
-End
+  end
 
 
 
 '
 '; This subroutine displays the SAF Flash Memory on a terminal
 '; Words in reverse byte order relative to address
-Sub HEFM_Dump
+sub HEFM_Dump
 
-    Dim Blocknum As Byte
+    Dim Blocknum as Byte
     NVM_Address  = SAF_START_ADDR
     BlockNum = 0
 
-    '128 times
-    Repeat SAF_WORDS
-        If NVM_Address % SAF_ROWSIZE_BYTES = 0 Then
-            If BlockNum > 0 Then   HSerPrintCRLF
-            HSerPrintCRLF
+    Repeat SAF_WORDS    ;128 times
+        If NVM_Address % SAF_ROWSIZE_BYTES = 0 then
+           If BlockNum > 0 then   HSERPRINTCRLF
+           HSerprintCRLF
 
-            HSerPrint "Block"
-            HSerPrint BlockNum
-            HSerPrint "  1 0   3 2   5 4   7 6   9 8   B A   D C   F E"
-            BlockNum++
-        End If
+           HserPrint "Block"
+           HSerprint BlockNum
+           HSerprint "  1 0   3 2   5 4   7 6   9 8   B A   D C   F E"
+           BlockNum++
+        End if
 
-        If NVM_Address  % 16 = 0 Then
-            HSerPrintCRLF
-            HSerPrint Hex(NVM_Address_H)
-            HSerPrint Hex(NVM_Address)
-            HSerPrint "    "
-        End If
+        IF NVM_Address  % 16 = 0 then
+           HSerPrintCRLF
+           hserprint hex(NVM_Address_H)
+           hserprint hex(NVM_Address)
+           hserprint "    "
+        end if
 
         Rel_Address = NVM_ADDRESS - SAF_START_ADDR
         SAFReadWord(Rel_Address,DataWord)
 
-        HSerPrint Hex(DataWord_H)
-        HSerPrint Hex(DataWord)
-        HSerPrint "  "
+        hserprint hex(DataWord_H)
+        hserprint hex(DataWord)
+        hserprint "  "
 
-        ' Next "WORD"
-        NVM_Address+=2
+        NVM_Address+=2 ' Next "WORD"
     End Repeat
 
-    HSerPrintCRLF
+ HserPrintCRLF
 
-End Sub
+End sub
 
-Sub InitPPS
-    'Module: UART pin directions
-    ' Make TX Pin an Output
-    Dir PORTC.6 Out
-    'Module: UART1
-    'TX1 > RC6
-    RC6PPS = 0x0013
-End Sub
+ Sub InitPPS
+          'Module: UART pin directions
+          Dir PORTC.6 Out    ' Make TX Pin an Output
+          'Module: UART1
+          RC6PPS = 0x0013    'TX1 > RC6
+ End Sub

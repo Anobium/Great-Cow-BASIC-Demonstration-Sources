@@ -17,154 +17,151 @@
 '''@date    3rd  March 2019
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 16F1939, 32
-#OPTION Explicit
-#INCLUDE <i2ceeprom.h>
+; ----- Configuration
+  #chip 16F1939, 32
+  #option explicit
+  #include <i2ceeprom.h>
 
-' ----- Define Hardware settings
-' Define I2C settings - CHANGE PORTS if required
-#DEFINE HI2C_BAUD_RATE 100
-#DEFINE HI2C_DATA PORTC.4
-#DEFINE HI2C_CLOCK PORTC.3
-'Initialise I2C Slave
-'I2C pins need to be input for SSP module
-Dir HI2C_DATA In
-Dir HI2C_CLOCK In
-'MASTER
-HI2CMode Master
+; ----- Define Hardware settings
+  ' Define I2C settings - CHANGE PORTS if required
+  #define HI2C_BAUD_RATE 100
+  #define HI2C_DATA PORTC.4
+  #define HI2C_CLOCK PORTC.3
+  'Initialise I2C Slave
+  'I2C pins need to be input for SSP module
+  Dir HI2C_DATA in
+  Dir HI2C_CLOCK in
+ 'MASTER
+  HI2CMode Master
 
-' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
-' USART settings - CHANGE PORTS if required
-#DEFINE USART_BAUD_RATE 9600
-Dir PORTc.6 Out
-Dir PORTc.7 In
-#DEFINE USART_TX_BLOCKING
-Wait 500 ms
+ ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
+ ' USART settings - CHANGE PORTS if required
+ #define USART_BAUD_RATE 9600
+ Dir PORTc.6 Out
+ Dir PORTc.7 In
+ #define USART_TX_BLOCKING
+ wait 500 ms
 
-' ----- Define Hardware settings
-'Change this ADDRESS to suit
-#DEFINE eepDev 0xA0
-'Change this typical 16, 32 or 64.
-#DEFINE EEpromPageSize 64
-'This IS EEPROM device specific
+; ----- Define Hardware settings
+  #define eepDev 0xA0               'Change this ADDRESS to suit
+  #define EEpromPageSize 64         'Change this typical 16, 32 or 64.
+                                    'This IS EEPROM device specific
 
-' ----- Variables
-Dim XLOOP As Byte
+; ----- Variables
+  Dim XLOOP as Byte
 
-'Change this type Byte or Word.
-Dim eepAddr As Word
-'This IS EEPROM device specific. Smaller device with 16 byte page size are typically requird 'Dim eepAddr as byte'
-'Large devices will required 'Dim eepAddr as word'
+  Dim eepAddr as Word               'Change this type Byte or Word.
+                                    'This IS EEPROM device specific. Smaller device with 16 byte page size are typically requird 'Dim eepAddr as byte'
+                                    'Large devices will required 'Dim eepAddr as word'
 
-Dim datarray( EEpromPageSize )
-Dim datastring As String * 16
+  Dim datarray( EEpromPageSize )
+  Dim datastring as String * 16
 
-' ----- Quick Command Reference
+; ----- Quick Command Reference
 
 
 
-' ----- Main body of program commences here.
+; ----- Main body of program commences here.
 
-'Show whether you have selected harware or software I2C
-HSerPrintCRLF 2
-#IFDEF I2C_DATA
-    HSerPrint "SW I2C  Operational"
-#ENDIF
-#IFDEF HI2C_DATA
-    HSerPrint "HW I2C Operational"
-#ENDIF
-HSerPrintCRLF 2
+  'Show whether you have selected harware or software I2C
+  HSerPrintCRLF 2
+  #ifdef I2C_DATA
+        HSerPrint "SW I2C  Operational"
+  #endif
+  #ifdef HI2C_DATA
+        HSerPrint "HW I2C Operational"
+  #endif
+  HSerPrintCRLF 2
 
-ArrayOps:
-' Write an Array
-'populate the array, the array is 10 elements long
-datarray = 10,9,8,7,6,5,4,3,2,1
+  ArrayOps:
+  ' Write an Array
+        'populate the array, the array is 10 elements long
+        datarray = 10,9,8,7,6,5,4,3,2,1
 
-HSerPrint "Initial Array"
-HSerPrintCRLF
-HSerPrint "    -:"
-For xloop = 1 To 10
-    HSerPrint datarray(xloop)
-    If xloop < 10 Then HSerPrint ","
-Next
-HSerPrintCRLF 2
+        HSerPrint "Initial Array"
+        HSerPrintCRLF
+        HSerPrint "    -:"
+        for xloop = 1 to 10
+          HSerPrint datarray(xloop)
+          if xloop < 10 then HSerPrint ","
+        next
+        HSerPrintCRLF 2
 
-'set EEProm start address for saving the array
-eepAddr = 0
-'write array
-eeprom_wr_array( eepDev, EEpromPageSize, eepAddr , datarray(), 10 )
+        'set EEProm start address for saving the array
+        eepAddr = 0
+        'write array
+        eeprom_wr_array( eepDev, EEpromPageSize, eepAddr , datarray(), 10 )
 
-'populate the array with 127 as test to see if the operation populates correctly.
-HSerPrint "Populate Array with #127"
-HSerPrintCRLF
-HSerPrint "    -:"
-For xloop = 1 To 10
-    datarray(xloop) = 127
-    HSerPrint datarray(xloop)
-    If xloop < 10 Then HSerPrint ","
-Next
-HSerPrintCRLF 2
+        'populate the array with 127 as test to see if the operation populates correctly.
+        HSerPrint "Populate Array with #127"
+        HSerPrintCRLF
+        HSerPrint "    -:"
+        for xloop = 1 to 10
+          datarray(xloop) = 127
+          HSerPrint datarray(xloop)
+          if xloop < 10 then HSerPrint ","
+        next
+        HSerPrintCRLF 2
 
-'set EEProm start address for reading the array
-eepAddr = 0
-eeprom_rd_array( eepDev, eepAddr , datarray(), 10 )
-HSerPrint "Read Array from EEProm results"
-HSerPrintCRLF
-HSerPrint "    -:"
-'show results
-For xloop = 1 To 10
-    HSerPrint datarray(xloop)
-    If xloop < 10 Then HSerPrint ","
-Next
-HSerPrintCRLF 2
-HSerPrint "End of array operations"
-HSerPrintCRLF 2
+        'set EEProm start address for reading the array
+        eepAddr = 0
+        eeprom_rd_array( eepDev, eepAddr , datarray(), 10 )
+        HSerPrint "Read Array from EEProm results"
+        HSerPrintCRLF
+        HSerPrint "    -:"
+        'show results
+        for xloop = 1 to 10
+          HSerPrint datarray(xloop)
+          if xloop < 10 then HSerPrint ","
+        next
+        HSerPrintCRLF 2
+        HSerPrint "End of array operations"
+        HSerPrintCRLF 2
 
-stringOps:
-HSerPrint "Start of string operations"
-HSerPrintCRLF 2
+        stringOps:
+        HSerPrint "Start of string operations"
+        HSerPrintCRLF 2
 
 
-' Write a String
-'populate the string
-datastring ="0123456789ABCDEF"
-datastring ="This is a string"
-'set EEProm start address for saving the length of string
-eepAddr = 0
-HSerPrint "Writing string"
-HSerPrintCRLF
-HSerPrint "    -:"
-HSerPrint datastring
-HSerPrintCRLF 2
+  ' Write a String
+        'populate the string
+        datastring ="0123456789ABCDEF"
+        datastring ="This is a string"
+        'set EEProm start address for saving the length of string
+        eepAddr = 0
+        HSerPrint "Writing string"
+        HSerPrintCRLF
+        HSerPrint "    -:"
+        HSerPrint datastring
+        HSerPrintCRLF 2
 
-'write byte zero of the string. Byte zero is the length of the string.
-eeprom_wr_byte( eepDev, eepAddr , datastring(0) )
-'set EEProm next address for saving the whole string
-eepAddr = 1
-'write string - note passing the BRACES () in datastring()
-eeprom_wr_string( eepDev, EEpromPageSize, eepAddr , datastring(), datastring(0) )
+        'write byte zero of the string. Byte zero is the length of the string.
+        eeprom_wr_byte( eepDev, eepAddr , datastring(0) )
+        'set EEProm next address for saving the whole string
+        eepAddr = 1
+        'write string - note passing the BRACES () in datastring()
+        eeprom_wr_string( eepDev, EEpromPageSize, eepAddr , datastring(), datastring(0) )
 
-'empty string
-datastring = "XXXXXXXXXXXXXXXX"
-HSerPrint "Populate the string with X's"
-HSerPrintCRLF
-HSerPrint "    -:"
-HSerPrint datastring
-HSerPrintCRLF 2
+        'empty string
+        datastring = "XXXXXXXXXXXXXXXX"
+        HSerPrint "Populate the string with X's"
+        HSerPrintCRLF
+        HSerPrint "    -:"
+        HSerPrint datastring
+        HSerPrintCRLF 2
 
-'rebuild string by reading eleven bytes - from byte zero and next ten bytes
-For eepAddr = 0 To datastring(0)
-    eeprom_rd_byte( eepDev, eepAddr , datastring(eepAddr) )
-Next
+        'rebuild string by reading eleven bytes - from byte zero and next ten bytes
+        for eepAddr = 0 to datastring(0)
+          eeprom_rd_byte( eepDev, eepAddr , datastring(eepAddr) )
+        next
 
-HSerPrint "Read String from EEProm results"
-HSerPrintCRLF
-HSerPrint "    -:"
-HSerPrint datastring
-HSerPrintCRLF 2
-HSerPrint "End of string operations"
-HSerPrintCRLF
-Wait 100 ms
-End
-' ----- Support methods.  Subroutines and Functions
+        HSerPrint "Read String from EEProm results"
+        HSerPrintCRLF
+        HSerPrint "    -:"
+        HSerPrint datastring
+        HSerPrintCRLF 2
+        HSerPrint "End of string operations"
+        HSerPrintCRLF
+        wait 100 ms
+        end
+; ----- Support methods.  Subroutines and Functions

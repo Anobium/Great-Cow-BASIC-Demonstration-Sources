@@ -1,28 +1,24 @@
-#CHIP tiny13a, 1.2
-#OPTION Explicit
+#chip tiny13a, 1.2
+#Option Explicit
 #DEFINE LED PORTB.0
 #DEFINE TOGGLE PINB.0
 #DEFINE SWITCH PORTB.1
 
-Dir LED Out
-'necessary for all input methods where the switch is at PB4
-Dir SWITCH In
-'comment if you want to use an external 10 kOhm resistor
-Set SWITCH = 1
-Set LED = 0
+DIR LED OUT	
+DIR SWITCH IN   'necessary for all input methods where the switch is at PB4
+SET SWITCH = 1	'comment if you want to use an external 10 kOhm resistor
+SET LED = 0
 
-'INT0 reacts to the rising edge of the signal
-MCUCR = 0b00000011
-'Enables the INT0 interrupt
-INT0 = 1
+MCUCR = 0b00000011	'INT0 reacts to the rising edge of the signal
+INT0 = 1			'Enables the INT0 interrupt
 
-On Interrupt ExtInt0 Call checkSwitch
+ON INTERRUPT ExtInt0 CALL checkSwitch
 
 'Main program:
-Do
-Loop
+DO	
+LOOP
 
 'Interrupt service routine:
-Sub checkSwitch
-    TOGGLE =! LED
-End Sub
+SUB checkSwitch
+	TOGGLE =! LED
+END SUB

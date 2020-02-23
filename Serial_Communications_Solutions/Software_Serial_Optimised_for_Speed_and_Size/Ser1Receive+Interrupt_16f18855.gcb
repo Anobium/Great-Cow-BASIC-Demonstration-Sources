@@ -13,91 +13,68 @@
 '''@date    17.01.2017
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 16f18855, 32
-#OPTION Explicit
+; ----- Configuration
+#chip 16f18855, 32
+#option Explicit
 
-' ----- Include library
-#INCLUDE <softserial.h>
+; ----- Include library
+#include <softserial.h>
 
-' ----- Config Serial UART :
-' baudrate must be defined
-#DEFINE SER1_BAUD 115200
-' databits optional (default = 8)
-#DEFINE SER1_DATABITS 8
-' stopbits optional (default = 1)
-#DEFINE SER1_STOPBITS 1
-' inverted polarity optional (default = Off)
-#DEFINE SER1_INVERT Off
-' Config I/O ports for transmitting:
-' I/O port (without .bit) must be defined
-#DEFINE SER1_TXPORT PORTC
-' portbit  must be defined
-#DEFINE SER1_TXPIN 0
-' Config I/O ports for receiving:
-' I/O port (without .bit) must be defined
-#DEFINE SER1_RXPORT PORTC
-' portbit  must be defined
-#DEFINE SER1_RXPIN 1
-' RXNOWAIT disables waiting for stopbit and reduces first delaytime
-' to compensate overhead for invoking an interrupt:
-' don't wait for stopbit optional (default = Off)
-#DEFINE SER1_RXNOWAIT On
+; ----- Config Serial UART :
+#define SER1_BAUD 115200   ; baudrate must be defined
+#define SER1_DATABITS 8    ; databits optional (default = 8)
+#define SER1_STOPBITS 1    ; stopbits optional (default = 1)
+#define SER1_INVERT Off    ; inverted polarity optional (default = Off)
+; Config I/O ports for transmitting:
+#define SER1_TXPORT PORTC  ; I/O port (without .bit) must be defined
+#define SER1_TXPIN 0       ; portbit  must be defined
+; Config I/O ports for receiving:
+#define SER1_RXPORT PORTC  ; I/O port (without .bit) must be defined
+#define SER1_RXPIN 1       ; portbit  must be defined
+; RXNOWAIT disables waiting for stopbit and reduces first delaytime
+; to compensate overhead for invoking an interrupt:
+#define SER1_RXNOWAIT On   ; don't wait for stopbit optional (default = Off)
 
-' ----- Variables
+; ----- Variables
 Dim RecByte As Byte
 Dim RxIndicator As Byte
 
-' ----- Config Interrupt
+; ----- Config Interrupt
 On Interrupt PORTChange Call ISR_StartReceive
-' set portbit in INTERRUPT-ON-CHANGE PORTB NEGATIVE EDGE REGISTER
-Set IOCCN.SER1_RXPIN On
-' set INTERRUPT-ON-CHANGE PORT CLEAR REGISTER
-#DEFINE IOCClearRegisterBit  IOCCF
+Set IOCCN.SER1_RXPIN On             ; set portbit in INTERRUPT-ON-CHANGE PORTB NEGATIVE EDGE REGISTER
+#define IOCClearRegisterBit  IOCCF  ; set INTERRUPT-ON-CHANGE PORT CLEAR REGISTER
 
-' ----- Main body of program commences here.
-'delay to prevent garbage if sending too quick after init
-Wait 1 ms
-'new line in Terminal
-Ser1Send 10
-'
-Ser1Send 13
-Ser1Print "Please send a byte!"
+; ----- Main body of program commences here.
+ Wait 1 Ms     'delay to prevent garbage if sending too quick after init
+ Ser1Send 10   'new line in Terminal
+ Ser1Send 13   '
+ Ser1Print "Please send a byte!"
 
-RxIndicator = 0
-Dir porta Out
+ RxIndicator = 0
+ dir porta out
 
-Do Forever
+ Do Forever
 
-    'we can do someting else here!
+   ;we can do someting else here!
 
-    If RxIndicator Then
-        'if an interrupt occured
-        'new line in Terminal
-        Ser1Send 10
-        Ser1Send 13
-        Ser1Print "You sent: "
-        Ser1Send RecByte
-        'reset "flag"
-        RxIndicator -= 1
-    End If
+   If RxIndicator Then       'if an interrupt occured
+     Ser1Send 10             'new line in Terminal
+     Ser1Send 13
+     Ser1Print "You sent: "
+     Ser1Send RecByte
+     RxIndicator -= 1        'reset "flag"
+   End If
 
-Loop
+ Loop
 
 Sub ISR_StartReceive
 
-    If SER1_RXPORT.SER1_RXPIN = 1 Then Exit Sub
-    'process falling edge only (of startbit)
+ If SER1_RXPORT.SER1_RXPIN = 1 Then Exit Sub  'process falling edge only (of startbit)
 
-    'ignore interrupts while receiving
-    IntOff
-    'get new data
-    RecByte = Ser1Receive
-    'tell mainprog, that we have new data
-    RxIndicator += 1
-    're-enable interrupts
-    IntOn
-    'clear IOC Interrupt
-    IOCClearRegisterBit = 0
+ IntOff                                       'ignore interrupts while receiving
+ RecByte = Ser1Receive                        'get new data
+ RxIndicator += 1                             'tell mainprog, that we have new data
+ IntOn                                        're-enable interrupts
+ IOCClearRegisterBit = 0                       'clear IOC Interrupt
 
 End Sub

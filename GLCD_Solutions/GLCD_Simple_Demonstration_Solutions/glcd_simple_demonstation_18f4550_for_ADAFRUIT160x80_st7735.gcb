@@ -13,63 +13,55 @@
 '''@date       03/11/19
 '''********************************************************************************
 
-'Chip Settings.
-#CHIP 18F4550, 48
-#CONFIG FOSC=HSPLL_HS, PLLDIV=5, CPUDIV=OSC1_PLL2,  MCLRE=On
+  'Chip Settings.
+  #chip 18F4550, 48
+  #config FOSC=HSPLL_HS, PLLDIV=5, CPUDIV=OSC1_PLL2,  MCLRE=ON
 
-#INCLUDE <glcd.h>
+    #include <glcd.h>
 
-#DEFINE GLCD_TYPE GLCD_TYPE_ST7735R_160_80
+    #define GLCD_TYPE GLCD_TYPE_ST7735R_160_80
 
-' can be ST7735_BLACKTAB, ST7735_GREENTAB or ST7735_REDTAB.  Each tab is a different ST7735 configuration.
-#DEFINE ST7735TABCOLOR ST7735_GREENTAB
-' you may have to try all three - if you do not know what chipset you have.
-#OPTION Explicit
+    #define ST7735TABCOLOR ST7735_GREENTAB  ' can be ST7735_BLACKTAB, ST7735_GREENTAB or ST7735_REDTAB.  Each tab is a different ST7735 configuration.
+                                            ' you may have to try all three - if you do not know what chipset you have.
+    #option Explicit
 
-'Pin mappings for SPI ST7735
-'Data/Command select   Purple Wire
-#DEFINE GLCD_DC         portE.2
-'CS Chip select        White
-#DEFINE GLCD_CS         portB.2
-'                      Gray
-#DEFINE GLCD_RESET      portC.6
-'SPI SDO (MOSI)        Blue
-#DEFINE GLCD_DO         portC.7
-'SPI SDI (MISO)  assume bi-directional DO/DI
-#DEFINE GLCD_DI         portC.7
-'SPI SCK               Green
-#DEFINE GLCD_SCK        portB.1
+   'Pin mappings for SPI ST7735
+    #define GLCD_DC         portE.2              'Data/Command select   Purple Wire
+    #define GLCD_CS         portB.2              'CS Chip select        White
+    #define GLCD_RESET      portC.6              '                      Gray
+    #define GLCD_DO         portC.7              'SPI SDO (MOSI)        Blue
+    #define GLCD_DI         portC.7              'SPI SDI (MISO)  assume bi-directional DO/DI
+    #define GLCD_SCK        portB.1              'SPI SCK               Green
 
 
 '*************************** GLCD Specific setup ************************************************
 
 
-Dim reg_result As Long
-'A long number
-reg_result=123456
+    dim reg_result as long
+    reg_result=123456                               'A long number
 
-GLCDfntDefaultSize = 1
+    GLCDfntDefaultsize = 1
 
-GLCDPrintString Hex(reg_result_e)
-GLCDPrintString Hex(reg_result_u)
-GLCDPrintString Hex(reg_result_h)
-GLCDPrintStringLn Hex(reg_result)
-GLCDLocateString 0,2
-
-
-GLCDPrintString "ST7735R"
-
-GLCDPrint 4,50, ChipNameStr
-GLCDPrint 4,66, "@ "+ Str(ChipMHz)+"Mhz"
+    GLCDPrintString hex(reg_result_e)
+    GLCDPrintString hex(reg_result_u)
+    GLCDPrintString hex(reg_result_h)
+    GLCDPrintStringLn hex(reg_result)
+    GLCDLocateString 0,2
 
 
-Line 0,0,2,2
-Box 0,0,GLCDDeviceWidth, GLCDDeviceHeight, TFT_YELLOW
-FilledBox GLCDDeviceWidth-40, GLCDDeviceHeight-40,GLCDDeviceWidth, GLCDDeviceHeight, TFT_YELLOW
-FilledBox GLCDDeviceWidth-30, GLCDDeviceHeight-30,GLCDDeviceWidth, GLCDDeviceHeight, TFT_GREEN
-FilledBox GLCDDeviceWidth-20, GLCDDeviceHeight-20,GLCDDeviceWidth, GLCDDeviceHeight, TFT_BLUE
-FilledBox GLCDDeviceWidth-10, GLCDDeviceHeight-10,GLCDDeviceWidth, GLCDDeviceHeight, TFT_RED
+    GLCDPrintString "ST7735R"
 
-Wait 100 ms
+    GLCDPrint 4,50, ChipNameStr
+    GLCDPrint 4,66, "@ "+ Str(ChipMHz)+"Mhz"
 
-End
+
+    line 0,0,2,2
+    box 0,0,GLCDDeviceWidth, GLCDDeviceHeight, TFT_YELLOW
+    filledbox GLCDDeviceWidth-40, GLCDDeviceHeight-40,GLCDDeviceWidth, GLCDDeviceHeight, TFT_YELLOW
+    filledbox GLCDDeviceWidth-30, GLCDDeviceHeight-30,GLCDDeviceWidth, GLCDDeviceHeight, TFT_GREEN
+    filledbox GLCDDeviceWidth-20, GLCDDeviceHeight-20,GLCDDeviceWidth, GLCDDeviceHeight, TFT_BLUE
+    filledbox GLCDDeviceWidth-10, GLCDDeviceHeight-10,GLCDDeviceWidth, GLCDDeviceHeight, TFT_RED
+
+    wait 100 ms
+
+end

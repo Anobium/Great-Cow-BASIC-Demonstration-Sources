@@ -26,30 +26,30 @@
 '''@date   	23.02.15
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 16F1937, 32
-#OPTION Explicit
+; ----- Configuration
+ #chip 16F1937, 32
+ #option explicit
 
-#INCLUDE <ds1307.h>
-
-
-
-' ----- Define Hardware settings
-Dir setBut In
-Dir modeBut In
-
-' Define Hardware I2C settings for SSP module
-#DEFINE HI2C_BAUD_RATE 400
-#DEFINE HI2C_DATA PORTC.4
-#DEFINE HI2C_CLOCK PORTC.3
-'I2C pins need to be input for SSP module
-Dir HI2C_DATA In
-Dir HI2C_CLOCK In
-'MASTER I2C Device for SSP module
-HI2CMode Master
+ #include <ds1307.h>
 
 
-'       Define I2C settings - CHANGE PORTS
+
+; ----- Define Hardware settings
+  dir setBut in
+  dir modeBut in
+
+; Define Hardware I2C settings for SSP module
+  #define HI2C_BAUD_RATE 400
+  #define HI2C_DATA PORTC.4
+  #define HI2C_CLOCK PORTC.3
+  ;I2C pins need to be input for SSP module
+  Dir HI2C_DATA in
+  Dir HI2C_CLOCK in
+  ;MASTER I2C Device for SSP module
+  HI2CMode Master
+
+
+;       Define I2C settings - CHANGE PORTS
 '       #define I2C_MODE Master
 '       #define I2C_DATA PORTC.4
 '       #define I2C_CLOCK PORTC.3
@@ -58,55 +58,43 @@ HI2CMode Master
 '       ;#define I2C_CLOCK_DELAY 10 us      ;width of clock pulse on SCL
 '       ;#define I2C_END_DELAY   10 us      ;interval between clock pulses
 
-' THIS CONFIG OF THE SERIAL PORT WORKS WITH max232 THEN TO PC
-' USART settings
-#DEFINE USART_BAUD_RATE 9600
-Dir PORTc.6 Out
-Dir PORTc.7 In
-#DEFINE USART_DELAY 10 ms
-#DEFINE USART_BLOCKING
-Wait 500 ms
-'sound bell on terminal
-HSerSend 7
+ ' THIS CONFIG OF THE SERIAL PORT WORKS WITH max232 THEN TO PC
+ ' USART settings
+  #define USART_BAUD_RATE 9600
+  Dir PORTc.6 Out
+  Dir PORTc.7 In
+  #define USART_DELAY 10 ms
+  #define USART_BLOCKING
+  wait 500 ms
+  HSerSend 7                          ;sound bell on terminal
 
 
-'0 is US or 1 is UK style
-#DEFINE clocktype   0
-'settling time for switches
-#DEFINE debounce    50 ms
-'delay time for pushbutton
-#DEFINE delay       150 ms
-'flag for pressed pushbutton
-#DEFINE pressed     1
-'Set pushbutton
-#DEFINE setBut      portb.0
-'Mode pushbutton
-#DEFINE modeBut     portb.1
+  #define clocktype   0               ;0 is US or 1 is UK style
+  #define debounce    50 mS            ;settling time for switches
+  #define delay       150 mS          ;delay time for pushbutton
+  #define pressed     1               ;flag for pressed pushbutton
+  #define setBut      portb.0         ;Set pushbutton
+  #define modeBut     portb.1         ;Mode pushbutton
 
-'a reference to the alarm 0
-#DEFINE Alarm0 0x00
-'a reference to the alarm 1
-#DEFINE Alarm1 0x01
+  #define Alarm0 0x00                 ;a reference to the alarm 0
+  #define Alarm1 0x01                 ;a reference to the alarm 1
 
 
-'----- Variables
+;----- Variables
 
-Dim DAYSMAX, DAYSMAX As Byte
-Dim changed As BIT
-Dim hour, min, sec, am_pm As Byte
-Dim oldsec As Byte
-Dim date, month, year, DOW As Byte
-Dim mode, Oldmode, dayMax As Byte
-'      init value
-oldsec = 255
+  Dim DAYSMAX, DAYSMAX as Byte
+  dim changed as bit
+  dim hour, min, sec, am_pm as byte
+  dim oldsec as byte
+  dim date, month, year, DOW as byte
+  dim mode, Oldmode, dayMax as byte
+  oldsec = 255                        ;      init value
 
-'----- Tables
+;----- Tables
 
-'# of days in months
-Table monthDays
+  table monthDays                     ;# of days in months
     31
-    'leap years only
-    29
+    29                                ;leap years only
     31
     30
     31
@@ -117,549 +105,446 @@ Table monthDays
     31
     30
     31
-End Table
+  end table
 
-'----- Program
+;----- Program
 
-CLS
+  CLS
 
-#IFDEF HI2C_DATA
-    Locate 0, 12
-    Print "i2cHW"
-    ' is device present?
-    HI2CReStart
-    HI2CSend(DS_AddrWrite)
-    HI2CStop
+  #ifdef HI2C_DATA
+        Locate 0, 12
+        Print "i2cHW"
+        HI2CReStart                          ; is device present?
+        HI2CSend(DS_AddrWrite)
+        HI2CStop
 
-    If HI2CAckpollState = TRUE  Then
-        ' is device present?
-        ' user message
-        Print "No DS1307"
-        Locate 1,0
-        ' user message
-        Print "Stopped"
-    End
-End If
-#ENDIF
+        if HI2CAckPollState = True  then  ; is device present?
+           Print "No DS1307"              ; user message
+           locate 1,0
+           Print "Stopped"                ; user message
+           end
+        end if
+  #endif
 
-#IFDEF I2C_DATA
-    Locate 0, 12
-    Print "i2cSW"
-    ' is device present?
-    I2CStart
-    I2CSend(DS_AddrWrite)
-    I2CStop
+  #ifdef I2C_DATA
+        Locate 0, 12
+        Print "i2cSW"
+        I2CStart                          ; is device present?
+        I2CSend(DS_AddrWrite)
+        I2CStop
 
-    If I2CSendState = FALSE  Then
-        ' is device present?
-        ' user message
-        Print "No DS1307"
-        Locate 1,0
-        ' user message
-        Print "Stopped"
-    End
-End If
-#ENDIF
+        if I2CSendState = False  then     ; is device present?
+           Print "No DS1307"              ; user message
+           locate 1,0
+           Print "Stopped"                ; user message
+           end
+        end if
+   #endif
 
-Locate 0,0
-Print "DS1307"
-Locate 1,0
-Print "Great Cow Basic"
-Wait 2 s
-CLS
+  locate 0,0
+  Print "DS1307"
+  locate 1,0
+  Print "Great Cow Basic"
+  wait 2 s
+  CLS
 
-' example uses of the new functions
-'get initial date
-DS1307_ReadDate(DOW, date, month, year)
-'and the current mode
-DS1307_ReadHourMode(mode)
-'update hour mode from RTC
-DS1307_SetHourMode(mode)
-'and, ensure the clock is running
-DS1307_EnableOscillator( TRUE )
+  ; example uses of the new functions
+  DS1307_ReadDate(DOW, date, month, year)   ;get initial date
+  DS1307_ReadHourMode(mode)                 ;and the current mode
+  DS1307_SetHourMode(mode)                  ;update hour mode from RTC
+  DS1307_EnableOscillator( true )           ;and, ensure the clock is running
 
-'and, turn off output
-DS1307_SetSQW 0
+  DS1307_SetSQW 0                           ;and, turn off output
 
 
 
-'Main body of program commences here.
-'get initial date
-DS1307_ReadDate(DOW, date, month, year)
-'and the current mode
-DS1307_ReadHourMode(mode)
+;Main body of program commences here.
+  DS1307_ReadDate(DOW, date, month, year)   ;get initial date
+  DS1307_ReadHourMode(mode)                 ;and the current mode
 
 
-Do
+  do
 
-    'show time and date
-    updateDisp
-    If setBut = pressed Then
-        'change time and date
-        changeSetting
-    End If
+    updateDisp                        ;show time and date
+    if setBut = pressed then
+      changeSetting                   ;change time and date
+    end if
 
-    If modeBut = pressed Then
-        '12 or 24 hour mode
-        changeMode
-    End If
+    if modeBut = pressed then
+      changeMode                      ;12 or 24 hour mode
+    end if
 
 
-Loop
-End
-'----- Subroutines
+  loop
+end
+  ;----- Subroutines
 
-Sub printTime
-    If mode = 24 Then
-        If hour < 10 Then
-            'left pad with zero
-            Print "0"
-        End If
-    End If
+  sub printTime
+    if mode = 24 then
+      if hour < 10 then               ;left pad with zero
+        Print "0"
+      end if
+    end if
     Print hour
 
     Print ":"
-    If min < 10 Then
-        'left pad with zero
-        Print "0"
-    End If
+    if min < 10 then                  ;left pad with zero
+      Print "0"
+    end if
     Print min
 
     Print ":"
-    If sec < 10 Then
-        'left pad with zero
-        Print "0"
-    End If
+    if sec < 10 then                  ;left pad with zero
+      Print "0"
+    end if
     Print sec
 
-    If mode = 12 Then
-        'Print a.m or p.m
-        If am_pm Then
-            'only in 12-hour mode
-            Print " p.m. "
-        Else
-            Print " a.m. "
-        End If
-    Else
-        'wipe out garbage
-        Print "     "
-    End If
-End Sub
+    if mode = 12 then                 ;Print a.m or p.m
+      if am_pm then                   ;only in 12-hour mode
+        Print " p.m. "
+      else
+        Print " a.m. "
+      end if
+    else
+      Print "     "                   ;wipe out garbage
+    end if
+  end sub
 
-'-----
+  ;-----
 
-Sub printDate
-    'day of the week
-    Select Case DOW
-    Case 1:
+  sub printDate
+    select case DOW                   ;day of the week
+      case 1:
         Print "Sun."
-    Case 2:
+      case 2:
         Print "Mon."
-    Case 3:
+      case 3:
         Print "Tue."
-    Case 4:
+      case 4:
         Print "Wed."
-    Case 5:
+      case 5:
         Print "Thu."
-    Case 6:
+      case 6:
         Print "Fri."
-    Case 7:
+      case 7:
         Print "Sat."
-    Case Else
+      case else
         Print "Err."
-    End Select
+    end select
 
-    If clocktype = 0 Then
-        Print month
-        Print "/"
-        Print date
-        'make four-digit year
-        Print "/20"
-        If year < 10 Then
-            Print "0"
-        End If
-    Else
-        Print date
-        Print "/"
-        Print month
-        'make four-digit year
-        Print "/20"
-        If year < 10 Then
-            Print "0"
-        End If
-    End If
+    if clocktype = 0 then
+      Print month
+      Print "/"
+      Print date
+      Print "/20"                       ;make four-digit year
+      if year < 10 then
+        Print "0"
+      end if
+    else
+      Print date
+      Print "/"
+      Print month
+      Print "/20"                       ;make four-digit year
+      if year < 10 then
+        Print "0"
+      end if
+    end if
     Print year
-    'blank any garbage
-    Print " "
-End Sub
+    Print " "                        ;blank any garbage
+  end sub
 
-'-----
+  ;-----
 
-Sub updateDisp
-    'for best efficiency, date is only updated once a day
+  sub updateDisp
+    ;for best efficiency, date is only updated once a day
     DS1307_ReadTime(hour, min, sec, am_pm)
-    If oldsec <> sec Then
-        If !(hour | min | sec) Then
-            'time to update
-            DS1307_ReadDate(DOW, date, month, year)
-        End If
+    if oldsec <> sec then
+      if !(hour | min | sec) then       ;time to update
+        DS1307_ReadDate(DOW, date, month, year)
+      end if
 
-        'home the cursor
-        Locate 0,0
-        'show time
-        printTime
+      locate 0,0                        ;home the cursor
+      printTime                         ;show time
 
-        'show the date
-        Locate 1,0
-        printDate
-        oldsec =  sec
-    End If
-End Sub
+      locate 1,0                        ;show the date
+      printDate
+      oldsec =  sec
+    end if
+  end sub
 
-'-----
+  ;-----
 
-Sub changeSetting
-    'assume no change will be made
-    changed = FALSE
-    'and the current mode
-    DS1307_ReadHourMode(Oldmode)
-    'ensure the display is correct
-    mode = 24
-    'change settings in 24-hour mode
-    DS1307_SetHourMode(24)
+  sub changeSetting
+    changed = false                   ;assume no change will be made
+    DS1307_ReadHourMode(Oldmode)      ;and the current mode
+    mode = 24                         ;ensure the display is correct
+    DS1307_SetHourMode(24)            ;change settings in 24-hour mode
 
-    'wait for Set release
-    Do While setBut = pressed
-        Wait debounce
-    Loop
+    do while setBut = pressed         ;wait for Set release
+      wait debounce
+    loop
 
-    Wait While ( setBut = pressed ) OR ( modeBut = pressed )
+    wait while ( setBut = pressed ) or ( modeBut = pressed )
 
-    If clocktype = 0 Then
-        ' handle US and UK clock type
-        SetMonth
-        SetDate
-    Else
-        SetDate
-        SetMonth
-    End If
+    if clocktype = 0 then             ; handle US and UK clock type
+       SetMonth
+       SetDate
+    else
+       SetDate
+       SetMonth
+    end if
     SetYear
 
-    '***** Day of the Week
+    ;***** Day of the Week
 
-    CLS
+    cls
     Print "Set Weekday:"
-    Locate 1,0
+    locate 1,0
     printDate
 
-    Do
-        'Mode button held
-        Do While modeBut = pressed
-            'increment while pressed
-            DOW++
-            If DOW > 7 Then
-                '1 = Sunday, etc.
-                DOW = 1
-            End If
+    do
+      do while modeBut = pressed      ;Mode button held
+        DOW++                         ;increment while pressed
+        if DOW > 7 then               ;1 = Sunday, etc.
+          DOW = 1
+        end if
 
-            'Print updated display
-            Locate 1,0
-            printDate
-            'wait for repeat
-            Wait While modeBut = pressed
-            'a change was made
-            changed = TRUE
-        Loop
-    Loop While setBut <> pressed
+        locate 1,0                    ;Print updated display
+        printDate
+        wait while modeBut = pressed  ;wait for repeat
+        changed = true                ;a change was made
+      loop
+    loop while setBut <> pressed
 
-    'wait for Set release
-    Do While setBut = pressed
-        Wait debounce
-    Loop
+    do while setBut = pressed         ;wait for Set release
+      wait debounce
+    loop
 
-    '***** Hour
+    ;***** Hour
 
-    CLS
+    cls
     Print "Set Hours:"
-    Locate 1,0
-    If OldMode = 12 AND am_pm Then
-        ' make correction of AM_PM mode by adding 12 hours to handle mode changes
-        hour = hour + 12
-    End If
+    locate 1,0
+    if OldMode = 12 and am_pm then    ; make correction of AM_PM mode by adding 12 hours to handle mode changes
+       hour = hour + 12
+    end if
 
     printTime
 
-    Do
-        'Mode button held
-        Do While modeBut = pressed
-            'increment while pressed
-            hour++
-            If hour > 23 Then
-                'remember, set in 24-hour mode
-                hour = 0
-            End If
+    do
+      do while modeBut = pressed      ;Mode button held
+        hour++                        ;increment while pressed
+        if hour > 23 then             ;remember, set in 24-hour mode
+          hour = 0
+        end if
 
-            'Print updated display
-            Locate 1,0
-            printTime
-            'wait for repeat
-            Wait While modeBut = pressed
-            'a change was made
-            changed = TRUE
-        Loop
-    Loop While setBut <> pressed
+        locate 1,0                    ;Print updated display
+        printTime
+        wait while modeBut = pressed  ;wait for repeat
+        changed = true                ;a change was made
+      loop
+    loop while setBut <> pressed
 
-    'wait for Set release
-    Do While setBut = pressed
-        Wait debounce
-    Loop
+    do while setBut = pressed         ;wait for Set release
+      wait debounce
+    loop
 
-    '***** Minutes
+    ;***** Minutes
 
-    CLS
+    cls
     Print "Set Minutes:"
-    Locate 1,0
+    locate 1,0
     printTime
 
-    Do
-        'Mode button held
-        Do While modeBut = pressed
-            'increment while pressed
-            min++
-            If min > 59 Then
-                '0 to 59 minutes
-                min = 0
-            End If
+    do
+      do while modeBut = pressed      ;Mode button held
+        min++                         ;increment while pressed
+        if min > 59 then              ;0 to 59 minutes
+          min = 0
+        end if
 
-            'Print updated display
-            Locate 1,0
-            printTime
-            'wait for repeat
-            Wait While modeBut = pressed
-            'a change was made
-            changed = TRUE
-        Loop
-    Loop While setBut <> pressed
+        locate 1,0                    ;Print updated display
+        printTime
+        wait while modeBut = pressed  ;wait for repeat
+        changed = true                ;a change was made
+      loop
+    loop while setBut <> pressed
 
-    'wait for Set release
-    Do While setBut = pressed
-        Wait debounce
-    Loop
+    do while setBut = pressed         ;wait for Set release
+      wait debounce
+    loop
 
-    '***** Second
+    ;***** Second
 
-    CLS
+    cls
     Print "Set Seconds:"
-    Locate 1,0
+    locate 1,0
     printTime
 
-    Do
-        'Mode button held
-        Do While modeBut = pressed
-            'increment while pressed
-            sec++
-            If sec > 59 Then
-                '0 to 59 seconds
-                sec = 0
-            End If
+    do
+      do while modeBut = pressed      ;Mode button held
+        sec++                         ;increment while pressed
+        if sec > 59 then              ;0 to 59 seconds
+          sec = 0
+        end if
 
-            'Print updated display
-            Locate 1,0
-            printTime
-            'wait for repeat
-            Wait While modeBut = pressed
-            'a change was made
-            changed = TRUE
-        Loop
-    Loop While setBut <> pressed
+        locate 1,0                    ;Print updated display
+        printTime
+        wait while modeBut = pressed  ;wait for repeat
+        changed = true                ;a change was made
+      loop
+    loop while setBut <> pressed
 
-    'wait for Set release
-    Do While setBut = pressed
-        Wait debounce
-    Loop
+    do while setBut = pressed         ;wait for Set release
+      wait debounce
+    loop
 
-    '***** Execute the new settings
+    ;***** Execute the new settings
 
-    If changed Then
-        CLS
-        Print "Press Set, or"
-        Locate 1,0
-        Print "Mode to revert"
+    if changed then
+      cls
+      Print "Press Set, or"
+      locate 1,0
+      Print "Mode to revert"
 
-        'wait for the Set button
-        Do While (setBut <> pressed)
-            Wait debounce
-            If ModeBut = pressed Then
-                'clear last message
-                CLS
-                'restore current mode
-                DS1307_SetHourMode(Oldmode)
-                'do not set, exit set routine
-                Exit Sub
-            End If
-        Loop
+      do while (setBut <> pressed)          ;wait for the Set button
+        wait debounce
+        if ModeBut = pressed then
+           cls                               ;clear last message
+           DS1307_SetHourMode(Oldmode)       ;restore current mode
+           exit Sub                          ;do not set, exit set routine
+        end if
+      loop
 
-        'change settings in 24-hour mode
-        DS1307_SetHourMode(24)
-        DS1307_SetClock(hour, min, sec, DOW, date, month, year)
-    End If
+      DS1307_SetHourMode(24)                 ;change settings in 24-hour mode
+      DS1307_SetClock(hour, min, sec, DOW, date, month, year)
+    end if
 
-    'wait for Set release
-    Do While (setBut = pressed)
-    Loop
+    do while (setBut = pressed)       ;wait for Set release
+    loop
 
-    'let it settle
-    Wait debounce
-    'clear last message
-    CLS
-    'restore current mode
-    DS1307_SetHourMode(Oldmode)
-    'ensure the clock is running
-    DS1307_EnableOscillator( TRUE )
-    'restore mode
-    mode = Oldmode
-End Sub
+    wait debounce                     ;let it settle
+    cls                               ;clear last message
+    DS1307_SetHourMode(Oldmode)      ;restore current mode
+    DS1307_EnableOscillator( true )  ;ensure the clock is running
+    mode = Oldmode                    ;restore mode
+  end sub
 
-'-----
+  ;-----
 
-Sub changeMode
-    'change settings in 24-hour mode
-    DS1307_SetHourMode(24)
+  sub changeMode
+    DS1307_SetHourMode(24)            ;change settings in 24-hour mode
 
-    If mode = 12 Then
-        'toggle between 12 and 24
-        mode = 24
-    Else
-        mode = 12
-    End If
+    if mode = 12 then                 ;toggle between 12 and 24
+      mode = 24
+    else
+      mode = 12
+    end if
 
-    'change to new mode
-    DS1307_SetHourMode(mode)
+    DS1307_SetHourMode(mode)          ;change to new mode
 
-    'wait for a release
-    Do While modeBut = pressed
-        Wait debounce
-    Loop
-End Sub
+    do while modeBut = pressed        ;wait for a release
+      wait debounce
+    loop
+  end sub
 
-Sub setMonth
-    '***** Month
-    CLS
+  sub setMonth
+    ;***** Month
+    cls
     Print "Set Month:"
-    Locate 1,0
+    locate 1,0
     printDate
 
-    Do
-        'Mode button held
-        Do While modeBut = pressed
-            'increment while pressed
-            month++
-            If month > 12 Then
-                month = 1
-            End If
+    do
+      do while modeBut = pressed      ;Mode button held
+        month++                       ;increment while pressed
+        if month > 12 then
+          month = 1
+        end if
 
-            'Print updated display
-            Locate 1,0
-            printDate
-            'wait for repeat
-            Wait While modeBut = pressed
-            'a change was made
-            changed = TRUE
-        Loop
-        Wait debounce
-        'Set moves you on
-    Loop While setBut <> pressed
+        locate 1,0                    ;Print updated display
+        printDate
+        wait while modeBut = pressed  ;wait for repeat
+        changed = true                ;a change was made
+      loop
+      wait debounce
+    loop while setBut <> pressed      ;Set moves you on
 
-    ReadTable monthDays, month, daysMax
+    readTable monthDays, month, daysMax
 
-    'wait for Set release
-    Do While setBut = pressed
-        Wait debounce
-    Loop
-End Sub
+    do while setBut = pressed         ;wait for Set release
+      wait debounce
+    loop
+  end Sub
 
 
 
-Sub SetDate
-    '***** Date
+  sub SetDate
+    ;***** Date
 
-    CLS
+    cls
     Print "Set Date:"
-    Locate 1,0
+    locate 1,0
     printDate
-    ReadTable monthDays, month, daysMax
-    Do
-        'Mode button held
-        Do While modeBut = pressed
-            'increment while pressed
-            date++
-            If date > daysMax Then
-                'stay within legal days
-                date = 1
-            End If
+    readTable monthDays, month, daysMax
+    do
+      do while modeBut = pressed      ;Mode button held
+        date++                        ;increment while pressed
+        if date > daysMax then        ;stay within legal days
+          date = 1
+        end if
 
-            'Print updated display
-            Locate 1,0
-            printDate
-            'wait for repeatt
-            Wait While modeBut = pressed
-            'a change was made
-            changed = TRUE
-        Loop
-        Wait debounce
-    Loop While setBut <> pressed
+        locate 1,0                    ;Print updated display
+        printDate
+        wait while modeBut = pressed  ;wait for repeatt
+        changed = true                ;a change was made
+      loop
+      wait debounce
+    loop while setBut <> pressed
 
-    'wait for Set release
-    Do While setBut = pressed
-        Wait debounce
-    Loop
-End Sub
+    do while setBut = pressed         ;wait for Set release
+      wait debounce
+    loop
+  end sub
 
 
-Sub SetYear
-    '***** Year
+  sub SetYear
+    ;***** Year
 
-    CLS
+    cls
     Print "Set Year:"
-    Locate 1,0
+    locate 1,0
     printDate
 
-    Do
-        'Mode button held
-        Do While modeBut = pressed
-            'increment while pressed
-            year++
-            If year > 99 Then
-                'this millennium only
-                year = 0
-            End If
+    do
+      do while modeBut = pressed      ;Mode button held
+        year++                        ;increment while pressed
+        if year > 99 then             ;this millennium only
+          year = 0
+        end if
 
-            'Print updated display
-            Locate 1,0
-            printDate
-            'wait for repeat
-            Wait While modeBut = pressed
-            'a change was made
-            changed = TRUE
-        Loop
-        Wait debounce
-    Loop While setBut <> pressed
+        locate 1,0                    ;Print updated display
+        printDate
+        wait while modeBut = pressed  ;wait for repeat
+        changed = true                ;a change was made
+      loop
+      wait debounce
+    loop while setBut <> pressed
 
-    'wait for Set release
-    Do While setBut = pressed
-        Wait debounce
-    Loop
+    do while setBut = pressed         ;wait for Set release
+      wait debounce
+    loop
 
 
-End Sub
+  end sub
 
 
-#DEFINE Locate ANSI_rev
-#DEFINE CLS ANSIERASECREEN
-#DEFINE Print HSerPrint
+#define locate ANSI_rev
+#define CLS ANSIERASECREEN
+#define print hserprint
 
 ' Position cursor on Terminal
-Sub ANSI ( In xpos, In ypos )
+Sub ANSI ( IN xpos, IN ypos )
     HSerSend 27
     HSerPrint "["
     HSerPrint ypos
@@ -669,7 +554,7 @@ Sub ANSI ( In xpos, In ypos )
 End Sub
 
 ' Position cursor on Terminal
-Sub ANSI_rev ( In ypos, In xpos )
+Sub ANSI_rev ( IN ypos, IN xpos )
     ypos++
     HSerSend 27
     HSerPrint "["
@@ -696,6 +581,6 @@ Sub ANSIERASECREEN
 
 
 
-End Sub
+end Sub
 
 

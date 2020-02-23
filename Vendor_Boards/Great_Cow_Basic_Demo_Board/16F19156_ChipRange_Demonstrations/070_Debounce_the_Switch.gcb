@@ -17,81 +17,80 @@
 '''@date    03/05/2018
 '''****
 ' ----- Configuration
-'Chip Settings.
-#CHIP 16F19156, 32
-#OPTION Explicit
+    'Chip Settings.
+    #chip 16F19156, 32
+    #option Explicit
 
-'' -------------------PORTA----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---------------------------------
-''-----------------------------------------
-''
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
 
-'' -------------------PORTB----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    -------| O | ----------| O | I |-
-''-----------------------------------------
-''
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | ----------| O | I |-
+    ''-----------------------------------------
+    ''
 
-'' ------------------PORTC-----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---------------------------------
-''-----------------------------------------
-''
-
-
-#DEFINE LEDD1 PORTB.1
-#DEFINE LEDD2 PORTB.5
-#DEFINE Potentiometer   PORTC.5
-#DEFINE SwitchIn        PORTB.0
-
-Dir     LEDD1         Out
-Dir     LEDD2         Out
-'this is the ANB4 port
-Dir     Potentiometer In
-Dir     SwitchIn      In
-
-'*****************************************************************************************************
-'Main program commences here.. everything before this is setup for the board.
-
-Dim lastKeyDown As Byte
-
-'Debouncing a switch
-
-Do Forever
-    Wait 10 ms
-
-    If  keyPressed( lastKeyDown ) = TRUE Then
-
-        'push button pressed
-        LEDD1 = !LEDD1
-
-    End If
-
-Loop
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
 
 
-Function  keyPressed ( In lastKeyDown )
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define Potentiometer   PORTC.5
+    #define SwitchIn        PORTB.0
 
-    Dim actKeyDown As Byte
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     Potentiometer In   'this is the ANB4 port
+    Dir     SwitchIn      In
 
-    If ( !SwitchIn ) Then
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
 
-        actKeyDown = TRUE
+     dim lastKeyDown as Byte
 
-    Else
+    'Debouncing a switch
 
-        actKeyDown = FALSE
+      Do forever
+                wait 10 ms
 
-    End If
+                if  keyPressed( lastKeyDown ) = true then
 
-    If (actKeyDown <> lastKeyDown) Then
-        lastKeyDown = actKeyDown
-        keyPressed =  actKeyDown
-    Else
-        keyPressed = FALSE
-    End If
+                    'push button pressed
+                    LEDD1 = !LEDD1
+
+                end if
+
+      loop
+
+
+  function  keyPressed ( in lastKeyDown )
+
+      dim actKeyDown as byte
+
+        if ( !SwitchIn ) then
+
+            actKeyDown = true
+
+        else
+
+            actKeyDown = false
+
+        end if
+
+        if (actKeyDown <> lastKeyDown) then
+            lastKeyDown = actKeyDown
+            keyPressed =  actKeyDown
+        else
+            keyPressed = false
+        end if
 
 
 
-End Function
+  end function

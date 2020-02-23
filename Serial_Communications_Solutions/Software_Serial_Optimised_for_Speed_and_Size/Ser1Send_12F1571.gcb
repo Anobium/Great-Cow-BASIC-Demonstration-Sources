@@ -1,4 +1,4 @@
-'''A demonstration program for GCB
+    '''A demonstration program for GCB
 '''---------------------------------------------------------------------------------
 '''This program uses the SoftSerial library for serial sending.
 ''' SoftSerial uses ASM routines for minimal overhead.
@@ -9,35 +9,26 @@
 '''@date    16.05.2019
 '''********************************************************************************
 
-#CHIP 12f1571, 4
-' all variables must be declared !
-#OPTION Explicit
+    #chip 12f1571, 4
+    #option explicit                     ' all variables must be declared !
 
-' ----- Include library
-#INCLUDE <softserial.h>
+    ; ----- Include library
+    #include <softserial.h>
 
-'write 0x55 to HEF location 127
-HEFWrite (127,0x55)
+    HEFWrite (127,0x55)   'write 0x55 to HEF location 127
 
-' ----- Config Serial UART :
-' baudrate must be defined
-#DEFINE SER1_BAUD 9600
-' Config I/O ports for transmitting:
-' I/O port (without .bit) must be defined
-#DEFINE SER1_TXPORT PORTA
-' portbit  must be defined
-#DEFINE SER1_TXPIN 0
+    ; ----- Config Serial UART :
+    #define SER1_BAUD 9600   ; baudrate must be defined
+    ; Config I/O ports for transmitting:
+    #define SER1_TXPORT PORTA  ; I/O port (without .bit) must be defined
+    #define SER1_TXPIN 0       ; portbit  must be defined
 
-Dim adval As Word
-'read location 127 to variable.
-HEFRead (127,adval)
-Do
-    'new line in Terminal
-    Ser1Send  13
-    Ser1Send  10
-    'send a text
-    Ser1Print "Software-UART: 0x"
-    'send the value
-    Ser1Print Hex(adval & 0xFF)
-    Wait 100 ms
-Loop
+    dim adval as word
+    HEFRead (127,adval)   'read location 127 to variable.
+    do
+        Ser1Send  13   'new line in Terminal
+        Ser1Send  10
+        Ser1Print "Software-UART: 0x"  'send a text
+        Ser1Print hex(adval & 0xFF)  'send the value
+        wait 100 ms
+    loop

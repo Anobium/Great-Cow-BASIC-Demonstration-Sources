@@ -1,25 +1,25 @@
 
 '
-#CHIP 16f877a, 4
+#chip 16f877a, 4
 
-Dir portc.2 Out
+    DIR portc.2 out
 
-'Main code
-'freq 40khz
-'variable duty from 0% to 100%
-Do
-    'Turn up brightness over 2.5 seconds
-    For Bright = 1 To 255
-        HPWM 1, 40, Bright
-        Wait 10 ms
-    Next
-    'Turn down brightness over 2.5 seconds
-    For Bright = 255 To 1
-        HPWM 1, 40, Bright
-        Wait 10 ms
-    Next
-Loop
+    'Main code
+    'freq 40khz
+    'variable duty from 0% to 100%
+    do
+        'Turn up brightness over 2.5 seconds
+        For Bright = 1 to 255
+            HPWM 1, 40, Bright
+            wait 10 ms
+        next
+        'Turn down brightness over 2.5 seconds
+        For Bright = 255 to 1
+            HPWM 1, 40, Bright
+            wait 10 ms
+        next
+    loop
 
-End
+end
 
 '#define AddHPWMCCPExit1

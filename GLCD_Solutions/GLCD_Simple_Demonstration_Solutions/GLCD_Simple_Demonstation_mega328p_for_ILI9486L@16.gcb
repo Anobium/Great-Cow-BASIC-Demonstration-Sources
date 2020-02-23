@@ -14,47 +14,40 @@
 '''@date    24.01.2019
 '''********************************************************************************
 
-'Chip Settings.
-#CHIP mega328p, 16
-#OPTION Explicit
+  'Chip Settings.
+  #chip mega328p, 16
+  #option explicit
 
-#INCLUDE <glcd.h>
-#INCLUDE <uno_mega328p.h >
+    #include <glcd.h>
+    #include <uno_mega328p.h >
 
-#DEFINE GLCD_TYPE GLCD_TYPE_ILI9486L
+    #define GLCD_TYPE GLCD_TYPE_ILI9486L
 
-'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-' Data command line
-#DEFINE GLCD_DC       DIGITAL_8
-' Chip select line
-#DEFINE GLCD_CS       DIGITAL_10
-' Reset line
-#DEFINE GLCD_RST      DIGITAL_9
+    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+    #define GLCD_DC       DIGITAL_8         ' Data command line
+    #define GLCD_CS       DIGITAL_10        ' Chip select line
+    #define GLCD_RST      DIGITAL_9         ' Reset line
 
-' Data in | MISO
-#DEFINE GLCD_DI       DIGITAL_12
-' Data out | MOSI
-#DEFINE GLCD_DO       DIGITAL_11
-' Clock Line
-#DEFINE GLCD_SCK      DIGITAL_13
+    #define GLCD_DI       DIGITAL_12          ' Data in | MISO
+    #define GLCD_DO       DIGITAL_11          ' Data out | MOSI
+    #define GLCD_SCK      DIGITAL_13          ' Clock Line
 
-' remove/comment out if you want to use software SPI.
-#DEFINE ILI9486L_HardwareSPI
+    #define ILI9486L_HardwareSPI    ' remove/comment out if you want to use software SPI.
 
 
 
 'main program start here
 
-'GLCD selected extension font set. ASCII characters 31-254, the extended font uses 1358 bytes of program memory
-#DEFINE GLCD_EXTENDEDFONTSET1
-GLCDfntDefaultSize = 1
+    'GLCD selected extension font set. ASCII characters 31-254, the extended font uses 1358 bytes of program memory
+    #define GLCD_EXTENDEDFONTSET1
+    GLCDfntDefaultsize = 1
 
 
-'GLCDCLS  supports GLCDBackground as default
-'GLCDCLS  also support passing color parameter.
-'GLCDCLS [color]
+    'GLCDCLS  supports GLCDBackground as default
+    'GLCDCLS  also support passing color parameter.
+    'GLCDCLS [color]
 
-'Available colors
+    'Available colors
 '      TFT_WHITE
 '      TFT_BLACK
 '      TFT_RED
@@ -75,242 +68,234 @@ GLCDfntDefaultSize = 1
 '      TFT_GREENYELLOW
 '      TFT_PINK
 
-Dim CCOUNT, BYTENUMBER, OLDFONT, OLDFONT As Byte
+    Dim CCOUNT, BYTENUMBER, OLDFONT, OLDFONT as Byte
 
-CCount = 31
-Dim longNumber As Long
-' max value = 4294967290
-longNumber = 0
-Dim wordNumber As Word
-wordNumber = 0
-byteNumber = 0
+    CCount = 31
+    dim longNumber as long
+    longNumber = 0 ' max value = 4294967290
+    dim wordNumber as Word
+    wordNumber = 0
+    byteNumber = 0
 
-'These are not public methods, but, they are included
-'Turn display off
-DSTB_ILI9486L ( Off )
-Wait 2 s
-'Turn display on
-DSTB_ILI9486L ( On )
+    'These are not public methods, but, they are included
+    'Turn display off
+    DSTB_ILI9486L ( off )
+    wait 2 s
+    'Turn display on
+    DSTB_ILI9486L ( on )
 
-Repeat 2
+    repeat 2
 
-    GLCDCLS TFT_BLUE
+            GLCDCLS TFT_BLUE
 
-    GLCDForeground = TFT_MAGENTA
-    GLCDfntDefaultSize = 1
-    GLCDPrint ( 2, 2, "GLCDPrint String" )
-
-
-    GLCDForeground = TFT_WHITE
-    GLCDfntDefaultSize = 2
-    GLCDPrint ( 2, 12, "GLCDPrint String" )
+            GLCDForeground = TFT_MAGENTA
+            GLCDfntDefaultsize = 1
+            GLCDPrint ( 2, 2, "GLCDPrint String" )
 
 
-    GLCDForeground = TFT_YELLOW
-    GLCDfntDefaultSize = 3
-    GLCDPrint ( 2,30, "GLCDPrint String" )
-
-    longNumber = 0xFFFFFFFF
-    wordNumber = 0xFFFF
-    byteNumber = 0xFF
-
-    GLCDCLS TFT_WHITE
-
-    GLCDForeground = TFT_MAGENTA
-    GLCDfntDefaultSize = 1
-    GLCDPrint ( 2, 2, bytenumber )
+            GLCDForeground = TFT_WHITE
+            GLCDfntDefaultsize = 2
+            GLCDPrint ( 2, 12, "GLCDPrint String" )
 
 
-    GLCDForeground = TFT_BLACK
-    GLCDfntDefaultSize = 2
-    GLCDPrint ( 2, 12, wordNumber )
+            GLCDForeground = TFT_YELLOW
+            GLCDfntDefaultsize = 3
+            GLCDPrint ( 2,30, "GLCDPrint String" )
+
+            longNumber = 0xFFFFFFFF
+            wordNumber = 0xFFFF
+            byteNumber = 0xFF
+
+            GLCDCLS TFT_WHITE
+
+            GLCDForeground = TFT_MAGENTA
+            GLCDfntDefaultsize = 1
+            GLCDPrint ( 2, 2, bytenumber )
 
 
-    GLCDForeground = TFT_CYAN
-    GLCDfntDefaultSize = 3
-    GLCDPrint ( 2,30, longnumber )
-
-    GLCDRotate ( Portrait_Rev )
-
-End Repeat
-
-GLCDRotate ( Portrait )
-GLCDCLS TFT_BLUE
-'Set font size.
-GLCDfntDefaultSize = 1
-' max value = 4294967290
-longNumber = 0
-wordNumber = 0
-byteNumber = 0
-
-'Using the global variable GLCDfntDefaultsize to show the different capabilities
-Select Case GLCDfntDefaultSize
-
-Case 1
-
-    ShowCase1
-
-Case 2
-
-    ShowCase2
-
-Case 3
-
-    GLCDDrawString (2, 1, "GLCD font")
-    GLCDDrawString (2, 25, "size = 3")
-    Box 0,0,ILI9486L_GLCD_WIDTH-1, ILI9486L_GLCD_HEIGHT-1, TFT_BLUE
-    Box ILI9486L_GLCD_WIDTH-5, ILI9486L_GLCD_HEIGHT-5,ILI9486L_GLCD_WIDTH-1, ILI9486L_GLCD_HEIGHT-1, TFT_WHITE
-
-End Select
-
-End
+            GLCDForeground = TFT_BLACK
+            GLCDfntDefaultsize = 2
+            GLCDPrint ( 2, 12, wordNumber )
 
 
-Sub ShowCase1
+            GLCDForeground = TFT_CYAN
+            GLCDfntDefaultsize = 3
+            GLCDPrint ( 2,30, longnumber )
 
-    GLCDDrawString (2, 1, "GCB", TFT_WHITE )
-    GLCDDrawString (56,1,"v.98", TFT_YELLOW )
-    GLCDDrawString (2, 16, "DrawStr", TFT_WHITE )
+            GLCDRotate ( Portrait_Rev )
 
-    GLCDDrawString ( 60, 31, "Long Number" )
-    GLCDDrawString ( 60, 39, "Word Number" )
-    GLCDDrawString ( 60, 47, "Byte Number" )
+    end Repeat
 
-    GLCDDrawString ( 74, 16, "Asc:" )
+  GLCDRotate ( Portrait )
+  GLCDCLS TFT_BLUE
+  'Set font size.
+  GLCDfntDefaultsize = 1
+  longNumber = 0 ' max value = 4294967290
+  wordNumber = 0
+  byteNumber = 0
 
-    Box 0,0,ILI9486L_GLCD_WIDTH-1, ILI9486L_GLCD_HEIGHT-1, TFT_YELLOW
-    Box ILI9486L_GLCD_WIDTH-5, ILI9486L_GLCD_HEIGHT-5,ILI9486L_GLCD_WIDTH-1, ILI9486L_GLCD_HEIGHT-1, TFT_WHITE
+    'Using the global variable GLCDfntDefaultsize to show the different capabilities
+    Select Case GLCDfntDefaultsize
 
-    'center
-    Circle( ILI9486L_GLCD_WIDTH/2, ILI9486L_GLCD_HEIGHT/2, 50, TFT_LIGHTGREY )
-    FilledCircle( ILI9486L_GLCD_WIDTH/2, ILI9486L_GLCD_HEIGHT/2, 25, TFT_DARKGREY  )
+    Case 1
 
-    Line 0,  ILI9486L_GLCD_HEIGHT-1 , ILI9486L_GLCD_WIDTH/2 +100,  (ILI9486L_GLCD_HEIGHT /2) - 50, TFT_CYAN
-    Line  0, (ILI9486L_GLCD_HEIGHT /2) - 50, ILI9486L_GLCD_WIDTH/2 +100, (ILI9486L_GLCD_HEIGHT /2) - 50, TFT_CYAN
+      ShowCase1
 
-    FilledBox 2,ILI9486L_GLCD_HEIGHT/2+10,42,ILI9486L_GLCD_HEIGHT/2+50, TFT_RED
+    Case 2
 
-    oldfont = GLCDfntDefaultSize
-    GLCDfntDefaultSize = 3
-    GLCDDrawString ( 36, ILI9486L_GLCD_HEIGHT - 30 , "ILI9486L Driver" , TFT_WHITE )
+      ShowCase2
 
-    GLCDfntDefaultSize = 1
-    GLCDDrawString ( ILI9486L_GLCD_WIDTH - 64, 2 , "Jan 2019" , TFT_WHITE )
+    Case 3
 
-    #IFDEF TFT_HardwareSPI
-        GLCDDrawString ( ILI9486L_GLCD_WIDTH - 42, 10 , "HW SPI" , TFT_WHITE )
-    #ENDIF
+      GLCDDrawString (2, 1, "GLCD font")
+      GLCDDrawString (2, 25, "size = 3")
+      box 0,0,ILI9486L_GLCD_WIDTH-1, ILI9486L_GLCD_HEIGHT-1, TFT_BLUE
+      box ILI9486L_GLCD_WIDTH-5, ILI9486L_GLCD_HEIGHT-5,ILI9486L_GLCD_WIDTH-1, ILI9486L_GLCD_HEIGHT-1, TFT_WHITE
 
-    #IFNDEF TFT_HardwareSPI
-        'therefore not 8bit bus
-        #IFNDEF 8Bit_Data_Bus
+  End Select
+
+end
+
+
+sub ShowCase1
+
+        GLCDDrawString (2, 1, "GCB", TFT_WHITE )
+        GLCDDrawString (56,1,"v.98", TFT_YELLOW )
+        GLCDDrawString (2, 16, "DrawStr", TFT_WHITE )
+
+        GLCDDrawString ( 60, 31, "Long Number" )
+        GLCDDrawString ( 60, 39, "Word Number" )
+        GLCDDrawString ( 60, 47, "Byte Number" )
+
+        GLCDDrawString ( 74, 16, "Asc:" )
+
+        box 0,0,ILI9486L_GLCD_WIDTH-1, ILI9486L_GLCD_HEIGHT-1, TFT_YELLOW
+        box ILI9486L_GLCD_WIDTH-5, ILI9486L_GLCD_HEIGHT-5,ILI9486L_GLCD_WIDTH-1, ILI9486L_GLCD_HEIGHT-1, TFT_WHITE
+
+        Circle( ILI9486L_GLCD_WIDTH/2, ILI9486L_GLCD_HEIGHT/2, 50, TFT_LIGHTGREY )            ;center
+        FilledCircle( ILI9486L_GLCD_WIDTH/2, ILI9486L_GLCD_HEIGHT/2, 25, TFT_DARKGREY  )
+
+        line 0,  ILI9486L_GLCD_HEIGHT-1 , ILI9486L_GLCD_WIDTH/2 +100,  (ILI9486L_GLCD_HEIGHT /2) - 50, TFT_CYAN
+        line  0, (ILI9486L_GLCD_HEIGHT /2) - 50, ILI9486L_GLCD_WIDTH/2 +100, (ILI9486L_GLCD_HEIGHT /2) - 50, TFT_CYAN
+
+        filledbox 2,ILI9486L_GLCD_HEIGHT/2+10,42,ILI9486L_GLCD_HEIGHT/2+50, TFT_RED
+
+        oldfont = GLCDfntDefaultsize
+        GLCDfntDefaultsize = 3
+        GLCDDrawString ( 36, ILI9486L_GLCD_HEIGHT - 30 , "ILI9486L Driver" , TFT_WHITE )
+
+        GLCDfntDefaultsize = 1
+        GLCDDrawString ( ILI9486L_GLCD_WIDTH - 64, 2 , "Jan 2019" , TFT_WHITE )
+
+        #ifdef TFT_HardwareSPI
+            GLCDDrawString ( ILI9486L_GLCD_WIDTH - 42, 10 , "HW SPI" , TFT_WHITE )
+        #endif
+
+        #ifndef TFT_HardwareSPI
+          #ifndef 8Bit_Data_Bus  'therefore not 8bit bus
             GLCDDrawString ( ILI9486L_GLCD_WIDTH - 42, 10 , "SW SPI" , TFT_WHITE )
-        #ENDIF
-    #ENDIF
+          #endif
+        #endif
 
-    #IFDEF 8Bit_Data_Bus
-        GLCDDrawString ( ILI9486L_GLCD_WIDTH - 96, 10 , "8Bit_Data_Bus" , TFT_WHITE )
-    #ENDIF
+        #ifdef 8Bit_Data_Bus
+            GLCDDrawString ( ILI9486L_GLCD_WIDTH - 96, 10 , "8Bit_Data_Bus" , TFT_WHITE )
+        #endif
 
 
-    'Revert the font size
-    GLCDfntDefaultSize = oldfont
-    GLCDForeground = TFT_RED
-    BigPrint_ILI9486L ( 100 , ILI9486L_GLCD_HEIGHT - 60 , "Great Cow Basic" )
-    GLCDForeground = TFT_WHITE
-    Do Forever
+        'Revert the font size
+        GLCDfntDefaultsize = oldfont
+        GLCDForeground = TFT_RED
+        BigPrint_ILI9486L ( 100 , ILI9486L_GLCD_HEIGHT - 60 , "Great Cow Basic" )
+        GLCDForeground = TFT_WHITE
+        DO forever
 
-        GLCDPrint ( 144 , 31, longNumber)
-        GLCDPrint ( 144 , 39, Pad( Str(wordnumber),5))
-        GLCDPrint ( 144 , 47, Pad( Str(bytenumber),3))
+            GLCDPrint ( 144 , 31, longNumber)
+            GLCDPrint ( 144 , 39, pad( str(wordnumber),5))
+            GLCDPrint ( 144 , 47, pad( str(bytenumber),3))
 
-        GLCDDrawChar(54, 16, CCount )
-        'Draw a box around the Char below
-        Box 52,15,62,26, TFT_WHITE
+            GLCDDrawChar(54, 16, CCount )
+            Box 52,15,62,26, TFT_WHITE                'Draw a box around the Char below
 
-        GLCDDrawString ( 100, 16 , Pad( Str(CCount),3) )
+            GLCDDrawString ( 100, 16 , pad( str(CCount),3) )
 
-        CCount++
-        If CCount = 0 Then CCount = 31
-        If CCount = 128 Then CCount = 192
-        longNumber = longNumber + 7
+            CCount++
+            if CCount = 0 then CCount = 31
+            if CCount = 128 then CCount = 192
+            longNumber = longNumber + 7
 
-        wordNumber = wordNumber + 3
-        byteNumber++
+            wordNumber = wordNumber + 3
+            byteNumber++
 
-    Loop
+        LOOP
 
-End Sub
+end sub
 
-Sub ShowCase2
+sub ShowCase2
 
-    GLCDDrawString (2, 1,  "GCB",TFT_WHITE)
-    GLCDDrawString (56,1,  "v.98",TFT_YELLOW)
-    GLCDDrawString (2, 18, "DrawStr",TFT_WHITE)
+        GLCDDrawString (2, 1,  "GCB",TFT_WHITE)
+        GLCDDrawString (56,1,  "v.98",TFT_YELLOW)
+        GLCDDrawString (2, 18, "DrawStr",TFT_WHITE)
 
-    GLCDDrawString ( 2, 52, "Long:" )
-    GLCDDrawString ( 2, 70, "Word:" )
-    GLCDDrawString ( 2, 88, "Byte:" )
+        GLCDDrawString ( 2, 52, "Long:" )
+        GLCDDrawString ( 2, 70, "Word:" )
+        GLCDDrawString ( 2, 88, "Byte:" )
 
-    GLCDDrawString ( 128, 18, "Asc:"+"  " )
+        GLCDDrawString ( 128, 18, "Asc:"+"  " )
 
-    Box 0,0,ILI9486L_GLCD_WIDTH-1, ILI9486L_GLCD_HEIGHT-1, TFT_RED
-    Box ILI9486L_GLCD_WIDTH-5, ILI9486L_GLCD_HEIGHT-5,ILI9486L_GLCD_WIDTH-1, ILI9486L_GLCD_HEIGHT-1, TFT_WHITE
+        box 0,0,ILI9486L_GLCD_WIDTH-1, ILI9486L_GLCD_HEIGHT-1, TFT_RED
+        box ILI9486L_GLCD_WIDTH-5, ILI9486L_GLCD_HEIGHT-5,ILI9486L_GLCD_WIDTH-1, ILI9486L_GLCD_HEIGHT-1, TFT_WHITE
 
-    'center
-    Circle( ILI9486L_GLCD_WIDTH/2, ILI9486L_GLCD_HEIGHT/2, 50, TFT_LIGHTGREY )
-    FilledCircle( ILI9486L_GLCD_WIDTH/2, ILI9486L_GLCD_HEIGHT/2, 25, TFT_DARKGREY  )
+        Circle( ILI9486L_GLCD_WIDTH/2, ILI9486L_GLCD_HEIGHT/2, 50, TFT_LIGHTGREY )            ;center
+        FilledCircle( ILI9486L_GLCD_WIDTH/2, ILI9486L_GLCD_HEIGHT/2, 25, TFT_DARKGREY  )
 
-    Line 0,  ILI9486L_GLCD_HEIGHT-1 , ILI9486L_GLCD_WIDTH/2 +100,  (ILI9486L_GLCD_HEIGHT /2) - 50, TFT_CYAN
-    Line  0, (ILI9486L_GLCD_HEIGHT /2) - 50, ILI9486L_GLCD_WIDTH/2 +100, (ILI9486L_GLCD_HEIGHT /2) - 50, TFT_CYAN
+        line 0,  ILI9486L_GLCD_HEIGHT-1 , ILI9486L_GLCD_WIDTH/2 +100,  (ILI9486L_GLCD_HEIGHT /2) - 50, TFT_CYAN
+        line  0, (ILI9486L_GLCD_HEIGHT /2) - 50, ILI9486L_GLCD_WIDTH/2 +100, (ILI9486L_GLCD_HEIGHT /2) - 50, TFT_CYAN
 
-    FilledBox 2,ILI9486L_GLCD_HEIGHT/2+10,42,ILI9486L_GLCD_HEIGHT/2+50, TFT_RED
+        filledbox 2,ILI9486L_GLCD_HEIGHT/2+10,42,ILI9486L_GLCD_HEIGHT/2+50, TFT_RED
 
-    oldfont = GLCDfntDefaultSize
-    GLCDfntDefaultSize = 3
-    GLCDDrawString ( 36, ILI9486L_GLCD_HEIGHT - 30 , "ILI9486L Driver" , TFT_WHITE )
+        oldfont = GLCDfntDefaultsize
+        GLCDfntDefaultsize = 3
+        GLCDDrawString ( 36, ILI9486L_GLCD_HEIGHT - 30 , "ILI9486L Driver" , TFT_WHITE )
 
-    GLCDfntDefaultSize = 1
-    GLCDDrawString ( ILI9486L_GLCD_WIDTH - 64, 2 , "Jan 2019" , TFT_WHITE )
+        GLCDfntDefaultsize = 1
+        GLCDDrawString ( ILI9486L_GLCD_WIDTH - 64, 2 , "Jan 2019" , TFT_WHITE )
 
-    #IFDEF TFT_HardwareSPI
-        GLCDDrawString ( ILI9486L_GLCD_WIDTH - 42, 10 , "HW SPI" , TFT_WHITE )
-    #ENDIF
+        #ifdef TFT_HardwareSPI
+            GLCDDrawString ( ILI9486L_GLCD_WIDTH - 42, 10 , "HW SPI" , TFT_WHITE )
+        #endif
 
-    #IFNDEF TFT_HardwareSPI
-        'therefore not 8bit bus
-        #IFNDEF 8Bit_Data_Bus
+        #ifndef TFT_HardwareSPI
+          #ifndef 8Bit_Data_Bus  'therefore not 8bit bus
             GLCDDrawString ( ILI9486L_GLCD_WIDTH - 42, 10 , "SW SPI" , TFT_WHITE )
-        #ENDIF
-    #ENDIF
+          #endif
+        #endif
 
-    #IFDEF 8Bit_Data_Bus
-        GLCDDrawString ( ILI9486L_GLCD_WIDTH - 96, 10 , "8Bit_Data_Bus" , TFT_WHITE )
-    #ENDIF
+        #ifdef 8Bit_Data_Bus
+            GLCDDrawString ( ILI9486L_GLCD_WIDTH - 96, 10 , "8Bit_Data_Bus" , TFT_WHITE )
+        #endif
 
-    'Revert the font size
-    GLCDfntDefaultSize = oldfont
-    GLCDForeground = TFT_RED
-    BigPrint_ILI9486L ( 100 , ILI9486L_GLCD_HEIGHT - 60 , "Great Cow Basic" )
-    GLCDForeground = TFT_WHITE
-    Do Forever
+        'Revert the font size
+        GLCDfntDefaultsize = oldfont
+        GLCDForeground = TFT_RED
+        BigPrint_ILI9486L ( 100 , ILI9486L_GLCD_HEIGHT - 60 , "Great Cow Basic" )
+        GLCDForeground = TFT_WHITE
+        DO forever
 
-        GLCDPrint ( 64 , 52, longNumber)
-        GLCDPrint ( 64 , 70, Pad( Str(wordnumber),5))
-        GLCDPrint ( 64 , 88, Pad( Str(bytenumber),3))
+          GLCDPrint ( 64 , 52, longNumber)
+          GLCDPrint ( 64 , 70, pad( str(wordnumber),5))
+          GLCDPrint ( 64 , 88, pad( str(bytenumber),3))
 
-        GLCDDrawChar(99, 18, CCount )
-        'Draw a box around the Char below
-        Box 98,18,117,42, TFT_WHITE
+          GLCDDrawChar(99, 18, CCount )
+          Box 98,18,117,42, TFT_WHITE               'Draw a box around the Char below
 
-        GLCDDrawString ( 180, 18 , Pad( Str(CCount),3) )
+          GLCDDrawString ( 180, 18 , pad( str(CCount),3) )
 
-        CCount++
-        If CCount = 0 Then CCount = 31
-        If CCount = 128 Then CCount = 192
-        longNumber = longNumber + 7
-        wordNumber = wordNumber + 3
-        byteNumber++
+          CCount++
+          if CCount = 0 then CCount = 31
+          if CCount = 128 then CCount = 192
+          longNumber = longNumber + 7
+          wordNumber = wordNumber + 3
+          byteNumber++
 
-    Loop
-End Sub
+        LOOP
+end sub

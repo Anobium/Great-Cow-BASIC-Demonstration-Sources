@@ -17,68 +17,68 @@
 '''************************************************************************
 
 ' ----- Configuration
-#CHIP 16f877a, 4
+  #chip 16f877a, 4
 
-' ----- Define Hardware settings
-' Required for LCD
-#DEFINE LCD_IO 4
-#DEFINE LCD_NO_RW
-#DEFINE LCD_SPEED FAST
+; ----- Define Hardware settings
+  ; Required for LCD
+  #define LCD_IO 4
+  #define LCD_NO_RW
+  #define LCD_Speed fast
 
-'Change as necessary
-#DEFINE LCD_RS PortB.2
-#DEFINE LCD_Enable PortB.3
-#DEFINE LCD_DB4 PortB.4
-#DEFINE LCD_DB5 PortB.5
-#DEFINE LCD_DB6 PortB.6
-#DEFINE LCD_DB7 PortB.7
+  ;Change as necessary
+  #define LCD_RS PortB.2
+  #define LCD_Enable PortB.3
+  #define LCD_DB4 PortB.4
+  #define LCD_DB5 PortB.5
+  #define LCD_DB6 PortB.6
+  #define LCD_DB7 PortB.7
 
-' ----- Variables
-Dim bytetest As Byte
-Dim wordtest As Word
-Dim longtest As Long
+; ----- Variables
+	dim bytetest as byte
+	dim wordtest as word
+  dim longtest as long
 
-bytetest = 0
-wordtest = 0
-longtest = 0
-
-
-' ----- Main body of program commences here.
+  bytetest = 0
+  wordtest = 0
+  longtest = 0
 
 
-CLS
-Print  "Val Functions"
-Wait 1 s
-CLS
+; ----- Main body of program commences here.
+
+
+	CLS
+  Print  "Val Functions"
+  Wait 1 s
+	cls
 
 
 
-Print "Bytes - Val()"
-Locate 1,0
-bytetest = Val("255")
-Print ByteTest
-Wait 1 s
-CLS
+	Print "Bytes - Val()"
+  Locate 1,0
+  bytetest = val("255")
+  Print ByteTest
+  Wait 1 s
+	cls
 
-Print "Words - Val()"
-Locate 1,0
-wordtest = val16("65535")
-Print WordTest
-Wait 1 s
-CLS
+  Print "Words - Val()"
+  Locate 1,0
+  wordtest = val16("65535")
+  Print WordTest
+  wait 1 s
+	cls
 
-Print "Longs - Val32()"
-Locate 1,0
-longtest = Val32("4294967295")
-Print LongTest
-Wait 1 s
-
-
+  Print "Longs - Val32()"
+  Locate 1,0
+  longtest = val32("4294967295")
+  Print LongTest
+  wait 1 s
 
 
 
 
-Wait 100 ms
-End
 
-' ----- Support methods.  Subroutines and Functions
+
+  wait 100 ms
+	end
+
+; ----- Support methods.  Subroutines and Functions

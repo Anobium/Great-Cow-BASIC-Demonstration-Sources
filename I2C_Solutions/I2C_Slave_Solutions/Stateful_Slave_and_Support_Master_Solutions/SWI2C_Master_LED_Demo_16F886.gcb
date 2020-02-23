@@ -9,107 +9,97 @@
 '''@date    14.12.15
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 16F886
+; ----- Configuration
+  #chip 16F886
 
-#OPTION Explicit
+  #option explicit
 
 '************************** YOU MUST VERIFY THIS ADDRESS!!!!!! *********************
 
-#DEFINE TargetGCBI2CAddress 0x40
+  #define TargetGCBI2CAddress 0x40
 
 
-' ----- Define Hardware settings
-' Define I2C settings - CHANGE PORTS
-#DEFINE I2C_MODE Master
-#DEFINE I2C_DATA PORTc.4
-#DEFINE I2C_CLOCK PORTc.3
-#DEFINE I2C_DISABLE_INTERRUPTS On
+; ----- Define Hardware settings
+  ' Define I2C settings - CHANGE PORTS
+ #define I2C_MODE Master
+ #define I2C_DATA PORTc.4
+ #define I2C_CLOCK PORTc.3
+ #define I2C_DISABLE_INTERRUPTS ON
 
-' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
-' USART settings - CHANGE PORTS if required
-#DEFINE USART_BAUD_RATE 19200
-Dir PORTc.6 Out
-Dir PORTc.7 In
-#DEFINE USART_TX_BLOCKING
-Wait 500 ms
+ ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
+ ' USART settings - CHANGE PORTS if required
+ #define USART_BAUD_RATE 19200
+ Dir PORTc.6 Out
+ Dir PORTc.7 In
+ #define USART_TX_BLOCKING
+ wait 500 ms
 
-'----- Variables
-#DEFINE STRINGSIZE 32
+;----- Variables
+  #define STRINGSIZE 32
 
-Dim DeviceID, outvar, I2CRetry As Byte
-Dim eepromVal1, eepromVal2, eepromVal3 As Byte
+  dim DeviceID, outvar, I2CRetry as byte
+  Dim eepromVal1, eepromVal2, eepromVal3 as Byte
 
-outvar = 0
+  outvar = 0
 
-' ----- Main body of program commences here.
-' Now assumes Serial Terminal is operational
-Dim DeviceID As Byte
+; ----- Main body of program commences here.
+         ' Now assumes Serial Terminal is operational
+  dim DeviceID as byte
 
-HSerPrintCRLF
-HSerPrint "Software I2C"
-HSerPrint " - LED Demo to Slave Device 0x"
-HSerPrint Hex( TargetGCBI2CAddress )
-HSerPrintCRLF 2
+  HSerPrintCRLF
+  HSerPrint "Software I2C"
+  HSerPrint " - LED Demo to Slave Device 0x"
+  HSerPrint hex( TargetGCBI2CAddress )
+  HSerPrintCRLF 2
 
-Repeat  4
+  Repeat  4
 
-    I2CRetry = 0
-    Do
-        'generate a start signal
-        I2CStart
-        'inidcate a write
-        I2CSend(TargetGCBI2CAddress)
+     I2CRetry = 0
+      do
+        I2CStart                              ;generate a start signal
+        I2CSend(TargetGCBI2CAddress)                       ;inidcate a write
         I2CRetry++
-    Loop While I2CSendState = 0 AND I2CRetry <> 255
-    I2CSend(0x23)
-    'this value is incrementing - just to get the demo Slave to figure out a packet has been sent
-    I2CSend(0)
-    I2CStop
-    Wait 100 ms
+      loop While I2CSendState = 0 and I2CRetry <> 255
+      I2CSend(0x23)
+      I2CSend(0)                      ;this value is incrementing - just to get the demo Slave to figure out a packet has been sent
+      I2CStop
+      wait 100 ms
 
-    I2CRetry = 0
-    Do
-        'generate a start signal
-        I2CStart
-        'inidcate a write
-        I2CSend(TargetGCBI2CAddress)
+     I2CRetry = 0
+      do
+        I2CStart                              ;generate a start signal
+        I2CSend(TargetGCBI2CAddress)                       ;inidcate a write
         I2CRetry++
-    Loop While I2CSendState = 0 AND I2CRetry <> 255
-    I2CSend(0x23)
-    'this value is incrementing - just to get the demo Slave to figure out a packet has been sent
-    I2CSend(15)
-    I2CStop
-    Wait 500 ms
+      loop While I2CSendState = 0 and I2CRetry <> 255
+      I2CSend(0x23)
+      I2CSend(15)                      ;this value is incrementing - just to get the demo Slave to figure out a packet has been sent
+      I2CStop
+      wait 500 ms
 
 
 
 
-End Repeat
+  End Repeat
 
-Do
-
-
-    ' this delay WILL impact the DEMO SLAVE terminal out.  This is because the Interrupts in HSERPRINT impact the SLAVE.
-    Wait 500 ms
+  do
 
 
-    I2CRetry = 0
-    Do
-        'generate a start signal
-        I2CStart
-        'inidcate a write
-        I2CSend(TargetGCBI2CAddress)
+       wait 500 ms   ' this delay WILL impact the DEMO SLAVE terminal out.  This is because the Interrupts in HSERPRINT impact the SLAVE.
+
+
+      I2CRetry = 0
+      do
+        I2CStart                              ;generate a start signal
+        I2CSend(TargetGCBI2CAddress)                       ;inidcate a write
         I2CRetry++
-    Loop While I2CSendState = 0 AND I2CRetry <> 255
-    I2CSend(0x23)
-    'this value is incrementing - just to get the demo Slave to figure out a packet has been sent
-    I2CSend(outvar)
-    I2CStop
+      loop While I2CSendState = 0 and I2CRetry <> 255
+      I2CSend(0x23)
+      I2CSend(outvar)                      ;this value is incrementing - just to get the demo Slave to figure out a packet has been sent
+      I2CStop
 
-    outvar++
-    outvar = outvar AND 0x0F
+      outvar++
+      outvar = outvar AND 0x0F
 
-Loop
+  loop
 
-' ----- Support methods.  Subroutines and Functions
+; ----- Support methods.  Subroutines and Functions

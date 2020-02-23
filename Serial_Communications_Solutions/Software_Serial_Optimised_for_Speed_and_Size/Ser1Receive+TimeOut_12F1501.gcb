@@ -11,85 +11,63 @@
 '''@date    29.01.2017
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 12F1501, 1
-#OPTION Explicit
+; ----- Configuration
+#chip 12F1501, 1
+#option Explicit
 
-' ----- Include library
-#INCLUDE <softserial.h>
+; ----- Include library
+#include <softserial.h>
 
-' ----- Config Serial UART :
-' baudrate must be defined
-#DEFINE SER1_BAUD 9600
-' databits optional (default = 8)
-#DEFINE SER1_DATABITS 8
-' stopbits optional (default = 1)
-#DEFINE SER1_STOPBITS 1
-' inverted polarity optional (default = Off)
-#DEFINE SER1_INVERT Off
-' Config I/O ports for transmitting:
-' I/O port (without .bit) must be defined
-#DEFINE SER1_TXPORT PORTA
-' portbit  must be defined
-#DEFINE SER1_TXPIN 5
-' Config I/O ports for receiving:
-' I/O port (without .bit) must be defined
-#DEFINE SER1_RXPORT PORTA
-' portbit  must be defined
-#DEFINE SER1_RXPIN 4
-' don't wait for stopbit optional (default = Off)
-#DEFINE SER1_RXNOWAIT Off
+; ----- Config Serial UART :
+#define SER1_BAUD 9600     ; baudrate must be defined
+#define SER1_DATABITS 8    ; databits optional (default = 8)
+#define SER1_STOPBITS 1    ; stopbits optional (default = 1)
+#define SER1_INVERT Off    ; inverted polarity optional (default = Off)
+; Config I/O ports for transmitting:
+#define SER1_TXPORT PORTA  ; I/O port (without .bit) must be defined
+#define SER1_TXPIN 5       ; portbit  must be defined
+; Config I/O ports for receiving:
+#define SER1_RXPORT PORTA  ; I/O port (without .bit) must be defined
+#define SER1_RXPIN 4       ; portbit  must be defined
+#define SER1_RXNOWAIT Off  ; don't wait for stopbit optional (default = Off)
 
 
-' ----- Variables
+; ----- Variables
 Dim RecByte As Byte
 Dim RxTimeOut As Byte
 RxTimeOut = 0
 
-' ----- Main body of program commences here.
-'new line in Terminal
-Ser1Send 10
-Ser1Send 13
-Ser1Print "Please send a byte!"
+; ----- Main body of program commences here.
+ Ser1Send 10   'new line in Terminal
+ Ser1Send 13
+ Ser1Print "Please send a byte!"
 
 
-Do Forever
+ Do Forever
 
-    'wait 10 * 10000 loops for startbit
-    LoopedReceive(10)
-    'new line in Terminal
-    Ser1Send 10
-    Ser1Send 13
-    If RxTimeOut Then
-        'if timeout counter > 0 a byte is received
-        Ser1Print "You sent: "
-        'send the byte
-        Ser1Send RecByte
-    Else
-        'if timeout counter is down to 0, nothing is received
-        '... so sent a hint
-        Ser1Print "TimeOut!"
-    End If
+   LoopedReceive(10)        'wait 10 * 10000 loops for startbit
+   Ser1Send 10              'new line in Terminal
+   Ser1Send 13
+   If RxTimeOut Then        'if timeout counter > 0 a byte is received
+     Ser1Print "You sent: "
+     Ser1Send RecByte       'send the byte
+    Else                    'if timeout counter is down to 0, nothing is received
+     Ser1Print "TimeOut!"   '... so sent a hint
+   End If
 
-Loop
+ Loop
 
 
 Sub LoopedReceive(RxTimeOut)
 
-    Do
-        'large inner loop to get delays of some seconds
-        Repeat 10000
-            If SER1_RXPORT.SER1_RXPIN = 0 Then
-                'if falling edge of startbit detected
-                '... get byte
-                RecByte = Ser1Receive
-                'exit sub after byte is stored
-                Exit Sub
-            End If
-        End Repeat
-        'count down the delayloop
-        RxTimeOut -= 1
-        'exit if is down to 0
-    Loop While RxTimeOut
+ Do
+   Repeat 10000  'large inner loop to get delays of some seconds
+     If SER1_RXPORT.SER1_RXPIN = 0 Then  'if falling edge of startbit detected
+      RecByte = Ser1Receive              '... get byte
+      Exit Sub                           'exit sub after byte is stored
+     End If
+   End Repeat
+   RxTimeOut -= 1                        'count down the delayloop
+ Loop While RxTimeOut                    'exit if is down to 0
 
 End Sub

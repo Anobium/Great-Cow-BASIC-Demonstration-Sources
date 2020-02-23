@@ -17,46 +17,44 @@
 
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP     16f15355,32
-#OPTION Explicit
+; ----- Configuration
+  #chip     16f15355,32
+  #option explicit
 
 
 
-' ----- Define Hardware settings
-'Set the ports.
-'Set the PPS for this solution.
-#STARTUP InitPPS, 85
+  ; ----- Define Hardware settings
+      'Set the ports.
+    'Set the PPS for this solution.
+  #startup InitPPS, 85
 
-Sub InitPPS
+  Sub InitPPS
     UNLOCKPPS
-    'RC5->EUSART1:RX1;
-    RX1DTPPS = 0x15
-    'RC4->EUSART1:TX1;
-    RC4PPS = 0x0F
-    LOCKPPS
-End Sub
+      RX1DTPPS = 0x15     'RC5->EUSART1:RX1;
+      RC4PPS = 0x0F     'RC4->EUSART1:TX1;
+      LOCKPPS
+  End sub
 
-#DEFINE USART_BAUD_RATE 19200
-#DEFINE USART_TX_BLOCKING
-#DEFINE USART_BLOCKING
+  #define USART_BAUD_RATE 19200
+  #define USART_TX_BLOCKING
+  #define USART_BLOCKING
 
 
-Dim INCHAR As Byte
+  Dim INCHAR as Byte
 
 
-Wait 500 ms
-HSerPrint "Loop Back Test Program"
-HSerPrintCRLF
+   wait 500 ms
+   hserprint "Loop Back Test Program"
+   HSerPrintCRLF
 
 
-' ----- Main body of program commences here.
+; ----- Main body of program commences here.
 
-Do Forever
+    Do Forever
 
-    'wait for char from USART
-    HSerReceive InChar
-    'send back char to USART
-    HSerSend InChar
+        'wait for char from USART
+        HSerReceive InChar
+        'send back char to USART
+        HSerSend InChar
 
-Loop
+    loop

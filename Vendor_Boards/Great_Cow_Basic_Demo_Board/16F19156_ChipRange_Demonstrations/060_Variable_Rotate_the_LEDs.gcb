@@ -19,60 +19,58 @@
 '''@date    03/05/2018
 '''****
 ' ----- Configuration
-'Chip Settings.
-#CHIP 16F19156, 32
-#OPTION Explicit
+    'Chip Settings.
+    #chip 16F19156, 32
+    #option Explicit
 
-'' -------------------PORTA----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---------------------------------
-''-----------------------------------------
-''
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
 
-'' -------------------PORTB----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    -------| O | A |--------| O | I |-
-''-----------------------------------------
-''
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | A |--------| O | I |-
+    ''-----------------------------------------
+    ''
 
-'' ------------------PORTC-----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---------------------------------
-''-----------------------------------------
-''
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
 
-'Define constants to make things easier. We can reuse these at any time.
-#DEFINE LEDD1 PORTB.1
-#DEFINE LEDD2 PORTB.5
-#DEFINE LDR             PORTB.4
-#DEFINE SwitchIn        PORTB.0
+    'Define constants to make things easier. We can reuse these at any time.
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define LDR             PORTB.4
+    #define SwitchIn        PORTB.0
 
-Dir     LEDD1         Out
-Dir     LEDD2         Out
-'this is the ANB4 port
-Dir     LDR           In
-Dir     SwitchIn      In
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     LDR           In    'this is the ANB4 port
+    Dir     SwitchIn      In
 
-'*****************************************************************************************************
-'Main program commences here.. everything before this is setup for the board.
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
 
-'Set the LED states
-LEDD1 = 1
-LEDD2 = 0
+   'Set the LED states
+    LEDD1 = 1
+    LEDD2 = 0
 
-'we have change to a larger variable to hold the range of 0 to 1023
-Dim ADCVal As Word
+    dim ADCVal as word   'we have change to a larger variable to hold the range of 0 to 1023
 
-Do
+    do
 
-    'Read the ADC for the cuttent value
-    ADCVal =  ReadAD10 ( ANB4, TRUE )
-    'Wait for the number of milliseconds
-    Wait ADCVal ms
+        'Read the ADC for the cuttent value
+        ADCVal =  ReadAD10 ( ANB4, TRUE )
+        'Wait for the number of milliseconds
+        Wait ADCVal ms
 
-    'Flip the state of the LEDs
-    LEDD1 = NOT LEDD1
-    LEDD2 = NOT LEDD2
+        'Flip the state of the LEDs
+        LEDD1 = NOT LEDD1
+        LEDD2 = NOT LEDD2
 
 
-Loop
+    loop

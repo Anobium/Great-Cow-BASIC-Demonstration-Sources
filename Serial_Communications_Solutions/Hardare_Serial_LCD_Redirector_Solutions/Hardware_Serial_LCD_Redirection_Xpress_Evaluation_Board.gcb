@@ -10,69 +10,66 @@
 '''@date    29.06.2016
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP     16f18855,32
-#OPTION Explicit
+; ----- Configuration
+  #chip     16f18855,32
+  #option explicit
 
 
-#INCLUDE  <lcd2serialredirect.h>
+  #include  <lcd2serialredirect.h>
 
-' ----- Define Hardware settings
-'Set the PPS of the RS232 port to USB.
-'Set the PPS for this solution.
-#STARTUP InitPPS, 85
+  ; ----- Define Hardware settings
+      'Set the PPS of the RS232 port to USB.
+    'Set the PPS for this solution.
+  #startup InitPPS, 85
 
-Sub InitPPS
+  Sub InitPPS
     UNLOCKPPS
-    'RC0 <- EUSART:TX;
-    RC0PPS = 0x0010
-    'RC1 -> EUSART:RX;
-    RXPPS  = 0x0011
-    LOCKPPS
-End Sub
+        RC0PPS = 0x0010       'RC0 <- EUSART:TX;
+        RXPPS  = 0x0011       'RC1 -> EUSART:RX;
+      LOCKPPS
+  End sub
 
-#DEFINE USART_BAUD_RATE 19200
-#DEFINE USART_TX_BLOCKING
+  #define USART_BAUD_RATE 19200
+  #define USART_TX_BLOCKING
 
-' Required to LCD to Serial redirection
-#DEFINE LCD_IO 0
+  ; Required to LCD to Serial redirection
+   #define LCD_IO 0
 
-Dim YPOS, XPOS As Byte
+  Dim YPOS, XPOS as Byte
 
 
-Wait 500 ms
+   wait 500 ms
 
-' ----- Main body of program commences here.
+; ----- Main body of program commences here.
 
-Do Forever
+    Do Forever
 
-    ' Bell Character
-    Print CHR(7)
-    CLS
-    Print "START TEST"
+        PRINT chr(7)  ' Bell Character
+        CLS
+        PRINT "START TEST"
 
-    Locate 1,0
+        locate 1,0
 
-    Print "DISPLAY ON"
-    Wait 3 s
+        PRINT "DISPLAY ON"
+        wait 3 s
 
-    Locate 0,0
+        locate 0,0
 
-    For ypos = 0 To 1
-        For xpos = 0 To 16
-            Locate ypos, xpos
-            Print "*"
-            ' flush HSerPrint buffer
-            Print ""
-            Wait 100 ms
-        Next
-    Next
+        for ypos = 0 to 1
+            for xpos = 0 to 16
+               locate ypos, xpos
+               print "*"
+               ' flush HSerPrint buffer
+               print ""
+               wait 100 ms
+            next
+        next
 
 
-    CLS
-    Locate 0,0
-    LCDCursor LCDON
-    Print "END TEST"
-    Wait 3 s
+        CLS
+        Locate 0,0
+        LCDCURSOR LCDON
+        Print "END TEST"
+        wait 3 s
 
-Loop
+    loop

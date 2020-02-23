@@ -7,39 +7,39 @@
 '''@date    31.01.2015  7/6/2019
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 12F509, 4
-#OPTION Explicit
+; ----- Configuration
+ #chip 12F509, 4
+ #option explicit
 
 
-' ----- Variables
-Dim PulseTime As Byte
+; ----- Variables
+  Dim PulseTime As byte
 
 
-' ----- Main body of program commences here.
-Do Forever
+; ----- Main body of program commences here.
+  Do Forever
 
-    'Rotate servo
-    '(Gradually change pulse length from 650 to 2250 us)
-    For PulseTime = 65 To 225
+            'Rotate servo
+            '(Gradually change pulse length from 650 to 2250 us)
+            For PulseTime = 65 to 225
 
-        'Send the right length pulse
-        PulseOut GPIO.2, PulseTime 10us
+                      'Send the right length pulse
+                      PulseOut GPIO.2, PulseTime 10us
 
-        'After sending pulse, wait a bit before sending the next one
-        Wait 6 ms
-    Next
+                      'After sending pulse, wait a bit before sending the next one
+                      Wait 6 ms
+            Next
 
-    'Then rotate it back
-    '(Gradually change pulse length from 2250 to 650 us)
-    For PulseTime = 225 To 65
+            'Then rotate it back
+            '(Gradually change pulse length from 2250 to 650 us)
+            For PulseTime = 225 to 65
 
-        'Send the right length pulse
-        PulseOut GPIO.2, PulseTime 10us
+                      'Send the right length pulse
+                      PulseOut GPIO.2, PulseTime 10us
 
-        'After sending pulse, wait a bit before sending the next one
-        Wait 6 ms
-    Next
-Loop
+                      'After sending pulse, wait a bit before sending the next one
+                      Wait 6 ms
+            Next
+  Loop
 
-End
+  end

@@ -10,36 +10,36 @@
 '''@date   	08.11.2014
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP mega328p,16
-#OPTION Explicit
+; ----- Configuration
+  #chip mega328p,16
+  #option explicit
 
 
 
-' ----- Define Hardware settings
-Dir PORTC.0 In
-Dir PORTB.0 Out
+; ----- Define Hardware settings
+  dir PORTC.0 in
+  dir PORTB.0 out
 
 
-'----- Variables
-Dim PWMCOUNT, PWMLEVEL As Byte
+;----- Variables
+  Dim PWMCOUNT, PWMLEVEL as Byte
 
-' ----- Main body of program commences here.
-Main:
-' Get value of the Pot connected to ADC0
-' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
-PWMLevel = ReadAD( 0 )
+; ----- Main body of program commences here.
+  Main:
+  ' Get value of the Pot connected to ADC0
+  ' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
+  PWMLevel = ReadAD( 0 )
 
-' Turn on the LED
-Set PORTB.0 On
+  ' Turn on the LED
+  set PORTB.0 on
 
-' Loop through the byte variable
-For PWMCount = 1 To 255
+  ' Loop through the byte variable
+  for PWMCount = 1 to 255
     ' if the Pot value is greater than the byte value then turn LED off
-    If PWMCount > PWMLevel Then
-        Set PORTB.0 Off
-    End If
-Next
-Goto Main
-End
+    if PWMCount > PWMLevel then
+      set PORTB.0 off
+    end if
+  next
+  goto Main
+  end
 

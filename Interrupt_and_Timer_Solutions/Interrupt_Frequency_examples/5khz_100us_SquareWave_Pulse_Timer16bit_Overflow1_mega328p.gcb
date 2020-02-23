@@ -16,51 +16,51 @@
 '''@date    01.11.2015
 '''********************************************************************************
 
-' ----- Configuration
+; ----- Configuration
 
-'Always specify the frequency! this is very good practice
-#CHIP mega328p, 16
-#OPTION Explicit
+  'Always specify the frequency! this is very good practice
+  #chip mega328p, 16
+  #option explicit
 
-' ----- Constants
-#DEFINE OutPort portb.5
+; ----- Constants
+  #define OutPort portb.5
 
-' ----- Define Hardware settings
-Dir OutPort Out
+; ----- Define Hardware settings
+  dir OutPort out
 
-' ----- Variables
-' No Variables specified in this demonstration.
+; ----- Variables
+  ' No Variables specified in this demonstration.
 
 
-' ----- Main body of program commences here.
+; ----- Main body of program commences here.
 
-' Add the handler for the interrupt
-On Interrupt Timer1Overflow Call PWMHandler
-' Initialise the timer - this is required
-' Set prescaler and then start the timer
-InitTimer1 Osc, PS_1_1
-' Start the timer - this is required
-StartTimer 1
-SetTimer 1,0xF9F1
+  ' Add the handler for the interrupt
+  On Interrupt Timer1Overflow Call PWMHandler
+  ' Initialise the timer - this is required
+  ' Set prescaler and then start the timer
+  InitTimer1 Osc, PS_1_1
+  ' Start the timer - this is required
+  StartTimer 1
+  Settimer 1,0xF9F1
 
-'Main routine
-Do
+  'Main routine
+  Do
 
     'ADD YOUR CODE HERE
 
-Loop
-End
+  Loop
+  end
 
-End
+  end
 
-' ----- Support methods.  Subroutines and Functions
+; ----- Support methods.  Subroutines and Functions
 
-'This method will be called when the Timer overflows
-Sub PWMHandler
+  'This method will be called when the Timer overflows
+  Sub PWMHandler
 
     ' Reload the timer
-    SetTimer 1,0xF9F0
+    Settimer 1,0xF9F0
 
     ' Create a squarewave on the output port to show the frequency
-    OutPort = NOT OutPort
-End Sub
+    OutPort = not OutPort
+  End Sub

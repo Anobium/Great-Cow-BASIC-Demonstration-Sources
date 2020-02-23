@@ -14,25 +14,25 @@
 '''@date   	25.5.15
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP mega328p,16
-#INCLUDE <glcd.h>
+; ----- Configuration
+  #chip mega328p,16
+  #include <glcd.h>
 
-' ----- Define Software settings
-' Define I2C settings - CHANGE PORTS
-#DEFINE I2C_MODE Master
-#DEFINE I2C_DATA PORTC.4
-#DEFINE I2C_CLOCK PORTC.5
-#DEFINE I2C_DISABLE_INTERRUPTS On
-'Optionally, you can reduce the I2C timings.
-#DEFINE I2C_BIT_DELAY 0 us
-#DEFINE I2C_CLOCK_DELAY 0 us
-#DEFINE I2C_END_DELAY 0 us
+  ; ----- Define Software settings
+  ' Define I2C settings - CHANGE PORTS
+   #define I2C_MODE Master
+   #define I2C_DATA PORTC.4
+   #define I2C_CLOCK PORTC.5
+   #define I2C_DISABLE_INTERRUPTS ON
+   'Optionally, you can reduce the I2C timings.
+   #define I2C_BIT_DELAY 0 us
+   #define I2C_CLOCK_DELAY 0 us
+   #define I2C_END_DELAY 0 us
 
-' ----- Define GLCD Hardware settings
-#DEFINE GLCD_TYPE GLCD_TYPE_SSD1306
-#DEFINE GLCD_I2C_Address 0x78
+; ----- Define GLCD Hardware settings
+  #define GLCD_TYPE GLCD_TYPE_SSD1306
+  #define GLCD_I2C_Address 0x78
 
-GLCDPrint (0, 0, "Great Cow Basic")
-GLCDPrint (0, 8, "Anobium 2019")
-Circle ( 64, 32, 10 )
+  GLCDPrint (0, 0, "Great Cow Basic")
+  GLCDPrint (0, 8, "Anobium 2019")
+  Circle ( 64, 32, 10 )

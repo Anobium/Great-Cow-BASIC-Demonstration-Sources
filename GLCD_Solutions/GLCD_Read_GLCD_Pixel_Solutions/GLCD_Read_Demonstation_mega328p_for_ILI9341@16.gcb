@@ -16,72 +16,64 @@
 '''@date
 '''********************************************************************************
 
-'Chip Settings.
-#CHIP mega328p, 16
-#OPTION Explicit
+  'Chip Settings.
+  #chip mega328p, 16
+  #option explicit
 
-#INCLUDE <glcd.h>
-#INCLUDE <uno_mega328p.h >
+    #include <glcd.h>
+    #include <uno_mega328p.h >
 
-#DEFINE GLCD_TYPE GLCD_TYPE_ILI9341
+    #define GLCD_TYPE GLCD_TYPE_ILI9341
 
-'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-' Data command line
-#DEFINE GLCD_DC       DIGITAL_8
-' Chip select line
-#DEFINE GLCD_CS       DIGITAL_10
-' Reset line
-#DEFINE GLCD_RESET    DIGITAL_9
+    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+    #define GLCD_DC       DIGITAL_8         ' Data command line
+    #define GLCD_CS       DIGITAL_10          ' Chip select line
+    #define GLCD_RESET    DIGITAL_9         ' Reset line
 
-' Data in | MISO    - Not used therefore not really required
-#DEFINE GLCD_DI       DIGITAL_12
-' Data out | MOSI
-#DEFINE GLCD_DO       DIGITAL_11
-' Clock Line
-#DEFINE GLCD_SCK      DIGITAL_13
+    #define GLCD_DI       DIGITAL_12          ' Data in | MISO    - Not used therefore not really required
+    #define GLCD_DO       DIGITAL_11          ' Data out | MOSI
+    #define GLCD_SCK      DIGITAL_13          ' Clock Line
 
-' remove/comment out if you want to use software SPI.
-#DEFINE ILI9341_HardwareSPI
+    #define ILI9341_HardwareSPI    ' remove/comment out if you want to use software SPI.
 
-Dim pixcol As Long
-Dim setpixcol As Word
+    dim pixcol as long
+    dim setpixcol as word
 
 
 
-' optionally you can rotate the screen.
-GLCDRotate ( Landscape_Rev )
-GLCDCLS ILI9341_BLACK
+    GLCDRotate ( Landscape_rev )     ' optionally you can rotate the screen.
+    GLCDCLS ILI9341_BLACK
 
-'Setup above here
-Pset 0,0, ILI9341_RED
-Pset 1,1, ILI9341_WHITE
-Pset 2,2, ILI9341_RED
+      'Setup above here
+      Pset 0,0, ILI9341_RED
+      Pset 1,1, ILI9341_WHITE
+      Pset 2,2, ILI9341_RED
 
-Do
+    do
 
-    pixcol = ReadPixel_ILI9341( 0,0 )
-    GLCDPrint 10, 10, Hex( pixcol_U )
-    GLCDPrint 26, 10, Hex( pixcol_H )
-    GLCDPrint 42, 10, Hex( pixcol )
-
-
-    pixcol = ReadPixel_ILI9341( 1,1 )
-    GLCDPrint 10, 20, Hex( pixcol_U )
-    GLCDPrint 26, 20, Hex( pixcol_H )
-    GLCDPrint 42, 20, Hex( pixcol )
-
-    pixcol = ReadPixel_ILI9341( 2,2 )
-    GLCDPrint 10, 30, Hex( pixcol_U )
-    GLCDPrint 26, 30, Hex( pixcol_H )
-    GLCDPrint 42, 30, Hex( pixcol )
-
-    Pset 3, 3, setpixcol: setpixcol = setpixcol + 16
-    pixcol = ReadPixel_ILI9341( 3,3 )
-    GLCDPrint 10, 40, Hex( pixcol_U )
-    GLCDPrint 26, 40, Hex( pixcol_H )
-    GLCDPrint 42, 40, Hex( pixcol )
+      pixcol = ReadPixel_ILI9341( 0,0 )
+      GLCDPrint 10, 10, hex( pixcol_U )
+      GLCDPrint 26, 10, hex( pixcol_H )
+      GLCDPrint 42, 10, hex( pixcol )
 
 
-Loop
+      pixcol = ReadPixel_ILI9341( 1,1 )
+      GLCDPrint 10, 20, hex( pixcol_U )
+      GLCDPrint 26, 20, hex( pixcol_H )
+      GLCDPrint 42, 20, hex( pixcol )
 
-End
+      pixcol = ReadPixel_ILI9341( 2,2 )
+      GLCDPrint 10, 30, hex( pixcol_U )
+      GLCDPrint 26, 30, hex( pixcol_H )
+      GLCDPrint 42, 30, hex( pixcol )
+
+      Pset 3, 3, setpixcol: setpixcol = setpixcol + 16
+      pixcol = ReadPixel_ILI9341( 3,3 )
+      GLCDPrint 10, 40, hex( pixcol_U )
+      GLCDPrint 26, 40, hex( pixcol_H )
+      GLCDPrint 42, 40, hex( pixcol )
+
+
+    loop
+
+    end

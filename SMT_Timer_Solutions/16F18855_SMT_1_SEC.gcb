@@ -2,35 +2,32 @@
 '''A Debug Program for SMTTimers.h
 ''' WilliamR
 '
-#CHIP 16f18855, 32
-#OPTION Explicit
+ #chip 16f18855, 32
+ #option explicit
 
-#INCLUDE <smt_timers.h>
+ #include <smt_timers.h>
 
-Wait 500 ms
-
-
-'LED
-Dir PortC.3 Out
+ WAIT 500 MS
 
 
-'Tune internal OSC for best accuracy so
-'that 1,000,000 timer ticks = 1,000,000 us
-OSCTUNE = 0b11111100
+  DIR PortC.3 OUT 'LED
 
-'FOSC4 = 8MHz / 8 =  1MHz
-'1 MHz
-InitSMT1(SMT_FOSC4,SMTPres_8)
 
-'Period = 1,000,000 microseconds (1 Second)
-'Fine tune here as necessary
-SetSMT1Period(1000391)
+ 'Tune internal OSC for best accuracy so
+ 'that 1,000,000 timer ticks = 1,000,000 us
+ OSCTUNE = 0b11111100
 
-'Interrupt every second and  blink LED for 100 ms
-On Interrupt SMT1Overflow Call BlinkLED
+ 'FOSC4 = 8MHz / 8 =  1MHz
+  InitSMT1(SMT_FOSC4,SMTPres_8)  '1 MHz
 
-'Start the 24-bit SMT1 timer
-StartSMT1
+ 'Period = 1,000,000 microseconds (1 Second)
+ SETSMT1PERIOD(1000391)  'Fine tune here as necessary
+
+ 'Interrupt every second and  blink LED for 100 ms
+ On Interrupt SMT1Overflow Call BlinkLED
+
+ 'Start the 24-bit SMT1 timer
+ STARTSMT1
 
 '// After making changes,  Chip must run for at least
 '// 1 minute after POR or Reset before an accuraate measurement
@@ -42,17 +39,17 @@ StartSMT1
 
 MAIN:
 
-Do
+  Do
 
-    '// waiting for interrupt...
+  '// waiting for interrupt...
 
-Loop
+  Loop
 
 ENDMAIN:
 
 
 Sub BlinkLED
-    Set PORTC.3 On
-    Wait 100 ms
-    Set PortC.3 Off
-End Sub
+   Set PORTC.3 On
+   Wait 100 ms
+   Set PortC.3 Off
+End sub

@@ -17,65 +17,65 @@
 '''************************************************************************
 
 ' ----- Configuration
-#CHIP 16f877a, 4
+  #chip 16f877a, 4
 
-' ----- Define Hardware settings
-' Required for LCD
-#DEFINE LCD_IO 4
-#DEFINE LCD_NO_RW
-#DEFINE LCD_SPEED FAST
+; ----- Define Hardware settings
+  ; Required for LCD
+  #define LCD_IO 4
+  #define LCD_NO_RW
+  #define LCD_Speed fast
 
-'Change as necessary
-#DEFINE LCD_RS PortB.2
-#DEFINE LCD_Enable PortB.3
-#DEFINE LCD_DB4 PortB.4
-#DEFINE LCD_DB5 PortB.5
-#DEFINE LCD_DB6 PortB.6
-#DEFINE LCD_DB7 PortB.7
+  ;Change as necessary
+  #define LCD_RS PortB.2
+  #define LCD_Enable PortB.3
+  #define LCD_DB4 PortB.4
+  #define LCD_DB5 PortB.5
+  #define LCD_DB6 PortB.6
+  #define LCD_DB7 PortB.7
 
-' ----- Variables
-Dim bytetest As Byte
-Dim wordtest As Word
-Dim longtest As Long
+; ----- Variables
+	dim bytetest as Byte
+	dim wordtest as Word
+  dim longtest as long
 
-bytetest = 0xff
-wordtest = 0xffff
-longtest = 0xffffffff
-
-
-' ----- Main body of program commences here.
+  bytetest = 0xff
+  wordtest = 0xffff
+  longtest = 0xffffffff
 
 
-CLS
-Print  "String Test"
-Wait 1 s
-CLS
+; ----- Main body of program commences here.
 
 
-
-Print "Byte"
-Locate 1,0
-Print Str(ByteTest)
-Wait 1 s
-CLS
-
-Print "Word"
-Locate 1,0
-Print Str(WordTest)
-Wait 1 s
-CLS
-
-Print "Long"
-Locate 1,0
-Print Str32(LongTest)
-Wait 1 s
-CLS
+	CLS
+  Print  "String Test"
+  Wait 1 s
+	cls
 
 
 
+	Print "Byte"
+  Locate 1,0
+  Print Str(ByteTest)
+  Wait 1 s
+	cls
+
+  Print "Word"
+  Locate 1,0
+  Print Str(WordTest)
+  wait 1 s
+	cls
+
+  Print "Long"
+  Locate 1,0
+  Print Str32(LongTest)
+  wait 1 s
+	cls
 
 
-Wait 100 ms
-End
 
-' ----- Support methods.  Subroutines and Functions
+
+
+  wait 100 ms
+	end
+
+; ----- Support methods.  Subroutines and Functions

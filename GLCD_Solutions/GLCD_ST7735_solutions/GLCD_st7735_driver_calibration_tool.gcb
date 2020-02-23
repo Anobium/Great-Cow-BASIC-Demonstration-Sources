@@ -23,27 +23,25 @@
 '''********************************************************************************
 
 
-'change chip
-#CHIP 18F47K42, 64
-#OPTION Explicit
+#chip 18F47K42, 64   'change chip
+#option explicit
 
 
 
 
-#INCLUDE <glcd.h>
-#DEFINE GLCD_TYPE GLCD_TYPE_ST7735
+        #include <glcd.h>
+        #define GLCD_TYPE GLCD_TYPE_ST7735
 
-'The slection of the TAB below enable the selection of the three type of ST7735
-'ST7735_BLACKTAB  can ST7735_GREENTAB or ST7735_REDTAB
-#DEFINE ST7735TABCOLOR ST7735_BLACKTAB
+        'The slection of the TAB below enable the selection of the three type of ST7735
+        #define ST7735TABCOLOR ST7735_BLACKTAB  'ST7735_BLACKTAB  can ST7735_GREENTAB or ST7735_REDTAB
 
-'Pin mappings for Software SPI - do NOT use HWSPI when calibrating... PPS and HPSPI add complexity that is not required.
-#DEFINE GLCD_DO  portc.5
-#DEFINE GLCD_SCK portc.3
+        'Pin mappings for Software SPI - do NOT use HWSPI when calibrating... PPS and HPSPI add complexity that is not required.
+        #define GLCD_DO  portc.5
+        #define GLCD_SCK portc.3
 
-#DEFINE GLCD_DC portA.0
-#DEFINE GLCD_CS portC.1
-#DEFINE GLCD_RESET portC.0
+        #define GLCD_DC portA.0
+        #define GLCD_CS portC.1
+        #define GLCD_RESET portC.0
 
 
 '************************ TEST ROUTNE ***********************
@@ -66,14 +64,14 @@
 '          #define ST7735_XSTART 0   'values of greater then zero is shift the columns by that number of pixels
 '          #define ST7735_YSTART 0   'values of greater then zero is shift the rows by that number of pixels
 
-GLCDRotate Portrait
-#DEFINE DEFAULT_GLCDBACKGROUND 0x67F0
-FilledBox 2,2,80,80,TFT_RED
-Box 0,0,GLCDDeviceWidth, GLCDDeviceHeight, TFT_YELLOW
-GLCDBackground = TFT_RED
-GLCDPrint 5, 10, ST7735_XSTART
-GLCDPrint 5, 20, ST7735_YSTART
-GLCDPrint 5, 30, ST7735TABCOLOR
-GLCDPrint 5, 40, GLCDRotateState
-FilledBox GLCDDeviceWidth-2,GLCDDeviceHeight-2,GLCDDeviceWidth-42,GLCDDeviceHeight-42, TFT_GREEN
-End
+        GLCDRotate Portrait
+        #define DEFAULT_GLCDBACKGROUND 0x67F0
+        filledbox 2,2,80,80,TFT_RED
+        box 0,0,GLCDDeviceWidth, GLCDDeviceHeight, TFT_YELLOW
+        GLCDBackground = TFT_RED
+        GLCDPrint 5, 10, ST7735_XSTART
+        GLCDPrint 5, 20, ST7735_YSTART
+        GLCDPrint 5, 30, ST7735TABCOLOR
+        GLCDPrint 5, 40, GLCDRotateState
+        filledbox GLCDDeviceWidth-2,GLCDDeviceHeight-2,GLCDDeviceWidth-42,GLCDDeviceHeight-42, TFT_GREEN
+        end

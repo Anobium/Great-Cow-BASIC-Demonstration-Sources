@@ -29,67 +29,66 @@
 
 
 
-'Chip Settings.
-#CHIP 16f15355
+    'Chip Settings.
+    #chip 16f15355
 
 
 
 
-'' -------------------LATC-----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' LED:   ---------------|D5 |D4 |D3 |D2 |-
-''-----------------------------------------
-''
-#DEFINE LEDD2  PORTC.0
-#DEFINE LEDD3  PORTC.1
-#DEFINE LEDD4  PORTC.2
-#DEFINE LEDD5  PORTC.3
-#DEFINE LEDBANK PORTC
-#DEFINE SWITCH      PORTA.1
+  '' -------------------LATC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
+    ''-----------------------------------------
+    ''
+    #define LEDD2  PORTC.0
+    #define LEDD3  PORTC.1
+    #define LEDD4  PORTC.2
+    #define LEDD5  PORTC.3
+    #define LEDBANK PORTC
+    #define SWITCH      PORTA.1
 
-Dir     LEDD2 Out
-Dir     LEDD3 Out
-Dir     LEDD4 Out
-Dir     LEDD5 Out
-Dir      SWITCH In
+    Dir     LEDD2 OUT
+    Dir     LEDD3 OUT
+    Dir     LEDD4 OUT
+    Dir     LEDD5 OUT
+    Dir      SWITCH IN
 
 '    Set LEDS off
-LEDBANK = 0
+    LEDBANK = 0
 
 
 
-#DEFINE SWITCH_DOWN         1
-#DEFINE SWITCH_UP           0
+    #define SWITCH_DOWN         1
+    #define SWITCH_UP           0
 
 
-#DEFINE NUM_READINGS 8
+    #define NUM_READINGS 8
 
-'Dimension and set the variables
-Dim _sum As Long
-Dim yloop, xloop As Byte
-_sum = 0
+    'Dimension and set the variables
+    dim _sum as long
+    dim yloop, xloop as byte
+    _sum = 0
 
-Dim queue(8)
-queue = 0, 0, 0, 0, 0, 0, 0, 0
+    dim queue(8)
+    queue = 0, 0, 0, 0, 0, 0, 0, 0
 
-Do
-    For xloop = 1 To NUM_READINGS
-        ' This will set the whole port
-        ' a little calculation to ensure max value is 15, equates to all 4 LEDS on
-        LEDBANK = ( average_reading ( queue() ) * 10 / 138 )
-        ' Set the next array point with the next reading
-        queue( xloop ) = ReadAD ( AN0 )
-    Next
-Loop
+    do
+        for xloop = 1 to NUM_READINGS
+            ' This will set the whole port
+            LEDBANK = ( average_reading ( queue() ) * 10 / 138 )         ' a little calculation to ensure max value is 15, equates to all 4 LEDS on
+            ' Set the next array point with the next reading
+            queue( xloop ) = ReadAD ( AN0 )
+        next
+    loop
 
 
-Function average_reading ( In analyze_queue() ) As Word
+function average_reading ( in analyze_queue() ) as word
 
     _sum = 0
-    For yloop = 1 To  NUM_READINGS
-        _sum = [Long]queue ( yloop ) + _sum
-    Next
+    for yloop = 1 to  NUM_READINGS
+        _sum = [long]queue ( yloop ) + _sum
+    next
 
     average_reading = _sum / NUM_READINGS
 
-End Function
+end Function

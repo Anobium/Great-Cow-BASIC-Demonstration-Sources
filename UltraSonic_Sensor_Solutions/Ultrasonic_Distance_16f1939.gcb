@@ -9,82 +9,72 @@
 '''@date    17.2.16
 '''********************************************************************************
 
-#CHIP 16f1939
-#INCLUDE <srf04.h>
+  #chip 16f1939
+  #include <srf04.h>
 
-#INCLUDE <glcd.h>
-' This is the Default value, not required.
-#DEFINE GLCD_TYPE GLCD_TYPE_KS0108
-
-
-#DEFINE GLCDDirection 1
-
-'D12 to actually since CS1, CS2 can be reversed on some devices
-#DEFINE GLCD_CS1 PORTC.1
-#DEFINE GLCD_CS2 PORTC.0
-'D0 to pin 7 on LCD
-#DEFINE GLCD_DB0 PORTD.0
-'D1 to pin 8 on LCD
-#DEFINE GLCD_DB1 PORTD.1
-'D2 to pin 9 on LCD
-#DEFINE GLCD_DB2 PORTD.2
-'D3 to pin 10 on LCD
-#DEFINE GLCD_DB3 PORTD.3
-'D4 to pin 11 on LCD
-#DEFINE GLCD_DB4 PORTD.4
-'D5 to pin 12 on LCD
-#DEFINE GLCD_DB5 PORTD.5
-'D6 to pin 13 on LCD
-#DEFINE GLCD_DB6 PORTD.6
-'D7 to pin 14 on LCD
-#DEFINE GLCD_DB7 PORTD.7
-
-#DEFINE GLCD_RS PORTe.0
-#DEFINE GLCD_Enable PORTe.2
-#DEFINE GLCD_RW PORTe.1
-#DEFINE GLCD_RESET PORTC.2
-
-' Timing for 32 mhz
-#DEFINE KS0108ReadDelay    6
-#DEFINE KS0108WriteDelay   0
-#DEFINE KS0108ClockDelay   0
+  #include <glcd.h>
+  #define GLCD_TYPE GLCD_TYPE_KS0108               ' This is the Default value, not required.
 
 
-' ----- Constants
+  #define GLCDDirection 1
 
-#DEFINE US1Ping PORTC.7
-#DEFINE US1Echo PORTC.6
+   #define GLCD_CS1 PORTC.1    'D12 to actually since CS1, CS2 can be reversed on some devices
+   #define GLCD_CS2 PORTC.0
+   #define GLCD_DB0 PORTD.0 'D0 to pin 7 on LCD
+   #define GLCD_DB1 PORTD.1 'D1 to pin 8 on LCD
+   #define GLCD_DB2 PORTD.2 'D2 to pin 9 on LCD
+   #define GLCD_DB3 PORTD.3 'D3 to pin 10 on LCD
+   #define GLCD_DB4 PORTD.4 'D4 to pin 11 on LCD
+   #define GLCD_DB5 PORTD.5 'D5 to pin 12 on LCD
+   #define GLCD_DB6 PORTD.6 'D6 to pin 13 on LCD
+   #define GLCD_DB7 PORTD.7 'D7 to pin 14 on LCD
 
-#DEFINE AlarmDistance 50
+   #define GLCD_RS PORTe.0
+   #define GLCD_Enable PORTe.2
+   #define GLCD_RW PORTe.1
+   #define GLCD_RESET PORTC.2
 
-' ----- Variables
-Dim Distance As Word
-
-' ----- Main body of program commences here.
-
-GLCDCLS
-GLCDPrint 0,   0, "GCBasic 2019"
-GLCDPrint 0,   8, "SRF04 Demo"
-Wait 2 s
-
-Do Forever
-
-
-    'Take a distance reading from the SRF04
-    Distance = USDistance(1)
-
-    'Check the reading, is the object too close to the SRF04?
-    If Distance < AlarmDistance Then
-        GLCDPrint ( 0, 24, "Close" )
-        GLCDPrint (0, 32 , Str(Distance)+"  " )
-    Else
-        GLCDPrint ( 0, 24, "Far  " )
-        GLCDPrint (0, 32 , "     " )
-    End If
-
-    'Delay for a few milliseconds before taking the next reading
-    Wait 10 ms
-Loop
+   ' Timing for 32 mhz
+   #define KS0108ReadDelay    6
+   #define KS0108WriteDelay   0
+   #define KS0108ClockDelay   0
 
 
-End
+; ----- Constants
+
+    #define US1Ping PORTC.7
+    #define US1Echo PORTC.6
+
+    #define AlarmDistance 50
+
+; ----- Variables
+    Dim Distance As word
+
+; ----- Main body of program commences here.
+
+    GLCDCLS
+    glcdprint 0,   0, "GCBasic 2019"
+    glcdprint 0,   8, "SRF04 Demo"
+    wait 2 s
+
+    Do Forever
+
+
+              'Take a distance reading from the SRF04
+              Distance = USDistance(1)
+
+              'Check the reading, is the object too close to the SRF04?
+              if Distance < AlarmDistance then
+                        GLCDPrint ( 0, 24, "Close" )
+                        GLCDPrint (0, 32 , str(Distance)+"  " )
+              Else
+                        GLCDPrint ( 0, 24, "Far  " )
+                        GLCDPrint (0, 32 , "     " )
+              end if
+
+              'Delay for a few milliseconds before taking the next reading
+              Wait 10 ms
+    Loop
+
+
+end

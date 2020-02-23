@@ -9,47 +9,35 @@
 '''@date    17.01.2017
 '''********************************************************************************
 
-' ----- Configuration
-'Arduino UNO
-#CHIP mega328P, 16
-#OPTION Explicit
+; ----- Configuration
+#chip mega328P, 16     'Arduino UNO
+#option Explicit
 
-' ----- Include library
-#INCLUDE <softserial.h>
+; ----- Include library
+#include <softserial.h>
 
-' ----- Config Serial UART (we use the onboard USB-serial converter):
-' baudrate must be defined
-#DEFINE SER1_BAUD 256000
-' databits optional (default = 8)
-#DEFINE SER1_DATABITS 8
-' stopbits optional (default = 1)
-#DEFINE SER1_STOPBITS 1
-' inverted polarity optional (default = Off)
-#DEFINE SER1_INVERT Off
-' Config I/O ports for transmitting:
-' I/O port (without .bit) must be defined
-#DEFINE SER1_TXPORT PORTD
-' portbit  must be defined
-#DEFINE SER1_TXPIN 1
+; ----- Config Serial UART (we use the onboard USB-serial converter):
+#define SER1_BAUD 256000   ; baudrate must be defined
+#define SER1_DATABITS 8    ; databits optional (default = 8)
+#define SER1_STOPBITS 1    ; stopbits optional (default = 1)
+#define SER1_INVERT Off    ; inverted polarity optional (default = Off)
+; Config I/O ports for transmitting:
+#define SER1_TXPORT PORTD  ; I/O port (without .bit) must be defined
+#define SER1_TXPIN 1       ; portbit  must be defined
 
-' ----- Variables
+; ----- Variables
 Dim xx As Word
 xx = 1000
 
-' ----- Main body of program commences here.
-Do Forever
+; ----- Main body of program commences here.
+ Do Forever
 
-    'new line in Terminal
-    Ser1Send  13
-    '
-    Ser1Send  10
-    'send a text
-    Ser1Print "Software-UART: "
-    'send the value of xx
-    Ser1Print  xx
+  Ser1Send  13                 'new line in Terminal
+  Ser1Send  10                 '
+  Ser1Print "Software-UART: "  'send a text
+  Ser1Print  xx                'send the value of xx
 
-    'time to enjoy the result
-    Wait 1 s
-    xx += 1
+  Wait 1 s                     'time to enjoy the result
+  xx += 1
 
-Loop
+ Loop

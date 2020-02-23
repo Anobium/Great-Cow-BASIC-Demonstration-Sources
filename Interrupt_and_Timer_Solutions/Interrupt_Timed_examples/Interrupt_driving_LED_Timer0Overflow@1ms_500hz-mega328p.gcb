@@ -18,49 +18,49 @@
 '''@date    31.03.2017
 ' ----- Configuration
 ' ----- Configuration
-#CHIP mega328p
-#OPTION Explicit
+  #chip mega328p
+  #option explicit
 
 '  #define SimulatePWM 'comment this to just toggle the LED
 
-'hardware
-#DEFINE LED PORTB.5
-Dir LED Out
+  'hardware
+  #define LED PORTB.5
+  dir LED out
 
-'Call the initialisation routine
-InitLEDControl
+  'Call the initialisation routine
+  InitLEDControl
 
-'----- Variables
-Dim LEDSPEED, PWMCOUNTER, PWMCOUNTER As Byte
+  ;----- Variables
+    Dim LEDSPEED, PWMCOUNTER, PWMCOUNTER as Byte
 
 
 'Main routine
-Do
+  Do
 
-    #IFDEF SimulatePWM
-        'Increase LED to full over 2.5 seconds
-        For LEDSpeed = 0 To 100
-            Wait 25 ms
-        Next
-        'Hold LEDPower
-        Wait 1 s
-        'Decrease LED to zero over 2.5 seconds
-        For LEDSpeed = 100 To 0 Step - 1
-            Wait 25 ms
-        Next
-        'Hold LEDPower
-        Wait 1 s
-    #ENDIF
+      #ifdef SimulatePWM
+          ;Increase LED to full over 2.5 seconds
+          For LEDSpeed = 0 to 100
+              Wait 25 ms
+          Next
+          ;Hold LEDPower
+          Wait 1 s
+          ;Decrease LED to zero over 2.5 seconds
+          For LEDSpeed = 100 to 0 step - 1
+              Wait 25 ms
+          Next
+          ;Hold LEDPower
+          Wait 1 s
+      #endif
 
-Loop
-End
+  Loop
+  end
 
 
 
 'Setup routine
 Sub InitLEDControl
 
-    Set LED Off
+    set LED off
 
     'Clear variables
     LEDSpeed = 0
@@ -86,23 +86,23 @@ End Sub
 Sub InterruptHandler
 
 
-    ' Set the register to 6 to give us the 1ms Interrupt.
-    ' Use the Timer Calc' application that is part of Mister E PIC Mutl-calc tookset to calculate the value.
-    ' Ensure you set the Prescaler in the InitTimer0 shown above
-    SetTimer 0, 6
+  ' Set the register to 6 to give us the 1ms Interrupt.
+  ' Use the Timer Calc' application that is part of Mister E PIC Mutl-calc tookset to calculate the value.
+  ' Ensure you set the Prescaler in the InitTimer0 shown above
+  SetTimer 0, 6
 
-    #IFDEF SimulatePWM
+  #ifdef SimulatePWM
 
-        If LEDSpeed > PWMCounter Then
-            Set LED On
-        Else
-            Set LED Off
-        End If
-        PWMCounter += 1
-        If PWMCounter = 100 Then PWMCounter = 0
-    #ENDIF
+    If LEDSpeed > PWMCounter Then
+        Set LED On
+    Else
+        Set LED Off
+    End If
+    PWMCounter += 1
+    If PWMCounter = 100 Then PWMCounter = 0
+  #endif
 
-    #IFNDEF SimulatePWM
-        LED = !LED
-    #ENDIF
+  #ifndef SimulatePWM
+    LED = !LED
+  #endif
 End Sub

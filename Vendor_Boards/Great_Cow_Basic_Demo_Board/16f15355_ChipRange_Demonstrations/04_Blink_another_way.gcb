@@ -20,22 +20,22 @@
 
 
 ' ----- Configuration
-'Chip Settings.
-#CHIP 16f15355,32
+    'Chip Settings.
+    #chip 16f15355,32
 
 
 
-'' -------------------LATC-----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' LED:   ---------------|D5 |D4 |D3 |D2 |-
-''-----------------------------------------
-''
+    '' -------------------LATC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
+    ''-----------------------------------------
+    ''
 
-Dir PORTC.0 Out
+    dir PORTC.0 out
 
-Do
-    Wait 1000 ms
-    'An alternative Great Cow BASIC method.
-    PORTC.0 = !PORTC.0
+    do
+        wait 1000 ms
+        'An alternative Great Cow BASIC method.
+        PORTC.0 = !PORTC.0
 
-Loop
+    loop

@@ -12,22 +12,22 @@
 '''@date    22.08.2018
 '''*************************************************************************
 
-'Chip Settings
-#CHIP 18F26K20, 64
+    'Chip Settings
+    #chip 18F26K20, 64
 
-Dir portc Out
+    DIR portc Out
 
 
-Do
+    do
 
-    'use for-loop to show the duty changing a 10bit value
-    Dim dutyvalue As Byte
-    For dutyvalue = 0 To 255
-        HPWM 1, 50, dutyvalue
-        Wait 10 ms
-    Next
+        'use for-loop to show the duty changing a 10bit value
+        dim dutyvalue as byte
+        for dutyvalue = 0 to 255
+            HPWM 1, 50, dutyvalue
+            wait 10 ms
+        next
 
-Loop
+    loop
 
 
 

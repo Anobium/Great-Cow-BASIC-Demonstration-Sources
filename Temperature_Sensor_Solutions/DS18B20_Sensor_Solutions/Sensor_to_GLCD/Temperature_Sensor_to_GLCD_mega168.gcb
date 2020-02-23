@@ -9,65 +9,64 @@
 '''@date    31.01.2015
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP mega168,16
-#OPTION Explicit
-#INCLUDE <glcd.h>
-#INCLUDE <ds18b20.h>
+; ----- Configuration
+ #chip mega168,16
+ #option explicit
+ #include <glcd.h>
+ #include <ds18b20.h>
 
 
-' ----- Define Hardware settings
-' Hardware is setup in the GLCD methods, therefore none are requied here.
+; ----- Define Hardware settings
+  ' Hardware is setup in the GLCD methods, therefore none are requied here.
 
-' ----- Constants
-' This is the Default value, not required.
-#DEFINE GLCD_TYPE GLCD_TYPE_KS0108
-#DEFINE GLCD_RW PORTB.1
-#DEFINE GLCD_RESET PORTB.5
-#DEFINE GLCD_CS1 PORTB.3
-#DEFINE GLCD_CS2 PORTB.4
-#DEFINE GLCD_RS PORTB.0
-#DEFINE GLCD_ENABLE PORTB.2
-#DEFINE GLCD_DB0 PORTD.0
-#DEFINE GLCD_DB1 PORTD.1
-#DEFINE GLCD_DB2 PORTD.2
-#DEFINE GLCD_DB3 PORTD.3
-#DEFINE GLCD_DB4 PORTD.4
-#DEFINE GLCD_DB5 PORTD.5
-#DEFINE GLCD_DB6 PORTD.6
-#DEFINE GLCD_DB7 PORTD.7
-
+; ----- Constants
+  #define GLCD_TYPE GLCD_TYPE_KS0108               ' This is the Default value, not required.
+  #define GLCD_RW PORTB.1
+  #define GLCD_RESET PORTB.5
+  #define GLCD_CS1 PORTB.3
+  #define GLCD_CS2 PORTB.4
+  #define GLCD_RS PORTB.0
+  #define GLCD_ENABLE PORTB.2
+  #define GLCD_DB0 PORTD.0
+  #define GLCD_DB1 PORTD.1
+  #define GLCD_DB2 PORTD.2
+  #define GLCD_DB3 PORTD.3
+  #define GLCD_DB4 PORTD.4
+  #define GLCD_DB5 PORTD.5
+  #define GLCD_DB6 PORTD.6
+  #define GLCD_DB7 PORTD.7
 
 
-' ----- Constants
-' DS18B20 port settings
-#DEFINE DQ PortC.3
 
-' ----- Variables
-' a variable to handle the temperature calculations
-Dim TempC_100 As Word
-Dim CCOUNT, DSDATA As Byte
+; ----- Constants
+  ' DS18B20 port settings
+  #define DQ PortC.3
 
-' ----- Main body of program commences here.
+; ----- Variables
+  ' a variable to handle the temperature calculations
+  dim TempC_100 as word
+  Dim CCOUNT, DSDATA as Byte
 
-ccount = 1
-GLCDCLS
-GLCDPrint(0, 0, "GCBasic 2019" )
+; ----- Main body of program commences here.
 
-GLCDPrint(0, 8, "DS18B20 Demo" )
+    ccount = 1
+    GLCDCLS
+    GLCDPrint(0, 0, "GCBasic 2019" )
+
+    GLCDPrint(0, 8, "DS18B20 Demo" )
 
 
-Do Forever
-    ' The function readtemp returns the integer value of the sensor
-    DSdata = ReadTemp
-    GLCDPrint(0, 24, "Reading" )
-    GLCDPrint(48, 24,  Hex(ccount) )
-    ' Display the integer value of the sensor on the LCD
-    GLCDPrint(66, 24,  Str(DSdata) + "c" )
-    DSdata = ((( DSdata * 9) /5) + 32 )
-    GLCDPrint(66, 32,  Str(DSdata) + "f" )
+    do forever
+       ' The function readtemp returns the integer value of the sensor
+       DSdata = readtemp
+       GLCDPrint(0, 24, "Reading" )
+       GLCDPrint(48, 24,  hex(ccount) )
+       ' Display the integer value of the sensor on the LCD
+       GLCDPrint(66, 24,  str(DSdata) + "c" )
+       DSdata = ((( DSdata * 9) /5) + 32 )
+       GLCDPrint(66, 32,  str(DSdata) + "f" )
 
-    Wait 2 s
-    ccount++
+       wait 2 s
+       ccount++
 
-Loop
+    loop

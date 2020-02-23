@@ -11,50 +11,45 @@
 '''@version
 '''@date
 '''********************************************************************************
-' ----- Configuration
-#CHIP mega328p
-#CONFIG MCLRE=On
-#INCLUDE <max7219_ledmatrix_driver.h>
-#OPTION Explicit
+; ----- Configuration
+  #chip mega328p
+  #config MCLRE=on
+  #include <max7219_ledmatrix_driver.h>
+  #option Explicit
 
-' ----- Constants
-'Set SPI pins for the Max7219
-'pin12
-#DEFINE Max7219_DI    portb.4
-'pin11
-#DEFINE Max7219_DO    portb.3
-'pin13
-#DEFINE Max7219_SCK   portb.5
-'pin10
-#DEFINE Max7219_CS    portb.2
+; ----- Constants
+  'Set SPI pins for the Max7219
+  #define Max7219_DI    portb.4    'pin12
+  #define Max7219_DO    portb.3    'pin11
+  #define Max7219_SCK   portb.5    'pin13
+  #define Max7219_CS    portb.2    'pin10
 
 
 
-'Specifics for device configuration
-#DEFINE MAX7219_X_Devices 4
-' remove and make a comment out if you want to use Software SPI for this device
-#DEFINE MAX7219_LEDMatrix_HardwareSPI
-#DEFINE HWSPIMode MasterUltraFast
+  'Specifics for device configuration
+  #define MAX7219_X_Devices 4
+  #define MAX7219_LEDMatrix_HardwareSPI     ' remove and make a comment out if you want to use Software SPI for this device
+  #define HWSPIMode MasterUltraFast
 
 
-'Choose one of the constants below to match the orientation of your LED Matrixes.
-'All the LED Matrixes must have the same orientation.
-#DEFINE Pset max7219_LEDMatrix_PSet_0
-'#define Pset max7219_LEDMatrix_PSet_90
-'#define Pset max7219_LEDMatrix_PSet_180
-'#define Pset max7219_LEDMatrix_PSet_270
+  'Choose one of the constants below to match the orientation of your LED Matrixes.
+  'All the LED Matrixes must have the same orientation.
+  #define Pset max7219_LEDMatrix_PSet_0
+  '#define Pset max7219_LEDMatrix_PSet_90
+  '#define Pset max7219_LEDMatrix_PSet_180
+  '#define Pset max7219_LEDMatrix_PSet_270
 
 
 '; ----- Main body of program commences here.
 
-Do
-    Box 0, 0, 31, 7
-    Max7219_LEDMatrix_SendBuffer
-    Wait 500 ms
-    GLCDCLS
-    GLCDPrint 4,0,"GLCD"
-    Max7219_LEDMatrix_SendBuffer
-    Wait 500 ms
-    GLCDCLS
-Loop
-End
+  do
+      Box 0, 0, 31, 7
+      Max7219_LEDMatrix_SendBuffer
+      wait 500 ms
+      GLCDCLS
+      GLCDPrint 4,0,"GLCD"
+      Max7219_LEDMatrix_SendBuffer
+      wait 500 ms
+      GLCDCLS
+  loop
+  end

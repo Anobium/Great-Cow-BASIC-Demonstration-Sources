@@ -14,37 +14,26 @@
 '''@date    27/10/2018
 '''********************************************************************
 
-'Specify the Device you are compiling for - this board is the 16F15356
-#CHIP 16F15356
-'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
+    #chip 16F15356          'Specify the Device you are compiling for - this board is the 16F15356
+                            'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
 
-'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
-#OPTION Explicit
+    #option Explicit        'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
 
-'Set a constant.  The LED can be de-activated by driving the connected I/O line to the supply voltage via a suitable resistor.
-#DEFINE LEDOn  = 1
-'Set a constant.  The LED can be activated by driving the connected I/O line to GND.
-#DEFINE LEDOff = 0
+    #define LEDOn  = 1      'Set a constant.  The LED can be de-activated by driving the connected I/O line to the supply voltage via a suitable resistor.
+    #define LEDOff = 0      'Set a constant.  The LED can be activated by driving the connected I/O line to GND.
 
-'Set a constant to refer to the LED. Attach via a suitable resistor.
-#DEFINE LED0 portc.1
+    #define LED0 portc.1    'Set a constant to refer to the LED. Attach via a suitable resistor.
 
-'Set LED as an output
-Dir LED0 Out
+    dir LED0 out            'Set LED as an output
 
-''' Most programs run in a loop such as this one
-' Start here
-Do
+    ''' Most programs run in a loop such as this one
+    Do                 ' Start here
 
-    'Turn LED on for 500 ms
-    PulseOut LED0, 500 ms
-    'Wait with LED off
-    Wait 500 ms
+      PulseOut LED0, 500 ms  'Turn LED on for 500 ms
+      Wait 500 ms            'Wait with LED off
 
-    ' Return to the top and do it again
-Loop
+    Loop              ' Return to the top and do it again
 
-' The program should never get to this line
-'
-' End execution and put the device into low power sleep mode.
-End
+    ' The program should never get to this line
+    '
+    End     ' End execution and put the device into low power sleep mode.

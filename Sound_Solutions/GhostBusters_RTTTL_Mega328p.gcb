@@ -10,34 +10,31 @@
 '''@date   	17.06.2016
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP mega328p
-#INCLUDE <songplay.h>
+; ----- Configuration
+  #chip mega328p
+  #include <songplay.h>
 
-' ----- Define Hardware settings
-' input pin from pushbutton/switch
-#DEFINE SWX PORTb.1
-' set port as input for pushbutton/switch
-Dir SWX In
+; ----- Define Hardware settings
+  #define SWX PORTb.1               ; input pin from pushbutton/switch
+  Dir SWX in                        ; set port as input for pushbutton/switch
 
-' ----- Constants
-' output pin for tone
-#DEFINE SoundOut PORTd.5
+; ----- Constants
+  #define SoundOut PORTd.5          ; output pin for tone
 
-' ----- Variables
-'Requires word size to hold note frequencies
-Dim SoundPlayRTTTLDataString As String * 255
+; ----- Variables
+  'Requires word size to hold note frequencies
+	dim SoundPlayRTTTLDataString as String * 255
 
 
-' ----- Main body of program commences here.
-Wait 2 s
+; ----- Main body of program commences here.
+    wait 2 s
 
-Do Forever
+		do forever
 
-    SoundPlayRTTTLDataString ="ghostbusters:d=16,o=5,b=112:g,g,8b,8g,8a,4f.,g,g,g ,g,8f,4g.,g,g,8b,8g,8a,4f.,g,g,g,g,8f,8a,8g,4d.,g,g,8b,8g,8a,4f.,g,g,g,g,8f ,4g."
-    PlayRTTTL(SoundPlayRTTTLDataString)
+    	SoundPlayRTTTLDataString ="ghostbusters:d=16,o=5,b=112:g,g,8b,8g,8a,4f.,g,g,g ,g,8f,4g.,g,g,8b,8g,8a,4f.,g,g,g,g,8f,8a,8g,4d.,g,g,8b,8g,8a,4f.,g,g,g,g,8f ,4g."
+    	PlayRTTTL(SoundPlayRTTTLDataString)
 
-    Wait While SWX = 1
+      wait while SWX = 1
 
-Loop
-End
+    loop
+		end

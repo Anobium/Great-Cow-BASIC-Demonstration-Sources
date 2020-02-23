@@ -8,32 +8,32 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 16F877a, 4
+; ----- Configuration
+  #chip 16F877a, 4
 
 
-' ----- Define Hardware settings
-'Send port
-Dir PORTA.2 Out
-'Receive Port
-Dir PORTA.0 In
+; ----- Define Hardware settings
+  'Send port
+  Dir PORTA.2 Out
+  'Receive Port
+  Dir PORTA.0 In
 
-'Config Software-UART
-#DEFINE SendAHigh Set PORTA.2 On
-#DEFINE SendALow Set PORTA.2 Off
-#DEFINE RecAHigh PORTA.0 On
-#DEFINE RecALow PORTA.0 Off
-InitSer 1, r9600, 1+WaitForStart, 8, 1, None, Invert
-' ----- Variables
-' No Variables specified in this example. All byte variables are defined upon use.
+  'Config Software-UART
+  #define SendAHigh Set PORTA.2 ON
+  #define SendALow Set PORTA.2 OFF
+  #define RecAHigh PORTA.0 ON
+  #define RecALow PORTA.0 OFF
+  InitSer 1, r9600, 1+WaitForStart, 8, 1, None, Invert
+; ----- Variables
+  ' No Variables specified in this example. All byte variables are defined upon use.
 
-' ----- Main body of program commences here.
-'Message after reset
-Wait 500 ms
-Do Forever
-    SerPrint 1, "Hello World"
-    ' "Carriage Return"
-    SerSend 1, 13
-    ' "Line Feed"
-    SerSend 1, 10
-Loop
+; ----- Main body of program commences here.
+  'Message after reset
+  wait 500 ms
+  do Forever
+   SerPrint 1, "Hello World"
+   ' "Carriage Return"
+   SerSend 1, 13
+   ' "Line Feed"
+   SerSend 1, 10
+  Loop

@@ -9,34 +9,34 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-' ----- Configuration
+; ----- Configuration
 
-#CHIP mega8
+ #chip mega8
 ' #config  :'[todo]
 
 ' #include :'[todo]
 
 
 
-' ----- Constants
-' No Constants specified in this example.
+; ----- Constants
+  ' No Constants specified in this example.
 '  [todo]
 
-' ----- Define Hardware settings
-'  [todo]
-
-
-' ----- Variables
-' No Variables specified in this example. All byte variables are defined upon use.
-'  [todo]
-
-' ----- Quick Command Reference:
+; ----- Define Hardware settings
 '  [todo]
 
 
+; ----- Variables
+  ' No Variables specified in this example. All byte variables are defined upon use.
+'  [todo]
 
-' ----- Main body of program commences here.
+; ----- Quick Command Reference:
+'  [todo]
 
-End
 
-' ----- Support methods.  Subroutines and Functions
+
+; ----- Main body of program commences here.
+
+end
+
+; ----- Support methods.  Subroutines and Functions

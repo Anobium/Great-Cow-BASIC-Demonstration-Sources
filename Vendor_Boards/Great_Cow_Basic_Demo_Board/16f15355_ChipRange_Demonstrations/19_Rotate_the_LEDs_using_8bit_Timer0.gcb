@@ -31,73 +31,72 @@
 
 
 
-'Chip Settings.
-#CHIP 16f15355, 32
-#OPTION Explicit
+    'Chip Settings.
+    #chip 16f15355, 32
+    #option explicit
 
 
 
 
-'' -------------------LATC-----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' LED:   ---------------|D5 |D4 |D3 |D2 |-
-''-----------------------------------------
-''
-#DEFINE LEDD2  PORTC.0
-#DEFINE LEDD3  PORTC.1
-#DEFINE LEDD4  PORTC.2
-#DEFINE LEDD5  PORTC.3
-#DEFINE LEDBANK PORTC
-#DEFINE SWITCH      PORTA.1
+   '' -------------------LATC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
+    ''-----------------------------------------
+    ''
+    #define LEDD2  PORTC.0
+    #define LEDD3  PORTC.1
+    #define LEDD4  PORTC.2
+    #define LEDD5  PORTC.3
+    #define LEDBANK PORTC
+    #define SWITCH      PORTA.1
 
-Dir     LEDD2 Out
-Dir     LEDD3 Out
-Dir     LEDD4 Out
-Dir     LEDD5 Out
-Dir      SWITCH In
+    Dir     LEDD2 OUT
+    Dir     LEDD3 OUT
+    Dir     LEDD4 OUT
+    Dir     LEDD5 OUT
+    Dir      SWITCH IN
 
 '    Set LEDS off
-LEDBANK = 0
+    LEDBANK = 0
 '    Set the first LED on
-Set LEDD5 On
+    Set LEDD5 on
 
 
 
-'Setup the timer.
-'params     Source, Prescaler                , Postscaler
-InitTimer0 Osc, PRE0_16384 + TMR0_HFINTOSC   , POST0_11
+    'Setup the timer.
+    'params     Source, Prescaler                , Postscaler
+    InitTimer0 Osc, PRE0_16384 + TMR0_HFINTOSC   , POST0_11
 
-' Start the Timer by writing to TMR0ON bit
-StartTimer 0
+    ' Start the Timer by writing to TMR0ON bit
+    StartTimer 0
 
-' Set the Timer start value
-SetTimer ( 0, 0xB1 )
-ClearTimer 0
-
-
-Dim CURRENTSTATE As Byte
-
-Do
-    Wait While TMR0IF = 0
-
-    ' Clearing IF flag.
-    TMR0IF = 0
-
-    'get current status of the four bits
-    currentstate = LEDBANK & 0x0F
-
-    'Just rotate the bottom four bits
-    'Set the carry flag
-    C = 0
-    Rotate  currentstate Right
-    'Test the Carry flag
-    If C = 1 Then currentstate.3 = 1
-    'set the BIT on
-
-    'Set the four bits
-    LEDBANK = ( LEDBANK & 0xF0 ) OR currentstate
-
-    'Clear the timer to Zero.
+    ' Set the Timer start value
+    SetTimer ( 0, 0xB1 )
     ClearTimer 0
 
-Loop
+
+    Dim CURRENTSTATE as Byte
+
+    do
+        wait while TMR0IF = 0
+
+        ' Clearing IF flag.
+        TMR0IF = 0
+
+        'get current status of the four bits
+        currentstate = LEDBANK & 0x0F
+
+        'Just rotate the bottom four bits
+        'Set the carry flag
+        C = 0
+        Rotate  currentstate right
+        'Test the Carry flag
+        if C = 1 then currentstate.3 = 1  'set the BIT on
+
+        'Set the four bits
+        LEDBANK = ( LEDBANK & 0xF0 ) OR currentstate
+
+        'Clear the timer to Zero.
+        ClearTimer 0
+
+    loop

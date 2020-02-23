@@ -14,71 +14,71 @@
 '''@date    30.05.15
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 16f1829, 32
-#OPTION Explicit
-#INCLUDE "displaydevices.h"
+; ----- Configuration
+  #Chip 16f1829, 32
+  #option explicit
+  #include "displaydevices.h"
 
-' ----- Define Hardware settings
+   ; ----- Define Hardware settings
 '  ' Define I2C settings - CHANGE PORTS
-#DEFINE HI2C_BAUD_RATE 100
-#DEFINE HI2C_DATA PORTB.4
-#DEFINE HI2C_CLOCK PORTB.6
+   #define HI2C_BAUD_RATE 100
+   #define HI2C_DATA PORTB.4
+   #define HI2C_CLOCK PORTB.6
 
-Dir HI2C_DATA In
-Dir HI2C_CLOCK In
+   Dir HI2C_DATA in
+   Dir HI2C_CLOCK in
 
-HI2CMode Master
-
-
-' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
-' USART settings - CHANGE PORTS if required
-#DEFINE USART_BAUD_RATE 9600
-Dir PORTc.6 Out
-Dir PORTc.7 In
-#DEFINE USART_DELAY 5 ms
-#DEFINE SerSendDelayms 10
-#DEFINE USART_BLOCKING
-Wait 500 ms
-
-' ----- Variables
-Dim DEVICEID, TESTID As Byte
+   HI2CMode Master
 
 
-' ----- Main body of program commences here.
-' Now assumes Serial Terminal is operational
-HSerPrintCRLF 2
-HSerPrint "Hardware I2C "
-HSerPrint ChipNameStr
-HSerPrintCRLF
+  ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
+   ' USART settings - CHANGE PORTS if required
+   #define USART_BAUD_RATE 9600
+   Dir PORTc.6 Out
+   Dir PORTc.7 In
+   #define USART_DELAY 5 ms
+   #define SerSendDelayms 10
+   #define USART_BLOCKING
+   wait 500 ms
 
-For deviceID = 0 To 255
-    HI2CStart
-    If HI2CWaitMSSPTimeout <> TRUE Then
-
-        HI2CSend ( deviceID )
-
-        If HI2CAckpollState = FALSE Then
-            HSerPrintCRLF
-            HSerPrint   "ID: 0x"
-            HSerPrint   Hex(deviceID)
-            HSerSend 9
-            testid =  deviceID | 1
-            DisplayDevices
-            HI2CSend ( 0 )
-
-        End If
-
-        HI2CStop
-
-    End If
-Next
-
-HSerPrintCRLF
-HSerPrint   "End Search"
-HSerPrintCRLF 2
-
-End
+; ----- Variables
+  Dim DEVICEID, TESTID as Byte
 
 
-' ----- Support methods.  Subroutines and Functions
+; ----- Main body of program commences here.
+        ' Now assumes Serial Terminal is operational
+         HSerPrintCRLF 2
+         HSerPrint "Hardware I2C "
+         HSerPrint ChipNameStr
+         HSerPrintCRLF
+
+              for deviceID = 0 to 255
+                HI2CStart
+                if HI2CWaitMSSPTimeout <> True then
+
+                    HI2CSend ( deviceID )
+
+                    if HI2CAckPollState = false then
+                      HSerPrintCRLF
+                      HSerPrint   "ID: 0x"
+                      HSerPrint   hex(deviceID)
+                      HSerSend 9
+                      testid =  deviceID | 1
+                      DisplayDevices
+                      HI2CSend ( 0 )
+
+                    end if
+
+                   HI2CStop
+
+                end if
+              next
+
+              HSerPrintCRLF
+              HSerPrint   "End Search"
+         HSerPrintCRLF 2
+
+         end
+
+
+; ----- Support methods.  Subroutines and Functions

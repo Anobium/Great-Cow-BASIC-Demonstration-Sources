@@ -13,25 +13,24 @@
 '''@date    23.08.2018
 '''*************************************************************************
 
-'Chip Settings
-#CHIP 16f1825, 16
+    'Chip Settings
+    #chip 16f1825, 16
 
-'Set the direction of the CCP1/PWM port
-Dir portc.5 Out
-
-
-'Set frequency in KHz, just change the value
-#DEFINE PWM_Timer2_Freq  38
-
-#DEFINE PWM_1_Duty 50
-#DEFINE PWM_1_Clock_Source 2
+    'Set the direction of the CCP1/PWM port
+    DIR portc.5 Out
 
 
-PWMOn (1)
+    #define PWM_Timer2_Freq  38        'Set frequency in KHz, just change the value
+
+    #define PWM_1_Duty 50
+    #define PWM_1_Clock_Source 2
 
 
-Do
-Loop
+    PWMOn (1)
+
+
+    do
+    loop
 
 
 

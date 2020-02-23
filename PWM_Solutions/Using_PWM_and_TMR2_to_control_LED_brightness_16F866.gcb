@@ -9,58 +9,48 @@
 '''@date    24.10.2016
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 16f886,8
+; ----- Configuration
+    #chip 16f886,8
 
-#OPTION Explicit
+    #option explicit
 
-'Define the ports
-#DEFINE CCP1Port portc.2
-#DEFINE CCP2Port portc.1
+    'Define the ports
+    #define CCP1Port portc.2
+    #define CCP2Port portc.1
 
-'Ensure the ports are outputs
-Dir CCP1Port  Out
-Dir CCP2Port  Out
+    'Ensure the ports are outputs
+    dir CCP1Port  out
+    dir CCP2Port  out
 
-'Set two variables to the spefic values we want
-Dim FrequencyValue, DutyPercentValue As Byte
-'this equate to 80%.  204 is 80% of 255. 255 is 100%
-DutyPercentValue = 204
-'starting frequency
-FrequencyValue = 76
+    'Set two variables to the spefic values we want
+    Dim FrequencyValue, DutyPercentValue as byte
+    DutyPercentValue = 204   'this equate to 80%.  204 is 80% of 255. 255 is 100%
+    FrequencyValue = 76      'starting frequency
 
-HPWM 2, FrequencyValue, DutyPercentValue
+    HPWM 2, FrequencyValue, DutyPercentValue
 
-'Set frequency in KHz
-#DEFINE PWM_Freq 76
-'Set duty cycle to 80 %
-#DEFINE PWM_Duty 80
-'Turn on the CCP1/PWM.  This command only operated on CCP1/PWM
-PWMOn
+    #define PWM_Freq 76    'Set frequency in KHz
+    #define PWM_Duty 80    'Set duty cycle to 80 %
+    PWMOn                  'Turn on the CCP1/PWM.  This command only operated on CCP1/PWM
 
-'Show the signals for 5 seconds on an oscilliscope
-Wait 5 s
+    wait 5 s               'Show the signals for 5 seconds on an oscilliscope
 
-Do Forever
-    For DutyPercentValue = 0 To 250 Step 10
-        ' cycle thru the duty
-        HPWM 2, FrequencyValue, DutyPercentValue
-        Wait 100 ms
-    Next
-    'stop CCP1/PWM
-    PWMOff
-    Wait 1 s
-    'star CCP1/PWM again
-    PWMOn
-Loop
+    do Forever
+        for DutyPercentValue = 0 to 250 step 10
+          HPWM 2, FrequencyValue, DutyPercentValue      ' cycle thru the duty
+          wait 100 ms
+        Next
+        PWMOff                                          'stop CCP1/PWM
+        wait 1 s
+        PWMOn                                           'star CCP1/PWM again
+    Loop
 
 
-''' GCB Optimisations
+    ''' GCB Optimisations
 
-'Optmise PWM.h
-#DEFINE USE_HPWMCCP1 FALSE
-'we are only using this channel
-#DEFINE USE_HPWMCCP2 TRUE
-#DEFINE USE_HPWMCCP3 FALSE
-#DEFINE USE_HPWMCCP4 FALSE
-#DEFINE USE_HPWMCCP5 FALSE
+    'Optmise PWM.h
+        #define USE_HPWMCCP1 false
+        #define USE_HPWMCCP2 true    'we are only using this channel
+        #define USE_HPWMCCP3 false
+        #define USE_HPWMCCP4 false
+        #define USE_HPWMCCP5 false

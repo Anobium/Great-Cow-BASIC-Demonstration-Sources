@@ -15,153 +15,152 @@
 '''@date    22/2/2017
 '''********************************************************************************
 
-' ----- Configuration
-'Chip model
-#CHIP mega328p, 16
-#OPTION Explicit
-#INCLUDE <uno_mega328p.h>
+; ----- Configuration
+  'Chip model
+  #chip mega328p, 16
+  #option explicit
+  #include <uno_mega328p.h>
 
-'Setup LCD Parameters
-#DEFINE LCD_IO 4
-#DEFINE LCD_NO_RW
-#DEFINE LCD_SPEED SLOW
+  ;Setup LCD Parameters
+  #define LCD_IO 4
+  #define LCD_NO_RW
+  #define LCD_Speed SLOW
 
-#DEFINE LCD_DB4           DIGITAL_4
-#DEFINE LCD_DB5           DIGITAL_5
-#DEFINE LCD_DB6           DIGITAL_6
-#DEFINE LCD_DB7           DIGITAL_7
-#DEFINE LCD_RS            DIGITAL_8
-#DEFINE LCD_Enable        DIGITAL_9
-
-
-' ------ Define Constants
-#DEFINE btnRIGHT  0
-#DEFINE btnUP     1
-#DEFINE btnDOWN   2
-#DEFINE btnLEFT   3
-#DEFINE btnSELECT 4
-#DEFINE btnReset  5
-#DEFINE btnNONE   6
-
-#DEFINE LCD_Backlite      DIGITAL_10
-
-' ------ Define port directions
-' ADC port
-Dir ANALOG_0 In
-Dir DIGITAL_10 Out
-
-' ------ Define variables
-select_status = !TRUE
-Dim adc_key_in As Word
-
-Dim SELECT_STATUS, PWMLEVEL, PWMCOUNTER, PWMCOUNTER As Byte
+  #define LCD_DB4           DIGITAL_4
+  #define LCD_DB5           DIGITAL_5
+  #define LCD_DB6           DIGITAL_6
+  #define LCD_DB7           DIGITAL_7
+  #define LCD_RS            DIGITAL_8
+  #define LCD_Enable        DIGITAL_9
 
 
-' ------ Main program starts here
-'Call the initialisation routine
-InitPWM
+; ------ Define Constants
+  #define btnRIGHT  0
+  #define btnUP     1
+  #define btnDOWN   2
+  #define btnLEFT   3
+  #define btnSELECT 4
+  #define btnReset  5
+  #define btnNONE   6
 
-CLS
+  #define LCD_Backlite      DIGITAL_10
 
-Print "Great Cow Basic"
-Locate 1,0
-Print "Anobium Feb 2019"
-Wait 2 s
-CLS
+; ------ Define port directions
+  ' ADC port
+  dir ANALOG_0 In
+  dir DIGITAL_10 out
 
-Print "Keypad Demo     "
-Print "Version 3"
-Wait 2 s
+; ------ Define variables
+  select_status = !true
+  dim adc_key_in as Word
 
-Locate 1,0
-Print Fill(16)
+  Dim SELECT_STATUS, PWMLEVEL, PWMCOUNTER, PWMCOUNTER as Byte
 
-Do Forever
-    Locate 0,15
-    If select_status = TRUE Then
+
+; ------ Main program starts here
+  'Call the initialisation routine
+  InitPWM
+
+  cls
+
+  print "Great Cow Basic"
+  Locate 1,0
+  print "Anobium Feb 2019"
+  wait 2 s
+  cls
+
+  print "Keypad Demo     "
+  print "Version 3"
+  wait 2 s
+
+  Locate 1,0
+  print Fill(16)
+
+  do forever
+     Locate 0,15
+     if select_status = true Then
         Print "*"
-    Else
+     Else
         Print " "
-    End If
+     end if
 
-    Locate 1,0
-    Select Case read_LCD_buttons
-    Case btnRIGHT
-        Print "Right   "
-    Case btnUP
+     Locate 1,0
+     select case read_LCD_buttons
+            case btnRIGHT
+                 Print "Right   "
+            case btnUP
 
-        If select_status = TRUE  Then
-            PWMLevel++
-            Wait 25 ms
-            If PWMLevel > 100 Then
-                PWMLevel = 100
-                Print "Up Max  "
+                 if select_status = true  then
+                   PWMLevel++
+                   WAIT 25 MS
+                   if PWMLevel > 100 then
+                      PWMLevel = 100
+                      Print "Up Max  "
 
-            End If
-        Else
-            Print "Up      "
-        End If
-        Print ""
-    Case btnDOWN
+                   end if
+                 else
+                   Print "Up      "
+                 end if
+                 Print ""
+            case btnDOWN
 
-        If select_status = TRUE  Then
+                 if select_status = true  then
 
-            Wait 25 ms
-            If PWMLevel > 0 Then
-                PWMLevel--
-                If PWMLevel = 1 Then Print "Down Min"
-            End If
-        Else
-            Print "Down    "
-        End If
-
-
-    Case btnLEFT
-        Print "Left    "
-    Case btnSELECT
-        Print "Select  "
-        select_status = !select_status
-        Wait While read_LCD_buttons = btnSELECT
-    Case btnReset
-        Print "Reset   "
-    Case Else
-        Print "None    "
-
-    End Select
+                   WAIT 25 MS
+                   if PWMLevel > 0 then
+                      PWMLevel--
+                      if PWMLevel = 1 then Print "Down Min"
+                   end if
+                 else
+                   Print "Down    "
+                 end if
 
 
+            case btnLEFT
+                 Print "Left    "
+            case btnSELECT
+                 Print "Select  "
+                 select_status = !select_status
+                 wait while read_LCD_buttons = btnSELECT
+            case btnReset
+                 Print "Reset   "
+            case else
+                 Print "None    "
+
+     end select
 
 
-Loop
 
 
-End
+  loop
+
+
+  end
 
 
 
 
 'read the buttons
-Function read_LCD_buttons
+function read_LCD_buttons
     read_LCD_buttons =   btnNONE
-    ' read the value from the sensor
-    adc_key_in = ReadAD10(AN0)
+    adc_key_in = ReadAD10(AN0)      ' read the value from the sensor
     ' Buttons when read are centered at thes values shown below:
     ' we add approx 50 to those values and check to see if we are close
     ' We make this the 1st option for speed reasons since it will be the most likely result
-    Select Case adc_key_in
-    Case < 50
-        read_LCD_buttons = btnRIGHT
-    Case < 150
-        read_LCD_buttons = btnUP
-    Case < 400
-        read_LCD_buttons = btnDOWN
-    Case < 550
-        read_LCD_buttons = btnLEFT
-    Case < 700
-        read_LCD_buttons = btnSelect
-    End Select
+    select case adc_key_in
+           case < 50
+                read_LCD_buttons = btnRIGHT
+           case < 150
+                read_LCD_buttons = btnUP
+           case < 400
+                read_LCD_buttons = btnDOWN
+           case < 550
+                read_LCD_buttons = btnLEFT
+           case < 700
+                read_LCD_buttons = btnSelect
+    end select
 
-End Function
+end function
 
 
 'Setup routine
@@ -174,8 +173,8 @@ Sub InitPWM
     On Interrupt Timer0Overflow Call PWMHandler
 
     'Set up the timer and start
-    InitTimer0 Osc, PS_1
-    StartTimer 0
+     InitTimer0 Osc, PS_1
+     StartTimer 0
 
 End Sub
 
@@ -188,6 +187,6 @@ Sub PWMHandler
     End If
     PWMCounter -= 1
     If PWMCounter = 0 Then
-        PWMCounter = 99
-    End If
+       PWMCounter = 99
+    END IF
 End Sub

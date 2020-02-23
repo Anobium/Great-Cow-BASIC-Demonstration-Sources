@@ -10,67 +10,61 @@
 '''@date
 '''********************************************************************************
 
-'Chip Settings.
-#CHIP 16f1939,32
-#OPTION Explicit
+  'Chip Settings.
+  #chip 16f1939,32
+  #option explicit
 
-#INCLUDE <glcd.h>
+    #include <glcd.h>
 
-#DEFINE GLCD_TYPE GLCD_TYPE_ILI9341
+    #define GLCD_TYPE GLCD_TYPE_ILI9341
 
-'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
 
-' #define GLCD_DI  portc.4        '  Data in | MISO   Not required
-' Data out | MOSI
-#DEFINE GLCD_DO  portc.5
-' Clock Line
-#DEFINE GLCD_SCK portc.3
+    ' #define GLCD_DI  portc.4        '  Data in | MISO   Not required
+    #define GLCD_DO  portc.5        ' Data out | MOSI
+    #define GLCD_SCK portc.3       ' Clock Line
 
-' Data command line
-#DEFINE GLCD_DC porta.0
-' Chip select line
-#DEFINE GLCD_CS portc.1
-' Reset line
-#DEFINE GLCD_RESET portc.0
+    #define GLCD_DC porta.0       ' Data command line
+    #define GLCD_CS portc.1        ' Chip select line
+    #define GLCD_RESET portc.0     ' Reset line
 
 
-' remove/comment out if you want to use software SPI.
-#DEFINE ILI9341_HardwareSPI
+    #define ILI9341_HardwareSPI    ' remove/comment out if you want to use software SPI.
 
 
 
 
 
-Dim scalefactor As Word
+  dim scalefactor as Word
 
-If GLCD_WIDTH > GLCD_HEIGHT Then
+  if GLCD_WIDTH > GLCD_HEIGHT then
     scalefactor = GLCD_HEIGHT * 100
-Else
+  else
     scalefactor = GLCD_WIDTH * 100
-End If
-scalefactor = scalefactor / 255
+  end if
+  scalefactor = scalefactor / 255
 
-GLCDBackground = ILI9341_BLUE
-GLCDCLS
+  GLCDBackground = ILI9341_BLUE
+  GLCDCLS
 
-GLCDPrint 0,0, "Scalefactor = "+ Str(scalefactor)
+  GLCDPrint 0,0, "Scalefactor = "+ str(scalefactor)
 
-Dim ccc, xpos, ypos, xpos1, ypos1 As Word
-Do Forever
+  dim ccc, xpos, ypos, xpos1, ypos1 as word
+  do Forever
 
-    Repeat 500
-        xpos = (Random * scalefactor  ):xpos = xpos/100
-        ypos = (Random * scalefactor ):ypos = ypos/100
-        xpos1 = (Random * scalefactor ):xpos1 = xpos1/100
-        ypos1 = (Random * scalefactor ):ypos1 = ypos1/100
+              repeat 500
+                xpos = (random * scalefactor  ):xpos = xpos/100
+                ypos = (random * scalefactor ):ypos = ypos/100
+                xpos1 = (random * scalefactor ):xpos1 = xpos1/100
+                ypos1 = (random * scalefactor ):ypos1 = ypos1/100
 
-        ccc = Random
-        ccc_h = Random
+                ccc = Random
+                ccc_h = Random
 
-        Box(xpos,ypos,(xpos+xpos1),(ypos+ypos1),ccc)
+                box(xpos,ypos,(xpos+xpos1),(ypos+ypos1),ccc)
 
-    End Repeat
-    GLCDCLS
+                end repeat
+          GLCDCLS
 
 
-Loop
+  loop

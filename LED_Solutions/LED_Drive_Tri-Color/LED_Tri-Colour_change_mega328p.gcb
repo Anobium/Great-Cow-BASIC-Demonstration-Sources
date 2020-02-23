@@ -9,92 +9,92 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP mega328p,16
-#OPTION Explicit
+; ----- Configuration
+  #chip mega328p,16
+  #option explicit
 
 
-' ----- Define Hardware settings
-'LED port directions
-Dir Red Out
-Dir green Out
-Dir blue Out
+; ----- Define Hardware settings
+  'LED port directions
+  dir Red out
+  dir green out
+  dir blue out
 
-'Setup LCD Parameters
-#DEFINE LCD_IO 4
-#DEFINE LCD_NO_RW
-#DEFINE LCD_SPEED SLOW
+  ;Setup LCD Parameters
+  #define LCD_IO 4
+  #define LCD_NO_RW
+  #define LCD_Speed SLOW
 
-'Change as necessary
-#DEFINE LCD_RS PortB.0
-#DEFINE LCD_Enable PortB.1
-#DEFINE LCD_DB4 PortC.3
-#DEFINE LCD_DB5 PortC.2
-#DEFINE LCD_DB6 PortC.1
-#DEFINE LCD_DB7 PortC.0
+  'Change as necessary
+  #define LCD_RS PortB.0
+  #define LCD_Enable PortB.1
+  #define LCD_DB4 PortC.3
+  #define LCD_DB5 PortC.2
+  #define LCD_DB6 PortC.1
+  #define LCD_DB7 PortC.0
 
-' ----- Constants
+; ----- Constants
 
-#DEFINE Red PORTB.2
-#DEFINE Green PORTB.3
-#DEFINE Blue PORTB.4
+  #define Red PORTB.2
+  #define Green PORTB.3
+  #define Blue PORTB.4
 
-' ----- Variables
-Dim REDLEVEL, GREENLEVEL, BLUELEVEL, FLASHRATE, PULSELOOP, LEVEL, RLTEMP As Byte
-
-
-
-' ----- Main body of program commences here.
-'Intro message
-Print "Tri-colour LED"
-Locate 1, 0
-Print "A GCBASIC Demo"
-
-Main:
-For RedLevel = 1 To 200
-    ShowColour Smooth(RedLevel), 1, 1
-Next
-For GreenLevel = 1 To 200
-    ShowColour 1, Smooth(GreenLevel), 1
-Next
-For BlueLevel = 1 To 200
-    ShowColour 1, 1, Smooth(BlueLevel)
-Next
-Goto Main
-End
-
-' ----- Support methods.  Subroutines and Functions
+; ----- Variables
+  Dim REDLEVEL, GREENLEVEL, BLUELEVEL, FLASHRATE, PULSELOOP, LEVEL, RLTEMP as Byte
+ 
 
 
-Sub ShowColour(RL, GL, BL)
-    RLTemp = RL+RL
-    ' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
-    FlashRate = ReadAD( 0 )
-    For PulseLoop = 1 To FlashRate
-        Set red On
-        Set green On
-        Set blue On
-        For Level = 1 To 200
-            If Level > RLTemp Then
-                Set red Off
-            End If
-            If Level > GL Then
-                Set green Off
-            End If
-            If Level > BL Then
-                Set blue Off
-            End If
-        Next
-    Next
-End Sub
+; ----- Main body of program commences here.
+  'Intro message
+  PRINT "Tri-colour LED"
+  Locate 1, 0
+  PRINT "A GCBASIC Demo"
 
-Function Smooth(temp)
-    If temp < 100 Then
-        Smooth = temp
-    End If
-    If temp >= 100 Then
-        Smooth = 200-temp
-    End If
-End Function
+  Main:
+      For RedLevel = 1 to 200
+          ShowColour Smooth(RedLevel), 1, 1
+      next
+      For GreenLevel = 1 to 200
+          ShowColour 1, Smooth(GreenLevel), 1
+      next
+      For BlueLevel = 1 to 200
+          ShowColour 1, 1, Smooth(BlueLevel)
+      next
+  goto Main
+  end
+
+; ----- Support methods.  Subroutines and Functions
+
+
+sub ShowColour(RL, GL, BL)
+   RLTemp = RL+RL
+   ' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
+   FlashRate = ReadAD( 0 )
+   for PulseLoop = 1 to FlashRate
+      set red on
+      set green on
+      set blue on
+      for Level = 1 to 200
+         if Level > RLTemp then
+            set red off
+         end if
+         if Level > GL then
+            set green off
+         end if
+         if Level > BL then
+            set blue off
+         end if
+      next
+   next
+end sub
+
+function Smooth(temp)
+   if temp < 100 then
+      Smooth = temp
+   end if
+   if temp >= 100 then
+      Smooth = 200-temp
+   end if
+end function
 
 

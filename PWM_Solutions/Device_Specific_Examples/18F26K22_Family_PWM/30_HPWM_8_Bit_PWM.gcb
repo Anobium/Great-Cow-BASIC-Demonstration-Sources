@@ -12,34 +12,29 @@
 '''@date    22.08.2018
 '''*************************************************************************
 
-'Chip Settings
-#CHIP 18F26K22, 64
+    'Chip Settings
+    #chip 18F26K22, 64
 
-'CCP1
-Dir portc.2 Out
-'CCP2
-Dir portc.1 Out
-'CCP3
-Dir portb.5 Out
-'CCP4
-Dir portb.0 Out
-'CCP5
-Dir porta.4 Out
+    DIR portc.2 Out  'CCP1
+    DIR portc.1 Out  'CCP2
+    DIR portb.5 Out  'CCP3
+    DIR portb.0 Out  'CCP4
+    DIR porta.4 Out  'CCP5
 
-Do
+    do
 
-    'use for-loop to show the duty changing a 10bit value
-    Dim dutyvalue As Byte
-    For dutyvalue = 0 To 255
-        HPWM_CCPTimerN 5, 50, dutyvalue, 6
-        HPWM_CCPTimerN 4, 40, dutyvalue, 4
-        HPWM_CCPTimerN 3, 30, dutyvalue, 4
-        HPWM_CCPTimerN 2, 20, dutyvalue, 2
-        HPWM_CCPTimerN 1, 10, dutyvalue, 2
+        'use for-loop to show the duty changing a 10bit value
+        dim dutyvalue as byte
+        for dutyvalue = 0 to 255
+            HPWM_CCPTimerN 5, 50, dutyvalue, 6
+            HPWM_CCPTimerN 4, 40, dutyvalue, 4
+            HPWM_CCPTimerN 3, 30, dutyvalue, 4
+            HPWM_CCPTimerN 2, 20, dutyvalue, 2
+            HPWM_CCPTimerN 1, 10, dutyvalue, 2
 
-        Wait 10 ms
-    Next
+            wait 10 ms
+        next
 
-Loop
+    loop
 
 

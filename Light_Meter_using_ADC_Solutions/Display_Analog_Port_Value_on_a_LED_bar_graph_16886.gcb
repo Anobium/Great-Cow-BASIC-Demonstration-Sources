@@ -11,54 +11,54 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 16F886,16
+; ----- Configuration
+ #chip 16F886,16
 
-' ----- Define Hardware settings
-Dir PORTB Out
-
-
-' ----- Constants
-' No Constants specified in this example.
+; ----- Define Hardware settings
+  Dir PORTB Out
 
 
-' ----- Variables
-' No Variables specified in this example. All byte variables are defined upon use.
+; ----- Constants
+  ' No Constants specified in this example.
 
 
-' ----- Main body of program commences here.
+; ----- Variables
+  ' No Variables specified in this example. All byte variables are defined upon use.
 
-Start:
 
-'Light all LEDs if pot turned all way to right
-If ReadAD(AN0) > 230 Then
-    PORTB = b'00111100'
+; ----- Main body of program commences here.
+
+    Start:
+
+    'Light all LEDs if pot turned all way to right
+    If ReadAD(AN0) > 230 Then
+              PORTB = b'00111100'
+              Goto Start
+    end if
+
+    'Three LEDs lit
+    If ReadAD(AN0) > 180 Then
+              PORTB = b'00011100'
+              Goto Start
+    end if
+
+    'Two LEDs lit
+    If ReadAD(AN0) > 100 Then
+              PORTB = b'00001100'
+              Goto Start
+    end if
+
+    'One LED lit
+    If ReadAD(AN0) > 10 Then
+              PORTB = b'00000100'
+              Goto Start
+    end if
+
+    'All LEDs off, Pot all way to left
+    If ReadAD(AN0) < 10 Then
+              PORTB = 0
+    end if
+
     Goto Start
-End If
 
-'Three LEDs lit
-If ReadAD(AN0) > 180 Then
-    PORTB = b'00011100'
-    Goto Start
-End If
-
-'Two LEDs lit
-If ReadAD(AN0) > 100 Then
-    PORTB = b'00001100'
-    Goto Start
-End If
-
-'One LED lit
-If ReadAD(AN0) > 10 Then
-    PORTB = b'00000100'
-    Goto Start
-End If
-
-'All LEDs off, Pot all way to left
-If ReadAD(AN0) < 10 Then
-    PORTB = 0
-End If
-
-Goto Start
-
-End
+    end

@@ -6,38 +6,38 @@
 '
 ' The first call to setup the PWM module is much slower then the second and subsequent calls.
 '
-#CHIP 16f886,8
+#chip 16f886,8
 
 
 
-'Set the CCP2 pin to output mode
-Dir PORTC.1 Out
+    'Set the CCP2 pin to output mode
+    DIR PORTC.1 out
 
-Dim Bright As Word
+    Dim Bright as word
 
-'Main code
-'freq 40khz
-'variable duty from 0% to 100%
-'hpwm3 using timer 2 with optimisation
+    'Main code
+    'freq 40khz
+    'variable duty from 0% to 100%
+    'hpwm3 using timer 2 with optimisation
 
-#DEFINE HPWM_Fast
-'First call is slower as all subsequent - try timing it
+    #define HPWM_FAST
+    'First call is slower as all subsequent - try timing it
 
 
-'Main code
-'freq 40khz
-'variable duty from 0% to 100%
-Do
-    'Turn up brightness over 2.5 seconds
-    For Bright = 1 To 255
-        HPWM 2, 40, Bright
-        Wait 10 ms
-    Next
-    'Turn down brightness over 2.5 seconds
-    For Bright = 255 To 1
-        HPWM 2, 40, Bright
-        Wait 10 ms
-    Next
-Loop
+    'Main code
+    'freq 40khz
+    'variable duty from 0% to 100%
+    do
+        'Turn up brightness over 2.5 seconds
+        For Bright = 1 to 255
+            HPWM 2, 40, Bright
+            wait 10 ms
+        next
+        'Turn down brightness over 2.5 seconds
+        For Bright = 255 to 1
+            HPWM 2, 40, Bright
+            wait 10 ms
+        next
+    loop
 
-End
+end

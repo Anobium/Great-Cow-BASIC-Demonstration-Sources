@@ -9,52 +9,50 @@
 '''@date    27.08.2019
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 16f18446, 32
-#OPTION Explicit
+; ----- Configuration
+    #chip 16f18446, 32
+    #option explicit
 
 
-' ----- Define GLCD Hardware settings
-#INCLUDE <glcd.h>
+; ----- Define GLCD Hardware settings
+    #include <glcd.h>
 
-#DEFINE GLCD_TYPE GLCD_TYPE_UC1601
-'I2C address
-#DEFINE GLCD_I2C_Address      0x70
-'Hard Reset pin connection
-#DEFINE GLCD_RESET            portc.0
-#DEFINE GLCD_PROTECTOVERRUN
-#DEFINE GLCD_OLED_FONT
+    #define GLCD_TYPE GLCD_TYPE_UC1601
+    #define GLCD_I2C_Address      0x70                   'I2C address
+    #define GLCD_RESET            portc.0                'Hard Reset pin connection
+    #define GLCD_PROTECTOVERRUN
+    #define GLCD_OLED_FONT
 
-' ----- Define Hardware settings
+; ----- Define Hardware settings
 
-' Define I2C settings - CHANGE PORTS
-#DEFINE I2C_MODE Master
-#DEFINE I2C_DATA PORTb.5
-#DEFINE I2C_CLOCK PORTb.7
-#DEFINE I2C_DISABLE_INTERRUPTS On
+    ' Define I2C settings - CHANGE PORTS
+    #define I2C_MODE Master
+    #define I2C_DATA PORTb.5
+    #define I2C_CLOCK PORTb.7
+    #define I2C_DISABLE_INTERRUPTS ON
 
-' ----- Define variables
-'none
-' ----- Main program
+; ----- Define variables
+    'none
+; ----- Main program
 
-'You can treat the GLCD like an LCD....
-GLCDPrintStringLn "User the GLCD like an LCD...."
-GLCDPrintStringLn "The GLCDPrintString commands...."
-GLCDPrintString "Enjoy....."
-Wait 4 s
+    'You can treat the GLCD like an LCD....
+    GLCDPrintStringLN "User the GLCD like an LCD...."
+    GLCDPrintStringLN "The GLCDPrintString commands...."
+    GLCDPrintString "Enjoy....."
+    wait 4 s
 
-Do
-    GLCDCLS
-    GLCDPrintStringLn "1. START DEMO"
-    GLCDPrintStringLn   "2. GLCD PrintStringLN"
+    do
+              GLCDCLS
+              GLCDPrintStringLN "1. START DEMO"
+              GLCDPrintStringLN   "2. GLCD PrintStringLN"
 
-    'Print the letter X on the third line in the far right position
-    GLCDLocateString  127, 3
-    GLCDPrintString   "X"
-    Wait 2 s
+              'Print the letter X on the third line in the far right position
+              GLCDLocateString  127, 3
+              GLCDPrintString   "X"
+              wait 2 s
 
-    GLCDCLS
-    GLCDPrintStringLn "END DEMO"
-    Wait 2 s
+              GLCDCLS
+              GLCDPrintStringLN "END DEMO"
+              wait 2 s
 
-Loop
+    loop

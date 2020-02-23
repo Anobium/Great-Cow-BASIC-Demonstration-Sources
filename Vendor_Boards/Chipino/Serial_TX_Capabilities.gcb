@@ -1,74 +1,74 @@
-'''A demonstration program for GCGB and GCB.
-'''--------------------------------------------------------------------------------------------------------------------------------
-'''This program ia a demonstration serial capabilities of the Chipino board.
-'''
-'''@author 	 EvanV
-'''@licence	 GPL
-'''@version	 1.0a
-'''@date   	 19.03.2016
-'''********************************************************************************
+ '''A demonstration program for GCGB and GCB.
+ '''--------------------------------------------------------------------------------------------------------------------------------
+ '''This program ia a demonstration serial capabilities of the Chipino board.
+ '''
+ '''@author 	 EvanV
+ '''@licence	 GPL
+ '''@version	 1.0a
+ '''@date   	 19.03.2016
+ '''********************************************************************************
 '********************************************************************************
 
 'Chip model
-#CHIP 16F886, 8
+#chip 16F886, 8
 
-#DEFINE SoundOut PORTc.2
-Dim timedelay1 As Word
-Dir b0 In
-Dir b1 In
-On Interrupt  portbchange Call InterruptHandler
+#define SoundOut PORTc.2
+dim timedelay1 as word
+dir b0 in
+dir b1 in
+on Interrupt  portbchange call InterruptHandler
 IOCB0 = 1
 IOCB1 = 1
 
-Repeat 4
+repeat 4
 
-    Tone 110, 10
-    Wait 10 ms
-End Repeat
+       tone 110, 10
+       wait 10 ms
+end repeat
 
-'USART settings
-#DEFINE USART_BAUD_RATE 9600
-Dir PORTc.6 Out
-#DEFINE USART_DELAY 5 ms
-#DEFINE SerSendDelayms 10
+    'USART settings
+    #define USART_BAUD_RATE 9600
+    Dir PORTc.6 Out
+    #define USART_DELAY 5 ms
+    #define SerSendDelayms 10
 
-HSerSend 27
-HSerPrint "[2J"
-Ansi ( 0, 0)
-HSerPrint "ChipIno Serial Demo"
-HSerPrintCRLF
+    HSerSend 27
+    HSerPrint "[2J"
+    Ansi ( 0, 0)
+    HSerPrint "ChipIno Serial Demo"
+    HSerPrintCRLF
 
-Do Forever
-    HSerPrintByte ReadAD(an1)
-    HSerSend 9
-    HSerPrintByteCRLF ReadAD(an0)
-    Wait 125 ms
-Loop
+    do forever
+       HSerPrintByte ReadAD(an1)
+       HSerSend 9
+       HSerPrintByteCRLF ReadAD(an0)
+       wait 125 ms
+    loop
 
-End
+end
 
 
 ' Position cursor on Terminal
-Sub ANSI ( In xpos, In ypos )
+Sub ANSI ( IN xpos, IN ypos )
     HSerSend 27
-    Wait SerSendDelayms ms
+    wait SerSendDelayms ms
     HSerPrint "["
     HSerPrint ypos
     HSerSend 59
     HSerPrint xpos
     HSerPrint "H"
-    Wait SerSendDelayms ms
+    wait SerSendDelayms ms
 End Sub
 
-Sub InterruptHandler
+sub InterruptHandler
     IntOff
     RBIF = 0
-    If portb.0 = 1 Then
+    if portb.0 = 1 then
         Tone 220, 5
-    End If
+    end if
 
-    If portb.1 = 1 Then
+    if portb.1 = 1 then
         Tone 880, 5
-    End If
-    IntOn
-End Sub
+    end if
+    inton
+end sub

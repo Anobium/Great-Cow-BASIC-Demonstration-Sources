@@ -8,32 +8,29 @@
 '
 ' To set the parameters of Great Cow BASIC PWM fixed mode for the channels use the commands shown below::
 
-#CHIP 12F1572, 32
-#CONFIG mclr=On
+    #chip 12F1572, 32
+    #config mclr=on
 
-Dir PORTA Out
+    Dir PORTA Out
 
-'30 kHz, 25% duty cycle (16384/65535)
-HPWM16(1, 30, 16384)
-'30 kHz, 25% duty cycle (16384/65535)
-HPWM16(2, 30, 16384)
-'30 kHz, 25% duty cycle (16384/65535)
-HPWM16(3, 30, 16384)
+    HPWM16(1, 30, 16384)   '30 kHz, 25% duty cycle (16384/65535)
+    HPWM16(2, 30, 16384)   '30 kHz, 25% duty cycle (16384/65535)
+    HPWM16(3, 30, 16384)   '30 kHz, 25% duty cycle (16384/65535)
 
 
-Do Forever
-Loop
+    do Forever
+    loop
 
 
-#DEFINE USE_HPWM16_1 TRUE
-#DEFINE USE_HPWM16_2 TRUE
-#DEFINE USE_HPWM16_3 TRUE
-#DEFINE USE_HPWM16_4 FALSE
-#DEFINE USE_HPWM16_5 FALSE
-#DEFINE USE_HPWM16_6 FALSE
-#DEFINE USE_HPWM16_7 FALSE
-#DEFINE USE_HPWM16_8 FALSE
-#DEFINE USE_HPWM16_9 FALSE
-#DEFINE USE_HPWM16_10 FALSE
-#DEFINE USE_HPWM16_11 FALSE
-#DEFINE USE_HPWM16_12 FALSE
+    #define USE_HPWM16_1 TRUE
+    #define USE_HPWM16_2 TRUE
+    #define USE_HPWM16_3 TRUE
+    #define USE_HPWM16_4 FALSE
+    #define USE_HPWM16_5 FALSE
+    #define USE_HPWM16_6 FALSE
+    #define USE_HPWM16_7 FALSE
+    #define USE_HPWM16_8 FALSE
+    #define USE_HPWM16_9 FALSE
+    #define USE_HPWM16_10 FALSE
+    #define USE_HPWM16_11 FALSE
+    #define USE_HPWM16_12 FALSE

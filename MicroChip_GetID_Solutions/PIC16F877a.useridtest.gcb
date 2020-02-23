@@ -28,36 +28,35 @@
 '''********************************************************************************
 
 
-#CHIP 16F877a
-WRT_OFF
-
-#INCLUDE <GetUserID.h>
 
 
-Dim NVIndex As Byte
-
-#DEFINE USART_BAUD_RATE 19200
-#DEFINE USART_TX_BLOCKING
-
-'Implement ANSI escaope code for serial terminal NOT using a LCD!
-#DEFINE ESC   CHR(27)
-#DEFINE CLS   HSerPrint(ESC+"[2J")
-#DEFINE HOME  HSerPrint(ESC+"[H")
-
-CLS
-HOME
+  #include <getuserid.h>
 
 
+  dim NVIndex as byte
 
-For NVIndex = 0 To 0x0F
+  #define USART_BAUD_RATE 19200
+  #define USART_TX_BLOCKING
+
+  'Implement ANSI escaope code for serial terminal NOT using a LCD!
+  #define ESC   chr(27)
+  #define CLS   HSerPrint(ESC+"[2J")
+  #define HOME  HSerPrint(ESC+"[H")
+
+  CLS
+  HOME
+
+
+
+  For NVIndex = 0 to 0x0F
 
     UserIDRegister = GetUserID(NVIndex)
-    HSerPrint "80" + Hex(NVIndex)
-    HSerPrint " : "
-    HSerPrint Hex( UserIDRegister_H )
-    HSerPrint Hex( UserIDRegister   )
-    HSerPrintCRLF
+    HserPrint "80" + hex(NVIndex)
+    HserPrint " : "
+    HserPrint hex( UserIDRegister_H )
+    HserPrint hex( UserIDRegister   )
+    HserPrintCRLF
 
-Next
+  Next
 
 End

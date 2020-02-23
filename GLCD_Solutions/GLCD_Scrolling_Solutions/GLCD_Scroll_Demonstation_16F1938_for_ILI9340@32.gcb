@@ -11,99 +11,91 @@
 '''********************************************************************************
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 16f1938,32
-#OPTION Explicit
+; ----- Configuration
+  #chip 16f1938,32
+  #option explicit
 
-#INCLUDE <glcd.h>
-#INCLUDE <chipino.h>
+  #include <glcd.h>
+  #include <chipino.h>
 
-' ----- Define Hardware settings
-' Hardware is setup in the GLCD method
-#DEFINE GLCD_TYPE GLCD_TYPE_ILI9340
+; ----- Define Hardware settings
+  ' Hardware is setup in the GLCD method
+    #define GLCD_TYPE GLCD_TYPE_ILI9340
 
-'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-' Data command line
-#DEFINE GLCD_DC 			D8
-' Chip select line
-#DEFINE GLCD_CS 			D10
-' Reset line
-#DEFINE GLCD_RESET 		D9
+    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+    #define GLCD_DC 			D8					' Data command line
+    #define GLCD_CS 			D10					' Chip select line
+    #define GLCD_RESET 		D9					' Reset line
 
-' Data in | MISO
-#DEFINE GLCD_DI  			D3
-' Data out | MOSI
-#DEFINE GLCD_DO  			D2
-' Clock Line
-#DEFINE GLCD_SCK 			D4
+    #define GLCD_DI  			D3 					' Data in | MISO
+    #define GLCD_DO  			D2					' Data out | MOSI
+    #define GLCD_SCK 			D4					' Clock Line
 
-' remove/comment out if you want to use software SPI.
-#DEFINE ILI9340_HardwareSPI
+    #define ILI9340_HardwareSPI    ' remove/comment out if you want to use software SPI.
 
-' ----- Variables
-Dim GLCDChar As Byte
+; ----- Variables
+    dim GLCDChar as Byte
 
-' ----- Main body of program commences here.  This is reusable code.
+; ----- Main body of program commences here.  This is reusable code.
 
 
-SetVerticalScrollDefinition (32, 0)
+		SetVerticalScrollDefinition (32, 0)
 
-GLCDfntDefaultSize = 2
-GLCDDrawString(0,8, "Great Cow Basic 2019", ILI9340_GREEN )
+    GLCDfntDefaultsize = 2
+    GLCDDrawString(0,8, "Great Cow Basic 2019", ILI9340_GREEN )
 
-Dim ScrollPosition As Word
-ScrollPosition = 32
-Dim ypos As Word
-GLCDChar = 1
+		dim ScrollPosition as word
+		ScrollPosition = 32
+    dim ypos as Word
+    GLCDChar = 1
 
-Do Forever
-
-
-    If ScrollPosition = 32 Then
-        ypos = 304
-    Else
-        ypos = ScrollPosition - 16
-    End If
-    ypos--
-
-    GLCDDrawString( 0, ypos, Pad( "", 20, CHR(GLCDChar+64) ) )
+    do Forever
 
 
-    If  GLCDChar < 26 Then
-        GLCDChar++
-    Else
-        GLCDChar = 1
-    End If
-    ScrollScreen
+        if ScrollPosition = 32 Then
+            ypos = 304
+        Else
+            ypos = ScrollPosition - 16
+        End if
+				ypos--
+
+        GLCDDrawString( 0, ypos, pad( "", 20, Chr(GLCDChar+64) ) )
+
+
+        if  GLCDChar < 26 then
+          GLCDChar++
+        else
+          GLCDChar = 1
+        end if
+        ScrollScreen
 
 
 Loop
 
-' ----- Methods and Subs
+; ----- Methods and Subs
 
 
-Sub SetVerticalScrollDefinition( TFA As Word, BFA As Word )
-    'TFA+VSA=BFA must equal 320, see datasheet
+sub SetVerticalScrollDefinition( TFA as word, BFA as word )
+  'TFA+VSA=BFA must equal 320, see datasheet
 
-    'Vertical Scroll definition.
-    SendCommand_ILI9340 ( 0x33 )
-    SendWord_ILI9340(TFA)
-    SendWord_ILI9340(320-(TFA+BFA))
-    SendWord_ILI9340(BFA)
+  'Vertical Scroll definition.
+  SendCommand_ILI9340 ( 0x33 )
+  SendWord_ILI9340(TFA)
+  SendWord_ILI9340(320-(TFA+BFA))
+  SendWord_ILI9340(BFA)
 
-End Sub
+end sub
 
-Sub ScrollScreen
+sub ScrollScreen
 
-    '
-    ScrollPosition += 16
-    If (ScrollPosition = 320) Then ScrollPosition = 32
-    SendVerticalScrollStartAddress(ScrollPosition)
-End Sub
+  ScrollPosition += 16;
+  if (ScrollPosition = 320) then ScrollPosition = 32
+  SendVerticalScrollStartAddress(ScrollPosition)
+end sub
 
-Sub SendVerticalScrollStartAddress( VSP As Word )
-    ' Vertical Scrolling Start Address definition.
-    SendCommand_ILI9340(0x37)
-    SendWord_ILI9340(VSP)
-End Sub
+sub SendVerticalScrollStartAddress( VSP as Word )
+	' Vertical Scrolling Start Address definition.
+  SendCommand_ILI9340(0x37)
+  SendWord_ILI9340(VSP)
+end sub
 

@@ -21,84 +21,83 @@
 '''@date    03/05/2018
 '''****
 ' ----- Configuration
-'Chip Settings.
-#CHIP 16F19156, 32
-#OPTION Explicit
+    'Chip Settings.
+    #chip 16F19156, 32
+    #option Explicit
 
-'' -------------------PORTA----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---|RS |RW | E |D7 |D6 |D5 |D4
-''-----------------------------------------
-''
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---|RS |RW | E |D7 |D6 |D5 |D4
+    ''-----------------------------------------
+    ''
 
-'' -------------------PORTB----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    -------| O | A |-------| O | I |-
-''-----------------------------------------
-''
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | A |-------| O | I |-
+    ''-----------------------------------------
+    ''
 
-'' ------------------PORTC-----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---| TX| A |---------------------
-''-----------------------------------------
-''
-
-
-#DEFINE LEDD1 PORTB.1
-#DEFINE LEDD2 PORTB.5
-#DEFINE SwitchIn        PORTB.0
-
-Dir     LEDD1         Out
-Dir     LEDD2         Out
-Dir     SwitchIn      In
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---| TX| A |---------------------
+    ''-----------------------------------------
+    ''
 
 
-'*****************************************************************************************************
-'Main program commences here.. everything before this is setup for the board.
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define SwitchIn        PORTB.0
+
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     SwitchIn      In
+
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
 
 
 
-'Setup the timer.
-'params    Source, Prescaler                , Postscaler
-InitTimer0 Osc, PRE0_32 + TMR0_FOSC4,       POST0_11
+    'Setup the timer.
+    'params    Source, Prescaler                , Postscaler
+    InitTimer0 Osc, PRE0_32 + TMR0_FOSC4,       POST0_11
 
-' Start the Timer by writing to TMR0ON bit
-StartTimer 0
+    ' Start the Timer by writing to TMR0ON bit
+    StartTimer 0
 
-' Set the Timer start value at 1 s
-SetTimer ( 0, 0xE2 )
-
-StartTimer 0
-
-'Set the LED states
-LEDD1 = 0
-LEDD2 = 1
-
-'we will use this to count the number of times the event happens
-Dim TimerCounter As Byte
-TimerCounter = 0
-
-Do
-    'wait for the event
-    Wait While TMR0IF = 0
-    ' Clearing Timer flag will reset event
-    TMR0IF = 0
-
-    TimerCounter = TimerCounter + 1
-
-    'when at 100 we are at 1 s
-    If TimerCounter = 100 Then
-
-        'Set the LED states
-        LEDD1 = !LEDD1
-        LEDD2 = !LEDD2
-
-        'restart our event counter
-        TimerCounter = 0
-
-    End If
-
-    ' Set the Timer start value
+    ' Set the Timer start value at 1 s
     SetTimer ( 0, 0xE2 )
 
-Loop
+    StartTimer 0
+
+    'Set the LED states
+    LEDD1 = 0
+    LEDD2 = 1
+
+    dim TimerCounter as byte 'we will use this to count the number of times the event happens
+    TimerCounter = 0
+
+    do
+            'wait for the event
+            wait while TMR0IF = 0
+            ' Clearing Timer flag will reset event
+            TMR0IF = 0
+
+            TimerCounter = TimerCounter + 1
+
+            'when at 100 we are at 1 s
+            if TimerCounter = 100 then
+
+              'Set the LED states
+              LEDD1 = !LEDD1
+              LEDD2 = !LEDD2
+
+              'restart our event counter
+              TimerCounter = 0
+
+             end if
+
+          ' Set the Timer start value
+          SetTimer ( 0, 0xE2 )
+
+        loop

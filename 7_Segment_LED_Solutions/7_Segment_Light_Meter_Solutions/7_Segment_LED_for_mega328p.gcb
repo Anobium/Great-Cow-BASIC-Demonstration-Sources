@@ -10,36 +10,36 @@
 '''@date    02.10.2016
 '''********************************************************************************
 
-' ----- Configuration
+; ----- Configuration
 
-#CHIP mega328p, 16
-#OPTION Explicit
-
-
-' ----- Define Hardware settings
-Dir PORTB Out
-Dir PORTD.1 Out
-
-' ----- Constants
-' You need to specify the port settings
-#DEFINE DisplayPortA PORTB
-
-#DEFINE DISP_SEL_1 PORTD.1
-
-' ----- Variables
-Dim Value As Byte
+  #chip mega328p, 16
+  #option explicit
 
 
-' ----- Main body of program commences her
+; ----- Define Hardware settings
+  Dir PORTB Out
+  DIR PORTD.1 out
 
-Do Forever
+; ----- Constants
+  ; You need to specify the port settings
+  #define DisplayPortA PORTB
+
+  #define DISP_SEL_1 PORTD.1
+
+; ----- Variables
+  Dim Value as Byte
+
+
+; ----- Main body of program commences her
+
+  Do Forever
 
     ' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
     Value = ReadAD( 0 )/26
     DisplayValue 1, Value
-    Wait 10 ms
+    wait 10 ms
 
-Loop
+  Loop
 
 
 

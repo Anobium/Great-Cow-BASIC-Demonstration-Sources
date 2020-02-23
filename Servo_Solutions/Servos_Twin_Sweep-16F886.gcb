@@ -9,31 +9,31 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 16F886, 16
-#OPTION Explicit
+; ----- Configuration
+  #chip 16F886, 16
+  #option explicit
 
-' ----- Define Hardware settings
-' No hardware configuration is required as outputs and inputs are set automatically within the methods used.
+; ----- Define Hardware settings
+ ' No hardware configuration is required as outputs and inputs are set automatically within the methods used.
 
-' ----- Constants
-' No Constants specified in this example.
+; ----- Constants
+  ' No Constants specified in this example.
 
-' ----- Variables
-Dim COUNT As Byte
+; ----- Variables
+  Dim COUNT as Byte
 
-' ----- Main body of program commences here.
+; ----- Main body of program commences here.
 
-main:
-For count = 100 To 200
-    PulseOut Portb.0,count 10us
-    PulseOut Portb.1,count 10us
-    Wait 20 ms
-Next
-For count = 200 To 100
-    PulseOut Portb.0,count 10us
-    PulseOut Portb.1,count 10us
-    Wait 20 ms
-Next
-Goto main
-End
+  main:
+    for count = 100 to 200
+      pulseout Portb.0,count 10us
+      pulseout Portb.1,count 10us
+      wait 20 ms
+    next
+    for count = 200 to 100
+      pulseout Portb.0,count 10us
+      pulseout Portb.1,count 10us
+      wait 20 ms
+    next
+  goto main
+  end

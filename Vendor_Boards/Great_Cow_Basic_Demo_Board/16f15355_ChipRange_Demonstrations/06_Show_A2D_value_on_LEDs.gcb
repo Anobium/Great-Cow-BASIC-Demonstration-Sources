@@ -28,31 +28,31 @@
 '''@date     04.12.2016
 
 ' ----- Configuration
-#CHIP 16f15355, 32
+    #chip 16f15355, 32
 
 
 
 
-'' -------------------LATC-----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' LED:   ---------------|D5 |D4 |D3 |D2 |-
-''-----------------------------------------
-''
-#DEFINE LEDD2  PORTC.0
-#DEFINE LEDD3  PORTC.1
-#DEFINE LEDD4  PORTC.2
-#DEFINE LEDD5  PORTC.3
-#DEFINE Potentiometer   PORTA.0
+    '' -------------------LATC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
+    ''-----------------------------------------
+    ''
+    #define LEDD2  PORTC.0
+    #define LEDD3  PORTC.1
+    #define LEDD4  PORTC.2
+    #define LEDD5  PORTC.3
+    #define Potentiometer   PORTA.0
 
-Dir     LEDD2 Out
-Dir     LEDD3 Out
-Dir     LEDD4 Out
-Dir     LEDD5 Out
-Dir     Potentiometer In
+    Dir     LEDD2 OUT
+    Dir     LEDD3 OUT
+    Dir     LEDD4 OUT
+    Dir     LEDD5 OUT
+    DIR     Potentiometer In
 
-Do
+    do
 
-    Wait 100 ms
-    PORTC =  ReadAD10 ( AN0 ) / 64
+        Wait 100 ms
+        PORTC =  ReadAD10 ( AN0 ) / 64
 
-Loop
+    loop

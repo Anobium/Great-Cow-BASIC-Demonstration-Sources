@@ -1,81 +1,81 @@
-'''A demonstration program for GCGB and GCB.
-'''--------------------------------------------------------------------------------------------------------------------------------
-'''This program ia a full demonstration of the Chipino board.
-'''
-'''@author 	 EvanV
-'''@licence	 GPL
-'''@version	 1.0a
-'''@date   	 19.03.2016
-'''********************************************************************************
+ '''A demonstration program for GCGB and GCB.
+ '''--------------------------------------------------------------------------------------------------------------------------------
+ '''This program ia a full demonstration of the Chipino board.
+ '''
+ '''@author 	 EvanV
+ '''@licence	 GPL
+ '''@version	 1.0a
+ '''@date   	 19.03.2016
+ '''********************************************************************************
 '********************************************************************************
 
 
 'Chip model
-#CHIP 16F1938, 32
+#chip 16F1938, 32
 '
 
-#DEFINE SoundOut PORTc.2
-Dim timedelay1 As Word
-Dir b0 In
-Dir b1 In
+#define SoundOut PORTc.2
+dim timedelay1 as word
+dir b0 in
+dir b1 in
 
 
-On Interrupt  PORTBChange Call InterruptHandler
+on Interrupt  PORTBChange call InterruptHandler
 IOCBN0 = 1
 IOCBN1 = 1
 IOCBP0 = 1
 IOCBP1 = 1
 
-Repeat 4
-    Tone 110, 10
-    Wait 10 ms
-End Repeat
+repeat 4
+       tone 110, 10
+       wait 10 ms
+end repeat
 
-#DEFINE PWM_Out1 PORTB.5
-#DEFINE PWM_Out2 PORTB.4
-#DEFINE PWM_Out3 PORTB.3
-#DEFINE PWM_Out4 PORTB.2
+#define PWM_Out1 PORTB.5
+#define PWM_Out2 PORTB.4
+#define PWM_Out3 PORTB.3
+#define PWM_Out4 PORTB.2
 
-Dir porta.0 In
-Dir porta.1 In
+dir porta.0 in
+dir porta.1 in
 
 
 
 'Main routine
 Start:
 
-'Turn one LED on, then off, then the next LED...
+      'Turn one LED on, then off, then the next LED...
 
-PWMOut 1, ReadAD10(AN1), readADC
-PWMOut 2, ReadAD10(AN1), readADC
-PWMOut 3, ReadAD10(AN1), readADC
-PWMOut 4, ReadAD10(AN1), readADC
+  PWMOut 1, ReadAD10(AN1), readADC
+  PWMOut 2, ReadAD10(AN1), readADC
+  PWMOut 3, ReadAD10(AN1), readADC
+  PWMOut 4, ReadAD10(AN1), readADC
 
 
 
-Goto Start
+goto Start
 
-Function readADC
+function readADC
     readADC = ReadAD( AN0 )
-    If readADC < 1 Then
-        readADC = 1
-    End If
+    if readADC < 1 then
+       readADC = 1
+    end if
 
-End Function
+end function
 
-Sub InterruptHandler
+sub InterruptHandler
     IntOff
 
-    If IOCBF0 = 1 Then
+    if IOCBF0 = 1 then
         Tone 220, 5
-        IOCBF = IOCBF AND 254
-    End If
+        IOCBF = IOCBF and 254
+    end if
 
-    If IOCBF1 = 1 Then
+    if IOCBF1 = 1 then
         Tone 880, 5
-        IOCBF = IOCBF AND 253
-    End If
+        IOCBF = IOCBF and 253
+    end if
     'RBIF = 0
-    IntOn
+    inton
 
-End Sub
+end sub

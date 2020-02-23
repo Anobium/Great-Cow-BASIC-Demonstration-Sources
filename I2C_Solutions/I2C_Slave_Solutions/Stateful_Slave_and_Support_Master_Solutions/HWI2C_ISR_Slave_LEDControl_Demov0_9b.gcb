@@ -33,154 +33,147 @@
 '''@date    02.11.2015
 '''********************************************************************************
 
-' ---'''Configuration
+; ---'''Configuration
 
-#CHIP 16f18855,32
-#OPTION Explicit
-
-
-'Set the PPS of the I2C and the RS232 ports.
-#STARTUP InitPPS, 85
-Sub InitPPS
-    'RC0->EUSART:TX;
-    RC0PPS = 0x0010
-    'RC1->EUSART:RX;
-    RXPPS  = 0x0011
-
-    'RC3->MSSP1:SCL1;
-    SSP1CLKPPS = 0x14
-    'RC4->MSSP1:SDA1;
-    SSP1DATPPS = 0x13
-    'RC3->MSSP1:SCL1;
-    RC3PPS = 0x15
-    'RC4->MSSP1:SDA1;
-    RC4PPS = 0x14
-
-End Sub
-
-'defines a set of callbacks - you do not need to define hi2cslave_state_1-5
-#INCLUDE <hwi2c_messageinterface.h>
-
-' redirect standard Error handler to my handler
-#DEFINE HI2CSlave_State_Error  MyHI2CSlave_State_Error
-
-'Buffer size
-#DEFINE HI2CBUFFERSIZE 16
-
-' error messaging LEDs
-#DEFINE HI2CSlaveSSPOVOverflowErrorLED    porta.0
-#DEFINE HI2CSlaveStateNotHandledErrorLED  porta.1
-
-' set up alert LEDs
-#IFDEF HI2CSlaveStateNotHandledErrorLED
-    Dir HI2CSlaveStateNotHandledErrorLED Out
-#ENDIF
-#IFDEF HI2CSlaveSSPOVOverflowErrorLED
-    Dir HI2CSlaveSSPOVOverflowErrorLED Out
-#ENDIF
-
-' Required I2C settings - CHANGE PORTS if required
-#DEFINE hi2c_BAUD_RATE 400
-#DEFINE hi2c_DATA PORTC.4
-#DEFINE hi2c_CLOCK PORTC.3
-'Initialise I2C Master
-'I2C pins need to be input for SSP2 module
-Dir hi2c_DATA In
-Dir hi2c_CLOCK In
-
-HI2CSetAddress 0x40
-HI2CMode Slave
-HI2CSlave_ISR_Init
-
-On Interrupt  SSP1Ready Call HI2CSlave_ISR_Handler
+  #chip 16f18855,32
+  #option explicit
 
 
-' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
-' USART settings - CHANGE PORTS if required
-#DEFINE USART_BAUD_RATE 19200
-#DEFINE USART_TX_BLOCKING
+  'Set the PPS of the I2C and the RS232 ports.
+  #startup InitPPS, 85
+  Sub InitPPS
+    RC0PPS = 0x0010       'RC0->EUSART:TX;
+    RXPPS  = 0x0011       'RC1->EUSART:RX;
 
-' ---'''Define Hardware settings
+    SSP1CLKPPS = 0x14     'RC3->MSSP1:SCL1;
+    SSP1DATPPS = 0x13     'RC4->MSSP1:SDA1;
+    RC3PPS = 0x15         'RC3->MSSP1:SCL1;
+    RC4PPS = 0x14         'RC4->MSSP1:SDA1;
 
-Dir porta.0 Out
-Dir porta.1 Out
-Dir porta.2 Out
-Dir porta.3 Out
+  End Sub
 
-' ---'''Variables
-Dim HI2CForLoop As Byte
+   #include <hwi2c_messageinterface.h>  'defines a set of callbacks - you do not need to define hi2cslave_state_1-5
 
+   ' redirect standard Error handler to my handler
+    #define HI2CSlave_State_Error  MyHI2CSlave_State_Error
 
-' ---'''Main body of program commences here.
+    'Buffer size
+    #define HI2CBUFFERSIZE 16
 
-Wait 100 ms
-HSerPrint "Demo of HWI2C_ISR_Slave_LEDControl_Demov0_9a.gcb"
-HSerPrintCRLF
+    ' error messaging LEDs
+    #define HI2CSlaveSSPOVOverflowErrorLED    porta.0
+    #define HI2CSlaveStateNotHandledErrorLED  porta.1
 
-HSerPrint ChipNameStr
-HSerPrintCRLF
+    ' set up alert LEDs
+    #ifdef HI2CSlaveStateNotHandledErrorLED
+          Dir HI2CSlaveStateNotHandledErrorLED out
+    #endif
+    #ifdef HI2CSlaveSSPOVOverflowErrorLED
+          Dir HI2CSlaveSSPOVOverflowErrorLED out
+    #endif
 
-Repeat 20
+ ' Required I2C settings - CHANGE PORTS if required
+    #define hi2c_BAUD_RATE 400
+    #define hi2c_DATA PORTC.4
+    #define hi2c_CLOCK PORTC.3
+    'Initialise I2C Master
+    'I2C pins need to be input for SSP2 module
+    Dir hi2c_DATA in
+    Dir hi2c_CLOCK in
 
-    porta.0 = !porta.0
-    porta.1 = !porta.1
-    porta.2 = !porta.2
-    porta.3 = !porta.3
-    Wait 100 ms
+    HI2CSetAddress 0x40
+    HI2CMode Slave
+    HI2CSlave_ISR_Init
 
-
-End Repeat
-
-Do Forever
-
-    'This terminal output WILL cause timing issues. This NOT a Recommend method to show the data stream - use HserSend in HEX!
-
-    'Do stuff
-Loop
-
-Sub HI2C_Process_In_Message ( In HI2CMESSAGESIZE )
-
-    'We have data!!  Just send some the First byte back
-    Select Case HI2CBUFFER(0)
-
-    Case 0x23
-        If (HI2CMESSAGESIZE = 2) Then
-            porta = HI2CBUFFER(1)
-        End If
-
-    End Select
-
-End Sub
+    On Interrupt  SSP1Ready call HI2CSlave_ISR_Handler
 
 
-Sub HI2C_Process_Out_Message
-    'Want to post process the data? do it here.
+  ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
+   ' USART settings - CHANGE PORTS if required
+    #define USART_BAUD_RATE 19200
+    #define USART_TX_BLOCKING
 
-End Sub
+; ---'''Define Hardware settings
 
-#DEFINE HI2CSlave_State_Error  MyHI2CSlave_State_Error
+    dir porta.0 Out
+    dir porta.1 Out
+    dir porta.2 Out
+    dir porta.3 Out
 
-Sub MyHI2CSlave_State_Error ( In HI2CErrorCode )
+; ---'''Variables
+    dim HI2CForLoop as byte
 
-    Dim I2Ctemp As Byte
-    ' HI2CErrorCode = What caused the error...
-    ' SSPSTAT will tell you the status
-    'Recommend to consume the Buffer
-    Do While  BF = 1
-        I2Ctemp = SSPBUF
+
+; ---'''Main body of program commences here.
+
+    wait 100 ms
+    HSerPrint "Demo of HWI2C_ISR_Slave_LEDControl_Demov0_9a.gcb"
+    HSerPrintCRLF
+
+    HSerPrint ChipNameStr
+    HSerPrintCRLF
+
+    Repeat 20
+
+        porta.0 = !porta.0
+        porta.1 = !porta.1
+        porta.2 = !porta.2
+        porta.3 = !porta.3
+        wait 100 ms
+
+
+    end Repeat
+
+    do Forever
+
+      'This terminal output WILL cause timing issues. This NOT a Recommend method to show the data stream - use HserSend in HEX!
+
+        'Do stuff
     Loop
 
-    Select Case HI2CErrorCode
-        #IFDEF HI2CSlaveSSPOVOverflowErrorLED
-        Case HI2CSlaveSSPOVOverflowError
-            Dir HI2CSlaveSSPOVOverflowErrorLED Out
-            HI2CSlaveSSPOVOverflowErrorLED = !HI2CSlaveSSPOVOverflowErrorLED
-        #ENDIF
-        #IFDEF HI2CSlaveStateNotHandledErrorLED
-        Case HI2CSlaveStateNotHandledError
-            Dir HI2CSlaveStateNotHandledErrorLED Out
-            HI2CSlaveStateNotHandledErrorLED = !HI2CSlaveStateNotHandledErrorLED
-        #ENDIF
-    End Select
+    sub HI2C_Process_In_Message ( in HI2CMESSAGESIZE )
 
-End Sub
+    'We have data!!  Just send some the First byte back
+       Select CASE HI2CBUFFER(0)
+
+             Case 0x23
+                if (HI2CMESSAGESIZE = 2) then
+                    porta = HI2CBUFFER(1)
+                end if
+
+        end Select
+
+    end sub
+
+
+    sub HI2C_Process_Out_Message
+      'Want to post process the data? do it here.
+
+    end sub
+
+    #define HI2CSlave_State_Error  MyHI2CSlave_State_Error
+
+    sub MyHI2CSlave_State_Error ( in HI2CErrorCode )
+
+        dim I2Ctemp as byte
+        ' HI2CErrorCode = What caused the error...
+        ' SSPSTAT will tell you the status
+        'Recommend to consume the Buffer
+        Do While  BF = 1
+            I2Ctemp = SSPBUF
+        Loop
+
+        Select Case HI2CErrorCode
+          #ifdef HI2CSlaveSSPOVOverflowErrorLED
+            Case HI2CSlaveSSPOVOverflowError
+                Dir HI2CSlaveSSPOVOverflowErrorLED out
+                HI2CSlaveSSPOVOverflowErrorLED = !HI2CSlaveSSPOVOverflowErrorLED
+          #endif
+          #ifdef HI2CSlaveStateNotHandledErrorLED
+            Case HI2CSlaveStateNotHandledError
+                Dir HI2CSlaveStateNotHandledErrorLED out
+                HI2CSlaveStateNotHandledErrorLED = !HI2CSlaveStateNotHandledErrorLED
+          #endif
+        End Select
+
+    end Sub

@@ -28,30 +28,30 @@
 '''********************************************************************************
 
 
-#CHIP 16F886
+  #chip 16F886
 
 
-#INCLUDE <GetUserID.h>
+  #include <getuserid.h>
 
-#DEFINE USART_BAUD_RATE 19200
-#DEFINE USART_TX_BLOCKING
+  #define USART_BAUD_RATE 19200
+  #define USART_TX_BLOCKING
 
-'Implement ANSI escaope code for serial terminal NOT using a LCD!
-#DEFINE ESC   CHR(27)
-#DEFINE CLS   HSerPrint(ESC+"[2J")
-#DEFINE HOME  HSerPrint(ESC+"[H")
-#DEFINE Print HSerPrint
+  'Implement ANSI escaope code for serial terminal NOT using a LCD!
+  #define ESC   chr(27)
+  #define CLS   HSerPrint(ESC+"[2J")
+  #define HOME  HSerPrint(ESC+"[H")
+  #define Print HSerPrint
 
-CLS
-HOME
+  CLS
+  HOME
 
-For Index = 0 To 0xF
+  For Index = 0 to 0xF
     UserIDRegister = GetUserID(Index)
-    Print "80" + Hex(Index)
-    Print " : "
-    Print Hex( UserIDRegister_H )
-    Print Hex( UserIDRegister )
-    HSerPrintCRLF
-Next Index
+    print "80" + hex(Index)
+    print " : "
+    print hex( UserIDRegister_H )
+    print hex( UserIDRegister )
+    HserPrintCRLF
+  Next Index
 
 End

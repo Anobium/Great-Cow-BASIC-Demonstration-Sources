@@ -11,45 +11,45 @@
 '''********************************************************************************
 
 
-' ----- Configuration
-#CHIP 16F886, 16
-#OPTION Explicit
+; ----- Configuration
+  #chip 16F886, 16 	
+  #option explicit
 
-' ----- Define Hardware settings
-'Set pin directions
-Dir SerOutPort Out
-Dir SerInPort In
+; ----- Define Hardware settings
+  'Set pin directions
+  Dir SerOutPort Out
+  Dir SerInPort In
 
-Dir portb.5 Out
+  DIR portb.5 Out
 
-' ----- Constants
-'Setup Serial Port
-#DEFINE SerInPort PORTB.6
-#DEFINE SerOutPort PORTB.7
-#DEFINE SendAHigh Set SerOutPort Off
-#DEFINE SendALow Set SerOutPort On
-#DEFINE RecAHigh SerInPort Off
-#DEFINE RecALow SerInPort On
-
-
-Dim TEMP As Byte
+; ----- Constants
+  'Setup Serial Port
+  #define SerInPort PORTB.6
+  #define SerOutPort PORTB.7
+  #define SendAHigh Set SerOutPort off
+  #define SendALow Set SerOutPort on
+  #define RecAHigh SerInPort off
+  #define RecALow SerInPort on
 
 
-' ----- Main body of program commences here.
-InitSer 1, r4800, 1+WaitForStart, 8, 1, none, invert
-Wait 500 ms
-SerPrint 1, "GCBASIC Serial RS232 Test"
-SerSend 1, 13
-SerSend 1, 10
-Wait 1 s
-Do
+  Dim TEMP as Byte
 
-    SerReceive 1, Temp
-    SerSend 1, Temp
-    SerSend 1, 13
-    SerSend 1, 10
-    If Temp = "1" Then Set portb.5 On
-    If Temp = "0" Then Set portb.5 Off
 
-Loop
+; ----- Main body of program commences here.
+  InitSer 1, r4800, 1+WaitForStart, 8, 1, none, invert
+  wait 500 ms
+  SerPrint 1, "GCBASIC Serial RS232 Test"
+  SerSend 1, 13
+  SerSend 1, 10
+  Wait 1 s
+  Do
+
+      SerReceive 1, Temp
+      SerSend 1, Temp
+      SerSend 1, 13
+      SerSend 1, 10
+      If Temp = "1" Then Set portb.5 on
+      If Temp = "0" Then Set portb.5 Off
+
+  Loop
 

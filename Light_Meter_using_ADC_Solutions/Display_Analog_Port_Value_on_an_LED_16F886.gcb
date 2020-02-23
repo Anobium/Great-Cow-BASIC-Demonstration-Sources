@@ -9,32 +9,31 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 16F886,16
+; ----- Configuration
+ #chip 16F886,16
 
-' ----- Define Hardware settings
-'Make Chipino D15 pin output
-Dir portb.5 Out
+; ----- Define Hardware settings
+  Dir portb.5 out	'Make Chipino D15 pin output
 
-' ----- Constants
-#DEFINE LED portb.5
-
-
-' ----- Variables
-' No Variables specified in this example. All byte variables are defined upon use.
+; ----- Constants
+  #define LED portb.5
 
 
-' ----- Main body of program commences here.
-Do
+; ----- Variables
+  ' No Variables specified in this example. All byte variables are defined upon use.
+
+
+; ----- Main body of program commences here.
+  Do
     'Light LED if in the dark
     If ReadAD(AN1) < 150 Then
-        'Sensor is in the Dark
-        Set LED On
-    Else
-        'Bright light is on the sensor
-        Set LED Off
-    End If
+         'Sensor is in the Dark
+         set LED on
+      else
+         'Bright light is on the sensor
+         set LED off	
+    end if
 
-Loop
-End
+  Loop
+  end
 

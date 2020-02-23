@@ -15,285 +15,271 @@
 '''@date
 '''********************************************************************************
 
-'Chip Settings.
-#CHIP mega328p, 16
-#OPTION Explicit
-
-#INCLUDE <glcd.h>
-#INCLUDE <uno_mega328p.h >
+  'Chip Settings.
+  #chip mega328p, 16
+  #option explicit
 
-#DEFINE GLCD_TYPE GLCD_TYPE_ILI9341
+    #include <glcd.h>
+    #include <uno_mega328p.h >
 
-'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-' Data command line
-#DEFINE GLCD_DC       DIGITAL_8
-' Chip select line
-#DEFINE GLCD_CS       DIGITAL_10
-' Reset line
-#DEFINE GLCD_RESET          DIGITAL_9
+    #define GLCD_TYPE GLCD_TYPE_ILI9341
 
-' Data in | MISO    - Not used therefore not really required
-#DEFINE GLCD_DI       DIGITAL_12
-' Data out | MOSI
-#DEFINE GLCD_DO       DIGITAL_11
-' Clock Line
-#DEFINE GLCD_SCK      DIGITAL_13
+    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+    #define GLCD_DC       DIGITAL_8         ' Data command line
+    #define GLCD_CS       DIGITAL_10          ' Chip select line
+    #define GLCD_RESET          DIGITAL_9         ' Reset line
 
-' remove/comment out if you want to use software SPI.
-#DEFINE ILI9341_HardwareSPI
+    #define GLCD_DI       DIGITAL_12          ' Data in | MISO    - Not used therefore not really required
+    #define GLCD_DO       DIGITAL_11          ' Data out | MOSI
+    #define GLCD_SCK      DIGITAL_13          ' Clock Line
 
+    #define ILI9341_HardwareSPI    ' remove/comment out if you want to use software SPI.
 
-'GLCD selected extension font set. ASCII characters 31-254, the extended font uses 1358 bytes of program memory
-#DEFINE GLCD_EXTENDEDFONTSET1
-GLCDfntDefaultSize = 1
 
-'GLCDCLS  supports GLCDBackground as default
-'GLCDCLS  also support passing color parameter.
-'GLCDCLS [color]
-' optionally you can rotate the screen.
-GLCDRotate ( Landscape_Rev )
+    'GLCD selected extension font set. ASCII characters 31-254, the extended font uses 1358 bytes of program memory
+    #define GLCD_EXTENDEDFONTSET1
+    GLCDfntDefaultsize = 1
 
+    'GLCDCLS  supports GLCDBackground as default
+    'GLCDCLS  also support passing color parameter.
+    'GLCDCLS [color]
+    GLCDRotate ( Landscape_rev )     ' optionally you can rotate the screen.
 
-'Available colors
-'ILI9341_BLACK
-'ILI9341_RED
-'ILI9341_GREEN
-'ILI9341_BLUE
-'ILI9341_WHITE
-'ILI9341_PURPLE
-'ILI9341_YELLOW
-'ILI9341_CYAN
-'ILI9341_D_GRAY
-'ILI9341_L_GRAY
-'ILI9341_SILVER
-'ILI9341_MAROON
-'ILI9341_OLIVE
-'ILI9341_LIME
-'ILI9341_AQUA
-'ILI9341_TEAL
-'ILI9341_NAVY
-'ILI9341_FUCHSIA
 
-Dim CCOUNT, BYTENUMBER, OLDFONT, OLDFONT As Byte
+    'Available colors
+    'ILI9341_BLACK
+    'ILI9341_RED
+    'ILI9341_GREEN
+    'ILI9341_BLUE
+    'ILI9341_WHITE
+    'ILI9341_PURPLE
+    'ILI9341_YELLOW
+    'ILI9341_CYAN
+    'ILI9341_D_GRAY
+    'ILI9341_L_GRAY
+    'ILI9341_SILVER
+    'ILI9341_MAROON
+    'ILI9341_OLIVE
+    'ILI9341_LIME
+    'ILI9341_AQUA
+    'ILI9341_TEAL
+    'ILI9341_NAVY
+    'ILI9341_FUCHSIA
 
-CCount = 31
-Dim longNumber As Long
-' max value = 4294967290
-longNumber = 0
-Dim wordNumber As Word
-wordNumber = 0
-byteNumber = 0
+    Dim CCOUNT, BYTENUMBER, OLDFONT, OLDFONT as Byte
 
+    CCount = 31
+    dim longNumber as long
+    longNumber = 0 ' max value = 4294967290
+    dim wordNumber as Word
+    wordNumber = 0
+    byteNumber = 0
 
-Repeat 2
 
-    GLCDRotate ( Landscape_Rev )
-    GLCDCLS ILI9341_BLUE
+    repeat 2
 
-    GLCDForeground = ILI9341_MAROON
-    GLCDfntDefaultSize = 1
-    GLCDPrint ( 2, 2, "GLCDPrint String" )
+            GLCDRotate ( Landscape_rev )
+            GLCDCLS ILI9341_BLUE
 
+            GLCDForeground = ILI9341_MAROON
+            GLCDfntDefaultsize = 1
+            GLCDPrint ( 2, 2, "GLCDPrint String" )
 
-    GLCDForeground = ILI9341_WHITE
-    GLCDfntDefaultSize = 2
-    GLCDPrint ( 2, 12, "GLCDPrint String" )
 
+            GLCDForeground = ILI9341_WHITE
+            GLCDfntDefaultsize = 2
+            GLCDPrint ( 2, 12, "GLCDPrint String" )
 
-    GLCDForeground = ILI9341_YELLOW
-    GLCDfntDefaultSize = 3
-    GLCDPrint ( 2,30, "GLCDPrint String" )
 
-    longNumber = 0xFFFFFFFF
-    wordNumber = 0xFFFF
-    byteNumber = 0xFF
+            GLCDForeground = ILI9341_YELLOW
+            GLCDfntDefaultsize = 3
+            GLCDPrint ( 2,30, "GLCDPrint String" )
 
-    GLCDRotate ( Portrait )
-    GLCDCLS ILI9341_WHITE
+            longNumber = 0xFFFFFFFF
+            wordNumber = 0xFFFF
+            byteNumber = 0xFF
 
-    GLCDForeground = ILI9341_MAROON
-    GLCDfntDefaultSize = 1
-    GLCDPrint ( 2, 2, bytenumber )
+            GLCDRotate ( Portrait )
+            GLCDCLS ILI9341_WHITE
 
+            GLCDForeground = ILI9341_MAROON
+            GLCDfntDefaultsize = 1
+            GLCDPrint ( 2, 2, bytenumber )
 
-    GLCDForeground = ILI9341_BLACK
-    GLCDfntDefaultSize = 2
-    GLCDPrint ( 2, 12, wordNumber )
 
+            GLCDForeground = ILI9341_BLACK
+            GLCDfntDefaultsize = 2
+            GLCDPrint ( 2, 12, wordNumber )
 
-    GLCDForeground = ILI9341_CYAN
-    GLCDfntDefaultSize = 3
-    GLCDPrint ( 2,30, longnumber )
 
-    Wait 2 s
+            GLCDForeground = ILI9341_CYAN
+            GLCDfntDefaultsize = 3
+            GLCDPrint ( 2,30, longnumber )
 
-End Repeat
+            wait 2 s
 
+    end Repeat
 
 
-GLCDCLS ILI9341_BLUE
-'Set font size.
-GLCDfntDefaultSize = 2
-' max value = 4294967290
-longNumber = 0
-wordNumber = 0
-byteNumber = 0
 
-'Using the global variable GLCDfntDefaultsize to show the different capabilities
-Select Case GLCDfntDefaultSize
+  GLCDCLS ILI9341_BLUE
+  'Set font size.
+  GLCDfntDefaultsize = 2
+  longNumber = 0 ' max value = 4294967290
+  wordNumber = 0
+  byteNumber = 0
 
-Case 1
+    'Using the global variable GLCDfntDefaultsize to show the different capabilities
+    Select Case GLCDfntDefaultsize
 
-    ShowCase1
+    Case 1
 
-Case 2
+      ShowCase1
 
-    ShowCase2
+    Case 2
 
-Case 3
+      ShowCase2
 
-    GLCDDrawString (2, 1, "GLCD font")
-    GLCDDrawString (2, 25, "size = 3")
-    Box 0,0,ILI9341_GLCD_WIDTH-1, ILI9341_GLCD_HEIGHT-1, ILI9341_BLUE
-    Box ILI9341_GLCD_WIDTH-5, ILI9341_GLCD_HEIGHT-5,ILI9341_GLCD_WIDTH-1, ILI9341_GLCD_HEIGHT-1, ILI9341_WHITE
+    Case 3
 
-End Select
+      GLCDDrawString (2, 1, "GLCD font")
+      GLCDDrawString (2, 25, "size = 3")
+      box 0,0,ILI9341_GLCD_WIDTH-1, ILI9341_GLCD_HEIGHT-1, ILI9341_BLUE
+      box ILI9341_GLCD_WIDTH-5, ILI9341_GLCD_HEIGHT-5,ILI9341_GLCD_WIDTH-1, ILI9341_GLCD_HEIGHT-1, ILI9341_WHITE
 
-End
+  End Select
 
+end
 
-Sub ShowCase1
 
-    GLCDRotate ( Portrait )
+sub ShowCase1
 
-    GLCDDrawString (2, 1, "GCB", ILI9341_WHITE )
-    GLCDDrawString (56,1,"v.9804", ILI9341_YELLOW )
-    GLCDDrawString (2, 16, "DrawStr", ILI9341_WHITE )
+        GLCDRotate ( Portrait )
 
-    GLCDDrawString ( 60, 31, "Long Number" )
-    GLCDDrawString ( 60, 39, "Word Number" )
-    GLCDDrawString ( 60, 47, "Byte Number" )
+        GLCDDrawString (2, 1, "GCB", ILI9341_WHITE )
+        GLCDDrawString (56,1,"v.9804", ILI9341_YELLOW )
+        GLCDDrawString (2, 16, "DrawStr", ILI9341_WHITE )
 
-    GLCDDrawString ( 74, 16, "Asc:" )
+        GLCDDrawString ( 60, 31, "Long Number" )
+        GLCDDrawString ( 60, 39, "Word Number" )
+        GLCDDrawString ( 60, 47, "Byte Number" )
 
-    Box 0,0,ILI9341_GLCD_WIDTH-1, ILI9341_GLCD_HEIGHT-1, ILI9341_YELLOW
-    Box ILI9341_GLCD_WIDTH-5, ILI9341_GLCD_HEIGHT-5,ILI9341_GLCD_WIDTH-1, ILI9341_GLCD_HEIGHT-1, ILI9341_WHITE
+        GLCDDrawString ( 74, 16, "Asc:" )
 
-    'center
-    Circle( ILI9341_GLCD_WIDTH/2, ILI9341_GLCD_HEIGHT/2, 50, ILI9341_SILVER )
-    FilledCircle( ILI9341_GLCD_WIDTH/2, ILI9341_GLCD_HEIGHT/2, 25, ILI9341_D_GRAY  )
+        box 0,0,ILI9341_GLCD_WIDTH-1, ILI9341_GLCD_HEIGHT-1, ILI9341_YELLOW
+        box ILI9341_GLCD_WIDTH-5, ILI9341_GLCD_HEIGHT-5,ILI9341_GLCD_WIDTH-1, ILI9341_GLCD_HEIGHT-1, ILI9341_WHITE
 
-    Line 0,  ILI9341_GLCD_HEIGHT-1 , ILI9341_GLCD_WIDTH/2 +100,  (ILI9341_GLCD_HEIGHT /2) - 50, ILI9341_CYAN
-    Line  0, (ILI9341_GLCD_HEIGHT /2) - 50, ILI9341_GLCD_WIDTH/2 +100, (ILI9341_GLCD_HEIGHT /2) - 50, ILI9341_CYAN
+        Circle( ILI9341_GLCD_WIDTH/2, ILI9341_GLCD_HEIGHT/2, 50, ILI9341_SILVER )            ;center
+        FilledCircle( ILI9341_GLCD_WIDTH/2, ILI9341_GLCD_HEIGHT/2, 25, ILI9341_D_GRAY  )
 
-    FilledBox 2,ILI9341_GLCD_HEIGHT/2+10,42,ILI9341_GLCD_HEIGHT/2+50, ILI9341_RED
+        line 0,  ILI9341_GLCD_HEIGHT-1 , ILI9341_GLCD_WIDTH/2 +100,  (ILI9341_GLCD_HEIGHT /2) - 50, ILI9341_CYAN
+        line  0, (ILI9341_GLCD_HEIGHT /2) - 50, ILI9341_GLCD_WIDTH/2 +100, (ILI9341_GLCD_HEIGHT /2) - 50, ILI9341_CYAN
 
-    oldfont = GLCDfntDefaultSize
-    GLCDfntDefaultSize = 3
-    GLCDDrawString ( 42, ILI9341_GLCD_HEIGHT - 30 , "ILI9341 Driver" , ILI9341_WHITE )
+        filledbox 2,ILI9341_GLCD_HEIGHT/2+10,42,ILI9341_GLCD_HEIGHT/2+50, ILI9341_RED
 
-    GLCDfntDefaultSize = 1
-    GLCDDrawString ( ILI9341_GLCD_WIDTH - 60, 2 , "Dec 2019" , ILI9341_WHITE )
-    #IFDEF ILI9341_HardwareSPI
-        GLCDDrawString ( ILI9341_GLCD_WIDTH - 42, 10 , "HW SPI" , ILI9341_WHITE )
-    #ENDIF
+        oldfont = GLCDfntDefaultsize
+        GLCDfntDefaultsize = 3
+        GLCDDrawString ( 42, ILI9341_GLCD_HEIGHT - 30 , "ILI9341 Driver" , ILI9341_WHITE )
 
-    #IFNDEF ILI9341_HardwareSPI
-        GLCDDrawString ( ILI9341_GLCD_WIDTH - 42, 10 , "SW SPI" , ILI9341_WHITE )
-    #ENDIF
+        GLCDfntDefaultsize = 1
+        GLCDDrawString ( ILI9341_GLCD_WIDTH - 60, 2 , "Dec 2019" , ILI9341_WHITE )
+        #ifdef ILI9341_HardwareSPI
+            GLCDDrawString ( ILI9341_GLCD_WIDTH - 42, 10 , "HW SPI" , ILI9341_WHITE )
+        #endif
 
-    'Revert the font size
-    GLCDfntDefaultSize = oldfont
-    GLCDForeground = ILI9341_WHITE
+        #ifndef ILI9341_HardwareSPI
+            GLCDDrawString ( ILI9341_GLCD_WIDTH - 42, 10 , "SW SPI" , ILI9341_WHITE )
+        #endif
 
-    Do Forever
+        'Revert the font size
+        GLCDfntDefaultsize = oldfont
+        GLCDForeground = ILI9341_WHITE
 
-        GLCDPrint ( 144 , 31, longNumber)
-        GLCDPrint ( 144 , 39, Pad( Str(wordnumber),5))
-        GLCDPrint ( 144 , 47, Pad( Str(bytenumber),3))
+        DO forever
 
-        GLCDDrawChar(54, 16, CCount )
-        'Draw a box around the Char below
-        Box 52,15,62,26, ILI9341_WHITE
+            GLCDPrint ( 144 , 31, longNumber)
+            GLCDPrint ( 144 , 39, pad( str(wordnumber),5))
+            GLCDPrint ( 144 , 47, pad( str(bytenumber),3))
 
-        GLCDDrawString ( 100, 16 , Pad( Str(CCount),3) )
+            GLCDDrawChar(54, 16, CCount )
+            Box 52,15,62,26, ILI9341_WHITE                'Draw a box around the Char below
 
-        CCount++
-        If CCount = 0 Then CCount = 31
-        If CCount = 128 Then CCount = 192
-        longNumber = longNumber + 7
+            GLCDDrawString ( 100, 16 , pad( str(CCount),3) )
 
-        wordNumber = wordNumber + 3
-        byteNumber++
+            CCount++
+            if CCount = 0 then CCount = 31
+            if CCount = 128 then CCount = 192
+            longNumber = longNumber + 7
 
-    Loop
+            wordNumber = wordNumber + 3
+            byteNumber++
 
-End Sub
+        LOOP
 
-Sub ShowCase2
+end sub
 
-    GLCDRotate ( Landscape_Rev )
+sub ShowCase2
 
-    GLCDDrawString (2, 1, "GCB",ILI9341_WHITE)
-    GLCDDrawString (56,1,"v.941",ILI9341_YELLOW)
-    GLCDDrawString (2, 18, "DrawStr",ILI9341_WHITE)
+        GLCDRotate ( Landscape_rev )
 
-    GLCDDrawString ( 2, 52, "Long:" )
-    GLCDDrawString ( 2, 70, "Word:" )
-    GLCDDrawString ( 2, 88, "Byte:" )
+        GLCDDrawString (2, 1, "GCB",ILI9341_WHITE)
+        GLCDDrawString (56,1,"v.941",ILI9341_YELLOW)
+        GLCDDrawString (2, 18, "DrawStr",ILI9341_WHITE)
 
-    GLCDDrawString ( 128, 18, "Asc:"+"  " )
+        GLCDDrawString ( 2, 52, "Long:" )
+        GLCDDrawString ( 2, 70, "Word:" )
+        GLCDDrawString ( 2, 88, "Byte:" )
 
-    Box 0,0,ILI9341_GLCD_WIDTH-1, ILI9341_GLCD_HEIGHT-1, ILI9341_YELLOW
-    Box ILI9341_GLCD_WIDTH-5, ILI9341_GLCD_HEIGHT-5,ILI9341_GLCD_WIDTH-1, ILI9341_GLCD_HEIGHT-1, ILI9341_WHITE
+        GLCDDrawString ( 128, 18, "Asc:"+"  " )
 
-    'center
-    Circle( ILI9341_GLCD_WIDTH/2, ILI9341_GLCD_HEIGHT/2, 50, ILI9341_SILVER )
-    FilledCircle( ILI9341_GLCD_WIDTH/2, ILI9341_GLCD_HEIGHT/2, 25, ILI9341_D_GRAY  )
+        box 0,0,ILI9341_GLCD_WIDTH-1, ILI9341_GLCD_HEIGHT-1, ILI9341_YELLOW
+        box ILI9341_GLCD_WIDTH-5, ILI9341_GLCD_HEIGHT-5,ILI9341_GLCD_WIDTH-1, ILI9341_GLCD_HEIGHT-1, ILI9341_WHITE
 
-    Line 0,  ILI9341_GLCD_HEIGHT-1 , ILI9341_GLCD_WIDTH/2 +100,  (ILI9341_GLCD_HEIGHT /2) - 50, ILI9341_CYAN
-    Line  0, (ILI9341_GLCD_HEIGHT /2) - 50, ILI9341_GLCD_WIDTH/2 +100, (ILI9341_GLCD_HEIGHT /2) - 50, ILI9341_CYAN
+        Circle( ILI9341_GLCD_WIDTH/2, ILI9341_GLCD_HEIGHT/2, 50, ILI9341_SILVER )            ;center
+        FilledCircle( ILI9341_GLCD_WIDTH/2, ILI9341_GLCD_HEIGHT/2, 25, ILI9341_D_GRAY  )
 
-    FilledBox 2,ILI9341_GLCD_HEIGHT/2+10,42,ILI9341_GLCD_HEIGHT/2+50, ILI9341_RED
+        line 0,  ILI9341_GLCD_HEIGHT-1 , ILI9341_GLCD_WIDTH/2 +100,  (ILI9341_GLCD_HEIGHT /2) - 50, ILI9341_CYAN
+        line  0, (ILI9341_GLCD_HEIGHT /2) - 50, ILI9341_GLCD_WIDTH/2 +100, (ILI9341_GLCD_HEIGHT /2) - 50, ILI9341_CYAN
 
-    oldfont = GLCDfntDefaultSize
-    GLCDfntDefaultSize = 3
-    GLCDDrawString ( 50, ILI9341_GLCD_HEIGHT - 30 , "ILI9341 Driver" , ILI9341_WHITE )
+        filledbox 2,ILI9341_GLCD_HEIGHT/2+10,42,ILI9341_GLCD_HEIGHT/2+50, ILI9341_RED
 
-    GLCDfntDefaultSize = 1
-    GLCDDrawString ( ILI9341_GLCD_WIDTH - 58, 2 , "Dec 2019" , ILI9341_WHITE )
+        oldfont = GLCDfntDefaultsize
+        GLCDfntDefaultsize = 3
+        GLCDDrawString ( 50, ILI9341_GLCD_HEIGHT - 30 , "ILI9341 Driver" , ILI9341_WHITE )
 
-    #IFDEF ILI9341_HardwareSPI
-        GLCDDrawString ( ILI9341_GLCD_WIDTH - 44, 10 , "HW SPI" , ILI9341_WHITE )
-    #ENDIF
+        GLCDfntDefaultsize = 1
+        GLCDDrawString ( ILI9341_GLCD_WIDTH - 58, 2 , "Dec 2019" , ILI9341_WHITE )
 
-    #IFNDEF ILI9341_HardwareSPI
-        GLCDDrawString ( ILI9341_GLCD_WIDTH - 42, 10 , "SW SPI" , ILI9341_WHITE )
-    #ENDIF
+        #ifdef ILI9341_HardwareSPI
+            GLCDDrawString ( ILI9341_GLCD_WIDTH - 44, 10 , "HW SPI" , ILI9341_WHITE )
+        #endif
 
-    'Revert the font size
-    GLCDfntDefaultSize = oldfont
-    GLCDForeground = ILI9341_WHITE
-    BigPrint_ILI9341 ( 100 , ILI9341_GLCD_HEIGHT - 60 , "Great Cow Basic" )
+        #ifndef ILI9341_HardwareSPI
+            GLCDDrawString ( ILI9341_GLCD_WIDTH - 42, 10 , "SW SPI" , ILI9341_WHITE )
+        #endif
 
-    Do Forever
+        'Revert the font size
+        GLCDfntDefaultsize = oldfont
+        GLCDForeground = ILI9341_WHITE
+        BigPrint_ILI9341 ( 100 , ILI9341_GLCD_HEIGHT - 60 , "Great Cow Basic" )
 
-        GLCDPrint ( 64 , 52, longNumber)
-        GLCDPrint ( 64 , 70, Pad( Str(wordnumber),5))
-        GLCDPrint ( 64 , 88, Pad( Str(bytenumber),3))
+        DO forever
 
-        GLCDDrawChar(99, 18, CCount )
-        'Draw a box around the Char below
-        Box 98,18,117,42, ILI9341_WHITE
+          GLCDPrint ( 64 , 52, longNumber)
+          GLCDPrint ( 64 , 70, pad( str(wordnumber),5))
+          GLCDPrint ( 64 , 88, pad( str(bytenumber),3))
 
-        GLCDDrawString ( 180, 18 , Pad( Str(CCount),3) )
+          GLCDDrawChar(99, 18, CCount )
+          Box 98,18,117,42, ILI9341_WHITE               'Draw a box around the Char below
 
-        CCount++
-        If CCount = 0 Then CCount = 31
-        If CCount = 128 Then CCount = 192
-        longNumber = longNumber + 7
-        wordNumber = wordNumber + 3
-        byteNumber++
+          GLCDDrawString ( 180, 18 , pad( str(CCount),3) )
 
-    Loop
-End Sub
+          CCount++
+          if CCount = 0 then CCount = 31
+          if CCount = 128 then CCount = 192
+          longNumber = longNumber + 7
+          wordNumber = wordNumber + 3
+          byteNumber++
+
+        LOOP
+end sub

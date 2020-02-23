@@ -16,112 +16,99 @@
 '''@date    11.4.17
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP mega328p,16
-#OPTION Explicit
-#INCLUDE <glcd.h>
+; ----- Configuration
+  #chip mega328p,16
+  #option explicit
+  #include <glcd.h>
 
-' ----- Define Hardware settings
-' Define I2C settings
-#DEFINE HI2C_BAUD_RATE 400
-#DEFINE HI2C_DATA
-HI2CMode Master
+; ----- Define Hardware settings
+  ' Define I2C settings
+  #define HI2C_BAUD_RATE 400
+  #define HI2C_DATA
+  HI2CMode Master
 
-' ----- Define GLCD Hardware settings
-#DEFINE GLCD_TYPE GLCD_TYPE_SSD1306
-#DEFINE GLCD_I2C_Address 0x78
+; ----- Define GLCD Hardware settings
+  #define GLCD_TYPE GLCD_TYPE_SSD1306
+  #define GLCD_I2C_Address 0x78
 
-'USART settings
-'Initializes USART port with specific baud
-#DEFINE USART_BAUD_RATE 115200
-' wait for tx register to be empty
-#DEFINE USART_TX_BLOCKING
-#DEFINE USART_DELAY 0 ms
+  'USART settings
+  #define USART_BAUD_RATE 115200  'Initializes USART port with specific baud
+  #define USART_TX_BLOCKING ' wait for tx register to be empty
+  #define USART_DELAY 0 ms
 
-' ----- Define variables
+; ----- Define variables
 
-Dim PixelValue, xPos, yPos, ReadxPos, ReadyPos As Byte
+  Dim PixelValue, xPos, yPos, ReadxPos, ReadyPos as Byte
 
 
 
-' ----- Main program
-HSerPrintCRLF 2
-HSerPrint "A program to examine the state of a GLCD pixel"
-HSerPrintCRLF 2
+; ----- Main program
+     HSerPrintCRLF 2
+     HSerPrint "A program to examine the state of a GLCD pixel"
+     HSerPrintCRLF 2
 
 
-'xPos of our pixel to set
-xPos = 0
-'yPos of our pixel to set
-yPos = 0
-'xPos of our pixel to examine
-ReadxPos = 0
-'yPos of our pixel to examine
-ReadyPos = 0
+     xPos = 0                                                       'xPos of our pixel to set
+     yPos = 0                                                       'yPos of our pixel to set
+     ReadxPos = 0                                                   'xPos of our pixel to examine
+     ReadyPos = 0                                                   'yPos of our pixel to examine
 
 
-HSerPrint "State of X"
-HSerPrint ReadxPos
-HSerPrint ", Y"
-HSerPrint ReadyPos
-HSerPrint " equals "
+     HSerPrint "State of X"
+     HSerPrint ReadxPos
+     HSerPrint ", Y"
+     HSerPrint ReadyPos
+     HSerPrint " equals "
 
 
-'Set PixelValue to something that cannot be returned by the function
-PixelValue = 0x55
-'Let things settle
-Wait 100 ms
-'Set a pixel
-Pset ( xPos, yPos, 1 )
+     PixelValue = 0x55                                              'Set PixelValue to something that cannot be returned by the function
+     wait 100 ms                                                    'Let things settle
+     Pset ( xPos, yPos, 1 )                                         'Set a pixel
 
-'This is the read Function ReadPixel_SSD1306()
-'Read the pixel state
-PixelValue = ReadPixel_SSD1306( ReadxPos, ReadyPos )
+     'This is the read Function ReadPixel_SSD1306()
+     PixelValue = ReadPixel_SSD1306( ReadxPos, ReadyPos )        'Read the pixel state
 
-'Print the result
-HSerPrint PixelValue
-HSerPrintCRLF
+     HSerPrint PixelValue                                           'Print the result
+     HSerPrintCRLF
 
 
-'Let things settle
-Wait 100 ms
-End
+     wait 100 ms                                                    'Let things settle
+     End
 
 
-'''Examine a pixel on the GLCD
-'''@param GLCDX X coordinate of pixel
-'''@param GLCDY Y coordinate of pixel
-Dim GLCDBitNo, GLCDChange, GLCDDataTemp As Byte
-Function ReadPixel_SSD1306(In GLCDX, In GLCDY )
-    Dim GLCDBitNo, GLCDChange, GLCDDataTemp As Byte
-    'Examine pixel at X, Y on LCD to State
-    'X is 0 to 127
-    'Y is 0 to 63
-    'Origin in top left
+  '''Examine a pixel on the GLCD
+  '''@param GLCDX X coordinate of pixel
+  '''@param GLCDY Y coordinate of pixel
+  dim GLCDBitNo, GLCDChange, GLCDDataTemp as byte
+  Function ReadPixel_SSD1306(In GLCDX, In GLCDY )
+      dim GLCDBitNo, GLCDChange, GLCDDataTemp as byte
+      'Examine pixel at X, Y on LCD to State
+      'X is 0 to 127
+      'Y is 0 to 63
+      'Origin in top left
 
-    #IF GLCD_TYPE = GLCD_TYPE_SSD1306
-
-
-        'Select correct buffer element
-        SSD1306_BufferLocationCalc = GLCDY
-        'Divide by 8
-        Repeat 3
-            Set C Off
-            Rotate SSD1306_BufferLocationCalc Right
-        End Repeat
-        SSD1306_BufferLocationCalc = SSD1306_BufferLocationCalc * GLCD_WIDTH
-        'add 1 as we dont use element (0)
-        SSD1306_BufferLocationCalc = GLCDX + SSD1306_BufferLocationCalc+1
-        GLCDDataTemp = SSD1306_BufferAlias(SSD1306_BufferLocationCalc)
-
-        'Change data to examine pixel by rotating our bit to bit zero
-        GLCDBitNo = GLCDY AND 7
-        Repeat GLCDBitNo
-            Rotate GLCDDataTemp Right
-        End Repeat
+    #if GLCD_TYPE = GLCD_TYPE_SSD1306
 
 
-        ReadPixel_SSD1306 = GLCDDataTemp.0
+            'Select correct buffer element
+            SSD1306_BufferLocationCalc = GLCDY
+            'Divide by 8
+            Repeat 3
+              Set C Off
+              Rotate SSD1306_BufferLocationCalc Right
+            End Repeat
+            SSD1306_BufferLocationCalc = SSD1306_BufferLocationCalc * GLCD_WIDTH
+            SSD1306_BufferLocationCalc = GLCDX + SSD1306_BufferLocationCalc+1  'add 1 as we dont use element (0)
+            GLCDDataTemp = SSD1306_BufferAlias(SSD1306_BufferLocationCalc)
 
-    #ENDIF
-End Function
+            'Change data to examine pixel by rotating our bit to bit zero
+            GLCDBitNo = GLCDY And 7
+            Repeat GLCDBitNo
+              Rotate GLCDDataTemp right
+            End Repeat
+
+
+            ReadPixel_SSD1306 = GLCDDataTemp.0
+
+    #endif
+  end function

@@ -9,33 +9,33 @@
 '''@date    07.03.2017
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP mega328p
+; ----- Configuration
+  #chip mega328p
 
-#DEFINE  led portB.5
-Dir led Out
+  #define  led portB.5
+  dir led out
 
-#OPTION Explicit
+  #option Explicit
 
-'@v0.97.00 the SetTimer method is not supported, so, let us set in the main code, as shown below
-'Timer1 Prescaler = 256; Actual Interrupt Time = 1
-InitTimer1 Osc, PS_256
+  '@v0.97.00 the SetTimer method is not supported, so, let us set in the main code, as shown below
+  'Timer1 Prescaler = 256; Actual Interrupt Time = 1
+  Inittimer1 Osc, PS_256
 
-'Timer1 Preload = 62499; Actual Interrupt Time = 1s
-'62499 = 0xF423 which are the Hi and Lo bytes
-OCR1AH = 0xF4
-OCR1AL = 0x23
-On Interrupt Timer1Match1 Call ISR
-StartTimer 1
-led = !led
+  'Timer1 Preload = 62499; Actual Interrupt Time = 1s
+  '62499 = 0xF423 which are the Hi and Lo bytes
+  OCR1AH = 0xF4
+  OCR1AL = 0x23
+  On Interrupt Timer1Match1 call ISR
+  StartTimer 1
+  led = !led
 
 
-Do
+  do
 
-Loop
+  loop
 
-Sub ISR
+sub ISR
 
-    led = !led
+  led = !led
 
-End Sub
+end sub

@@ -1,127 +1,123 @@
-'''
-'''
-'''  PIC: 16F877a
-'''  Compiler: GCB
-'''  IDE: GCB@SYN
-'''
-'''  Date: 6.7.2016
-'''
-''' The 16F877A data sheet states interrupts are compilete when the A/D conversion is done.
-'''
-''' Datasheet reads:
-''' 11.0 ANALOG-TO-DIGITAL CONVERTER (A/D) MODULE
-'''
-''' When the A/D conversion is complete, the result is loaded into
-''' this A/D result register pair, the GO/DONE bit (ADCON0<2>)
-''' is cleared and the A/D interrupt flag bit ADIF is set.
-'''
-'''
-''' Solution:
-''' You can create a periodic timer interrupt (using Timer0 for example)
-''' and read the A/D in the ISR. In effect you would be polling the A/D
-''' voltage. Then, set a flag or do something if the current value is
-''' sufficiently different from the previous value.
+  '''
+  '''
+  '''  PIC: 16F877a
+  '''  Compiler: GCB
+  '''  IDE: GCB@SYN
+  '''
+  '''  Date: 6.7.2016
+  '''
+  ''' The 16F877A data sheet states interrupts are compilete when the A/D conversion is done.
+  '''
+  ''' Datasheet reads:
+  ''' 11.0 ANALOG-TO-DIGITAL CONVERTER (A/D) MODULE
+  '''
+  ''' When the A/D conversion is complete, the result is loaded into
+  ''' this A/D result register pair, the GO/DONE bit (ADCON0<2>)
+  ''' is cleared and the A/D interrupt flag bit ADIF is set.
+  '''
+  '''
+  ''' Solution:
+  ''' You can create a periodic timer interrupt (using Timer0 for example)
+  ''' and read the A/D in the ISR. In effect you would be polling the A/D
+  ''' voltage. Then, set a flag or do something if the current value is
+  ''' sufficiently different from the previous value.
 
-''' If you were just looking for a interrupt if the input moved above or
-''' below a fixed voltage, then you could use the comparator, and use
-''' the INT_COMP interrupt. You could even change the reference voltage
-''' inside the ISR, to provide some hysteresis, and thereby reduce the
-''' effects of signal noise (to prevent getting lots of spurious interrupts
-''' if the input voltage is very close to the reference voltage).
+  ''' If you were just looking for a interrupt if the input moved above or
+  ''' below a fixed voltage, then you could use the comparator, and use
+  ''' the INT_COMP interrupt. You could even change the reference voltage
+  ''' inside the ISR, to provide some hysteresis, and thereby reduce the
+  ''' effects of signal noise (to prevent getting lots of spurious interrupts
+  ''' if the input voltage is very close to the reference voltage).
 
-' ----- Configuration
-#CHIP 16f886, 8
+  ' ----- Configuration
+      #chip 16f886, 8
 
-'this is in milliseconds - this therefore reads the ADC every... ms.
-#DEFINE ADCTimeDelay 10		
-'There is a small processing overhead so the actual delay may a tiny bit out.
-'this is the alarm setting
-#DEFINE myADCLimit   131
+      #define ADCTimeDelay 10		  'this is in milliseconds - this therefore reads the ADC every... ms.
+      														'There is a small processing overhead so the actual delay may a tiny bit out.
+      #define myADCLimit   131		'this is the alarm setting
 
-' Critical - Used by the ISR'
-Dim t1_millis             As Long
-' working copy '
-Dim curMillis             As Long
-Dim currentACvalue				As Word
+      Dim t1_millis             As long ' Critical - Used by the ISR'
+      ' working copy '
+      Dim curMillis             As Long
+      Dim currentACvalue				As Word
 
-'Potentitor is connected to RA0...set as input
-Dir porta.0 In
+      'Potentitor is connected to RA0...set as input
+      dir porta.0 in
 
-'LED out
-#DEFINE LED1 porta.1
-Dir LED1 Out
-LED1 = On
+      'LED out
+      #define LED1 porta.1
+      dir LED1 out
+      LED1 = On
 
-#DEFINE LED2 porta.2
-Dir LED2 Out
-LED2 = On
+      #define LED2 porta.2
+      dir LED2 out
+      LED2 = On
 
-'Just to show we are operational!!
-Repeat 8
-    LED1  = !LED1
-    Wait 125 ms
-End Repeat
-LED1 = Off
+      'Just to show we are operational!!
+      Repeat 8
+        LED1  = !LED1
+        wait 125 ms
+      end Repeat
+      LED1 = off
 
-' Set up the Interrupt
-' TMR1_Initialize
-'Timer1
-'Prescaler 1:1; TMR1 Preload = 63536; Actual Interrupt Time : 1 ms
-InitTimer1( Osc, PS_1_8 )
-' Preload Count for 1ms '
-SetTimer( 1, 63536 )
-' Add a handler for the interrupt '
-On Interrupt Timer1Overflow Call TMR1_ISR
+      ' Set up the Interrupt
+      ' TMR1_Initialize
+      'Timer1
+			'Prescaler 1:1; TMR1 Preload = 63536; Actual Interrupt Time : 1 ms
+      InitTimer1( Osc, PS_1_8 )
+      SetTimer( 1, 63536 ) ' Preload Count for 1ms '
+      ' Add a handler for the interrupt '
+      On Interrupt Timer1Overflow Call TMR1_ISR
 
-' reset our timer.
-t1_millis = 0
+      ' reset our timer.
+		  t1_millis = 0
 
-StartTimer 1
+      StartTimer 1
 
-'Loop forever
-Do Forever
-    'Get the current time in ms
-    curMillis = millis
+			'Loop forever
+      Do forever
+      		'Get the current time in ms
+          curMillis = millis
 
-    'is the current time greater than our specified time delay.
-    If curMillis = ADCTimeDelay  Then
-        currentACvalue = ReadAD10 ( AN0 )
+          'is the current time greater than our specified time delay.
+          if curMillis = ADCTimeDelay  then
+              currentACvalue = ReadAD10 ( AN0 )
 
-        'Just to show we are here...
-        LED2  = !LED2
+              'Just to show we are here...
+              LED2  = !LED2
 
-        'Is the ADC greater than the specified value?
-        If currentACvalue > myADCLimit Then
-            LED1 = On
-        Else
-            LED1 = Off
-        End If
+              'Is the ADC greater than the specified value?
+              if currentACvalue > myADCLimit then
+                  LED1 = on
+              else
+                  LED1 = off
+              end if
 
-        ' disable interrupts while we reset our timer.
-        IntOff
-        t1_millis = 0
-        IntOn
+              ' disable interrupts while we reset our timer.
+              IntOff
+                  t1_millis = 0
+              IntOn
 
-    End If
-Loop
+          end if
+      Loop
 
 
-'Returns the current value of the timer.
-Function millis As Long
-    ' disable interrupts while we read t1_millis '
-    IntOff
-    millis = t1_millis
-    IntOn
-End Function
+    'Returns the current value of the timer.
+    function millis as long
+      ' disable interrupts while we read t1_millis '
+      IntOff
+        millis = t1_millis
+      IntOn
+    end Function
 
-'This is called every time timer1 overflows.  We increment t1_millis so we can count things.
-Sub TMR1_ISR
-    IntOff
-    ' 63576 should be used in this code to ensure the timing is exactly 1ms.
-    ' This number has been validated with an oscilliscope.
-    SetTimer( 1, 63576 )
-    'Handler count for 1ms adj for isr time'
-    t1_millis += 1
-    IntOn
-End Sub
+    'This is called every time timer1 overflows.  We increment t1_millis so we can count things.
+    Sub TMR1_ISR
+    		IntOff
+        ' 63576 should be used in this code to ensure the timing is exactly 1ms.
+        ' This number has been validated with an oscilliscope.
+        SetTimer( 1, 63576 )
+        'Handler count for 1ms adj for isr time'
+        t1_millis += 1
+        Inton
+    End Sub
 

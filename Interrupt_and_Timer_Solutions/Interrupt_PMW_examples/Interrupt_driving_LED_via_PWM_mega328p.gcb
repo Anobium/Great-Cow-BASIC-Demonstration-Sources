@@ -10,78 +10,78 @@
 '''@date    20.02.2015
 '''********************************************************************************
 
-' ----- Configuration
+; ----- Configuration
 
-#CHIP mega328p, 16
-#OPTION Explicit
-
-
-
-' ----- Define Hardware settings
-Dir PortB.5 Out
-
-' ----- Constants
-#DEFINE led Portb.5
-
-'----- Variables
-Dim LEDSpeed, LEDPOWER, LEDLUM, PWMCOUNTER, PWMCOUNTER As Byte
-
-' ----- Main body of program commences here.
-
-'Call the initialisation routine
-InitLEDControl
-
-Do
-    'Increase LED to full over 2.5 seconds
-    For LEDPower = 0 To 100
-        LEDSpeed = LEDPower
-        Wait 25 ms
-    Next
-    'Hold LEDPower
-    Wait 1 s
-    'Decrease LED to zero over 2.5 seconds
-    For LEDPower = 100 To 0 Step - 1
-        LEDSpeed = LEDPower
-        Wait 25 ms
-    Next
-    'Hold LEDPower
-    Wait 1 s
-Loop
-End
-
-'Setup routine
-Sub InitLEDControl
-    Set LED Off
-    'Clear variables
-    LEDSpeed = 0
-    PWMCounter = 0
-
-    'Add a handler for the interrupt
-    On Interrupt Timer0Overflow Call PWMHandler
-
-    'Set up the timer
-    InitTimer0 Osc, PS_1
-    StartTimer 0
-
-End Sub
+  #chip mega328p, 16
+  #option explicit
 
 
-'PWM sub
-'This will be called when Timer 0 overflows
-Sub PWMHandler
-    If LEDSpeed > PWMCounter Then
-        Set LED On
-    Else
-        Set LED Off
-    End If
-    PWMCounter += 1
-    If PWMCounter = 100 Then PWMCounter = 0
-End Sub
 
-End
+; ----- Define Hardware settings
+  dir PortB.5 out
 
-' ----- Support methods.  Subroutines and Functions
-'none
+; ----- Constants
+  #define led Portb.5
+
+;----- Variables
+  Dim LEDSpeed, LEDPOWER, LEDLUM, PWMCOUNTER, PWMCOUNTER as Byte
+
+; ----- Main body of program commences here.
+
+  ;Call the initialisation routine
+  InitLEDControl
+
+  Do
+      ;Increase LED to full over 2.5 seconds
+      For LEDPower = 0 to 100
+          LEDSpeed = LEDPower
+          Wait 25 ms
+      Next
+      ;Hold LEDPower
+      Wait 1 s
+      ;Decrease LED to zero over 2.5 seconds
+      For LEDPower = 100 to 0 step - 1
+          LEDSpeed = LEDPower
+          Wait 25 ms
+      Next
+      ;Hold LEDPower
+      Wait 1 s
+  Loop
+  end
+
+  ;Setup routine
+  Sub InitLEDControl
+      set LED off
+      'Clear variables
+      LEDSpeed = 0
+      PWMCounter = 0
+
+      ;Add a handler for the interrupt
+      On Interrupt Timer0Overflow Call PWMHandler
+
+      ;Set up the timer
+      InitTimer0 Osc, PS_1
+      StartTimer 0
+
+  End Sub
+
+
+  ;PWM sub
+  ;This will be called when Timer 0 overflows
+  Sub PWMHandler
+      If LEDSpeed > PWMCounter Then
+          Set LED On
+      Else
+          Set LED Off
+      End If
+      PWMCounter += 1
+      If PWMCounter = 100 Then PWMCounter = 0
+  End Sub
+
+    end
+
+  ; ----- Support methods.  Subroutines and Functions
+  'none
 
 
 

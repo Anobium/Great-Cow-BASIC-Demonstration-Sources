@@ -21,57 +21,57 @@
 '''@date    25.03.17
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP mega328p,16
+; ----- Configuration
+  #chip mega328p,16
 
-' ----- Define Hardware settings
-' Define I2C settings
-#DEFINE HI2C_BAUD_RATE 100
-#DEFINE HI2C_DATA
-#DEFINE HI2C_CLOCK
-HI2CMode Master
+; ----- Define Hardware settings
+  ' Define I2C settings
+  #define HI2C_BAUD_RATE 100
+  #define HI2C_DATA
+  #define HI2C_CLOCK
+  HI2CMode Master
 
-' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
-' USART settings - CHANGE PORTS if required
-#DEFINE USART_BAUD_RATE 9600
-#DEFINE USART_TX_BLOCKING
-Wait 500 ms
+ ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
+ ' USART settings - CHANGE PORTS if required
+ #define USART_BAUD_RATE 9600
+ #define USART_TX_BLOCKING
+ wait 500 ms
 
-HSerPrint "I2C Sensor"
-HSerPrintCRLF
+  HSerPrint "I2C Sensor"
+  HSerPrintCRLF
 
 
-'Set clock
-HI2CStart
-HI2CSend 0xD0
-HI2CSend 0x6B
-HI2CSend 0
-HI2CStop
+  'Set clock
+  HI2CStart
+  HI2CSend 0xD0
+  HI2CSend 0x6B
+  HI2CSend 0
+  HI2CStop
 
-'Set power
-HI2CStart
-HI2CSend 0xD0
-HI2CSend 0x1B
-HI2CSend 0
-HI2CStop
+  'Set power
+  HI2CStart
+  HI2CSend 0xD0
+  HI2CSend 0x1B
+  HI2CSend 0
+  HI2CStop
 
-'Enable Interrupt of device
-HI2CStart
-HI2CSend 0xD0
-HI2CSend 0x38
-HI2CSend 0x21
-HI2CStop
+  'Enable Interrupt of device
+  HI2CStart
+  HI2CSend 0xD0
+  HI2CSend 0x38
+  HI2CSend 0x21
+  HI2CStop
 
-HSerPrint "I2C Init Completed"
-HSerPrintCRLF
+  HSerPrint "I2C Init Completed"
+  HSerPrintCRLF
 
-Do
+do
 
     'Read XYZ Accelerometer Measurements
     HI2CReStart
     HI2CSend 0xD0
     HI2CSend 0x3B
-    HI2CReStart
+    HI2CRestart
     HI2CSend 0xD1
     HI2CReceive xa_msb
     HI2CReceive xa_lsb
@@ -83,11 +83,11 @@ Do
 
 
     'Read Temperature Measurement
-    Dim mytemp As Word
+    dim mytemp as word
     HI2CReStart
     HI2CSend 0xD0
     HI2CSend 0x41
-    HI2CReStart
+    HI2CRestart
     HI2CSend 0xD1
     HI2CReceive temp_msb
     HI2CReceive temp_lsb, nak
@@ -98,7 +98,7 @@ Do
     HI2CReStart
     HI2CSend 0xD0
     HI2CSend 0x43
-    HI2CReStart
+    HI2CRestart
     HI2CSend 0xD1
     HI2CReceive xg_msb
     HI2CReceive xg_lsb
@@ -111,56 +111,55 @@ Do
 
 ' Display information from the sensor
 
-    HSerPrint Pad(Str(ConvertValue( xa_msb, xa_lsb )),5)
+    HSerPrint pad(str(ConvertValue( xa_msb, xa_lsb )),5)
     HSerPrint ":"
-    HSerPrint Pad(Str(ConvertValue( ya_msb, ya_lsb )),5)
+    HSerPrint pad(str(ConvertValue( ya_msb, ya_lsb )),5)
     HSerPrint ":"
-    HSerPrint Pad(Str(ConvertValue( za_msb, za_lsb )),5)
+    HSerPrint pad(str(ConvertValue( za_msb, za_lsb )),5)
 
     HSerSend 9
-    HSerPrint Pad(Str(ConvertValue( xg_msb, xg_lsb )),5)
+    HSerPrint pad(str(ConvertValue( xg_msb, xg_lsb )),5)
     HSerPrint ":"
-    HSerPrint Pad(Str(ConvertValue( yg_msb, yg_lsb )),5)
+    HSerPrint pad(str(ConvertValue( yg_msb, yg_lsb )),5)
     HSerPrint ":"
-    HSerPrint Pad(Str(ConvertValue( zg_msb, zg_lsb )),5)
+    HSerPrint pad(str(ConvertValue( zg_msb, zg_lsb )),5)
 
     HSerSend 9
-    HSerPrint Hex(temp_msb)
-    HSerPrint Hex(temp_lsb)
+    HSerPrint hex(temp_msb)
+    HSerPrint hex(temp_lsb)
 
     HSerSend 9
-    HSerPrint mytemp
+    Hserprint mytemp
 
     'Factorised calculation to show as a decimal
 
-    'set the values to a word
-    mytemp = (temp_msb *256)+ temp_lsb
+    mytemp = (temp_msb *256)+ temp_lsb  'set the values to a word
     'These calcs are specified in the datasheet
     mytemp = (mytemp + 521)
     mytemp = mytemp / 34
     mytemp  = mytemp + 350
 
     HSerSend 9
-    HSerPrint mytemp/100
+    Hserprint mytemp/100
     HSerPrint "."
-    HSerPrint LeftPad(Str(mytemp - ((mytemp/100)*100)),2,"0")
+    Hserprint leftpad(str(mytemp - ((mytemp/100)*100)),2,"0")
 
     HSerPrintCRLF
 
-    Wait 100 ms
-Loop
+    wait 100 ms
+loop
 
 
 ' Methods
 
-Function ConvertValue ( In inVarH, In inVarL ) As Integer
+Function ConvertValue ( in inVarH, in inVarL ) as Integer
 
-    Dim inVar As Word Alias inVarH, inVarL
+    Dim inVar as word alias inVarH, inVarL
     ' Convert 2 complement
-    If inVar.15 = 1 Then
-        ConvertValue = (inVar XOR 65535) + 1
-    Else
-        ConvertValue = inVar
-    End If
+    if inVar.15 = 1 then
+      ConvertValue = (inVar XOR 65535) + 1
+    else
+      ConvertValue = inVar
+    end if
 
 End Function

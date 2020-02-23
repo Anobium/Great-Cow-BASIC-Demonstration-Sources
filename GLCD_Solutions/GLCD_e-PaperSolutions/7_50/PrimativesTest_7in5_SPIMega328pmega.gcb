@@ -1,151 +1,147 @@
 '''A demonstration program for Explicit-Paper from WaveShare.
-'''-------------------------------------------------------------------------
+ '''-------------------------------------------------------------------------
 ' -------------------------------------------------------
-'''This has been tested using the hardware and software SPI option.
+ '''This has been tested using the hardware and software SPI option.
 
-'''*************************************************************************
+ '''*************************************************************************
 
 
-#CHIP mega328p, 16
-#INCLUDE <uno_mega328p.h>
-#OPTION Explicit
+     #chip mega328p, 16
+    #include <uno_mega328p.h>
+     #option explicit
+
+ '******************************************************************************************************
+
+    'Setup the E-Paper
+     #include <glcd.h>
+
+     #define GLCD_TYPE GLCD_TYPE_EPD_EPD7in5
+     #define GLCD_EXTENDEDFONTSET1
+     #define GLCD_OLED_FONT
+
+     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+     #define GLCD_DC     DIGITAL_9
+     #define GLCD_CS     DIGITAL_10
+     #define GLCD_RESET  DIGITAL_8
+     #define GLCD_DO     DIGITAL_11
+     #define GLCD_SCK    DIGITAL_13
+     #define GLCD_Busy   DIGITAL_7
+
+ '  The following should be used   '#define EPD_HardwareSPI     'remove comment out if you want to use software SPI.
+     #define EPD_HardwareSPI
+     #define HWSPIMode MasterUltraFast
+
+  '******************************************************************************************************
+
+
+    #define SPISRAM_CS            DIGITAL_5
+    #define SPISRAM_SCK           DIGITAL_13
+    #define SPISRAM_DO            DIGITAL_11
+    #define SPISRAM_DI            DIGITAL_12
+
+    #define SPISRAM_HARDWARESPI
+    #define SPISRAM_TYPE          SRAM_23LC1024
 
 '******************************************************************************************************
 
-'Setup the E-Paper
-#INCLUDE <glcd.h>
-
-#DEFINE GLCD_TYPE GLCD_TYPE_EPD_EPD7in5
-#DEFINE GLCD_EXTENDEDFONTSET1
-#DEFINE GLCD_OLED_FONT
-
-'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-#DEFINE GLCD_DC     DIGITAL_9
-#DEFINE GLCD_CS     DIGITAL_10
-#DEFINE GLCD_RESET  DIGITAL_8
-#DEFINE GLCD_DO     DIGITAL_11
-#DEFINE GLCD_SCK    DIGITAL_13
-#DEFINE GLCD_Busy   DIGITAL_7
-
-'  The following should be used   '#define EPD_HardwareSPI     'remove comment out if you want to use software SPI.
-#DEFINE EPD_HardwareSPI
-#DEFINE HWSPIMode MasterUltraFast
-
-'******************************************************************************************************
-
-
-#DEFINE SPISRAM_CS            DIGITAL_5
-#DEFINE SPISRAM_SCK           DIGITAL_13
-#DEFINE SPISRAM_DO            DIGITAL_11
-#DEFINE SPISRAM_DI            DIGITAL_12
-
-#DEFINE SPISRAM_HARDWARESPI
-#DEFINE SPISRAM_TYPE          SRAM_23LC1024
-
-'******************************************************************************************************
-
-' USART settings
-#DEFINE USART_BAUD_RATE 57600
-#DEFINE USART_DELAY 0 ms
-#DEFINE USART_BLOCKING
-#DEFINE USART_TX_BLOCKING
+ ' USART settings
+   #define USART_BAUD_RATE 57600
+   #define USART_DELAY 0 ms
+   #define USART_BLOCKING
+   #define USART_TX_BLOCKING
 
 
 
 'Main program
 
-Dim CCOUNT, BYTENUMBER, OLDFONT, OLDFONT As Byte
+  Dim CCOUNT, BYTENUMBER, OLDFONT, OLDFONT as Byte
 
-CCount = 31
-Dim longNumber As Long
-' max value = 4294967290
-longNumber = 0
-Dim wordNumber As Word
-wordNumber = 0
-byteNumber = 0
+  CCount = 31
+  dim longNumber as long
+  longNumber = 0 ' max value = 4294967290
+  dim wordNumber as Word
+  wordNumber = 0
+  byteNumber = 0
 
-Dim lpage, uppage As Byte
-lpage = 0
-uppage= EPD_N_PAGE - 1
-
+  dim lpage, uppage as Byte
+  lpage = 0
+  uppage= EPD_N_PAGE - 1
 
 
-GLCDForeground=TFT_BLACK
-GLCDBackground=TFT_WHITE
-GLCDfntDefaultSize = 2
 
-GLCDRotate ( Landscape )
+  GLCDForeground=TFT_BLACK
+  GLCDBackground=TFT_WHITE
+  GLCDfntDefaultSize = 2
 
-GLCDDisplay On
+  GLCDRotate ( Landscape )
 
-
-GLCD_Open_PageTransaction
-GLCDPrintLargeFont ( 200 , GLCDDeviceHeight - 100 , "BOOTING - Loading first screen" )
-GLCDPrintLargeFont ( 200 , GLCDDeviceHeight - 60 , "Great Cow BASIC" )
-GLCD_Close_PageTransaction
-
-Do
-    GLCDDisplay On
-    GLCD_Open_PageTransaction
-
-    GLCDDrawString (2, 1, "GCB",TFT_BLACK)
-    GLCDDrawString (56,1,"v.9700",TFT_BLACK)
-    GLCDDrawString (2, 18, "DrawStr",TFT_BLACK)
-
-    GLCDDrawString ( 2, 52, "Long:" )
-    GLCDDrawString ( 2, 70, "Word:" )
-    GLCDDrawString ( 2, 88, "Byte:" )
-
-    GLCDDrawString ( 128, 18, "Asc:"+"  " )
-
-    Box 0,0,GLCDDeviceWidth, GLCDDeviceHeight, TFT_BLACK
-    Box GLCDDeviceWidth-5, GLCDDeviceHeight-5,GLCDDeviceWidth, GLCDDeviceHeight, TFT_BLACK
-
-    'center
-    Circle( GLCDDeviceWidth/2, GLCDDeviceHeight/2, 50, CCount )
-    'center
-    FilledCircle( GLCDDeviceWidth/2, GLCDDeviceHeight/2, 25, CCount  )
-
-    Line 0,  GLCDDeviceHeight , GLCDDeviceWidth/2 +100,  (GLCDDeviceHeight /2) - 50, TFT_BLACK
-    Line  0, (GLCDDeviceHeight /2) - 50, GLCDDeviceWidth/2 +100, (GLCDDeviceHeight /2) - 50, TFT_BLACK
-
-    FilledBox 2,GLCDDeviceHeight/2+10,42,GLCDDeviceHeight/2+50, !CCount
-
-    oldfont = GLCDfntDefaultSize
-    GLCDfntDefaultSize = 2
-    GLCDDrawString ( 150, GLCDDeviceHeight - 30 , "EPD_EPD7in5 Driver" , TFT_BLACK )
-
-    GLCDfntDefaultSize = 1
-    GLCDDrawString ( GLCDDeviceWidth - 60, 2 , "Dec 2019" , TFT_BLACK )
+  GLCDDisplay on
 
 
-    'Revert the font size
-    GLCDfntDefaultSize = oldfont
-    GLCDForeground = TFT_BLACK
-    GLCDPrintLargeFont ( 150 , GLCDDeviceHeight - 60 , "Great Cow BASIC" )
+  GLCD_Open_PageTransaction
+      GLCDPrintLargeFont ( 200 , GLCDDeviceHeight - 100 , "BOOTING - Loading first screen" )
+      GLCDPrintLargeFont ( 200 , GLCDDeviceHeight - 60 , "Great Cow BASIC" )
+  GLCD_Close_PageTransaction
+
+  Do
+      GLCDDisplay on
+      GLCD_Open_PageTransaction
+
+        GLCDDrawString (2, 1, "GCB",TFT_BLACK)
+        GLCDDrawString (56,1,"v.9700",TFT_BLACK)
+        GLCDDrawString (2, 18, "DrawStr",TFT_BLACK)
+
+        GLCDDrawString ( 2, 52, "Long:" )
+        GLCDDrawString ( 2, 70, "Word:" )
+        GLCDDrawString ( 2, 88, "Byte:" )
+
+        GLCDDrawString ( 128, 18, "Asc:"+"  " )
+
+        box 0,0,GLCDDeviceWidth, GLCDDeviceHeight, TFT_BLACK
+        box GLCDDeviceWidth-5, GLCDDeviceHeight-5,GLCDDeviceWidth, GLCDDeviceHeight, TFT_BLACK
+
+        Circle( GLCDDeviceWidth/2, GLCDDeviceHeight/2, 50, CCount )            ;center
+        FilledCircle( GLCDDeviceWidth/2, GLCDDeviceHeight/2, 25, CCount  )     ;center
+
+        line 0,  GLCDDeviceHeight , GLCDDeviceWidth/2 +100,  (GLCDDeviceHeight /2) - 50, TFT_BLACK
+        line  0, (GLCDDeviceHeight /2) - 50, GLCDDeviceWidth/2 +100, (GLCDDeviceHeight /2) - 50, TFT_BLACK
+
+        filledbox 2,GLCDDeviceHeight/2+10,42,GLCDDeviceHeight/2+50, !CCount
+
+        oldfont = GLCDfntDefaultsize
+        GLCDfntDefaultsize = 2
+        GLCDDrawString ( 150, GLCDDeviceHeight - 30 , "EPD_EPD7in5 Driver" , TFT_BLACK )
+
+        GLCDfntDefaultsize = 1
+        GLCDDrawString ( GLCDDeviceWidth - 60, 2 , "Dec 2019" , TFT_BLACK )
 
 
-    GLCDPrint ( 64 , 52, longNumber)
-    GLCDPrint ( 64 , 70, Pad( Str(wordnumber),5))
-    GLCDPrint ( 64 , 88, Pad( Str(bytenumber),3))
+        'Revert the font size
+        GLCDfntDefaultsize = oldfont
+        GLCDForeground = TFT_BLACK
+        GLCDPrintLargeFont ( 150 , GLCDDeviceHeight - 60 , "Great Cow BASIC" )
 
-    GLCDDrawChar(99, 18, CCount )
-    'Draw a box around the Char below
-    Box 98,18,117,42, TFT_BLACK
 
-    GLCDDrawString ( 180, 18 , Pad( Str(CCount),3) )
+          GLCDPrint ( 64 , 52, longNumber)
+          GLCDPrint ( 64 , 70, pad( str(wordnumber),5))
+          GLCDPrint ( 64 , 88, pad( str(bytenumber),3))
 
-    GLCD_Close_PageTransaction
+          GLCDDrawChar(99, 18, CCount )
+          Box 98,18,117,42, TFT_BLACK               'Draw a box around the Char below
 
-    GLCDDisplay Off
-    Wait 1800 ms
+          GLCDDrawString ( 180, 18 , pad( str(CCount),3) )
+
+     GLCD_Close_PageTransaction
+
+     GLCDDisplay off
+     wait 1800 ms
 
 
     CCount++
-    If CCount = 0 Then CCount = 31
-    If CCount = 128 Then CCount = 192
+    if CCount = 0 then CCount = 31
+    if CCount = 128 then CCount = 192
     longNumber = longNumber + 7
     wordNumber = wordNumber + 3
     byteNumber++
 
-Loop
+  Loop

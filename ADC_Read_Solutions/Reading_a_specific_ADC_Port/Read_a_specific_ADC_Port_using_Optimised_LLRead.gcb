@@ -13,93 +13,87 @@
 '''@date       7/12/17
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 16F15355, 32
+; ----- Configuration
+#chip 16F15355, 32
 
 
-'TxD Pin for serial
-#DEFINE Comms_OutPut_Port  PORTC.6
+#define Comms_OutPut_Port  PORTC.6    'TxD Pin for serial
 
 '*** Config Software-UART ***
 Dir Comms_OutPut_Port Out
-#DEFINE SendAHigh Set Comms_OutPut_Port On
-#DEFINE SendALow  Set Comms_OutPut_Port Off
+#define SendAHigh Set Comms_OutPut_Port ON
+#define SendALow  Set Comms_OutPut_Port OFF
 InitSer 1, r19200, 1+WaitForStart, 8, 1, None, Normal
-Set Comms_OutPut_Port On
+Set Comms_OutPut_Port ON
 
 SerPrint 1, " PIC 16f15355"
 
-' "Carriage Return"
-SerSend 1, 13
-' "Line Feed"
-SerSend 1, 10
+SerSend 1, 13  ' "Carriage Return"
+SerSend 1, 10  ' "Line Feed"
 
 
-Do
-    SerPrint 1,ReadAD10(AN2)
-    ' "Carriage Return"
-    SerSend 1, 13
-    ' "Line Feed"
-    SerSend 1, 10
-    Wait 500 ms
-Loop
+do
+  SerPrint 1,readad10(AN2)
+  SerSend 1, 13  ' "Carriage Return"
+  SerSend 1, 10  ' "Line Feed"
+  wait 500 ms
+loop
 
 End
 
 
 
-#DEFINE LLReadAD  myLLReadAD
-#DEFINE AD_Delay 8 10us
+#define LLReadAD  myLLReadAD
+#define AD_Delay 8 10us
 
-Macro myLLReadAD (ADLeftAdjust)
+macro myLLReadAD (ADLeftAdjust)
 
     'specifically set porta.2 as analog
     Set ANSELA.2 On
 
     'FOSC/16 in ADCON1 selecting the processing time
-    Set ADCS2 Off
-    Set ADCS1 On
-    Set ADCS0 Off
+    SET ADCS2 OFF
+    SET ADCS1 ON
+    SET ADCS0 OFF
 
 '    SerPrint 1,ADCON1
 '    SerSend 1, 9
 
 
     'GOnDONE stop; ADON enabled; CHS ANA0;
-    '
-    ADCON0 = 0x01
+    ADCON0 = 0x01;
 
-    'Clear port
-    Set CHS0 Off
-    Set CHS1 Off
-    Set CHS2 Off
-    Set CHS3 Off
-    Set CHS4 Off
-    'Choose port in ADCON0 setting the channel
-    If ADReadPort.0 On Then Set CHS0 On
-    If ADReadPort.1 On Then Set CHS1 On
-    If ADReadPort.2 On Then Set CHS2 On
+    ;Clear port
+    SET CHS0 OFF
+    SET CHS1 OFF
+    SET CHS2 OFF
+    SET CHS3 OFF
+    SET CHS4 OFF
+    ;Choose port in ADCON0 setting the channel
+    IF ADReadPort.0 On Then Set CHS0 On
+    IF ADReadPort.1 On Then Set CHS1 On
+    IF ADReadPort.2 On Then Set CHS2 On
     If ADReadPort.3 On Then Set CHS3 On
     If ADReadPort.4 On Then Set CHS4 On
 
 '    SerPrint 1,ADCON0
 '    SerSend 1, 9
 
-    'Enable A/D
-    Set ADON On
+    ;Enable A/D
+    SET ADON ON
 
-    'Acquisition Delay
+    ;Acquisition Delay
     Wait AD_Delay
 
-    'Read A/D
-    Set GO On
-    Wait While GO On
+    ;Read A/D
+    SET GO ON
+    Wait While GO ON
 
-    'Switch off A/D
-    Set ADCON0.ADON Off
+    ;Switch off A/D
+    SET ADCON0.ADON OFF
 
-    'Clear whatever ANSEL variants the chip has
+    ;Clear whatever ANSEL variants the chip has
     ANSELA = 0
 
-End Macro
+end macro
 

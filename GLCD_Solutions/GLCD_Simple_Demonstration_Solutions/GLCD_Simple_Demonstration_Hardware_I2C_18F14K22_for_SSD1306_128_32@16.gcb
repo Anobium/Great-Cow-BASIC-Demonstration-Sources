@@ -17,149 +17,131 @@
 '''@date    27.8.17
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 18f14k22, 64
-#OPTION Explicit
+  ; ----- Configuration
+  #chip 18f14k22, 64
+  #option explicit
 
-' Define I2C settings - CHANGE PORTS
-#DEFINE HI2C_BAUD_RATE 400
-#DEFINE HI2C_DATA PORTB.4
-#DEFINE HI2C_CLOCK PORTB.6
-'Initialise I2C Slave
-'I2C pins need to be input for SSP module
-Dir HI2C_DATA In
-Dir HI2C_CLOCK In
-'MASTER
-HI2CMode Master
+  ' Define I2C settings - CHANGE PORTS
+  #define HI2C_BAUD_RATE 400
+  #define HI2C_DATA PORTB.4
+  #define HI2C_CLOCK PORTB.6
+  'Initialise I2C Slave
+  'I2C pins need to be input for SSP module
+  Dir HI2C_DATA in
+  Dir HI2C_CLOCK in
+  'MASTER
+  HI2CMode Master
 
-#INCLUDE <glcd.h>
-' ----- Define GLCD Hardware settings
-#DEFINE GLCD_TYPE GLCD_TYPE_SSD1306_32
-#DEFINE GLCD_I2C_Address 0x78
-' ----- Define variables
+    #include <glcd.h>
+; ----- Define GLCD Hardware settings
+  #define GLCD_TYPE GLCD_TYPE_SSD1306_32
+  #define GLCD_I2C_Address 0x78
+; ----- Define variables
 
-#DEFINE GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
-#DEFINE GLCD_TYPE_SSD1306_CHARACTER_MODE_ONLY
-#DEFINE GLCD_PROTECTOVERRUN
+  #define GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+  #define GLCD_TYPE_SSD1306_CHARACTER_MODE_ONLY
+  #define GLCD_PROTECTOVERRUN
 
-Dim BYTENUMBER, CCOUNT As Byte
+  Dim BYTENUMBER, CCOUNT as Byte
 
-CCount = 0
-Dim longNumber As Long
-' max value = 4294967290
-longNumber = 0
-Dim wordNumber As Word
-Dim outstring As String
-wordNumber = 0
-byteNumber = 0
+  CCount = 0
+  dim longNumber as long
+  longNumber = 0 ' max value = 4294967290
+  dim wordNumber as Word
+  dim outstring as string
+  wordNumber = 0
+  byteNumber = 0
 
-' ----- Main program
+; ----- Main program
 
-#IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
-    GLCD_Open_PageTransaction 0,3
-#ENDIF
+    #ifdef GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+      GLCD_Open_PageTransaction 0,3
+    #endif
 
-GLCDPrint 0, 0,   "Great Cow BASIC"
-GLCDPrint (0, 16, "Anobium 2019")
-GLCDPrint (76, 16, GLCD_WIDTH )
-GLCDPrint (96, 16, "*" )
-GLCDPrint (104, 16, GLCD_HEIGHT )
+        GLCDPrint 0, 0,   "Great Cow BASIC"
+        GLCDPrint (0, 16, "Anobium 2019")
+        GLCDPrint (76, 16, GLCD_WIDTH )
+        GLCDPrint (96, 16, "*" )
+        GLCDPrint (104, 16, GLCD_HEIGHT )
 
-#IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
-    GLCD_Close_PageTransaction
-#ENDIF
+    #ifdef GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+      GLCD_Close_PageTransaction
+    #endif
 
-Wait 3 s
-GLCDCLS
+  wait 3 s
+  GLCDCLS
 
-#IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
-    GLCD_Open_PageTransaction 0, 3
-#ENDIF
+    #ifdef GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+      GLCD_Open_PageTransaction 0, 3
+    #endif
 
-GLCDPrint 0, 0,   "Version 0.98.00"
-
-
-#IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
-    GLCDPrint (0, 16, "LM GLCD MODE")
-#ENDIF
-
-#IFNDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
-    GLCDPrint (0, 16, "FULL GLCD MODE")
-#ENDIF
+        GLCDPrint 0, 0,   "Version 0.98.00"
 
 
-#IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
-    GLCD_Close_PageTransaction
-#ENDIF
+        #ifdef GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+            GLCDPrint (0, 16, "LM GLCD MODE")
+        #endif
 
-Wait 3 s
-GLCDCLS
-
-
-Do Forever
-
-    For CCount = 32 To 127
-
-        ' Prepare a string
-        outString = Str( CCount )
+        #ifndef GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+            GLCDPrint (0, 16, "FULL GLCD MODE")
+        #endif
 
 
-        ' Prepare the static components of the screen
-        #IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+    #ifdef GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+      GLCD_Close_PageTransaction
+    #endif
+
+  wait 3 s
+  GLCDCLS
+
+
+  DO forever
+
+     for CCount = 32 to 127
+
+          outString = str( CCount )                                  ; Prepare a string
+
+
+          ' Prepare the static components of the screen
+          #ifdef GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
             GLCD_Open_PageTransaction 0,3
-        #ENDIF
+          #endif
 
-        ' Print some text
-        GLCDPrint ( 1,   1, "PrintStr")
-        ' Print some more text
-        GLCDPrint ( 64,  1, "@")
-        ' Print chip speed
-        GLCDPrint ( 72,  1, ChipMHz)
-        ' Print some text
-        GLCDPrint ( 86, 1, "Mhz")
-        ' Draw some text
-        GLCDDrawString( 1,9,"DrawStr")
-        ' Draw a box
-        Box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1
-        ' Draw a box
-        Box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1
-        ' Draw a circle
-        Circle( 44,24,5)
-        ' Draw a line
-        Line 0,GLCD_HEIGHT-1,44,19
+            GLCDPrint ( 1,   1, "PrintStr")                                ; Print some text
+            GLCDPrint ( 64,  1, "@")                                    ; Print some more text
+            GLCDPrint ( 72,  1, ChipMhz)                                   ; Print chip speed
+            GLCDPrint ( 86, 1, "Mhz")                                     ; Print some text
+            GLCDDrawString( 1,9,"DrawStr")                                 ; Draw some text
+            box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1                            ; Draw a box
+            box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1    ; Draw a box
+            Circle( 44,24,5)                                              ; Draw a circle
+            line 0,GLCD_HEIGHT-1,44,19                                    ; Draw a line
 
 
-        GLCDPrint ( 52 ,  18,  "0x" )
-        ' Print a HEX string
-        GLCDPrint ( 64 ,  18,  Hex(longNumber_E ) )
-        ' Print a HEX string
-        GLCDPrint ( 76 ,  18,  Hex(longNumber_U ) )
-        ' Print a HEX string
-        GLCDPrint ( 88 ,  18,  Hex(longNumber_H ) )
-        ' Print a HEX string
-        GLCDPrint ( 100 , 18,  Hex(longNumber ) )
+            GLCDPrint ( 52 ,  18,  "0x" )
+            GLCDPrint ( 64 ,  18,  hex(longNumber_E ) )                 ; Print a HEX string
+            GLCDPrint ( 76 ,  18,  hex(longNumber_U ) )                 ; Print a HEX string
+            GLCDPrint ( 88 ,  18,  hex(longNumber_H ) )                 ; Print a HEX string
+            GLCDPrint ( 100 , 18,  hex(longNumber ) )                   ; Print a HEX string
 
 
-        ' Draw a Box
-        Box (3,24,6,27)
-        ' Draw a character
-        GLCDDrawChar(48, 9, CCount )
+            box (3,24,6,27)                                           ; Draw a Box
+            GLCDDrawChar(48, 9, CCount )                               ; Draw a character
 
-        ' Draw a string
-        GLCDDrawString(64, 9, Pad(outString,3) )
+            GLCDDrawString(64, 9, pad(outString,3) )                   ; Draw a string
 
-        Ellipse 118, 6, 7, 4
-        If CCOUNT < 63 Then
-            FilledEllipse 118, 6, 5, 2
-        End If
+            Ellipse 118, 6, 7, 4
+            if CCOUNT < 63 then
+              FilledEllipse 118, 6, 5, 2
+            end if
 
-        #IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
-            GLCD_Close_PageTransaction
-        #ENDIF
+        #ifdef GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+          GLCD_Close_PageTransaction
+        #endif
 
-        longNumber = longNumber + 7
+          longNumber = longNumber + 7
 
 
-    Next
-Loop
-End
+      NEXT
+  LOOP
+  end

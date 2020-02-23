@@ -1,25 +1,25 @@
 #CHIP tiny13a, 1.2
-#OPTION Explicit
-#DEFINE AVRTC0
-#DEFINE AVRCHAN2
-#DEFINE LED1 PortB.1
-#OPTION Volatile LED1
+#OPTION EXPLICIT
+#DEFINE AVRTC0             
+#DEFINE AVRCHAN2        
+#DEFINE LED1 PortB.1         
+#OPTION VOLATILE LED1        
 
-Dim FREQ, DUTY_CYCLE As Byte
-Dir LED1 Out
-FREQ = 1
+DIM FREQ, DUTY_CYCLE AS BYTE
+DIR LED1 OUT
+FREQ = 1            
 DUTY_CYCLE= 0
 
-Do
-    Repeat 25
-        If DUTY_CYCLE >= 0 Then DUTY_CYCLE = DUTY_CYCLE + 10
+DO
+    REPEAT 25
+        IF DUTY_CYCLE >= 0 THEN DUTY_CYCLE = DUTY_CYCLE + 10
         HPWM 2, FREQ, DUTY_CYCLE
-        Wait 50 ms
-    End Repeat
+        WAIT 50 MS
+    END REPEAT
 
-    Repeat 25
-        If DUTY_CYCLE <= 255 Then DUTY_CYCLE = DUTY_CYCLE - 10
+    REPEAT 25
+        IF DUTY_CYCLE <= 255 THEN DUTY_CYCLE = DUTY_CYCLE - 10
         HPWM 2, FREQ, DUTY_CYCLE
-        Wait 50 ms
-    End Repeat
-Loop
+        WAIT 50 MS
+    END REPEAT
+LOOP

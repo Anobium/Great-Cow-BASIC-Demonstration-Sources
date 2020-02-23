@@ -14,94 +14,79 @@
 '''@date       30/01/2010
 '''********************************************************************************
 
-' ----- Configuration
+; ----- Configuration
 
-#CHIP 16F18326,8
-#OPTION Explicit
+#chip 16F18326,8
+#option Explicit
 
-' ----- Main Program
+; ----- Main Program
 
-Dim indexpointer, ntest, eepromppointer As Byte
-eepromppointer =0
+    Dim indexpointer, ntest, eepromppointer as byte
+    eepromppointer =0
 
-'test routine 1
-For indexpointer = 1 To 3
-    ReadTable test1, indexpointer ,ntest
-    EPWrite eepromppointer, ntest
-    eepromppointer++
-Next
+    'test routine 1
+    for indexpointer = 1 to 3
+      readtable test1, indexpointer ,ntest
+      epwrite eepromppointer, ntest
+      eepromppointer++
+    next
 
-'test routine 2
-For indexpointer=1 To 6
-    ReadTable test2, indexpointer ,ntest
-    EPWrite eepromppointer, ntest
-    eepromppointer++
-Next
+    'test routine 2
+    for indexpointer=1 to 6
+      readtable test2, indexpointer ,ntest
+      epwrite eepromppointer, ntest
+      eepromppointer++
+    next
 
-'test routine 3
-For indexpointer = 1 To 3
-    ReadTable test3, indexpointer ,ntest
-    EPWrite eepromppointer, ntest
-    eepromppointer++
-Next
+    'test routine 3
+    for indexpointer = 1 to 3
+      readtable test3, indexpointer ,ntest
+      epwrite eepromppointer, ntest
+      eepromppointer++
+    next
 
-'test routine 4
-For indexpointer=1 To 6
-    ReadTable test4, indexpointer ,ntest
-    EPWrite eepromppointer, ntest
-    eepromppointer++
-Next
+    'test routine 4
+    for indexpointer=1 to 6
+      readtable test4, indexpointer ,ntest
+      epwrite eepromppointer, ntest
+      eepromppointer++
+    next
 
-'test routine 5
-For indexpointer=1 To 6
-    ReadTable test5, indexpointer ,ntest
-    EPWrite eepromppointer, ntest
-    eepromppointer++
-Next
+    'test routine 5
+    for indexpointer=1 to 6
+      readtable test5, indexpointer ,ntest
+      epwrite eepromppointer, ntest
+      eepromppointer++
+    next
 
-End
+    end
 
-Table test1
-    '0xAA, d170
-    0b10101010
-    '0xff, d255
-    0b11111111
-    '0x01, d1
-    0b00000001
-End Table
+table test1
+0b10101010              '0xAA, d170
+0b11111111              '0xff, d255
+0b00000001              '0x01, d1
+end table
 
-Table test2
-    '0xAA, d170 & 0x80 d128
-    0b10101010,0b10000000
-    '0xff, d255 & 0xff, d255
-    0b11111111,0b11111111
-    '0x55, d85 & 0x01 d1
-    0b01010101,0b00000001
-End Table
+table test2
+0b10101010,0b10000000   '0xAA, d170 & 0x80 d128
+0b11111111,0b11111111   '0xff, d255 & 0xff, d255
+0b01010101,0b00000001   '0x55, d85 & 0x01 d1
+end table
 
-Table test3
-    '0xAA, d170
-    b'10101010'
-    '0xff, d255
-    b'11111111'
-    '0x01, d1
-    b'00000001'
-End Table
+table test3
+b'10101010'              '0xAA, d170
+b'11111111'              '0xff, d255
+b'00000001'              '0x01, d1
+end table
 
-Table test4
-    '0xAA, d170 & 0x80 d128
-    b'10101010',b'10000000'
-    '0xff, d255 & 0xff, d255
-    b'11111111',b'11111111'
-    '0xAA, d170 & 0x80 d128
-    b'10101010',b'10000000'
-End Table
+table test4
+b'10101010',b'10000000'   '0xAA, d170 & 0x80 d128
+b'11111111',b'11111111'   '0xff, d255 & 0xff, d255
+b'10101010',b'10000000'   '0xAA, d170 & 0x80 d128
+end table
 
-Table test5
-    'with leading space    0xAA, d170 & 0x80 d128
-    0b10101010,0b10000000
-    'without                0xff, d255 & 0xff, d255
-    0b11111111,0b11111111
-    'with                  0x55, d85 & 0x01 d1
-    0b01010101,0b00000001
-End Table
+table test5
+ 0b10101010,0b10000000 'with leading space    0xAA, d170 & 0x80 d128
+0b11111111,0b11111111 'without                0xff, d255 & 0xff, d255
+ 0b01010101,0b00000001 'with                  0x55, d85 & 0x01 d1
+end table

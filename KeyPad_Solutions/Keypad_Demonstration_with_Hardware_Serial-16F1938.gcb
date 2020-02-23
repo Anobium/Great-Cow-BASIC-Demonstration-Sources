@@ -13,48 +13,48 @@
 '''@date   	08.04.2015
 '''********************************************************************************
 
-' ----- Configuration
+; ----- Configuration
 
-#CHIP 16f1938,16
-#OPTION Explicit
-
-
-' ----- Constants
-#DEFINE KEYPAD_ROW_1 portb.3
-#DEFINE KEYPAD_ROW_2 portb.2
-#DEFINE KEYPAD_ROW_3 portb.1
-#DEFINE KEYPAD_ROW_4 portb.0
-#DEFINE KEYPAD_COL_1 portc.0
-#DEFINE KEYPAD_COL_2 portc.1
-#DEFINE KEYPAD_COL_3 portc.2
-#DEFINE KEYPAD_COL_4 portc.3
-
-' ----- Define Hardware settings
-' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
-' USART settings - CHANGE PORTS if required
-#DEFINE USART_BAUD_RATE 9600
-#DEFINE USART_DELAY 5 ms
-#DEFINE USART_BLOCKING
-Wait 500 ms
+  #chip 16f1938,16
+  #option explicit
 
 
-Dim TEMP As Byte
+; ----- Constants
+  #define KEYPAD_ROW_1 portb.3
+  #define KEYPAD_ROW_2 portb.2
+  #define KEYPAD_ROW_3 portb.1
+  #define KEYPAD_ROW_4 portb.0
+  #define KEYPAD_COL_1 portc.0
+  #define KEYPAD_COL_2 portc.1
+  #define KEYPAD_COL_3 portc.2
+  #define KEYPAD_COL_4 portc.3
 
-' ----- Main body of program commences here.
+; ----- Define Hardware settings
+ ' THIS CONFIG OF THE SERIAL PORT WORKS WITH A  MAX232 (or equiv) THEN TO PC
+ ' USART settings - CHANGE PORTS if required
+ #define USART_BAUD_RATE 9600
+ #define USART_DELAY 5 ms
+ #define USART_BLOCKING
+ wait 500 ms
 
 
-Do
-    'Get key
-    Temp = KeypadData
-    'If a key is pressed, then display it
-    If Temp <> KEY_NONE Then
-        HSerPrint Temp
-        'Wait until key is released
-        Wait While KeypadData <> KEY_NONE
-    End If
-Loop
+ Dim TEMP as Byte
 
-End
+; ----- Main body of program commences here.
 
 
-' ----- Support methods.  Subroutines and Functions
+  Do
+      'Get key
+      Temp = KeypadData
+      'If a key is pressed, then display it
+      If Temp <> KEY_NONE Then
+         HSerPrint Temp
+         'Wait until key is released
+         wait while KeypadData <> KEY_NONE
+      End If
+  Loop
+
+  End
+
+
+; ----- Support methods.  Subroutines and Functions

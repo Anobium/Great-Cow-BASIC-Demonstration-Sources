@@ -1,14 +1,8 @@
-Please review the other folders For file with rotation commands, As  follows:
+Please review the other folders for file with rotation commands, as  follows:
 
-' optionally you can rotate the screen.
-GLCD_Simple_Demonstation_16F1938_for_ILI9340@32.gcb:    GLCDRotate ( Landscape_Rev )
-' optionally you can rotate the screen.
-GLCD_Simple_Demonstation_16F1938_for_ILI9341@32.gcb:    GLCDRotate ( Landscape_Rev )
-' GLCDRotate ( LANDSCAPE )     ' optionally you can rotate the screen.
-GLCD_Simple_Demonstation_16LF1937_for_ST7735@32.gcb:
-' optionally you can rotate the screen.
-GLCD_Simple_Demonstation_16LF1939_for_ST7735@32.gcb:      GLCDRotate ( Portrait_Rev )
-' optionally you can rotate the screen.
-GLCD_Simple_Demonstation_mega328p_for_ILI9340@16.gcb:    GLCDRotate ( Landscape_Rev )
-' optionally you can rotate the screen.
-GLCD_Simple_Demonstation_mega328p_for_ILI9341@16.gcb:    GLCDRotate ( Landscape_Rev )
+GLCD_Simple_Demonstation_16F1938_for_ILI9340@32.gcb:    GLCDRotate ( Landscape_rev )     ' optionally you can rotate the screen.
+GLCD_Simple_Demonstation_16F1938_for_ILI9341@32.gcb:    GLCDRotate ( Landscape_rev )     ' optionally you can rotate the screen.
+GLCD_Simple_Demonstation_16LF1937_for_ST7735@32.gcb:      ' GLCDRotate ( LANDSCAPE )     ' optionally you can rotate the screen.
+GLCD_Simple_Demonstation_16LF1939_for_ST7735@32.gcb:      GLCDRotate ( PORTRAIT_REV )     ' optionally you can rotate the screen.
+GLCD_Simple_Demonstation_mega328p_for_ILI9340@16.gcb:    GLCDRotate ( Landscape_rev )     ' optionally you can rotate the screen.
+GLCD_Simple_Demonstation_mega328p_for_ILI9341@16.gcb:    GLCDRotate ( Landscape_rev )     ' optionally you can rotate the screen.

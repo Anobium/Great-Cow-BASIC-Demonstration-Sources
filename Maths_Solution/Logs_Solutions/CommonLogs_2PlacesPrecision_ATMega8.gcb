@@ -9,55 +9,51 @@
 '''@date   		01.04.2015
 '''********************************************************************************
 
-' ----- Configuration
+; ----- Configuration
 
-#CHIP mega8,8
+  #chip mega8,8
 
-#INCLUDE <maths.h>
+  #include <maths.h>
 
-'Use LCD in 2-wire mode with 74LS164 / 74HC164
-#DEFINE LCD_IO 2
-' databit
-#DEFINE LCD_DB PORTC.0
-' clockbit
-#DEFINE LCD_CB PORTC.1
-#DEFINE LCD_NO_RW
+ 'Use LCD in 2-wire mode with 74LS164 / 74HC164
+  #define LCD_IO 2
+  #define LCD_DB PORTC.0            ; databit
+  #define LCD_CB PORTC.1            ; clockbit
+  #define LCD_NO_RW
 
 
-' ----- Variables
-Dim ii As Word
-Dim outStr, valStr As String
+; ----- Variables
+ dim ii as word
+ dim outStr, valStr as string
 
 
-' ----- Main body of program commences here.
+; ----- Main body of program commences here.
 
-For ii = 1 To 65535
-    CLS
-    Print "log10("
-    'print argument
-    Print ii
-    Print ")="
-    Locate 1,0
-    'and its logarithm
-    print2Places(Log10(ii))
-    Wait 2 s
-Next
+  for ii = 1 to 65535
+    cls
+    print "log10("
+    print ii                       ;print argument
+    print ")="
+    locate 1,0
+    print2Places(log10(ii))        ;and its logarithm
+    wait 2 S
+  next
 
-' ----- Support methods.  Subroutines and Functions
+; ----- Support methods.  Subroutines and Functions
 
-Sub print2places(In p2p_arg As Word)
-    'print decently formatted results, to 2 decimal places
+  sub print2places(in p2p_arg as word)
+    ;print decently formatted results, to 2 decimal places
 
-    valStr = Str(p2p_arg)
-    Select Case Len(valStr)
-    Case 1:
+    valStr = str(p2p_arg)
+    select case len(valStr)
+      case 1:
         outStr = "0.0" + valStr
-    Case 2:
+      case 2:
         outStr = "0." + valStr
-    Case 3:
-        outStr = Left(valStr,1) + "." + Right(valStr,2)
-    Case 4:
-        outStr = Left(valStr,2) + "." + Right(valStr,2)
-    End Select
-    Print outStr
-End Sub
+      case 3:
+        outStr = left(valStr,1) + "." + right(valStr,2)
+      case 4:
+        outStr = left(valStr,2) + "." + right(valStr,2)
+    end select
+    print outStr
+  end sub

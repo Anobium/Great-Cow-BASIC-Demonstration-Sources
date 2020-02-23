@@ -28,31 +28,31 @@
 '''********************************************************************************
 
 
-#CHIP 16F1455
+  #chip 16F1455
 
 
-#INCLUDE <GetUserID.h>
+  #include <getuserid.h>
 
-#DEFINE USART_BAUD_RATE 19200
-#DEFINE USART_TX_BLOCKING
+  #define USART_BAUD_RATE 19200
+  #define USART_TX_BLOCKING
 
-'Implement ANSI escaope code for serial terminal NOT using a LCD!
-#DEFINE ESC   CHR(27)
-#DEFINE CLS   HSerPrint(ESC+"[2J")
-#DEFINE HOME  HSerPrint(ESC+"[H")
-#DEFINE Print HSerPrint
+  'Implement ANSI escaope code for serial terminal NOT using a LCD!
+  #define ESC   chr(27)
+  #define CLS   HSerPrint(ESC+"[2J")
+  #define HOME  HSerPrint(ESC+"[H")
+  #define Print HSerPrint
 
-CLS
-HOME
+  CLS
+  HOME
 
-Dim UserIDRegister As Word
+  dim UserIDRegister as word
 
-For Index = 0 To 0xF
+  For Index = 0 to 0xF
     UserIDRegister  = GetUserID(Index)
-    HSerPrint "80" + Hex(NVIndex)
-    HSerPrint " : "
-    HSerPrint Hex( UserIDRegister_H )
-    HSerPrint Hex( UserIDRegister    )
-Next Index
+    HserPrint "80" + hex(NVIndex)
+    HserPrint " : "
+    HserPrint hex( UserIDRegister_H )
+    HserPrint hex( UserIDRegister    )
+  Next Index
 
 End

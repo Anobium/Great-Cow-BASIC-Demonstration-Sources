@@ -10,44 +10,44 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 12F675, 8
+; ----- Configuration
+ #chip 12F675, 8
 
 
-' ----- Define Hardware settings
-Dir GPIO.0 Out
-Dir GPIO.1 Out
-Dir GPIO.2 Out
-Dir GPIO.4 In
+; ----- Define Hardware settings
+  dir GPIO.0 OUT
+  dir GPIO.1 OUT
+  dir GPIO.2 OUT
+  dir GPIO.4 IN
 
-Set GPIO.1 On
-
-
-' ----- Constants
-' No Constants specified in this example.
+  Set GPIO.1 On
 
 
-' ----- Variables
-' No Variables specified in this example. All byte variables are defined upon use.
+; ----- Constants
+  ' No Constants specified in this example.
 
-' ----- Main body of program commences here.
-' Repeat following code forever to keep following the line
-Do Forever
 
-    'Does the sensor see light?
-    If GPIO.4 = On Then
+; ----- Variables
+  ' No Variables specified in this example. All byte variables are defined upon use.
 
-        'If the sensor sees light, turn off left motor and turn on right motor
-        Set GPIO.2 Off
-        Set GPIO.0 On
-    Else
+; ----- Main body of program commences here.
+; Repeat following code forever to keep following the line
+  Do Forever
 
-        'If the sensor sees dark, turn off right motor and turn on left motor
-        Set GPIO.0 Off
-        Set GPIO.2 On
-    End If
-Loop
-End
+            'Does the sensor see light?
+            If GPIO.4 = On Then
+
+                      'If the sensor sees light, turn off left motor and turn on right motor
+                      Set GPIO.2 Off
+                      Set GPIO.0 On
+            Else
+
+                      'If the sensor sees dark, turn off right motor and turn on left motor
+                      Set GPIO.0 Off
+                      Set GPIO.2 On
+            End If
+  Loop
+  end
 
 
 

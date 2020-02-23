@@ -11,168 +11,144 @@
 '''********************************************************************************
 
 
-#CHIP 16F1789,32
+#chip 16F1789,32
 
 
-#OPTION Explicit
-#INCLUDE <glcd.h>
-#DEFINE GLCD_TYPE GLCD_TYPE_ILI9326
+#option explicit
+#include <glcd.h>
+#define GLCD_TYPE GLCD_TYPE_ILI9326
 
-' read command line
-#DEFINE GLCD_RD       porta.3
-' write command line
-#DEFINE GLCD_WR       porta.2
-' Command/Data line
-#DEFINE GLCD_RS       porta.1
-' Chip select line
-#DEFINE GLCD_CS       porta.0
-' Reset line
-#DEFINE GLCD_RST      porta.5
-#DEFINE GLCD_DataPort portD
+    #define GLCD_RD       porta.3        ' read command line
+    #define GLCD_WR       porta.2         ' write command line
+    #define GLCD_RS       porta.1         ' Command/Data line
+    #define GLCD_CS       porta.0         ' Chip select line
+    #define GLCD_RST      porta.5         ' Reset line
+    #define GLCD_DataPort portD
 
 
 
-'define the frame_refresh
-'1 to 5 is advised
-#DEFINE frame_refresh 3
-'
-'now rename colours to make it easier to set up sprite data
-#DEFINE bk ILI9326_BLACK
-#DEFINE re ILI9326_RED
-#DEFINE gr ILI9326_GREEN
-#DEFINE bl ILI9326_BLUE
-#DEFINE wh ILI9326_WHITE
-#DEFINE pu ILI9326_PURPLE
-#DEFINE ye ILI9326_YELLOW
-#DEFINE cy ILI9326_CYAN
-#DEFINE dg ILI9326_D_GRAY
-#DEFINE lg ILI9326_L_GRAY
-#DEFINE si ILI9326_SILVER
-#DEFINE ma ILI9326_MAROON
-#DEFINE ol ILI9326_OLIVE
-#DEFINE li ILI9326_LIME
-#DEFINE aq ILI9326_AQUA
-#DEFINE te ILI9326_TEAL
-#DEFINE na ILI9326_NAVY
-#DEFINE fu ILI9326_FUCHSIA
-'backgroung color
-#DEFINE bg bk
+   ;define the frame_refresh
+    #define frame_refresh 3  '1 to 5 is advised
+    ;
+    ;now rename colours to make it easier to set up sprite data
+    #define bk ILI9326_BLACK
+    #define re ILI9326_RED
+    #define gr ILI9326_GREEN
+    #define bl ILI9326_BLUE
+    #define wh ILI9326_WHITE
+    #define pu ILI9326_PURPLE
+    #define ye ILI9326_YELLOW
+    #define cy ILI9326_CYAN
+    #define dg ILI9326_D_GRAY
+    #define lg ILI9326_L_GRAY
+    #define si ILI9326_SILVER
+    #define ma ILI9326_MAROON
+    #define ol ILI9326_OLIVE
+    #define li ILI9326_LIME
+    #define aq ILI9326_AQUA
+    #define te ILI9326_TEAL
+    #define na ILI9326_NAVY
+    #define fu ILI9326_FUCHSIA
+    ;backgroung color
+    #define bg bk
 
-#DEFINE GLCD_OLED_FONT
-GLCDfntDefaultSize = 2
+    #define GLCD_OLED_FONT
+    GLCDfntDefaultsize = 2
 
-GLCDPrint 30,50, " Great Cow BASIC"
-GLCDPrint 30,70, "   Sprite Demo"
-GLCDPrint 30,90, "  ILI9326 @ 2019"
+    GLCDPrint 30,50, " Great Cow BASIC"
+    GLCDPrint 30,70, "   Sprite Demo"
+    GLCDPrint 30,90, "  ILI9326 @ 2019"
 
-Wait 6 s
+    Wait 6 s
 
-GLCDRotate Portrait
-GLCDCLS bg
-'
-'height and width of sprite in pixels
-Dim sprite_height,sprite_width As Byte
-'dim spritedata as byte;data to make sprite
-Dim sprite_x,sprite_y As Word
-Dim ptr,spritedata_ptr,pixel As Word
-'
-'demo vars
-Dim temp,frame,frame_count As Byte
-Dim dx(8),dy(8) As Word
-Dim spy(8),oldspy(8) As Word
-Dim spx(8),oldspx(8) As Word
-'set up start sprite positions and directions
-dx(1)=2:dx(2)=3:dx(3)=65536-4:dx(4)=6
-dx(5)=65536-8:dx(6)=65536-8:dx(7)=65536-8:dx(8)=65536-8
-dy(1)=65536-5:dy(2)=65536-3:dy(3)=65536-8:dy(4)=3
-dy(5)=2:dy(6)=7:dy(7)=2:dy(8)=8
-'
-spx(1)=30:spx(2)=100:spx(3)=150:spx(4)=50
-spx(5)=160:spx(6)=100:spx(7)=80:spx(8)=30
-spy(1)=20:spy(2)=20:spy(3)=16:spy(4)=50:spy(5)=60:spy(6)=40
-spy(5)=20:spy(6)=30:spy(7)=24:spy(8)=36
-sprite_height=16:sprite_width=16
-spritedata_ptr=1
-frame=0:frame_count=0
-'
-'demo moving sprite
-Do
-    For temp=1 To 8
-        If spx(temp)> (399-sprite_width) Then
-            'check right edge
-            dx(temp)= 65536-dx(temp)
-        End If
-        If spx(temp)<8 Then
-            'check left edge
-            dx(temp)= 65536-dx(temp)
-        End If
-        If spy(temp)> (229-sprite_height) Then
-            'check bottom edge
-            dy(temp)= 65536-dy(temp)
-        End If
-        If spy(temp)<8 Then
-            'check top edge
-            dy(temp)= 65536-dy(temp)
-        End If
-        '
-        'get last position for erase
-        oldspx(temp)=spx(temp):oldspy(temp)=spy(temp)
-        'get new position for draw
-        spx(temp)=spx(temp)+dx(temp):spy(temp)=spy(temp)+dy(temp)
-        '
-        If frame=0 Then
-            'which sprite to draw
-            'erase sprite at last position
-            erase_sprite (oldspx(temp),oldspy(temp))
-            ' 1 ;pointer to sprite 1 in table
-            'draw sprite1 at new position
-            sprite (spx(temp),spy(temp), 1 )
-        Else
-            'erase sprite at last position
-            erase_sprite (oldspx(temp),oldspy(temp))
-            ' 257 ;pointer to sprite 2 in table
-            'draw sprite2 at new position
-            sprite (spx(temp),spy(temp), 257)
-        End If
-        '
-    Next temp
-    'when to change spritedata_ptr
-    frame_count++
-    If frame_count=frame_refresh Then
+    GLCDRotate Portrait
+    GLCDCLS bg
+    ;
+    dim sprite_height,sprite_width as byte ;height and width of sprite in pixels
+    ;dim spritedata as byte;data to make sprite
+    dim sprite_x,sprite_y as Word
+    dim ptr,spritedata_ptr,pixel as word
+    ;
+    ;demo vars
+    dim temp,frame,frame_count as byte
+    dim dx(8),dy(8) as word
+    dim spy(8),oldspy(8) as word
+    dim spx(8),oldspx(8) as word
+    ;set up start sprite positions and directions
+    dx(1)=2:dx(2)=3:dx(3)=65536-4:dx(4)=6
+    dx(5)=65536-8:dx(6)=65536-8:dx(7)=65536-8:dx(8)=65536-8
+    dy(1)=65536-5:dy(2)=65536-3:dy(3)=65536-8:dy(4)=3
+    dy(5)=2:dy(6)=7:dy(7)=2:dy(8)=8
+    ;
+    spx(1)=30:spx(2)=100:spx(3)=150:spx(4)=50
+    spx(5)=160:spx(6)=100:spx(7)=80:spx(8)=30
+    spy(1)=20:spy(2)=20:spy(3)=16:spy(4)=50:spy(5)=60:spy(6)=40
+    spy(5)=20:spy(6)=30:spy(7)=24:spy(8)=36
+    sprite_height=16:sprite_width=16
+    spritedata_ptr=1
+    frame=0:frame_count=0
+    ;
+    do ;demo moving sprite
+      for temp=1 to 8
+        if spx(temp)> (399-sprite_width) then ;check right edge
+          dx(temp)= 65536-dx(temp)
+        end if
+        if spx(temp)<8 then ;check left edge
+          dx(temp)= 65536-dx(temp)
+        end if
+        if spy(temp)> (229-sprite_height) then ;check bottom edge
+          dy(temp)= 65536-dy(temp)
+        end if
+        if spy(temp)<8 then ;check top edge
+          dy(temp)= 65536-dy(temp)
+        end if
+      ;
+        oldspx(temp)=spx(temp):oldspy(temp)=spy(temp) ;get last position for erase
+        spx(temp)=spx(temp)+dx(temp):spy(temp)=spy(temp)+dy(temp) ;get new position for draw
+      ;
+        if frame=0 then;which sprite to draw
+          erase_sprite (oldspx(temp),oldspy(temp)) ;erase sprite at last position
+          ' 1 ;pointer to sprite 1 in table
+          sprite (spx(temp),spy(temp), 1 ) ;draw sprite1 at new position
+        else
+          erase_sprite (oldspx(temp),oldspy(temp)) ;erase sprite at last position
+          ' 257 ;pointer to sprite 2 in table
+          sprite (spx(temp),spy(temp), 257) ;draw sprite2 at new position
+        end if
+      ;
+      next temp
+      frame_count++ ;when to change spritedata_ptr
+      if frame_count=frame_refresh then
         frame=!frame
         frame_count=0
-    End If
-    'end demo
-Loop
-'
+      end if
+    loop ;end demo
+    ;
 
-'fills box with sprite data
-Sub sprite ( In sprite_x As Word , In sprite_y As Word , In spritedata_ptr As Word  )
-    Dim ptrx, ptry As Word
+    sub sprite ( in sprite_x as word , in sprite_y as word , in spritedata_ptr as word  ) ;fills box with sprite data
+      dim ptrx, ptry as word
 
-    ptr = spritedata_ptr
-    For ptry = sprite_x+1 To sprite_x+16
-        For ptrx = sprite_y+1 To sprite_y+16
-            ReadTable spritedata,ptr,pixel
-            Pset ptrx, ptry, pixel
-            ptr++
-        Next
-    Next
-End Sub
-'
-'write a box of 0's
-Sub erase_sprite ( In sprite_x As Word , In sprite_y As Word )
-    Dim ptrx, ptry As Word
+      ptr = spritedata_ptr
+      for ptry = sprite_x+1 to sprite_x+16
+        for ptrx = sprite_y+1 to sprite_y+16
+          ReadTable spritedata,ptr,pixel
+          Pset ptrx, ptry, pixel
+          ptr++
+        next
+      next
+    end sub
+    ;
+    sub erase_sprite ( in sprite_x as word , in sprite_y as word ) ;write a box of 0's
+      dim ptrx, ptry as word
 
-    For ptry = sprite_x+1 To sprite_x+16
-        For ptrx = sprite_y+1 To sprite_y+16
-            Pset ptrx, ptry, bg
-        Next
-    Next
-End Sub
-'
-'sprite 1
-Table spritedata
+      for ptry = sprite_x+1 to sprite_x+16
+        for ptrx = sprite_y+1 to sprite_y+16
+          Pset ptrx, ptry, bg
+        next
+      next
+    end sub
+    ;
+    table spritedata ;sprite 1
     wh,bl,bl,bl,bl,bg,bg,bg,bg,bg,bg,bl,bl,bl,bl,wh
     bg,bl,re,re,re,bl,bl,bg,bg,bl,bl,re,re,re,bl,bg
     bg,bg,bl,re,re,re,bl,bg,bg,bl,re,re,re,bl,bg,bg
@@ -189,8 +165,8 @@ Table spritedata
     ye,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,ye
     bg,ye,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,ye,bg
     bg,bg,ye,bg,bg,bg,bg,bg,bg,bg,bg,bg,bg,ye,bg,bg
-    '
-    'sprite 2
+    ;
+    ;sprite 2
     bl,bl,bl,bl,bl,bg,bg,bg,bg,bg,bg,bl,bl,bl,bl,bl
     bg,bl,re,re,re,bl,bl,bg,bg,bl,bl,re,re,re,bl,bg
     bg,bg,bl,wh,wh,re,bl,bg,bg,bl,re,wh,wh,bl,bg,bg
@@ -207,8 +183,8 @@ Table spritedata
     bg,bg,bg,bg,ye,ye,bg,bg,bg,bg,ye,ye,bg,bg,bg,bg
     bg,bg,bg,bg,bg,ye,bg,bg,bg,bg,ye,bg,bg,bg,bg,bg
     bg,bg,bg,bg,bg,bg,ye,bg,bg,ye,bg,bg,bg,bg,bg,bg
-End Table
+    end table
 
 
-End
+end
 

@@ -27,39 +27,39 @@
 '''
 '''************************************************************************
 
-#CHIP mega328p, 16
+  #chip mega328p, 16
 
-#DEFINE LED portb.5
-Dir LED Out
+  #define LED portb.5
+  dir LED out
 
-Dim EventCounter As Long
-EventCounter = 0
+  dim EventCounter as long
+  EventCounter = 0
 
-'USART settings
-#DEFINE USART_BAUD_RATE 9600
-#DEFINE USART_TX_BLOCKING
+  'USART settings
+  #define USART_BAUD_RATE 9600
+  #define USART_TX_BLOCKING
 
-Wait 2 s
-HSerPrintCRLF 2
-HSerPrint "AMS312 Sensor"
-HSerPrintCRLF
-HSerPrint "Counting Events"
-HSerPrintCRLF
+  wait 2 s
+  HSerPrintCRLF 2
+  HSerPrint "AMS312 Sensor"
+  HSerPrintCRLF
+  HSerPrint "Counting Events"
+  HSerPrintCRLF
 
-Do Forever
+  do Forever
 
     'Read Sensor value
     ADVal = ReadAD(an0)
 
     'Is the sensor greater than 127 then turn LED on
-    If ADVal  > 127 Then
-        LED = 1
-        EventCounter++
-        HSerPrint EventCounter
-        HSerPrintCRLF
-        Wait 2 s
-    Else
-        LED = 0
-    End If
+    if ADVal  > 127 then
+      LED = 1
+      EventCounter++
+      HSerPrint EventCounter
+      HSerPrintCRLF
+      wait 2 s
+    else
+      LED = 0
+    end if
 
-Loop
+  loop

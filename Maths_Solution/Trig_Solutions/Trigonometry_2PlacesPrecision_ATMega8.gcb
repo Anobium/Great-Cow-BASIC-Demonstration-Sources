@@ -9,95 +9,79 @@
 '''@date   		01.04.2015
 '''********************************************************************************
 
-' ----- Configuration
+; ----- Configuration
 
-#CHIP mega8,8
-#OPTION Explicit
+ #chip mega8,8
+ #option explicit
 
-#INCLUDE <trig2places.h>
+ #include <trig2places.h>
 
-'Use LCD in 2-wire mode with 74LS164 / 74HC164
-#DEFINE LCD_IO 2
-' databit
-#DEFINE LCD_DB PORTC.0
-' clockbit
-#DEFINE LCD_CB PORTC.1
-#DEFINE LCD_NO_RW
+ 'Use LCD in 2-wire mode with 74LS164 / 74HC164
+  #define LCD_IO 2
+  #define LCD_DB PORTC.0            ; databit
+  #define LCD_CB PORTC.1            ; clockbit
+  #define LCD_NO_RW
 
 
-' ----- Variables
-Dim ii As Integer
-Dim outStr, valStr As String
-Dim LENGTH As Byte
+; ----- Variables
+ dim ii as integer
+ dim outStr, valStr as string
+ Dim LENGTH as Byte
 
 
-' ----- Main body of program commences here.
+; ----- Main body of program commences here.
 
-'arguments from -720 to 720
-For ii = -720 To 720
-    CLS
-    'print the label
-    Print "sin("
-    'and the argument
-    Print ii
-    'and closing parenthesis
-    Print ")="
-    Locate 1,0
-    'print value of the sine
-    printTrig(sin(ii))
-    'pause to view
-    Wait 500 ms
+  for ii = -720 to 720             ;arguments from -720 to 720
+    cls
+    print "sin("                  ;print the label
+    print ii                       ;and the argument
+    print ")="                    ;and closing parenthesis
+    locate 1,0
+    printTrig(sin(ii))             ;print value of the sine
+    wait 500 mS                   ;pause to view
 
-    'do likewise for cosine
-    CLS
-    Print "cos("
-    Print ii
-    Print ")="
-    Locate 1,0
+    cls                           ;do likewise for cosine
+    print "cos("
+    print ii
+    print ")="
+    locate 1,0
     printTrig(cos(ii))
-    'pause to view
-    Wait 500 ms
+    wait 500 mS                   ;pause to view
 
-    'do likewise for tangent
-    CLS
-    Print "tan("
-    Print ii
-    Print ")="
-    Locate 1,0
+    cls                           ;do likewise for tangent
+    print "tan("
+    print ii
+    print ")="
+    locate 1,0
     printTrig(tan(ii))
-    'pause to view
-    Wait 500 ms
-Next ii
+    wait 500 mS                   ;pause to view
+  next ii
 
 
 
-' ----- Support methods.  Subroutines and Functions
+; ----- Support methods.  Subroutines and Functions
 
-Sub printTrig(In value As Integer)
-    'print decently formatted trig results
+  sub printTrig(in value as integer)
+    ;print decently formatted trig results
 
-    'assume positive (no sign)
-    outStr = ""
+    outStr = ""                   ;assume positive (no sign)
 
-    If value < 0 Then
-        'handle negatives
-        'prefix a minus sign
-        outStr = "-"
-        'but work with positives
-        value = -1 * value
-    End If
+    if value < 0 then             ;handle negatives
+      outStr = "-"                ;prefix a minus sign
+      value = -1 * value          ;but work with positives
+    end if
 
-    valStr = Str(value)
-    length = Len(valStr)
-    Select Case length
-    Case 1:
+    valStr = str(value)
+    length = len(valStr)
+    select case length
+      case 1:
         outStr = outStr + "0.0" + valStr
-    Case 2:
+      case 2:
         outStr = outStr + "0." + valStr
-    Case 3:
-        outStr = outStr + Left(valStr,1) + "." + Right(valStr,2)
-    Case 4:
-        outStr = outStr + Left(valStr,2) + "." + Right(valStr,2)
-    End Select
-    Print outStr
-End Sub
+      case 3:
+        outStr = outStr + left(valStr,1) + "." + right(valStr,2)
+      case 4:
+        outStr = outStr + left(valStr,2) + "." + right(valStr,2)
+    end select
+   print outStr
+  end sub

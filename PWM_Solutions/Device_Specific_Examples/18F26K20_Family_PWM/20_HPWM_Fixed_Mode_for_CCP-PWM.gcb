@@ -13,29 +13,26 @@
 '''@date    22.08.2018
 '''*************************************************************************
 
-'Chip Settings
-#CHIP 18F26K20, 64
+    'Chip Settings
+    #chip 18F26K20, 64
 
 
-Dir portc Out
+    DIR portc Out
 
 
-'Set frequency in KHz, just change the value
-#DEFINE PWM_Timer2_Freq  28
+    #define PWM_Timer2_Freq  28        'Set frequency in KHz, just change the value
 
-#DEFINE PWM_1_Duty 10
-#DEFINE PWM_1_Clock_Source 2
+    #define PWM_1_Duty 10
+    #define PWM_1_Clock_Source 2
 
-#DEFINE PWM_2_Duty 20
-#DEFINE PWM_2_Clock_Source 2
+    #define PWM_2_Duty 20
+    #define PWM_2_Clock_Source 2
 
-'Will enable CCP/PWM channel
-PWMOn (1)
+    PWMOn (1)    'Will enable CCP/PWM channel
 
-'Will enable CCP/PWM channel
-PWMOn (2)
+    PWMOn (2)    'Will enable CCP/PWM channel
 
-Do
-Loop
+    do
+    loop
 
 

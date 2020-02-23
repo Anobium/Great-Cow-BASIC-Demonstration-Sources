@@ -1,37 +1,27 @@
-' Declare the Target Processor and Speed
-#CHIP 18F26K83,32
-' Require Explicit declaration of Variables
-#OPTION Explicit
-' Include the Library
-#INCLUDE <millis.h>
+#chip 18F26K83,32        ' Declare the Target Processor and Speed
+#option explicit          ' Require Explicit declaration of Variables
+#include <millis.h>       ' Include the Library
 
-' Define the LED Pin - Digital Pin 2
-#DEFINE LED PORTA.0
-' Flash rate in mS
-#DEFINE LEDRate 1000
-' Setup
-' Make the LED Pin an Output
-Dir LED Out
-LED = 0
+        #define LED PORTA.0       ' Define the LED Pin - Digital Pin 2
+        #define LEDRate 1000     ' Flash rate in mS
+        ' Setup
+        Dir LED Out               ' Make the LED Pin an Output
+        LED = 0
 
-' declare working variables
-Dim CurMs, LstMs As Word
-' Main                    ' This loop runs over and over forever.
-LstMs = 0
-CurMs = 0
+        Dim CurMs, LstMs as word  ' declare working variables
+        ' Main                    ' This loop runs over and over forever.
+        LstMs = 0
+        CurMs = 0
 
-' Main                    ' This loop runs over and over forever.
-Do
-    CurMs = millis()
+        ' Main                    ' This loop runs over and over forever.
+        Do
+          CurMs = millis()
 
-    If CurMs - LstMs >= LEDRate Then
-        ' required Time has Elapsed
-        ' So Toggle state of LED
-        LED = !LED
-        ' And Record Toggle Time
-        LstMs = CurMs
-    End If
+          if CurMs - LstMs >= LEDRate then  ' required Time has Elapsed
+            LED = !LED                      ' So Toggle state of LED
+            LstMs = CurMs                   ' And Record Toggle Time
+          end if
 
-Loop
+        Loop
 
-End
+END

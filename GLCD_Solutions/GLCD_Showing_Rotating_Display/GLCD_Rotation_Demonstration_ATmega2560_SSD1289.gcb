@@ -11,37 +11,37 @@
 '''**********
 
 'Chip Settings
-#CHIP mega2560, 16
+#chip mega2560, 16
 
 'Include
-#INCLUDE <glcd.h>
+#include <glcd.h>
 
 'GLCD Device Selection
-#DEFINE GLCD_TYPE GLCD_TYPE_SSD1289
+#define GLCD_TYPE GLCD_TYPE_SSD1289
 
-#DEFINE GLCD_EXTENDEDFONTSET1
+#define GLCD_EXTENDEDFONTSET1
 
 'Define ports for the SSD1289 display
-#DEFINE GLCD_WR   PORTG.2
-#DEFINE GLCD_CS   PORTG.1
-#DEFINE GLCD_RS   PORTD.7
-#DEFINE GLCD_RST  PORTG.0
-#DEFINE GLCD_DB0  PORTC.0
-#DEFINE GLCD_DB1  PORTC.1
-#DEFINE GLCD_DB2  PORTC.2
-#DEFINE GLCD_DB3  PORTC.3
-#DEFINE GLCD_DB4  PORTC.4
-#DEFINE GLCD_DB5  PORTC.5
-#DEFINE GLCD_DB6  PORTC.6
-#DEFINE GLCD_DB7  PORTC.7
-#DEFINE GLCD_DB8  PORTA.0
-#DEFINE GLCD_DB9  PORTA.1
-#DEFINE GLCD_DB10 PORTA.2
-#DEFINE GLCD_DB11 PORTA.3
-#DEFINE GLCD_DB12 PORTA.4
-#DEFINE GLCD_DB13 PORTA.5
-#DEFINE GLCD_DB14 PORTA.6
-#DEFINE GLCD_DB15 PORTA.7
+#define GLCD_WR   PORTG.2
+#define GLCD_CS   PORTG.1
+#define GLCD_RS   PORTD.7
+#define GLCD_RST  PORTG.0
+#define GLCD_DB0  PORTC.0
+#define GLCD_DB1  PORTC.1
+#define GLCD_DB2  PORTC.2
+#define GLCD_DB3  PORTC.3
+#define GLCD_DB4  PORTC.4
+#define GLCD_DB5  PORTC.5
+#define GLCD_DB6  PORTC.6
+#define GLCD_DB7  PORTC.7
+#define GLCD_DB8  PORTA.0
+#define GLCD_DB9  PORTA.1
+#define GLCD_DB10 PORTA.2
+#define GLCD_DB11 PORTA.3
+#define GLCD_DB12 PORTA.4
+#define GLCD_DB13 PORTA.5
+#define GLCD_DB14 PORTA.6
+#define GLCD_DB15 PORTA.7
 
 'You can set these parameters are global or
 ' pass as parameter to the SDD1289 GLCD commands as shown on the first GLCDPrint command below:
@@ -51,30 +51,30 @@ GLCDForeground = SSD1289_YELLOW
 GLCDCLS SSD1289_BLUE
 
 Do
-    GLCDCLS
-    GLCDRotate Portrait
+		GLCDCLS
+    GLCDRotate PORTRAIT
     GLCDPrint  2, 2,  "GCBasic", SSD1289_YELLOW, 2
     GLCDPrint  2 , 30 ,  "PORTRAIT"
     GLCDPrint  20 , 60 ,  "Orientation"
     Wait 2 s
 
 
-    GLCDCLS
-    GLCDRotate Landscape
+		GLCDCLS
+    GLCDRotate LANDSCAPE
     GLCDPrint  2, 2, "GCBasic"
     GLCDPrint  2 , 30 ,  "LANDSCAPE"
     GLCDPrint  20 , 60 ,  "Orientation"
     Wait 2 s
 
-    GLCDCLS
-    GLCDRotate Portrait_Rev
+		GLCDCLS
+    GLCDRotate PORTRAIT_REV
     GLCDPrint  2, 2,  "GCBasic"
     GLCDPrint  2 , 30 , "PORTRAIT_REV"
     GLCDPrint  20 , 60 ,  "Orientation"
     Wait 2 s
 
-    GLCDCLS
-    GLCDRotate Landscape_Rev
+		GLCDCLS
+    GLCDRotate LANDSCAPE_REV
     GLCDPrint  2, 2,  "GCBasic"
     GLCDPrint  2 , 30 ,  "LANDSCAPE_REV"
     GLCDPrint  20 , 60 ,  "Orientation"

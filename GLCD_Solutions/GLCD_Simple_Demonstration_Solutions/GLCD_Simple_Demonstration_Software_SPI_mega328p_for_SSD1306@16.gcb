@@ -14,36 +14,36 @@
 '''@date    2/22/2017
 
 'Chip model
-#CHIP mega328p, 16
-#INCLUDE <glcd.h>
+#chip mega328p, 16
+#include <glcd.h>
 
 'Defines for a 7 pin SPI module
 'RES pin is pulsed low in glcd_SSD1306.h for proper startup
-#DEFINE MOSI_SSD1306 PortB.1
-#DEFINE SCK_SSD1306 PortB.2
-#DEFINE DC_SSD1306 PortB.3
-#DEFINE CS_SSD1306 PortB.4
-#DEFINE RES_SSD1306 PortB.5
+#define MOSI_SSD1306 PortB.1
+#define SCK_SSD1306 PortB.2
+#define DC_SSD1306 PortB.3
+#define CS_SSD1306 PortB.4
+#define RES_SSD1306 PortB.5
 
-' ----- Define GLCD Hardware settings
-#DEFINE GLCD_TYPE GLCD_TYPE_SSD1306
-#DEFINE S4Wire_DATA
+; ----- Define GLCD Hardware settings
+#define GLCD_TYPE GLCD_TYPE_SSD1306
+#define S4Wire_DATA
 
-Dim longnumber As Long
+dim longnumber as Long
 longnumber = 123456
-Dim wordnumber As Word
+dim wordnumber as word
 wordnumber = 62535
-Dim bytenumber As Byte
+dim bytenumber as Byte
 bytenumber =255
 
-#DEFINE led PortB.0
-Dir led Out
+#define led PortB.0
+dir led out
 
 
 Do
-    Set led On
-    Wait 1 s
-    Set led Off
+     SET led ON
+     wait 1 s
+     SET led OFF
 
     GLCDCLS
     GLCDPrint (30, 0, "Hello World!")
@@ -57,6 +57,6 @@ Do
     GLCDPrint (52,55,bytenumber)
     Line (0,40,127,63)
     Line (0,63,127,40)
-    Wait 3 s
+    wait 3 s
 
 Loop

@@ -1,37 +1,33 @@
 #CHIP tiny13a, 1.2
-#OPTION Explicit
+#OPTION EXPLICIT
 #DEFINE LED PORTB.0
 #DEFINE TOGGLE PINB.0
 #DEFINE SWITCH PORTB.1
 
-Dim BUTTON As Byte
-Dir LED Out
-'necessary for all input methods where the switch is at PB4
-Dir SWITCH In
-'comment if you want to use an external 10 kOhm resistor
-Set SWITCH = 1
-Set LED = 0
+DIM BUTTON AS BYTE
+DIR LED OUT	
+DIR SWITCH IN   'necessary for all input methods where the switch is at PB4
+SET SWITCH = 1	'comment if you want to use an external 10 kOhm resistor
+SET LED = 0
 
-'Enables the PCINT interrupt
-PCIE = 1
-'Enables the PCINT1 interrupt only at PortB.1
-PCMSK.PCINT1 = 1
+PCIE = 1			'Enables the PCINT interrupt
+PCMSK.PCINT1 = 1	'Enables the PCINT1 interrupt only at PortB.1
 
-On Interrupt PinChange0 Call checkSwitch
+ON INTERRUPT PinChange0 CALL checkSwitch
 BUTTON = 0
 
 'Main program:
-Do
-    If BUTTON > 3 Then
-        TOGGLE =! LED
-        BUTTON = 0
-    End If
-Loop
+DO
+IF BUTTON > 3 THEN
+	TOGGLE =! LED
+	BUTTON = 0
+END IF
+LOOP
 
 'Interrupt service routine:
-Sub checkSwitch
-    Do While SWITCH = 0
-        Wait 1 us
-        BUTTON += 1
-    Loop
-End Sub
+SUB checkSwitch
+	DO WHILE SWITCH = 0
+		WAIT 1 US
+		BUTTON += 1
+	LOOP
+END SUB

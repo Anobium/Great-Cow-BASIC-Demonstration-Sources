@@ -9,97 +9,97 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-'Set chip model required:
+;Set chip model required:
 
-#CHIP mega8, 8
+ #chip mega8, 8
 
-'Setup LCD Parameters
-#DEFINE LCD_IO 8
-#DEFINE LCD_NO_RW
-#DEFINE LCD_SPEED FAST
+  ;Setup LCD Parameters
+  #define LCD_IO 8
+  #define LCD_NO_RW
+  #define LCD_Speed fast
 
-' ----- Define Hardware settings
-#DEFINE LCD_RS PORTB.0
-#DEFINE LCD_Enable PORTB.1
-#DEFINE LCD_DATA_PORT PORTD
+; ----- Define Hardware settings
+  #define LCD_RS PORTB.0
+  #define LCD_Enable PORTB.1
+  #define LCD_DATA_PORT PORTD
 
-' ----- Main body of program commences here.
-Do Forever
-    CLS
-    Wait 3 s
-    Print "START TEST"
-    Locate 1,0
-    Print "DISPLAY ON"
-    Wait 3 s
+; ----- Main body of program commences here.
+    Do Forever
+        CLS
+        WAIT 3 s
+        PRINT "START TEST"
+        locate 1,0
+        PRINT "DISPLAY ON"
+        wait 3 s
 
-    CLS
-    Locate 0,0
-    Print "Cursor ON"
-    Locate 1,0
-    LCDCursor CURSORON
-    Wait 3 s
+        CLS
+        Locate 0,0
+        Print "Cursor ON"
+        Locate 1,0
+        LCDcursor CursorOn
+        wait 3 S
 
-    CLS
-    LCDCursor CURSOROFF
-    Locate 0,0
-    Print "Cursor OFF"
-    Wait 3 s
+        CLS
+        LCDcursor CursorOFF
+        locate 0,0
+        Print "Cursor OFF"
+        wait 3 s
 
-    CLS
-    Locate 0,0
-    Print "FLASH ON"
-    Locate 1,0
-    LCDCursor FLASHON
-    Wait 3 s
+        CLS
+        Locate 0,0
+        Print "FLASH ON"
+        Locate 1,0
+        LCDcursor FLASHON
+        wait 3 s
 
-    CLS
-    Locate 0,0
-    Print "FLASH OFF"
-    LCDCursor FLASHOFF
-    Wait 3 sec
+        CLS
+        locate 0,0
+        Print "FLASH OFF"
+        LCDCURSOR FLASHOFF
+        wait 3 sec
 
-    Locate 0,0
-    Print "CURSR & FLSH ON"
-    Locate 1,0
-    LCDCursor CURSORON
-    LCDCursor FLASHON
-    Wait 3 sec
+        Locate 0,0
+        Print "CURSR & FLSH ON"
+        locate 1,0
+        LCDCURSOR CURSORON
+        LCDCURSOR FLASHON
+        Wait 3 sec
 
-    Locate 0,0
-    Print "CURSR & FLSH OFF"
-    Locate 1,0
-    LCDCursor CURSOROFF
-    LCDCursor FLASHOFF
-    Wait 3 sec
+        Locate 0,0
+        Print "CURSR & FLSH OFF"
+        locate 1,0
+        LCDCURSOR CursorOFF
+        LCDCURSOR FLASHOFF
+        Wait 3 sec
 
-    CLS
-    Locate 0,4
-    Print "Flashing"
-    Locate 1,4
-    Print "Display"
-    Wait 500 ms
+        CLS
+        Locate 0,4
+        PRINT "Flashing"
+        Locate 1,4
+        Print "Display"
+        wait 500 ms
 
-    Repeat 10
-        LCDCursor LCDOFF
-        Wait 500 ms
-        LCDCursor LCDON
-        Wait 500 ms
-    End Repeat
+        repeat 10
+            LCDCURSOR LCDOFF
+            wait 500 ms
+            LCDCURSOR LCDON
+            wait 500 ms
+        end repeat
 
-    CLS
-    Locate 0,0
-    Print "DISPLAY OFF"
-    Locate 1,0
-    Print "FOR 5 SEC"
-    Wait 2 SEC
-    LCDCursor LCDOFF
-    Wait 5 s
+        CLS
+        Locate 0,0
+        Print "DISPLAY OFF"
+        Locate 1,0
+        Print "FOR 5 SEC"
+        Wait 2 SEC
+        LCDCURSOR LCDOFF
+        WAIT 5 s
 
-    CLS
-    Locate 0,0
-    LCDCursor LCDON
-    Print "END TEST"
-    Wait 3 s
+        CLS
+        Locate 0,0
+        LCDCURSOR LCDON
+        Print "END TEST"
+        wait 3 s
 
-Loop
+    loop
 

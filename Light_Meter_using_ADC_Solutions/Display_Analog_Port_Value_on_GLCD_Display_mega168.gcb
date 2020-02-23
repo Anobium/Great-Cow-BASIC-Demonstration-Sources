@@ -9,47 +9,47 @@
 '''@date   	14.02.2015
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP mega168, 16
+; ----- Configuration
+ #chip mega168, 16
 
-#INCLUDE <glcd.h>
-
-
-' ----- Define Hardware settings
-' No hardware settings are specified in this example.
-' All hardware is defined with respect to GLCD in the support methods.
-
-' ----- Constants
-#DEFINE GLCD_RW PORTB.1
-#DEFINE GLCD_RESET PORTB.5
-#DEFINE GLCD_CS1 PORTB.3
-#DEFINE GLCD_CS2 PORTB.4
-#DEFINE GLCD_RS PORTB.0
-#DEFINE GLCD_ENABLE PORTB.2
-#DEFINE GLCD_DB0 PORTD.0
-#DEFINE GLCD_DB1 PORTD.1
-#DEFINE GLCD_DB2 PORTD.2
-#DEFINE GLCD_DB3 PORTD.3
-#DEFINE GLCD_DB4 PORTD.4
-#DEFINE GLCD_DB5 PORTD.5
-#DEFINE GLCD_DB6 PORTD.6
-#DEFINE GLCD_DB7 PORTD.7
+ #include <glcd.h>
 
 
-' ----- Variables
-' none specified in this example. All byte variables are defined upon use.
+; ----- Define Hardware settings
+  ' No hardware settings are specified in this example.
+  ' All hardware is defined with respect to GLCD in the support methods.
+
+; ----- Constants
+  #define GLCD_RW PORTB.1
+  #define GLCD_RESET PORTB.5
+  #define GLCD_CS1 PORTB.3
+  #define GLCD_CS2 PORTB.4
+  #define GLCD_RS PORTB.0
+  #define GLCD_ENABLE PORTB.2
+  #define GLCD_DB0 PORTD.0
+  #define GLCD_DB1 PORTD.1
+  #define GLCD_DB2 PORTD.2
+  #define GLCD_DB3 PORTD.3
+  #define GLCD_DB4 PORTD.4
+  #define GLCD_DB5 PORTD.5
+  #define GLCD_DB6 PORTD.6
+  #define GLCD_DB7 PORTD.7
 
 
-' ----- Main body of program commences here.
-GLCDCLS
-GLCDPrint 0,0,   "GCBASIC 2019"
-GLCDPrint 0,8,   "Demonstation Code"
-GLCDPrint 0,32,  "Light Level:"
-Do While TRUE
+; ----- Variables
+; none specified in this example. All byte variables are defined upon use.
 
-    'Take a measurement and display on LCD.
-    ' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
-    'Uses the method STR to convert a number to a string.
-    GLCDPrint 72,32, Pad( Str(ReadAD( 0 ) ), 3 )
-Loop
-End
+
+; ----- Main body of program commences here.
+  GLCDCLS
+  GLCDPrint 0,0,   "GCBASIC 2019"
+  GLCDPrint 0,8,   "Demonstation Code"
+  GLCDPrint 0,32,  "Light Level:"
+  do while true
+
+      'Take a measurement and display on LCD.
+      ' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
+      'Uses the method STR to convert a number to a string.
+      GLCDPrint 72,32, pad( str(ReadAD( 0 ) ), 3 )
+  loop
+  end

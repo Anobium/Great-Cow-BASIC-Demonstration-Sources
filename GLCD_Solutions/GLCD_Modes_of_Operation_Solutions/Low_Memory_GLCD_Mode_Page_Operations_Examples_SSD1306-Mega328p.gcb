@@ -53,74 +53,74 @@
 '''********************************************************************************
 
 
-#CHIP mega328p,16
-#OPTION Explicit
-#INCLUDE <uno_mega328p.h>
-#INCLUDE <glcd.h>
+  #chip mega328p,16
+  #option explicit
+  #include <uno_mega328p.h>
+  #include <glcd.h>
 
-' ----- Define GLCD Hardware settings
-#DEFINE GLCD_TYPE GLCD_TYPE_SSD1306
-#DEFINE GLCD_I2C_Address 0x78
-#DEFINE GLCD_PROTECTOVERRUN
+  ; ----- Define GLCD Hardware settings
+  #define GLCD_TYPE GLCD_TYPE_SSD1306
+  #define GLCD_I2C_Address 0x78
+  #define GLCD_PROTECTOVERRUN
 
-' Define Hardware I2C settings
-#DEFINE HI2C_BAUD_RATE 400
-#DEFINE HI2C_DATA
-HI2CMode Master
+  ' Define Hardware I2C settings
+  #Define HI2C_BAUD_RATE 400
+  #Define HI2C_DATA
+  HI2CMode Master
 
 '    #define GLCD_TYPE_SSD1306_CHARACTER_MODE_ONLY    '''This defined will be required on high RAM devices to activate low memory capability
 '  #define GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
 
 
-GLCDCLS
+  GLCDCLS
 
-Dim Mxpos As Byte
-Dim Mxstring As String * 11
+  dim Mxpos as Byte
+  dim Mxstring as string * 11
 
 
-GLCD_Open_PageTransaction 0,7
-GLCDPrint 1, 0, "Great Cow BASIC"
-GLCDPrint 1, 8, "Meter"
-Line 0, 0, 127, 63
-Line 127, 0, 0, 63
-GLCD_Close_PageTransaction
+  GLCD_Open_PageTransaction 0,7
+      GLCDPrint 1, 0, "Great Cow BASIC"
+      GLCDPrint 1, 8, "Meter"
+      Line 0, 0, 127, 63
+      Line 127, 0, 0, 63
+  GLCD_Close_PageTransaction
 
-End
+  end
 
-Do Forever
+  do Forever
 
     Mxstring = ""
-    For Mxpos = 0 To 11
+    for Mxpos = 0 to 11
 
-        Mxstring = Pad("", Mxpos, "|")
-        Mxstring = Pad(Mxstring, 11-Mxpos, " ")
-        GLCD_Open_PageTransaction 0,7
+      Mxstring = pad("", Mxpos, "|")
+      Mxstring = pad(Mxstring, 11-Mxpos, " ")
+      GLCD_Open_PageTransaction 0,7
 
-        Box 0, 0, 127, 63
-        Box 0, 0, 35, 50
-        Box 0, 50, 127, 50
-        GLCDPrint 1, 1, "Meter"
-        Line 60, 25, 120, 25
-        GLCDPrint 52, 30, "0v"
-        GLCDPrint 112, 30, "5v"
-        GLCDPrint 57, 15, Mxstring
+          box 0, 0, 127, 63
+          box 0, 0, 35, 50
+          box 0, 50, 127, 50
+          GLCDPrint 1, 1, "Meter"
+          line 60, 25, 120, 25
+          GLCDPrint 52, 30, "0v"
+          GLCDPrint 112, 30, "5v"
+          GLCDPrint 57, 15, Mxstring
 
-        GLCD_Close_PageTransaction
-        Wait 100 ms
+      GLCD_Close_PageTransaction
+      wait 100 ms
 
-    Next
+    next
 
-    For Mxpos = 0 To 13
+    for Mxpos = 0 to 13
 
-        GLCD_Open_PageTransaction 7,7
+      GLCD_Open_PageTransaction 7,7
 
-        Line 1, 56, 126, 56, GLCDBackground
-        Line 10*Mxpos, 56, (10*Mxpos)+5, 56
-        Box 0, 0, 127, 63
+          Line 1, 56, 126, 56, GLCDBackground
+          Line 10*Mxpos, 56, (10*Mxpos)+5, 56
+          box 0, 0, 127, 63
 
-        GLCD_Close_PageTransaction
-        Wait 100 ms
+      GLCD_Close_PageTransaction
+      wait 100 ms
 
-    Next
+    next
 
-Loop
+  Loop

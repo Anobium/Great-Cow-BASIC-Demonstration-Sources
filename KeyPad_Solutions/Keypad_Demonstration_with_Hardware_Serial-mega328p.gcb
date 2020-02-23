@@ -18,37 +18,37 @@
 '''@date    08.04.2015
 '''********************************************************************************
 
-' ----- Configuration
+; ----- Configuration
 
-#CHIP mega328p, 16
-#INCLUDE <uno_mega328p.h>
+  #chip mega328p, 16
+  #include <uno_mega328p.h>
 
-' ----- Constants
-#DEFINE KEYPAD_ROW_1 DIGITAL_11
-#DEFINE KEYPAD_ROW_2 DIGITAL_10
-#DEFINE KEYPAD_ROW_3 DIGITAL_9
-#DEFINE KEYPAD_ROW_4 DIGITAL_8
-#DEFINE KEYPAD_COL_1 DIGITAL_7
-#DEFINE KEYPAD_COL_2 DIGITAL_6
-#DEFINE KEYPAD_COL_3 DIGITAL_5
-#DEFINE KEYPAD_COL_4 DIGITAL_4
-
-
-' ----- Main body of program commences here.
+; ----- Constants
+  #define KEYPAD_ROW_1 DIGITAL_11
+  #define KEYPAD_ROW_2 DIGITAL_10
+  #define KEYPAD_ROW_3 DIGITAL_9
+  #define KEYPAD_ROW_4 DIGITAL_8
+  #define KEYPAD_COL_1 DIGITAL_7
+  #define KEYPAD_COL_2 DIGITAL_6
+  #define KEYPAD_COL_3 DIGITAL_5
+  #define KEYPAD_COL_4 DIGITAL_4
 
 
-Do
-    'Get key
-    Temp = KeypadData
-    'If a key is pressed, then display it
-    If Temp <> KEY_NONE Then
-        HSerPrint Temp
-        'Wait until key is released
-        Wait While KeypadData <> KEY_NONE
-    End If
-Loop
-
-End
+; ----- Main body of program commences here.
 
 
-' ----- Support methods.  Subroutines and Functions
+  Do
+      'Get key
+      Temp = KeypadData
+      'If a key is pressed, then display it
+      If Temp <> KEY_NONE Then
+         HSerPrint Temp
+         'Wait until key is released
+         wait while KeypadData <> KEY_NONE
+      End If
+  Loop
+
+  End
+
+
+; ----- Support methods.  Subroutines and Functions

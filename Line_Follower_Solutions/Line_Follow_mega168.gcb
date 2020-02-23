@@ -10,42 +10,42 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP mega168, 16
+; ----- Configuration
+ #chip mega168, 16
 
-' ----- Define Hardware settings
-Dir portb.0 Out
-Dir portb.2 Out
+; ----- Define Hardware settings
+  dir portb.0 out
+  dir portb.2 out
 
-Dir portb.3 Out
-Dir portb.4 In
+  dir portb.3 out
+  dir portb.4 in
 
-Set portb.3 On
+  Set portb.3 On
 
-' ----- Constants
-' No Constants specified in this example.
+; ----- Constants
+  ' No Constants specified in this example.
 
-' ----- Variables
-' No Variables specified in this example. All byte variables are defined upon use.
+; ----- Variables
+  ' No Variables specified in this example. All byte variables are defined upon use.
 
-' ----- Main body of program commences here.
-' Repeat following code forever to keep following the line
-Do Forever
+; ----- Main body of program commences here.
+; Repeat following code forever to keep following the line
+  Do Forever
 
-    'Does the sensor see light?
-    If portb.4 = 1 Then
+            'Does the sensor see light?
+            If portb.4 = 1 Then
 
-        'If the sensor sees light, turn off left motor and turn on right motor
-        Set portb.2 Off
-        Set portb.0 On
-    Else
+                      'If the sensor sees light, turn off left motor and turn on right motor
+                      Set portb.2 Off
+                      Set portb.0 On
+            Else
 
-        'If the sensor sees dark, turn off right motor and turn on left motor
-        Set portb.0 Off
-        Set portb.2 On
-    End If
-Loop
-End
+                      'If the sensor sees dark, turn off right motor and turn on left motor
+                      Set portb.0 Off
+                      Set portb.2 On
+            End If
+  Loop
+  end
 
 
 

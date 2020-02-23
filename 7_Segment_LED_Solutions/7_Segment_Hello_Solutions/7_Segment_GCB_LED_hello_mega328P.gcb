@@ -10,40 +10,39 @@
 '''@date    31.01.2015
 '''********************************************************************************
 
-' ----- Configuration
+; ----- Configuration
 
-#CHIP mega328p,16
-#OPTION Explicit
+  #chip mega328p,16
+  #option explicit
 
-' ----- Define Hardware settings
-' All port settings, like in and out, are handled within the Seven Segment driver.
+; ----- Define Hardware settings
+  ; All port settings, like in and out, are handled within the Seven Segment driver.
 
-' ----- Constants
-' You need to specify the port settings
-#DEFINE DISP_SEG_A PORTB.0
-#DEFINE DISP_SEG_B PORTB.1
-#DEFINE DISP_SEG_C PORTB.2
-#DEFINE DISP_SEG_D PORTB.3
-#DEFINE DISP_SEG_E PORTB.4
-#DEFINE DISP_SEG_F PORTB.5
-#DEFINE DISP_SEG_G PORTB.6
-#DEFINE DISP_SEL_1 PORTD.1
+; ----- Constants
+  ; You need to specify the port settings
+  #define DISP_SEG_A PORTB.0
+  #define DISP_SEG_B PORTB.1
+  #define DISP_SEG_C PORTB.2
+  #define DISP_SEG_D PORTB.3
+  #define DISP_SEG_E PORTB.4
+  #define DISP_SEG_F PORTB.5
+  #define DISP_SEG_G PORTB.6
+  #define DISP_SEL_1 PORTD.1
 
 
-' ----- Variables
-Dim DispMessage As Byte
-' defines a string
-Dim Message As String * 10
-Message = "Hello"
+; ----- Variables
+  dim DispMessage as Byte
+  dim Message as string * 10                                  ; defines a string
+  Message = "Hello"
 
-' ----- Main body of program commences her
+; ----- Main body of program commences her
 
-Main:
-For DispMessage = 1 To 5
-    DisplayChar 1, Message(DispMessage)
-    Wait 25 10ms
-Next
-Goto Main
+  Main:
+    for DispMessage = 1 to 5
+        DisplayChar 1, Message(DispMessage)
+        wait 25 10ms
+    next
+  goto Main
 
 
 

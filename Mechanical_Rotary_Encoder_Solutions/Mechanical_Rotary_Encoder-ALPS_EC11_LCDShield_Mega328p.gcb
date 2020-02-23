@@ -20,174 +20,171 @@
 ''' *****************************************
 
 
-' ----- Configuration
-#CHIP mega328p,16
-#OPTION Explicit
-#INCLUDE <uno_mega328p.h>
+; ----- Configuration
+  #chip mega328p,16
+  #option explicit
+  #include <uno_mega328p.h>
 
-' Load encoder header file
-#INCLUDE <alps-ec11.h>
+	' Load encoder header file
+  #include <alps-ec11.h>
 
-'Setup LCD Parameters
-#DEFINE LCD_IO 4
-#DEFINE LCD_NO_RW
-#DEFINE LCD_SPEED SLOW
-
-
-#DEFINE LCD_RS         Digital_8
-#DEFINE LCD_Enable     Digital_9
-#DEFINE LCD_DB4        Digital_4
-#DEFINE LCD_DB5        Digital_5
-#DEFINE LCD_DB6        Digital_6
-#DEFINE LCD_DB7        Digital_7
+  ;Setup LCD Parameters
+  #define LCD_IO 4
+  #define LCD_NO_RW
+  #define LCD_Speed slow
 
 
-#DEFINE btnRIGHT  0
-#DEFINE btnUP     1
-#DEFINE btnDOWN   2
-#DEFINE btnLEFT   3
-#DEFINE btnSELECT 4
-#DEFINE btnNONE   5
+  #define LCD_RS         Digital_8
+  #define LCD_Enable     Digital_9
+  #define LCD_DB4        Digital_4
+  #define LCD_DB5        Digital_5
+  #define LCD_DB6        Digital_6
+  #define LCD_DB7        Digital_7
 
 
-' ----- Define Hardware settings
-#DEFINE Resetbtn         Reset
-Dir Resetbtn In
-#DEFINE LCDBacklite      Digital_10
-Dir LCDBacklite Out
-Set LCDBacklite On
-
-' ----- Define Hardware settings
+  #define btnRIGHT  0
+  #define btnUP     1
+  #define btnDOWN   2
+  #define btnLEFT   3
+  #define btnSELECT 4
+  #define btnNONE   5
 
 
-'Encoder connections defined here for Mega328p these should not be changed
-'Clock on INT0
-#DEFINE Alps_ENCODER_A		Portd.2
+; ----- Define Hardware settings
+  #define Resetbtn         Reset
+  dir Resetbtn in
+  #define LCDBacklite      Digital_10
+  dir LCDBacklite out
+	Set LCDBacklite On
 
-'CW
-#DEFINE Alps_ENCODER_B		Portd.0
-
-'Encoder-switch on INT1
-#DEFINE Alps_ENCODER_SW		Portd.3
-
-#DEFINE Alps_ENCODER_ENC_READ_DELAY 200
-
-Dir Alps_ENCODER_A In
-Dir Alps_ENCODER_B In
-Dir Alps_ENCODER_SW In
+; ----- Define Hardware settings
 
 
-'---- variables
-Dim REFRESHLCD As Byte
+  'Encoder connections defined here for Mega328p these should not be changed
+  #define Alps_ENCODER_A		Portd.2  	'Clock on INT0
 
-' ----- Main body of program commences here.
+  #define Alps_ENCODER_B		Portd.0		'CW
 
-'****************************************************************************
-'Enable portd.3, which is External Interrupt #1, as the source of the interrupt.
-'See the datasheet for more information.
-#DEFINE ExternalEventSource_Switch ExtInt1
-#DEFINE SetExternalEventEnable_Switch Int1
-#DEFINE ClearExternalEvent_Switch INTF1
+  #define Alps_ENCODER_SW		Portd.3		'Encoder-switch on INT1
 
-SetExternalEventEnable_Switch = 1
-On Interrupt ExternalEventSource_Switch Call Alps_ENCODER_SW_Pressed
+  #define Alps_ENCODER_ENC_READ_DELAY 200
 
-'****************************************************************************
-'Enable portd.2, which is External Interrupt #0, as the source of the interrupt.
-'See the datasheet for more information.
-#DEFINE ExternalEventSource_Clock ExtInt0
-#DEFINE SetExternalEventEnable_Clock int0
-#DEFINE ClearExternalEvent_Clock INTF0
-'To control the rising edge set EICRA to 7, as follows:
-'        7 bit 	6 bit 	5 bit 	4 bit 	3 bit 	2 bit 	1 bit 	0 bit
-'  EICRA	- 			- 			- 			- 			ISC11 	ISC10 	ISC01 	ISC00
-'  External Interrupt Control Register A
-'
-'
-'   ISCx1	 ISCx0 	DESCRIPTION
-'  0	0	 Low level of INTx generates an interrupt request
-'  0	1	 Any logic change on INTx generates an interrupt request
-'  1	0	 The falling edge of INTx generates an interrupt request
-'  1	1	 The rising edge of INTx generates an interrupt request
-
-#DEFINE SetExternalEdge_Clock EICRA
-
-SetExternalEdge_Clock = 7
-SetExternalEventEnable_Clock = 1
-On Interrupt ExternalEventSource_Clock Call Alps_ENCODER_Clock_Event
+  dir Alps_ENCODER_A in
+  dir Alps_ENCODER_B in
+  dir Alps_ENCODER_SW in
 
 
-'****************************************************************************
-'Prevent events from firing during initial LCD update
-IntOff
-CLS
-Print "Rotary Enc. Demo"
-Locate 1,0
-Print "Great Cow Basic"
-Wait 2 s
-CLS
-Print "@Dec 2019"
-Locate 1,0
-Print "Immo's&Ano Code"
-Wait 2 s
-CLS
+;---- variables
+  Dim REFRESHLCD as Byte
 
-'Show what happening with encoder on the LCD
-Locate 0,0
-Print "Counting enabled"
-Locate 1, 0
-Print "Rotate encoder  "
+; ----- Main body of program commences here.
+
+;****************************************************************************
+	'Enable portd.3, which is External Interrupt #1, as the source of the interrupt.
+  'See the datasheet for more information.
+  #define ExternalEventSource_Switch ExtInt1
+  #define SetExternalEventEnable_Switch Int1
+  #define ClearExternalEvent_Switch INTF1
+
+  SetExternalEventEnable_Switch = 1
+  On Interrupt ExternalEventSource_Switch Call Alps_ENCODER_SW_Pressed
+
+;****************************************************************************
+  'Enable portd.2, which is External Interrupt #0, as the source of the interrupt.
+  'See the datasheet for more information.
+  #define ExternalEventSource_Clock ExtInt0
+  #define SetExternalEventEnable_Clock int0
+  #define ClearExternalEvent_Clock INTF0
+  'To control the rising edge set EICRA to 7, as follows:
+  '        7 bit 	6 bit 	5 bit 	4 bit 	3 bit 	2 bit 	1 bit 	0 bit
+  '  EICRA	- 			- 			- 			- 			ISC11 	ISC10 	ISC01 	ISC00
+  '  External Interrupt Control Register A
+  '
+  '
+  '   ISCx1	 ISCx0 	DESCRIPTION
+  '  0	0	 Low level of INTx generates an interrupt request
+  '  0	1	 Any logic change on INTx generates an interrupt request
+  '  1	0	 The falling edge of INTx generates an interrupt request
+  '  1	1	 The rising edge of INTx generates an interrupt request
+
+  #define SetExternalEdge_Clock EICRA
+
+	SetExternalEdge_Clock = 7
+  SetExternalEventEnable_Clock = 1
+  On Interrupt ExternalEventSource_Clock Call Alps_ENCODER_Clock_Event
+
+
+  ;****************************************************************************
+  'Prevent events from firing during initial LCD update
+	IntOff
+	CLS
+  PRINT "Rotary Enc. Demo"
+  Locate 1,0
+  PRINT "Great Cow Basic"
+  wait 2 s
+  CLS
+  Print "@Dec 2019"
+  Locate 1,0
+  PRINT "Immo's&Ano Code"
+  wait 2 s
+	CLS
+
+	'Show what happening with encoder on the LCD
+  locate 0,0
+  print "Counting enabled"
+  locate 1, 0
+  print "Rotate encoder  "
 
 
 
-RefreshLCD = TRUE
-IntOn
+  RefreshLCD = True
+	inton
 
-Do Forever
+  do Forever
 
-    ' Alps_ESB_Bit is a bit that is exposed to detect state of button.  Detects event has occurred
-    If Alps_ESB_Bit = 1 Then
+			' Alps_ESB_Bit is a bit that is exposed to detect state of button.  Detects event has occurred
+			if Alps_ESB_Bit = 1 then
 
-        'Update screen once on button button change
-        If 	RefreshLCD = TRUE Then
-            RefreshLCD = FALSE
+				'Update screen once on button button change
+				if 	RefreshLCD = true then
+						RefreshLCD = False
 
-            CLS
-            Locate 0,0
-            Print "Counting enabled"
+						CLS
+        		locate 0,0
+          	print "Counting enabled"
 
-        End If
+				end if
 
-        ' Alps_EncoderEvent is a bit that is exposed to detect state of button.  Detects event has occurred
-        If Alps_EncoderEvent = 1  Then
+				' Alps_EncoderEvent is a bit that is exposed to detect state of button.  Detects event has occurred
+				if Alps_EncoderEvent = 1  then
 
-            Alps_EncoderEvent = 0
+					Alps_EncoderEvent = 0
 
-            Locate 1,0
-            'Alps_CurrentPosition is a public Integer value that is the current rotational value
-            Print Alps_CurrentPosition
+          locate 1,0
+          'Alps_CurrentPosition is a public Integer value that is the current rotational value
+          print Alps_CurrentPosition
 
-            'Alps_Directn is a public bit that is the current direction of the encoder
-            If Alps_Directn = 1 Then
-                Print " (+) "
-            Else
-                Print " (-) "
-            End If
+					'Alps_Directn is a public bit that is the current direction of the encoder
+          if Alps_Directn = 1 then
+            print " (+) "
+          Else
+            print " (-) "
+          end if
 
-        End If
+				end if
 
-    Else
+      else
 
-        Locate 0, 0
-        Print "Count disabled  "
-        Locate 1, 0
-        Print "  press button  "
-        RefreshLCD= TRUE
+        locate 0, 0
+        print "Count disabled  "
+        locate 1, 0
+        print "  press button  "
+				RefreshLCD= True
 
-    End If
+      end if
 
-Loop
+  loop
 
-End
+	End
 
-' ----- Support methods.  Subroutines and Functions
+; ----- Support methods.  Subroutines and Functions

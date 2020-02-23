@@ -1,78 +1,78 @@
-'''A demonstration program for GCGB and GCB.
-'''--------------------------------------------------------------------------------------------------------------------------------
-'''This program ia a demonstration sound, ADC (light meter) and an Interrupt.
-'''
-'''@author 	 EvanV
-'''@licence	 GPL
-'''@version	 1.0a
-'''@date   	 19.03.2016
-'''********************************************************************************
+ '''A demonstration program for GCGB and GCB.
+ '''--------------------------------------------------------------------------------------------------------------------------------
+ '''This program ia a demonstration sound, ADC (light meter) and an Interrupt.
+ '''
+ '''@author 	 EvanV
+ '''@licence	 GPL
+ '''@version	 1.0a
+ '''@date   	 19.03.2016
+ '''********************************************************************************
 '********************************************************************************
 
-' ----- Configuration
+ ; ----- Configuration
 'Chip model
-#CHIP 16F886, 8
-#OPTION Explicit
+#chip 16F886, 8
+#option explicit
 
-#DEFINE SoundOut PORTc.2
+#define SoundOut PORTc.2
 
-Dim LL As Byte
+Dim LL as Byte
 
-Dim timedelay1 As Word
+dim timedelay1 as word
 
-Dir b0 In
-Dir b1 In
-On Interrupt  portbchange Call InterruptHandler
+dir b0 in
+dir b1 in
+on Interrupt  portbchange call InterruptHandler
 IOCB0 = 1
 IOCB1 = 1
 
-Repeat 4
-    Tone 110, 10
-    Wait 10 ms
-End Repeat
+repeat 4
+       tone 110, 10
+       wait 10 ms
+end repeat
 
-Dir portb.2 Out
-Dir portb.3 Out
-Dir portb.4 Out
-Dir portb.5 Out
+dir portb.2 Out
+dir portb.3 Out
+dir portb.4 Out
+dir portb.5 Out
 
-Dir porta.0 In
-Dir porta.1 In
+dir porta.0 in
+dir porta.1 in
 
 
 
 'Main routine
 Start:
 
-ll = ReadAD(AN0)
-If ll < 51 Then
-    portb = portb AND 195
-End If
-If ll > 51 AND ll < 101 Then
-    portb = portb OR 4
-End If
-If ll > 102 AND ll < 152  Then
-    portb = portb OR 12
-End If
-If ll > 153 AND ll < 203 Then
-    portb = portb OR 28
-End If
-If ll > 204 Then
-    portb = portb OR 60
-End If
+      ll = ReadAD(AN0)
+      if ll < 51 then
+          portb = portb and 195
+      end if
+      if ll > 51 and ll < 101 then
+         portb = portb or 4
+      end if
+      if ll > 102 and ll < 152  then
+         portb = portb or 12
+      end if
+      if ll > 153 and ll < 203 then
+         portb = portb or 28
+      end if
+      if ll > 204 then
+         portb = portb or 60
+      end if
 
-Goto Start
+goto Start
 
 
-Sub InterruptHandler
+sub InterruptHandler
     IntOff
     RBIF = 0
-    If portb.0 = 1 Then
+    if portb.0 = 1 then
         Tone 220, 5
-    End If
+    end if
 
-    If portb.1 = 1 Then
+    if portb.1 = 1 then
         Tone 880, 5
-    End If
-    IntOn
-End Sub
+    end if
+    inton
+end sub

@@ -10,36 +10,36 @@
 '''@date    28.04.2018
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 16F877a, 20
+; ----- Configuration
+  #chip 16F877a, 20
 
-'Setup LCD Parameters
-#DEFINE LCD_IO 8
-' ----- Define LCD Hardware settings
-#DEFINE LCD_RS PORTA.5
-#DEFINE LCD_RW PORTA.4
-#DEFINE LCD_Enable PORTA.3
-#DEFINE LCD_DATA_PORT PORTD
+  ;Setup LCD Parameters
+  #define LCD_IO 8
+; ----- Define LCD Hardware settings
+  #define LCD_RS PORTA.5
+  #define LCD_RW PORTA.4
+  #define LCD_Enable PORTA.3
+  #define LCD_DATA_PORT PORTD
 
-' ----- Main body of program commences here.
+; ----- Main body of program commences here.
 
-#INCLUDE "gcbversionnumber.cnt"
-'Include the GCBVersionNumber.cnt to increment versionString and create the build time string called GCBBuildTimeStr.
-' versionString a string is created automatically.
-' GCBBuildTimeStr is a string that is also created automatically.
-' use "GCBVersionNumber.cnt" as this will create a local copy of the versionString tracker.
-' if you use <GCBVersionNumber.cnt> this is a system wide versionString tracker.
+  #include "gcbversionnumber.cnt"
+  'Include the GCBVersionNumber.cnt to increment versionString and create the build time string called GCBBuildTimeStr.
+  ' versionString a string is created automatically.
+  ' GCBBuildTimeStr is a string that is also created automatically.
+  ' use "GCBVersionNumber.cnt" as this will create a local copy of the versionString tracker.
+  ' if you use <GCBVersionNumber.cnt> this is a system wide versionString tracker.
 
 
-Dim versionString As String * 40
-versionString = "Build"+GCBBuildStr
-versionString = versionString + "@"+GCBBuildTimeStr
+  dim versionString as string * 40
+  versionString = "Build"+GCBBuildStr
+  versionString = versionString + "@"+GCBBuildTimeStr
 
-Do Forever
-    CLS
-    Wait 1 s
-    Print GCBBuildTimeStr
-    Locate 1,0
-    Print "Anobium"
-    Wait 5 s
-Loop
+  Do Forever
+      CLS
+      WAIT 1 s
+      PRINT GCBBuildTimeStr
+      locate 1,0
+      PRINT "Anobium"
+      wait 5 S
+loop

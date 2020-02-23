@@ -10,88 +10,88 @@
 '''********************************************************************************
 
 
-' ----- Configuration
-#CHIP mega168,16
+; ----- Configuration
+  #chip mega168,16
 
 
-' ----- Constants
-#DEFINE RED_EW PORTD.0
-#DEFINE AMBER_EW PORTD.1
-#DEFINE GREEN_EW PORTD.2
-#DEFINE RED_NS PORTD.3
-#DEFINE AMBER_NS PORTD.4
-#DEFINE GREEN_NS PORTD.5
-#DEFINE RED_TIME 1
-#DEFINE AMBER_TIME 2
-#DEFINE GREEN_TIME 5
-#DEFINE RED 1
-#DEFINE AMBER 2
-#DEFINE GREEN 3
+; ----- Constants
+  #define RED_EW PORTD.0
+  #define AMBER_EW PORTD.1
+  #define GREEN_EW PORTD.2
+  #define RED_NS PORTD.3
+  #define AMBER_NS PORTD.4
+  #define GREEN_NS PORTD.5
+  #define RED_TIME 1
+  #define AMBER_TIME 2
+  #define GREEN_TIME 5
+  #define RED 1
+  #define AMBER 2
+  #define GREEN 3
 
 
-' ----- Variables
-' No Variables specified in this example. All byte variables are defined upon use.
+; ----- Variables
+  ' No Variables specified in this example. All byte variables are defined upon use.
 
 
 
 
-' ----- Main body of program commences here.
+; ----- Main body of program commences here.
 '    First, set all lights to red
-LightNS RED
-LightEW RED
-Do Forever
+  LightNS RED
+  LightEW RED
+  Do Forever
 
-    'Cycle for NS (EW remains red)
-    LightNS GREEN
-    Wait GREEN_TIME s
-    LightNS AMBER
-    Wait AMBER_TIME s
-    LightNS RED
-    Wait RED_TIME s
+            'Cycle for NS (EW remains red)
+            LightNS GREEN
+            Wait GREEN_TIME s
+            LightNS AMBER
+            Wait AMBER_TIME s
+            LightNS RED
+            Wait RED_TIME s
 
-    'Cycle for EW (NS remains red)
-    LightEW GREEN
-    Wait GREEN_TIME s
-    LightEW AMBER
-    Wait AMBER_TIME s
-    LightEW RED
-    Wait RED_TIME s
-Loop
-End
+            'Cycle for EW (NS remains red)
+            LightEW GREEN
+            Wait GREEN_TIME s
+            LightEW AMBER
+            Wait AMBER_TIME s
+            LightEW RED
+            Wait RED_TIME s
+  Loop
+  end
 
-' ----- Support methods.  Subroutines and Functions
+; ----- Support methods.  Subroutines and Functions
 
-'''Set the North/South lights
-'''@param Colour Colour to show
-Sub LightNS (In Colour)
-    Set RED_NS Off
-    Set AMBER_NS Off
-    Set GREEN_NS Off
-    If Colour = RED Then
-        Set RED_NS On
-    End If
-    If Colour = AMBER Then
-        Set AMBER_NS On
-    End If
-    If Colour = GREEN Then
-        Set GREEN_NS On
-    End If
-End Sub
+  '''Set the North/South lights
+  '''@param Colour Colour to show
+  Sub LightNS (In Colour)
+            Set RED_NS Off
+            Set AMBER_NS Off
+            Set GREEN_NS Off
+            if Colour = RED then
+                      Set RED_NS On
+            end if
+            if Colour = AMBER then
+                      Set AMBER_NS On
+            end if
+            if Colour = GREEN then
+                      Set GREEN_NS On
+            end if
+  End Sub
 
-'''Set the East/West lights
-'''@param Colour Colour to show
-Sub LightEW (In Colour)
-    Set RED_EW Off
-    Set AMBER_EW Off
-    Set GREEN_EW Off
-    If Colour = RED Then
-        Set RED_EW On
-    End If
-    If Colour = AMBER Then
-        Set AMBER_EW On
-    End If
-    If Colour = GREEN Then
-        Set GREEN_EW On
-    End If
-End Sub
+  '''Set the East/West lights
+  '''@param Colour Colour to show
+  Sub LightEW (In Colour)
+            Set RED_EW Off
+            Set AMBER_EW Off
+            Set GREEN_EW Off
+            if Colour = RED then
+                      Set RED_EW On
+            end if
+            if Colour = AMBER then
+                      Set AMBER_EW On
+            end if
+            if Colour = GREEN then
+                      Set GREEN_EW On
+            end if
+  End Sub
 

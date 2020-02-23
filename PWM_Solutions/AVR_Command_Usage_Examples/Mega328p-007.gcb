@@ -11,62 +11,51 @@
 '''@date    23.06.2017
 '''*****
 
-#CHIP mega328p, 16
+    #chip mega328p, 16
 
-'#1
-'Set the CLOCK Source as AVRTCx relates to this PWM, see the Help
-'relates timer to PWM2
-#DEFINE AVRTC0
-'relates timer to PWM3 & PWM4
-#DEFINE AVRTC1
-'relates timer to PWM7
-#DEFINE AVRTC2
+    '#1
+    'Set the CLOCK Source as AVRTCx relates to this PWM, see the Help
+    #define AVRTC0     'relates timer to PWM2
+    #define AVRTC1     'relates timer to PWM3 & PWM4
+    #define AVRTC2     'relates timer to PWM7
 
-'#2
-'Set the AVR PWM Channel as enabled by defining this constants equates to the correct channel
-'OC0B
-#DEFINE AVRCHAN2
-'OC1A
-#DEFINE AVRCHAN3
-'OC1B
-#DEFINE AVRCHAN4
-'OC2B
-#DEFINE AVRCHAN7
+    '#2
+    'Set the AVR PWM Channel as enabled by defining this constants equates to the correct channel
+    #define AVRCHAN2    'OC0B
+    #define AVRCHAN3    'OC1A
+    #define AVRCHAN4    'OC1B
+    #define AVRCHAN7    'OC2B
 
-'#3
-'Set the PWM pin to output mode.
-'OC2B   on D3
-Dir PortD.3 Out
-'OC1B   on D10
-Dir PortB.2 Out
-'OC1A   on D9
-Dir PortB.1 Out
-'OC0B   on D5
-Dir PortD.5 Out
+    '#3
+    'Set the PWM pin to output mode.
+    dir PortD.3 Out   'OC2B   on D3
+    dir PortB.2 Out   'OC1B   on D10
+    dir PortB.1 out   'OC1A   on D9
+    dir PortD.5 Out   'OC0B   on D5
 
 
-'Main code
-'freq 40khz
-'variable duty from 0% to 100%
-Do
-    'Turn up brightness over 2.5 seconds
-    For Bright = 0 To 255
-        '#4 - Call the method with the correct PWM channel
-        HPWM 2, 40, Bright
-        HPWM 3, 40, Bright
-        HPWM 4, 40, Bright
-        HPWM 7, 40, Bright
-        Wait 10 ms
-    Next
-    'Turn down brightness over 2.5 seconds
-    For Bright = 255 To 0
-        '#4 - Call the method with the correct PWM channel
-        HPWM 2, 40, Bright
-        HPWM 3, 40, Bright
-        HPWM 4, 40, Bright
-        HPWM 7, 40, Bright
-        Wait 10 ms
-    Next
-Loop
+    'Main code
+    'freq 40khz
+    'variable duty from 0% to 100%
+    do
+        'Turn up brightness over 2.5 seconds
+        For Bright = 0 to 255
+            '#4 - Call the method with the correct PWM channel
+            HPWM 2, 40, Bright
+            HPWM 3, 40, Bright
+            HPWM 4, 40, Bright
+            HPWM 7, 40, Bright
+            wait 10 ms
+        next
+        'Turn down brightness over 2.5 seconds
+        For Bright = 255 to 0
+            '#4 - Call the method with the correct PWM channel
+            HPWM 2, 40, Bright
+            HPWM 3, 40, Bright
+            HPWM 4, 40, Bright
+            HPWM 7, 40, Bright
+            wait 10 ms
+        next
+    loop
 
-End
+end

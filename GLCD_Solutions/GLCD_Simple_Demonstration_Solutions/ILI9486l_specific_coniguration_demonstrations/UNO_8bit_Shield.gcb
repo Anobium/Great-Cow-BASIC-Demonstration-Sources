@@ -14,37 +14,32 @@
 '''@date    24.01.2019
 '''********************************************************************************
 
-'Chip Settings.
-#CHIP mega328p, 16
-#OPTION Explicit
+  'Chip Settings.
+    #chip mega328p, 16
+    #option explicit
 
-#INCLUDE <glcd.h>
-#INCLUDE <uno_mega328p.h >
+    #include <glcd.h>
+    #include <uno_mega328p.h >
 
-#DEFINE GLCD_TYPE GLCD_TYPE_ILI9486
-#DEFINE UNO_8bit_Shield
+    #define GLCD_TYPE GLCD_TYPE_ILI9486
+    #define UNO_8bit_Shield
 
-'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
-' read command line
-#DEFINE GLCD_RD       ANALOG_0
-' write command line
-#DEFINE GLCD_WR       ANALOG_1
-' Command/Data line.
-#DEFINE GLCD_DC       ANALOG_2
-' Chip select line
-#DEFINE GLCD_CS       ANALOG_3
-' Reset line
-#DEFINE GLCD_RST      ANALOG_4
+    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+    #define GLCD_RD       ANALOG_0          ' read command line
+    #define GLCD_WR       ANALOG_1          ' write command line
+    #define GLCD_DC       ANALOG_2          ' Command/Data line.
+    #define GLCD_CS       ANALOG_3          ' Chip select line
+    #define GLCD_RST      ANALOG_4          ' Reset line
 
-#DEFINE GLCD_DB0       DIGITAL_8
-#DEFINE GLCD_DB1       DIGITAL_9
-#DEFINE GLCD_DB2       DIGITAL_2
-#DEFINE GLCD_DB3       DIGITAL_3
-#DEFINE GLCD_DB4       DIGITAL_4
-#DEFINE GLCD_DB5       DIGITAL_5
-#DEFINE GLCD_DB6       DIGITAL_6
-#DEFINE GLCD_DB7       DIGITAL_7
+    #define GLCD_DB0       DIGITAL_8
+    #define GLCD_DB1       DIGITAL_9
+    #define GLCD_DB2       DIGITAL_2
+    #define GLCD_DB3       DIGITAL_3
+    #define GLCD_DB4       DIGITAL_4
+    #define GLCD_DB5       DIGITAL_5
+    #define GLCD_DB6       DIGITAL_6
+    #define GLCD_DB7       DIGITAL_7
 
-GLCDCLS  TFT_BLUE
-GLCDLocateString( 0, 1 )
-GLCDPrintString "UNO 8bit"
+    GLCDCLS  TFT_BLUE
+    GLCDLocateString( 0, 1 )
+    GLCDPrintString "UNO 8bit"

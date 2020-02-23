@@ -9,56 +9,56 @@
 '''@date   	31.01.2015
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 16F886, 16
+; ----- Configuration
+  #chip 16F886, 16
 
 
-' ----- Define Hardware settings
-Dir portb.0 In
+; ----- Define Hardware settings
+  DIR portb.0 in
 
-' ----- Constants
-#DEFINE SoundOut portc.2
+; ----- Constants
+  #define SoundOut portc.2
 
 
-' ----- Main body of program commences here.
+; ----- Main body of program commences here.
 
-Do
-    Tone 554, 50
-    Tone 494, 50
-    Tone 440, 50
-    Tone 494, 50
-    Tone 554, 50
-    Tone 0, 50
-    Tone 554, 50
-    Tone 554, 50
-    Tone 494, 50
-    Tone 0, 50
-    Tone 494, 50
-    Tone 0, 50
-    Tone 494, 50
-    Tone 554, 50
-    Tone 659, 50
-    Tone 0, 50
-    Tone 659, 50
-    Tone 554, 50
-    Tone 494, 50
-    Tone 440, 50
-    Tone 494, 50
-    Tone 554, 50
-    Tone 0, 50
-    Tone 554, 50
-    Tone 0, 50
-    Tone 554, 50
-    Tone 494, 50
-    Tone 0, 50
-    Tone 494, 50
-    Tone 554, 50
-    Tone 494, 50
-    Tone 440, 50
+    Do
+        Tone 554, 50
+        tone 494, 50
+        Tone 440, 50
+        tone 494, 50
+        Tone 554, 50
+        tone 0, 50
+        Tone 554, 50
+        tone 554, 50
+        Tone 494, 50
+        tone 0, 50
+        Tone 494, 50
+        tone 0, 50
+        Tone 494, 50
+        tone 554, 50
+        Tone 659, 50
+        tone 0, 50
+        Tone 659, 50
+        tone 554, 50
+        Tone 494, 50
+        tone 440, 50
+        Tone 494, 50
+        tone 554, 50
+        Tone 0, 50
+        tone 554, 50
+        Tone 0, 50
+        tone 554, 50
+        Tone 494, 50
+        tone 0, 50
+        Tone 494, 50
+        tone 554, 50
+        Tone 494, 50
+        tone 440, 50
 
-hold:
-    If portb.0 = 1 Then Goto hold
-
-Loop
+        hold:
+        If portb.0 = 1 Then goto hold
+    	
+    Loop
 
 

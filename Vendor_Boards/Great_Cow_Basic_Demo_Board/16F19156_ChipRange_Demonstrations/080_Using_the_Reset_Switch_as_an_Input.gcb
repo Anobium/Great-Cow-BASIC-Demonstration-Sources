@@ -16,78 +16,77 @@
 '''@date    03/05/2018
 '''****
 ' ----- Configuration
-'Chip Settings.
-#CHIP 16F19156, 32
-#OPTION Explicit
+    'Chip Settings.
+    #chip 16F19156, 32
+    #option Explicit
 
-'Change the MCLRE to be an input by setting this Configuration Switch
-#CONFIG mclre=Off
-
-
-'' -------------------PORTA----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---------------------------------
-''-----------------------------------------
-''
-
-'' -------------------PORTB----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    -------| O | A |--------| O | I |-
-''-----------------------------------------
-''
-
-'' ------------------PORTC-----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---------------------------------
-''-----------------------------------------
-''
-
-'Define constants to make things easier. We can reuse these at any time.
-#DEFINE LEDD1 PORTB.1
-#DEFINE LEDD2 PORTB.5
-#DEFINE LDR             PORTB.4
-#DEFINE SwitchIn        PORTB.0
-#DEFINE RSTButton       PORTE.3
-
-Dir     LEDD1         Out
-Dir     LEDD2         Out
-'this is the ANB4 port
-Dir     LDR           In
-Dir     SwitchIn      In
-
-'*****************************************************************************************************
-'Main program commences here.. everything before this is setup for the board.
-
-Dim lastKeyDown As Byte
-
-'Debouncing two switches
-Do Forever
-    Wait 10 ms
-
-    'This line is normally HIGH, so, we have to test when the line goes low.
-    If  SwitchIn = 0 Then
-
-        'push button pressed
-        LEDD1 = 1
-
-    Else
-
-        LEDD1 = 0
-
-    End If
+    'Change the MCLRE to be an input by setting this Configuration Switch
+    #config mclre=off
 
 
-    'The reset line is always HIGH, so, we have to test when the line goes low.
-    If  RSTButton = 0 Then
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
 
-        'push button pressed
-        LEDD2 = 1
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | A |--------| O | I |-
+    ''-----------------------------------------
+    ''
 
-    Else
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
 
-        LEDD2 = 0
+    'Define constants to make things easier. We can reuse these at any time.
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define LDR             PORTB.4
+    #define SwitchIn        PORTB.0
+    #define RSTButton       PORTE.3
 
-    End If
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     LDR           In    'this is the ANB4 port
+    Dir     SwitchIn      In
+
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
+
+     dim lastKeyDown as Byte
+
+     'Debouncing two switches
+      Do forever
+                wait 10 ms
+
+                'This line is normally HIGH, so, we have to test when the line goes low.
+                if  SwitchIn = 0 then
+
+                    'push button pressed
+                    LEDD1 = 1
+
+                Else
+
+                    LEDD1 = 0
+
+                end if
 
 
-Loop
+                'The reset line is always HIGH, so, we have to test when the line goes low.
+                if  RSTButton = 0 then
+
+                    'push button pressed
+                    LEDD2 = 1
+
+                else
+
+                    LEDD2 = 0
+
+                end if
+
+
+      loop

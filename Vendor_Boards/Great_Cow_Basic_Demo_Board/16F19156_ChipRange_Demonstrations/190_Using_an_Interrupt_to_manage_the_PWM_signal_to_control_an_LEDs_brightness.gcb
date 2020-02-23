@@ -17,97 +17,97 @@
 '''
 '''************************************************************************
 ' ----- Configuration
-'Chip Settings.
-#CHIP 16F19156, 32
+    'Chip Settings.
+    #chip 16F19156, 32
 
-#OPTION Explicit
+    #option Explicit
 
-'' -------------------PORTA----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---------------------------------
-''-----------------------------------------
-''
+    '' -------------------PORTA----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---------------------------------
+    ''-----------------------------------------
+    ''
 
-'' -------------------PORTB----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    -------| O | A |-------| O | I |-
-''-----------------------------------------
-''
+    '' -------------------PORTB----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    -------| O | A |-------| O | I |-
+    ''-----------------------------------------
+    ''
 
-'' ------------------PORTC-----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---| TX| A |-I---I---------------
-''-----------------------------------------
-''
-
-
-#DEFINE LEDD1 PORTB.1
-#DEFINE LEDD2 PORTB.5
-#DEFINE SwitchIn        PORTB.0
-#DEFINE LCDControl      PORTC.2
+    '' ------------------PORTC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' IO:    ---| TX| A |-I---I---------------
+    ''-----------------------------------------
+    ''
 
 
-Dir     LEDD1         Out
-Dir     LEDD2         Out
-Dir     SwitchIn      In
-Dir     LCDControl    Out
-
-'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
-LCDControl = 1
-
-'*****************************************************************************************************
-'Main program commences here.. everything before this is setup for the board.
+    #define LEDD1 PORTB.1
+    #define LEDD2 PORTB.5
+    #define SwitchIn        PORTB.0
+    #define LCDControl      PORTC.2
 
 
-Dim speed, MotorSpeed, PWMCounter As Byte
+    Dir     LEDD1         Out
+    Dir     LEDD2         Out
+    Dir     SwitchIn      In
+    Dir     LCDControl    Out
 
-#DEFINE MOTOR LEDD1
-Dir MOTOR Out
+    'Always set the LCD on (high) to Shut OFF the LCD-Backlight. This is required when powered from a PicKit.
+    LCDControl = 1
 
-'Call the initialisation routine
-InitMotorControl
+    '*****************************************************************************************************
+    'Main program commences here.. everything before this is setup for the board.
 
-'Main routine
-Do
-    'Increase speed to full over 2.5 seconds
-    For Speed = 0 To 100
-        MotorSpeed = Speed
-        Wait 25 ms
-    Next
-    'Hold speed
-    Wait 1 s
-    'Decrease speed to zero over 2.5 seconds
-    For Speed = 100 To 0
-        MotorSpeed = Speed
-        Wait 25 ms
-    Next
-    'Hold speed
-    Wait 1 s
-Loop
 
-'Setup routine
-Sub InitMotorControl
-    'Clear variables
-    MotorSpeed = 0
-    PWMCounter = 0
+    dim speed, MotorSpeed, PWMCounter as byte
 
-    'Add a handler for the interrupt
-    On Interrupt Timer0Overflow Call PWMHandler
-    InitTimer0 Osc, PRE0_1 + TMR0_FOSC4,       POST0_1
-    StartTimer 0
+    #define MOTOR LEDD1
+    dir MOTOR out
 
-End Sub
+    'Call the initialisation routine
+    InitMotorControl
 
-'PWM sub
-'This will be called when Timer 0 overflows
-Sub PWMHandler
+    'Main routine
+    Do
+        'Increase speed to full over 2.5 seconds
+        For Speed = 0 to 100
+            MotorSpeed = Speed
+            Wait 25 ms
+        Next
+        'Hold speed
+        Wait 1 s
+        'Decrease speed to zero over 2.5 seconds
+        For Speed = 100 to 0
+            MotorSpeed = Speed
+            Wait 25 ms
+        Next
+        'Hold speed
+        Wait 1 s
+    Loop
 
-    If MotorSpeed > PWMCounter Then
-        Set MOTOR On
-    Else
-        Set MOTOR Off
-    End If
-    PWMCounter += 1
-    If PWMCounter = 100 Then PWMCounter = 0
+    'Setup routine
+    Sub InitMotorControl
+        'Clear variables
+        MotorSpeed = 0
+        PWMCounter = 0
 
-End Sub
+        'Add a handler for the interrupt
+        On Interrupt Timer0Overflow Call PWMHandler
+        InitTimer0 Osc, PRE0_1 + TMR0_FOSC4,       POST0_1
+        StartTimer 0
+
+    End Sub
+
+    'PWM sub
+    'This will be called when Timer 0 overflows
+    Sub PWMHandler
+
+        If MotorSpeed > PWMCounter Then
+            Set MOTOR On
+        Else
+            Set MOTOR Off
+        End If
+        PWMCounter += 1
+        If PWMCounter = 100 Then PWMCounter = 0
+
+    End Sub

@@ -11,30 +11,30 @@
 '''@date     21/3/2019
 '''********************************************************************************
 
-' ----- Configuration
-#CHIP 16F690, 8
-#OPTION Explicit
-' ----- Define Hardware settings
-#DEFINE DOWN        0
-#DEFINE UP          1
+; ----- Configuration
+    #chip 16F690, 8
+    #option explicit
+    ; ----- Define Hardware settings
+    #define DOWN        0
+    #define UP          1
 
-#DEFINE SWITCH PORTA.3
-#DEFINE LED PORTC.3
-Dir SWITCH In
-Dir LED Out
+    #define SWITCH PORTA.3
+    #define LED PORTC.3
+    Dir SWITCH In
+    Dir LED Out
 
 
-Do
-    If ( SWITCH = DOWN ) Then
-        Wait 10 ms
+    do
+         if ( SWITCH = DOWN ) then
+             wait 10 ms
 
-        If ( SWITCH = DOWN ) Then
-            Set LED On
-            Wait 3 s
-        End If
-    Else
-        Set LED Off
-    End If
-Loop
+            if ( SWITCH = DOWN ) Then
+               Set LED on
+               Wait 3 s
+           end if
+        else
+          Set LED off
+     end if
+    loop
 
-End
+    End

@@ -51,87 +51,76 @@
 '''@date    30.12.2017
 '''********************************************************************************
 
-' ---'''Configuration
+; ---'''Configuration
 
-#CHIP 18f25k42, 64
-#OPTION Explicit
+    #chip 18f25k42, 64
+    #option explicit
 
-#STARTUP InitPPS, 85
+    #startup InitPPS, 85
 
-Sub InitPPS
+    Sub InitPPS
 
-    'RC4->I2C1:SDA1
-    RC4PPS =      0x22
-    'RC3->I2C1:SCL1
-    RC3PPS =      0x21
-    'RC3->I2C1:SCL1
-    I2C1SCLPPS =  0x13
-    'RC4->I2C1:SDA1
-    I2C1SDAPPS =  0x14
+          RC4PPS =      0x22   'RC4->I2C1:SDA1
+          RC3PPS =      0x21   'RC3->I2C1:SCL1
+          I2C1SCLPPS =  0x13   'RC3->I2C1:SCL1
+          I2C1SDAPPS =  0x14   'RC4->I2C1:SDA1
 
-End Sub
+    End Sub
 
-'Template comment at the end of the config file
+    'Template comment at the end of the config file
 
-'defines a set of callbacks - you do not need to define hi2cslave_state_1-5
-#INCLUDE <hwi2c_messageinterfacekmode.h>
-'Buffer size
-#DEFINE HI2CBUFFERSIZE 16
+    #include <hwi2c_messageinterfacekmode.h>  'defines a set of callbacks - you do not need to define hi2cslave_state_1-5
+    'Buffer size
+    #define HI2CBUFFERSIZE 16
 
-'Required I2C settings
-'As we are a slave and the clock is controlled by the Master
-#DEFINE HI2C_BAUD_RATE 100
-#DEFINE HI2C_DATA PORTC.4
-#DEFINE HI2C_CLOCK PORTC.3
-' Configure these ports as output - the K-Mode I2C devices are outputs!
-Dir HI2C_DATA Out
-Dir HI2C_CLOCK Out
+    'Required I2C settings
+    #define HI2C_BAUD_RATE 100  'As we are a slave and the clock is controlled by the Master
+    #define HI2C_DATA PORTC.4
+    #define HI2C_CLOCK PORTC.3
+    ' Configure these ports as output - the K-Mode I2C devices are outputs!
+    Dir HI2C_DATA out
+    Dir HI2C_CLOCK out
 
-'Set the I2C levels for these specific ports
-RC3I2C.TH0=1
-RC4I2C.TH0=1
-'Configure these ports as Open-drain
-ODCONC.ODCC4 = 1
-ODCONC.ODCC3 = 1
+    'Set the I2C levels for these specific ports
+    RC3I2C.TH0=1
+    RC4I2C.TH0=1
+    'Configure these ports as Open-drain
+    ODCONC.ODCC4 = 1
+    ODCONC.ODCC3 = 1
 
-'Now set up the I2C slave library - four commands needed
-HI2CSetAddress 0x70
-HI2CMode Slave
-SI2CSlave_ISR_Init
-On Interrupt I2C1Interrupt Call SI2CSlave_ISR_Handler
+    'Now set up the I2C slave library - four commands needed
+    HI2CSetAddress 0x70
+    HI2CMode Slave
+    SI2CSlave_ISR_Init
+    On Interrupt I2C1Interrupt call SI2CSlave_ISR_Handler
 
 
-'Define Hardware settings for this demonstration - we are flashing the LEDs
-'These LEDs reflect the state of the Pot
-#DEFINE LED0  porta.1
-#DEFINE LED1  porta.2
-#DEFINE LED2  porta.3
+   'Define Hardware settings for this demonstration - we are flashing the LEDs
+   'These LEDs reflect the state of the Pot
+    #define LED0  porta.1
+    #define LED1  porta.2
+    #define LED2  porta.3
 
-'This LED is to show we are alive and in the main loop
-#DEFINE LED3  portb.1
+    'This LED is to show we are alive and in the main loop
+    #define LED3  portb.1
 
-'0, 1 and 2 are outputs (LEDs)
-Dir LED0 Out
-'0, 1 and 2 are outputs (LEDs)
-Dir LED1 Out
-'0, 1 and 2 are outputs (LEDs
-Dir LED2 Out
-'0, 1 and 2 are outputs (LEDs
-Dir LED3 Out
+    dir LED0 out                  ;0, 1 and 2 are outputs (LEDs)
+    dir LED1 out                  ;0, 1 and 2 are outputs (LEDs)
+    dir LED2 out                  ;0, 1 and 2 are outputs (LEDs
+    dir LED3 out                  ;0, 1 and 2 are outputs (LEDs
 
 
-'Main body of program commences here.
-Dir portb.1 Out
-Do Forever
-    'flash this LED to show that we are alive
-    portb.1 = ! portb.1
-    Wait 1 s
-    'Do other stuff
+   'Main body of program commences here.
+    dir portb.1 out
+    do Forever
+       portb.1 = ! portb.1    'flash this LED to show that we are alive
+       wait 1 s
+      'Do other stuff
 
-Loop
+    Loop
 
-'User call back #1 - this will be called after each packet is received for Writes to this Slave from the Master.
-Sub HI2C_Process_In_Message ( In HI2CMESSAGESIZE )
+    'User call back #1 - this will be called after each packet is received for Writes to this Slave from the Master.
+sub HI2C_Process_In_Message ( in HI2CMESSAGESIZE )
 
     'The Variable HI2CMESSAGESIZE is the length of the incoming packet.
     'A package cannot exceed the buffer size.
@@ -141,79 +130,76 @@ Sub HI2C_Process_In_Message ( In HI2CMESSAGESIZE )
     '
 
     'Variables for these user methods
-    Dim ADCValue, lastHI2CInstruction As Byte
+    dim ADCValue, lastHI2CInstruction as byte
 
     lastHI2CInstruction = HI2CBUFFER(0)
 
     'We have incoming data!!
-    If HI2CBUFFER(0) = 0x23 Then
-        Select Case HI2CBUFFER(1)
+     if HI2CBUFFER(0) = 0x23 then
+       Select CASE HI2CBUFFER(1)
 
-        Case 0x00
-            LED0 = 0
-            LED1 = 0
-            LED2 = 0
+             Case 0x00
+                LED0 = 0
+                LED1 = 0
+                LED2 = 0
 
-        Case 0x01
-            LED0 = 1
-            LED1 = 0
-            LED2 = 0
+             Case 0x01
+                LED0 = 1
+                LED1 = 0
+                LED2 = 0
 
-        Case 0x02
-            LED0 = 0
-            LED1 = 1
-            LED2 = 0
+             Case 0x02
+                LED0 = 0
+                LED1 = 1
+                LED2 = 0
 
-        Case 0x03
-            LED0 = 1
-            LED1 = 1
-            LED2 = 0
-        Case Else
-            porta = HI2CBUFFER(1) * 2
+             Case 0x03
+                LED0 = 1
+                LED1 = 1
+                LED2 = 0
+             Case Else
+                porta = HI2CBUFFER(1) * 2
 
-        End Select
-    End If
+        end Select
+     end if
 
-    If HI2CBUFFER(0) = 0x81 Then
-        Select Case HI2CBUFFER(1)
+     if HI2CBUFFER(0) = 0x81 then
+       Select CASE HI2CBUFFER(1)
 
-        Case 0x04
-            'connect Pot to the correct Port on the microcontroller.
-            ADCValue = ReadAD(ANA4)
+             Case 0x04
+                ADCValue = ReadAD(ANA4)  'connect Pot to the correct Port on the microcontroller.
 
-        Case Else
-            ' return zero if another port is requested.
-            ADCValue = 0x00
+             Case Else
+                ADCValue = 0x00          ' return zero if another port is requested.
 
-        End Select
-    End If
+        end Select
+     end if
 
-End Sub
+    end sub
 
-'User call back #2 - this is called when the Master wants data.  The buffer needs to handle the calls appropiately.
-Sub HI2C_Process_Out_Message
+    'User call back #2 - this is called when the Master wants data.  The buffer needs to handle the calls appropiately.
+sub HI2C_Process_Out_Message
 
     'Variables
-    Dim ADCValue, lastHI2CInstruction As Byte
+    dim ADCValue, lastHI2CInstruction as byte
 
-    'WARNING - placing time driven calls here may cause i2c buffer overruns. Move calls to I2C_Process_In_Message.
-    'WARNING - changing the Interrupts, stop or starting the Interrupts may cause i2c buffer overruns. Do not do this.
+      'WARNING - placing time driven calls here may cause i2c buffer overruns. Move calls to I2C_Process_In_Message.
+      'WARNING - changing the Interrupts, stop or starting the Interrupts may cause i2c buffer overruns. Do not do this.
 
-    'Values to be sent to the Master are loaded into the buffer array called HI2CBUFFER()
-    'The first value is at element zero.
-    'Value are returned are relative to the write operation.  Write need to control the values returned.
+      'Values to be sent to the Master are loaded into the buffer array called HI2CBUFFER()
+      'The first value is at element zero.
+      'Value are returned are relative to the write operation.  Write need to control the values returned.
 
 
-    'Want to post process the data. Do it here.
-    Select Case lastHI2CInstruction
-    Case 0x81
-        'Place read value into Output Buffer
-        HI2CBUFFER(0) = ADCValue
+      'Want to post process the data. Do it here.
+     Select CASE lastHI2CInstruction
+        case 0x81
+          HI2CBUFFER(0) = ADCValue  'Place read value into Output Buffer
 
         'add more cases
         'case NN
 
-    End Select
+     end Select
 
-End Sub
+    end sub
 

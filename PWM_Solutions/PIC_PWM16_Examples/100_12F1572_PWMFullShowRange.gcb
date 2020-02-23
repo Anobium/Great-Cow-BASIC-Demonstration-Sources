@@ -1,24 +1,23 @@
-#CHIP PIC12F1572 ,32
+  #chip PIC12F1572 ,32
 
-#OPTION Explicit
+  #option explicit
 
-Dim adcSetting As Word
-adcSetting =0
+  dim adcSetting as word
+  adcSetting =0
 
-'pwm out
-Dir PORTA.2 Out
+  Dir PORTA.2 Out     'pwm out
 
 
-Do
-    'read the ADC
-    adcSetting = ReadAD10( an0 )
+  Do
+      'read the ADC
+      adcSetting = ReadAD10( an0 )
 
-    'Scale the ADC - in the context that this is a test therefore the is a 'stepped' result
-    adcSetting = Scale ( adcSetting, 0, 1023, 0, 65535 )
+      'Scale the ADC - in the context that this is a test therefore the is a 'stepped' result
+      adcSetting = scale ( adcSetting, 0, 1023, 0, 65535 )
 
-    'Call the method
-    HPWM16(3, 100, adcSetting)
-Loop
+      'Call the method
+      HPWM16(3, 100, adcSetting)
+  loop
 
 
 

@@ -1,17 +1,17 @@
 #CHIP tiny13a, 1.2
-#OPTION Explicit
+#OPTION EXPLICIT
 #DEFINE RANDOMIZE_SEED Timer0
-#DEFINE LED1 PortB.1
-#OPTION Volatile LED1
-#DEFINE PWM_FREQ 1
-#DEFINE PWM_Duty 10
+#DEFINE LED1 PortB.1            
+#OPTION VOLATILE LED1            
+#DEFINE PWM_FREQ 1            
+#DEFINE PWM_Duty 10            
 
-Dir LED1 Out
+DIR LED1 OUT                
 
-Do
-    Randomize
-    PWMOn
-    Wait Random ms
-    PWMOff
-    Wait Random ms
-Loop
+DO
+    RANDOMIZE
+    PWMON
+    WAIT RANDOM MS            
+    PWMOFF                
+    WAIT RANDOM MS
+LOOP

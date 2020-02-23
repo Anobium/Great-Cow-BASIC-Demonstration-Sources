@@ -12,35 +12,31 @@
 '''@date    23.08.2018
 '''*************************************************************************
 
-'Chip Settings
-#CHIP 16F886, 8
+    'Chip Settings
+    #chip 16F886, 8
 
-'Set the direction of the CCP1/PWM port
-Dir portc.2 Out
+    'Set the direction of the CCP1/PWM port
+    DIR portc.2 Out
 
-'Main code
+    'Main code
 
-'Frequency of PWM in KHz
-#DEFINE PWM_Freq 38
-'Duty cycle of PWM (%)
-#DEFINE PWM_Duty 50
+    #define PWM_Freq 38      'Frequency of PWM in KHz
+    #define PWM_Duty 50      'Duty cycle of PWM (%)
 
-Do
+    do
 
-    'Will enable CCP1/PWM Only
-    PWMOn
+        PWMOn    'Will enable CCP1/PWM Only
 
-    Wait 1 s
+        wait 1 s
 
-    'Will disable CCP1/PWM Only
-    PWMOff
+        PWMOff   'Will disable CCP1/PWM Only
 
-    Wait 1 s
+        wait 1 s
 
-Loop
+    loop
 
 
-End
+    end
 
 
 
