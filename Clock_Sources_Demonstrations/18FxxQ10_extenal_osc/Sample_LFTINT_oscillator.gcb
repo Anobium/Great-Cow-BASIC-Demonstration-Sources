@@ -1,0 +1,32 @@
+'''A most simple sample for GCGB and GCB.
+'''------------------------------------------------------------------------
+'''This program blinks the onboard LED of a microcontroller using tje LFINT internal oscillator to give 31 Khz
+'''
+'''This sample file can be adapted to any of the supported microcontrollers
+'''by simply changing the #chip creating and removing the comment.
+'''
+'''To make your programmer or your bootloader work, simply do the following.
+'''
+'''From within this IDE, select from the menu 'IDE Tools/GCB Tools/Edit Programmer Preferences' or press Ctrl-Alt-E.
+'''this will show you the 'Programmer Preferences', select the 'Programmer' tab.
+'''
+'''
+'''For further adventures with Great Cow BASIC .... Click button "view Demos" for 1000's of sample programs.
+'''
+'''
+'''Enjoy.
+'''
+'''
+'''************************************************************************
+
+' ----- Configuration
+    #CHIP 18F25Q10, 31k
+
+    #define testport porta.1
+    dir testport out
+
+
+    do
+        testport = !testport
+        wait 100  ms
+    loop

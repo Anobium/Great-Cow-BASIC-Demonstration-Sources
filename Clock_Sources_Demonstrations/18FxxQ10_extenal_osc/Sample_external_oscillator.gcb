@@ -1,0 +1,52 @@
+'''A most simple sample for GCGB and GCB.
+'''------------------------------------------------------------------------
+'''This program blinks the onboard LED of a microcontroller using a 16 MHz external oscillator using the 4x PLL to give 16mhz
+'''
+'''This sample file can be adapted to any of the supported microcontrollers
+'''by simply changing the #chip creating and removing the comment.
+'''
+'''To make your programmer or your bootloader work, simply do the following.
+'''
+'''From within this IDE, select from the menu 'IDE Tools/GCB Tools/Edit Programmer Preferences' or press Ctrl-Alt-E.
+'''this will show you the 'Programmer Preferences', select the 'Programmer' tab.
+'''
+'''
+'''For further adventures with Great Cow BASIC .... Click button "view Demos" for 1000's of sample programs.
+'''
+'''
+'''Enjoy.
+'''
+'''
+'''************************************************************************
+
+' ----- Configuration
+    #CHIP 18F25Q10, 16
+
+    ' CONFIG1L
+    #config FEXTOSC = HS            'External Oscillator mode Selection bits->HS (crystal oscillator) above 8 MHz; PFM set to high power
+    #config RSTOSC = EXTOSC_4PLL    'Power-up default value for COSC bits->EXTOSC with 4x PLL, with EXTOSC operating per FEXTOSC bits
+
+
+    ' NOSC EXTOSC   with 4x PLL; NDIV 4;
+    OSCCON1 = 0x22;
+    ' CSWHOLD may proceed; SOSCPWR Low power;
+    OSCCON3 = 0x00;
+    ' MFOEN disabled; LFOEN enabled; ADOEN disabled; SOSCEN disabled; EXTOEN disabled; HFOEN disabled;
+    OSCEN = 0x10;
+    ' HFFRQ 4_MHz;
+    OSCFRQ = 0x02;
+    ' TUN 0;
+    OSCTUNE = 0x00;
+    ' Wait for PLL to stabilize
+    wait while PLLR = 0
+
+
+    #define testport porta.1
+    dir testport out
+
+
+    do
+        testport = !testport
+        wait 100  ms
+
+    loop
