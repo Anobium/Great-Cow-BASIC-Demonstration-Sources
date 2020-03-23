@@ -1,6 +1,6 @@
 '''A most simple sample for GCGB and GCB.
 '''------------------------------------------------------------------------
-'''This program blinks the onboard LED of a microcontroller using tje LFINT internal oscillator to give 31 Khz
+'''This program blinks the onboard LED of a microcontroller using the LFINT internal oscillator to give 31 Khz
 '''
 '''This sample file can be adapted to any of the supported microcontrollers
 '''by simply changing the #chip creating and removing the comment.

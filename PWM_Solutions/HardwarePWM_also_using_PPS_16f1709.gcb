@@ -3,10 +3,10 @@
 '''This program ia a demonstration of Hardare PWM, but, this also shows how to use PPS.
 '''The PWM is set to be on PortA.0, you can choose but in this demo you can easily change this to portc.5 by changing the commands.
 ''':
-'''@author	EvanV
-'''@licence	GPL
-'''@version	1.0a
-'''@date   	02.12.2015
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    02.12.2015
 '''********************************************************************************
 
 ; ----- Configuration
@@ -14,16 +14,16 @@
 #option explicit
 
 
-	'Set the PPS of the PWM and the RS232 ports.
+  'Set the PPS of the PWM and the RS232 ports.
     Intoff
-  	PPSLOCK = 0x55
+    PPSLOCK = 0x55
     PPSLOCK = 0xAA
-    PPSLOCKED = 0x00 	'unlock PPS
+    PPSLOCKED = 0x00  'unlock PPS
 
     'RC5PPS = 0x0C     'RC5->CCP1:CCP1
     RA0PPS = 0x0C;     'RA0->CCP1:CCP1
     RXPPS=0x0D        'Peripheral input is RB5
-		RB7PPS=0x14       'Pin RB7 source is TX/CK
+    RB7PPS=0x14       'Pin RB7 source is TX/CK
     PPSLOCK = 0x55
     PPSLOCK = 0xAA
     PPSLOCKED = 0x01  'lock PPS

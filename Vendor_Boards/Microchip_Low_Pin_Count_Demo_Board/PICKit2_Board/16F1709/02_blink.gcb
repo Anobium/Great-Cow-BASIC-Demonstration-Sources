@@ -1,0 +1,44 @@
+'''
+'''******************************************************************
+''' Lesson 2 - "Blink"
+'''
+'''  One way to create a delay is to spend time decrementing a value. In assembly, the timing
+'''  can be accurately programmed since the user will have direct control on how the
+'''  code is executed. In 'GCB', the compiler takes the 'GCB Source' and compiles it into assembly before
+'''  creating the file to program to the actual PIC MCU (HEX file). Because of this, it is hard
+'''  to predict exactly how many instructions it takes for a line of 'GCB' to execute but GCB calculates the delay for you.
+'''
+'''  DS1 blinks at a rate of approximately 1.5 seconds.
+'''
+'''  PIC: 16F1709
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: PICkit 2 Low Pin Count Demo Board
+'''  Date: 20.3.2019
+'''
+''''''******************************************************************
+''' See Low Pin Count Demo Board User's Guide for Lesson Information*
+''''''*****************************************************************
+'''
+
+ #chip 16F1709
+ #option explicit
+
+
+
+    '' -------------------LATC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|DS4|DS3|DS2|DS1|-
+    ''-----------------------------------------
+    ''
+
+    Dim CURRENTSTATE as Byte
+
+    dir portc.0 out
+
+    do
+        wait 1500 ms
+        currentstate = 1 XOR portc.0
+        portc.0 = currentstate
+    loop
