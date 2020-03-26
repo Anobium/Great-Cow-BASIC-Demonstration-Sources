@@ -5,14 +5,14 @@
 ''':
 '''As this device is a PPS device we need to set the PPS, this mode can use all the PWM modules
 '''Change the PPS to test different module, but, remember to change the CONSTANTS!!
-'''This sets PWM channels 6 and 7 but you can adapt the frequency, duty or change the timer source
+'''This sets PWM channels 5 and 6 but you can adapt the frequency or duty
 '''
 '''You can make the ASM smaller, adapt the PWM Optimisation!!
 '''
 '''@author  EvanV
 '''@licence GPL
 '''@version 1.0a
-'''@date    22.08.2018
+'''@date    24.03.2020
 '''*************************************************************************
 
 'Chip Settings
@@ -59,5 +59,4 @@ PWMOn ( 6, PWMModule )
 
 Do
 Loop
-
 

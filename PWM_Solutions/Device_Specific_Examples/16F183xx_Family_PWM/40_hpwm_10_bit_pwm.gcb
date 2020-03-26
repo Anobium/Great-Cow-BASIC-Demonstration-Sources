@@ -4,14 +4,14 @@
 '''This demonstration how use the PWM 10 bit Module but with this method you can change the parameters.
 ''':
 '''Change the PPS to test different module, but, remember to change the CONSTANTS!!
-'''This default to PWM but you can change the PWM and/or change the timer source
+'''This default to PWM but you can change the PWM parameters.
 '''
 '''You can make the ASM smaller, adapt the PWM Optimisation!!
 '''
 '''@author  EvanV
 '''@licence GPL
 '''@version 1.0a
-'''@date    22.08.2018
+'''@date    24.03.2020
 '''*************************************************************************
 
 'Chip Settings
@@ -53,4 +53,3 @@ Do
     Next
 
 Loop
-
