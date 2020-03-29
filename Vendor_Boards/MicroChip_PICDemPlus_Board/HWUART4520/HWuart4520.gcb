@@ -1,0 +1,43 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program sends characters from microprocessor using the GCB Hardware-UART methods
+'''via the on-board TTL converter at 1 second intervals using 9600-8n-1 format.view in 'terminal' window.
+'''
+'''You have to add SCKP - Synchronous Clock Polarity Select bit acts differently depending on EUSART mode.
+'''Asynchronous mode:
+'''-1 - Transmit inverted data to the TX/CK pin; and
+'''-0 - Transmit non-inverted data to the same pin.
+'''
+'''@author  Evan R. Venn / HiB
+'''@licence GPL
+'''@version 2.0a for PICDEM+ (sure electronics) pcb
+'''@date    31.01.2015      29.3.2020
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 18f4520,8
+
+; ----- Define Hardware settings
+ ' THIS CONFIG OF THE SERIAL PORT TO A PC TERMINAL via the on-board TTL Converter
+ ' USART settings
+ #define USART_BAUD_RATE 9600
+ Dir PORTc.6 Out
+ Dir PORTc.7 In
+ #define USART_DELAY 5 ms
+ #define USART_BLOCKING
+ SCKP = 0
+
+; ----- Variables
+  ' No Variables specified in this example. All byte variables are defined upon use.
+
+; ----- Main body of program commences here.
+  'Message after reset
+  wait 500 ms
+  do Forever
+   HSerPrint "Hello World"
+   ' "Carriage Return"
+   wait 1000 ms
+   HSerSend 13
+   ' "Line Feed"
+   HSerSend 10
+  Loop

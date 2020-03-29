@@ -1,0 +1,53 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a ddemonstration of sequencing four LEDs.
+'''The LEDS are connected of PortC.b0,b1, b.2, b.3 via a resistor per LED..
+'''@author  EvanV plus works of HughC ***Sure PICdem Plus taget HiB***
+'''@licence GPL
+'''@version 2.0a
+'''@date    31.01.2015 ***29.3.2020***
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 18F4520,8
+
+; ----- Define Hardware settings
+
+
+; ----- Constants
+  #define LED1 PORTB.0
+  #define LED2 PORTB.1
+  #define LED3 PORTB.2
+  #define LED4 PORTB.3
+
+  #define FlashDelay 600 ms
+
+
+; ----- Variables
+  ' No Variables specified in this example. All byte variables are defined upon use.
+
+
+; ----- Main body of program commences here.
+start:
+    set LED1 ON
+    set LED2 OFF
+    set LED3 OFF
+    set LED4 OFF
+    wait FlashDelay
+    set LED1 OFF
+    set LED2 ON
+    set LED3 OFF
+    set LED4 OFF
+    wait FlashDelay
+    set LED1 OFF
+    set LED2 OFF
+    set LED3 ON
+    set LED4 OFF
+    wait FlashDelay
+    set LED1 OFF
+    set LED2 OFF
+    set LED3 OFF
+    set LED4 ON
+    wait FlashDelay
+goto start
+end

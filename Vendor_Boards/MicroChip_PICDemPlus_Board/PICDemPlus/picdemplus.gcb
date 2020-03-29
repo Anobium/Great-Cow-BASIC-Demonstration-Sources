@@ -1,0 +1,30 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a basic led flash for sure picdem+ pcb
+'''Flashes an LED on PORTB 0 at 1hz
+'''
+'''@author HiB
+'''@licence GPL
+'''@version
+'''@date    31.03.2020
+'''********************************************************************************
+
+; ----- Configuration
+
+#chip 18F4520,8
+#option explicit
+
+
+; ----- Main body of program commences here.
+#define Rs PORTB.0
+dir Rs out
+
+do
+
+    Rs= ! Rs
+    wait 1000 ms
+
+loop
+end
+
+
