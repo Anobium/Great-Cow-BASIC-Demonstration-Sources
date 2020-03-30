@@ -1,0 +1,105 @@
+'''A demonstration program for GreatCowBASIC.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program will demonstrate reading the analog to digital converter (ADC or A/D) module.
+'''This is implemented within Great Cow Basic to support 8-bit, 10-bit and 12-bit read operations.
+'''This is supported for Single channel measurement mode and Differential Channel Measurement mode.
+''':
+'''This is a Single channel measurement mode, or normal mode demonstration.
+''':
+'''Great Cow Basic will configure the analog to digitalconverter clock source, the programmed acquisition time and justification of the returned value.
+'''The response can be a byte, word or integer (as defined in the Great Cow Basic method) these are 8-bit, 10-bit and 12-bit values respectively.
+''':
+'''This demonstration show the usage for normal or Single channel measurement of the ADC.
+'''See the Help for connectivity but essential the source device is connected to the appropiate ADC (ANx) pin.
+''':
+'''This demonstation assumes you have a 10k POT connected to AN0 (RA0) port of the microchip processor.(or just touch PORTA.0 pinouts pad!)
+'''the value will change from low to high.
+'''The value is sent once a second over the usb serial port to a terminal program;and displayed on the LCD
+'''
+'''Check datasheet for your specific chip
+'''
+'''
+'''@author  Bill Roth /HiB
+'''@licence GPL
+'''@version 2.1 for SURE DB-113 (PICDEMPlus)
+'''@date    21.12.2015 29.3.2020
+'''********************************************************************************
+
+; ----- Configuration
+
+     #Chip 18f4520, 8
+     #config MCLRE_ON 'enable board 'reset' without disconnection
+
+; ----- Constants
+
+  #define LCD_IO 8
+  #define LCD_Speed FAST
+
+
+  'Change as necessary
+  ' USART settings
+ #define USART_BAUD_RATE 9600
+ Dir PORTc.6 Out
+ Dir PORTc.7 In
+ #define USART_DELAY 5 ms
+ #define USART_BLOCKING
+ SCKP = 0
+  #define LCD_RS PORTA.3
+  #define LCD_Enable PORTA.1
+  #define LCD_DATA_PORT PORTD
+  #define LCD_RW PORTA.2
+
+
+; ----- Variables
+    DIM ad_val as integer 'lets read negative values also!
+
+
+; ----- Main body of program commences here.
+    'Show start up message
+    SPLASH
+    Wait 1 S
+    CLS
+
+    'Display fixed messages to display
+    Locate 0,0: Print  "ReadAD:"
+    Locate 1,0 : Print "ReadAD10:"
+
+
+
+    Do
+
+      'read 8-bit value to Variable
+      ad_val = Readad(AN0)
+      Locate 0,10
+      Print ad_val
+      Print "   "
+      wait 20 ms
+
+     'read 10-bit value to Variable
+      ad_val = ReadAd10(AN0)
+      Locate 1,10
+      Print ad_val
+      Print "   "
+      wait 20 ms
+
+     HSerPrint "ReadAd10 "
+     HSerPrint ad_val
+     "Carriage Return"
+     wait 1000 ms
+     HSerSend 13
+     "Line Feed"
+     HSerSend 10
+
+
+
+    loop
+
+    End
+
+; ----- Support methods.  Subroutines and Functions
+
+    Sub Splash
+      Locate 0,0 : Print "CHIP: ": Print ChipNameStr
+      Locate 1,0 : Print "RAM: ": Print  ChipRam: Print " Bytes"
+      Locate 2,0 : Print "MEMORY:" : Print ChipWords: Print " Words"
+    End sub
