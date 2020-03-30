@@ -45,15 +45,15 @@
 Dir RA1 Out
 Dir RA2 Out
 
-'Set frequency in KHz, just change the value
-#DEFINE PWM_Timer2_Freq  28
-'Set frequency in KHz, just change the value
-#DEFINE PWM_Timer4_Freq  40
+'Set frequency in KHz, just change the value, timer source for this chip can ONLY be timer2 therefore a single frequency
+#DEFINE PWM_Timer2_Freq  8
 
 #DEFINE PWM_1_Duty 50
+'Timer source for this chip can ONLY be timer2
 #DEFINE PWM_1_Clock_Source 2
 
-#DEFINE PWM_2_Duty 20
+#DEFINE PWM_2_Duty 25
+'Timer source for this chip can ONLY be timer2
 #DEFINE PWM_2_Clock_Source 2
 
 'Will enable CCP/PWM channel, remember to set PPS!!! to port

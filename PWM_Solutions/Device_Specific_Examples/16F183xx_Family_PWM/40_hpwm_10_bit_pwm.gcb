@@ -48,8 +48,9 @@ Do
     'use for-loop to show the duty changing a 10bit value
     Dim dutyvalue As Word
     For dutyvalue = 0 To 1023
-        HPWM 5, 40, dutyvalue, 2
-        Wait 10 ms
+        HPWM 5, 8, dutyvalue, 2
+        HPWM 6, 8, 1023-dutyvalue, 2
+        wait 5 ms
     Next
 
 Loop

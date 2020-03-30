@@ -44,14 +44,16 @@ Dir RA1 Out
 Dir RA2 Out
 
 'Set frequency in KHz, just change the value
-#DEFINE PWM_Timer2_Freq  28
+#DEFINE PWM_Timer2_Freq  8
 
 #DEFINE PWM_5_Duty 20
+'Timer source for this chip can ONLY be timer2
 #DEFINE PWM_5_Clock_Source 2
 'Will enable PWM module
 PWMOn ( 5, PWMModule )
 
-#DEFINE PWM_6_Duty 70
+#DEFINE PWM_6_Duty 80
+'Timer source for this chip can ONLY be timer2
 #DEFINE PWM_6_Clock_Source 2
 'Will enable PWM module
 PWMOn ( 6, PWMModule )
@@ -59,4 +61,3 @@ PWMOn ( 6, PWMModule )
 
 Do
 Loop
-
