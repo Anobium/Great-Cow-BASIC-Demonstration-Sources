@@ -1,0 +1,19 @@
+#CHIP 16F676
+
+  #OPTION Explicit
+  #DEFINE GREENLED RA1
+  #DEFINE REDLED   RA2
+  #DEFINE SWITCH   RA3
+
+  Dir GREENLED out
+  Dir REDLED   out
+  Dir SWITCH   in
+
+
+  ' ----- Main body of program commences here.
+  Do Forever
+
+    SetWith ( GREENLED, SWITCH )
+    SetWith ( REDLED,   NOT SWITCH )
+
+  Loop

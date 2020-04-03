@@ -1,0 +1,17 @@
+#CHIP 16F676
+
+  Dir RA1 out
+  Dir RA2 out
+
+  'Set initial value
+  RA1 = 0
+  RA2 = 1
+
+  ' ----- Main body of program commences here.
+  Do Forever
+
+    wait 1 s
+    RA1 = NOT RA1
+    RA2 = NOT RA1
+
+  Loop
