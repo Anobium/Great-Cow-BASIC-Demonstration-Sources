@@ -20,15 +20,12 @@
     End Sub
     'Template comment at the end of the config file
 
-
-
-
     ' Add PPS if appropiate for your chip
     ' [change to your config] This is the config for a serial terminal
     ' turn on the RS232 and terminal port.
     ' Define the USART settings
-    #DEFINE USART_BAUD_RATE 115200
-    #DEFINE USART_BLOCKING
+    #DEFINE USART_BAUD_RATE 9600
+
     'This assumes you are using an ANSI compatible terminal.  Use PUTTY.EXE it is very easy to use.
 
     '   Main program
@@ -40,32 +37,35 @@
     Dim temppnt As Byte
 
     ' Constants etc required for Buffer Ring
-    #DEFINE BUFFER_SIZE 64
+    #DEFINE BUFFER_SIZE 8
     #DEFINE bkbhit (next_in <> next_out)
 
-
-    'Buffer
+    'Define the Buffer
     Dim buffer( BUFFER_SIZE - 1 ) 'we will use element 0 in the array as part of out buffer
+
     'Call init the buffer
+    InitBufferRing
 
-
-
+    HSerSend 10
+    HSerSend 13
+    HSerSend 10
+    HSerSend 13
     HSerPrint "Started: Serial between two devices"
     HSerSend 10
     HSerSend 13
 
-    InitBufferRing
 
     'Get character(s) and send back
     Do
 
         ' Do we have data in the buffer?
-        Do While bkbhit
+        if bkbhit then
 
             'Send the next character in the buffer, exposed via the function `bgetc` back the terminal
             HSerSend bgetc
 
-        Loop
+        end if
+
     Loop
 
     'Supporting subroutines
@@ -82,11 +82,13 @@
     End Sub
 
     Function bgetc
-
-        Wait While !(bkbhit)
-        bgetc = buffer(next_out)
-        next_out=(next_out+1) % BUFFER_SIZE
-
+        Dim local_next_out as Byte    'maintain a local copy of the next_out variable to ensure it does not change when an Interrupt happens
+        local_next_out = next_out
+        bgetc = buffer(local_next_out)
+        local_next_out=(local_next_out+1) % BUFFER_SIZE
+        INTOFF
+        next_out = local_next_out
+        INTON
     End Function
 
 
@@ -106,4 +108,3 @@
         #ENDIF
 
     End Sub
-
