@@ -1,0 +1,44 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program reads and writes tables.
+'''
+'''The purpose is to validate the Great Cow BASIC hex table usage
+'''
+'''
+'''
+'''
+'''
+'''@author     Evan R.Venn
+'''@licence    GPL
+'''@version 1.0a
+'''@date       2/04/2020
+'''********************************************************************************
+;Chip Settings
+#chip 16f18313
+#option Explicit
+
+dim TableReadPosition, OutVar as byte
+
+for TableReadPosition = 1 to 1
+  ReadTable StringData , TableReadPosition, OutVar
+next
+
+;Data tables
+Table StringData
+ 0x4C'
+ 0x4B'
+ 0x3B'
+ 0x0b
+ 0x0B
+End Table
+
+'The ASM should read as follows
+'
+'    TableSTRINGDATA
+'      retlw 5
+'      retlw 76
+'      retlw 75
+'      retlw 59
+'      retlw 11
+'      retlw 11
+'

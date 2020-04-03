@@ -1,8 +1,8 @@
-'''A test program of the hefsaf.h library routines
+'''A test program of the SAFsaf.h library routines
 '''-----------------------------------------------------------------------------
-'''This is using the hef/saf routines to read/write data or strings
-'''to HEF or SAF memory. The HEF/ SAF Memory Block is then dumped to a serial terminal
-'''Be sure to use one of the chip listed in hefsaf.h init routine which
+'''This is using the SAF/saf routines to read/write data or strings
+'''to SAF or SAF memory. The SAF Memory Block is then dumped to a serial terminal
+'''Be sure to use one of the chip listed in SAFsaf.h init routine which
 '''have an UART module.  This is a revised demonstation to support the latest library.
 '''
 '''@author  William Roth and the works Evan Venn & Jacques Nilo
@@ -51,7 +51,6 @@
 
  #startup InitPPS, 85
  #define PPSToolPart 18F25K42
- #define Programmer PK3mpec  ' *** Do not use -R **
 
   'Setup Serial port
   #define USART_BAUD_RATE 19200
@@ -78,7 +77,7 @@
    SAFWriteBlock (0, MyBuffer,numbytes)
 
   ' *** Read the 8 stored bytes using SAFReadBlock ***
-    HEFReadBlock (0, MyBuffer, numbytes)
+    SAFReadBlock (0, MyBuffer, numbytes)
 
    'Output the 8 bytes to a terminal
     HSerPrintCRLF 2
@@ -114,7 +113,7 @@
   SAFwriteWord (12, Word3)
   SAFwriteWord (14, Word4)
 
-  'Read the Words using HEFReadWord & output to terminal
+  'Read the Words using SAFReadWord & output to terminal
   Rel_Address = 8
   HserprintCRLF 2
   Repeat 4
@@ -124,7 +123,7 @@
       Rel_Address +=2  'increment address by 2
   End repeat
   HSerprintCRLF 2
-  HEFM_DUMP
+  SAFM_DUMP
 
 '=========================================================
   end
@@ -134,7 +133,7 @@
 '
 '; This subroutine displays the SAF Flash Memory on a terminal
 '; Words in reverse byte order relative to address
-sub HEFM_Dump
+sub SAFM_Dump
 
     Dim Blocknum as Byte
     NVM_Address  = SAF_START_ADDR
