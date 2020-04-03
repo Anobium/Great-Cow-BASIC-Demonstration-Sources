@@ -1,0 +1,82 @@
+#chip 16F18313
+#option Explicit
+
+  #define LED1 RA1
+  #define LED2 RA2
+  #define LED3 RA4
+  #define LED4 RA5
+
+  #define SWITCH  RA3
+  #define VR1  RA0
+
+  Dir LED1 out
+  Dir LED2 out
+  Dir LED3 out
+  Dir LED4 out
+  Dir SWITCH  in
+
+/*
+-------------------LATA-----------------
+Bit#:  -7---6---5---4---3---2---1---0---
+Type:   -------|LED|LED|SW |LED|LED|ADC
+Real:           RA5 RA4 RA3 RA2 RA1
+Name:   -------| 4 | 3 |SW | 2 | 1 |ANA0
+-----------------------------------------
+*/
+
+
+/*
+-------------------LATA-----------------
+Bit#:  -7---6---5---4---3---2---1---0---
+CAP:   -------|LED|LED|SW |LED|LED|ADC|-
+-----------------------------------------
+STATE TABLE
+STATE 1       | 0 | 0 |   | 0 | 1 |   |
+STATE 2       | 0 | 0 |   | 1 | 0 |   |
+STATE 3       | 0 | 1 |   | 0 | 0 |   |
+STATE 5       | 1 | 0 |   | 0 | 0 |   |
+
+*/
+
+
+  Dim ADCValue as Byte
+
+
+  ' ----- Main body of program commences here.
+  Do Forever
+
+    ADCValue = READAD ( ANA0 )
+
+    Select Case ADCValue
+      case 0 to 63
+        'Set one LED on... could 1 or ON
+        LED1 = 1
+        LED2 = 0
+        LED3 = 0
+        LED4 = 0
+
+      case 64 to 127
+        LED1 = 0
+        LED2 = 1
+        LED3 = 0
+        LED4 = 0
+
+      case 128 to 191
+        LED1 = 0
+        LED2 = 0
+        LED3 = 1
+        LED4 = 0
+
+      case 192 to 255
+        LED1 = 0
+        LED2 = 0
+        LED3 = 0
+        LED4 = 1
+
+    end select
+
+    wait 500 ms
+
+    wait while switch = 0
+
+  Loop

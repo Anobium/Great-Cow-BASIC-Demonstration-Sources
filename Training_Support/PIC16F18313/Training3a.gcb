@@ -1,0 +1,24 @@
+#CHIP 16F18313
+
+  #OPTION Explicit
+  #DEFINE GREENLED RA1
+  #DEFINE REDLED   RA2
+  #DEFINE SWITCH   RA0
+
+  Dir GREENLED out
+  Dir REDLED   out
+  Dir SWITCH   in
+
+
+  ' ----- Main body of program commences here.
+  Do Forever
+
+    if SWITCH = On then
+        GREENLED = On
+        REDLED   = Off
+    else
+        GREENLED = Off
+        REDLED   = On
+    end if
+
+  Loop

@@ -1,0 +1,38 @@
+#chip 16F18313
+#option Explicit
+
+  #define LED1 RA1
+  #define LED2 RA2
+  #define LED3 RA4
+  #define LED4 RA5
+
+  #define SWITCH  RA3
+  #define VR1  RA0
+
+  Dir LED1 out
+  Dir LED2 out
+  Dir LED3 out
+  Dir LED4 out
+  Dir SWITCH  in
+
+   ; ----- Constants
+      'PWM constant. This is a required constant.
+      #define PWM_Out1 LED1
+
+    ; ----- Define Hardware settings
+      'PWM port out.  This is not required but good practice.
+      dir PWM_Out1 out
+
+      'A potentiometer is attached to ANO
+
+    ; ----- Variables
+      ' No Variables specified in this example.
+
+    ; ----- Main body of program commences here.
+        do
+          '100 cycles is a purely arbitrary value
+            PWMOut 1, ReadAD(AN0), 100
+            wait 5 s
+
+        loop
+    end

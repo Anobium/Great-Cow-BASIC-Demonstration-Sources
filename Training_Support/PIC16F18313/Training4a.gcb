@@ -1,0 +1,41 @@
+#chip 16f18313
+#option Explicit
+
+  #define LED1 RA1
+  #define LED2 RA2
+  #define LED3 RA4
+  #define LED4 RA5
+
+  #define SWITCH  RA3
+  #define VR1  RA0
+
+  Dir LED1 out
+  Dir LED2 out
+  Dir LED3 out
+  Dir LED4 out
+  Dir SWITCH  in
+
+  'Declare or dimensiona a Byte variable to store the ADC value
+  Dim ADCValue as Byte
+
+  ' ----- Main body of program commences here.
+  Do Forever
+
+    'ReadAD return a byte value of 0 to 255
+    ADCValue = ReadAD( ANA0 )
+
+    'Test to see if in the mid point
+    if ADCValue < 128 then
+        LED1 = 0
+        LED2 = 0
+        LED3 = 1
+        LED4 = 1
+    else
+        LED1 = 1
+        LED2 = 1
+        LED3 = 0
+        LED4 = 0
+
+    end if
+
+  Loop

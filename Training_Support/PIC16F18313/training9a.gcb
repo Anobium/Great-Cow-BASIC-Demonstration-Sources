@@ -1,0 +1,93 @@
+#chip 16F18313
+#option Explicit
+
+  #define LED1 RA1
+  #define LED2 RA2
+  #define LED3 RA4
+  #define LED4 RA5
+
+  #define SWITCH  RA3
+  #define VR1  RA0
+
+  Dir LED1 out
+  Dir LED2 out
+  Dir LED3 out
+  Dir LED4 out
+  Dir SWITCH  in
+
+/*
+-------------------LATA-----------------
+Bit#:  -7---6---5---4---3---2---1---0---
+Type:   -------|LED|LED|SW |LED|LED|ADC
+Real:           RA5 RA4 RA3 RA2 RA1
+Name:   -------| 4 | 3 |SW | 2 | 1 |ANA0
+-----------------------------------------
+*/
+
+
+/*
+-------------------LATA-----------------
+Bit#:  -7---6---5---4---3---2---1---0---
+CAP:   -------|LED|LED|SW |LED|LED|ADC|-
+-----------------------------------------
+STATE TABLE
+STATE 1       | 0 | 0 |   | 0 | 1 |   |
+STATE 2       | 0 | 0 |   | 1 | 0 |   |
+STATE 3       | 0 | 1 |   | 0 | 0 |   |
+STATE 5       | 1 | 0 |   | 0 | 0 |   |
+
+*/
+
+
+  Dim LEDState as Integer
+  'Initilize the variable to zero
+  LEDState = 0
+
+  Dim Direction as Integer
+  Direction = -1
+
+
+  ' ----- Main body of program commences here.
+  Do Forever
+
+    Select Case LEDState
+      case 0
+        'Set one LED on... could 1 or ON
+        LED1 = 1
+        LED2 = 0
+        LED3 = 0
+        LED4 = 0
+      case 1
+        LED1 = 0
+        LED2 = 1
+        LED3 = 0
+        LED4 = 0
+      case 2
+        LED1 = 0
+        LED2 = 0
+        LED3 = 1
+        LED4 = 0
+      case 3
+        LED1 = 0
+        LED2 = 0
+        LED3 = 0
+        LED4 = 1
+    end select
+
+    LEDState = LEDState + Direction
+    If LEDState = 4  then LEDState = 0
+    If LEDState = -1 then LEDState = 3
+
+
+    wait 500 ms
+
+    if switch = 0 then
+        if Direction = 1 then
+          Direction = -1
+        else
+          Direction = 1
+        End if
+        wait while switch = 0
+    end if
+
+  Loop

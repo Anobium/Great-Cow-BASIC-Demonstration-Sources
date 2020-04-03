@@ -1,0 +1,12 @@
+#CHIP 16F18313
+
+    ' ----- Main body of program commences here.
+    Do Forever
+
+        'Lighten LED onboard LED for 100 milliseconds:
+        PulseOut RA1, 100 ms
+
+        'Then wait 900 milliseconds after LED goes off:
+        Wait 900 ms
+
+    Loop
