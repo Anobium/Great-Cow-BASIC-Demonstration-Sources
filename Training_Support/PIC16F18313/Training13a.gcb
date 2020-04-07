@@ -1,0 +1,34 @@
+#chip 16f18313,32         ' Declare the Target Processor and Speed
+#option explicit          ' Require Explicit declaration of Variables
+
+
+    #define LED1  RA1
+    Dir LED1 out
+
+/*
+
+1.  InitTimer0 source, prescaler + clocksource, postscaler
+
+2.  SetTimer ( 0. byte_value, value ), or
+    SetTimer ( 0. word_value [where the High byte sets the timer], value )
+
+3.  StartTimer 0
+
+    and, optionally use
+
+4.  ClearTimer 0
+
+*/
+
+
+InitTimer0 OSC, PRE0_16384 + TMR0_HFINTOSC, POST0_11
+SetTimer ( 0, 0xB100 )
+StartTimer 0
+
+Do
+
+    wait while TMR0IF = 0
+    LED1 = !LED1
+    TMR0IF = 0
+
+Loop
