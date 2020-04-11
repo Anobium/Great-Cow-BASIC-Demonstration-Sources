@@ -1,0 +1,96 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+'''This program uses the SoftSerial library for serial sending and receiving.
+''' SoftSerial uses ASM routines for minimal overhead.
+''' This sample receives a string
+'''  - with a given lenght or
+'''  - until a given end-char or
+'''  - after a given timeout (realized by a delaycounter).
+''' No use of timers or interrupts.
+''' ATTENTION: This sample uses inverted polarity for
+'''            direct connection to a native RS 232 comport!
+''':
+'''@author  Frank Steinberg
+'''@licence GPL
+'''@version 1.0
+'''@date    10.04.2020
+'''********************************************************************************
+
+; ----- Configuration
+#chip 12F1501, 16
+#option Explicit
+
+; ----- Include library
+#include <softserial.h>
+
+; ----- Config Serial UART (we use the onboard USB-serial converter):
+#define SER1_BAUD 38400    ; baudrate must be defined
+#define SER1_DATABITS 8    ; databits optional (default = 8)
+#define SER1_STOPBITS 1    ; stopbits optional (default = 1)
+#define SER1_INVERT On     ; INVERTED POLARITY for direct connection to a native RS 232 comport
+; Config I/O ports for transmitting:
+#define SER1_TXPORT PORTA  ; I/O port (without .bit) must be defined
+#define SER1_TXPIN 2       ; portbit  must be defined
+; Config I/O ports for receiving:
+#define SER1_RXPORT PORTA  ; I/O port (without .bit) must be defined
+#define SER1_RXPIN 0       ; portbit  must be defined
+#define SER1_RXNOWAIT On   ; don't wait for stopbit optional (default = Off)
+
+; ----- Constants
+#define RXTIMEOUT   38     ;Ser1GetString finishes after this timeout, 1 second = 38 on a 16 Mhz PIC
+#define RXMAXCHARS  20     ;Ser1GetString finishes when 20 bytes received
+#define RXENDCHAR   13     ;Ser1GetString finishes when Chr(13) = CR is received
+
+; ----- Variables
+Dim RecString As String * RXMAXCHARS
+
+; ----- Main body of program commences here.
+ Ser1Send 10   'new line in Terminal
+ Ser1Send 13
+ Ser1Print "Please send a string"
+
+ Do Forever
+
+   Ser1GetString()            'receive data via software-serial
+   Ser1Send 10                'new line in terminal
+   Ser1Send 13
+   If RecString(0) Then       'print string if data present
+     Ser1Print "You sent "
+     Ser1Print RecString(0)   'index null in a string (which is a byte-array) contains the actual lenght
+     Ser1Print " Bytes: "
+     'RecString(0) -= 1       'optional, if you don't want to print the last character
+     Ser1Print RecString      'send the string
+    Else                      'string length is zero, if nothing received within timeout
+     Ser1Print "! TimeOut !"  '... send a hint
+   End If
+
+ Loop
+
+
+'*** Receive data via Ser1-software-serial port and store to String 'RecString'
+Sub Ser1GetString()
+'    Finishes when ...
+'     1. received byte = RXENDCHAR or
+'     2. string has maximum lenght (RXMAXCHARS) or
+'     3. timeout reached (RXTIMEOUT)
+
+  Dim innerLoop As Long
+  Dim RecByteNr As Byte
+  RecByteNr = 0                             'number of received bytes
+
+  Repeat RXTIMEOUT                          'outer timeout-loop
+   innerLoop = 2950                         '2950 inner timeout-loops (~ 10ms on a 16Mhz AVR, ~26 ms on a 16Mhz PIC)
+    Do Until innerLoop = 0                  'inner timeout-loop
+      If SER1_RXPORT.SER1_RXPIN = 1 Then    'INVERTED polarity, we wait for a rising edge as startbit
+        RecByteNr += 1                      'increase byte-counter
+        RecString(RecByteNr) = Ser1Receive  'get byte and store to string
+        If RecByteNr = RXMAXCHARS Then Exit Repeat            'end receiving at max lenght of the string
+        If RecString(RecByteNr) = RXENDCHAR Then Exit Repeat  'end receiving if last byte is detected
+        innerLoop = 2950                    'reset inner timeout-counter for next byte receiving
+      End If
+      innerLoop -= 1                        'decrease inner timeout-loop
+    Loop
+  End Repeat
+  RecString(0) = RecByteNr                  'update length of string
+
+End Sub
