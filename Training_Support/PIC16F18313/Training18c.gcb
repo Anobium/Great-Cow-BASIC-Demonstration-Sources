@@ -1,0 +1,7 @@
+#chip 16F19156
+#option Explicit
+
+SAFWrite 0, 0x12
+SAFWrite 1, 0x13
+
+

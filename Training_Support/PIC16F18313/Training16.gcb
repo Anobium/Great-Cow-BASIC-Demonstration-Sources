@@ -1,4 +1,5 @@
 #chip 16f18313
+#config MCLR=ON
 #option Explicit
 #include <ds18b20.h>
 
@@ -39,8 +40,9 @@
  '''Set LCD_10 to 12 for the Ywmjkdz I2C adapter with pot bent over top of chip
 
 ; ----- Variables
-  dim TempC_100 as word   ' a variabler to handle the temperature calculations
-  Dim CCOUNT, SIGNBIT, WHOLE, FRACT, DIG as Byte
+  dim TempC_100 as LONG   ' a variabler to handle the temperature calculations
+  Dim DSdata,WHOLE, FRACT, DIG as word
+  Dim CCOUNT, SIGNBIT as Byte
 
 
 ; ----- Main body of program commences here.
@@ -60,7 +62,7 @@
        ' Display the integer value of the sensor on the LCD
        locate 0,0
        print hex(ccount)
-       print " Ceil"
+       print " Roundup "
        locate 0,8
        print DSdata
        print chr(223)+"C"
@@ -72,37 +74,32 @@
        ' The function readtemp12 returns the raw value of the sensor.
        ' The sensor is read as a 12 bit value therefore each unit equates to 0.0625 of a degree
        DSdata = readtemp12
+
+
        SignBit = DSdata / 256 / 128
        If SignBit = 0 Then goto Positive
        ' its negative!
        DSdata = ( DSdata # 0xffff ) + 1 ' take twos comp
 
+
     Positive:
+       ' Convert value * 0.0625 by factorisation
+       TempC_100 =  DSdata *  625
+       Whole = TempC_100 / 10000
+       Fract = TempC_100 % 10000
 
-       ' Convert value * 0.0625. Mulitple value by 6 then add result to multiplication of the value with 25 then divide result by 100.
-       TempC_100 =  DSdata * 6
-       DSdata = ( DSdata * 25 ) / 100
-       TempC_100 = TempC_100 + DSdata
 
-       Whole = TempC_100 / 100
-       Fract = TempC_100 % 100
        If SignBit = 0 Then goto DisplayTemp
        Print "-"
 
     DisplayTemp:
-       locate 1,0
-       print hex(ccount)
-       print " Real"
-       locate 1,8
-       print str(Whole)
-       print "."
-      ' To ensure the decimal part is two digits
-       Dig = Fract / 10
-       print Dig
-       Dig = Fract % 10
-       print Dig
-       print chr(223)
-       print "C"
+       Locate 2,0
+       print hex(ccount)+" "
+       Print Whole
+       Print "."
+       Print leftpad( str(Fract),4,"0")
+       Print chr(223)+"C"
+
        wait 2 s
        ccount++
 

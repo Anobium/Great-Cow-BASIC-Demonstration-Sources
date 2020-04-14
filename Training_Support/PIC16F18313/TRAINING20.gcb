@@ -1,0 +1,20 @@
+#chip 16F18313
+
+'#chip 18F27Q43
+'#chip 16F887a
+'#chip 12F1572
+'#chip 10f322
+
+
+#option  Explicit
+
+    Dim LEDState as Byte
+    LEDState = 1
+    Dir porta out
+    porta.1 = LEDstate
+
+
+
+
+
+

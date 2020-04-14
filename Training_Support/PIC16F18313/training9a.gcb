@@ -38,7 +38,6 @@ STATE 5       | 1 | 0 |   | 0 | 0 |   |
 
 */
 
-
   Dim LEDState as Integer
   'Initilize the variable to zero
   LEDState = 0

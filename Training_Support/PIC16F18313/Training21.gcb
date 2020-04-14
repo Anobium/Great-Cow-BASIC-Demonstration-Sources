@@ -1,0 +1,8 @@
+#chip 16f18313
+
+  Dir RA1 out
+
+  do
+    ra1 = !ra1
+    wait 200 ms
+  loop

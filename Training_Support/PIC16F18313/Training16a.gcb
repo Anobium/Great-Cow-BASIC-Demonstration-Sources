@@ -1,4 +1,5 @@
 #chip 16f18313
+#config MCLR=ON
 #option Explicit
 #include <ds18b20.h>
 
