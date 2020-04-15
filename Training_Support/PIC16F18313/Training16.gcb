@@ -63,7 +63,7 @@
        locate 0,0
        print hex(ccount)
        print " Roundup "
-       locate 0,8
+       locate 0,11
        print DSdata
        print chr(223)+"C"
 
@@ -93,8 +93,9 @@
        Print "-"
 
     DisplayTemp:
-       Locate 2,0
-       print hex(ccount)+" "
+       Locate 1,0
+       print hex(ccount)
+       Locate 1,6
        Print Whole
        Print "."
        Print leftpad( str(Fract),4,"0")
