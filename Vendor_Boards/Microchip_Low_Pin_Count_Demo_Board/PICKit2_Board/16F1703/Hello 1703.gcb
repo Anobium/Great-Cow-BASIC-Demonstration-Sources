@@ -1,0 +1,20 @@
+ #chip 16f1703
+ #option explicit
+
+
+
+    '' -------------------LATC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|DS4|DS3|DS2|DS1|-
+    ''-----------------------------------------
+    ''
+
+    Dim CURRENTSTATE as Byte
+
+    dir portc.0 out
+
+    do
+        wait 1000 ms
+        currentstate = 1 XOR portc.0
+        portc.0 = currentstate
+    loop
