@@ -1,0 +1,93 @@
+ '''A program  for GCGB and GCB the demonstrations
+'''-------------------------------------------------------------
+''' dummy 'Greenhouse temperature controller' demo
+''' using smart serial LCD / low pin-count demo board
+'''@author     HiB
+'''@licence    GPL
+'''@version    v1
+'''@date       25/4/2020
+'''*************************************************************
+
+; ----- Configuration
+    #Chip 16f1703,4
+    #Option Explicit
+
+    ; ----- Include library
+    #include <softserial.h>
+
+    ; ----- Config Serial UART :
+    #define SER1_BAUD 9600   ; baudrate must be defined
+    #define SER1_DATABITS 8    ; databits optional (default = 8)
+    #define SER1_STOPBITS 1    ; stopbits optional (default = 1)
+    #define SER1_INVERT Off    ; inverted polarity optional (default = Off)
+    ; Config I/O ports for transmitting:
+    #define SER1_TXPORT PORTA  ; I/O port (without .bit) must be defined
+    #define SER1_TXPIN 5       ; portbit  must be defined
+
+    #define LIGHT1 PORTC.0
+    #define LIGHT2 PORTC.1
+    #define LIGHT3 PORTC.2
+    #define Buzzer PORTC.3
+
+
+
+     Do
+      Temp = ReadAD(AN0) / 20 'divide A2D reading by 20
+
+      Select Case Temp
+        Case 0
+             Set LIGHT1 On
+             Set LIGHT2 Off
+             Set LIGHT3 Off
+             Set Buzzer Off
+
+             Ser1Send 13 'carriage return in Terminal
+             Ser1send 32 'centre text on display
+             Ser1send 32
+             Ser1send 32
+             Ser1Print "Heater ON "  'display status
+             Wait 1 s
+
+         Case 1
+            Set LIGHT1 Off
+            Set LIGHT2 On
+            Set LIGHT3 Off
+            Set Buzzer Off
+
+            Ser1Send 13
+            Ser1send 32
+            Ser1send 32
+            Ser1send 32
+            Ser1Print "Heater OFF"
+            Wait 1 s
+
+        Case 2
+            Set LIGHT1 Off
+            Set LIGHT2 Off
+            Set LIGHT3 On
+            Set Buzzer Off
+
+            Ser1Send 13
+            Ser1send 32
+            Ser1send 32
+            Ser1send 32
+            Ser1Print "  FAN ON    "
+            Wait 1 s
+
+        Case 3
+            Set LIGHT1 Off
+            Set LIGHT2 Off
+            Set LIGHT3 Off
+            Set Buzzer On
+
+            Ser1Send 13
+            Ser1send 32
+            Ser1send 32
+            Ser1send 32
+            Ser1print " OVER HEAT "
+            Wait 1 s
+
+      End Select
+
+      Wait 250 ms
+    Loop

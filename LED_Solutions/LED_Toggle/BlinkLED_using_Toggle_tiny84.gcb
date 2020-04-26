@@ -1,0 +1,13 @@
+#chip tiny84
+ #option explicit
+
+
+    Dim CURRENTSTATE as Byte
+
+    dir porta.0 out
+
+    do
+        wait 1000 ms
+        currentstate = 1 XOR porta.0
+        porta.0 = currentstate
+    loop

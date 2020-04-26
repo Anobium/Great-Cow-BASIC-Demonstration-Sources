@@ -1,0 +1,14 @@
+' basic blink for ATTiny10
+' ----- Configuration
+  #chip tiny10,1
+
+
+
+' ----- Main body of program commences here.
+  Do Forever
+
+     'Light LED on GPIO.1 for 100 milliseconds:
+     PulseOut porta.1, 100 ms
+     'Then wait 500 milliseconds after LED goes off:
+     Wait 500 ms
+  Loop
