@@ -1,0 +1,52 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program communicates between a PIC using software I2C and a PICAXE using I2C.
+'''The PICAXE is connected via I2C bus with suitable pullup resistors. The I2C Slave address is 0x60. The frequency of the PICAXE is critical.
+'''
+'''The PICAXE Master sends a value to the Slave and the Slave returns the value with 1 added to it.
+'''
+'''The PICAXE Master I2C bus is 25khz.  Any faster and communications may fail.
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.00
+'''@date       1/5/2020
+'''********************************************************************************
+
+; ----- Configuration
+'change the chip but the frequency must be matched with the Master. 4mhz may be slower practical working solution
+#chip 16F15376, 4
+
+
+  #define I2C_MODE    Slave     ;this is a slave device now
+  #define I2C_CLOCK   portd.1   ;change ports as appropiate
+  #define I2C_DATA    portd.0   ;change ports as appropiate
+  #define I2C_ADDRESS 0x60      ;address of the slave device
+
+  ;----- Variables
+  dim addr, reg, value as byte
+
+
+  wait 1 s                                   ;wait for programmers to settle
+  ;----- Program
+  do
+
+    if I2CStartOccurred then                ;wait for Start signal
+        I2CReceive( addr   )                ;then wait for an address
+        if I2CMatch  = true then            ;if it matches, proceed
+          I2CReceive( value )
+
+          'do stuff here....
+          value=value+1
+
+          wait while I2C_CLOCK =0           ;wait for transition
+          I2CReceive( addr  )               ;and its address
+          if ( addr OR 1 ) = ( I2C_ADDRESS OR 1 ) then    ;check it is the read address
+            I2CSend value, NAK                            ;send the data
+          end if
+          I2CStop
+
+        end if
+     end if
+
+  loop
