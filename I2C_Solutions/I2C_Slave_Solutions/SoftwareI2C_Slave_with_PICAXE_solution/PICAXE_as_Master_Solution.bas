@@ -2,10 +2,12 @@
 'Frequency of PIXACE is CRITICAL
 'This is has been tested to interoperate with a PIC at 4mHz
 '
-setfreq m1
+'setfreq m4 works with i2cslow_32 which gives a MASTER I2C clock frequency from the PICAXE of 12.5kHz.  If the I2C clock frequency is any faster then inter-PIC commumications will fail.
+'
+setfreq m4
 let b20=1
 test:
-	HI2cSetup I2CMASTER, $60, i2cslow_4, I2CBYTE 'I2C comms to PIC 
+	HI2cSetup I2CMASTER, $60, i2cslow_32, I2CBYTE 'I2C comms to PIC 
 	hi2cout (b20)
 	pause 10
 	hi2cin (b21)

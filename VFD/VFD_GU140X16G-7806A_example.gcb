@@ -1,0 +1,84 @@
+'  FILE:    PIC_GCB_VFD_Example
+'  DATE:    05/05/2020
+'  VERSION: 1.9
+'  AUTHOR:  Anobium
+'
+'This program was tested using the NORITAKE ITRON VFD GU140x16G-7806A
+'
+'THIS SOFTWARE IS PROVIDED "AS IS". HOBBY COMPONENTS MAKES NO WARRANTIES,
+'WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED
+'WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ACCURACY OR
+'LACK OF NEGLIGENCE. HOBBY COMPONENTS SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE
+'FOR ANY DAMAGES INCLUDING, BUT NOT LIMITED TO, SPECIAL, INCIDENTAL OR
+'CONSEQUENTIAL DAMAGES FOR ANY REASON WHATSOEVER.
+
+
+#chip 18f4525,20
+#config mclr=on
+
+
+'Use LCD in 4 pin mode and define LCD pins
+#DEFINE LCD_IO 4
+#DEFINE LCD_RW PORTE.1
+#DEFINE LCD_RS PORTE.0
+#DEFINE LCD_Enable PORTE.2
+
+#DEFINE LCD_DB4 PORTD.4
+#DEFINE LCD_DB5 PORTD.5
+#DEFINE LCD_DB6 PORTD.6
+#DEFINE LCD_DB7 PORTD.7
+
+  'Main program
+  do
+      'Clear the LCD
+      CLS
+      'Display some text on bot, 0xlines
+      Locate 0,0
+      Print "NORITAKE ITRON VFD "
+      Locate 1,0
+      Print "GU140x16G-7806A"
+      Wait 2 s
+      CLS
+      Print ChipNameStr + ": "+Str(ChipMHz) + "Mhz"
+
+      Locate 1,0
+      Print "Great Cow BASIC"
+      wait 1 s
+
+      dim TableLength, TablePosition, GraphicData as byte
+
+      ClS
+      'Send Char 1
+      SET LCD_RS OFF
+      ReadTable Graphics1, 0, TableLength
+      for TablePosition = 1 to TableLength
+        ReadTable Graphics1, TablePosition, GraphicData
+        LCDWriteByte ( GraphicData)
+        SET LCD_RS ON
+      next
+
+      'Send Char 2
+      SET LCD_RS OFF
+      ReadTable Graphics2, 0, TableLength
+      for TablePosition = 1 to TableLength
+        ReadTable Graphics2, TablePosition, GraphicData
+        LCDWriteByte ( GraphicData)
+        SET LCD_RS ON
+      next
+
+      wait 1 s
+  loop
+
+
+
+Table Graphics1
+0xF1, 0x30, 0x04, 0x37, 0x0B, 0x68, 0x1C, 0x5C, 0x48, 0x3E, 0x1D, 0x1D, 0x14, 0x36
+End Table
+
+Table Graphics2
+
+0xF1, 0x50, 0x00, 0x63, 0x0F, 0x76, 0x00, 0x00, 0x00, 0x00, 0x07, 0x04, 0xC7, 0xFE, 0x72, 0x73
+0x32, 0x3E, 0x3F, 0x1D, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+0x00, 0x3C, 0x42, 0x81, 0xB9, 0xC1, 0x42, 0x7C, 0x20, 0xD8
+0xFC, 0x3C, 0xFC, 0xCA, 0x49, 0xB1, 0x89, 0x42, 0x3C, 0x00
+End Table

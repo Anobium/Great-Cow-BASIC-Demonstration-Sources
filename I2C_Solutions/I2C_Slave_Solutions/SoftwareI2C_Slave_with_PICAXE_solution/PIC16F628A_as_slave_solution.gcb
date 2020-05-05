@@ -15,42 +15,56 @@
 
 ; ----- Configuration
 'change the chip but the frequency must be matched with the Master. 4mhz may be slower practical working solution
-#chip 16F15376, 4
+#chip 16f628, 4
+#option Explicit
+
+'PICinfo v1.0.3.14 generated config
 
 
-  #define I2C_MODE    Slave     ;this is a slave device now
-  #define I2C_CLOCK   portd.1   ;change ports as appropiate
-  #define I2C_DATA    portd.0   ;change ports as appropiate
-  #define I2C_ADDRESS 0x60      ;address of the slave device
+#config CP=OFF
+#config CPD=OFF
+#config LVP=OFF
+#config MCLRE=OFF
+#config OSC=XT
+#config WDTE=OFF
 
-  ;----- Variables
-  dim addr, reg, value as byte
+'end of config by PICinfo
 
 
-  wait 1 s                                   ;wait for programmers to settle
- ';----- Program
-  do
 
-      if I2CStartOccurred then ;wait for Start signal
-        I2CReceive( addr ) ;then wait for an address
 
-        if I2CMatch = true then ;if it matches, proceed
-            I2CReceive( value )
 
-            'do stuff here....
-            value=value+1
+#define I2C_MODE Slave ;this is a slave device now
+#define I2C_CLOCK portb.2
+#define I2C_DATA portb.1
+#define I2C_ADDRESS 0x60 ;address of the slave device
 
-            wait while !I2CStartOccurred
-            I2CReceive( addr ) ;and its address
+;----- Variables
+dim addr, reg, value as byte
 
-            if ( addr OR 1 ) = ( I2C_ADDRESS OR 1 ) then ;check it is the read address
+wait 1 s
+';----- Program
+do
 
-                I2CSend value
-            end if
+    if I2CStartOccurred then ;wait for Start signal
+      I2CReceive( addr ) ;then wait for an address
 
-        end if
+      if I2CMatch = true then ;if it matches, proceed
+          I2CReceive( value )
+
+          'do stuff here....
+          value=value+1
+
+          wait while !I2CStartOccurred
+          I2CReceive( addr ) ;and its address
+
+          if ( addr OR 1 ) = ( I2C_ADDRESS OR 1 ) then ;check it is the read address
+
+              I2CSend value
+          end if
 
       end if
 
-  loop
+    end if
 
+loop
