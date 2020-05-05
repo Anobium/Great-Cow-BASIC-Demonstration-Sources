@@ -19,7 +19,6 @@
  #config MCLRE_OFF
 
   #include <chipino.h>
-  #include <lowlevel\hwi2c2.h>
 
   #define SendAHigh Set PORTC.7 ON
   #define SendALow Set PORTC.7 OFF
