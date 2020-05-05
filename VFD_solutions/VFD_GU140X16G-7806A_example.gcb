@@ -13,7 +13,7 @@
 'CONSEQUENTIAL DAMAGES FOR ANY REASON WHATSOEVER.
 
 
-#chip 18f4525,20
+#chip 18f4525
 #config mclr=on
 
 
