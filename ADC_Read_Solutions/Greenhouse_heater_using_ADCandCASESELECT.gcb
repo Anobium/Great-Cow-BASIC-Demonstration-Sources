@@ -29,7 +29,7 @@
     #define LIGHT3 PORTC.2
     #define Buzzer PORTC.3
 
-
+    Dim Temp as Byte
 
      Do
       Temp = ReadAD(AN0) / 20 'divide A2D reading by 20
