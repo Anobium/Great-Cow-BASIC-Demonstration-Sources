@@ -24,7 +24,7 @@
 #include <softserial.h>
 
 ; ----- Config Serial UART (we use the onboard USB-serial converter):
-#define SER1_BAUD 38400    ; baudrate must be defined
+#define SER1_BAUD 19200    ; baudrate must be defined
 #define SER1_DATABITS 8    ; databits optional (default = 8)
 #define SER1_STOPBITS 1    ; stopbits optional (default = 1)
 #define SER1_INVERT Off    ; USB-serial converter needs uninverted polarity
