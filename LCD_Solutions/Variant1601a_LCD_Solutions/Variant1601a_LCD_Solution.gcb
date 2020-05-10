@@ -1,7 +1,10 @@
 '''A demonstration program for GCGB and GCB.
 '''--------------------------------------------------------------------------------------------------------------------------------
-'''This program demonstrates shows one LCD (16x2 & 16x4) being driven using a LCD I2C adapters.
-'''This uses the GCB software implementation of TWI/IC2 for AVR devices.
+'''This program demonstrates shows one LCD (16x1) being driven using an LCD I2C adapter.
+'''
+'''This is a sub type LCD and uses the additional constant called 1601a
+'''
+'''based on the NXP PCF8574T This uses the GCB software implementation of TWI/IC2 for AVR devices.
 '''Two types are supported as shown below.  This example is using "#define LCD_IO 10"
 '''- Set LCD_I0 to 10 for the YwRobot LCD1602 IIC V1 or the Sainsmart LCD_PIC I2C adapter.
 '''- Set LCD_I0 to 12 for the Ywmjkdz I2C adapter with pot bent over top of chip.
