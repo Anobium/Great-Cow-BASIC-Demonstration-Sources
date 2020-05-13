@@ -1,0 +1,104 @@
+'  FILE:    PIC_GCB_VFD_Example
+'  DATE:    12/05/2020
+'  VERSION: 1.0
+'  AUTHOR:  Anobium
+'
+'This program was tested using the NORITAKE ITRON VFD GU140x16G-7806A
+'
+'THIS SOFTWARE IS PROVIDED "AS IS". HOBBY COMPONENTS MAKES NO WARRANTIES,
+'WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED
+'WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ACCURACY OR
+'LACK OF NEGLIGENCE. HOBBY COMPONENTS SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE
+'FOR ANY DAMAGES INCLUDING, BUT NOT LIMITED TO, SPECIAL, INCIDENTAL OR
+'CONSEQUENTIAL DAMAGES FOR ANY REASON WHATSOEVER.
+
+
+#chip 18F47K42
+#config mclr=on
+
+
+
+'Use LCD in 4 pin mode and define LCD pins
+#DEFINE LCD_IO 4
+#DEFINE LCD_VFD_DELAY 250 us
+
+#DEFINE LCD_RW PORTE.1
+#DEFINE LCD_RS PORTE.0
+#DEFINE LCD_Enable PORTE.2
+
+#DEFINE LCD_DB4 PORTD.4
+#DEFINE LCD_DB5 PORTD.5
+#DEFINE LCD_DB6 PORTD.6
+#DEFINE LCD_DB7 PORTD.7
+
+
+'A load of VFD constants
+
+#define VFDFONT5x5            0x41   'A
+#define VFDFONT5x7            0x42   'B
+#define VFDFONT10x14          0x43   'C
+
+#define VFDFONTLarge          0x4C   'L
+#define VFDFONTInternational  0x49   'I
+#define VFDFONTI              0x49   'I
+
+#define VFDFONT5x7E    0x62   'b
+#define VFDFONT10x14E  0x63   'c
+
+#define VFDFONTPIXEL1 0x31   '1
+#define VFDFONTPIXEL2 0x32   '2
+
+#define  VFDInvertArea  0x49
+#define  VFDFillArea    0x46
+#define  VFDClearArea   0x43
+#define  VFDOutlineBox  0x4F
+#define  VFDClearBox    0x6F
+
+
+
+  Locate 0,4
+  Print "NORITAKE ITRON"
+  Locate 1,0
+  Print  "VFD GU140x16G-7806A"
+  wait 7 s
+  ClS
+
+  Print "Great Cow BASIC 2020"
+  Locate 1,0
+  Print "I/O Control"
+
+
+
+  'Set RXD to input and other ports to outputs
+  SET LCD_RS OFF
+  LCDWriteByte ( 0xF4 )
+  wait 250 us
+  SET LCD_RS ON
+  wait 250 us
+  LCDWriteByte ( 0x80 )
+
+  'Main program
+  do
+
+
+      'Turn on HB & MB be setting low.
+      SET LCD_RS OFF
+      LCDWriteByte ( 0xF6 )
+      wait 250 us
+      SET LCD_RS ON
+      wait 250 us
+      LCDWriteByte ( 0x02 )
+
+      wait 1 ms
+
+      'Turn off HB & MB be setting high
+      SET LCD_RS OFF
+      LCDWriteByte ( 0xF6 )
+      wait 250 us
+      SET LCD_RS ON
+      wait 250 us
+      LCDWriteByte ( 0xFF )
+
+      wait 1 ms
+
+  loop
