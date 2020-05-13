@@ -56,12 +56,19 @@
 
 
 
-  Print "Great Cow BASIC 2020"
+  Locate 0,4
+  Print "NORITAKE ITRON"
+  Locate 1,0
+  Print  "VFD GU140x16G-7806A"
   wait 7 s
+  ClS
+
+  Print "Great Cow BASIC 2020"
+  wait 1 s
   ClS
   VFDFontSelect (VFDFONT5x5  )
   Print "Great Cow BASIC 2020"
-  wait 2 s
+  wait 1 s
   ClS
 
 
@@ -102,6 +109,14 @@
       Print "Great Cow BASIC 2020"
       wait 1 s
       ClS
+
+      Locate 0,4
+      Print "NORITAKE ITRON"
+      Locate 1,0
+      Print  "VFD GU140x16G-7806A"
+      wait 2 s
+      ClS
+
 
   loop
 
