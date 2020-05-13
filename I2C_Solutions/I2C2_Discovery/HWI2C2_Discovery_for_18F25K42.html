@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Compilation Report</title>
+</head>
+<body>
+<h1>Compilation Report</h1>
+<p>Compiler Version (YYYY-MM-DD): 0.98.07 RC09 2020-04-20 (Windows 32 bit)</p>
+<h2>Compilation time</h2>
+<p> (Compile time: 1.398438 seconds)</p>
+<p> (Assembly time: 0 seconds)</p>
+<p> (Download time: 0 seconds)</p>
+<p> (Total time: 1.398438 seconds)</p>
+<h2>Chip resource usage:</h2>
+<p>Chip Model: 18F25K42</p>
+<p>Program Memory: 951/16384 words (5.8%)</p>
+<p>RAM: 58/2048 bytes (2.83%)</p>
+<p> OSC: HFINTOSC_1MHZ, 64Mhz (Internal oscillator)</p>
+<h2>RAM Allocation</h2>
+<table border="1">
+</table>
+<h2>Subroutines</h2>
+<table border="1">
+<tr><th>Name</th><th>Code Size (lines)</th><th>Compiled Size (words)</th><th>Outgoing calls</th></tr>
+<tr><td>Main</td><td>47</td><td>288</td><td>INITUSART(1), HI2C2INIT(16), SYSDIVSUB(1), SYSREADSTRING(9), Delay_S(1), SI2C2DISCOVERY(1), HEX(3), HSERPRINT(12), HSERPRINTCRLF(7), INITPPS(5), INITSYS(16)</td></tr>
+<tr><td>INITPPS</td><td>12</td><td>20</td><td></td></tr>
+<tr><td>INITSYS</td><td>712</td><td>30</td><td></td></tr>
+<tr><td>SYSREADSTRING</td><td>101</td><td>24</td><td></td></tr>
+<tr><td>SYSDIVSUB</td><td>48</td><td>22</td><td></td></tr>
+<tr><td>HEX</td><td>14</td><td>41</td><td></td></tr>
+<tr><td>INITUSART</td><td>144</td><td>13</td><td></td></tr>
+<tr><td>HSERSEND</td><td>132</td><td>22</td><td>Delay_MS(1)</td></tr>
+<tr><td>HSERPRINT</td><td>12</td><td>37</td><td>HSERSEND(1)</td></tr>
+<tr><td>HSERPRINTCRLF</td><td>4</td><td>18</td><td>HSERSEND(2)</td></tr>
+<tr><td>HI2C2INIT</td><td>4</td><td>3</td><td>SI2C2INIT(1)</td></tr>
+<tr><td>SI2C2INIT</td><td>16</td><td>27</td><td>SI2C2STOP(1), SI2C2SEND(1), SI2C2START(1)</td></tr>
+<tr><td>SI2C2START</td><td>3</td><td>5</td><td></td></tr>
+<tr><td>SI2C2STOP</td><td>15</td><td>47</td><td>SI2C2WAIT4STOP(1)</td></tr>
+<tr><td>SI2C2SEND</td><td>60</td><td>140</td><td>SI2C2WAIT4MDR(1), SI2C2WAIT4ACK(1)</td></tr>
+<tr><td>SI2C2WAIT4ACK</td><td>13</td><td>33</td><td></td></tr>
+<tr><td>SI2C2WAIT4MDR</td><td>12</td><td>30</td><td></td></tr>
+<tr><td>SI2C2WAIT4STOP</td><td>12</td><td>30</td><td></td></tr>
+<tr><td>SI2C2DISCOVERY</td><td>23</td><td>51</td><td>Delay_MS(1), SI2C2STOP(1)</td></tr>
+<tr><td>Delay_MS</td><td>0</td><td>18</td><td></td></tr>
+<tr><td>Delay_S</td><td>0</td><td>10</td><td>Delay_MS(1)</td></tr>
+<tr><td>SysStringTables</td><td>0</td><td>42</td><td></td></tr>
+</table>
+</body>
+</html>
