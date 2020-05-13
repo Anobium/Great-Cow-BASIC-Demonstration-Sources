@@ -1,6 +1,6 @@
-# Great-Cow-BASIC
+# NORITAKE ITRON VFD GU140x16G-7806A supported using Great-Cow-BASIC
 
-This GIT contains the latest user contributed demonstrations.
+This GIT contains the latest device driver for the VFD.
 
 
 # VFD
