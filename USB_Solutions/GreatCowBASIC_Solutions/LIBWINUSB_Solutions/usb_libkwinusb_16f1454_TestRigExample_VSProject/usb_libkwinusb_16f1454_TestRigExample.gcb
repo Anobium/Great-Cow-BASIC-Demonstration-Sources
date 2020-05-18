@@ -1,0 +1,203 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''
+'''Demonstration of the Great Cow BASIC capabilities for LibK/WinUSB library.  Use the Windows application to control!
+'''
+'''Connect the 16f1454 to the USB
+'''  D- to porta.1
+'''  D+ to porta.0
+'''  Cap between Vusb3V3 and 0V
+'''  You can provide supply voltage via the USB, or, you can provide local voltage.
+'''
+''' LEDs to ports suitable resistors as follows:
+'''
+''' KeepAlive LED PORTA.4
+'''
+''' REDLED        PORTA.5
+''' YELLOWLED     PORTC.0
+''' GREENLED      PORTC.1
+'''
+''' SWITCHES pulled high are as follows:
+'''
+''' INPUT1        PORTC.2       'IO5
+''' INPUT2        PORTC.3       'IO6
+''' INPUT3        PORTC.4       'IO7.  Note this is can be used as the Serial Out port.
+''' INPUT4        PORTC.5       'IO8
+'''
+'''
+''' A serial terminal at 115200bps can be connected to portc.4
+'''
+'''
+'''
+'''
+'''This program is the very first program for Great Cow BASICUSB
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.0
+'''@date       18/05/2020
+'''********************************************************************************
+
+' ----- Configuration
+    #chip 16f1454, 48
+    #include <usb.h>
+    #option Explicit
+    #config mclre_on
+    ' ----- Constants for the usb.h
+    #Define USB_PRODUCT_NAME  "GCASM-PIC Anobium's Test Rig"
+    #Define USB_VID 0x1209      'Should not be changed unless you have your own Vendor Identity - this VID is allocate to Great Cow BASIC Lib/WinUSB Solutions.
+    #Define USB_PID 0x2006      'Should not be changed unless you have your own Vendor Identity - this PID is allocate to Great Cow BASIC Lib/WinUSB Solutions.
+    #Define USB_REV 0x0000      'You MUST obtain a REV number from https://github.com/Anobium/GreatCowBASICpidcodes1209_2006 to develop your own Open Source USB solutions
+
+    'Constants that match the codes in the PC application
+    #Define USBDEVICEREADREDLEDSTATUS     130
+    #Define USBDEVICESETREDLEDON          131
+    #Define USBDEVICESETREDLEDOFF         132
+
+    #Define USBDEVICEREADYELLOWLEDSTATUS   133
+    #Define USBDEVICESETYELLOWLEDON        134
+    #Define USBDEVICESETYELLOWLEDOFF       135
+
+    #Define USBDEVICEREADGREENLEDSTATUS   136
+    #Define USBDEVICESETGREENLEDON        137
+    #Define USBDEVICESETGREENLEDOFF       138
+
+    #Define USBDEVICERPORTSTATUS          140
+
+    'Define USB specific callback handlers
+    'MANDATED to handle you solution
+    #Define USB_SETUP_HANDLER           SetupHandler_CallBack
+    'optional callback handlers for error and descriptor call.
+    #Define USB_ERROR_HANDLER           ErrorHandler_CallBack
+    #Define USB_DESCRIPTOR_HANDLER      DescriptorHandler_CallBack
+
+
+
+    'Solution specific configuration
+        'USART - if required.  This will impact use of INPUT3 as serial out
+'        #Define USART_BAUD_RATE 115200
+        #Define USART_BLOCKING
+
+    ' ------ Port assignments
+
+        #Define KEEPALIVELED  PORTA.4
+
+        #Define REDLED        PORTA.5
+        #Define REDLED_LAT    LATA.5
+
+        #Define YELLOWLED     PORTC.0
+        #Define YELLOWLED_LAT LATC.0
+
+        #Define GREENLED      PORTC.1
+        #Define GREENLED_LAT  LATC.1
+
+        Dir KEEPALIVELED      OUT
+        Dir REDLED            OUT
+        Dir YELLOWLED         OUT
+        Dir GREENLED          OUT
+
+        #Define INPUT1        PORTC.2       'IO5
+        #Define INPUT2        PORTC.3       'IO6
+        #Define INPUT3        PORTC.4       'IO7.  Note this is also the Serial Out port.
+        #Define INPUT4        PORTC.5       'IO8
+
+        Dir INPUT1            IN
+        Dir INPUT2            IN
+        Dir INPUT3            IN
+        Dir INPUT4            IN
+
+        ' ----- Main body of program commences here
+        Do
+              'Do nothing just wait for the USB Interrupt
+              'Do not sleep the MCU!!
+        Loop
+
+        end
+
+
+        ' ----- Support methods.  User call backs
+        Sub ErrorHandler_CallBack
+          #ifdef USART_BAUD_RATE
+              HSerPrint "Error: "
+              HSerPrint Hex(UEIR)
+              HSerPrintCRLF
+          #endif
+        End Sub
+
+        Sub SetupHandler_CallBack
+
+              Select Case USBRequest
+
+              'Red LED handler
+                    'Response to control request: Transfer USBDEVICEREADREDLEDSTATUS, send status of port
+                    Case USBDEVICEREADREDLEDSTATUS
+                      USBBufferWrite( REDLED_LAT )
+
+                    'Response to control request: Transfer USBDEVICESETREDLEDON, turn on LED
+                    Case USBDEVICESETREDLEDON
+                      Set REDLED On
+
+                    'Response to control request: Transfer USBDEVICESETREDLEDOFF, turn off LED
+                    Case USBDEVICESETREDLEDOFF
+                      Set REDLED Off
+
+              'Yellow LED handler
+                    'Response to control request: Transfer USBDEVICEREADYELLOWLEDSTATUS, send status of port
+                    Case USBDEVICEREADYELLOWLEDSTATUS
+                      USBBufferWrite( YELLOWLED_LAT )
+
+                    'Response to control request: Transfer USBDEVICESETYELLOWLEDON, turn on LED
+                    Case USBDEVICESETYELLOWLEDON
+                      Set YELLOWLED On
+
+                    'Response to control request: Transfer USBDEVICESETYELLOWLEDOFF, turn off LED
+                    Case USBDEVICESETYELLOWLEDOFF
+                      Set YELLOWLED Off
+
+              'Green LED handler
+                    'Response to control request: Transfer USBDEVICEREADGREENLEDSTATUS, send status of port
+                    Case USBDEVICEREADGREENLEDSTATUS
+                      USBBufferWrite( GREENLED_LAT )
+
+                    'Response to control request: Transfer USBDEVICESETGREENLEDON, turn on LED
+                    Case USBDEVICESETGREENLEDON
+                      Set GREENLED On
+
+                    'Response to control request: Transfer USBDEVICESETGREENLEDOFF, turn off LED
+                    Case USBDEVICESETGREENLEDOFF
+                      Set GREENLED Off
+
+
+                    Case USBDEVICERPORTSTATUS
+
+                      USBBufferWrite( INPUT1 )
+                      USBBufferWrite( INPUT2 )
+                      USBBufferWrite( INPUT3 )
+                      USBBufferWrite( INPUT4 )
+
+                'Response to control request: Transfer 255, keep alive
+                Case USBDEVICEKEEPALIVE
+                  USBBufferWrite( USBDEVICEKEEPALIVE )
+                  KEEPALIVELED = !KEEPALIVELED
+
+                'Handle the others via the serial port as we do not know what they are
+                Case Else
+                  #IFDEF USART_BAUD_RATE
+                      HSerPrint "Req "
+                      HSerPrint USBTempBuffer(1)
+                      HSerPrintCRLF
+                  #ENDIF
+              End Select
+
+        End Sub
+
+
+
+
+        Sub DescriptorHandler_Callback
+            #IFDEF USART_BAUD_RATE
+                HSerPrint "Desc: "
+                HSerPrint USBDescType
+                HSerPrintCRLF
+            #ENDIF
+        End Sub

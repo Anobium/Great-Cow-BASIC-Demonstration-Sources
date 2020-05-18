@@ -7,11 +7,11 @@
 '''  D- to porta.1
 '''  D+ to porta.0
 '''  Cap between Vusb3V3 and 0V
-'''  You can provide supply voltage via the USB, or, you can prpoved local voltage.
+'''  You can provide supply voltage via the USB, or, you can provide local voltage.
 '''
 ''' LEDs to ports a.5, c.0 and c.1 via suitable resistors.  They are KeepAlive LED and two LEDs for remote control
 ''' POTS to ports a.0, a.1, a.2 and a.3,  you will read those remotely
-''' A serrial terminal at 115200bps can be connected to portc.4
+''' A serial terminal at 115200bps can be connected to portc.4
 '''
 ''' Use the Windows application to control!
 '''

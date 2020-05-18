@@ -1,0 +1,51 @@
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_100 - Copy\VBProject\bin\Debug\GCBLIBKWINUSB.exe
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_100 - Copy\VBProject\bin\Debug\GCBLIBKWINUSB.pdb
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_100 - Copy\VBProject\obj\Debug\GCBLIBKWINUSB.vbprojResolveAssemblyReference.cache
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_100 - Copy\VBProject\obj\Debug\GCBLIBKWINUSB.MainForm.resources
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_100 - Copy\VBProject\obj\Debug\GCBLIBKWINUSB.vbproj.GenerateResource.Cache
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_100 - Copy\VBProject\obj\Debug\GCBLIBKWINUSB.exe
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_100 - Copy\VBProject\obj\Debug\GCBLIBKWINUSB.pdb
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_102\VBProject\obj\Debug\GCBLIBKWINUSB.exe
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_102\VBProject\obj\Debug\GCBLIBKWINUSB.pdb
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_103\VBProject\bin\Debug\GCBLIBKWINUSB.exe
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_103\VBProject\bin\Debug\GCBLIBKWINUSB.pdb
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_103\VBProject\obj\Debug\GCBLIBKWINUSB.vbprojResolveAssemblyReference.cache
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_103\VBProject\obj\Debug\GCBLIBKWINUSB.MainForm.resources
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_103\VBProject\obj\Debug\GCBLIBKWINUSB.vbproj.GenerateResource.Cache
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_103\VBProject\obj\Debug\GCBLIBKWINUSB.exe
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_103\VBProject\obj\Debug\GCBLIBKWINUSB.pdb
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\bin\Debug\GCBLIBKWINUSB.exe
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\bin\Debug\GCBLIBKWINUSB.pdb
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.vbprojResolveAssemblyReference.cache
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.MainForm.resources
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.vbproj.GenerateResource.Cache
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.exe
+C:\Users\admin\Desktop\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.pdb
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.exe
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.pdb
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\bin\Debug\GCBLIBKWINUSB.exe
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\bin\Debug\GCBLIBKWINUSB.pdb
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.MainForm.resources
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.vbproj.GenerateResource.Cache
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.Resources.resources
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.vbproj.CoreCompileInputs.cache
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.vbproj.CopyComplete
+D:\Great-Cow-BASIC-Library-Development\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.vbprojResolveAssemblyReference.cache
+D:\Great-Cow-BASIC-Library-Development\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.MainForm.resources
+D:\Great-Cow-BASIC-Library-Development\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.Resources.resources
+D:\Great-Cow-BASIC-Library-Development\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.vbproj.GenerateResource.Cache
+D:\Great-Cow-BASIC-Library-Development\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.exe
+D:\Great-Cow-BASIC-Library-Development\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.pdb
+D:\Great-Cow-BASIC-Library-Development\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\bin\Debug\GCBLIBKWINUSB.exe
+D:\Great-Cow-BASIC-Library-Development\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\bin\Debug\GCBLIBKWINUSB.pdb
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104\VBProject\obj\Debug\GCBLIBKWINUSB.vbprojAssemblyReference.cache
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104 - 16f1454\VBProject\bin\Debug\GCBLIBKWINUSB.exe
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104 - 16f1454\VBProject\bin\Debug\GCBLIBKWINUSB.pdb
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104 - 16f1454\VBProject\obj\Debug\GCBLIBKWINUSB.vbprojAssemblyReference.cache
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104 - 16f1454\VBProject\obj\Debug\GCBLIBKWINUSB.MainForm.resources
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104 - 16f1454\VBProject\obj\Debug\GCBLIBKWINUSB.Resources.resources
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104 - 16f1454\VBProject\obj\Debug\GCBLIBKWINUSB.vbproj.GenerateResource.cache
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104 - 16f1454\VBProject\obj\Debug\GCBLIBKWINUSB.vbproj.CoreCompileInputs.cache
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104 - 16f1454\VBProject\obj\Debug\GCBLIBKWINUSB.vbproj.CopyComplete
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104 - 16f1454\VBProject\obj\Debug\GCBLIBKWINUSB.exe
+D:\Great-Cow-BASIC-Library-Development.git\trunk\USB_Serial\GCB Library\Tools\VS.NET Projects\GCBLIBKWINUSB\GCBLIBKWINUSB_104 - 16f1454\VBProject\obj\Debug\GCBLIBKWINUSB.pdb

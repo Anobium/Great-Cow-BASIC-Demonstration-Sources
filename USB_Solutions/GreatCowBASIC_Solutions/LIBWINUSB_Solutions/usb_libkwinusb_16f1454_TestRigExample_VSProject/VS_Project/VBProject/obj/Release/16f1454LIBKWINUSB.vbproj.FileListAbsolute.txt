@@ -1,0 +1,10 @@
+D:\Projects\USB_Board\16F1454\VBProject\bin\Release\16f1454LIBKWINUSB.exe.config
+D:\Projects\USB_Board\16F1454\VBProject\bin\Release\16f1454LIBKWINUSB.exe
+D:\Projects\USB_Board\16F1454\VBProject\bin\Release\LibUsbDotNet.dll
+D:\Projects\USB_Board\16F1454\VBProject\obj\Release\16f1454LIBKWINUSB.vbprojAssemblyReference.cache
+D:\Projects\USB_Board\16F1454\VBProject\obj\Release\LIBKWINUSB.MainForm.resources
+D:\Projects\USB_Board\16F1454\VBProject\obj\Release\LIBKWINUSB.Resources.resources
+D:\Projects\USB_Board\16F1454\VBProject\obj\Release\16f1454LIBKWINUSB.vbproj.GenerateResource.cache
+D:\Projects\USB_Board\16F1454\VBProject\obj\Release\16f1454LIBKWINUSB.vbproj.CoreCompileInputs.cache
+D:\Projects\USB_Board\16F1454\VBProject\obj\Release\16f1454LIBKWINUSB.vbproj.CopyComplete
+D:\Projects\USB_Board\16F1454\VBProject\obj\Release\16f1454LIBKWINUSB.exe
