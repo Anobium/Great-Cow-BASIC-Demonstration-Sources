@@ -1,0 +1,19 @@
+' Install the software
+' Connect the Chip
+' Create this simple program to verify all is good
+' Program changing the programming setup
+' Program and review LED is flashing
+
+
+#CHIP 16F1939
+
+    ' ----- Main body of program commences here.
+    Do Forever
+
+        'Lighten LED onboard LED for 100 milliseconds:
+        PulseOut RA1, 100 ms
+
+        'Then wait 900 milliseconds after LED goes off:
+        Wait 900 ms
+
+    Loop
