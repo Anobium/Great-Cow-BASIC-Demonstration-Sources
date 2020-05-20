@@ -1,0 +1,27 @@
+#CHIP 16F1939
+
+' Connect another 200ohm resistor (or greater) to the Porta.2 and the the LED to the resistor and 0v.
+' Create and program this code.  The code toggles the LED.
+' Where is the frequency specified?
+' Where is the config?
+' Where is the setup of the frequency?
+' Where is the WAIT command specified?
+' How is the WAIT injested into the code?
+' How can refer to RA1 but the port is called PORTA.1 and PORTA.2 ?
+
+
+  Dir RA1 out
+  Dir RA2 out
+
+  'Set initial value
+  RA1 = 0
+  RA2 = 1
+
+  ' ----- Main body of program commences here.
+  Do Forever
+
+    wait 1 s
+    RA1 = NOT RA1
+    RA2 = NOT RA1
+
+  Loop

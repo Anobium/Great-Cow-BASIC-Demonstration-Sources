@@ -1,0 +1,28 @@
+#CHIP 16F1939
+
+' We are defining a BYTE variable called LEDState.  What other types of variables are supported?
+' Is there a better variable type to use that uses less memory?
+' Why does the program never end?
+
+  Dir RA1 out
+  Dir RA2 out
+
+  Dim LEDState as Byte
+  LEDState = 0
+
+  ' ----- Main body of program commences here.
+  Do Forever
+
+    IF LEDState = 0 then
+      RA1 = 1
+      RA2 = 0
+      LEDState = 1
+    else
+      RA1 = 0
+      RA2 = 1
+      LEDState = 0
+    end if
+
+    wait 100 ms
+
+  Loop
