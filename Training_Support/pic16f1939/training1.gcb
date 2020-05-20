@@ -1,5 +1,6 @@
 ' Install the software
 ' Connect the Chip
+' Connect a 200ohm resistor (or greater) to the Porta.1 and the the LED to the resistor and 0v.
 ' Create this simple program to verify all is good
 ' Connect your programmer
 ' Change the programming setup
