@@ -1,0 +1,38 @@
+#chip mega328p, 16
+#option Explicit
+;for terminal distance out
+#define USART_BAUD_RATE 9600
+#define USART_TX_BLOCKING
+#define USART_DELAY 1 ms
+;set up v53l0x
+#define HI2C_DATA PORTC.5;sda
+#define HI2C_CLOCK PORTC.4 ;scl
+#define HI2C_BAUD_RATE 400
+HI2CMode Master
+;main Get Distance----
+dim distance_lo,distance_hi as byte
+
+HI2CStart ;software restart
+HI2CSend(0x52)
+HI2CSend(0x89)
+HI2CSend(0x01)
+HI2CStop
+wait 200 ms
+do ;------------------------
+  HI2CStart ;Sys Range Start
+  HI2CSend(0x52)
+  HI2CSend(0x00)
+  HI2CSend(0x01)
+  HI2CStop
+
+  HI2CStart ;read distance
+  HI2CSend(0x52)
+  HI2CSend(0x1e)
+  HI2CReStart
+  HI2CSend(0x52 or 1) ;set the read flag
+  HI2CReceive(distance_hi)
+  HI2CReceive(distance_lo, NACK) ;read one byte and conclude
+  HI2CStop
+
+  hserprint " Distance: "+str(distance_hi*256+distance_lo)+"  mm ";
+ loop
