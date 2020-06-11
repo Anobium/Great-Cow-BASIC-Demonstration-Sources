@@ -1,0 +1,67 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+'''This program uses the SoftSerial library for serial sending and receiving.
+''' SoftSerial uses ASM routines for minimal overhead.
+''' Ser1Receive stops programm execution until a startbit-impulse is detected.
+''' See other samples how to realize timeouts or interrupt-driven receiving.
+''':
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    11/06/2020
+'''********************************************************************************
+
+; ----- Configuration
+#chip tiny9,  1
+#option Explicit
+
+; ----- Include library
+#include <softserial.h>
+
+; ----- Config Serial UART :
+#define SER1_BAUD 9600    ; baudrate must be defined
+#define SER1_DATABITS 8    ; databits optional (default = 8)
+#define SER1_STOPBITS 1    ; stopbits optional (default = 1)
+#define SER1_INVERT Off    ; inverted polarity optional (default = Off)
+; Config I/O ports for transmitting:
+#define SER1_TXPORT PORTB  ; I/O port (without .bit) must be defined
+#define SER1_TXPIN 1       ; portbit  must be defined
+; Config I/O ports for receiving:
+#define SER1_RXPORT PORTB  ; I/O port (without .bit) must be defined
+#define SER1_RXPIN 2       ; portbit  must be defined
+#define SER1_RXNOWAIT Off  ; don't wait for stopbit optional (default = Off)
+
+; ----- Variables
+Dim RecByte As Byte
+Dim myString as String * 19
+  myString = "Please send a byte!"
+; ----- Main body of program commences here.
+
+
+    Repeat 2
+        Ser1Send 10   'new line in Terminal
+        Ser1Send 13
+    end Repeat
+    Repeat 20
+        Ser1Print myString  'send a text
+        Ser1Send myString( 19 )
+        Ser1Send 10   'new line in Terminal
+        Ser1Send 13
+    End Repeat
+
+    dir portb.0 out
+    Do
+        pulseout portb.0, 100 ms
+        wait 100 ms
+        Ser1Send "."
+    Loop
+'
+' Do Forever
+'
+'  RecByte = Ser1Receive      'receive one byte - wait until detecting startbit
+'  Ser1Send  13               'new line in Terminal
+'  Ser1Send  10               '
+'  Ser1Print "You sent: "  'send a text
+'  Ser1Send RecByte           'send the sign representing the byte
+'
+' Loop
