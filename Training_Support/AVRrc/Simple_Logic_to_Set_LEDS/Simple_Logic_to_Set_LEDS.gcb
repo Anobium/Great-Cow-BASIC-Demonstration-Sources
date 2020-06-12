@@ -1,6 +1,6 @@
 '''A demonstration program for GCB
 '''---------------------------------------------------------------------------------
-''' This program shows logic test in the AVRrc chips
+''' This program shows logic test in the AVRrc chips - change the constant CURRENTTEST to change the program
 '''
 '''
 '''@author  Evan Venn
@@ -36,8 +36,6 @@
   'See inline
 
 ; ----- Main body of program commences here.
-
-
 
   #IFDEF  CURRENTTEST 1
     'Test 1 - should toggle when switch is pushed

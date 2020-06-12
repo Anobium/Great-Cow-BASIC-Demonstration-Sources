@@ -62,16 +62,6 @@ sub WDDelay ( in WDtimerDelay )
   'Enable Interrupt
   WDIE = 1
 
-
-/*
-  'Set WDT Bits
-  WDTCSR = WDTCSR OR ( WDtimerDelay and 7 )
-  'Shift WDtimerDelay to the LEFT by two bits. Is this the fastest method?
-  Rotate WDtimerDelay Left
-  Rotate WDtimerDelay Left
-  WDTCSR = WDTCSR OR ( WDtimerDelay and 32 )
-*/
-
   'Heisenburg - the ASM fails
   WDP3 = WDtimerDelay.3
   WDP2 = WDtimerDelay.2
