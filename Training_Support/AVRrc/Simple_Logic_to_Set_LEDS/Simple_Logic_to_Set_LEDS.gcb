@@ -1,6 +1,6 @@
 '''A demonstration program for GCB
 '''---------------------------------------------------------------------------------
-''' This program shows how use ...
+''' This program shows logic test in the AVRrc chips
 '''
 '''
 '''@author  Evan Venn
@@ -29,18 +29,18 @@
   Dir GreenLEd   out
   Dir YellowLED  out
 
-  #Define CURRENTTEST 3
+  #Define CURRENTTEST 1
 
 
 ; ----- Variables
-
+  'See inline
 
 ; ----- Main body of program commences here.
 
 
 
   #IFDEF  CURRENTTEST 1
-    'Test 1
+    'Test 1 - should toggle when switch is pushed
     do
         if Switch then
             GreenLED = On
@@ -54,7 +54,7 @@
 
 
   #IFDEF  CURRENTTEST 2
-    'Test2
+    'Test2 - should toggle when switch is pushed
     dim SwitchState as Byte
     do
         SwitchState = Switch
@@ -70,11 +70,10 @@
 
 
   #IFDEF  CURRENTTEST 3
-    'Test3
+    'Test3 - Should toggle every 500ms
     dim SwitchState as Byte
     SwitchState = 0
     do
-
         if SwitchState then
             GreenLED = On
             YellowLED = Off
