@@ -1,0 +1,154 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows how use WDT to generate delays.
+'''
+''' This method reduces power consumption during the operation, however, uses more PROGMEM than the Great Cow BASIC `wait` instruction.
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    11/06/2020
+'''********************************************************************************
+
+; ----- Configuration
+#chip tiny9,  1
+#option Explicit
+
+; ----- Include library
+#include <softserial.h>
+
+; ----- Variables
+  'None
+
+; ----- Main body of program commences here.
+
+    dir portb.0 out
+    Do
+        portb.0 = !portb.0
+        'Use Watchdog for time delay; n=0 is ~19ms; n=6 is ~1.151secs ; n=9 is 9.25secs,
+        WDDelay ( 6 )
+        Ser1Send 46
+    Loop
+
+
+End
+
+
+
+
+
+
+; ----- Config Serial UART :
+#define SER1_BAUD 9600    ; baudrate must be defined
+#define SER1_DATABITS 8    ; databits optional (default = 8)
+#define SER1_STOPBITS 1    ; stopbits optional (default = 1)
+#define SER1_INVERT Off    ; inverted polarity optional (default = Off)
+; Config I/O ports for transmitting:
+#define SER1_TXPORT PORTB  ; I/O port (without .bit) must be defined
+#define SER1_TXPIN 1       ; portbit  must be defined
+; Config I/O ports for receiving:
+#define SER1_RXPORT PORTB  ; I/O port (without .bit) must be defined
+#define SER1_RXPIN 2       ; portbit  must be defined
+#define SER1_RXNOWAIT Off  ; don't wait for stopbit optional (default = Off)
+
+
+' ----- Subs
+
+'Use Watchdog for time delay; n=0 is ~19ms; n=6 is ~1.151secs ; n=9 is 9.25secs
+sub WDDelay ( in WDtimerDelay )
+
+  'Set SM1 to permit use of sleep
+  SM1=1
+  'Enable Interrupt
+  WDIE = 1
+
+
+  'Set WDT Bits
+  WDTCSR = WDTCSR OR ( WDtimerDelay and 7 )
+  'Shift WDtimerDelay to the LEFT by two bits. Is this the fastest method?
+  Rotate WDtimerDelay Left
+  Rotate WDtimerDelay Left
+  WDTCSR = WDTCSR OR ( WDtimerDelay and 32 )
+
+
+/*
+  'Heisenburg - the ASM fails
+  WDP3 = WDtimerDelay.3
+  WDP2 = WDtimerDelay.2
+  WDP1 = WDtimerDelay.1
+  WDP0 = WDtimerDelay.0
+*/
+
+
+/*
+  'Long hand setup of the bits to test the WDT capability - works but expensive in terms of PROGMEM
+  if WDtimerDelay.3 = 1 then
+    WDP3 = 1
+  else
+    WDP3 = 0
+  end if
+
+  if WDtimerDelay.2 = 1 then
+    WDP2 = 1
+  else
+    WDP2 = 0
+  end if
+
+  if WDtimerDelay.1 = 1 then
+    WDP1 = 1
+  else
+    WDP1 = 0
+  end if
+
+  if WDtimerDelay.0 = 1 then
+    WDP0 = 1
+  else
+    WDP0 = 0
+  end if
+*/
+
+  SE = 1 'sleep_enable
+  SLEEP  'sleep_cpu
+
+end sub
+
+sub Interrupt
+    'Handle Watchdog event
+    If WDIE = 1 then
+      WDIE = 0
+    End if
+end sub
+
+
+'Script to resolve oscillator
+
+
+    #IFNDEF ChipMHz 1
+      'As Great Cow BASIC does not set the AVR frequency per chipfamily - set here.
+      'Unlock the  frequency register where 0xD8 is the correct signature for the AVRrc chips
+      CCP = 0xD8
+      #IFDEF ChipMHz 8
+        CLKPSR = 0
+      #ENDIF
+      #IFDEF ChipMHz 4
+        CLKPSR = 1
+      #ENDIF
+      #IFDEF ChipMHz 2
+        CLKPSR = 2
+      #ENDIF
+      #IFDEF ChipMHz 0.5
+        CLKPSR = 4
+      #ENDIF
+      #IFDEF ChipMHz 0.25
+        CLKPSR = 5
+      #ENDIF
+      #IFDEF ChipMHz 0.125
+        CLKPSR = 6
+      #ENDIF
+      #IFDEF ChipMHz 0.0625
+        CLKPSR = 7
+      #ENDIF
+      #IFDEF ChipMHz 0.03125
+        CLKPSR = 8
+      #ENDIF
+    #ENDIF
