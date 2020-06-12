@@ -62,12 +62,22 @@ sub WDDelay ( in WDtimerDelay )
   'Enable Interrupt
   WDIE = 1
 
+
+/*
   'Set WDT Bits
   WDTCSR = WDTCSR OR ( WDtimerDelay and 7 )
   'Shift WDtimerDelay to the LEFT by two bits. Is this the fastest method?
   Rotate WDtimerDelay Left
   Rotate WDtimerDelay Left
   WDTCSR = WDTCSR OR ( WDtimerDelay and 32 )
+*/
+
+  'Heisenburg - the ASM fails
+  WDP3 = WDtimerDelay.3
+  WDP2 = WDtimerDelay.2
+  WDP1 = WDtimerDelay.1
+  WDP0 = WDtimerDelay.0
+
 
   SE = 1 'sleep_enable
   SLEEP  'sleep_cpu
@@ -75,9 +85,10 @@ sub WDDelay ( in WDtimerDelay )
 end sub
 
 sub Interrupt
-    'Clear Watchdog event
-    If WDIE = 1 then WDIE = 0
-
+    'Handle Watchdog event
+    If WDIE = 1 then
+      WDIE = 0
+    End if
 end sub
 
 

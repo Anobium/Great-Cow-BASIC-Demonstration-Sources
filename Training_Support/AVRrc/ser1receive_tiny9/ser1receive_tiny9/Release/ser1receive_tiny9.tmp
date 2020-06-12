@@ -1,0 +1,55 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.1.57</VERSION>
+ <DEVICE>"ATtiny9"</DEVICE>
+ <WORKING_DIR>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\Release</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\tn9def.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\Release/ser1receive_tiny9.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>ser1receive_tiny9.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>ser1receive_tiny9.map</FILE>
+  <FILE>ser1receive_tiny9.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <BASPROGRAMSTART><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>87</LINE></BASPROGRAMSTART>
+  <INITSYS><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>241</LINE></INITSYS>
+  <STX1PINSETUP><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>348</LINE></STX1PINSETUP>
+  <StringTable1><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>426</LINE></StringTable1>
+  <SysReadString><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>362</LINE></SysReadString>
+  <SysRepeatLoop1><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>137</LINE></SysRepeatLoop1>
+  <SER1SEND><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>301</LINE></SER1SEND>
+  <SysRepeatLoopEnd1><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>151</LINE></SysRepeatLoopEnd1>
+  <SysRepeatLoop2><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>155</LINE></SysRepeatLoop2>
+  <SER1PRINT4><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>254</LINE></SER1PRINT4>
+  <SysRepeatLoopEnd2><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>179</LINE></SysRepeatLoopEnd2>
+  <SysDoLoop_S1><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>183</LINE></SysDoLoop_S1>
+  <Delay_MS><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>221</LINE></Delay_MS>
+  <SysDoLoop_E1><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>204</LINE></SysDoLoop_E1>
+  <BASPROGRAMEND><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>215</LINE></BASPROGRAMEND>
+  <DMS_START><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>223</LINE></DMS_START>
+  <DMS_OUTER><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>225</LINE></DMS_OUTER>
+  <DMS_INNER><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>227</LINE></DMS_INNER>
+  <SER1PRINTSTREND><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>295</LINE></SER1PRINTSTREND>
+  <SysForLoopEnd1><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>293</LINE></SysForLoopEnd1>
+  <SysForLoop1><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>272</LINE></SysForLoop1>
+  <STX1LOOP><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>312</LINE></STX1LOOP>
+  <STX1ONE><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>318</LINE></STX1ONE>
+  <STX1DONE><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>323</LINE></STX1DONE>
+  <STX1DELAY><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>327</LINE></STX1DELAY>
+  <SYSSTRINGREADCHECK><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>396</LINE></SYSSTRINGREADCHECK>
+  <SYSREADSTRINGPART><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>383</LINE></SYSREADSTRINGPART>
+  <SYSSTRINGREAD><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>405</LINE></SYSSTRINGREAD>
+  <SysStringTables><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>424</LINE></SysStringTables>
+  <StringTable2><FILE>D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm</FILE><LINE>430</LINE></StringTable2>
+ </LABELS>
+</ASSEMBLER_INFO>

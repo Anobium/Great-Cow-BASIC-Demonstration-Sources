@@ -49,6 +49,7 @@ Dim myString as String * 19
         Ser1Send 13
     End Repeat
 
+
     dir portb.0 out
     Do
         pulseout portb.0, 100 ms
