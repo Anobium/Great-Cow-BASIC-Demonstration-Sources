@@ -1,0 +1,152 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows PWM duty changer test in the AVRrc chips - change the constant CURRENTTEST to change the program
+'''
+''' Change TCCR0B to change the frequency.  OCR0AL controls the DUTY
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    11/06/2020
+'''********************************************************************************
+
+; ----- Configuration
+#chip tiny9,  1
+#option Explicit
+
+; ----- Include library
+#include <softserial.h>
+
+; ----- Constants
+
+  #DEFINE RedLED PORTB.2
+  #DEFINE GreenLED PORTB.1
+  #DEFINE YellowLED PORTB.0
+
+
+  #Define CURRENTTEST 1
+
+
+; ----- Variables
+  'See inline
+
+; ----- Main body of program commences here.
+
+  #IFDEF  CURRENTTEST 1
+    'Test 1
+
+      dir Portb.0 out
+      dir Portb.1 out
+      dir Portb.2 out
+      portb.1 = 1
+      portb.2 = 0
+
+      COM0A1 = 1: COM0A0 = 0                       ' Set OC0A1 Low for a port that is PULLED HIGH, examine COM0A1 and COM0A0 for other options
+      WGM00  = 1: WGM01 = 1                        ' Set OC0A1 Low , Fast 10bit PWM mode
+      WGM02  = 1: TCCR0B = TCCR0B or 2             ' Fast PWM with OCR0A as TOP;  clkI/O/8 (From prescaler)
+
+        'Main loop
+        'Simply index OCR0AL to change the DUTY %
+
+        Dim OCR0A as word
+        OCR0A = 0
+
+        do
+              '10 bit addressing by using 1024
+              repeat 1024
+                OCR0AH = OCR0A_h
+                OCR0AL = OCR0A
+                OCR0A++
+                wait 1 ms
+              end repeat
+              portb.1 = !portb.1
+              portb.2 = !portb.2
+              repeat 1024
+                OCR0AH = OCR0A_h
+                OCR0AL = OCR0A
+                OCR0A--
+                wait 1 ms
+              end repeat
+              portb.1 = !portb.1
+              portb.2 = !portb.2
+        Loop
+
+  #ENDIF
+
+
+  #IFDEF  CURRENTTEST 2
+    'Test2 -
+    dir Portb.0 out
+    dir Portb.1 out
+    dir Portb.2 out
+    portb.0 = 1
+    portb.1 = 1
+    portb.2 = 1
+
+    do
+
+    loop
+  #ENDIF
+
+
+  #IFDEF  CURRENTTEST 3
+    'Test3 -
+  #ENDIF
+
+
+End
+
+
+
+; ----- Config Serial UART :
+#define SER1_BAUD 600      ; baudrate must be defined
+#define SER1_DATABITS 8    ; databits optional (default = 8)
+#define SER1_STOPBITS 1    ; stopbits optional (default = 1)
+#define SER1_INVERT Off    ; inverted polarity optional (default = Off)
+; Config I/O ports for transmitting:
+#define SER1_TXPORT PORTB  ; I/O port (without .bit) must be defined
+#define SER1_TXPIN 1       ; portbit  must be defined
+; Config I/O ports for receiving:
+#define SER1_RXPORT PORTB  ; I/O port (without .bit) must be defined
+#define SER1_RXPIN 2       ; portbit  must be defined
+#define SER1_RXNOWAIT Off  ; don't wait for stopbit optional (default = Off)
+
+
+' ----- Subs
+
+
+
+'Script to resolve oscillator
+
+Sub Init
+      'As Great Cow BASIC does not set the AVR frequency per chipfamily - set here.
+      'Unlock the  frequency register where 0xD8 is the correct signature for the AVRrc chips
+      CCP = 0xD8
+      #IFDEF ChipMHz 8
+        CLKPSR = 0
+      #ENDIF
+      #IFDEF ChipMHz 4
+        CLKPSR = 1
+      #ENDIF
+      #IFDEF ChipMHz 2
+        CLKPSR = 2
+      #ENDIF
+      #IFDEF ChipMHz 1
+        CLKPSR = 3
+      #ENDIF
+      #IFDEF ChipMHz 0.5
+        CLKPSR = 4
+      #ENDIF
+      #IFDEF ChipMHz 0.25
+        CLKPSR = 5
+      #ENDIF
+      #IFDEF ChipMHz 0.125
+        CLKPSR = 6
+      #ENDIF
+      #IFDEF ChipMHz 0.0625
+        CLKPSR = 7
+      #ENDIF
+      #IFDEF ChipMHz 0.03125
+        CLKPSR = 8
+      #ENDIF
+End Sub

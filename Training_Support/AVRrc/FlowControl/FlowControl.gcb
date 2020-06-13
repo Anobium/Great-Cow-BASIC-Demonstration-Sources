@@ -1,8 +1,7 @@
 '''A demonstration program for GCB
 '''---------------------------------------------------------------------------------
-''' This program shows how use WDT to generate delays.
+''' This program shows logic test in the AVRrc chips - change the constant CURRENTTEST to change the program
 '''
-''' This method reduces power consumption during the operation, however, uses more PROGMEM than the Great Cow BASIC `wait` instruction.
 '''
 '''@author  Evan Venn
 '''@licence GPL
@@ -11,35 +10,71 @@
 '''********************************************************************************
 
 ; ----- Configuration
-#chip tiny9, 1
-#option Explicit
+#chip tiny9,  1
+'#option Explicit
 
 ; ----- Include library
 #include <softserial.h>
 
+; ----- Constants
+
+  #DEFINE RedLED PORTB.2
+  #DEFINE GreenLED PORTB.1
+  #DEFINE YellowLED PORTB.0
+
+
+  #Define CURRENTTEST 1
+
+
 ; ----- Variables
-  'None
+  'See inline
 
 ; ----- Main body of program commences here.
 
-    dir portb.0 out
+  #IFDEF  CURRENTTEST 1
+    'Test 1
     Do
-        portb.0 = !portb.0
-        'Use Watchdog for time delay; n=0 is ~19ms; n=6 is ~1.151secs ; n=9 is 9.25secs,
-        WDDelay ( 6 )
-        Ser1Send 46
+      'Turn on RedLED
+      Gosub TestSub1
+
+      'Turn on GreenLED
+      Goto TestMethod2
+      main:
+
+      PulseOut YellowLED, 1 s
+      wait 1 s
+
     Loop
+
+  #ENDIF
+
+
+  #IFDEF  CURRENTTEST 2
+    'Test2 -
+  #ENDIF
+
+
+  #IFDEF  CURRENTTEST 3
+    'Test3 -
+  #ENDIF
 
 
 End
 
+Sub TestSub1
+  Dir RedLED out
+  RedLED = !RedLED
+End Sub
 
-
+TestMethod2:
+  Dir GreenLED out
+  GreenLED = !GreenLED
+goto main
 
 
 
 ; ----- Config Serial UART :
-#define SER1_BAUD 9600    ; baudrate must be defined
+#define SER1_BAUD 600      ; baudrate must be defined
 #define SER1_DATABITS 8    ; databits optional (default = 8)
 #define SER1_STOPBITS 1    ; stopbits optional (default = 1)
 #define SER1_INVERT Off    ; inverted polarity optional (default = Off)
@@ -54,32 +89,6 @@ End
 
 ' ----- Subs
 
-'Use Watchdog for time delay; n=0 is ~19ms; n=6 is ~1.151secs ; n=9 is 9.25secs
-sub WDDelay ( in WDtimerDelay )
-
-  'Set SM1 to permit use of sleep
-  SM1=1
-  'Enable Interrupt
-  WDIE = 1
-
-  'Heisenburg - the ASM fails
-  WDP3 = WDtimerDelay.3
-  WDP2 = WDtimerDelay.2
-  WDP1 = WDtimerDelay.1
-  WDP0 = WDtimerDelay.0
-
-
-  SE = 1 'sleep_enable
-  SLEEP  'sleep_cpu
-
-end sub
-
-sub Interrupt
-    'Handle Watchdog event
-    If WDIE = 1 then
-      WDIE = 0
-    End if
-end sub
 
 
 'Script to resolve oscillator

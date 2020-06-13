@@ -1,0 +1,4 @@
+#chip tiny9, 1
+
+
+WDTCSR.5 = WDtimerDelay.3
