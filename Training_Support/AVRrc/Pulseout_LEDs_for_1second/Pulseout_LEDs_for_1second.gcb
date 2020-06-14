@@ -13,7 +13,46 @@
 #chip tiny9, 1
 #option Explicit
 
-    #IFNDEF ChipMHz 1
+; ----- Constants
+     ' 1 second, ie 0.5Hz at a chip frequency of 1mhz
+    #define myDelay 1 s
+
+; ----- Define Hardware settings
+    dir portb.0 out
+    dir portb.1 out
+    dir portb.2 out
+
+    portb.0 = 1
+    portb.2 = 1
+    portb.2 = 1
+
+; ----- Variables
+    'None
+' Main
+' This loop runs over and over forever.
+
+
+
+    Do
+        PulseOutInv portb.0, myDelay
+        wait myDelay
+        PulseOutInv portb.1, myDelay
+        wait myDelay
+        PulseOutInv portb.2, myDelay
+        wait myDelay
+    Loop
+
+END
+
+
+
+' ----- Subs
+
+
+
+'Sub to resolve oscillator
+#startup Init
+Sub Init
       'As Great Cow BASIC does not set the AVR frequency per chipfamily - set here.
       'Unlock the  frequency register where 0xD8 is the correct signature for the AVRrc chips
       CCP = 0xD8
@@ -25,6 +64,9 @@
       #ENDIF
       #IFDEF ChipMHz 2
         CLKPSR = 2
+      #ENDIF
+      #IFDEF ChipMHz 1
+        CLKPSR = 3
       #ENDIF
       #IFDEF ChipMHz 0.5
         CLKPSR = 4
@@ -41,31 +83,4 @@
       #IFDEF ChipMHz 0.03125
         CLKPSR = 8
       #ENDIF
-    #ENDIF
-
-; ----- Constants
-     ' 1 second, ie 0.5Hz at a chip frequency of 1mhz
-    #define myDelay 500 ms
-
-; ----- Define Hardware settings
-    dir portb.0 out
-    dir portb.1 out
-    dir portb.2 out
-
-    portb.1 = 1
-    portb.2 = 1
-
-
-; ----- Variables
-    'None
-' Main
-' This loop runs over and over forever.
-
-
-
-    Do
-        pulseout portb.0, myDelay
-        wait myDelay
-    Loop
-
-END
+End Sub

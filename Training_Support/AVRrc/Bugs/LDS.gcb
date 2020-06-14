@@ -2,3 +2,5 @@
 
 
 WDTCSR.5 = WDtimerDelay.3
+WDP3 = WDtimerDelay.3
+

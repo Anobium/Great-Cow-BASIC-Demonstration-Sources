@@ -34,24 +34,6 @@
 End
 
 
-
-
-
-
-; ----- Config Serial UART :
-#define SER1_BAUD 9600    ; baudrate must be defined
-#define SER1_DATABITS 8    ; databits optional (default = 8)
-#define SER1_STOPBITS 1    ; stopbits optional (default = 1)
-#define SER1_INVERT Off    ; inverted polarity optional (default = Off)
-; Config I/O ports for transmitting:
-#define SER1_TXPORT PORTB  ; I/O port (without .bit) must be defined
-#define SER1_TXPIN 1       ; portbit  must be defined
-; Config I/O ports for receiving:
-#define SER1_RXPORT PORTB  ; I/O port (without .bit) must be defined
-#define SER1_RXPIN 2       ; portbit  must be defined
-#define SER1_RXNOWAIT Off  ; don't wait for stopbit optional (default = Off)
-
-
 ' ----- Subs
 
 'Use Watchdog for time delay; n=0 is ~19ms; n=6 is ~1.151secs ; n=9 is 9.25secs
@@ -82,10 +64,25 @@ sub Interrupt
 end sub
 
 
-'Script to resolve oscillator
+
+; ----- Config Serial UART :
+#define SER1_BAUD 9600    ; baudrate must be defined
+#define SER1_DATABITS 8    ; databits optional (default = 8)
+#define SER1_STOPBITS 1    ; stopbits optional (default = 1)
+#define SER1_INVERT Off    ; inverted polarity optional (default = Off)
+; Config I/O ports for transmitting:
+#define SER1_TXPORT PORTB  ; I/O port (without .bit) must be defined
+#define SER1_TXPIN 1       ; portbit  must be defined
+; Config I/O ports for receiving:
+#define SER1_RXPORT PORTB  ; I/O port (without .bit) must be defined
+#define SER1_RXPIN 2       ; portbit  must be defined
+#define SER1_RXNOWAIT Off  ; don't wait for stopbit optional (default = Off)
 
 
-    #IFNDEF ChipMHz 1
+
+'Sub to resolve oscillator
+#startup Init
+Sub Init
       'As Great Cow BASIC does not set the AVR frequency per chipfamily - set here.
       'Unlock the  frequency register where 0xD8 is the correct signature for the AVRrc chips
       CCP = 0xD8
@@ -97,6 +94,9 @@ end sub
       #ENDIF
       #IFDEF ChipMHz 2
         CLKPSR = 2
+      #ENDIF
+      #IFDEF ChipMHz 1
+        CLKPSR = 3
       #ENDIF
       #IFDEF ChipMHz 0.5
         CLKPSR = 4
@@ -113,4 +113,4 @@ end sub
       #IFDEF ChipMHz 0.03125
         CLKPSR = 8
       #ENDIF
-    #ENDIF
+End Sub

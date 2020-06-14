@@ -34,28 +34,27 @@
   #IFDEF  CURRENTTEST 1
     'Test 1
 
-        Dir Portb.0 out                 // PB0 as an output
+      Dir Portb.0 out                 // PB0 as an output
 
-        // Set up ADC on PB2
-'        #asmraw ADMUX = 1<<MUX0;                // ADC1 (PB1)
-        mux0=1
+      // Set up ADC on PB2
+      '        #asmraw ADMUX = 1<<MUX0;                // ADC1 (PB1)
+      mux0=1
 
 
-        '#asmraw ADCSRA = 1<<ADEN | 3<<ADPS0;    // Enable ADC, 125kHz clock
-        aden = 1
-        adps0 =1
-        adps1 =0
-        adps2 =1
+      '#asmraw ADCSRA = 1<<ADEN | 3<<ADPS0;    // Enable ADC, 125kHz clock
+      aden = 1
+      adps0 =1
+      adps1 =0
+      adps2 =1
 
     'Set up waveform on PB0
-
-'   TCCR0A = 1<<COM0A0 | 3<<WGM00;  // Toggle OC0A, Fast PWM
+    'TCCR0A = 1<<COM0A0 | 3<<WGM00;  // Toggle OC0A, Fast PWM
     in SysValueCopy, TCCR0A
     sbr   SysValueCopy, 1<<COM0A0 | 3<<WGM00;  // Toggle OC0A, Fast PWM
     out TCCR0A,SysValueCopy
 
 
-'   TCCR0B = 3<<WGM02 | 4<<CS00;    // Fast PWM with OCR0A as TOP; /256
+    'TCCR0B = 3<<WGM02 | 4<<CS00;    // Fast PWM with OCR0A as TOP; /256
     in SysValueCopy,TCCR0B
     sbr   SysValueCopy, 3<<WGM02 | 4<<CS00;    // Fast PWM with OCR0A as TOP; /256
     out TCCR0B,SysValueCopy
@@ -102,11 +101,9 @@ End
 ' ----- Subs
 
 
-
-'Script to resolve oscillator
-
-
-    #IFNDEF ChipMHz 1
+'Sub to resolve oscillator
+#startup Init
+Sub Init
       'As Great Cow BASIC does not set the AVR frequency per chipfamily - set here.
       'Unlock the  frequency register where 0xD8 is the correct signature for the AVRrc chips
       CCP = 0xD8
@@ -118,6 +115,9 @@ End
       #ENDIF
       #IFDEF ChipMHz 2
         CLKPSR = 2
+      #ENDIF
+      #IFDEF ChipMHz 1
+        CLKPSR = 3
       #ENDIF
       #IFDEF ChipMHz 0.5
         CLKPSR = 4
@@ -134,4 +134,4 @@ End
       #IFDEF ChipMHz 0.03125
         CLKPSR = 8
       #ENDIF
-    #ENDIF
+End Sub

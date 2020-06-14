@@ -97,11 +97,9 @@ End
 ' ----- Subs
 
 
-
-'Script to resolve oscillator
-
-
-    #IFNDEF ChipMHz 1
+'Sub to resolve oscillator
+#startup Init
+Sub Init
       'As Great Cow BASIC does not set the AVR frequency per chipfamily - set here.
       'Unlock the  frequency register where 0xD8 is the correct signature for the AVRrc chips
       CCP = 0xD8
@@ -113,6 +111,9 @@ End
       #ENDIF
       #IFDEF ChipMHz 2
         CLKPSR = 2
+      #ENDIF
+      #IFDEF ChipMHz 1
+        CLKPSR = 3
       #ENDIF
       #IFDEF ChipMHz 0.5
         CLKPSR = 4
@@ -129,5 +130,4 @@ End
       #IFDEF ChipMHz 0.03125
         CLKPSR = 8
       #ENDIF
-    #ENDIF
-
+End Sub

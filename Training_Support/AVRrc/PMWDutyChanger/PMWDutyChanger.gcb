@@ -116,8 +116,8 @@ End
 
 
 
-'Script to resolve oscillator
-
+'Sub to resolve oscillator
+#startup Init
 Sub Init
       'As Great Cow BASIC does not set the AVR frequency per chipfamily - set here.
       'Unlock the  frequency register where 0xD8 is the correct signature for the AVRrc chips

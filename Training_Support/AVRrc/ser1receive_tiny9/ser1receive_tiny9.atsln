@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Atmel Studio Solution File, Format Version 11.00
-Project("{18226A42-8477-4023-8AD2-40C49DA407C9}") = "ser1receive_tiny9", "ser1receive_tiny9\ser1receive_tiny9.asmproj", "{A9D435DF-05FB-4318-A06A-A65961589AE2}"
+Project("{18226A42-8477-4023-8AD2-40C49DA407C9}") = "ser1receive_tiny9", "ser1receive_tiny9\ser1receive_tiny9.asmproj", "{15C5FFB8-08B4-486E-A14A-4FFE35866D1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +9,10 @@ Global
 		Release|AVR = Release|AVR
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A9D435DF-05FB-4318-A06A-A65961589AE2}.Debug|AVR.ActiveCfg = Debug|AVR
-		{A9D435DF-05FB-4318-A06A-A65961589AE2}.Debug|AVR.Build.0 = Debug|AVR
-		{A9D435DF-05FB-4318-A06A-A65961589AE2}.Release|AVR.ActiveCfg = Release|AVR
-		{A9D435DF-05FB-4318-A06A-A65961589AE2}.Release|AVR.Build.0 = Release|AVR
+		{15C5FFB8-08B4-486E-A14A-4FFE35866D1C}.Debug|AVR.ActiveCfg = Debug|AVR
+		{15C5FFB8-08B4-486E-A14A-4FFE35866D1C}.Debug|AVR.Build.0 = Debug|AVR
+		{15C5FFB8-08B4-486E-A14A-4FFE35866D1C}.Release|AVR.ActiveCfg = Release|AVR
+		{15C5FFB8-08B4-486E-A14A-4FFE35866D1C}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

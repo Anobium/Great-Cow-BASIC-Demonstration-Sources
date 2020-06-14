@@ -1,19 +1,18 @@
 
-AVRASM ver. 2.1.57  D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm Fri Jun 12 09:09:04 2020
+AVRASM ver. 2.1.57  D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm Sun Jun 14 07:50:10 2020
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\tn9def.inc'
 D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(9): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\tn9def.inc'
-D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(37): warning: Register r26 already defined by the .DEF directive
-D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(39): warning: Register r28 already defined by the .DEF directive
-D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(41): warning: Register r30 already defined by the .DEF directive
-D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(42): warning: Register r31 already defined by the .DEF directive
-D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(43): warning: Register r26 already defined by the .DEF directive
-D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(44): warning: Register r27 already defined by the .DEF directive
-D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(45): warning: Register r28 already defined by the .DEF directive
-D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(46): warning: Register r29 already defined by the .DEF directive
-D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(47): warning: Register r25 already defined by the .DEF directive
-D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(49): warning: Register r29 already defined by the .DEF directive
-D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(50): warning: Register r30 already defined by the .DEF directive
+D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(33): warning: Register r26 already defined by the .DEF directive
+D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(36): warning: Register r30 already defined by the .DEF directive
+D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(37): warning: Register r31 already defined by the .DEF directive
+D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(38): warning: Register r26 already defined by the .DEF directive
+D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(39): warning: Register r27 already defined by the .DEF directive
+D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(40): warning: Register r28 already defined by the .DEF directive
+D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(41): warning: Register r29 already defined by the .DEF directive
+D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(42): warning: Register r25 already defined by the .DEF directive
+D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(44): warning: Register r29 already defined by the .DEF directive
+D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1receive_tiny9\ser1receive_tiny9\ser1receive_tiny9.asm(45): warning: Register r30 already defined by the .DEF directive
                  
                  ;Program compiled by Great Cow BASIC (0.98.<<>> 2020-06-07 (Windows 64 bit))
                  
@@ -458,13 +457,9 @@ D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1re
                  
                  ;Set aside memory locations for variables
                  .EQU	MYSTRING=64
-                 .EQU	PRINTLEN=84
+                 .EQU	SERDLYCNT=84
                  .EQU	STRINGPOINTER=85
                  .EQU	STXDATABYTE=86
-                 .EQU	SYSPRINTDATAHANDLER=87
-                 .EQU	SYSPRINTDATAHANDLER_H=88
-                 .EQU	SYSPRINTTEMP=89
-                 .EQU	SYSREPEATTEMP1=90
                  
                  ;********************************************************************************
                  
@@ -472,7 +467,6 @@ D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1re
                  .DEF	DELAYTEMP=r25
                  .DEF	DELAYTEMP2=r26
                  .DEF	SYSCALCTEMPA=r22
-                 .DEF	SYSCALCTEMPB=r28
                  .DEF	SYSCALCTEMPX=r16
                  .DEF	SYSREADA=r30
                  .DEF	SYSREADA_H=r31
@@ -484,14 +478,6 @@ D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1re
                  .DEF	SYSVALUECOPY=r21
                  .DEF	SYSWAITTEMPMS=r29
                  .DEF	SYSWAITTEMPMS_H=r30
-                 .DEF	SYSTEMP1=r17
-                 .DEF	SYSTEMP2=r18
-                 .DEF	SYSTEMP3=r19
-                 
-                 ;********************************************************************************
-                 
-                 ;Alias variables
-                 #define	SYSMYSTRING_19	83
                  
                  ;********************************************************************************
                  
@@ -527,8 +513,8 @@ D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1re
 00000c e55f      	ldi	SysValueCopy,low(RAMEND)
 00000d bf5d      	out	SPL, SysValueCopy
                  ;Call initialisation routines
-00000e d041      	rcall	INITSYS
-00000f d070      	rcall	STX1PINSETUP
+00000e d01e      	rcall	INITSYS
+00000f d031      	rcall	STX1PINSETUP
                  
                  ;Start of the main program
                  ;''A demonstration program for GCB
@@ -546,7 +532,7 @@ D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1re
                  ;----- Configuration
                  ;----- Include library
                  ;----- Config Serial UART :
-                 ;#define SER1_BAUD 9600    ; baudrate must be defined
+                 ;#define SER1_BAUD 600    ; baudrate must be defined
                  ;#define SER1_DATABITS 8    ; databits optional (default = 8)
                  ;#define SER1_STOPBITS 1    ; stopbits optional (default = 1)
                  ;#define SER1_INVERT Off    ; inverted polarity optional (default = Off)
@@ -554,6 +540,7 @@ D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1re
                  ;#define SER1_TXPORT PORTB  ; I/O port (without .bit) must be defined
                  ;#define SER1_TXPIN 1       ; portbit  must be defined
                  ;Config I/O ports for receiving:
+                 ;NOTE:  RX is commented out until we have resolved the LDS/STS issue
                  ;#define SER1_RXPORT PORTB  ; I/O port (without .bit) must be defined
                  ;#define SER1_RXPIN 2       ; portbit  must be defined
                  ;#define SER1_RXNOWAIT Off  ; don't wait for stopbit optional (default = Off)
@@ -563,80 +550,43 @@ D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1re
                  ;myString = "Please send a byte!"
 000010 e4c0      	ldi	SysStringB,low(MYSTRING)
 000011 e0d0      	ldi	SysStringB_H,high(MYSTRING)
-000012 e3e8      	ldi	SysReadA,low(StringTable1<<1)
-000013 e0f1      	ldi	SysReadA_H,high(StringTable1<<1)
-000014 d06e      	rcall	SysReadString
+000012 ecee      	ldi	SysReadA,low(StringTable1<<1)
+000013 e0f0      	ldi	SysReadA_H,high(StringTable1<<1)
+000014 d039      	rcall	SysReadString
                  ;----- Main body of program commences here.
+                 ;/*
                  ;Repeat 2
-000015 e052      	ldi	SysValueCopy,2
-000016 ab5a      	sts	SysRepeatTemp1,SysValueCopy
-                 SysRepeatLoop1:
                  ;Ser1Send 10   'new line in Terminal
-000017 e05a      	ldi	SysValueCopy,10
-000018 ab56      	sts	STXDATABYTE,SysValueCopy
-000019 d058      	rcall	SER1SEND
                  ;Ser1Send 13
-00001a e05d      	ldi	SysValueCopy,13
-00001b ab56      	sts	STXDATABYTE,SysValueCopy
-00001c d055      	rcall	SER1SEND
                  ;end Repeat
-00001d a31a      	lds	SysTemp1,SysRepeatTemp1
-00001e 951a      	dec	SysTemp1
-00001f ab1a      	sts	SysRepeatTemp1,SysTemp1
-000020 f7b1      	brne	SysRepeatLoop1
-                 SysRepeatLoopEnd1:
                  ;Repeat 20
-000021 e154      	ldi	SysValueCopy,20
-000022 ab5a      	sts	SysRepeatTemp1,SysValueCopy
-                 SysRepeatLoop2:
                  ;Ser1Print myString  'send a text
-000023 e450      	ldi	SysValueCopy,low(MYSTRING)
-000024 ab57      	sts	SysPRINTDATAHandler,SysValueCopy
-000025 e050      	ldi	SysValueCopy,high(MYSTRING)
-000026 ab58      	sts	SysPRINTDATAHandler_H,SysValueCopy
-000027 d02b      	rcall	SER1PRINT4
                  ;Ser1Send myString( 19 )
-000028 a353      	lds	SysValueCopy,SYSMYSTRING_19
-000029 ab56      	sts	STXDATABYTE,SysValueCopy
-00002a d047      	rcall	SER1SEND
                  ;Ser1Send 10   'new line in Terminal
-00002b e05a      	ldi	SysValueCopy,10
-00002c ab56      	sts	STXDATABYTE,SysValueCopy
-00002d d044      	rcall	SER1SEND
                  ;Ser1Send 13
-00002e e05d      	ldi	SysValueCopy,13
-00002f ab56      	sts	STXDATABYTE,SysValueCopy
-000030 d041      	rcall	SER1SEND
                  ;End Repeat
-000031 a31a      	lds	SysTemp1,SysRepeatTemp1
-000032 951a      	dec	SysTemp1
-000033 ab1a      	sts	SysRepeatTemp1,SysTemp1
-000034 f771      	brne	SysRepeatLoop2
-                 SysRepeatLoopEnd2:
+                 ;*/
                  ;dir portb.0 out
-000035 9a08      	sbi	DDRB,0
+000015 9a08      	sbi	DDRB,0
                  ;Do
                  SysDoLoop_S1:
                  ;pulseout portb.0, 100 ms
                  ;Macro Source: stdbasic.h (185)
                  ;Set Pin On
-000036 9a10      	sbi	PORTB,0
+000016 9a10      	sbi	PORTB,0
                  ;Wait Time
-000037 e6d4      	ldi	SysWaitTempMS,100
-000038 e0e0      	ldi	SysWaitTempMS_H,0
-000039 d00a      	rcall	Delay_MS
+000017 e6d4      	ldi	SysWaitTempMS,100
+000018 e0e0      	ldi	SysWaitTempMS_H,0
+000019 d007      	rcall	Delay_MS
                  ;Set Pin Off
-00003a 9810      	cbi	PORTB,0
+00001a 9810      	cbi	PORTB,0
                  ;wait 100 ms
-00003b e6d4      	ldi	SysWaitTempMS,100
-00003c e0e0      	ldi	SysWaitTempMS_H,0
-00003d d006      	rcall	Delay_MS
                  ;Ser1Send "."
-00003e e25e      	ldi	SysValueCopy,46
-00003f ab56      	sts	STXDATABYTE,SysValueCopy
-000040 d031      	rcall	SER1SEND
+00001b e25e      	ldi	SysValueCopy,46
+00001c ab56      	sts	STXDATABYTE,SysValueCopy
+00001d d012      	rcall	SER1SEND
                  ;Loop
-000041 cff4      	rjmp	SysDoLoop_S1
+00001e cff7      	rjmp	SysDoLoop_S1
                  SysDoLoop_E1:
                  ;
                  ;Do Forever
@@ -648,28 +598,30 @@ D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1re
                  ;Ser1Send RecByte           'send the sign representing the byte
                  ;
                  ;Loop
+                 ;Sub to resolve oscillator
+                 ;#startup Init
                  BASPROGRAMEND:
-000042 9588      	sleep
-000043 cffe      	rjmp	BASPROGRAMEND
+00001f 9588      	sleep
+000020 cffe      	rjmp	BASPROGRAMEND
                  
                  ;********************************************************************************
                  
                  Delay_MS:
-000044 95e3      	inc	SysWaitTempMS_H
+000021 95e3      	inc	SysWaitTempMS_H
                  DMS_START:
-000045 e6af      	ldi	DELAYTEMP2,111
+000022 e6af      	ldi	DELAYTEMP2,111
                  DMS_OUTER:
-000046 e092      	ldi	DELAYTEMP,2
+000023 e092      	ldi	DELAYTEMP,2
                  DMS_INNER:
-000047 959a      	dec	DELAYTEMP
-000048 f7f1      	brne	DMS_INNER
-000049 95aa      	dec	DELAYTEMP2
-00004a f7d9      	brne	DMS_OUTER
-00004b 95da      	dec	SysWaitTempMS
-00004c f7c1      	brne	DMS_START
-00004d 95ea      	dec	SysWaitTempMS_H
-00004e f7b1      	brne	DMS_START
-00004f 9508      	ret
+000024 959a      	dec	DELAYTEMP
+000025 f7f1      	brne	DMS_INNER
+000026 95aa      	dec	DELAYTEMP2
+000027 f7d9      	brne	DMS_OUTER
+000028 95da      	dec	SysWaitTempMS
+000029 f7c1      	brne	DMS_START
+00002a 95ea      	dec	SysWaitTempMS_H
+00002b f7b1      	brne	DMS_START
+00002c 9508      	ret
                  
                  ;********************************************************************************
                  
@@ -680,56 +632,9 @@ D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1re
                  ;End  clearing ANSEL
                  ;Turn off all ports
                  ;PORTB = 0
-000050 e050      	ldi	SysValueCopy,0
-000051 b952      	out	PORTB,SysValueCopy
-000052 9508      	ret
-                 
-                 ;********************************************************************************
-                 
-                 ;Overloaded signature: STRING:, Source: SoftSerialCh1.h (310)
-                 SER1PRINT4:
-                 ;PrintLen = LEN(PrintData$)
-                 ;PrintLen = PrintData(0)
-000053 a3a7      	lds	SysStringA,SysPRINTDATAHandler
-000054 a3b8      	lds	SysStringA_H,SysPRINTDATAHandler_H
-000055 915c      	ld	SysValueCopy,X
-000056 ab54      	sts	PRINTLEN,SysValueCopy
-                 ;if PrintLen = 0 then Goto Ser1PrintStrEnd
-000057 a364      	lds	SysCalcTempA,PRINTLEN
-000058 2366      	tst	SysCalcTempA
-000059 f0b9      	breq	SER1PRINTSTREND
-                 ;Write Data
-                 ;for SysPrintTemp = 1 to PrintLen
-00005a e050      	ldi	SysValueCopy,0
-00005b ab59      	sts	SYSPRINTTEMP,SysValueCopy
-00005c a364      	lds	SysCalcTempA,PRINTLEN
-00005d 3061      	cpi	SysCalcTempA,1
-00005e f090      	brlo	SysForLoopEnd1
-                 SysForLoop1:
-00005f a319      	lds	SysTemp1,SYSPRINTTEMP
-000060 9513      	inc	SysTemp1
-000061 ab19      	sts	SYSPRINTTEMP,SysTemp1
-                 ;Ser1Send PrintData(SysPrintTemp)
-000062 a317      	lds	SysTemp1,SysPRINTDATAHandler
-000063 a329      	lds	SysTemp2,SYSPRINTTEMP
-000064 0f12      	add	SysTemp1,SysTemp2
-000065 2fa1      	mov	SysStringA,SysTemp1
-000066 a318      	lds	SysTemp1,SysPRINTDATAHandler_H
-000067 e030      	ldi	SysTemp3,0
-000068 1f13      	adc	SysTemp1,SysTemp3
-000069 2fb1      	mov	SysStringA_H,SysTemp1
-00006a 915c      	ld	SysValueCopy,X
-00006b ab56      	sts	STXDATABYTE,SysValueCopy
-00006c d005      	rcall	SER1SEND
-                 ;next
-00006d a369      	lds	SysCalcTempA,SYSPRINTTEMP
-00006e a3c4      	lds	SysCalcTempB,PRINTLEN
-00006f 176c      	cp	SysCalcTempA,SysCalcTempB
-000070 f370      	brlo	SysForLoop1
-                 SysForLoopEnd1:
-                 ;CR
-                 SER1PRINTSTREND:
-000071 9508      	ret
+00002d e050      	ldi	SysValueCopy,0
+00002e b952      	out	PORTB,SysValueCopy
+00002f 9508      	ret
                  
                  ;********************************************************************************
                  
@@ -740,43 +645,47 @@ D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1re
                  ;*** Code for AVR:
                  ;** AVR; send to channel:
                  ;lds R23,STxDataByte               ;load DataByte to register
-000072 a376      	lds	R23,STXDATABYTE
+000030 a376      	lds	R23,STXDATABYTE
                  ;ldi R26,SER1_DATABITS+2           ;load number of DataBits to register (1 start + N data + 1 stop)
-000073 e0aa      	ldi	R26,8+2
+000031 e0aa      	ldi	R26,8+2
                  ;com R23                           ;invert DataBits and set Carry to 1
-000074 9570      	com	R23
+000032 9570      	com	R23
                  STX1LOOP:
                  ;10 cycle loop + delay per byte
                  ;brcc STx1One                     ;jump to STxOne if Carry=0  [ASM]             cycle 1
-000075 f408      	brcc	STX1ONE
+000033 f408      	brcc	STX1ONE
                  ;Set SER1_TXPORT,SER1_TXPIN Off ;set pin LOW if Carry=1 (translated to: cbi)  cycle 2,3
-000076 9811      	cbi	PORTB,1
+000034 9811      	cbi	PORTB,1
                  STX1ONE:
                  ;brcs STx1Done                    ;jump to STxDone if Carry=1                   cycle 4,5
-000077 f008      	brcs	STX1DONE
+000035 f008      	brcs	STX1DONE
                  ;Set SER1_TXPORT,SER1_TXPIN On  ;set pin HIGH if Carry=0 (translated to: cbi) cycle -
-000078 9a11      	sbi	PORTB,1
+000036 9a11      	sbi	PORTB,1
                  STX1DONE:
                  ;--- start short delay --------
                  ;ldi R24, STX1_DELAY            ;load delaycounter to register [ASM]          cycle 6
-000079 e18f      	ldi	R24, 31
+000037 e288      	ldi	R24, 40
                  STX1DELAY:
                  ;delay-loop = (3 cycle * delaycounter) -1
                  ;dec R24                        ;decrement delaycounter
-00007a 958a      	dec	R24
+000038 958a      	dec	R24
                  ;brne STx1Delay                  ;loop to STxDelay until delaycounter=0
-00007b f7f1      	brne	STX1DELAY
+000039 f7f1      	brne	STX1DELAY
                  ;--- end short delay ----------
                  ;--- start long delay --------
+                 ;Sub_SerLongDelay(STX1_DELAYH)  ;process long delay
+00003a e052      	ldi	SysValueCopy,2
+00003b ab54      	sts	SERDLYCNT,SysValueCopy
+00003c d007      	rcall	SUB_SERLONGDELAY
                  ;--- end long delay ----------
                  ;lsr R23                         ;shift next DataBit to Carry  [ASM]  cycle 7
-00007c 9576      	lsr	R23
+00003d 9576      	lsr	R23
                  ;dec R26                         ;decrement bitcounter [ASM]          cycle 8
-00007d 95aa      	dec	R26
+00003e 95aa      	dec	R26
                  ;brne STx1Loop                    ;jump to STxLoop and transmit next bit until bitcounter=0  [ASM] cycle 9,10
-00007e f7b1      	brne	STX1LOOP
+00003f f799      	brne	STX1LOOP
                  ;* Add additional stopbit
-00007f 9508      	ret
+000040 9508      	ret
                  
                  ;********************************************************************************
                  
@@ -784,13 +693,47 @@ D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1re
                  STX1PINSETUP:
                  ;*** Process pin-direction and -polarity for sending on programmstart:
                  ;Dir SER1_TXPORT.SER1_TXPIN Out       '... make it output
-000080 9a09      	sbi	DDRB,1
+000041 9a09      	sbi	DDRB,1
                  ;Set SER1_TXPORT.SER1_TXPIN On      '... set HIGH to make the first startbit recognizable
-000081 9a11      	sbi	PORTB,1
+000042 9a11      	sbi	PORTB,1
                  ;#ifdef PIC
                  ;nop                                'otherwise the first 2 bytes are garbage !?
                  ;#endif
-000082 9508      	ret
+000043 9508      	ret
+                 
+                 ;********************************************************************************
+                 
+                 ;Source: softserial.h (84)
+                 SUB_SERLONGDELAY:
+                 ;Dim  SerDlyCntI As Byte
+                 ;Calling & returning from Sub:  4 cycles
+                 ;loading TxCntDly            :  1 cycles
+                 ;--- start outer loop --------------
+                 ;lds R25, SerDlyCnt
+000044 a394      	lds	R25, SERDLYCNT
+                 ;ldi R25, SRX1_DELAYH
+                 STXDELAYH:
+                 ;ldi R24, 253           ;number of inner delay-loops [GCB]         ;outer loop cycle 1
+000045 ef8d      	ldi	R24, 253
+                 ;--- start inner loop --------------
+                 STXDELAYI:
+                 ;dec R24              ;decrement inner delaycounter              ;inner loop cycle 1
+000046 958a      	dec	R24
+                 ;brne STxDelayI        ;loop to STxDelayI until delaycounter = 0  ;inner loop cycle 2,3
+000047 f7f1      	brne	STXDELAYI
+                 ;nop                  ;last loop:  no jump -1 cycles; nop +1 cycle
+000048 0000      	nop
+                 ;--- end inner loop -----------------
+                 ;dec R25               ;decrement outer delaycounter               ;outer loop cycle 2
+000049 959a      	dec	R25
+                 ;nop                                                               ;outer loop cycle 3
+00004a 0000      	nop
+                 ;nop                                                               ;outer loop cycle 4
+00004b 0000      	nop
+                 ;brne STxDelayH          ;loop to STxDelayH until delaycounter = 0   ;outer loop cycle 5,6
+00004c f7c1      	brne	STXDELAYH
+                 ;--- end outer loop ---------------
+00004d 9508      	ret
                  
                  ;********************************************************************************
                  
@@ -804,76 +747,76 @@ D:\Great-Cow-BASIC-Demonstration-Sources.git\trunk\Training_Support\AVRrc\ser1re
                  ;Instance 1
                  ;added 0x4000 to address PROGMEM by setting the one bit
                  ;SYSREADA_H.6  = 1
-000083 64f0      	sbr	 SYSREADA_H,1<<6
-000084 8100      	ld	SysCalcTempX, z
+00004e 64f0      	sbr	 SYSREADA_H,1<<6
+00004f 8100      	ld	SysCalcTempX, z
                  ;mov SysCalcTempA, SysCalcTempX
-000085 2f60      	mov	SYSCALCTEMPA, SYSCALCTEMPX
+000050 2f60      	mov	SYSCALCTEMPA, SYSCALCTEMPX
                  ;SysReadA += 1
-000086 95e3      	inc	SYSREADA
-000087 f409      	brne	PC + 2
-000088 95f3      	inc	SYSREADA_H
+000051 95e3      	inc	SYSREADA
+000052 f409      	brne	PC + 2
+000053 95f3      	inc	SYSREADA_H
                  ;st Y+, SysCalcTempA
-000089 9369      	st	Y+, SYSCALCTEMPA
+000054 9369      	st	Y+, SYSCALCTEMPA
                  ;rjmp SysStringReadCheck
-00008a c006      	rjmp	SYSSTRINGREADCHECK
+000055 c006      	rjmp	SYSSTRINGREADCHECK
                  SYSREADSTRINGPART:
                  ;lpm SysCalcTempA, Z+
                  ;Instance 2
-00008b 8100      	ld	SysCalcTempX, z
+000056 8100      	ld	SysCalcTempX, z
                  ;mov SysCalcTempA, SysCalcTempX
-00008c 2f60      	mov	SYSCALCTEMPA, SYSCALCTEMPX
+000057 2f60      	mov	SYSCALCTEMPA, SYSCALCTEMPX
                  ;SysReadA += 1
-00008d 95e3      	inc	SYSREADA
-00008e f409      	brne	PC + 2
-00008f 95f3      	inc	SYSREADA_H
+000058 95e3      	inc	SYSREADA
+000059 f409      	brne	PC + 2
+00005a 95f3      	inc	SYSREADA_H
                  ;add SysStringLength, SysCalcTempA
-000090 0f96      	add	SYSSTRINGLENGTH, SYSCALCTEMPA
+00005b 0f96      	add	SYSSTRINGLENGTH, SYSCALCTEMPA
                  ;Check length
                  SYSSTRINGREADCHECK:
                  ;If length is 0, exit
                  ;cpi SysCalcTempA, 0
-000091 3060      	cpi	SYSCALCTEMPA, 0
+00005c 3060      	cpi	SYSCALCTEMPA, 0
                  ;brne SysStringRead
-000092 f409      	brne	SYSSTRINGREAD
+00005d f409      	brne	SYSSTRINGREAD
                  ;ret
-000093 9508      	ret
+00005e 9508      	ret
                  ;Copy
                  SYSSTRINGREAD:
                  ;Copy char
                  ;lpm SysCalcTempX, Z+
                  ;Instance 3
-000094 8100      	ld	SysCalcTempX, z
+00005f 8100      	ld	SysCalcTempX, z
                  ;SysReadA += 1
-000095 95e3      	inc	SYSREADA
-000096 f409      	brne	PC + 2
-000097 95f3      	inc	SYSREADA_H
+000060 95e3      	inc	SYSREADA
+000061 f409      	brne	PC + 2
+000062 95f3      	inc	SYSREADA_H
                  ;st Y+, SysCalcTempX
-000098 9309      	st	Y+, SYSCALCTEMPX
+000063 9309      	st	Y+, SYSCALCTEMPX
                  ;dec SysCalcTempA
-000099 956a      	dec	SYSCALCTEMPA
+000064 956a      	dec	SYSCALCTEMPA
                  ;brne SysStringRead
-00009a f7c9      	brne	SYSSTRINGREAD
-00009b 9508      	ret
+000065 f7c9      	brne	SYSSTRINGREAD
+000066 9508      	ret
                  
                  ;********************************************************************************
                  
                  SysStringTables:
                  
                  StringTable1:
-00009c 5013
-00009d 656c
-00009e 7361
-00009f 2065
-0000a0 6573
-0000a1 646e
-0000a2 6120
-0000a3 6220
-0000a4 7479
-0000a5 2165      .DB	19,80,108,101,97,115,101,32,115,101,110,100,32,97,32,98,121,116,101,33
+000067 5013
+000068 656c
+000069 7361
+00006a 2065
+00006b 6573
+00006c 646e
+00006d 6120
+00006e 6220
+00006f 7479
+000070 2165      .DB	19,80,108,101,97,115,101,32,115,101,110,100,32,97,32,98,121,116,101,33
                  
                  
                  StringTable2:
-0000a6 2e01      .DB	1,46
+000071 2e01      .DB	1,46
                  
                  
                  ;********************************************************************************
@@ -898,36 +841,36 @@ counted separately from r26..r31 here.
 "ATtiny9" register use summary:
 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 r5 :   0 r6 :   0 r7 :   0 
 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16:   6 r17:  15 r18:   2 r19:   2 r20:   0 r21:  32 r22:  12 r23:   3 
-r24:   2 r25:   3 r26:   6 r27:   2 r28:   3 r29:   4 r30:   8 r31:   5 
-x  :   2 y  :   2 z  :   3 
-Registers used: 18 out of 35 (51.4%)
+r16:   6 r17:   0 r18:   0 r19:   0 r20:   0 r21:  10 r22:   6 r23:   3 
+r24:   4 r25:   5 r26:   4 r27:   0 r28:   1 r29:   3 r30:   7 r31:   5 
+x  :   0 y  :   2 z  :   3 
+Registers used: 13 out of 35 (37.1%)
 
 "ATtiny9" instruction use summary:
-.lds.l:   0 .sts.l:   0 adc   :   1 add   :   2 and   :   0 andi  :   0 
+.lds.l:   0 .sts.l:   0 adc   :   0 add   :   1 and   :   0 andi  :   0 
 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 brcc  :   1 
-brcs  :   1 breq  :   1 brge  :   0 brhc  :   0 brhs  :   0 brid  :   0 
-brie  :   0 brlo  :   2 brlt  :   0 brmi  :   0 brne  :  13 brpl  :   0 
+brcs  :   1 breq  :   0 brge  :   0 brhc  :   0 brhs  :   0 brid  :   0 
+brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 brne  :  13 brpl  :   0 
 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 brvs  :   0 bset  :   0 
 bst   :   0 cbi   :   2 cbr   :   0 clc   :   0 clh   :   0 cli   :   0 
 cln   :   0 clr   :   0 cls   :   0 clt   :   0 clv   :   0 clz   :   0 
-com   :   1 cp    :   1 cpc   :   0 cpi   :   2 cpse  :   0 dec   :   9 
-eor   :   0 icall :   0 ijmp  :   0 in    :   0 inc   :   8 ld    :   5 
-ldd   :   0 ldi   :  26 lds   :  28 lsl   :   0 lsr   :   1 mov   :   4 
-neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   3 pop   :   0 
-push  :   0 rcall :  13 ret   :   7 reti  :   8 rjmp  :   4 rol   :   0 
+com   :   1 cp    :   0 cpc   :   0 cpi   :   1 cpse  :   0 dec   :   9 
+eor   :   0 icall :   0 ijmp  :   0 in    :   0 inc   :   7 ld    :   3 
+ldd   :   0 ldi   :  16 lds   :   4 lsl   :   0 lsr   :   1 mov   :   2 
+neg   :   0 nop   :   3 or    :   0 ori   :   0 out   :   3 pop   :   0 
+push  :   0 rcall :   6 ret   :   7 reti  :   8 rjmp  :   4 rol   :   0 
 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   5 sbic  :   0 sbis  :   0 
 sbr   :   1 sbrc  :   0 sbrs  :   0 sec   :   0 seh   :   0 sei   :   0 
 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 sez   :   0 
-sleep :   1 st    :   2 std   :   0 sts   :  32 sub   :   0 subi  :   0 
-swap  :   0 tst   :   1 wdr   :   0 
-Instructions used: 29 out of 99 (29.3%)
+sleep :   1 st    :   2 std   :   0 sts   :   4 sub   :   0 subi  :   0 
+swap  :   0 tst   :   0 wdr   :   0 
+Instructions used: 25 out of 99 (25.3%)
 
 "ATtiny9" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x00014e    310     22    332    1024  32.4%
+[.cseg] 0x000000 0x0000e4    204     22    226    1024  22.1%
 [.dseg] 0x000040 0x000060      0      0      0      32   0.0%
 [.eseg] 0x000000 0x000000      0      0      0       0      -
 
-Assembly complete, 0 errors, 11 warnings
+Assembly complete, 0 errors, 10 warnings
