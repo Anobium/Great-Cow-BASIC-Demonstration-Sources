@@ -1,10 +1,15 @@
 '''A demonstration program for GCB
 '''---------------------------------------------------------------------------------
-'''This program uses the SoftSerial library for serial sending and receiving.
+'''This program uses the SoftSerial library for serial sending serial communoications.
 ''' SoftSerial uses ASM routines for minimal overhead.
-''' Ser1Receive stops programm execution until a startbit-impulse is detected.
-''' See other samples how to realize timeouts or interrupt-driven receiving.
-''':
+'''
+''' You cannot use Ser1Print unless you have a string of 3 bytes - this is caused by the use of STACKS to cache the Program Counter in RAM.
+''' Therefore, you MUST use a table to send the character using Ser1Send ()
+'''
+'''
+'''
+'''
+'''
 '''@author  Evan Venn
 '''@licence GPL
 '''@version 1.0
@@ -12,71 +17,69 @@
 '''********************************************************************************
 
 ; ----- Configuration
-#chip tiny9,  1
+#chip tiny9,  8
 #option Explicit
 
 ; ----- Include library
 #include <softserial.h>
 
+dir portb.0 in
+dir portb.2 in
+dir portb.3 in
+
+
 ; ----- Config Serial UART :
-#define SER1_BAUD 600    ; baudrate must be defined
+#define SER1_BAUD 19200    ; baudrate must be defined
 #define SER1_DATABITS 8    ; databits optional (default = 8)
 #define SER1_STOPBITS 1    ; stopbits optional (default = 1)
 #define SER1_INVERT Off    ; inverted polarity optional (default = Off)
 ; Config I/O ports for transmitting:
 #define SER1_TXPORT PORTB  ; I/O port (without .bit) must be defined
 #define SER1_TXPIN 1       ; portbit  must be defined
-; Config I/O ports for receiving:
 
-'NOTE:  RX is commented out until we have resolved the LDS/STS issue
-
-'#define SER1_RXPORT PORTB  ; I/O port (without .bit) must be defined
-'#define SER1_RXPIN 2       ; portbit  must be defined
-'#define SER1_RXNOWAIT Off  ; don't wait for stopbit optional (default = Off)
 
 ; ----- Variables
-Dim RecByte As Byte
-Dim myString as String * 19
-  myString = "Please send a byte!"
+    Dim StringLenByte, RecByte  As Byte
+
 ; ----- Main body of program commences here.
 
-/*
-    Repeat 2
-        Ser1Send 10   'new line in Terminal
-        Ser1Send 13
-    end Repeat
-    Repeat 20
-        Ser1Print myString  'send a text
-        Ser1Send myString( 19 )
-        Ser1Send 10   'new line in Terminal
-        Ser1Send 13
-    End Repeat
-*/
+    Ser1Send 1
+    Ser1Send 10   'new line in Terminal
+    Ser1Send 13
+    Ser1Send 10   'new line in Terminal
+    Ser1Send 13
+    for RecByte = 1 to 31
+     ReadTable Strings, RecByte, STxDataByte
+     Ser1Send STxDataByte
+    next
+    Ser1Send 10   'new line in Terminal
+    Ser1Send 13
+    Ser1Send 10   'new line in Terminal
+    Ser1Send 13
+
+
+    table Strings
+    87,101,108,99,111,109,101,32,116,111,32,71,114,101,97,116,32,67,111,119,32,66,65,83,73,67,32,50,48,50,48
+    end table
 
     dir portb.0 out
+    dir portb.2 out
     Do
         pulseout portb.0, 100 ms
-'        wait 100 ms
+        wait 100 ms
         Ser1Send "."
+        portb.2 = ! portb.2
     Loop
-'
-' Do Forever
-'
-'  RecByte = Ser1Receive      'receive one byte - wait until detecting startbit
-'  Ser1Send  13               'new line in Terminal
-'  Ser1Send  10               '
-'  Ser1Print "You sent: "  'send a text
-'  Ser1Send RecByte           'send the sign representing the byte
-'
-' Loop
 
 
 'Sub to resolve oscillator
-'#startup Init
+#startup Init
 Sub Init
       'As Great Cow BASIC does not set the AVR frequency per chipfamily - set here.
       'Unlock the  frequency register where 0xD8 is the correct signature for the AVRrc chips
-     ' CCP = 0xD8
+      CCP = 0xD8            'signature to CCP
+      CLKMSR = 0            'use clock 00: Calibrated Internal 8 MHzOscillator
+      CCP = 0xD8
       #IFDEF ChipMHz 8
         CLKPSR = 0
       #ENDIF
