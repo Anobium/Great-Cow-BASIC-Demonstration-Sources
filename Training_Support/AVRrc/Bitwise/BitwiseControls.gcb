@@ -89,7 +89,19 @@
 
 
   #IFDEF  CURRENTTEST 3
-    'Test3 - no defined
+        dir portb.0 out
+        dir portb.1 out
+        dir portb.2 out
+
+        portb.0 = 1
+
+        do
+          portb.1 = portb.0
+          portb.2 = !portb.1
+          portb.0 = portb.2
+          wait 100 ms
+
+        loop
   #ENDIF
 
 
