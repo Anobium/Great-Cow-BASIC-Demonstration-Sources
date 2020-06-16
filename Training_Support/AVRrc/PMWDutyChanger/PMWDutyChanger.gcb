@@ -106,10 +106,7 @@ End
 ; Config I/O ports for transmitting:
 #define SER1_TXPORT PORTB  ; I/O port (without .bit) must be defined
 #define SER1_TXPIN 1       ; portbit  must be defined
-; Config I/O ports for receiving:
-#define SER1_RXPORT PORTB  ; I/O port (without .bit) must be defined
-#define SER1_RXPIN 2       ; portbit  must be defined
-#define SER1_RXNOWAIT Off  ; don't wait for stopbit optional (default = Off)
+
 
 
 ' ----- Subs
