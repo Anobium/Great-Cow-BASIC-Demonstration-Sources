@@ -28,7 +28,7 @@
   WGM02  = 1: TCCR0B = TCCR0B or 2             ' Fast PWM with OCR0A as TOP;  clkI/O/8 (From prescaler)
 
   'factorise ADCL to give full duty as the ADC reading is 0-255 and we need 0-1023
-  #Define MAXFACTOR = 9       '8 may work for a perfect POT
+  #Define MAXFACTOR = 13       '8 may work for a perfect POT setup... mine is not perfect...
   #Define MAXADC    = 1023
 
   Dim adcTemp as word
@@ -44,4 +44,5 @@
     OCR0AL = adcTemp   '  Copy result to PWM duty
     OCR0AH = adcTemp_h '  Copy result to PWM duty
   Loop
+
 
