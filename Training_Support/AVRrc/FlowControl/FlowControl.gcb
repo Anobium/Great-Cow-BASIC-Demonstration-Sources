@@ -14,7 +14,7 @@
 '#option Explicit
 
 ; ----- Include library
-#include <softserial.h>
+#include <tinyAVRrc.h>
 
 ; ----- Constants
 
@@ -71,55 +71,3 @@ TestMethod2:
   GreenLED = !GreenLED
 goto main
 
-
-
-; ----- Config Serial UART :
-#define SER1_BAUD 600      ; baudrate must be defined
-#define SER1_DATABITS 8    ; databits optional (default = 8)
-#define SER1_STOPBITS 1    ; stopbits optional (default = 1)
-#define SER1_INVERT Off    ; inverted polarity optional (default = Off)
-; Config I/O ports for transmitting:
-#define SER1_TXPORT PORTB  ; I/O port (without .bit) must be defined
-#define SER1_TXPIN 1       ; portbit  must be defined
-; Config I/O ports for receiving:
-#define SER1_RXPORT PORTB  ; I/O port (without .bit) must be defined
-#define SER1_RXPIN 2       ; portbit  must be defined
-#define SER1_RXNOWAIT Off  ; don't wait for stopbit optional (default = Off)
-
-
-' ----- Subs
-
-'Sub to resolve oscillator
-#startup Init
-Sub Init
-      'As Great Cow BASIC does not set the AVR frequency per chipfamily - set here.
-      'Unlock the  frequency register where 0xD8 is the correct signature for the AVRrc chips
-      CCP = 0xD8
-      #IFDEF ChipMHz 8
-        CLKPSR = 0
-      #ENDIF
-      #IFDEF ChipMHz 4
-        CLKPSR = 1
-      #ENDIF
-      #IFDEF ChipMHz 2
-        CLKPSR = 2
-      #ENDIF
-      #IFDEF ChipMHz 1
-        CLKPSR = 3
-      #ENDIF
-      #IFDEF ChipMHz 0.5
-        CLKPSR = 4
-      #ENDIF
-      #IFDEF ChipMHz 0.25
-        CLKPSR = 5
-      #ENDIF
-      #IFDEF ChipMHz 0.125
-        CLKPSR = 6
-      #ENDIF
-      #IFDEF ChipMHz 0.0625
-        CLKPSR = 7
-      #ENDIF
-      #IFDEF ChipMHz 0.03125
-        CLKPSR = 8
-      #ENDIF
-End Sub

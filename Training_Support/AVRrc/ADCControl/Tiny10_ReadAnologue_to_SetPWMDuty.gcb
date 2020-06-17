@@ -13,6 +13,8 @@
 
 #chip  TINY10, 1
 #option Explicit
+
+; ----- Include library
 #include <tinyAVRrc.h>
 
   Dir PortB.0 out
@@ -44,5 +46,4 @@
     OCR0AL = adcTemp   '  Copy result to PWM duty
     OCR0AH = adcTemp_h '  Copy result to PWM duty
   Loop
-
 
