@@ -1,0 +1,110 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows logic test in the AVRrc chips - change the constant CURRENTTEST to change the program
+'''
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    11/06/2020
+'''********************************************************************************
+
+; ----- Configuration
+#chip tiny9,  1
+#option Explicit
+
+; ----- Include library
+#include <tinyAVRrc.h>
+
+; ----- Constants
+
+  #DEFINE RedLED PORTB.2
+  #DEFINE GreenLED PORTB.1
+  #DEFINE YellowLED PORTB.0
+
+  #Define CURRENTTEST 2
+
+
+; ----- Variables
+  'See inline
+
+; ----- Main body of program commences here.
+
+  #IFDEF  CURRENTTEST 1
+    'Test 1
+
+    Dir RedLED     out
+    Dir YellowLED  out
+
+    Dim LEDMask as Byte    ' Pattern to be displayed
+    LEDMask = 0b001        ' Initialise the Patten
+
+    Dim Counter as Byte
+    Counter = 0
+
+    Do
+        Ser1Print LEDMask
+        Ser1Send 58
+        Ser1Print Counter
+        Ser1Send 13
+        Ser1Send 10
+
+        LEDMask = FnLSL(LEDMask, 1) & 0x0F      ' Mask the lower 3 bits
+        if LEDMask.3 then LEDMask = 0b001       ' Restart the sequence
+
+        ' Display the Pattern - cannot use Green LED as this is serial line
+        YellowLED = !LEDMask.0
+        RedLED    = !LEDMask.2
+
+        wait 100 ms
+        Counter++
+    Loop
+
+  #ENDIF
+
+
+  #IFDEF  CURRENTTEST 2
+    Dir Portb.0 out
+    Dir Portb.1 out
+    Dir Portb.2 out
+
+    Dim LEDMask as Byte    ' Pattern to be displayed
+    LEDMask = 0b0001       ' Initialise the Patten
+
+
+    Do
+        Portb.0 = !LEDMask.0
+        Portb.1 = !LEDMask.1
+        Portb.2 = !LEDMask.2
+        Set C off
+        Rotate  LEDMask Left
+        if  LEDMask = 0b1000 then
+          LEDMask = 0b0001
+        End if
+        wait 500 ms
+
+    Loop
+
+  #ENDIF
+
+
+  #IFDEF  CURRENTTEST 3
+        dir portb.0 out
+        dir portb.1 out
+        dir portb.2 out
+
+        portb.0 = 1
+
+        do
+          portb.1 = portb.0
+          portb.2 = !portb.1
+          portb.0 = portb.2
+          wait 100 ms
+
+        loop
+  #ENDIF
+
+
+End
+
+

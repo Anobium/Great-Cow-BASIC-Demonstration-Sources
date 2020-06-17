@@ -1,0 +1,48 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a one second pulse on an LED using PulseOut
+'''
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.00
+'''@date       11/06/2020
+'''********************************************************************************
+
+; ----- Configuration
+#chip tiny10, 1
+#option Explicit
+
+; ----- Include library
+#include <tinyAVRrc.h>
+
+; ----- Constants
+     ' 1 second, ie 0.5Hz at a chip frequency of 1mhz
+    #define myDelay 1 s
+
+; ----- Define Hardware settings
+    dir portb.0 out
+    dir portb.1 out
+    dir portb.2 out
+
+    portb.0 = 1
+    portb.2 = 1
+    portb.2 = 1
+
+; ----- Variables
+    'None
+' Main
+' This loop runs over and over forever.
+
+
+
+    Do
+        PulseOutInv portb.0, myDelay
+        wait myDelay
+        PulseOutInv portb.1, myDelay
+        wait myDelay
+        PulseOutInv portb.2, myDelay
+        wait myDelay
+    Loop
+
+END
