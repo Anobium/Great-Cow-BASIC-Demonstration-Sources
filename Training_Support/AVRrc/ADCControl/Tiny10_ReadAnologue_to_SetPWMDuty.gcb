@@ -45,5 +45,8 @@
 
     OCR0AL = adcTemp   '  Copy result to PWM duty
     OCR0AH = adcTemp_h '  Copy result to PWM duty
-  Loop
 
+    'FLASH and LED on portb.2
+    PulseOutInv portb.2, 50 ms
+    wait 50 ms
+  Loop
