@@ -1,0 +1,95 @@
+'''  The MAX5481–MAX5484 10-bit (1024-tap) nonvolatile, linear-taper, programmable voltage-dividers and variable resistors perform the function of a mechanical
+'''  potentiometer, but replace the mechanics with a pinconfigurable 3-wire serial SPI™-compatible interface or up/down digital interface. The MAX5481/MAX5482 are
+'''  3-terminal voltage-dividers and the MAX5483/MAX5484 are 2-terminal variable resistors.
+'''
+'''  The MAX5481–MAX5484 feature an internal, nonvolatile, electrically erasable programmable read-only memory (EEPROM) that stores the wiper position for initialization during power-up. The 3-wire SPI-compatible
+'''  serial interface allows communication at data rates up to 7MHz. A pin-selectable up/down digital interface is also available.
+'''
+'''  The MAX5481–MAX5484 are ideal for applications requiring digitally controlled potentiometers. Two end-toend resistance values are available (10kO and 50kO) in a
+'''  voltage-divider or a variable-resistor configuration.
+'''  These devices ideal for applications requiring low-temperature-coefficient voltage-dividers, such as low-drift, programmable gain-amplifiers.
+'''
+'''
+'''
+'''  This demonstration shows how to use the MAX848xDigitalPotIncrement and MAX848xDigitalPotDecrement methods to increase and decrease the MAX858x pot value.
+'''
+'''  The MAX848xDigitalPotIncrement and MAX848xDigitalPotDecrement methods ONLY support software SPI.
+'''
+'''  PIC: 16f15376 but will work on any chip
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Board: MAX848x chip
+'''  Date: 18.06.2020
+'''
+
+' ----- Configuration
+    #chip 16f15376
+    #config mclre_on
+    #option explicit
+    #include <max848xdigitalpot.h>
+
+
+'Start of MAX848XDIGITALPOT configuration
+    'Three ports and one optional port is required as shown below.
+
+    #DEFINE MAX848XDIGITALPOT_CS       PORTC.0
+    #DEFINE MAX848XDIGITALPOT_SCK      PORTC.1
+    #DEFINE MAX848XDIGITALPOT_DO       PORTC.2
+    #DEFINE MAX848XDIGITALPOT_IOMODE   PORTC.3
+
+    'MAX848XDIGITALPOT_IOMODE to control SPI or Up/Down modes automatically, or if you do not define MAX848XDIGITALPOT_IOMODE then set the SPI/UD in the Max848x as follows:
+    '            SPI/UD = HIGH (connected permanently to high voltage ) then the you can only use the SPI controls as follows:
+    '                     MAX848xDigitalWriteMemory
+    '                     MAX848xCopyWiperRegistertoNVRegister
+    '                     MAX848xCopyNVRegistertoWiperRegister
+    '            SPI/UD = LOW (connected permanently to 0v ) then the you can only use the SPI controls as follows:
+    '                     MAX848xDigitalPotIncrement
+    '                     MAX848xDigitalPotDecrement
+
+    ' MAX848xDigitalPotIncrement and MAX848xDigitalPotDecrement are ONLY support when using Software SPI
+
+' Main program
+
+      'Define some resistor constants, just for this sample code
+      'These are calibated - you may need re-calibrate
+      #define MINk    0
+      #define 10k   150
+      #define 20k   358
+      #define 30k   564
+      #define 40k   770
+      #define 50k   979
+      #define MAXk 1023
+
+      'Loop through forever
+      do
+            MAX848xDigitalPotSetWiperPosition ( MINk )
+                wait 2 s
+            MAX848xDigitalPotSetWiperPosition ( 10k )
+                wait 2 s
+            MAX848xDigitalPotSetWiperPosition ( 20k )
+                wait 2 s
+            MAX848xDigitalPotSetWiperPosition ( 30k )
+                wait 2 s
+            MAX848xDigitalPotSetWiperPosition ( 40k )
+                wait 2 s
+            MAX848xDigitalPotSetWiperPosition ( 50k )
+                wait 2 s
+            MAX848xDigitalPotSetWiperPosition ( MAXk )
+                wait 2 s
+
+            'Increment though the range from 10k to 50k
+            MAX848xDigitalPotSetWiperPosition ( 10k )
+            wait 2 s
+            Repeat 50k - 10k
+                MAX848xDigitalPotIncrement
+                wait 10 ms
+            End Repeat
+            wait 2 s
+            Repeat 50k - 10k
+                MAX848xDigitalPotDecrement
+                wait 10 ms
+            End Repeat
+            wait 2 s
+
+      loop
