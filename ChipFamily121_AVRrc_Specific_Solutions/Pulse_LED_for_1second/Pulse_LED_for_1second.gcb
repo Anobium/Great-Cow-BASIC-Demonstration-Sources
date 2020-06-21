@@ -13,7 +13,6 @@
 #option Explicit
 
 ; ----- Include library
-#include <tinyAVRrc.h>
 
 ; ----- Constants
      ' 1 second, ie 0.5Hz at a chip frequency of 1mhz

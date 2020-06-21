@@ -14,7 +14,6 @@
 '#option Explicit
 
 ; ----- Include library
-#include <tinyAVRrc.h>
 
 ; ----- Constants
 
@@ -70,4 +69,3 @@ TestMethod2:
   Dir GreenLED out
   GreenLED = !GreenLED
 goto main
-

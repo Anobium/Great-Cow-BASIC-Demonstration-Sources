@@ -14,7 +14,6 @@
 #option Explicit
 
 ; ----- Include library
-#include <tinyAVRrc.h>
 
 ; ----- Constants
 
@@ -106,5 +105,4 @@
 
 
 End
-
 

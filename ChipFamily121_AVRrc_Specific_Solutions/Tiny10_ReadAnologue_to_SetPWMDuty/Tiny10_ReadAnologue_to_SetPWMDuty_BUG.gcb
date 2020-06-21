@@ -14,13 +14,12 @@
 #chip  TINY10, 1
 #option Explicit
 
+  'BUG... out of registers - work around is
+'  sub wait
+'
+'  end sub
 
   Dir PortB.0 out
-
-  'Setup ADC
-  MUX0 = 1                ' ADC1 (PB1)
-  ADEN = 1
-  ADPS0 = 1               ' Enable ADC, 125kHz clock
 
   'Set up PWM
   COM0A1 = 1: COM0A0 = 0                       ' Set OC0A1 Low for a port that is PULLED HIGH, examine COM0A1 and COM0A0 for other options
@@ -34,11 +33,9 @@
   Dim adcTemp as word
   ' Main loop
   Do Forever
-    ADSC = 1               '  Start ADC read operation
-    wait while ( ADSC = 1) '  Wait while conversion in progress
 
-    'factorise ADCL to give full dity
-    adcTemp =  ( ADCL * MAXFACTOR )
+    'factorise ADC to give full dity
+    adcTemp =  ( ReadAD( AN1 ) * MAXFACTOR )
     if adcTemp > MAXADC then adcTemp = MAXADC
 
     OCR0AL = adcTemp   '  Copy result to PWM duty
@@ -48,3 +45,4 @@
     wait 50 ms
 
   Loop
+

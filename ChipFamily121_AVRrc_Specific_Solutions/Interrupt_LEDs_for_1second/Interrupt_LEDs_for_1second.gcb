@@ -19,7 +19,6 @@
 #option Explicit
 
 ; ----- Include library
-#include <tinyAVRrc.h>
 
 
 ; ----- Constants
@@ -63,4 +62,3 @@ END
 Sub ISR
     portb.2 = !portb.2
 End Sub
-
