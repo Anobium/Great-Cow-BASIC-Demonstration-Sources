@@ -1,0 +1,41 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a one second pulse on portb.0 which is OCR0A
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.00
+'''@date       28/06/2020
+'''********************************************************************************
+
+; ----- Configuration
+#chip tiny104, 8
+#option Explicit
+
+; ----- Include library
+
+; ----- Constants
+     ' 1 second, ie 0.5Hz at a chip frequency of 1mhz
+    #define myDelay 15624
+
+    'Do not change constant calculations as these create the CONSTANTS
+    #define myDelayL  myDelay AND 255
+    #define myDelayH  (myDelay/256)
+
+; ----- Define Hardware settings
+    #DEFINE RedLED    PORTB.1
+    dir RedLED    out
+
+; ----- Variables
+    'Load the registers to toogle OCR0A - for different frequencies you need to recalc the 'TCCR0B' mask and the 'myDelay' constant
+    OCR0AH = myDelayH
+    OCR0AL = myDelayL
+    COM0A0 = 1: WGM00 = 0            ' Toggle OC0A, CTC mode
+    WGM02  = 1: TCCR0B = TCCR0B OR 3  ' CTC mode, use OCR0A  /64
+
+; ----- Main body of program commences here.
+
+    do
+    loop
+
+end

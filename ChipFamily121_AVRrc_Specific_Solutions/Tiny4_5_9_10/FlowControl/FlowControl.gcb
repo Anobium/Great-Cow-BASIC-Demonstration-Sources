@@ -11,7 +11,7 @@
 
 ; ----- Configuration
 #chip tiny9,  1
-'#option Explicit
+#option Explicit
 
 ; ----- Include library
 

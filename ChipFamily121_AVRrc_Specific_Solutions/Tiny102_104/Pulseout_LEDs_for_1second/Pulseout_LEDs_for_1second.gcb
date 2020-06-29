@@ -1,0 +1,45 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a one second pulse on an LED using PulseOut
+'''
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.00
+'''@date       28/06/2020
+'''********************************************************************************
+
+; ----- Configuration
+#chip tiny104, 8
+#option Explicit
+
+; ----- Include library
+
+; ----- Constants
+     ' 1 second, ie 0.5Hz at a chip frequency of 1mhz
+    #define myDelay 1 s
+
+; ----- Define Hardware settings
+    #DEFINE GreenLED  PORTB.2
+    #DEFINE RedLED    PORTB.1
+    #DEFINE YellowLED PORTB.0
+
+
+; ----- Variables
+    'None
+' Main
+' This loop runs over and over forever.
+
+
+
+    Do
+        PulseOut GreenLED, myDelay
+        wait myDelay
+        PulseOut RedLED, myDelay
+        wait myDelay
+        PulseOut YellowLED, myDelay
+        wait myDelay
+    Loop
+
+END
+

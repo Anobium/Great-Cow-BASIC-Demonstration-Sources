@@ -1,0 +1,71 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows logic test in the AVRrc chips - change the constant CURRENTTEST to change the program
+'''
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    28/06/2020
+'''********************************************************************************
+
+; ----- Configuration
+#chip tiny104, 8
+#option Explicit
+
+; ----- Include library
+
+; ----- Constants
+
+  #DEFINE RedLED PORTB.2
+  #DEFINE GreenLED PORTB.1
+  #DEFINE YellowLED PORTB.0
+
+
+  #Define CURRENTTEST 1
+
+
+; ----- Variables
+  'See inline
+
+; ----- Main body of program commences here.
+
+  #IFDEF  CURRENTTEST 1
+    'Test 1
+    Do
+      'Turn on RedLED
+      Gosub TestSub1
+
+      'Turn on GreenLED
+      Goto TestMethod2
+      main:
+
+      PulseOut YellowLED, 1 s
+      wait 1 s
+
+    Loop
+
+  #ENDIF
+
+
+  #IFDEF  CURRENTTEST 2
+    'Test2 -
+  #ENDIF
+
+
+  #IFDEF  CURRENTTEST 3
+    'Test3 -
+  #ENDIF
+
+
+End
+
+Sub TestSub1
+  Dir RedLED out
+  RedLED = !RedLED
+End Sub
+
+TestMethod2:
+  Dir GreenLED out
+  GreenLED = !GreenLED
+goto main

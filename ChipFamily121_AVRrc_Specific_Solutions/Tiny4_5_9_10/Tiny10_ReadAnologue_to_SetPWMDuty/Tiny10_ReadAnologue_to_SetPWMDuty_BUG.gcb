@@ -1,0 +1,65 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows how to read the ADC, and then to set PWM duty%
+'''
+''' Change TCCR0B to change the frequency.  OCR0AL controls the DUTY
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    11/06/2020
+'''********************************************************************************
+
+
+#chip  TINY10, 8
+#option Explicit
+
+  'BUG... out of registers - work around is
+'  sub wait
+'
+'  end sub
+
+
+; ----- Config Serial UART :
+; ----- Include library
+#include <softserial.h>
+#define SER1_BAUD 9600     ; baudrate must be defined
+#define SER1_DATABITS 8    ; databits optional (default = 8)
+#define SER1_STOPBITS 1    ; stopbits optional (default = 1)
+#define SER1_INVERT Off    ; inverted polarity optional (default = Off)
+; Config I/O ports for transmitting:
+#define SER1_TXPORT PORTB  ; I/O port (without .bit) must be defined
+#define SER1_TXPIN 2       ; portbit  must be defined
+
+
+  Dir PortB.0 out
+
+  'Set up PWM
+  COM0A1 = 1: COM0A0 = 0                       ' Set OC0A1 Low for a port that is PULLED HIGH, examine COM0A1 and COM0A0 for other options
+  WGM00  = 1: WGM01 = 1                        ' Set OC0A1 Low , Fast 10bit PWM mode
+  WGM02  = 1: 'TCCR0B = TCCR0B or 2             ' Fast PWM with OCR0A as TOP;  clkI/O/8 (From prescaler)
+TCCR0B.0=0
+TCCR0B.1=1
+TCCR0B.2=0
+
+
+  'factorise ADCL to give full duty as the ADC reading is 0-255 and we need 0-1023
+  #Define MAXFACTOR = 13       '8 may work for a perfect POT setup... mine is not perfect...
+  #Define MAXADC    = 1023
+
+  Dim adcTemp as word
+  ' Main loop
+  Do Forever
+
+    'factorise ADC to give full dity
+    adcTemp =  ( ReadAD( AN1 ) )
+    Ser1Send adcTemp
+    if adcTemp > MAXADC then adcTemp = MAXADC
+
+    OCR0AL = adcTemp   '  Copy result to PWM duty
+    OCR0AH = adcTemp_h '  Copy result to PWM duty
+
+    'PulseOutInv portb.2, 50 ms
+    wait 500 ms
+
+  Loop
