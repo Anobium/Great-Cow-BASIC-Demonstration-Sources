@@ -29,7 +29,7 @@
   ' Main loop
   Do Forever
 
-    adcTemp =  ReadAD10( AN7 ) * 3
+    adcTemp =  ReadAD( AN7 ) * 4
 
     OCR0AH = adcTemp_h '  Copy result to PWM duty, always copy High byte first
     OCR0AL = adcTemp   '  Copy result to PWM duty
