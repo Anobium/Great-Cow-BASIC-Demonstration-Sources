@@ -1,6 +1,6 @@
 '''A demonstration program for GCB
 '''---------------------------------------------------------------------------------
-''' This program shows logic test in the AVRrc chips - change the constant CURRENTTEST to change the program
+''' This program shows logic test board.
 '''
 '''
 '''@author  Evan Venn
