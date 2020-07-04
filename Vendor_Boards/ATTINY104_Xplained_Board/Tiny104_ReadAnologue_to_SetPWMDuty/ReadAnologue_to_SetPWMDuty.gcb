@@ -1,0 +1,53 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows how to read the ADC, and then to set PWM duty% - the 10K pot is attached to AN4/Pin10/PortB.0
+'''
+''' Change TCCR0B to change the frequency.  OCR0B controls the DUTY
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    28/06/2020
+'''********************************************************************************
+
+
+; ----- Configuration
+#chip  TINY104, 4
+#option Explicit
+
+
+  #Define SWITCH  portb.1
+  #Define LED     porta.5
+
+  'Set Internal Pullup for SWITCH port
+  PUEB.1 = 1
+  'Set direction of Switch
+  Dir SWITCH in
+
+  'Use Volatile to ensure the compiler does not try to optimize the code
+  #option Volatile LED
+  'Set direction of LED
+  Dir LED out
+
+  'Set up ADC
+  #define AD_Delay 2 10us
+
+  'Set up PWM
+  COM0B1 = 1: COM0B0 = 0                       ' Set OC0B1 Low for a port that is PULLED HIGH, examine COM0B1 and COM0B0 for other options
+  WGM00  = 1: WGM01 = 1                        ' Set OC0B1 Low , Fast 10bit PWM mode
+  WGM02  = 1: TCCR0B = TCCR0B or 2             ' Fast PWM with OCR0B as TOP;  clkI/O/8 (From prescaler)
+  REMAP = 1
+
+  Dim adcTemp as word
+  ' Main loop
+  Do Forever
+
+    adcTemp =  ReadAD10( AN4 )
+
+    OCR0BH = adcTemp_h '  Copy result to PWM duty, always copy High byte first
+    OCR0BL = adcTemp   '  Copy result to PWM duty
+
+    wait 100 ms
+
+
+  Loop

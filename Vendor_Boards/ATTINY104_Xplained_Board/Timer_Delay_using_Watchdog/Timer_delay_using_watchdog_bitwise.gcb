@@ -1,0 +1,76 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows how use WDT to generate delays.
+'''
+''' This method reduces power consumption during the operation, however, uses more PROGMEM than the Great Cow BASIC `wait` instruction.
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    28/06/2020
+'''********************************************************************************
+
+; ----- Configuration
+#chip  TINY104, 4
+#option Explicit
+
+
+    #Define SWITCH  portb.1
+    #Define LED     porta.5
+
+    'Set Internal Pullup for SWITCH port
+    PUEB.1 = 1
+    'Set direction of Switch
+    Dir SWITCH in
+
+    'Use Volatile to ensure the compiler does not try to optimize the code
+    #option Volatile LED
+    'Set direction of LED
+    Dir LED out
+
+
+; ----- Variables
+  'None
+
+; ----- Main body of program commences here.
+
+    Do
+        LED = !LED
+        'Use Watchdog for time delay; n=0 is ~19ms; n=6 is ~1.151secs ; n=9 is 9.25secs,
+        WDDelay ( 6 )
+        wait 500 ms
+    Loop
+
+
+End
+
+' ----- Subs
+
+'Use Watchdog for time delay; n=0 is ~19ms; n=6 is ~1.151secs ; n=9 is 9.25secs
+sub WDDelay ( in WDtimerDelay as byte )
+
+  'Set SM1 to permit use of sleep
+  SM1=1
+  'Enable Interrupt
+  WDIE = 1
+
+  WDP3 = WDtimerDelay.3
+  WDP2 = WDtimerDelay.2
+  WDP1 = WDtimerDelay.1
+  WDP0 = WDtimerDelay.0
+
+
+  SE = 1 'sleep_enable
+  SLEEP  'sleep_cpu
+
+end sub
+
+sub Interrupt
+    'Handle Watchdog event
+    If WDIE = 1 then
+      WDIE = 0
+    End if
+end sub
+
+
+

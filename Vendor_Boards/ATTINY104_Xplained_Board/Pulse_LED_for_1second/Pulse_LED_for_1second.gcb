@@ -1,0 +1,55 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a one second pulse on portb.0 which is OCR0A
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.00
+'''@date       28/06/2020
+'''********************************************************************************
+
+; ----- Configuration
+#chip  TINY104, 4
+#option Explicit
+
+
+    #Define SWITCH  portb.1
+    #Define LED     porta.5
+
+    'Set Internal Pullup for SWITCH port
+    PUEB.1 = 1
+    'Set direction of Switch
+    Dir SWITCH in
+
+    'Use Volatile to ensure the compiler does not try to optimize the code
+    #option Volatile LED
+    'Set direction of LED
+    Dir LED out
+
+; ----- Include library
+
+; ----- Constants
+     ' 1 second, ie 0.5Hz at a chip frequency of 1mhz
+    #define myDelay 15624
+
+    'Do not change constant calculations as these create the CONSTANTS
+    #define myDelayL  myDelay AND 255
+    #define myDelayH  (myDelay/256)
+
+
+; ----- Variables
+    'Load the registers to toogle OCR0A - for different frequencies you need to recalc the 'TCCR0B' mask and the 'myDelay' constant
+    OCR0AH = myDelayH
+    OCR0AL = myDelayL
+    COM0B0 = 1: WGM00 = 0            ' Toggle OC0A, CTC mode
+    WGM02  = 1: TCCR0B = TCCR0B OR 3  ' CTC mode, use OCR0A  /64
+
+    'Change the output port by remaping to the LED
+    REMAP = 1
+
+; ----- Main body of program commences here.
+
+    do
+    loop
+
+end

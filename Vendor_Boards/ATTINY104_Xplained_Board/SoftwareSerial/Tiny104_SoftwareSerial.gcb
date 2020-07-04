@@ -1,0 +1,77 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows how to use software serial.  Porta.6 is selected to avoid the mEDDG pulse on the PortB.2 (if you self power the ATTINY104 then you can use Portb.2)
+'''
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    03/07/2020
+'''********************************************************************************
+
+
+
+#chip  TINY104, 8
+#option Explicit
+
+
+  ; Start of board specific configuration
+
+  #Define SWITCH  portb.1
+  #Define LED     porta.5
+
+  'Set Internal Pullup for SWITCH port
+  PUEB.1 = 1
+  'Set direction of Switch
+  Dir SWITCH in
+
+  'Use Volatile to ensure the compiler does not try to optimize the code
+  #option Volatile LED
+  'Set direction of LED
+  Dir LED out
+
+  ; End of board specific configuration
+
+  #include <softserial.h>
+  ; ----- Config Serial UART :
+  #define SER1_BAUD 9500     ; baudrate must be defined - this was intended to be 9600 but the internal clock is SO bad.. I had to adjust the BPS to 9500
+  #define SER1_DATABITS 8    ; databits optional (default = 8)
+  #define SER1_STOPBITS 1    ; stopbits optional (default = 1)
+  #define SER1_INVERT Off    ; inverted polarity optional (default = Off)
+  ; Config I/O ports for transmitting:
+  #define SER1_TXPORT PORTA  ; I/O port (without .bit) must be defined
+  #define SER1_TXPIN 6       ; portbit  must be defined
+
+
+; ----- Variables
+    Dim StringLenByte, RecByte  As Byte
+
+; ----- Main body of program commences here.
+
+    Ser1Send 1
+    Ser1Send 10   'new line in Terminal
+    Ser1Send 13
+    Ser1Send 10   'new line in Terminal
+    Ser1Send 13
+    for RecByte = 1 to 31
+     ReadTable Strings, RecByte, STxDataByte
+     Ser1Send STxDataByte
+    next
+    Ser1Send 10   'new line in Terminal
+    Ser1Send 13
+    Ser1Send 10   'new line in Terminal
+    Ser1Send 13
+
+    REM - enable to show constraint     Ser1Print "Hello this is a string"
+
+    table Strings
+    87,101,108,99,111,109,101,32,116,111,32,71,114,101,97,116,32,67,111,119,32,66,65,83,73,67,32,50,48,50,48
+    end table
+
+    Do
+
+        wait 100 ms
+        Ser1Send "."
+        LED = ! LED
+
+    Loop

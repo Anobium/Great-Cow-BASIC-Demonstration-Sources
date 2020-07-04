@@ -1,0 +1,96 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows logic test in the AVRrc chips - change the constant CURRENTTEST to change the program
+'''
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    28/06/2020
+'''********************************************************************************
+
+; ----- Configuration
+#chip  TINY104, 4
+#option Explicit
+
+
+    #Define SWITCH  portb.1
+    #Define LED     porta.5
+
+    'Set Internal Pullup for SWITCH port
+    PUEB.1 = 1
+    'Set direction of Switch
+    Dir SWITCH in
+
+    'Use Volatile to ensure the compiler does not try to optimize the code
+    #option Volatile LED
+    'Set direction of LED
+    Dir LED out
+
+   #Define CURRENTTEST 4
+
+
+; ----- Variables
+  'See inline
+
+; ----- Main body of program commences here.
+
+
+
+  #IFDEF  CURRENTTEST 1
+    'Test 1 - should toggle when switch is pushed
+    do
+        if Switch then
+            LED = On
+
+        else
+            LED = Off
+
+        end if
+    loop
+  #ENDIF
+
+
+  #IFDEF  CURRENTTEST 2
+    'Test2 - should toggle when switch is pushed
+    dim SwitchState as Byte
+    do
+        SwitchState = Switch
+        if SwitchState then
+            LED = On
+
+        else
+            LED = Off
+
+        end if
+    loop
+  #ENDIF
+
+
+  #IFDEF  CURRENTTEST 3
+    'Test3 - Should toggle every 500ms
+    dim SwitchState as Byte
+    SwitchState = 0
+    do
+        if SwitchState then
+            LED = On
+            SwitchState = 0
+        else
+            LED = Off
+            SwitchState = 1
+        end if
+        WAIT 500 MS
+    loop
+  #ENDIF
+
+  #IFDEF  CURRENTTEST 4
+    'Test 4 - should toggle when switch is pushed
+    do
+        LED = Switch
+    loop
+  #ENDIF
+
+
+
+End
+

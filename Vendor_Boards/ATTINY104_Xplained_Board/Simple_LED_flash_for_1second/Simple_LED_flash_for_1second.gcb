@@ -1,0 +1,48 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a one second pulse on the LEDS
+'''
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.00
+'''@date       28/06/2020
+'''********************************************************************************
+
+; ----- Configuration
+#chip  TINY104, 4
+#option Explicit
+
+
+    #Define SWITCH  portb.1
+    #Define LED     porta.5
+
+    'Set Internal Pullup for SWITCH port
+    PUEB.1 = 1
+    'Set direction of Switch
+    Dir SWITCH in
+
+    'Use Volatile to ensure the compiler does not try to optimize the code
+    #option Volatile LED
+    'Set direction of LED
+    Dir LED out
+
+
+; ----- Include library
+
+; ----- Constants
+     ' 1 second, ie 0.5Hz at a chip frequency of 1mhz
+    #define myDelay 1
+
+; ----- Variables
+    'None
+' Main
+' This loop runs over and over forever.
+
+
+    Do
+        LED = !LED
+        wait 1 s
+    Loop
+
+END

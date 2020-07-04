@@ -1,0 +1,47 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows how to set the PWM in fixed frequency and duty AND remap the PWM to the LED
+'''
+''' Change the constants to change the PWM parameters
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    03/07/2020
+'''********************************************************************************
+
+
+
+#chip  TINY104, 4
+#option Explicit
+
+
+  #Define SWITCH  portb.1
+  #Define LED     porta.5
+
+  'Set Internal Pullup for SWITCH port
+  PUEB.1 = 1
+  'Set direction of Switch
+  Dir SWITCH in
+
+  'Use Volatile to ensure the compiler does not try to optimize the code
+  #option Volatile LED
+  'Set direction of LED
+  Dir LED out
+
+
+  'define PWM_Freq in kHz and define PWM_Duty in %
+  #define PWM_Freq 24
+  #define PWM_Duty 30
+
+  'remap the COM0B1/PWM to the LED
+  REMAP = 1
+
+  do
+
+      PWMOn
+      wait 5 s
+      PWMOff
+      wait 1 s
+
+  loop
