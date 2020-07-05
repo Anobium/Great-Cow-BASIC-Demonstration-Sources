@@ -29,7 +29,7 @@
 
 ' ----- Main body of program commences here.
 
-    '40000 Hz
+    '40000 Hz = 0x0147AE
     NCO1_Initialize 0x0147AE
     wait 5 s
 
