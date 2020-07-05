@@ -19,7 +19,7 @@
     #Define LED     porta.5
 
     'Set Internal Pullup for SWITCH port
-    PUEB.1 = 1
+    PUEB.PORTB1 = 1
     'Set direction of Switch
     Dir SWITCH in
 
@@ -71,6 +71,5 @@ sub Interrupt
       WDIE = 0
     End if
 end sub
-
 
 

@@ -1,6 +1,7 @@
 '''A demonstration program for GCB
 '''---------------------------------------------------------------------------------
-''' This program shows basic logic test.
+''' This program shows logic test in the AVRrc chips
+'''
 '''
 '''@author  Evan Venn
 '''@licence GPL
@@ -27,20 +28,22 @@
     Dir LED out
 
 
+
 ; ----- Variables
-  'See inline
+  'None
 
 ; ----- Main body of program commences here.
 
 
 
-
     do
+        if Switch = On then
+            LED = On
 
-      LED = !LED
-      wait 500 ms
+        else
+            LED = Off
 
+        end if
     loop
-
 
 End

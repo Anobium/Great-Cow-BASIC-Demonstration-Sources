@@ -1,6 +1,6 @@
 '''A demonstration program for GCB
 '''---------------------------------------------------------------------------------
-''' This program shows how to use software serial.  Porta.6 is selected to avoid the mEDDG pulse on the PortB.2 (if you self power the ATTINY104 then you can use Portb.2)
+''' This program shows how to use software serial.
 '''
 '''
 '''@author  Evan Venn
@@ -21,7 +21,7 @@
   #Define LED     porta.5
 
   'Set Internal Pullup for SWITCH port
-  PUEB.1 = 1
+  PUEB.PORTB1 = 1
   'Set direction of Switch
   Dir SWITCH in
 
@@ -39,14 +39,16 @@
   #define SER1_STOPBITS 1    ; stopbits optional (default = 1)
   #define SER1_INVERT Off    ; inverted polarity optional (default = Off)
   ; Config I/O ports for transmitting:
-  #define SER1_TXPORT PORTA  ; I/O port (without .bit) must be defined
-  #define SER1_TXPIN 6       ; portbit  must be defined
+  #define SER1_TXPORT PORTB  ; I/O port (without .bit) must be defined
+  #define SER1_TXPIN 3       ; portbit  must be defined
 
 
 ; ----- Variables
     Dim StringLenByte, RecByte  As Byte
 
 ; ----- Main body of program commences here.
+
+    wait 3 s      'To give you time to connect the terminal
 
     Ser1Send 1
     Ser1Send 10   'new line in Terminal
