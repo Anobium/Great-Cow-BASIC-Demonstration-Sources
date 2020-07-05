@@ -38,16 +38,17 @@
   WGM02  = 1: TCCR0B = TCCR0B or 2             ' Fast PWM with OCR0B as TOP;  clkI/O/8 (From prescaler)
   REMAP = 1
 
-  Dim adcTemp as word
+  Dim adcTemp, oldadcValue as word
   ' Main loop
   Do Forever
 
     adcTemp =  ReadAD10( AN4 )
 
-    OCR0BH = adcTemp_h '  Copy result to PWM duty, always copy High byte first
-    OCR0BL = adcTemp   '  Copy result to PWM duty
-
-    wait 100 ms
+    if adcTemp <> oldadcValue then
+      OCR0BH = adcTemp_h '  Copy result to PWM duty, always copy High byte first
+      OCR0BL = adcTemp   '  Copy result to PWM duty
+      oldadcValue = adcTemp
+    end if
 
 
   Loop
