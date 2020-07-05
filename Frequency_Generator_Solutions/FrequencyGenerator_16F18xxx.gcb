@@ -1,0 +1,302 @@
+''' Great Cow BASIC demonstration
+'''
+''' This demonstration a frequency generator with the a range of  0hz to  40000Hz(40kHz)
+'''
+''' This program uses two CLC module, the NCO module, the CLKREF module to calculate the frequency and Timer6 for the duty.
+'''
+'''
+''' There is one yellow LED available on the MPLAB® Xpress PIC16F18446 board that can be turned ON
+''' and OFF.
+'''
+'''
+'''@author  Evan R. Venn
+'''@licence GPL
+'''@version 1.00
+'''@date    05/07/2020
+'''********************************************************************
+#chip 16f18446 , 32
+#option Explicit
+
+
+    PMD_Initialize();
+    PIN_MANAGER_Initialize();
+    TMR6_Initialize();
+    CLC1_Initialize();
+    NCO1_Initialize( 0 );
+    CLC2_Initialize();
+    CLKREF_Initialize();
+
+
+' ----- Main body of program commences here.
+
+    '40000 Hz
+    NCO1_Initialize 0x0147AE
+    wait 5 s
+
+    Do
+
+       '1Hz
+      NCO1_Initialize 0x000003
+      wait 5 s
+
+       '10Hz
+      NCO1_Initialize 0x000015
+      wait 5 s
+
+      '100hz
+      NCO1_Initialize 0x0000D2
+      wait 5 s
+
+      '1000 Hz
+      NCO1_Initialize 0x000831
+      wait 5 s
+
+      '2000 Hz
+      NCO1_Initialize 0x001062
+      wait 5 s
+
+      '5000 Hz
+      NCO1_Initialize 0x0028F5
+      wait 5 s
+
+      '10000 Hz
+      NCO1_Initialize 0x0051EC
+      wait 5 s
+
+      '20000 Hz
+      NCO1_Initialize 0x00A3D7
+      wait 5 s
+
+      '40000 Hz
+      NCO1_Initialize 0x0147AE
+      wait 5 s
+
+    loop
+
+
+sub PMD_Initialize
+
+    // CLKRMD CLKR enabled; SYSCMD SYSCLK enabled; FVRMD FVR enabled; IOCMD IOC enabled; NVMMD NVM enabled;
+    PMD0 = 0x00;
+    // TMR0MD TMR0 enabled; TMR1MD TMR1 enabled; TMR4MD TMR4 enabled; TMR5MD TMR5 enabled; TMR2MD TMR2 enabled; TMR3MD TMR3 enabled; TMR6MD TMR6 enabled;
+    PMD1 = 0x00;
+    // NCO1MD NCO1 enabled;
+    PMD2 = 0x00;
+    // ZCDMD ZCD enabled; CMP1MD CMP1 enabled; ADCMD ADC enabled; CMP2MD CMP2 enabled; DAC1MD DAC1 enabled;
+    PMD3 = 0x00;
+    // CCP2MD CCP2 enabled; CCP1MD CCP1 enabled; CCP4MD CCP4 enabled; CCP3MD CCP3 enabled; PWM6MD PWM6 enabled; PWM7MD PWM7 enabled;
+    PMD4 = 0x00;
+    // CWG2MD CWG2 enabled; CWG1MD CWG1 enabled;
+    PMD5 = 0x00;
+    // U1MD EUSART1 enabled; MSSP1MD MSSP1 enabled; MSSP2MD MSSP2 enabled;
+    PMD6 = 0x00;
+    // CLC3MD CLC3 enabled; CLC4MD CLC4 enabled; DSM1MD DSM enabled; SMT1MD SMT1 enabled; CLC1MD CLC1 enabled; CLC2MD CLC2 enabled;
+    PMD7 = 0x00;
+end sub
+
+sub PIN_MANAGER_Initialize
+
+    /**
+    LATx registers
+    */
+    LATA = 0x00;
+    LATB = 0x00;
+    LATC = 0x00;
+
+    /**
+    TRISx registers
+    */
+    TRISA = 0x3B;
+    TRISB = 0xF0;
+    TRISC = 0xF7;
+
+    /**
+    ANSELx registers
+    */
+    ANSELC = 0xFF;
+    ANSELB = 0xF0;
+    ANSELA = 0x37;
+
+    /**
+    WPUx registers
+    */
+    WPUB = 0x00;
+    WPUA = 0x00;
+    WPUC = 0x00;
+
+    /**
+    ODx registers
+    */
+    ODCONA = 0x00;
+    ODCONB = 0x00;
+    ODCONC = 0x00;
+
+    /**
+    SLRCONx registers
+    */
+    SLRCONA = 0x37;
+    SLRCONB = 0xF0;
+    SLRCONC = 0xFF;
+
+    /**
+    INLVLx registers
+    */
+    INLVLA = 0x3F;
+    INLVLB = 0xF0;
+    INLVLC = 0xFF;
+
+    RC3PPS = 0x02;   //RC3->CLC2:CLC2OUT;
+    RA2PPS = 0x01;   //RA2->CLC1:CLC1OUT;
+
+end sub
+
+sub TMR6_Initialize
+    // Set TMR6 to the options selected in the User Interface
+
+    // T6CS CLKR;
+    T6CLKCON = 0x08;
+
+    // T6PSYNC Not Synchronized; T6MODE Starts at T6ON = 1 and TMR6_ers = 1; T6CKPOL Rising Edge; T6CKSYNC Synchronized;
+    T6HLT = 0x21;
+
+    // T6RSEL CLC1_out;
+    T6RST = 0x0D;
+
+    // T6PR 9;
+    T6PR = 0x09;
+
+    // TMR6 0;
+    T6TMR = 0x00;
+
+    // Clearing IF flag.
+    TMR6IF = 0;
+
+    // T6CKPS 1:1; T6OUTPS 1:1; TMR6ON on;
+    T6CON = 0x80;
+end sub
+
+sub CLC1_Initialize
+
+    // Set the CLC1 to the options selected in the User Interface
+
+    // LC1G1POL not_inverted; LC1G2POL inverted; LC1G3POL not_inverted; LC1G4POL inverted; LC1POL not_inverted;
+    CLC1POL = 0x0A;
+    // LC1D1S NCO1_OUT;
+    CLC1SEL0 = 0x1A;
+    // LC1D2S TMR6_OUT;
+    CLC1SEL1 = 0x12;
+    // LC1D3S CLC2_OUT;
+    CLC1SEL2 = 0x21;
+    // LC1D4S TMR6_OUT;
+    CLC1SEL3 = 0x12;
+    // LC1G1D3N disabled; LC1G1D2N disabled; LC1G1D4N disabled; LC1G1D1T enabled; LC1G1D3T disabled; LC1G1D2T disabled; LC1G1D4T disabled; LC1G1D1N disabled;
+    CLC1GLS0 = 0x02;
+    // LC1G2D2N disabled; LC1G2D1N disabled; LC1G2D4N disabled; LC1G2D3N disabled; LC1G2D2T disabled; LC1G2D1T disabled; LC1G2D4T disabled; LC1G2D3T disabled;
+    CLC1GLS1 = 0x00;
+    // LC1G3D1N disabled; LC1G3D2N disabled; LC1G3D3N disabled; LC1G3D4N disabled; LC1G3D1T disabled; LC1G3D2T disabled; LC1G3D3T enabled; LC1G3D4T disabled;
+    CLC1GLS2 = 0x20;
+    // LC1G4D1N disabled; LC1G4D2N disabled; LC1G4D3N disabled; LC1G4D4N disabled; LC1G4D1T disabled; LC1G4D2T disabled; LC1G4D3T disabled; LC1G4D4T disabled;
+    CLC1GLS3 = 0x00;
+    // LC1EN enabled; INTN disabled; INTP disabled; MODE 2-input D flip-flop with R;
+    CLC1CON = 0x85;
+
+end sub
+
+
+sub NCO1_Initialize ( INC_VAL As Long   )
+    // Set the NCO to the options selected in the GUI
+    // EN disabled; POL active_hi; PFM FDC_mode;
+    NCO1CON = 0x00;
+    // CKS CLKR; PWS 1_clk;
+    NCO1CLK = 0x06;
+    //
+    NCO1ACCU = 0x00;
+    //
+    NCO1ACCH = 0x00;
+    //
+    NCO1ACCL = 0x00;
+    //
+    NCO1INCU = [BYTE]INC_VAL_U
+    //
+    NCO1INCH = [BYTE]INC_VAL_H
+    //
+    NCO1INCL = [BYTE]INC_VAL
+
+    'Enable NCO
+    NCO1EN = 1
+
+End Sub
+
+Sub CLC2_Initialize
+    // Set the CLC2 to the options selected in the User Interface
+
+    // LC2G1POL not_inverted; LC2G2POL not_inverted; LC2G3POL not_inverted; LC2G4POL not_inverted; LC2POL not_inverted;
+    CLC2POL = 0x00;
+    // LC2D1S TMR6_OUT;
+    CLC2SEL0 = 0x12;
+    // LC2D2S CLC1_OUT;
+    CLC2SEL1 = 0x20;
+    // LC2D3S CLC1_OUT;
+    CLC2SEL2 = 0x20;
+    // LC2D4S CLC1_OUT;
+    CLC2SEL3 = 0x20;
+    // LC2G1D3N disabled; LC2G1D2N disabled; LC2G1D4N disabled; LC2G1D1T enabled; LC2G1D3T disabled; LC2G1D2T disabled; LC2G1D4T disabled; LC2G1D1N disabled;
+    CLC2GLS0 = 0x02;
+    // LC2G2D2N disabled; LC2G2D1N disabled; LC2G2D4N disabled; LC2G2D3N disabled; LC2G2D2T enabled; LC2G2D1T disabled; LC2G2D4T disabled; LC2G2D3T disabled;
+    CLC2GLS1 = 0x08;
+    // LC2G3D1N disabled; LC2G3D2N disabled; LC2G3D3N disabled; LC2G3D4N disabled; LC2G3D1T disabled; LC2G3D2T disabled; LC2G3D3T disabled; LC2G3D4T disabled;
+    CLC2GLS2 = 0x00;
+    // LC2G4D1N disabled; LC2G4D2N disabled; LC2G4D3N disabled; LC2G4D4N disabled; LC2G4D1T disabled; LC2G4D2T disabled; LC2G4D3T disabled; LC2G4D4T disabled;
+    CLC2GLS3 = 0x00;
+    // LC2EN enabled; INTN disabled; INTP disabled; MODE AND-OR;
+    CLC2CON = 0x80;
+
+End Sub
+
+Sub CLKREF_Initialize
+    // CLKRCLK FOSC;
+    CLKRCLK = 0x00;
+    // CLKRDC 50% Duty Cycle; CLKRDIV BaseClock/32; CLKREN enabled;
+    CLKRCON = 0x95;
+
+end sub
+
+
+// Configuration bits: selected in the GUI
+
+// CONFIG1
+#pragma config FEXTOSC = OFF    // External Oscillator mode selection bits->Oscillator not enabled
+#pragma config RSTOSC = HFINT1    // Power-up default value for COSC bits->HFINTOSC (1MHz)
+#pragma config CLKOUTEN = OFF    // Clock Out Enable bit->CLKOUT function is disabled; i/o or oscillator function on OSC2
+#pragma config CSWEN = ON    // Clock Switch Enable bit->Writing to NOSC and NDIV is allowed
+#pragma config FCMEN = ON    // Fail-Safe Clock Monitor Enable bit->FSCM timer enabled
+
+// CONFIG2
+#pragma config MCLRE = ON    // Master Clear Enable bit->MCLR pin is Master Clear function
+#pragma config PWRTS = OFF    // Power-up Timer Enable bit->PWRT disabled
+#pragma config LPBOREN = OFF    // Low-Power BOR enable bit->ULPBOR disabled
+#pragma config BOREN = ON    // Brown-out reset enable bits->Brown-out Reset Enabled, SBOREN bit is ignored
+#pragma config BORV = LO    // Brown-out Reset Voltage Selection->Brown-out Reset Voltage (VBOR) set to 2.45V
+#pragma config ZCDDIS = OFF    // Zero-cross detect disable->Zero-cross detect circuit is disabled at POR.
+#pragma config PPS1WAY = ON    // Peripheral Pin Select one-way control->The PPSLOCK bit can be cleared and set only once in software
+#pragma config STVREN = ON    // Stack Overflow/Underflow Reset Enable bit->Stack Overflow or Underflow will cause a reset
+
+// CONFIG3
+#pragma config WDTCPS = WDTCPS_31    // WDT Period Select bits->Divider ratio 1:65536; software control of WDTPS
+#pragma config WDTE = OFF    // WDT operating mode->WDT Disabled, SWDTEN is ignored
+#pragma config WDTCWS = WDTCWS_7    // WDT Window Select bits->window always open (100%); software control; keyed access not required
+#pragma config WDTCCS = SC    // WDT input clock selector->Software Control
+
+// CONFIG4
+#pragma config BBSIZE = BB512    // Boot Block Size Selection bits->512 words boot block size
+#pragma config BBEN = OFF    // Boot Block Enable bit->Boot Block disabled
+#pragma config SAFEN = OFF    // SAF Enable bit->SAF disabled
+#pragma config WRTAPP = OFF    // Application Block Write Protection bit->Application Block not write protected
+#pragma config WRTB = OFF    // Boot Block Write Protection bit->Boot Block not write protected
+#pragma config WRTC = OFF    // Configuration Register Write Protection bit->Configuration Register not write protected
+#pragma config WRTD = OFF    // Data EEPROM write protection bit->Data EEPROM NOT write protected
+#pragma config WRTSAF = OFF    // Storage Area Flash Write Protection bit->SAF not write protected
+#pragma config LVP = ON    // Low Voltage Programming Enable bit->Low Voltage programming enabled. MCLR/Vpp pin function is MCLR.
+
+// CONFIG5
+#pragma config CP = OFF    // UserNVM Program memory code protection bit->UserNVM code protection disabled
