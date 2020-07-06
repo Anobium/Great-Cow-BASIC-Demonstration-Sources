@@ -58,19 +58,29 @@
     Ser1Send 13
     Ser1Send 10   'new line in Terminal
     Ser1Send 13
+
     for RecByte = 1 to 31
      ReadTable Strings, RecByte, STxDataByte
      Ser1Send STxDataByte
     next
     Ser1Send 10   'new line in Terminal
     Ser1Send 13
+
+    for RecByte = 1 to 29
+     ReadTable String2, RecByte, STxDataByte
+     Ser1Send STxDataByte
+    next
     Ser1Send 10   'new line in Terminal
     Ser1Send 13
 
-    REM - enable to show constraint     Ser1Print "Hello this is a string"
+    REM - enable to show constraint     HSerPrint "Hello this is a string"
 
     table Strings
     87,101,108,99,111,109,101,32,116,111,32,71,114,101,97,116,32,67,111,119,32,66,65,83,73,67,32,50,48,50,48
+    end table
+
+    table String2
+    84,104,105,115,32,105,115,32,117,115,105,110,103,32,83,111,102,116,119,97,114,101,32,83,101,114,105,97,108
     end table
 
     Do

@@ -59,6 +59,14 @@
     next
     HserSend 10
     HserSend 13
+
+
+    for RecByte = 1 to 28
+     ReadTable String2, RecByte, STxDataByte
+     HserSend STxDataByte
+    next
+    HserSend 10
+    HserSend 13
 ' or
 '    dim var as string * 7
 '    var = "Hello t"
@@ -73,6 +81,10 @@
 
     table Strings
     87,101,108,99,111,109,101,32,116,111,32,71,114,101,97,116,32,67,111,119,32,66,65,83,73,67,32,50,48,50,48
+    end table
+
+    table String2
+    84,104,105,115,32,105,115,32,117,115,105,110,103,32,72,97,114,119,97,114,101,32,83,101,114,105,97,108,0
     end table
 
     Do
