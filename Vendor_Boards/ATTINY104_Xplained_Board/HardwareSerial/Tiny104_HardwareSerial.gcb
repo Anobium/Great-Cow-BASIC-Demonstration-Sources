@@ -1,6 +1,6 @@
 '''A demonstration program for GCB
 '''---------------------------------------------------------------------------------
-''' This program shows how to use software serial.
+''' This program shows how to use hardware serial.
 '''
 '''
 '''@author  Evan Venn
