@@ -17,7 +17,7 @@
 
   ; Start of board specific configuration
 
-  'Adjust Oscillator frequency to ensure operation of Serial, if required
+  ;Adjust Oscillator frequency to ensure operation of Serial, if required
   OSCCAL = OSCCAL - 5
 
   #Define SWITCH  portb.1
@@ -33,41 +33,43 @@
   'Set direction of LED
   Dir LED out
 
+    'USART settings for USART1
+    #define USART_BAUD_RATE 9600
+    #define USART_TX_BLOCKING
+
+
   ; End of board specific configuration
 
-  #include <softserial.h>
-  ; ----- Config Serial UART :
-  #define SER1_BAUD 9600     ; baudrate must be defined - this was intended to be 9600 but the internal clock is SO bad.. I had to adjust the BPS to 9500
-  #define SER1_DATABITS 8    ; databits optional (default = 8)
-  #define SER1_STOPBITS 1    ; stopbits optional (default = 1)
-  #define SER1_INVERT Off    ; inverted polarity optional (default = Off)
-  ; Config I/O ports for transmitting:
-  #define SER1_TXPORT PORTB  ; I/O port (without .bit) must be defined
-  #define SER1_TXPIN 2       ; portbit  must be defined
-
-
 ; ----- Variables
-    Dim StringLenByte, RecByte  As Byte
+    Dim StringLenByte, RecByte, STxDataByte  As Byte
 
 ; ----- Main body of program commences here.
 
     wait 3 s      'To give you time to connect the terminal
 
-    Ser1Send 1
-    Ser1Send 10   'new line in Terminal
-    Ser1Send 13
-    Ser1Send 10   'new line in Terminal
-    Ser1Send 13
+    HserSend 1
+    HserSend 1
+    HserSend 10
+    HserSend 13
+    HserSend 10
+    HserSend 13
     for RecByte = 1 to 31
      ReadTable Strings, RecByte, STxDataByte
-     Ser1Send STxDataByte
+     HserSend STxDataByte
     next
-    Ser1Send 10   'new line in Terminal
-    Ser1Send 13
-    Ser1Send 10   'new line in Terminal
-    Ser1Send 13
-
-    REM - enable to show constraint     Ser1Print "Hello this is a string"
+    HserSend 10
+    HserSend 13
+' or
+'    dim var as string * 7
+'    var = "Hello t"
+'    HSerPrint var
+'    var="his is "
+'    HSerPrint var
+'    var = "a string"
+'    HSerPrint var
+' or
+'    Enable to show constraint
+'     HSerPrint "Hello this is a string"
 
     table Strings
     87,101,108,99,111,109,101,32,116,111,32,71,114,101,97,116,32,67,111,119,32,66,65,83,73,67,32,50,48,50,48
@@ -76,7 +78,7 @@
     Do
 
         wait 100 ms
-        Ser1Send "."
+        HSerSend "."
         LED = ! LED
 
     Loop
