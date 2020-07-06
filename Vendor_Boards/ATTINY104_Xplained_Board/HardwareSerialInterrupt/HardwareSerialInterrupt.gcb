@@ -1,0 +1,98 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows how to use hardware serialto receive and set the port
+'''
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    03/07/2020
+'''********************************************************************************
+
+
+
+#chip  TINY104, 8
+#option Explicit
+
+  ; Start of board specific configuration
+
+  ;Adjust Oscillator frequency to ensure operation of Serial, if required
+  OSCCAL = OSCCAL - 5
+
+  #Define SWITCH  portb.1
+  #Define LED     porta.5
+
+  'Set Internal Pullup for SWITCH port
+  PUEB.PORTB1 = 1
+  'Set direction of Switch
+  Dir SWITCH in
+
+  'Use Volatile to ensure the compiler does not try to optimize the code
+  #option Volatile LED
+  'Set direction of LED
+  Dir LED out
+  LED = 0
+  'USART settings for USART1
+  #define USART_BAUD_RATE 9600
+  #define USART_TX_BLOCKING
+
+
+  ; End of board specific configuration
+
+; ----- Variables
+
+; ----- Main body of program commences here.
+
+  // Configure the Data Direction Register for Port A (DDRA).
+  // Set all pins in PORTA as output (1111 1111, a.k.a. 0xFF)
+
+  Dir PortA OUT
+
+  // Now that data direction is established, enable the pins.
+  // Turn off all pins in PORTA by default.
+  // NOTE: On Xplained Nano board, the built-in LED on PA5 follows
+  // reverse logic: setting the bit to 0 turns ON the LED and setting
+  // it to 1 turns OFF the LED. I have no earthly idea why. So, the
+  // built-in LED on the Xplained Nano board will be lit by default
+  // after all pins in the port are set to "off" (0000 0000, a.k.a. 0x00).
+  PORTA = 0xff
+
+  'cache else the register will be lost
+  Dim UCSR_Cache
+  UCSR_Cache = UCSRA
+
+
+  // USART Receive Complete interrupt stuff
+  On Interrupt UsartRX1Ready call ISR
+
+  'Need to set this regster directly as the On Interrupt destroyed the register!
+  UCSRB = 0x98
+
+
+  // Loop forever, do nothing. Interrupts handle everything now.
+  // See the ISR() interrupt handler below for the actions taken when
+  // the interrupt is triggered.
+  // USART Receive Complete interrupt stuff
+  Do
+    'Restore register
+    UCSRA = UCSR_Cache
+  Loop
+
+// Handler for the USART Receive Complete interrupt.
+Sub ISR
+
+  Dim Inval
+  // Read input from USART, and
+  // Turn components on/off based on bits in the received byte.
+  // Whatever we get from the user, push that into PORTA. The 8 bits
+  // in the byte map perfectly with the 8 bits in PORTA. Components
+  // connected with the PORTA pins (if any) should turn on/off based on
+  // how the bits in the cmd byte were set.
+
+  // Get and return received data from buffer.
+  InVal = UDR
+  PORTA = InVal
+  HSerSend InVal
+
+End Sub
+
