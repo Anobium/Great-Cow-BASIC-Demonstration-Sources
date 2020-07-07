@@ -1,6 +1,6 @@
 '''A demonstration program for GCB
 '''---------------------------------------------------------------------------------
-''' This program shows how to use hardware serialto receive and set the port
+''' This program shows how to use hardware serial to receive and set the port
 '''
 '''
 '''@author  Evan Venn
@@ -32,20 +32,24 @@
   'Set direction of LED
   Dir LED out
   LED = 0
+
   'USART settings for USART1
   #define USART_BAUD_RATE 9600
   #define USART_TX_BLOCKING
 
-
   ; End of board specific configuration
 
 ; ----- Variables
+   Dim StringLenByte, RecByte As Byte
+   Dim STxDataByte alias Serdata  'Alias the table data direct to the variable used by the library to send the data to the port
+
 
 ; ----- Main body of program commences here.
 
-  // Configure the Data Direction Register for Port A (DDRA).
-  // Set all pins in PORTA as output (1111 1111, a.k.a. 0xFF)
+  // Issue a start message
+  StartMessage
 
+  // Configure the Data Direction Register for Port A
   Dir PortA OUT
 
   // Now that data direction is established, enable the pins.
@@ -57,31 +61,20 @@
   // after all pins in the port are set to "off" (0000 0000, a.k.a. 0x00).
   PORTA = 0xff
 
-  'cache else the register will be lost
-  Dim UCSR_Cache
-  UCSR_Cache = UCSRA
-
-
-  // USART Receive Complete interrupt stuff
+  // USART Receive Completed interrupt call
   On Interrupt UsartRX1Ready call ISR
-
-  'Need to set this regster directly as the On Interrupt destroyed the register!
-  UCSRB = 0x98
-
 
   // Loop forever, do nothing. Interrupts handle everything now.
   // See the ISR() interrupt handler below for the actions taken when
   // the interrupt is triggered.
   // USART Receive Complete interrupt stuff
   Do
-    'Restore register
-    UCSRA = UCSR_Cache
   Loop
 
 // Handler for the USART Receive Complete interrupt.
 Sub ISR
 
-  Dim Inval
+  Dim Serdata
   // Read input from USART, and
   // Turn components on/off based on bits in the received byte.
   // Whatever we get from the user, push that into PORTA. The 8 bits
@@ -89,10 +82,68 @@ Sub ISR
   // connected with the PORTA pins (if any) should turn on/off based on
   // how the bits in the cmd byte were set.
 
-  // Get and return received data from buffer.
-  InVal = UDR
-  PORTA = InVal
-  HSerSend InVal
+  // Get and return received data from buffer using a sub to reduce code size. Using the variable Serdat aalso reduces the RAM used.
+  SerData = UDR
+  // Invert the bits so, bit 4 = d32 to set the LED.
+  PORTA = Serdata
+
+  //Optionally, return the value back to the terminal
+  HSerSend Serdata
 
 End Sub
 
+
+Sub StartMessage
+
+    HserSend 1
+    HserSend 1
+    HserSend 10
+    HserSend 13
+    HserSend 10
+    HserSend 13
+    for RecByte = 1 to 31
+     ReadTable Strings, RecByte, STxDataByte
+     HserSend STxDataByte
+    next
+    HserSend 10
+    HserSend 13
+
+
+    for RecByte = 1 to 28
+     ReadTable String2, RecByte, STxDataByte
+     HserSend STxDataByte
+    next
+    HserSend 10
+    HserSend 13
+
+    for RecByte = 1 to 75
+     ReadTable String3, RecByte, STxDataByte
+     HserSend STxDataByte
+    next
+    HserSend 10
+    HserSend 13
+
+    for RecByte = 1 to 65
+     ReadTable String4, RecByte, STxDataByte
+     HserSend STxDataByte
+    next
+    HserSend 10
+    HserSend 13
+
+    table Strings  'Welcome to Great Cow BASIC 2020
+    87,101,108,99,111,109,101,32,116,111,32,71,114,101,97,116,32,67,111,119,32,66,65,83,73,67,32,50,48,50,48
+    end table
+
+    table String2   'This is using Harware Serial
+    84,104,105,115,32,105,115,32,117,115,105,110,103,32,72,97,114,119,97,114,101,32,83,101,114,105,97,108,0
+    end table
+
+    table String3   'This program uses 2 bytes of precious RAM on this ATTINY104 microcontroller
+    84,104,105,115,32,112,114,111,103,114,97,109,32,117,115,101,115,32,53,32,98,121,116,101,115,32,111,102,32,112,114,101,99,105,111,117,115,32,82,65,77,32,111,110,32,116,104,105,115,32,65,84,84,73,78,89,49,48,52,32,109,105,99,114,111,99,111,110,116,114,111,108,108,101,114
+    end table
+
+    table String4   'Send single byte messages to set or clear the PortA register bits"
+    83,101,110,100,32,115,105,110,103,108,101,32,98,121,116,101,32,109,101,115,115,97,103,101,115,32,116,111,32,115,101,116,32,111,114,32,99,108,101,97,114,32,116,104,101,32,80,111,114,116,65,32,114,101,103,105,115,116,101,114,32,98,105,116,115
+    end table
+
+End Sub
