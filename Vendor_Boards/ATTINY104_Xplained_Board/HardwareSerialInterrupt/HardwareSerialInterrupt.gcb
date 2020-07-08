@@ -85,7 +85,7 @@ Sub ISR
   // Get and return received data from buffer using a sub to reduce code size. Using the variable Serdat aalso reduces the RAM used.
   SerData = UDR
   // Invert the bits so, bit 4 = d32 to set the LED.
-  PORTA = Serdata
+  PORTA = !Serdata
 
   //Optionally, return the value back to the terminal
   HSerSend Serdata
