@@ -8,6 +8,20 @@
 '''@date       28/06/2020
 '''********************************************************************************
 
+/*
+Diagram Author : Ardunaut
+                 __________
+           VCC--|1       14|--GND (TPI CLK)
+           PA0--|2       13|--PB3 (CDC TX) -->USART_Transmit()
+(TPI DATA) PA1--|3       12|--PB2 (CDC RX) <--USART_Receive()
+   (RESET) PA2--|4       11|--PB1 (BUTTON)
+           PA3--|5       10|--PB0
+           PA4--|6        9|--PA7
+     (LED) PA5--|7        8|--PA6
+                \__________/
+        Atmel ATtiny104 Xplained Nano
+*/
+
 ; ----- Configuration
 #chip  TINY104, 4
 #option Explicit
