@@ -37,10 +37,12 @@
   'Set up PWM
   COM0A1 = 1: COM0A0 = 0                       ' Set OC0A1 Low for a port that is PULLED HIGH, examine COM0A1 and COM0A0 for other options
   WGM00  = 1: WGM01 = 1                        ' Set OC0A1 Low , Fast 10bit PWM mode
-  WGM02  = 1: 'TCCR0B = TCCR0B or 2             ' Fast PWM with OCR0A as TOP;  clkI/O/8 (From prescaler)
-TCCR0B.0=0
-TCCR0B.1=1
-TCCR0B.2=0
+  WGM02  = 1: TCCR0B = TCCR0B or 2             ' Fast PWM with OCR0A as TOP;  clkI/O/8 (From prescaler)
+
+' To resolve bug
+'      TCCR0B.0=0
+'      TCCR0B.1=1
+'      TCCR0B.2=0
 
 
   'factorise ADCL to give full duty as the ADC reading is 0-255 and we need 0-1023
