@@ -1,0 +1,102 @@
+'''
+''' This demonstration uses a simple software routine to avoid the initial noise on the switch
+''' pin. The code will inspect the switch status, but should overcome most of the noise from a switch.
+'''
+''' Some switches are worse than others.
+'''
+''' When the switch is held down and released, one LED will toggle.
+'''
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    09.07.2020
+' ----- Configuration
+
+'Chip Settings.
+#CHIP 18f26Q43, 16
+#OPTION Explicit
+'This Configuration change is needed to enable programming in Low Voltage Programming Mode
+
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    --------IN-LED--LED-LED LED -----
+''-----------------------------------------
+''
+
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.2
+#DEFINE LEDD3 PORTB.3
+#DEFINE LEDD4 PORTB.4
+#DEFINE LEDPORT LATB
+
+
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+Dir     LEDD3         Out
+Dir     LEDD4         Out
+
+#DEFINE POTENTIOMETER PORTA.0
+Dir     POTENTIOMETER In
+#DEFINE SWITCHIN      PORTB.5
+Dir     SWITCHIN      In
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+Dim lastKeyDown As Byte
+
+'Debouncing a switch
+
+Do Forever
+    Wait 10 ms
+
+    'keyPressed is a Function that returns the state
+    If  keyPressed( lastKeyDown ) = TRUE Then
+
+        'push button pressed
+        LEDD1 = !LEDD1
+
+    End If
+
+Loop
+
+
+Function  keyPressed ( In lastKeyDown )
+
+    Dim actKeyDown As Byte
+
+    If ( !SWITCHIN ) Then
+
+        actKeyDown = TRUE
+
+    Else
+
+        actKeyDown = FALSE
+
+    End If
+
+    If (actKeyDown <> lastKeyDown) Then
+        lastKeyDown = actKeyDown
+        keyPressed =  actKeyDown
+    Else
+        keyPressed = FALSE
+    End If
+
+
+End Function

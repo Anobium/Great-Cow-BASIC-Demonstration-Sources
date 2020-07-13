@@ -1,0 +1,32 @@
+'''
+''' The  most simple sample for GCGB and GCB.
+'''
+''' This simply set an LEDs on.  The LED is attached to portb.1 via a suitable resistor to 0v.
+'''
+'''
+'''************************************************************************
+'''
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    09.07.2020
+' ----- Configuration
+
+'Chip Settings.
+#CHIP 18f26q43, 16
+'This Configuration may need changing to enable programming in Low Voltage Programming Mode
+
+'
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+
+    'Set the a port as an output, we will use only one BIT to connect to the LED
+    Dir portb.1 Out
+
+    'Set one bit of the port on.
+    ' You can try set portb.1 - the other LED, remember you will need a resistor!
+    portb.1 = 1
+
+    'End
+    End

@@ -1,0 +1,124 @@
+'''
+'''  This demonstration flashes an LED to show the use of a 16Bit Timer 0
+'''
+'''  Timer0 is a counter implemented in the processor. It may be used to count instruction
+'''  cycles or external events, that occur at or below the instruction cycle rate.
+'''  In the PIC18, Timer0 can be used as either an 8-bit or 16-bit counter, or timer. The
+'''  enhanced mid-range core implements only an 8-bit counter.
+'''
+'''  This lesson configures Timer0 to count instruction cycles and to set a flag when it rolls
+'''  over. This frees up the processor to do meaningful work rather than wasting instruction
+'''  cycles in a timing loop using a 16bit timer.
+'''  Using a counter provides a convenient method of measuring time or delay loops as it
+'''  allows the processor to work on other tasks rather than counting instruction cycles.
+'''
+'''
+'''  LEDs should flash  ~1 second.
+'''
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    09.07.2020
+' ----- Configuration
+
+
+'Chip Settings.
+#CHIP 18f26Q43, 16
+#OPTION Explicit
+'This Configuration change does not have Low Voltage Programming Mode enabled, as the MCLR pin cannot be used as an input when using  LVP=on
+
+
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    --------IN-LED--LED-LED LED -----
+''-----------------------------------------
+''
+
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ----TX---------------------------
+''-----------------------------------------
+''
+
+'' ------------------PORTE-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ----------------RST--------------
+''-----------------------------------------
+''
+
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.2
+#DEFINE LEDD3 PORTB.3
+#DEFINE LEDD4 PORTB.4
+#DEFINE LEDPORT LATB
+
+
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+Dir     LEDD3         Out
+Dir     LEDD4         Out
+
+#DEFINE POTENTIOMETER PORTA.0
+Dir     POTENTIOMETER In
+#DEFINE SWITCHIN      PORTB.5
+Dir     SWITCHIN      In
+
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+' Initialise the timer.
+' Firstly tell the compiler to use a 16bit timer for this demonstration
+#DEFINE TMR0_16BIT
+
+' For this we need the following for timer0
+'       Prescaler with the FOSC/4 with no post scaler
+'           1:64
+InitTimer0 Osc, PRE0_64 + TMR0_FOSC4 ,  POST0_1
+'     Start the Timer
+StartTimer 0
+
+'Every 1 sec.  0x0bdc is calculated value using a tool like Mr E. Timer Helper
+SetTimer ( 0 , 0x0bdc  )
+
+
+'Set the initial LED states - change to suit your configuration - same as previous demonstrations
+#DEFINE LEDSTATEMACRO LEDD1 = 0: LEDD2 = 0: LEDD3 = 0: LEDD4 = 1
+'You may need change to the LEDMASK to suit your port/configuration.  We use a macro as re reuse this statement more that once.
+#DEFINE LEDMASK 0B00011110
+LEDSTATEMACRO
+
+Do
+    'Wait for the Timer0 event
+    Wait While TMR0IF = 0
+
+    ' Clearing Timer 0 flag will reset event
+    TMR0IF = 0
+
+
+    'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
+    Set C Off
+    ' and shift the contents of LEDState
+    Rotate LEDPORT Right
+    ' If the LEDState.0is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
+    If LEDPORT.0 = 1 Then
+        'Set the initial LED states
+        LEDSTATEMACRO
+        'Mask off the other bits
+        LEDPORT = LEDPORT AND LEDMASK
+    End If
+
+
+    'Set timer 0 to 1s before the next event occurs.  This value as close as you can get to 1s
+    SetTimer ( 0 , 0x0bdc )
+
+Loop
