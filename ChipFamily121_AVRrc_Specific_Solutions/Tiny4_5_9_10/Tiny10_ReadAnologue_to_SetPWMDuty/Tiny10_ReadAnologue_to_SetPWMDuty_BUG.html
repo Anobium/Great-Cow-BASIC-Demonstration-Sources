@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Compilation Report</title>
+</head>
+<body>
+<h1>Compilation Report</h1>
+<p>Compiler Version (YYYY-MM-DD): 0.98.<<>> 2020-07-07 (Windows 64 bit)</p>
+<h2>Compilation time</h2>
+<p> (Compile time: 0.6660156 seconds)</p>
+<p> (Assembly time: 0 seconds)</p>
+<p> (Download time: 0 seconds)</p>
+<p> (Total time: 0.6660156 seconds)</p>
+<h2>Chip resource usage:</h2>
+<p>Chip Model: TINY10</p>
+<p>Program Memory: 136/512 words (26.56%)</p>
+<p>RAM: 6/32 bytes (18.75%)</p>
+<p> OSC: 8Mhz</p>
+<h2>RAM Allocation</h2>
+<table border="1">
+</table>
+<h2>Subroutines</h2>
+<table border="1">
+<tr><th>Name</th><th>Code Size (lines)</th><th>Compiled Size (words)</th><th>Outgoing calls</th></tr>
+<tr><td>Main</td><td>26</td><td>54</td><td>SYSCOMPLESSTHAN16(1), Delay_MS(1), SER1SEND(1), READAD(1), INITSYS(5)</td></tr>
+<tr><td>SUB_SERLONGDELAY</td><td>25</td><td>10</td><td></td></tr>
+<tr><td>STX1PINSETUP</td><td>9</td><td>3</td><td></td></tr>
+<tr><td>SER1SEND</td><td>96</td><td>16</td><td>SUB_SERLONGDELAY(1)</td></tr>
+<tr><td>READAD</td><td>69</td><td>13</td><td>Delay_10US(1)</td></tr>
+<tr><td>INITSYS</td><td>748</td><td>11</td><td></td></tr>
+<tr><td>SYSCOMPLESSTHAN16</td><td>38</td><td>10</td><td></td></tr>
+<tr><td>Delay_10US</td><td>0</td><td>7</td><td></td></tr>
+<tr><td>Delay_MS</td><td>0</td><td>12</td><td></td></tr>
+</table>
+</body>
+</html>
