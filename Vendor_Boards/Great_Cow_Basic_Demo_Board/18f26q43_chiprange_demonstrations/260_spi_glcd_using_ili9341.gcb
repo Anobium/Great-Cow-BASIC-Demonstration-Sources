@@ -6,7 +6,7 @@
 '''This program draws lines, boxes, circles and prints strings and numbers.
 '''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
 ''':
-'''This has been tested using the hardware SPI option.
+'''This has been tested using the hardware and software SPI option.  If you change from harware SPI when using PPS, you will need to power cycle the chip.
 ''':
 ''':
 '''@author  EvanV

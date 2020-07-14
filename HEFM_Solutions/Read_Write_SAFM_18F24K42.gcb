@@ -69,6 +69,7 @@
  ''' MyBuffer is sized using the system constant SAF_ROWSIZE_BYTES
  '''------------------------------------------------------------------
 
+
   'Write  8 Bytes of data into the buffer/array
   MyBuffer = 32, 44, 88, 91, 78, 31, 63, 99
 
