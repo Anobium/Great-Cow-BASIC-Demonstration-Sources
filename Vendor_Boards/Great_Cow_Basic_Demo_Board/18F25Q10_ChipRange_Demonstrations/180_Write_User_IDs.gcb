@@ -1,0 +1,107 @@
+'''
+'''******************************************************************
+''' Lesson "UserIDs"
+'''
+''' This lesson will provide code for writing and reading word values onto
+''' the on-board Userid memory. Userid is non-volatile memory, meaning that it does
+''' not lose its value when power is shut off. This is unlike RAM, which will
+''' lose its value when no power is applied. The Userid is useful for storing
+''' variables that must still be present during no power.
+'''
+''' The program writes to the Userid using the constant CHIPUSERIDADDRESS.
+'''
+'''
+'''
+'''@author  W.Roth and E.R.Venn
+'''@licence GPL
+'''@version 1.00
+'''@date    16/07/2020
+
+
+' ----- Configuration
+'Chip Settings.
+#CHIP 18F25Q10, 32
+#OPTION Explicit
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+
+DIM Userid_Start_Addr AS LONG
+
+Wait 1 s
+
+Dim ii as word
+Dim WordL as Byte
+Dim WordH as Byte
+Dim WordVal Alias WordH, WordL As WORD
+
+MAIN:
+
+ WordL = 1
+ WordH = 0
+
+ 'Write Bytes to UserID
+ For ii = 0 to ( ChipUserIDLength * 2 ) step 2
+    WRITE_USERID_WORD (ii, WordVal)  ' Call the SubRoutine
+    WORDH = WORDL + 1
+    WORDL = WordH + 1
+
+ Next
+
+ 'Alternatively (Still writes a WORD but in Reverse Byte Order)
+
+'  WordL = 0
+'  WordH = 1
+'
+'  For ii = 0 to ( ChipUserIDLength * 2 ) step 2
+'    WRITE_USERID_WORD (ii, WordVal)
+'    WORDL = WORDH + 1
+'    WORDH = WordL + 1
+'
+'  Next
+
+
+'FLASH LED
+Do
+  PulseOut porta.1, 100 ms
+  wait 100 ms
+LOOP
+
+
+
+SUB Write_USERID_WORD ( IN Userid_Rel_Addr, IN ID_WORD as WORD )
+
+   Dim Int_Save as Bit  'INT Context Save variable
+
+WORD_WRITE:
+   'CHIPUSERIDADDRESS is a constant define that is the address of the UserIDs
+   Userid_Start_Addr = CHIPUSERIDADDRESS
+
+   NVMADRU = Userid_Start_Addr_U
+   NVMADRH = Userid_Start_Addr_H
+   NVMADRL = Userid_Rel_Addr
+
+   NVMDATH = ID_WORD_H          ' High byte to be written
+   NVMDATL = ID_WORD            ' Low byte to be written
+
+
+   Int_Save = INTCON.GIE        ' Save Interrupt state
+   INTCON.GIE = 0               ' Disable Interrupts
+
+   NVMCON0.NVMEN  = 1           ' Enable NVRAM
+
+
+PROGRAM_WORD:
+; ----- Required Sequence -----
+       NVMCON2 = 0x55
+       NVMCON2 = 0xAA
+
+       NVMCON1.WR = 1           ' Write operation
+; ------------------------------
+
+ NVMCON0.NVMEN = 0              ' Dsable NVM
+ INTCON.GIE = Int_Save          ' Restore Interrupt state
+
+
+End SUB
