@@ -156,7 +156,7 @@ Box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1
 ' Draw a box
 Box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1
 ' Draw a circle
-Ellipse (44,41,15,15)
+Circle (44,41,15)
 ' Draw a line
 Line 64,31,0,31
 
@@ -195,7 +195,7 @@ Do Forever
         FilledBox 3,43,11,51, wordNumber
 
         ' Draw a filled box
-        FilledEllipse( 44,41,9, 9, longNumber XOR 1)
+        FilledCircle( 44,41,9, longNumber XOR 1)
         ' Draw a line
         Line 0,63,64,31
 
