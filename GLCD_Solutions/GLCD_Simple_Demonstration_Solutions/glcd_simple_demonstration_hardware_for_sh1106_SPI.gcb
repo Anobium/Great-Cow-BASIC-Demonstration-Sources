@@ -1,0 +1,198 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a simple GLCD demonstration of the SH1106 GLCD capabilities.
+'''This program draws lines, boxes, circles and prints strings and numbers.
+'''The SH1106 controller a small graphical OLED, suitable for a lot of various projects.
+'''The display is 38*35 mm, with an active display surface of 0.96inches , and a 128*64 pixel resolution.
+'''The display is easy to interface, using SPI type of communication.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+'''
+'''
+'''@author  E. R. Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    21/07/2020
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 18F25Q10
+  #option explicit
+
+  #include <glcd.h>
+  #include <..\converters\Anobium.bmp>
+
+
+  ; ----- GLCD Ports
+  #DEFINE GLCD_DO  PORTC.5  'SPI
+  #DEFINE GLCD_SCK PORTC.4  'SPI
+  #DEFINE GLCD_DC PORTB.1 ' PIN AO
+  #DEFINE GLCD_CS PORTC.3 ' PIN CS
+  #DEFINE GLCD_RESET PORTC.2 ' PIN RST
+
+; ----- Define GLCD Hardware settings
+  #define GLCD_TYPE GLCD_TYPE_SH1106
+  #DEFINE S4Wire_DATA
+
+; ----- Define variables
+
+  Dim Bytenumber, Widthofpicture, Heightofpicture, Orgcharlocx, Currcharval, Firstpass, Charlocy, Currcharrow, Charlocx, Ccount as Byte
+
+  CCount = 0
+  dim longNumber as long
+  longNumber = 123456 ' max value = 4294967290
+  dim wordNumber as Word
+  dim outstring as string
+  wordNumber = 0
+  byteNumber = 0
+
+  'First display a BMP file
+
+  dim lengthofpicture, ram_index as word
+
+  GLCDRotate Landscape_Rev
+  GLCDSetContrast ( 0x80 )
+
+  ' Add your own case statement here to handle multiple BMPs, you just  need the variables to be defined
+  ReadTable Anobium, 0, lengthofpicture
+  ReadTable Anobium, 1, widthofpicture
+  ReadTable Anobium, 2, heightofpicture
+  lengthofpicture =  heightofpicture / 8
+  lengthofpicture = [word]lengthofpicture * widthofpicture
+
+  ' For BMP that fit the display simple write the data to the screen
+
+  CharLocX = 0                       ' specify X pos for BMP
+  CharLocY = 0                       ' specify Y pos for BMP.  For buffer any valid Y, for non-buffered 0,8,16, 24 etc...
+  OrgCharLocX = CharLocX              ' specify X orginisal X pos
+  firstpass = true                    ' specify this is the first pass
+
+  for  ram_index =  3 to lengthofpicture + 3         ; start at third byte and finish at the end
+
+            ' Add your own case statement here to handle multiple BMPs, you just  need set CurrCharVal to the data value
+            ReadTable Anobium,  ( ram_index ), CurrCharVal  ' read data
+
+            if ( ( ram_index - 3 ) % widthofpicture ) = 0  and firstpass = false then     ' change position for new line of data
+               CharLocY = CharLocY + 8
+               CharLocX = OrgCharLocX
+            end if
+
+                    For CurrCharRow = 0 to 7
+                        if ( CharLocY + CurrCharRow < GLCD_HEIGHT ) and ( CharLocX < GLCD_WIDTH ) then
+                            If CurrCharVal.0 = 0 Then
+                               PSet CharLocX , CharLocY + CurrCharRow, GLCDBackground
+                            Else
+                               PSet CharLocX , CharLocY + CurrCharRow, GLCDForeground
+                            End If
+                        end if
+                        Rotate CurrCharVal Right
+                    Next
+
+            firstpass = false                                          ' now this is NOT the first pass
+            CharLocX++                                                 ' increment the X pos
+  next
+
+  wait 2 s
+  GLCDCLS
+
+
+  DO forever
+      GLCDPrint (1, 0, "Great Cow BASIC")
+      GLCDPrint (1, 8, "Anobium 2020")
+
+      GLCDPrint (1,  24, "GLCD_WIDTH " )
+      GLCDPrint (80, 24, str(GLCD_WIDTH) )
+      GLCDPrint (1,  32, "GLCD_HEIGHT " )
+      GLCDPrint (80, 32, str(GLCD_HEIGHT) )
+
+
+      wait 3 s
+      GLCDCLS
+
+      ' Prepare the static components of the screen
+      GLCDPrint ( 1,   0, "PrintStr")                                ; Print some text
+      GLCDPrint ( 64,  0, "@")                                    ; Print some more text
+      GLCDPrint ( 72,  0, ChipMhz)                                   ; Print chip speed
+      GLCDPrint ( 86, 0, "Mhz")                                     ; Print some text
+      GLCDDrawString( 1,8,"DrawStr")                                 ; Draw some text
+      box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1                            ; Draw a box
+
+      box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1    ; Draw a box
+      Circle( 44,41,15)                                              ; Draw a circle
+      line 64,31,0,31                                                ; Draw a line
+
+
+
+      repeat 2
+         for CCount = 32 to 127
+              GLCDPrint ( 64 ,  36,  hex(longNumber_E ) )                 ; Print a HEX string
+              GLCDPrint ( 76 ,  36,  hex(longNumber_U ) )                 ; Print a HEX string
+              GLCDPrint ( 88 ,  36,  hex(longNumber_H ) )                 ; Print a HEX string
+              GLCDPrint ( 100 ,  36, hex(longNumber   ) )                 ; Print a HEX string
+              GLCDPrint ( 112 ,  36, "h" )                                ; Print a HEX string
+
+
+              GLCDPrint ( 64 ,  44, pad(str(wordNumber), 5 ) )           ; Print a padded string
+              GLCDPrint ( 64 ,  52, pad(str(byteNumber), 3 ) )           ; Print a padded string
+
+
+              box (50,10,60,20)                                           ; Draw a Box
+              GLCDDrawChar(52, 11, CCount )                               ; Draw a character
+              outString = str( CCount )                                  ; Prepare a string
+              GLCDDrawString(64, 9, pad(outString,3) )                   ; Draw a string
+
+              filledbox 3,43,11,51, wordNumber                           ; Draw a filled box
+
+              FilledCircle( 44,41,9, longNumber xor 1)                   ; Draw a filled box
+              line 0,63,64,31                                            ; Draw a line
+
+                                                                         ; Do some simple maths
+              longNumber = longNumber + 7 : wordNumber = wordNumber + 3 : byteNumber++
+          NEXT
+      end Repeat
+
+      GLCDCLS
+      GLCDfntDefaultsize = 3
+      GLCDPrint 0, 6, "SH1106"
+      GLCDfntDefaultsize = 2
+      GLCDPrint (0, 36, "Test")
+      wait 2 s
+      GLCDSetDisplayInvertMode
+      wait 5 s
+      GLCDSetDisplayNormalMode
+      wait 1 s
+      GLCDSetDisplayInvertMode
+      wait 5 s
+      GLCDSetDisplayNormalMode
+      wait 1 s
+      GLCDCLS
+      GLCDRotate Landscape_Rev
+      GLCDDrawString( 0,8,"DrawStr") ; Draw some text
+      wait 1 s
+      GLCDCLS
+      GLCDfntDefaultsize = 1
+      GLCDPrint 92, 20, "VAL"
+
+      GLCDfntDefaultsize = 3
+      GLCDPrint 0, 12, "12345"
+      GLCDfntDefaultsize = 2
+      GLCDPrint (50, 44, "33333")
+      wait 2 s
+      GLCDfntDefaultsize = 3
+      GLCDPrint 0, 12, "20018"
+      GLCDfntDefaultsize = 2
+      GLCDPrint (50, 44, "1111")
+      wait 2 s
+      GLCDfntDefaultsize = 3
+      GLCDPrint 0, 12, "30539"
+      GLCDfntDefaultsize = 2
+      GLCDPrint (50, 44, "22222")
+      wait 2 s
+      GLCDfntDefaultsize = 3
+      GLCDPrint 0, 12, "00000"
+      GLCDfntDefaultsize = 2
+      GLCDPrint (50, 44, "88888")
+      wait 2 s
+      GLCDfntDefaultsize = 1
+      GLCDCLS
+
+  Loop
