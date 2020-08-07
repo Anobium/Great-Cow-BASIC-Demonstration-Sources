@@ -13,8 +13,6 @@
 #chip tiny9,  1
 #option Explicit
 
-; ----- Include library
-#include <tinyAVRrc.h>
 
 ; ----- Constants
 
@@ -87,7 +85,6 @@
 
 
 End
-
 
 
 

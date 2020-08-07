@@ -21,7 +21,6 @@
 #option Explicit
 
 ; ----- Include library
-#include <tinyAVRrc.h>
 #include <softserial.h>
 
 
@@ -72,4 +71,3 @@ dir portb.3 in
         Ser1Send "."
         portb.2 = ! portb.2
     Loop
-

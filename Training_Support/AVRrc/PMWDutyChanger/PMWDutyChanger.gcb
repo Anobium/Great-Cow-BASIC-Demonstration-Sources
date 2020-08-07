@@ -15,7 +15,6 @@
 #option Explicit
 
 ; ----- Include library
-#include <tinyAVRrc.h>
 #include <softserial.h>
 
 ; ----- Constants
@@ -107,4 +106,3 @@ End
 ; Config I/O ports for transmitting:
 #define SER1_TXPORT PORTB  ; I/O port (without .bit) must be defined
 #define SER1_TXPIN 1       ; portbit  must be defined
-
