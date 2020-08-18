@@ -1,0 +1,189 @@
+'****************************************************************
+'* This Program was developed to allow program an    *
+'*  Analog Devices AD9850 to output a specific        *
+'*  frequency                                         *
+'*  The AD9850 can be used with any PIC device that   *
+'*  has the Enhanced USART Module.  I am using the    *
+'*  PIC16F690 for example                             *
+'*  Add whatever device you want to use as the PIC device
+'*  and frequency of your oscillator
+
+'****************************************************************
+
+'''@author     Harley Burton
+'''@licence    GPL
+'''@version    V1.0
+'''@date       31.7.2020
+'''********************************************************************************
+
+; ----- Configuration
+#chip 16F690, 8
+#config OSC=INT
+
+' Set up a few port pins so they can control the appropriate pins
+' On the AD9850
+
+#define DDS_Reset PORTC.3       'Resets the AD9850 DDS Device
+#define FQ_UD PORTC.5           'This is the "Load" pulse for Then
+                                'AD9850
+
+DDS_Reset = 1                   'Puts DDS in reset and holds it there
+                                'while PIC is being setup
+
+#define Mark 1
+#define Space 0
+
+#define USART_BAUD_RATE 100000  'Baud rate is 100000bps
+                                'This should also set the bits for
+                                'synchronous mode
+#define USART_BLOCKING          'Makes sure the USART Transmit
+                                'buffer empties the message to
+                                'thd AD9850
+
+#define MstrClk 100000000       'Define your master clock frequency
+                                'in my case 100MHz (Hex 0x5f5E100
+
+#define Fout 1000000            'Output frequency for test is 1MHz
+
+#define IsOn 1                  ' Sets port bit to on
+#define IsOff 0                 ' Sets port bit to off
+
+Dir PORTB.5 Out                 ' DDS Data
+Dir PORTB.7 Out                 ' DDS Clock
+
+Dir PORTC.5 Out                 ' DDS Load Pulse
+
+'Define variables
+
+Dim TunWrd as Long              ' Frequency which is to be generated
+                                ' before the load bytes are calculated
+Dim CLKIN as Long               ' Master Clock Freq
+Dim TuningWord as Long          ' Tuning Word to be calculated
+                                ' and loaded into AD9850
+Dim TuningCalc as Long          ' Temporary Variable for tuning
+                                ' Calculation
+
+Dim TuningVar as String         ' This is a temporary variable
+                                ' to make up byte values for tuning
+                                ' array
+
+
+Dim ZeroIn(5) Byte              ' Frequency of Zero Hz
+Dim CalFreq(5) Byte             ' Load bytes Array
+
+'Mathtest = 2^32/MstrClk
+
+'Initialize a bunch of variables and built-ins
+'Set bits to Synchronous Send Mode
+Set SYNC = On                   ' Sets synchronous mode
+Set CSRC = On                   ' Sets to master mode
+Set SREN = Off                  ' Sets to disable receive mode
+Set CREN = Off                  ' Sets to disable receive mode
+Set SPEN = On                   ' Enables EUSART
+Set SCKP = On                   ' Sets the clock so that data changes
+                                ' on the falling edge
+Set TXEN = On                   ' Enables Transmit
+
+'Each transmitted bit of the DDS message is a Mark or Space, i.e.
+'Each frequency require a load of 5 bytes for each bits.
+'The first 4 bytes are the frequency divisor while the fifth byte is
+'the control byte, always a "00".
+
+'The divisors were calculated by accessing a divisor calculator at
+'the Analog Divices website. Using a 100MHz system clock and inputting
+'the frequency of interest at:
+'http://www.analog.com/designtools/en/simdds/?part=AD9850&fin=100M&mult=1&ftw=6147AE14&rso=111111&harmonicDB=-50&useFilters=0
+'The calculator provides the divisor in hex.
+
+'The divisors are put in an array in reverse order so that they can
+'be transmitted in the proper order.  The final byte is always a 0x00.
+
+'The divisors to transmit a Mark are the array MarkIn()
+
+'The divisors to transmit a 0Hz are in the array ZeroIn()
+ZeroIn(0) = 0x00                ' 0Hz
+ZeroIn(1) = 0x00
+ZeroIn(2) = 0x00
+ZeroIn(3) = 0x00
+ZeroIn(4) = 0x00
+
+'A 1.000MHz CalFreq = 0x028F5C29
+'The divisors to transmit 1MHz are in the array CalFreq()
+CalFreq(0) = 0x29
+CalFreq(1) = 0x5C
+CalFreq(2) = 0x8F
+CalFreq(3) = 0x02
+CalFreq(4) = 0x00
+
+'Take a few MS for some of the ports to get set up
+wait 1 ms
+DDS_Reset = 0
+FQ_UD = 0
+wait 1 ms
+
+'Begin by setting everything to the zero so that the
+'carrier will start out not transmitting until commanded
+
+SendZero
+
+Main:
+
+'This is the main Loop dummy
+'Insert your operational code at this point
+
+Do
+
+' Place any functions you need toi run here before sending the value
+' to ve transmitted out the AD9850
+
+'**********************************************************************
+'* Before calling the SendCalFrequency routine, copy the hex values   *
+'* of the frequency you want set into the CalFreq                     *
+'* array then call the SendCalFrequency routine.                      *
+'* This will load the frequency and enable the AD9850 to generate     *
+'* the frequency selected                                             *
+'* You can stop generating a frequeny by calling the SendZero         *
+'* subroutine                                                         *
+'**********************************************************************
+
+Loop
+
+Sub SendZero    'Send the bytes that set the frequency to Zero Hz
+
+  TCounter = 0
+  Do
+    'Check TRMT bit to see if a new value can be loaded into Transmit
+    'Shift Register (TSR)
+    If TRMT then
+      'Transmit byte synchronously
+      HSerSend ZeroIn(TCounter)
+      TCounter = TCounter + 1
+    End If
+  Loop until TCounter = 5
+  'Wait till the last byte has been shifted out
+  Wait 200 us
+  'Pulse the Frequency Load Bit (FQ_UD)
+  PulseOut PORTC.5, 50 us
+
+End sub
+
+Sub SendCalFrequency
+
+  TCounter = 0
+  Do
+    'Check TRMT bit to see if a new value can be loaded into Transmit
+    'Shift Register (TSR)
+    If TRMT then
+      'Transmit byte synchronously
+      HSerSend CalFreq(TCounter)
+      TCounter = TCounter + 1
+    End If
+  Loop until TCounter = 5
+  'Wait till the last byte has been shifted out
+  Wait 200 us
+  'Pulse the Frequency Load Bit (FQ_UD)
+  PulseOut PORTC.5, 50 us   'written this was was faster than
+                            'setting it to 1 and then back to 0
+                            'but you could code it that way too
+
+End sub
