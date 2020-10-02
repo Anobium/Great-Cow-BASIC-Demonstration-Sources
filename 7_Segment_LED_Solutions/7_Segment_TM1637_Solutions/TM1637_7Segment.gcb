@@ -5,7 +5,7 @@
 '''@author  Friderik Back
 '''@licence GPL
 '''@version 2.0a
-'''@date    1.10.2020
+'''@date    2.10.2020
 '''********************************************************************************
 
 ; ----- Configuration
@@ -22,7 +22,7 @@
 #define TM1637_DIO PortD.3 'Arduino Digital_3
 
 Dim letter,small_chr, dig, Num0, Num1 as byte
-Dim bright as byte
+Dim bright, TM_Bright, time_to_end as byte
 
 '---- main program --------
     Do
@@ -35,9 +35,9 @@ Dim bright as byte
 
         'All segments Fade in test
         For bright = 8 to 15
-            TMWrite4Dig(8,8,8,8,TM_bright,1) 'All segments test
+            TMWrite4Dig(8,8,8,8,bright,1) 'All segments test
             wait 500 ms
-        Next bri
+        Next bright
         ' Letters Fade in
         For TM_Bright = 8 to 15
             TMWriteChar (0 , "G")
@@ -67,7 +67,7 @@ Dim bright as byte
         ' All letters demo
         For letter = 65 to 90
 
-            small_chr = letter + 32 'Siekoo aèphabet
+            small_chr = letter + 32 'Siekoo aephabet
 
             TMWriteChar (0 , letter)
             TMWriteChar (1 , " ")
@@ -182,9 +182,9 @@ Dim bright as byte
         End Repeat
 
         Repeat 3
-            TMWrite4Dig(1,2,0,0,10,1)  ' clock disp , no leading zero, minimum brightness, Colon On
+            TMWrite4Dig(1,2,0,0,10,1)  ' clock disp , no leading zero, brightness = 10, Colon On
             wait 500 ms
-            TMWrite4Dig(1,2,0,0,10,0)  ' clock disp , no leading zero, minimum brightness, Colon Off
+            TMWrite4Dig(1,2,0,0,10,0)  ' clock disp , no leading zero, brightness = 10, Colon Off
             wait 500 ms
         End Repeat
 
@@ -196,11 +196,11 @@ Dim bright as byte
         wait 2 s
 
 
-        For TM_bright = 123 to 117 step -1
-            TMdec(TM_bright,1)
+        For time_to_end = 123 to 117 step -1
+            TMdec(time_to_end,1)
             wait 500 ms
-            TMdec(TM_bright,3)
+            TMdec(time_to_end,3)
             wait 500 ms
-        next bri
+        next  time_to_end
 
     Loop
