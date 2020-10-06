@@ -73,14 +73,13 @@ End Sub
 'PWM sub
 'This will be called when the Timer overflows
 Sub InterruptHandler
-LED = !LED
 
-'    If LEDSpeed > PWMCounter Then
-'        Set LED On
-'    Else
-'        Set LED Off
-'    End If
-'    PWMCounter += 1
-'    If PWMCounter = 100 Then PWMCounter = 0
+    If LEDSpeed > PWMCounter Then
+        Set LED On
+    Else
+        Set LED Off
+    End If
+    PWMCounter += 1
+    If PWMCounter = 100 Then PWMCounter = 0
 
 End Sub
