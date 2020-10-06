@@ -1,6 +1,7 @@
-32Mhz is twice as fast as a conventional arduino nano! Actually _even faster_ as many operations take less clock cycles than in the atmega328p.
 
 # Features
+
+32Mhz is twice as fast as a conventional arduino nano! Actually _even faster_ as many operations take less clock cycles than in the atmega328p.
 
 - Fast_IO update
 - Automatic prescaler setup
