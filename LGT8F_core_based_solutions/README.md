@@ -95,22 +95,7 @@ Like this pinout?
 - https://www.eevblog.com/forum/projects/anyone-here-interested-in-the-logic-green-avrs-lgt8f328p/
 - http://coultersmithing.com/forums/viewtopic.php?f=6&t=1149
 
-# Disclamer
-
-I have no association with Arduino, Logic Green, Atmel or anything. I just wanted to have a convenient way to use these boards and get them to work without hacks at max speed
-
-# Download stats
-
-http://www.somsubhra.com/github-release-stats/?username=dbuezas&repository=lgt8fx
 
 # Thanks
 
-- [#Larduino_HSP](https://github.com/LGTMCU/Larduino_HSP) for doing 99.9999% of the work
-- [#RalphBacon](https://github.com/RalphBacon) introducing most of us to the board
-- [#dcfusor](https://github.com/dcfusor) for help with fast io backporting
-- [#HI-SEBA](https://github.com/HI-SEBA) for help with software serial
-- [#dwillmore](https://github.com/dwillmore) for creating the wiki, serial adapter troubleshooting, more examples of boards and wemos-TTGO-XI board support
-- [#seisfeld](https://github.com/seisfeld) for adding in-menu support for an external oscillator
-- [#jg1uaa](https://github.com/jg1uaa) for the updated Software Serial without timing tables and missing methods
-- [#LaZsolt](https://github.com/LaZsolt) for adding SSOP20 lgt8f328p support and precise delayMicroseconds
-- [#jayzakk](https://github.com/jayzakk) for fixing the ADC prescaler for faster analog reads
+- [#dbuezas](https://github.com/dbuezas/lgt8fx/blob/master/readme.md) for doing 99.9999% of the work
