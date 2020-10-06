@@ -1,0 +1,51 @@
+'''A demonstration program for GCGB and GCB
+'''--------------------------------------------------------------------------------------------------------------------------------
+''' This program will toggle the output port using the Great Cow BASIC  PWM for AVR method.
+''' This program uses the Great Cow BASIC  PWM for AVR on PWM Channel 2
+''' This uses a method to support the frequency and duty to be changed as the PWM parameters.
+''' This shows the FOUR things you HAVE to do to enable PWM on a single channele have to use PWM Channel 2 on this microcontroller as PWM Channel 1 is not available as the Great Cow BASIC library requires to use PWM Channel 1 registers for computational purposes.
+'''
+''' Connected LED to D5
+'''
+'''@author  EvanV plus works of KentS
+'''@licence GPL
+'''@version 1.0a
+'''@date    06/10/2020
+'''********************************************************************************
+
+    #chip  lgt8fx8p
+    #option Explicit
+
+    '#1
+    'Set the CLOCK Source as AVRTC0 relates to PWM2
+    #define AVRTC0
+
+    '#2
+    'Set the AVR PWM Channel as enabled by defining this constants.  AVRCHAN2 equates OC0B
+    #define AVRCHAN2
+
+    '#3
+    'Set the PWM pin to output mode.  OC0B on assigned to portD.5
+    DIR PORTD.5 out
+
+    Dim Bright as byte
+
+    'Main code
+    'freq 40khz
+    'variable duty from 0% to 100%
+    do
+        'Turn up brightness over 2.5 seconds
+        For Bright = 0 to 255
+            '#4 - Call the method with the correct PWM channel
+            HPWM 2, 40, Bright
+            wait 10 ms
+        next
+        'Turn down brightness over 2.5 seconds
+        For Bright = 255 to 0
+            '#4 - Call the method with the correct PWM channel
+            HPWM 2, 40, Bright
+            wait 10 ms
+        next
+    loop
+
+end

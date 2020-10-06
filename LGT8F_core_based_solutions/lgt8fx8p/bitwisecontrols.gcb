@@ -1,0 +1,39 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows basic logic test.
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    06/10/2020
+'''********************************************************************************
+
+
+; ----- Configuration
+#chip  lgt8fx8p
+#option Explicit
+
+    #Define LED     portb.5
+
+
+    'Use Volatile to ensure the compiler does not try to optimize the code
+    #option Volatile LED
+    'Set direction of LED
+    Dir LED out
+
+
+; ----- Variables
+  'See inline
+
+; ----- Main body of program commences here.
+
+
+    do
+
+      LED = !LED
+      wait 500 ms
+
+    loop
+
+
+End
