@@ -1,6 +1,6 @@
 '''A most simple sample for GCGB and GCB.
 '''------------------------------------------------------------------------
-'''This program shpws the name of the programmer chip passed to AVRDUDE.
+'''This program shows the name of the programmer chip passed to AVRDUDE, other key chip specific information.
 '''
 ''' Valid chips are
 '''       LGT8FX328P
