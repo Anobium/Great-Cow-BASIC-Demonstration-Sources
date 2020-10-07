@@ -1,0 +1,50 @@
+'''A most simple sample for GCGB and GCB.
+'''------------------------------------------------------------------------
+'''This program shpws the name of the programmer chip passed to AVRDUDE.
+'''
+''' Valid chips are
+'''       LGT8FX328P
+'''       LGT8FX328P-0
+'''       LGT8FX328P-1
+'''       LGT8FX328P-2
+'''       LGT8FX328P-3
+'''       LGT8FX328P-8
+'''
+'''Uses a serial terminal
+'''
+'''Enjoy.
+'''
+'''
+'''************************************************************************
+
+' ----- Configuration
+'Make into a comment to use the AVR chipset
+#CHIP LGT8FX328P
+
+
+   'USART settings for USART1
+    #define USART_BAUD_RATE 9600
+    #define USART_TX_BLOCKING
+    #define USART_DELAY OFF
+
+' ----- Main body of program commences here.
+
+
+Do Forever
+
+    HSerPrint ChipNameStr
+    HSerSend 9
+    HSerPrint "PROGMEM " + str( ChipWords )
+    HSerPrint " Kwords"
+    HSerSend 9
+    HSerPrint "EEProm " + str(ChipEEProm)
+    HSerSend 9
+    HSerPrint "AVRDUDE chip name: "
+    HSerPrint CHIPPROGRAMMERNAMESTR
+    HSerPrintCRLF
+
+    'Then wait 100 milliseconds after LED goes off:
+    PulseOut portb.5, 100 ms
+    Wait 100 ms
+
+Loop
