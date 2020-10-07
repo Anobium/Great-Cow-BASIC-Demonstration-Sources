@@ -1,0 +1,218 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program will show the functionality of the TM1637a.h library.
+'''The TM1637 module is connected to PortB.0 CLK and PortB.1 DIO
+'''@author  Friderik Back
+'''@licence GPL
+'''@version 1.0
+'''@date    4.10.2020
+'''********************************************************************************
+
+; ----- Configuration
+'
+
+
+
+#chip tiny85,16 'Digispark with default settings
+#include <TM1637a.h>
+#option Explicit
+
+#define TM1637_CLK PortB.0
+#define TM1637_DIO PortB.1
+
+Dim letter,bright, TM_Bright, time_to_end as byte
+Dim sentence as String
+'---- main program --------
+sentence = "    Gcb Tm1637 demo for Attiny 85    "
+    Do
+        'Clear display
+        TMWrite4Dig(16,16,16,16,0,0)
+        'Walking sentence
+        TM_Bright = 10
+        for letter = 1 to len(sentence) - 3
+            TMWriteChar (0 , asc(mid(sentence, letter, 1)))
+            TMWriteChar (1 , asc(mid(sentence, letter+1, 1)))
+            TMWriteChar (2 , asc(mid(sentence, letter+2, 1)))
+            TMWriteChar (3 , asc(mid(sentence, letter+3, 1)))
+            Wait 750 ms
+        next letter
+
+
+        'All segments Fade in test
+        For bright = 8 to 15
+            TMWrite4Dig(8,8,8,8,bright,1) 'All segments test
+            wait 500 ms
+        Next bright
+
+        ' Numbers & Letters demo
+        TM_Bright = 10
+        TMWriteChar (0 , "N")
+        TMWriteChar (1 , "u")
+        TMWriteChar (2 , "m")
+        TMWriteChar (3 , " ")
+        wait 2 s
+
+        ' All numbers
+        For letter = 48 to 54
+            TMWriteChar (0 ,  letter)
+            TMWriteChar (1 , letter + 1)
+            TMWriteChar (2 , letter + 2)
+            TMWriteChar (3 , letter + 3)
+            Wait 750 ms
+        Next letter
+        Wait 2 s
+        TMWriteChar (0 , "C")
+        TMWriteChar (1 , "h")
+        TMWriteChar (2 , "a")
+        TMWriteChar (3 , "r")
+        wait 2 s
+
+        'Letters A to Z
+        For letter = 65 to 87
+            TMWriteChar (0 ,  letter)
+            TMWriteChar (1 , letter + 1)
+            TMWriteChar (2 , letter + 2)
+            TMWriteChar (3 , letter + 3)
+            Wait 750 ms
+        Next letter
+        'Siekoo character set
+        Wait 2 s
+        TMWriteChar (0 , "S")
+        TMWriteChar (1 , "i")
+        TMWriteChar (2 , "e")
+        TMWriteChar (3 , "k")
+        wait 2 s
+
+        For letter = 91 to 119
+            TMWriteChar (0 ,  letter)
+            TMWriteChar (1 , letter + 1)
+            TMWriteChar (2 , letter + 2)
+            TMWriteChar (3 , letter + 3)
+            Wait 750 ms
+        Next letter
+        Wait 2 s
+
+
+
+        ' Special signs
+        TMWriteChar (0 , "S")
+        TMWriteChar (1 , "P")
+        TMWriteChar (2 , "E")
+        TMWriteChar (3 , "C")
+        wait 2 s
+
+        TMWrite4Dig(17,18,19,20,10,0)
+        wait 2 s
+
+        'Alternative command
+        TMWriteChar (0 , "?")
+        TMWriteChar (1 , "-")
+        TMWriteChar (2 , "°")
+        TMWriteChar (3 , ")")
+        wait 2 s
+
+        'Hex number demo
+        TMWriteChar (0 , "H")
+        TMWriteChar (1 , "e")
+        TMWriteChar (2 , "x")
+        TMWriteChar (3 , " ")
+        wait 2 s
+
+        letter = b'11111111' ' = 255 DecToBcd_GCB
+        TMhex(letter) '00FF
+        wait 2 s
+
+        TMhex(65535) 'FFFF
+        wait 2 s
+
+        TMhex(0xABCD) 'ABCD
+        wait 2 s
+
+        'decimal numbers
+        TMWriteChar (0 , "D")
+        TMWriteChar (1 , "e")
+        TMWriteChar (2 , "c")
+        TMWriteChar (3 , " ")
+        wait 2 s
+
+        TMdec(8095) '8095
+        wait 2 s
+        TMdec(2,0) '   2
+        wait 2 s
+        TMdec(134) ' 134
+        wait 2 s
+        TMWriteChar (0 , "-")'-134
+        wait 2 s
+        TMdec(134,1) ' 0134
+        wait 2 s
+        TMdec(134,2) ' 1:34
+        wait 2 s
+        TMdec(134,3) ' 01:34
+        wait 2 s
+        TMdec(67) '  67
+        wait 2 s
+        TMdec(12345,3) '----
+        wait 2 s
+
+
+        'Thermometer demo
+
+        TMWriteChar (0 , "t")
+        TMWriteChar (1 , "e")
+        TMWriteChar (2 , "r")
+        TMWriteChar (3 , "m")
+        wait 2 s
+        TMWrite4Dig(2,2,18,12,10,0)  ' 22°C
+        wait 2 s
+        TMWrite4Dig(9,3,18,15,11,0)  ' 93°F
+        wait 2 s
+        TMWrite4Dig(16,9,18,12,10,0)  ' 3°C
+        wait 2 s
+        TMWrite4Dig(17,7,18,12,9,0)  ' -7°C
+        wait 2 s
+
+        'Clock demo
+        TMWriteChar (0 , "C")
+        TMWriteChar (1 , "l")
+        TMWriteChar (2 , "c")
+        TMWriteChar (3 , "k")
+        wait 2 s
+
+        Repeat 3
+            TMWrite4Dig(1,1,5,9,10,1)  ' clock disp , no leading zero, minimum brightness, Colon On
+            wait 500 ms
+            TMWrite4Dig(1,1,5,9,10,0)  ' clock disp , no leading zero, minimum brightness, Colon Off
+            wait 500 ms
+        End Repeat
+
+        Repeat 3
+            TMWrite4Dig(1,2,0,0,10,1)  ' clock disp , no leading zero, brightness = 10, Colon On
+            wait 500 ms
+            TMWrite4Dig(1,2,0,0,10,0)  ' clock disp , no leading zero, brightness = 10, Colon Off
+            wait 500 ms
+        End Repeat
+
+        'Countdown demo
+        TMWriteChar (0 , "C")
+        TMWriteChar (1 , "O")
+        TMWriteChar (2 , "U")
+        TMWriteChar (3 , "n")
+        wait 2 s
+
+
+        For time_to_end = 10 to 0 step -1
+            TMdec(time_to_end,1)
+            wait 500 ms
+            TMdec(time_to_end,3)
+            wait 500 ms
+        next  time_to_end
+        'Fade out
+        For bright = TM_Bright to 7 step -1
+            TMWrite4Dig(0,0,0,0,bright,1) 'All segments test
+            wait 1 s
+        Next bright
+
+
+
+
+    Loop
