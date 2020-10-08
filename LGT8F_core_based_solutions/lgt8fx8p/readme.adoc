@@ -15,13 +15,12 @@
 |070  |Turn an LED on and off with a switch Turn an LED on and off  & when Switch Down turn on
 |080  |Sequentially blink with ADC delay. Using 060 as the basis of this demonstration program
 |090  |Debouncing a switch. Ensuring a switch does not bounce. Using 070  as the basis of this demonstration program
+|100  |Reversible sequentially blinking the LEDs with a variable delay  Using the LEDS and the POT  Read pot, set wait, then use code from 050
+|110  |Reversible sequentially blinking the LEDs with a variable delay to a Serial Terminal Using the LEDS, POT and the Serial Port
 |===
 
 [cols=2, options="autowidth"]
 |===
-
-|100  |Reversible sequentially blinking the LEDs with a variable delay  Using the LEDS and the POT  Read pot, set wait, then use code from 050
-|110  |Reversible sequentially blinking the LEDs with a variable delay to a Serial Terminal Using the LEDS, POT and the Serial Port Send 100 with POT value to serial
 |120  |Blinking the LED with an 8bit timer  Timer and LED Blink timer using timer0
 |130  |Blinking the LED with an 8bit Pot value (100 was 10bit value)  Timer and LED Blink with timer but using 8bit ADC read
 |140  |Using EEPROM to store data EEPROM  Write/read EEPROM
