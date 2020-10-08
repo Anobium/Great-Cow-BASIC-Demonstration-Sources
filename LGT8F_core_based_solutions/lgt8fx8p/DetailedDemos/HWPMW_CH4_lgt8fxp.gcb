@@ -11,7 +11,7 @@
 '''@date    06/10/2020
 '''********************************************************************************
 
-    #chip lgt8fx328p
+    #chip LGT8F328P
 
     '#1
     'Set the CLOCK Source as AVRTCx relates to PWM4

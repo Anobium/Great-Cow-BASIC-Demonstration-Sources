@@ -3,10 +3,11 @@
 ''' This demonstration simply turns the LED on and off with a wait of 500 ms.
 '''
 '''
-''' Great Cow BASIC will set the state of the LEDS dependent on the state of an input switch
+''' Great Cow BASIC will flash each LED sequentially using a method that shifts the port to the right. This means the each LED is set on sequentially.
 '''
+''' See http://gcbasic.sourceforge.net/help/_rotate.html
 '''
-''' In this demo we connect four LEDs and a switch.
+''' In this demo we connect four LEDs and flash them.
 ''' Connect the LEDs via suitable resistors using a standard LED connection.
 '''
 '''
@@ -16,20 +17,7 @@
 ''' Constants
 ''' LED    ---------------|L4 |L3 |L2 |L1 |-  where L equates to LED
 '''-----------------------------------------
-'''
-''' Connect the switch via suitable resistors using a standard switch connection.
-''' -------------------PORTE-----------------
-''' Bit#:  -7---6---5---4---3---2---1---0---
-''' PCB                  --D7--
-''' Constants
-''' SWITCH----------------|SW |--------------
-'''-----------------------------------------
-'''
-''' This is an interesting demonstration.  Try decreasing the wait to 0 (zero).. then, when only LED works, reduce the frequency and all four react.. why?
-'''
-'''
-
-
+''
 '''@author  Evan Venn
 '''@licence GPL
 '''@version 1.0
@@ -51,36 +39,28 @@
     #DEFINE LED3 portc.2
     #DEFINE LED4 portc.3
 
-    #DEFINE SWITCH porte.3
-
-    #DEFINE LEDDELAY  10
-
     'Set LED as an output
     Dir LED1 Out
     Dir LED2 Out
     Dir LED3 Out
     Dir LED4 Out
 
-    'Set Switch as an input
-    Dir SWITCH In
-
     ''' Most programs run in a loop such as this one
     ' Start here
 
+    Dim readADCValue as word
 
+' **************************** ROTATE RIGHT **********************************
+    'Set the first LED on
+    LED4 = 1
+    'USART settings for USART1
+    #define USART_BAUD_RATE 9600
+    #define USART_TX_BLOCKING
+    #define USART_DELAY OFF
     Do
-          'Set the LED to the state of the switch
-          LED1 = SWITCH
 
-          'copy the state from each LED to the next LED
-          wait LEDDELAY us
-          LED2 = LED1
-          wait LEDDELAY us
-          LED3 = LED2
-          wait LEDDELAY us
-          LED4 = LED3
-          wait LEDDELAY us
-
+        readADCValue = readad12(an4, true )
+hserprint readADCValue
+HSerPrintCRLF
+        wait 100 ms
     Loop
-
-

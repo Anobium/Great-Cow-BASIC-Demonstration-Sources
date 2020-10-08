@@ -11,7 +11,7 @@
 
 ; ----- Configuration
 
-#chip  lgt8fx328p
+#chip  LGT8F328P
 #option Explicit
 
 #define outport portb.5

@@ -17,7 +17,7 @@
 ' This uses a method to support the frequency and duty to be changed as the PWM parameters.
 ' This shows the FOUR things you HAVE to do to enable PWM on a single channel
 
-    #chip  lgt8fx328p
+    #chip  LGT8F328P
     #option Explicit
 
     '#1

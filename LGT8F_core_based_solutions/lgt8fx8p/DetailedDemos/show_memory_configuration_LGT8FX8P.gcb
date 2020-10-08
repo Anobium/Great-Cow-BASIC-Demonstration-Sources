@@ -3,12 +3,12 @@
 '''This program shows the name of the programmer chip passed to AVRDUDE, other key chip specific information.
 '''
 ''' Valid chips are
-'''       LGT8FX328P
-'''       LGT8FX328P-0
-'''       LGT8FX328P-1
-'''       LGT8FX328P-2
-'''       LGT8FX328P-3
-'''       LGT8FX328P-8
+'''       LGT8F328P
+'''       LGT8F328P-0
+'''       LGT8F328P-1
+'''       LGT8F328P-2
+'''       LGT8F328P-3
+'''       LGT8F328P-8
 '''
 '''Uses a serial terminal
 '''
@@ -19,7 +19,7 @@
 
 ' ----- Configuration
 'Make into a comment to use the AVR chipset
-#CHIP lgt8fx328p
+#CHIP LGT8F328P
 
 
    'USART settings for USART1

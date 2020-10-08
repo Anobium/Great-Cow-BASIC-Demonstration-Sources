@@ -26,7 +26,7 @@
 
 
 ; ----- Configuration
-#chip  lgt8fx328p
+#chip  LGT8F328P
 #option Explicit
 'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
 

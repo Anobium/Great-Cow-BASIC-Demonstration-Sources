@@ -14,11 +14,11 @@
 '''********************************************************************************
 
     'Chip Settings.
-    #chip lgt8fx328p
+    #chip LGT8F328P
     #option explicit
 
     #include <glcd.h>
-    #include <lgt8fx328p.h >
+    #include <LGT8F328P.h >
 
     #define GLCD_TYPE GLCD_TYPE_SSD1331
 

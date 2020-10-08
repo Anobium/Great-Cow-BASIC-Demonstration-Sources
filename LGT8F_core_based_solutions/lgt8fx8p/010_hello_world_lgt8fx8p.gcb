@@ -4,7 +4,7 @@
 '''
 ''' Great Cow BASIC will automatically setup the chip for you.  You can add a parameter to the #chip line to change the frequency, as follows:
 '''
-''' #chip  lgt8fx328p [, 32 | 16 | 8 | 4 | 2 | 1 | 0.5 | 0.25 | 0.125 ]
+''' #chip  LGT8F328P [, 32 | 16 | 8 | 4 | 2 | 1 | 0.5 | 0.25 | 0.125 ]
 '''
 ''' Great Cow BASIC will set the chip to the fastest internal frequency if no frequency is specified.
 '''
@@ -16,7 +16,7 @@
 
 
 ; ----- Configuration
-#chip  lgt8fx328p
+#chip  LGT8F328P
 #option Explicit
 
     'Set direction of LED
