@@ -6,32 +6,33 @@
 [cols=2, options="header,autowidth"]
 |===
 |*Index*|*Description*
-|010	|Hello World	Turn on an LED	Port On. Port off
-|020	|Blink an LED	Blink an LED	Set Port On, Set Port off
-|030	|Blink an LED another way	Blink an LED another way	LED = !LED
-|040	|Blink more than one LED	Blink LED's	Four LEDS
-|050	|Sequentially blink the LEDs with PulseOut	Blinks LEDs using PulseOut	Pulseout one LED
-|060	|Sequentially blink the LEDs	Blinks LEDs using bitwise carry	Rotate the four LEDs
-|070	|Turn an LED on and off with a switch	Turn an LED on and off	& when Switch Down turn on
-|080	|Debouncing a switch.	Ensuring a switch does not bounce
-|090	|Using a RESET port as a switch input	Using MLCR
-|100	|Reversible sequentially blinking the LEDs with a variable delay	Using the LEDS and the POT	Read pot, set wait, then use code from 050
-|110	|Reversible sequentially blinking the LEDs with a variable delay to a Serial Terminal	Using the LEDS, POT and the Serial Port	Send 100 with POT value to serial
-|120	|Blinking the LED with an 8bit timer	Timer and LED	Blink timer using timer0
-|130	|Blinking the LED with an 8bit Pot value (100 was 10bit value)	Timer and LED	Blink with timer but using 8bit ADC read
-|140	|Using EEPROM to store data	EEPROM	Write/read EEPROM
-|150	|Using an interrupt to toggle the LED	Interrupts	Switch to port interrupt
-|160	|Using an external interrupt to toggle the LED	Interrupts	Switch to ext interrupt
-|170	|Playing sounds	Sound	Buzz a sound
-|180	|Showing the I2C hardware on the serial terminal	i2C and Serial	Show I2C values on terminal
-|190	|Hello world on the I2C LCD	I2C and LCD	Show on LCD
-|200	|Showing the I2C temperature sensor value on the serial terminal	I22, Serial and MCP2221	Show on Serial
-|210	|Showing the I2C temperature sensor value on the LCD	I22, LCD and MCP2221	Show on LCD
-|220	|Using CCP/PWM to generate a square wave with variable duty	CCP/PWM and POT	Gen PWM signal
-|230	|Using CCP/PWM to generate to the LEDs with variable duty	CCP/PWM, POT and LEDS	Gen PWM signal
-|240	|Using CCP/PWM in a fixed mode	CCP/PWM, POT and LEDS	Gen PWM signal
-|250	|Using PWM module  with variable duty	PWM, POT and LEDS	Gen PWM signal
-|260	|Using PWM module in a fixed mode	PWM, POT and LEDS	Gen PWM signal
-|270	|Using an I2C GLCD	I2C and GLCD	Show GLCD
-|280	|Using an I2C as a Voltmeter	I2C and GLCD	Show GCLD
+|010  |Hello World  Turn on an LED  Port On. Port off
+|020  |Blink an LED Blink an LED  Set Port On, Set Port off
+|030  |Blink an LED another way Blink an LED another way  LED = !LED
+|040  |Blink more than one LED  Blink LED's Four LEDS
+|050  |Sequentially blink the LEDs with PulseOut  Blinks LEDs using PulseOut  Pulseout one LED
+|060  |Sequentially blink the LEDs  Blinks LEDs using bitwise carry Rotate the four LEDs
+|070  |Turn an LED on and off with a switch Turn an LED on and off  & when Switch Down turn on
+|080  |Sequentially blink with ADC delay. Using 060 as the basis of this demonstration program
+
+|090  |Debouncing a switch. Ensuring a switch does not bounce. Using 070  as the basis of this demonstration program
+|100  |Reversible sequentially blinking the LEDs with a variable delay  Using the LEDS and the POT  Read pot, set wait, then use code from 050
+|110  |Reversible sequentially blinking the LEDs with a variable delay to a Serial Terminal Using the LEDS, POT and the Serial Port Send 100 with POT value to serial
+|120  |Blinking the LED with an 8bit timer  Timer and LED Blink timer using timer0
+|130  |Blinking the LED with an 8bit Pot value (100 was 10bit value)  Timer and LED Blink with timer but using 8bit ADC read
+|140  |Using EEPROM to store data EEPROM  Write/read EEPROM
+|150  |Using an interrupt to toggle the LED Interrupts  Switch to port interrupt
+|160  |Using an external interrupt to toggle the LED  Interrupts  Switch to ext interrupt
+|170  |Playing sounds Sound Buzz a sound
+|180  |Showing the I2C hardware on the serial terminal  i2C and Serial  Show I2C values on terminal
+|190  |Hello world on the I2C LCD I2C and LCD Show on LCD
+|200  |Showing the I2C temperature sensor value on the serial terminal  I22, Serial and MCP2221 Show on Serial
+|210  |Showing the I2C temperature sensor value on the LCD  I22, LCD and MCP2221  Show on LCD
+|220  |Using CCP/PWM to generate a square wave with variable duty CCP/PWM and POT Gen PWM signal
+|230  |Using CCP/PWM to generate to the LEDs with variable duty CCP/PWM, POT and LEDS Gen PWM signal
+|240  |Using CCP/PWM in a fixed mode  CCP/PWM, POT and LEDS Gen PWM signal
+|250  |Using PWM module  with variable duty PWM, POT and LEDS Gen PWM signal
+|260  |Using PWM module in a fixed mode PWM, POT and LEDS Gen PWM signal
+|270  |Using an I2C GLCD  I2C and GLCD  Show GLCD
+|280  |Using an I2C as a Voltmeter  I2C and GLCD  Show GCLD
 |===
