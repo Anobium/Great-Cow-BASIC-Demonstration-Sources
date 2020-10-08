@@ -1,0 +1,46 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This demonstration simply turns the LED on and off with a wait of 500 ms.
+'''
+''' This shows how you can use the logic of NOT to toggle an LED.
+'''
+''' Great Cow BASIC will read the state of the port controlling the LED,
+''' then, it will change the state of the port, using the NOT logic,
+''' then, it will automatically update the state of the port with this new state.
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    08/10/2020
+'''********************************************************************************
+
+
+; ----- Configuration
+#chip  lgt8fx328p
+#option Explicit
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
+
+    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+    #OPTION Explicit
+
+   'Set a constant to refer to the LED.
+    #DEFINE LED0 portb.5
+    'Set LED as an output
+    Dir LED0 Out
+
+    ''' Most programs run in a loop such as this one
+    ' Start here
+    Do
+
+        ' Toggle LED off
+        LED0 = NOT LED0
+        ' Wait in a timer loop for a while
+        Wait 100 ms
+
+        ' Return to the top and do it again
+    Loop
+
+    ' The program should never get to this line
+    '
+    ' End execution and put the device into low power sleep mode.
+    End

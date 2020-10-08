@@ -19,7 +19,7 @@
 
 ' ----- Configuration
 'Make into a comment to use the AVR chipset
-#CHIP LGT8FX328P
+#CHIP lgt8fx328p
 
 
    'USART settings for USART1

@@ -1,0 +1,44 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This demonstration simply turns the LED on and off with a wait of 500 ms.
+'''
+''' This shows how you can DEFINE constants to make your code easier to maintain.
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    08/10/2020
+'''********************************************************************************
+
+
+; ----- Configuration
+#chip  lgt8fx328p
+#option Explicit
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
+
+    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+    #OPTION Explicit
+
+
+    'Set a constant to refer to the LED.
+    #DEFINE LED0 portb.5
+
+    'Set LED as an output, this is not really needed as the PulseOut instruction does this for you
+    Dir LED0 Out
+
+    ''' Most programs run in a loop such as this one
+    ''' Start here
+    Do
+
+        'Turn LED on for 500 ms
+        PulseOut LED0, 500 ms
+        'Wait with LED off
+        Wait 500 ms
+
+        ' Return to the top and do it again
+    Loop
+
+    ' The program should never get to this line
+    '
+    ' End execution and put the device into low power sleep mode.
+    End

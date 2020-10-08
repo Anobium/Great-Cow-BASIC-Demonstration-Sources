@@ -1,0 +1,47 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows basic logic test.
+'''
+''' Great Cow BASIC will automatically setup the chip for you.  You can add a parameter to the #chip line to change the frequency, as follows:
+'''
+''' #chip  lgt8fx328p [, 32 | 16 | 8 | 4 | 2 | 1 | 0.5 | 0.25 | 0.125 ]
+'''
+''' Great Cow BASIC will set the chip to the fastest internal frequency if no frequency is specified.
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    08/10/2020
+'''********************************************************************************
+
+
+; ----- Configuration
+#chip  lgt8fx328p
+#option Explicit
+
+    'Set direction of LED
+    Dir portb.5 out
+
+
+; ----- Variables
+  'None
+
+; ----- Main body of program commences here.
+
+
+    do
+
+      'Turn the LED on
+      portb.5 = 1
+      'Wait for the specified time period
+      wait 100 ms
+
+      'Turn the LED off
+      portb.5 = 0
+      'Wait for the specified time period
+      wait 100 ms
+
+    loop
+
+
+End

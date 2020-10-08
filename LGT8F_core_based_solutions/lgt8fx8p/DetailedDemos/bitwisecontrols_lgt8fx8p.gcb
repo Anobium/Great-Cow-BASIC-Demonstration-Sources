@@ -10,7 +10,7 @@
 
 
 ; ----- Configuration
-#chip  lgt8fx8p
+#chip  lgt8fx328p
 #option Explicit
 
     #Define LED     portb.5

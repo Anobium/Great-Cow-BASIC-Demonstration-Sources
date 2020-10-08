@@ -1,0 +1,87 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This demonstration simply turns the LED on and off with a wait of 500 ms.
+'''
+'''
+''' Great Cow BASIC will set the state of the LEDS dependent on the state of an input switch
+'''
+'''
+''' In this demo we connect four LEDs and a switch.
+''' Connect the LEDs via suitable resistors using a standard LED connection.
+'''
+'''
+''' -------------------PORTC-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB    D7--D6--D5--D4--D3--D2--D1--D0---
+''' Constants
+''' LED    ---------------|L4 |L3 |L2 |L1 |-  where L equates to LED
+'''-----------------------------------------
+'''
+''' Connect the switch via suitable resistors using a standard switch connection.
+''' -------------------PORTE-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB                  --D7--
+''' Constants
+''' SWITCH----------------|SW |--------------
+'''-----------------------------------------
+'''
+''' This is an interesting demonstration.  Try decreasing the wait to 0 (zero).. then, when only LED works, reduce the frequency and all four react.. why?
+'''
+'''
+
+
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    08/10/2020
+'''********************************************************************************
+
+
+; ----- Configuration
+#chip  lgt8fx328p
+#option Explicit
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
+
+    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+    #OPTION Explicit
+
+   'Set constants to refer to the LEDs.
+    #DEFINE LED1 portc.0
+    #DEFINE LED2 portc.1
+    #DEFINE LED3 portc.2
+    #DEFINE LED4 portc.3
+
+    #DEFINE SWITCH porte.3
+
+    #DEFINE LEDDELAY  10
+
+    'Set LED as an output
+    Dir LED1 Out
+    Dir LED2 Out
+    Dir LED3 Out
+    Dir LED4 Out
+
+    'Set Switch as an input
+    Dir SWITCH In
+
+    ''' Most programs run in a loop such as this one
+    ' Start here
+
+
+    Do
+          'Set the LED to the state of the switch
+          LED1 = SWITCH
+
+          'copy the state from each LED to the next LED
+          wait LEDDELAY us
+          LED2 = LED1
+          wait LEDDELAY us
+          LED3 = LED2
+          wait LEDDELAY us
+          LED4 = LED3
+          wait LEDDELAY us
+
+    Loop
+
+
+

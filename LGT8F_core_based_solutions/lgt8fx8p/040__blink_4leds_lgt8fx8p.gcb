@@ -1,0 +1,64 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This demonstration simply turns the LED on and off with a wait of 500 ms.
+'''
+''' This shows how you can use the logic of NOT to toggle an LED.
+'''
+''' Great Cow BASIC will read the state of the port controlling the LED,
+''' In this demo we connect four LEDs and flash them. We will be using this LEDs in the next demos.
+''' Connect the LEDs via suitable resistors using a standard LED connection.
+'''
+'''
+''' -------------------PORTC-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB    D7--D6--D5--D4--D3--D2--D1--D0---
+''' Constants
+''' LED    ---------------|L4 |L3 |L2 |L1 |-  where L equates to LED
+'''-----------------------------------------
+''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    08/10/2020
+'''********************************************************************************
+
+
+; ----- Configuration
+#chip  lgt8fx328p
+#option Explicit
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
+
+    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+    #OPTION Explicit
+
+   'Set constants to refer to the LEDs.
+    #DEFINE LED1 portc.0
+    #DEFINE LED2 portc.1
+    #DEFINE LED3 portc.2
+    #DEFINE LED4 portc.3
+
+    'Set LED as an output
+    Dir LED1 Out
+    Dir LED2 Out
+    Dir LED3 Out
+    Dir LED4 Out
+
+    ''' Most programs run in a loop such as this one
+    ' Start here
+    Do
+
+        ' Toggle LED off
+        LED1 = NOT LED1
+        LED2 = NOT LED2
+        LED3 = NOT LED3
+        LED4 = NOT LED4
+        ' Wait in a timer loop for a while
+        Wait 100 ms
+
+        ' Return to the top and do it again
+    Loop
+
+    ' The program should never get to this line
+    '
+    ' End execution and put the device into low power sleep mode.
+    End
