@@ -1,0 +1,113 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This demonstration uses a simple software routine to avoid the initial noise on the switch
+''' pin. The code will inspect the switch status, but should overcome most of the noise from a switch.
+'''
+''' Some switches are worse than others.
+'''
+''' When the switch is held down, the LEDs will toggle.
+'''
+''' In this demo we connect four LEDs and a switch.
+''' Connect the LEDs via suitable resistors using a standard LED connection.
+'''
+'''
+''' -------------------PORTC-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB    D7--D6--D5--D4--D3--D2--D1--D0---
+''' Constants
+''' LED    ---------------|L4 |L3 |L2 |L1 |-  where L equates to LED
+'''-----------------------------------------
+'''
+''' Connect the switch via suitable resistors using a standard switch connection.
+''' -------------------PORTE-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB                  --D7--
+''' Constants
+''' SWITCH----------------|SW |--------------
+'''-----------------------------------------
+'''
+''' This is an interesting demonstration.  Try decreasing the wait to 0 (zero).. then, when only LED works, reduce the frequency and all four react.. why?
+'''
+'''
+
+
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    08/10/2020
+'''********************************************************************************
+
+
+; ----- Configuration
+#chip  lgt8fx328p
+#option Explicit
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
+
+    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+    #OPTION Explicit
+
+   'Set constants to refer to the LEDs.
+    #DEFINE LED1 portc.0
+    #DEFINE LED2 portc.1
+    #DEFINE LED3 portc.2
+    #DEFINE LED4 portc.3
+
+    #DEFINE SWITCH porte.3
+
+    #DEFINE LEDDELAY  10
+
+    'Set LED as an output
+    Dir LED1 Out
+    Dir LED2 Out
+    Dir LED3 Out
+    Dir LED4 Out
+
+    'Set Switch as an input
+    Dir SWITCH In
+
+    ''' Most programs run in a loop such as this one
+    ' Start here
+
+    Dim lastKeyDown As Byte
+
+    'Debouncing a switch
+    Do Forever
+        Wait 10 ms
+
+        If  keyPressed( lastKeyDown ) = TRUE Then
+
+            'push button pressed
+            LED1 = !LED1
+            LED2 = !LED2
+            LED3 = !LED3
+            LED4 = !LED4
+
+        End If
+
+    Loop
+
+
+Function  keyPressed ( In lastKeyDown )
+
+    Dim actKeyDown As Byte
+
+    If ( !SWITCH ) Then
+
+        actKeyDown = TRUE
+
+    Else
+
+        actKeyDown = FALSE
+
+    End If
+
+    If (actKeyDown <> lastKeyDown) Then
+        lastKeyDown = actKeyDown
+        keyPressed =  actKeyDown
+    Else
+        keyPressed = FALSE
+    End If
+
+
+
+End Function
