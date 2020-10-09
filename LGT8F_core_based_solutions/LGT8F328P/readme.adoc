@@ -25,6 +25,9 @@
 |160  |Playing sounds Sound Buzz a sound
 |===
 
+Completed peograms above here....
+
+
 [cols=2, options="autowidth"]
 |===
 |180  |Hello world on the I2C LCD I2C and LCD Show on LCD
