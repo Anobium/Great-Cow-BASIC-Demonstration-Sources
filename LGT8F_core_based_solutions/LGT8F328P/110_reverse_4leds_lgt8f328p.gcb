@@ -96,7 +96,7 @@
          'Send a string to the serial terminal
          HSerPrint "ADC: "
          'Send a formatted string to the serial terminal
-         HSerPrint LeftPad( str( myDelay), 3, "0")
+         HSerPrint LeftPad( str( myDelay), 5, "0")
          'Send a CRLF to the serial terminal
          HSerPrintCRLF
 

@@ -1,0 +1,81 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This demonstration simply turns the LED on and off with a wait of 1000 ms.   You can change the wait period, just change the constant.
+'''
+''' This used the millis() library to setup and expose a function that is the running time of the chip in milliseconds ( ms )
+''' Using millis() hides the complexity of setting up the timer.
+'''
+''' In this demo we connect four LEDs and flash them.
+''' Connect the LEDs via suitable resistors using a standard LED connection.
+'''
+'''
+''' -------------------PORTC-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB    D7--D6--D5--D4--D3--D2--D1--D0---
+''' Constants
+''' LED    ---------------|L4 |L3 |L2 |L1 |-  where L equates to LED
+'''-----------------------------------------
+''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    08/10/2020
+'''********************************************************************************
+
+
+; ----- Configuration
+#chip  LGT8F328P
+#option Explicit
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
+
+    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+    #OPTION Explicit
+
+   'Set constants to refer to the LEDs.
+    #DEFINE LED1 portc.0
+    #DEFINE LED2 portc.1
+    #DEFINE LED3 portc.2
+    #DEFINE LED4 portc.3
+
+    'Set LED as an output
+    Dir LED1 Out
+    Dir LED2 Out
+    Dir LED3 Out
+    Dir LED4 Out
+
+    ' Main program
+    ' include the millis library.  This will set up the ms counter for you.
+    #include <millis.h>
+    #define LEDRate 10      ' Flash rate in mS
+
+    ' declare working variables
+    Dim CurMs, LstMs as word
+
+    'LstMs is the last Millisecond
+    LstMs = 0
+    CurMs = 0
+
+    ' This loop runs over and over forever.
+    Do
+      CurMs = millis()
+
+      'If the required Time in ms has elapsed, where we deduct the CurMs - LstMs to get a delta ms, and, then we compate to our desired ms to be exceeded
+      if ( CurMs - LstMs ) >= LEDRate then
+
+        ' Toggle LED off
+        LED1 = NOT LED1
+        LED2 = NOT LED2
+        LED3 = NOT LED3
+        LED4 = NOT LED4
+
+        ' And Record Toggle Time
+        LstMs = CurMs
+
+      end if
+
+    Loop
+
+    ' The program should never get to this line
+    '
+    ' End execution and put the device into low power sleep mode.
+    End

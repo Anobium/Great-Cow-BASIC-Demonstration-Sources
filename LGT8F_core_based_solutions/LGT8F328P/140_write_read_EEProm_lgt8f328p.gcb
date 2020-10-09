@@ -1,0 +1,154 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This demonstration will provide code for writing and reading a single byte onto
+''' the on-board EEPROM. EEPROM is non-volatile memory, meaning that it does
+''' not lose its value when power is shut off. This is unlike RAM, which will
+''' lose its value when no power is applied. The EEPROM is useful for storing
+''' variables that must still be present during no power.
+''' It is also convenient to use if the entire RAM space is used up.
+''' Writes and reads to the EEPROM are practically instant and are much faster
+''' than program memory operations.
+
+''' This will show the value of the EEPROM on the serial Terminal.
+''' You can experiment by changing the variable 'Outdata' from Random function to a specific range.  Enjoy.
+'''
+''' The terminal will look like this....
+/*
+
+            EEPROM Test and Show EEProm Results
+            Write/Read and Compare Operation
+
+            If a compare operating fails then the `!!` will be shown
+
+                 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+            00:  1D 09 BD 35 72 32 78 C7 29 4F 97 80 76 3D EA FB
+            10:  BA 60 2F D9 4E EA 2F A1 1A B3 BF 8D 71 96 0C 3E
+            20:  EF 9C D7 7B BE AE F6 6F 64 A2 10 88 F9 A4 44 9A
+            30:  11 56 45 7B 5D 2D 86 7A B3 3D D6 8B 16 A8 63 36
+            40:  06 E9 76 EE C5 04 47 A5 B2 86 06 53 E9 35 FE B5
+            50:  3D 84 7F 1B C7 F8 60 F4 9E 1F 44 ED 19 24 E7 F3
+            60:  4D AD D8 28 C9 B7 60 B0 BA EA 1C 8D 9D 49 57 19
+            70:  9C 78 B4 95 B0 46 51 AE 0D E0 53 43 CE CC 29 82
+            80:  00 29 EF 04 80 5A 29 AF 94 F8 71 10 E3 49 1C 61
+            90:  42 12 70 6A 78 1B 5A 9B 58 E1 90 C7 4F A3 98 74
+            A0:  A6 A1 31 93 7F 83 90 D9 F7 F5 FC 88 51 5F EA E5
+            B0:  02 36 4B 25 B9 14 F4 D7 67 06 64 71 3F 77 04 61
+            C0:  D9 C5 59 EF 83 EF B9 2B 04 73 BD B0 1D 4D 99 C0
+            D0:  2A 52 FC AA 99 A5 46 55 1A 80 93 0A 8B 7E 98 D3
+            E0:  01 24 7C 24 64 28 23 DC 2A 07 3C 22 97 9D 4E 63
+            F0:  9C FD DB EA 51 41 52 B3 66 CA BC DB 62 62 89 62
+
+            End of EEProm Program and Display
+            Press switch to repeat demonstration
+
+*/
+''' -------------------PORTC-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB    D7--D6--D5--D4--D3--D2--D1--D0---
+''' Constants
+''' LED    ------------ADC|L4 |L3 |L2 |L1 |-  where L equates to LED
+'''-----------------------------------------
+'''
+''' Connect the switch via suitable resistors using a standard switch connection.
+''' -------------------PORTE-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB                  --D7--
+''' Constants
+''' SWITCH----------------|SW |--------------
+''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    08/10/2020
+'''********************************************************************************
+
+
+; ----- Configuration
+#chip  LGT8F328P
+#option Explicit
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
+
+    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+    #OPTION Explicit
+
+   'Set constants to refer to the LEDs.
+    #DEFINE LED1 portc.0
+    #DEFINE LED2 portc.1
+    #DEFINE LED3 portc.2
+    #DEFINE LED4 portc.3
+
+    'Set LED as an output
+    Dir LED1 Out
+    Dir LED2 Out
+    Dir LED3 Out
+    Dir LED4 Out
+
+    #DEFINE SWITCH porte.3
+    Dir SWITCH in
+
+    'USART settings for USART1 on the chip which is sent via the USB to the PC
+    #define USART_BAUD_RATE 9600
+    #define USART_TX_BLOCKING
+    #define USART_DELAY OFF
+
+
+
+    ' Now assumes Serial Terminal is operational
+    Dim EEPromAddress, DisplayNewLine, Indata, OutData As Byte
+
+    Do Forever
+
+        HSerPrintCRLF 2
+        HSerPrint "EEPROM Test and Show EEProm Results"
+        HSerPrintCRLF
+        HSerPrint "Write/Read and Compare Operation"
+        HSerPrintCRLF 2
+        HSerPrint "If a compare operating fails then the `!!` will be shown"
+        HSerPrintCRLF 2
+
+
+        'write operations
+        Set LED1 Off
+
+        HSerPrint "     "
+        For EEPromAddress = 0 To 15
+            HSerPrint Hex(EEPromAddress)
+            HSerPrint " "
+        Next
+
+        For EEPromAddress = 0 To 255
+            DisplayNewLine = EEPromAddress % 16
+            If DisplayNewLine = 0 Then
+                HSerPrintCRLF
+                HSerPrint Hex(EEPromAddress)
+                HSerPrint ": "
+            End If
+            HSerPrint " "
+
+            Outdata = Random
+            'Outdata = EEPromAddress
+
+'*** EEPROM write
+            EPWrite ( EEPromAddress, Outdata )
+'*** EEPROM read
+            EPRead  ( EEPromAddress, Indata )
+
+            If Outdata = Indata Then
+                HSerPrint  Hex(Indata)
+            Else
+                HSerPrint  "!!"
+            End If
+
+        Next
+
+        HSerPrintCRLF 2
+        HSerPrint   "End of EEProm Program and Display"
+        HSerPrintCRLF
+        HSerPrint   "Press switch to repeat demonstration"
+        HSerPrintCRLF
+
+        Set LED1 On
+
+        Wait While Switch = On
+    Loop
+    End
