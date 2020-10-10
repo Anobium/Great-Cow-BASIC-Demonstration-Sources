@@ -2,10 +2,7 @@
 
 # Features
 
-- Fast_IO update
-- Automatic prescaler setup
 - Support of 0.125 to 32 Mhz
-- Digital Analog Converter
 - Voltage References
 - Analog Comparator (page 224 of datasheet v1.0.4)
 - Differential Amplifier
@@ -18,10 +15,11 @@
 
 - Support 32 Mhz and other clock speeds
 - Differential Amplifier API
-- Better Boards Menu
-- Installation via Board Manager Urls
-- SoftwareSerial @32Mhz
-- [Huge resource](https://github.com/Edragon/LGT)
+- 12-bit ADC
+
+
+# Reference site 
+- [A huge resource](https://github.com/Edragon/LGT)
 
 # Power consumption @ 5v
 
