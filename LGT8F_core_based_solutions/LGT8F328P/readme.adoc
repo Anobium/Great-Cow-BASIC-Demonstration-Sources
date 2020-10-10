@@ -39,6 +39,7 @@ Completed programs above here....
 |240  |Using CCP/PWM in a fixed mode  CCP/PWM, POT and LEDS Gen PWM signal
 |250  |Using PWM module  with variable duty PWM, POT and LEDS Gen PWM signal
 |260  |Using PWM module in a fixed mode PWM, POT and LEDS Gen PWM signal
-|270  |Using an I2C GLCD  I2C and GLCD  Show GLCD
-|280  |Using an I2C as a Voltmeter  I2C and GLCD  Show GCLD
+|270  |Using an SPI GLCD
+|280  |Using an SPI Sensor
 |===
+
