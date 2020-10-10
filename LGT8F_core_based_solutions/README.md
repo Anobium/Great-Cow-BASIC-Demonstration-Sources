@@ -12,15 +12,16 @@
 - Computation Accelerator (page 52 of datasheet v1.0.4)
 - SoftwareSerial and Hardware Serial
 - 2 to 6 high current 80ma IO pins
-- [328p Arduino ISP](https://github.com/dbuezas/lgt8fx/blob/master/lgt8f/libraries/LarduinoISP/readme.md) (from [#brother-yan](https://github.com/brother-yan/LGTISP))
+- [328p Arduino ISP](from [#brother-yan](https://github.com/brother-yan/LGTISP))
 
-# Differences to original core [Larduino_HSP v3.6c](https://github.com/Edragon/LGT/tree/master/HSP%20Patch%20File/Larduino_HSP_3.6c/Larduino_HSP_v3.6c)
+# Differences to original core 
 
 - Support 32 Mhz and other clock speeds
 - Differential Amplifier API
 - Better Boards Menu
 - Installation via Board Manager Urls
 - SoftwareSerial @32Mhz
+- [Huge resource](https://github.com/Edragon/LGT)
 
 # Power consumption @ 5v
 
@@ -36,8 +37,8 @@
 # Example boards:
 
 ## LGT8F328P-LQFP32
-
-### [WAVGAT Pro Mini Pseudo Clone](../../wiki/WAVGAT-Pro-Mini-Pseudo-Clone)
+../-
+### [WAVGAT Pro Mini Pseudo Clone](https://github.com/dbuezas/lgt8fx/wiki/WAVGAT-Pro-Mini-Pseudo-Clone)
 
 <img src="https://github.com/dbuezas/lgt8fx/blob/master/docs/boards/WAVGAT_Pro_Mini_Clone.jpg" alt="Wavgat Pro Mini pseudo-clone" width="200"/>
 <img src="https://github.com/dbuezas/lgt8fx/blob/master/docs/boards/wavgat_back.jpg" alt="Wavgat Pro Mini pseudo-clone" width="200"/>
@@ -46,7 +47,7 @@
 
 <img src="https://github.com/dbuezas/lgt8fx/blob/master/docs/boards/pro_mini_LQFP32.png" alt="Pro Mini style" width="200"/>
 
-### [Nano Style](../../wiki/Nano-Style)
+### [Nano Style](https://github.com/dbuezas/lgt8fx/wiki/Nano-Style)
 
 <img src="https://github.com/dbuezas/lgt8fx/blob/master/docs/boards/nano_LQFP32.png" alt="Nano style" width="200"/>
 <img src="https://github.com/dbuezas/lgt8fx/blob/master/docs/boards/nano.jpg" alt="Nano style" width="200"/>
@@ -60,7 +61,7 @@ Like this pinout?
 
 <img src="https://github.com/dbuezas/lgt8fx/blob/master/docs/boards/uno_LQFP32.jpeg" alt="Uno style" width="200"/>
 
-### [Wemos TTGO XI](../../wiki/Wemos-TTGO-XI)
+### [Wemos TTGO XI](https://github.com/dbuezas/lgt8fx/wiki/Wemos-TTGO-XI)
 
 <img src="https://github.com/dbuezas/lgt8fx/blob/master/docs/boards/TTGO_XI_8F328P-U_nano_V3.0_LQFP32.png" alt="Wemos Nano style" width="200"/>
 <img src="https://github.com/dbuezas/lgt8fx/blob/master/docs/boards/wemos.jpg" alt="Wemos Nano style" width="200"/>
@@ -68,7 +69,7 @@ Like this pinout?
 
 ## LGT8F328P-SSOP20
 
-### [Pro Mini Style SSOP20](../../wiki/Pro-Mini-Style---SSOP20)
+### [Pro Mini Style SSOP20](https://github.com/dbuezas/lgt8fx/wiki/Pro-Mini-Style---SSOP20)
 
 <img src="https://github.com/dbuezas/lgt8fx/blob/master/docs/boards/ssop20.png" alt="Pro Mini simil" width="200"/>
 <img src="https://github.com/dbuezas/lgt8fx/blob/master/docs/boards/ssop20.jpg" alt="Pro Mini simil" width="200"/>
