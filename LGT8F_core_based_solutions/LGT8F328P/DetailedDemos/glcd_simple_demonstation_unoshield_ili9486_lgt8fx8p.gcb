@@ -1,0 +1,292 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a simple GLCD demonstration of the ILI9486L GLCD capabilities.
+'''It is a nice graphical LCD, suitable for a lot of various projects.
+'''This program draws lines, boxes, circles and prints strings and numbers.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+''':
+'''This has been tested using a UNO shield. There is three programs within this one program, simply change the varaible GLCDfntDefaultsize to 1 | 2 | 3
+''':
+''':
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date    10.10.2020
+'''********************************************************************************
+
+  'Chip Settings.
+    #chip  LGT8F328P
+    #option explicit
+
+    #include <glcd.h>
+    #include <LGT8F328P.h >
+
+    #define GLCD_TYPE GLCD_TYPE_ILI9486
+    #define UNO_8bit_Shield
+
+    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+    #define GLCD_RD       ANALOG_0          ' read command line
+    #define GLCD_WR       ANALOG_1          ' write command line
+    #define GLCD_DC       ANALOG_2          ' Command/Data line.
+    #define GLCD_CS       ANALOG_3          ' Chip select line
+    #define GLCD_RST      ANALOG_4          ' Reset line
+
+    #define GLCD_DB0       DIGITAL_8
+    #define GLCD_DB1       DIGITAL_9
+    #define GLCD_DB2       DIGITAL_2
+    #define GLCD_DB3       DIGITAL_3
+    #define GLCD_DB4       DIGITAL_4
+    #define GLCD_DB5       DIGITAL_5
+    #define GLCD_DB6       DIGITAL_6
+    #define GLCD_DB7       DIGITAL_7
+
+
+
+'main program start here
+
+    'GLCD selected extension font set. ASCII characters 31-254, the extended font uses 1358 bytes of program memory
+    #define GLCD_EXTENDEDFONTSET1
+    GLCDfntDefaultsize = 1
+
+
+    'GLCDCLS  supports GLCDBackground as default
+    'GLCDCLS  also support passing color parameter.
+    'GLCDCLS [color]
+
+    Dim CCOUNT, BYTENUMBER, OLDFONT, OLDFONT as Byte
+
+    CCount = 31
+    dim longNumber as long
+    longNumber = 0 ' max value = 4294967290
+    dim wordNumber as Word
+    wordNumber = 0
+    byteNumber = 0
+
+    'These are not public methods, but, they are included
+    'Turn display off
+    DSTB_ILI9486L ( off )
+    wait 2 s
+    'Turn display on
+    DSTB_ILI9486L ( on )
+
+    repeat 2
+
+            GLCDCLS TFT_BLUE
+
+            GLCDForeground = TFT_MAGENTA
+            GLCDfntDefaultsize = 1
+            GLCDPrint ( 2, 2, "GLCDPrint String" )
+
+
+            GLCDForeground = TFT_WHITE
+            GLCDfntDefaultsize = 2
+            GLCDPrint ( 2, 12, "GLCDPrint String" )
+
+
+            GLCDForeground = TFT_YELLOW
+            GLCDfntDefaultsize = 3
+            GLCDPrint ( 2,30, "GLCDPrint String" )
+
+            longNumber = 0xFFFFFFFF
+            wordNumber = 0xFFFF
+            byteNumber = 0xFF
+
+            GLCDCLS TFT_WHITE
+
+            GLCDForeground = TFT_MAGENTA
+            GLCDfntDefaultsize = 1
+            GLCDPrint ( 2, 2, bytenumber )
+
+
+            GLCDForeground = TFT_BLACK
+            GLCDfntDefaultsize = 2
+            GLCDPrint ( 2, 12, wordNumber )
+
+
+            GLCDForeground = TFT_CYAN
+            GLCDfntDefaultsize = 3
+            GLCDPrint ( 2,30, longnumber )
+
+            GLCDRotate ( Portrait_Rev )
+
+    end Repeat
+
+  GLCDRotate ( Landscape )
+  GLCDCLS TFT_BLUE
+
+
+
+
+
+'Set font size will also change the demo
+  GLCDfntDefaultsize = 1
+
+  longNumber = 0 ' max value = 4294967290
+  wordNumber = 0
+  byteNumber = 0
+
+    'Using the global variable GLCDfntDefaultsize to show the different capabilities
+    Select Case GLCDfntDefaultsize
+
+    Case 1
+
+      ShowCase1
+
+    Case 2
+
+      ShowCase2
+
+    Case 3
+
+      GLCDDrawString (2, 1, "GLCD font")
+      GLCDDrawString (2, 25, "size = 3")
+      box 0,0, GLCDDeviceWidth -1,  GLCDDeviceHeight -1, TFT_BLUE
+      box  GLCDDeviceWidth -5,  GLCDDeviceHeight -5, GLCDDeviceWidth -1,  GLCDDeviceHeight -1, TFT_WHITE
+
+  End Select
+
+end
+
+
+sub ShowCase1
+
+        GLCDDrawString (2, 1, "GCB", TFT_WHITE )
+        GLCDDrawString (56,1,"v.98", TFT_YELLOW )
+        GLCDDrawString (2, 16, "DrawStr", TFT_WHITE )
+
+        GLCDDrawString ( 60, 31, "Long Number" )
+        GLCDDrawString ( 60, 39, "Word Number" )
+        GLCDDrawString ( 60, 47, "Byte Number" )
+
+        GLCDDrawString ( 74, 16, "Asc:" )
+
+        box 0,0, GLCDDeviceWidth -1,  GLCDDeviceHeight -1, TFT_YELLOW
+        box  GLCDDeviceWidth -5,  GLCDDeviceHeight -5, GLCDDeviceWidth -1,  GLCDDeviceHeight -1, TFT_WHITE
+
+        Circle(  GLCDDeviceWidth /2,  GLCDDeviceHeight /2, 50, TFT_LIGHTGREY )            ;center
+        FilledCircle(  GLCDDeviceWidth /2,  GLCDDeviceHeight /2, 25, TFT_DARKGREY  )
+
+        line 0,   GLCDDeviceHeight -1 ,  GLCDDeviceWidth /2 +100,  ( GLCDDeviceHeight  /2) - 50, TFT_CYAN
+        line  0, ( GLCDDeviceHeight  /2) - 50,  GLCDDeviceWidth /2 +100, ( GLCDDeviceHeight  /2) - 50, TFT_CYAN
+
+        filledbox 2, GLCDDeviceHeight /2+10,42, GLCDDeviceHeight /2+50, TFT_RED
+
+        oldfont = GLCDfntDefaultsize
+        GLCDfntDefaultsize = 3
+        GLCDDrawString ( 36,  GLCDDeviceHeight  - 30 , "ILI9486L Driver" , TFT_WHITE )
+
+        GLCDfntDefaultsize = 1
+        GLCDDrawString (  GLCDDeviceWidth  - 64, 2 , "Oct 2020" , TFT_WHITE )
+
+        #ifdef TFT_HardwareSPI
+            GLCDDrawString (  GLCDDeviceWidth  - 42, 10 , "HW SPI" , TFT_WHITE )
+        #endif
+
+        #ifndef TFT_HardwareSPI
+          #ifndef UNO_8bit_Shield  'therefore not 8bit bus
+            GLCDDrawString (  GLCDDeviceWidth  - 42, 10 , "SW SPI" , TFT_WHITE )
+          #endif
+        #endif
+
+        #ifdef UNO_8bit_Shield
+            GLCDDrawString (  GLCDDeviceWidth  - 114, 10 , "UNO 8bit Shield" , TFT_WHITE )
+        #endif
+
+
+        'Revert the font size
+        GLCDfntDefaultsize = oldfont
+        GLCDForeground = TFT_RED
+        GLCDPrintLargeFont  ( 100 ,  GLCDDeviceHeight  - 60 , "Great Cow BASIC" )
+        GLCDForeground = TFT_WHITE
+        DO forever
+
+            GLCDPrint ( 144 , 31, longNumber)
+            GLCDPrint ( 144 , 39, pad( str(wordnumber),5))
+            GLCDPrint ( 144 , 47, pad( str(bytenumber),3))
+
+            GLCDDrawChar(54, 16, CCount )
+            Box 52,15,62,26, TFT_WHITE                'Draw a box around the Char below
+
+            GLCDDrawString ( 100, 16 , pad( str(CCount),3) )
+
+            CCount++
+            if CCount = 0 then CCount = 31
+            if CCount = 128 then CCount = 192
+            longNumber = longNumber + 7
+
+            wordNumber = wordNumber + 3
+            byteNumber++
+
+        LOOP
+
+end sub
+
+sub ShowCase2
+
+        GLCDDrawString (2, 1,  "GCB",TFT_WHITE)
+        GLCDDrawString (56,1,  "v.98",TFT_YELLOW)
+        GLCDDrawString (2, 18, "DrawStr",TFT_WHITE)
+
+        GLCDDrawString ( 2, 52, "Long:" )
+        GLCDDrawString ( 2, 70, "Word:" )
+        GLCDDrawString ( 2, 88, "Byte:" )
+
+        GLCDDrawString ( 128, 18, "Asc:"+"  " )
+
+        box 0,0, GLCDDeviceWidth -1,  GLCDDeviceHeight -1, TFT_RED
+        box  GLCDDeviceWidth -5,  GLCDDeviceHeight -5, GLCDDeviceWidth -1,  GLCDDeviceHeight -1, TFT_WHITE
+
+        Circle(  GLCDDeviceWidth /2,  GLCDDeviceHeight /2, 50, TFT_LIGHTGREY )            ;center
+        FilledCircle(  GLCDDeviceWidth /2,  GLCDDeviceHeight /2, 25, TFT_DARKGREY  )
+
+        line 0,   GLCDDeviceHeight -1 ,  GLCDDeviceWidth /2 +100,  ( GLCDDeviceHeight  /2) - 50, TFT_CYAN
+        line  0, ( GLCDDeviceHeight  /2) - 50,  GLCDDeviceWidth /2 +100, ( GLCDDeviceHeight  /2) - 50, TFT_CYAN
+
+        filledbox 2, GLCDDeviceHeight /2+10,42, GLCDDeviceHeight /2+50, TFT_RED
+
+        oldfont = GLCDfntDefaultsize
+        GLCDfntDefaultsize = 3
+        GLCDDrawString ( 36,  GLCDDeviceHeight  - 34 , "ILI9486L Driver" , TFT_WHITE )
+
+        GLCDfntDefaultsize = 1
+        GLCDDrawString (  GLCDDeviceWidth  - 64, 2 , "Oct 2020" , TFT_WHITE )
+
+        #ifdef TFT_HardwareSPI
+            GLCDDrawString (  GLCDDeviceWidth  - 42, 10 , "HW SPI" , TFT_WHITE )
+        #endif
+
+        #ifndef TFT_HardwareSPI
+          #ifndef UNO_8bit_Shield  'therefore not 8bit bus
+            GLCDDrawString (  GLCDDeviceWidth  - 42, 10 , "SW SPI" , TFT_WHITE )
+          #endif
+        #endif
+
+        #ifdef UNO_8bit_Shield
+            GLCDDrawString (  GLCDDeviceWidth  - 114, 10 , "UNO 8bit Shield" , TFT_WHITE )
+        #endif
+
+        'Revert the font size
+        GLCDfntDefaultsize = oldfont
+        GLCDForeground = TFT_RED
+        GLCDPrintLargeFont  ( 100 ,  GLCDDeviceHeight  - 60 , "Great Cow BASIC" )
+        GLCDForeground = TFT_WHITE
+        DO forever
+
+          GLCDPrint ( 64 , 52, longNumber)
+          GLCDPrint ( 64 , 70, pad( str(wordnumber),5))
+          GLCDPrint ( 64 , 88, pad( str(bytenumber),3))
+
+          GLCDDrawChar(99, 18, CCount )
+          Box 98,18,117,42, TFT_WHITE               'Draw a box around the Char below
+
+          GLCDDrawString ( 180, 18 , pad( str(CCount),3) )
+
+          CCount++
+          if CCount = 0 then CCount = 31
+          if CCount = 128 then CCount = 192
+          longNumber = longNumber + 7
+          wordNumber = wordNumber + 3
+          byteNumber++
+
+        LOOP
+end sub

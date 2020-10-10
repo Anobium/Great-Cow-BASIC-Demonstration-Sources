@@ -19,9 +19,16 @@
 ''' Connect the LEDs via suitable resistors using a standard LED connection.
 '''
 '''
+''' Connect the switch via suitable resistors using a standard switch connection.
+''' -------------------PORTB-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB
+''' Constants
+''' SOUND --------|SND|---------------------
+'''-----------------------------------------
 ''' -------------------PORTC-----------------
 ''' Bit#:  -7---6---5---4---3---2---1---0---
-''' PCB    D7--D6--D5--D4--D3--D2--D1--D0---
+''' PCB    NA--A6--A5--A4--A3--A2--A1--A0---
 ''' Constants
 ''' LED    ---------------|L4 |L3 |L2 |L1 |-  where L equates to LED
 '''-----------------------------------------
@@ -29,9 +36,9 @@
 ''' Connect the switch via suitable resistors using a standard switch connection.
 ''' -------------------PORTE-----------------
 ''' Bit#:  -7---6---5---4---3---2---1---0---
-''' PCB                  --D7--
+''' PCB                  --A7--
 ''' Constants
-''' SWITCH----------------|SW |--------------
+''' SOUND ----------------|SW |--------------
 '''-----------------------------------------
 '''
 ''' This is an interesting demonstration.  Try decreasing the wait to 0 (zero).. then, when only LED works, reduce the frequency and all four react.. why?
@@ -62,7 +69,7 @@
 
 
    'Set constants to refer to the LEDs.
-    #DEFINE SoundOut PORTe.1          ; output pin for Tone
+    #DEFINE SoundOut PORTB.5          ; output pin for Tone
 
     #DEFINE SWITCH porte.3
 

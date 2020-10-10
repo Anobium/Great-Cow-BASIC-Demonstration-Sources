@@ -14,10 +14,18 @@
 '''
 ''' -------------------PORTC-----------------
 ''' Bit#:  -7---6---5---4---3---2---1---0---
-''' PCB    D7--D6--D5--D4--D3--D2--D1--D0---
+''' PCB    NA--A6--A5--A4--A3--A2--A1--A0---
 ''' Constants
-''' LED    ---------------|L4 |L3 |L2 |L1 |-  where L equates to LED
+'''        ---------------|L4 |L3 |L2 |L1 |-  where L equates to LED
 '''-----------------------------------------
+'''
+''' -------------------PORTE-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB                          --A6-------
+''' Constants
+'''                               -ADC-
+'''-----------------------------------------
+
 ''
 '''@author  Evan Venn
 '''@licence GPL
@@ -56,7 +64,7 @@
     Do
 
         'Make an 8 bit reading of the ADC port.  This returns a value of 0 to 255.  The ADC port supports 0 to 4095 [ReadAD12()] but the demo looks silly with big numbers. :-)
-        readADCValue = readAD( AN4 )
+        readADCValue = readAD( ADC6 )
 
         'if readADCValue is 0 then set to 1.. just makes the LEDs look better...
         if readADCValue = 0 then

@@ -9,18 +9,17 @@
 '''
 ''' -------------------PORTC-----------------
 ''' Bit#:  -7---6---5---4---3---2---1---0---
-''' PCB    D7--D6--D5--D4--D3--D2--D1--D0---
+''' PCB    NA--A6--A5--A4--A3--A2--A1--A0---
 ''' Constants
-''' LED    ------------ADC|L4 |L3 |L2 |L1 |-  where L equates to LED
+'''        ---|ADC|SCL|SDA|L4 |L3 |L2 |L1 |-  where L equates to LED
 '''-----------------------------------------
 '''
 ''' Connect the switch via suitable resistors using a standard switch connection.
 ''' -------------------PORTE-----------------
 ''' Bit#:  -7---6---5---4---3---2---1---0---
-''' PCB                  --D7--
+''' PCB                  --A7--   -ADC-
 ''' Constants
-''' SWITCH----------------|SW |--------------
-''
+'''
 '''@author  Evan Venn
 '''@licence GPL
 '''@version 1.0
@@ -69,7 +68,7 @@
 
     Do
 
-        ADC12BitValue = ReadAD12( AN4 )
+        ADC12BitValue = ReadAD12( ADC6 )
 
          If  direction = LED_RIGHT  Then
 

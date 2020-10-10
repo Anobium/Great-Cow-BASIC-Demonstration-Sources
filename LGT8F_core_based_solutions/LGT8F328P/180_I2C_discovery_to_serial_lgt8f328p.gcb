@@ -1,0 +1,113 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+'''  This demonstration shows the read of the 12bit ADC. A range of 0 to 4095!!
+'''  This is a similar program to the previous ADC program but with a higher ADC resolution.
+'''
+'''  And, it sends the values to the serial terminal via the USB interface
+'''
+'''  Press the switch to reverse the direction of the LEDs, increase the ADC value to increase the debounce check.
+'''
+''' -------------------PORTC-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB    NA--A6--A5--A4--A3--A2--A1--A0---
+''' Constants
+'''        ---|ADC|SCL|SDA|L4 |L3 |L2 |L1 |-  where L equates to LED
+
+'''-----------------------------------------
+'''
+''' Connect the switch via suitable resistors using a standard switch connection.
+''' -------------------PORTE-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB                  --A7--
+''' Constants
+''' SWITCH----------------|SW |--------------
+''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    08/10/2020
+'''********************************************************************************
+
+
+; ----- Configuration
+#chip  LGT8F328P, 16
+#option Explicit
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
+
+    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+    #OPTION Explicit
+
+
+    #DEFINE SWITCH porte.3
+    Dir SWITCH in
+
+    'USART settings for USART1 on the chip which is sent via the USB to the PC
+    #DEFINE USART_BAUD_RATE 9600
+    #DEFINE USART_TX_BLOCKING
+    #DEFINE USART_DELAY OFF
+
+
+  ; ----- Define Hardware settings for hwi2c
+    ' Define I2C settings - CHANGE PORTS if required for your specific device.
+  ' Define I2C settings
+  #define HI2C_BAUD_RATE 400
+  #define HI2C_DATA PORTC.5
+  #define HI2C_CLOCK PORTC.4
+  'I2C pins need to be input for SSP module when used on Microchip device
+  Dir HI2C_DATA in
+  Dir HI2C_CLOCK in
+  HI2CMode Master
+
+  ; ----- Main body of program commences here.
+    ' Now assumes Serial Terminal is operational
+    dim DeviceID as byte
+    Dim DisplayNewLine as Byte
+
+    Do
+        HSerPrintCRLF 2
+        HSerPrint "Show LGT8F328P Hardware I2C Bus"
+        HSerPrintCRLF 2
+
+        HSerPrint "     "
+        for DeviceID = 0 to 15
+          HSerPrint hex(deviceID)
+          HSerPrint " "
+        next
+        for DeviceID = 0 to 255
+          DisplayNewLine = DeviceID % 16
+          if DisplayNewLine = 0 Then
+            HSerPrintCRLF
+            HserPrint hex(DeviceID)
+            HSerPrint ": "
+          end if
+          HSerPrint " "
+          HI2CStart
+          if HI2CWaitMSSPTimeout <> True then
+
+            HI2CSend ( deviceID )
+
+            if HI2CAckPollState = false then
+              HSerPrint   hex(deviceID)
+              HI2CSend ( 0)
+            Else
+              HSerPrint "--"
+            end if
+
+
+          end if
+          HI2CStop
+
+        next
+
+        HSerPrintCRLF 2
+        HSerPrint   "End of Search"
+        HSerPrintCRLF 2
+
+        wait while switch = 1
+
+    Loop
+    END
+
+
+
+  ; ----- Support methods.  Subroutines and Functions

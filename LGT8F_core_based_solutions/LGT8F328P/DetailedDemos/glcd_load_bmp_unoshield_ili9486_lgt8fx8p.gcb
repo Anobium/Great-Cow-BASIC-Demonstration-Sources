@@ -1,0 +1,68 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a simple GLCD demonstration of the ILI9486L GLCD capabilities.
+'''It is a nice graphical LCD, suitable for a lot of various projects.
+'''This program draws lines, boxes, circles and prints strings and numbers.
+'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
+''':
+'''This has been tested using the hardware and the software SPI option.
+''':
+''':
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date    24.01.2019
+'''********************************************************************************
+
+  'Chip Settings.
+    #chip  LGT8F328P
+    #option explicit
+
+    #include <glcd.h>
+    #include <LGT8F328P.h >
+
+    #define GLCD_TYPE GLCD_TYPE_ILI9486
+    #define UNO_8bit_Shield
+
+    'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
+    #define GLCD_RD       ANALOG_0          ' read command line
+    #define GLCD_WR       ANALOG_1          ' write command line
+    #define GLCD_DC       ANALOG_2          ' Command/Data line.
+    #define GLCD_CS       ANALOG_3          ' Chip select line
+    #define GLCD_RST      ANALOG_4          ' Reset line
+
+    #define GLCD_DB0       DIGITAL_8
+    #define GLCD_DB1       DIGITAL_9
+    #define GLCD_DB2       DIGITAL_2
+    #define GLCD_DB3       DIGITAL_3
+    #define GLCD_DB4       DIGITAL_4
+    #define GLCD_DB5       DIGITAL_5
+    #define GLCD_DB6       DIGITAL_6
+    #define GLCD_DB7       DIGITAL_7
+
+    #include "samplebmp001.h"
+
+'main program start here
+    GLCDRotate ( Landscape )
+    GLCDCLS SSD1289_White
+
+    DrawBMP (30, 60, Image1)
+    DrawBMP (140, 60, Image2)
+
+    Wait 5 s
+    GLCDPrint  1, 200, " May the force...", TFT_RED
+    GLCDPrint  1, 230, "   ...be with you", TFT_Red
+    Do
+    Loop
+
+
+
+
+
+
+    table TableImage3
+    end Table
+    table TableImage4
+    end Table
+    table TableImage5
+    end Table
