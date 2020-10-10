@@ -34,7 +34,6 @@
 ''' SWITCH----------------|SW |--------------
 '''-----------------------------------------
 '''
-''' This is an interesting demonstration.  Try decreasing the wait to 0 (zero).. then, when only LED works, reduce the frequency and all four react.. why?
 '''
 '''
 

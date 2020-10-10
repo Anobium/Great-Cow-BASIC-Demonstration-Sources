@@ -1,11 +1,9 @@
 '''A demonstration program for GCB
 '''---------------------------------------------------------------------------------
-'''  This demonstration shows the read of the 12bit ADC. A range of 0 to 4095!!
-'''  This is a similar program to the previous ADC program but with a higher ADC resolution.
 '''
-'''  And, it sends the values to the serial terminal via the USB interface
+'''  This shows how to display a basic BMP on the GLCD and the GLCD basic commands.
 '''
-'''  Press the switch to reverse the direction of the LEDs, increase the ADC value to increase the debounce check.
+'''
 '''
 ''' -------------------PORTC-----------------
 ''' Bit#:  -7---6---5---4---3---2---1---0---

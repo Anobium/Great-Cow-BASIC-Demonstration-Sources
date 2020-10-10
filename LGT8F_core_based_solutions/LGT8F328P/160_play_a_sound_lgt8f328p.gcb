@@ -1,25 +1,11 @@
 '''A demonstration program for GCB
 '''---------------------------------------------------------------------------------
-''' This demonstration uses a  Interrupt routine to detect the switch being depressed.
-''' When the switch is held down, the LEDs will toggle.
-'''
-''' The setup is relatively easy
-/*
-
-      On Interrupt PICI3Ready  call KeyDowbInterruptHandler
-      PCINT27 = 1
-
-      Where the switch is attached to porte.3m and, porte.3 is PCINT27.  See the diagram here https://raw.githubusercontent.com/dbuezas/lgt8fx/master/docs/boards/pinouts/svg/LGT8F328P-nano.png
-      and, where PCINT27 is in the PICI3 group (this is in the datasheet) so we call On Interrupt PICI3Ready  call KeyDowbInterruptHandler
-      and, set the bit  PCINT27 = 1
-
-*/
-'''
-''' In this demo we connect four LEDs and a switch.
-''' Connect the LEDs via suitable resistors using a standard LED connection.
+''' This demonstration
 '''
 '''
-''' Connect the switch via suitable resistors using a standard switch connection.
+''' Connect a piezo buzzer to the port... and listen.
+'''
+'''
 ''' -------------------PORTB-----------------
 ''' Bit#:  -7---6---5---4---3---2---1---0---
 ''' PCB
@@ -41,7 +27,6 @@
 ''' SOUND ----------------|SW |--------------
 '''-----------------------------------------
 '''
-''' This is an interesting demonstration.  Try decreasing the wait to 0 (zero).. then, when only LED works, reduce the frequency and all four react.. why?
 '''
 '''
 
