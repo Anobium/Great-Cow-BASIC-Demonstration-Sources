@@ -18,7 +18,7 @@
             EEPROM Test and Show EEProm Results
             Write/Read and Compare Operation
 
-            If a compare operating fails then the `!!` will be shown
+            If a compare operation fails then the `!!` will be shown
 
                  00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
             00:  1D 09 BD 35 72 32 78 C7 29 4F 97 80 76 3D EA FB
@@ -103,7 +103,7 @@
         HSerPrintCRLF
         HSerPrint "Write/Read and Compare Operation"
         HSerPrintCRLF 2
-        HSerPrint "If a compare operating fails then the `!!` will be shown"
+        HSerPrint "If a compare operation fails then the `!!` will be shown"
         HSerPrintCRLF 2
 
 
