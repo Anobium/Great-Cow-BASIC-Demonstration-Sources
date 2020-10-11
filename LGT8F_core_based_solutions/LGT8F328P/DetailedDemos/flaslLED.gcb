@@ -1,0 +1,12 @@
+#chip  LGT8F328P
+#option Explicit
+
+dir portb.4 out
+
+
+do
+  portb.4=0
+'  wait 10 us
+  portb.4=1
+'  wait 10 us
+loop

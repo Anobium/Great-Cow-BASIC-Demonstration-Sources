@@ -184,6 +184,9 @@
 #define AD_REF_AREF 0
 #define AD_REF_AVCC 1
 #define AD_REF_256 3
+#define AD_REF_4096 4
+#define AD_REF_2048 5
+#define AD_REF_1024 6
 
 'Port names
 'PIC style
@@ -1628,17 +1631,63 @@ macro LLReadAD (ADLeftAdjust)
     #endif
 
     #ifdef Bit(REFS2)
+
       'Select reference source for chips that DO HAVE Bit(REFS2)
-      If AD_REF_SOURCE = AD_REF_AREF Then
-        Set ADMUX.REFS0 On
-      End If
-      #IF AD_REF_SOURCE = AD_REF_256
-          If AD_REF_SOURCE = AD_REF_256 Then ' case 2
+      #if ChipFamily <> 122
+
+          If AD_REF_SOURCE = AD_REF_AREF Then
             Set ADMUX.REFS0 On
-            Set ADMUX.REFS1 On
-            Set REFS2 On
           End If
-      #ENDIF
+          #IF AD_REF_SOURCE = AD_REF_256
+              If AD_REF_SOURCE = AD_REF_256 Then ' case 2
+                Set ADMUX.REFS0 On
+                Set ADMUX.REFS1 On
+                Set REFS2 On
+              End If
+          #ENDIF
+      #endif
+      #if ChipFamily = 122
+
+
+          #IF AD_REF_SOURCE = AD_REF_AREF
+                'Set for AD_REF_AREF
+                REFS0=b'0'
+                REFS1=b'0'
+                REFS2=0
+          #ENDIF
+
+          #IF AD_REF_SOURCE = AD_REF_AVCC
+                'Set for AD_REF_AVCC
+                REFS0=b'1'
+                REFS1=b'0'
+                REFS2=0
+          #ENDIF
+
+          #IF AD_REF_SOURCE = AD_REF_4096
+                'Set for AD_REF_4096
+                REFS0=b'0'
+                REFS1=b'0'
+                REFS2=1
+          #ENDIF
+
+          #IF AD_REF_SOURCE = AD_REF_2048
+                'Set for AD_REF_2048
+                REFS0=b'0'
+                REFS1=b'1'
+                REFS2=0
+          #ENDIF
+
+          #IF AD_REF_SOURCE = AD_REF_1024
+                'Set for AD_REF_1024
+                REFS0=b'1'
+                REFS1=b'1'
+                REFS2=0
+          #ENDIF
+
+      #endif
+
+
+
     #endif
 
 
