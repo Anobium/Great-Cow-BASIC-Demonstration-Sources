@@ -1,0 +1,69 @@
+'//============================================
+'// Larduino w/ 328D
+'// DAC0 output demo
+'// DACO output ==> D4 on board
+'//============================================
+'#define SAMPLES 255
+'byte table[SAMPLES];
+'void setup() {
+'  // put your setup code here, to run once:
+'  for (int i = 0; i < SAMPLES; i++) {
+'    table[i] = sin((float)i * TWO_PI / SAMPLES) * 255;
+'  }
+'  analogReference(DEFAULT);  // 5v
+'  // analogReference(EXTERNAL);      // REF PIN Voltage
+'  // analogReference(INTERNAL4V096); // 4.096V
+'  // analogReference(INTERNAL2V048); // 2.048v
+'  // analogReference(INTERNAL1V048); // 1.024v
+'  pinMode(DAC0, ANALOG);
+'}
+'
+'void loop() {
+'  // put your main code here, to run repeatedly:
+'  for (byte i = 0; i <= SAMPLES; i++) {
+'    analogWrite(DAC0, table[i]);
+'  }
+'}
+'
+'
+#DEFINE NumberofSamples 255
+Dim TableofDACValues( NumberofSamples )
+Dim index as byte
+
+'  for index = 0 to NumberofSamples
+'      TableofDACValues(index) = sin( index )
+'       TableofDACValues(index) = TableofDACValues(index) * 3.142 * 2
+'       TableofDACValues(index) = TableofDACValues(index) / NumberofSamples
+'       TableofDACValues(index) = TableofDACValues(index) * NumberofSamples
+'       HSerPrintByteCRLF TableofDACValues(index)
+'  next
+
+
+#chip  LGT8F328P
+#option Explicit
+#INCLUDE <TRIG2PLACES.H> gives two decimal places
+
+
+
+    'USART settings for USART1
+    #DEFINE USART_BAUD_RATE 19200
+    #DEFINE USART_TX_BLOCKING
+    #DEFINE USART_DELAY OFF
+
+    DIR portd.4 in
+    portd.4 = 0
+    DACEN = 1
+    DAOE  = 1
+    DAVS0 = 1
+    DAVS1 = 1
+'    index = ReadAD12( 0 )
+
+    // put your main code here, to run repeatedly:
+    do
+
+          for index = 0 to NumberofSamples
+              DALR = index 'TableofDACValues(index)
+              wait 5 ms
+          next
+
+    loop
