@@ -1,0 +1,64 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+
+''' -------------------PORTC-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB    NA--A6--A5--A4--A3--A2--A1--A0---
+''' Constants
+'''        ---|ADC|SCL|SDA|L4 |L3 |L2 |L1 |-  where L equates to LED
+'''-----------------------------------------
+'''
+''' Connect the switch via suitable resistors using a standard switch connection.
+''' -------------------PORTE-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB                  --A7--   -ADC-
+''' Constants
+''' SWITCH----------------|SW |---|ADC|------
+
+
+''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    08/10/2020
+'''********************************************************************************
+
+
+; ----- Configuration
+#chip  LGT8F328P
+#option Explicit
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
+
+    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+    #OPTION Explicit
+
+    'USART settings for USART1 on the chip which is sent via the USB to the PC
+    #define USART_BAUD_RATE 9600
+    #define USART_TX_BLOCKING
+
+    'Test for the register GUID3. This will therefore only work on chips with GUIDs
+    #if var(GUID3)
+        dim GUID as long alias GUID3, GUID2, GUID1, GUID0,
+    #endif
+    Dim ShowString as string
+
+    wait 2 s
+    HSerPrintCRLF 2
+    ShowString = "Show " + ChipNameStr + " GUID"+" on serial terminal"
+    HSerPrint ShowString
+    HSerPrintCRLF 2
+
+    HSerPrint "dec :"
+    HSerPrint GUID
+    HSerPrintCRLF
+
+
+    ShowString = "hex :0x" + hex(GUID_E)
+    ShowString = ShowString+ hex(GUID_U)
+    ShowString = ShowString+ hex(GUID_H)
+    ShowString = ShowString+ hex(GUID)
+    HSerPrintStringCRLF ShowString
+
+
+    do
+    loop

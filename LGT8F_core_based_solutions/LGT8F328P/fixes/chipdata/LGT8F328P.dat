@@ -64,6 +64,11 @@ Timer3Interupt:TIMER3_INT,58,TOIE3,TOV3
 
 [Registers]
 'Start of chip specific changes
+GUID3,246
+GUID2,245
+GUID1,244
+GUID0,243
+
 PMCR,242
 ECCR,54
 'End of chip specific changes

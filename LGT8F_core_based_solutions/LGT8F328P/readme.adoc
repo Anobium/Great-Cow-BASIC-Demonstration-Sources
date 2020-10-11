@@ -15,8 +15,8 @@
 |070  |Turn an LED on and off with a switch Turn an LED on and off  & when Switch Down turn on
 |080  |Sequentially blink with ADC delay. Using 060 as the basis of this demonstration program
 |090  |Debouncing a switch. Ensuring a switch does not bounce. Using 070  as the basis of this demonstration program
-|100  |Reversible sequentially blinking the LEDs with a variable delay  Using the LEDS and the POT  Read pot, set wait, then use code from 050
-|110  |Reversible sequentially blinking the LEDs with a variable delay to a Serial Terminal Using the LEDS and a POT
+|100  |Reversible sequentially blinking the LEDs with a variable delay to serial terminal.  Using the LEDS and the POT  Read pot, set wait, then use code from 050
+|110  |Reversible sequentially blinking the LEDs with a millis delay
 |120  |Blinking the LED with an 8bit timer  Timer and LED Blink timer using timer0
 |130  |Blinking the LED with an 10bit Pot value ( demo 100 was 10bit value) to serial terminal
 |140  |Using EEPROM to store data EEPROM  Write/read EEPROM
@@ -40,4 +40,5 @@ Completed programs above here....
 |250  |Using PWM module in a fixed mode PWM, POT and LEDS Gen PWM signal
 |260  |Using an SPI GLCD
 |270  |Using an SPI Sensor
+|280  |Show GUID in serial terminal
 |===
