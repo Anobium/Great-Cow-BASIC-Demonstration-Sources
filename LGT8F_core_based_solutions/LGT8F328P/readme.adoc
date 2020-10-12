@@ -42,3 +42,6 @@ For the connectivity the following diagram shows to overall connectivity.
 
 image::nano_test_scope_lgt8f328p.jpg[align="center", 70%]
 
+The LEDs are connnected via suitable resistors, the I2C is pulled high to 5v with 4k resisitors, the switch is pulled high with a 10k resistor, the POT is 10k pot, the SPI is connected as per the hardware SPI connections (the software SPI also uses the same ports) and serial is assumed to be the serial hardware port (same assumption for the software serial).
+
+
