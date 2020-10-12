@@ -1,0 +1,50 @@
+'''A demonstration program for GCGB and GCB
+'''--------------------------------------------------------------------------------------------------------------------------------
+''' This program will output a PWM signal using the Great Cow BASIC  PWM for AVR method.
+''' This program uses the Great Cow BASIC  PWM for AVR on PWM Channel OC0B
+'''
+''' This uses a method to support the frequency and duty to be changed as the PWM parameters.
+''' This shows the FOUR things you HAVE to do to enable PWM on a single channele have to use PWM OC0B on this microcontroller as PWM Channel 1 is not available as the Great Cow BASIC library requires to use PWM Channel 1 registers for computational purposes.
+'''
+''' Look in the program for #1, #2, #3 to setup and then #4 to use the PWM method.
+'''
+'''@author  Anobium
+'''@licence GPL
+'''@version 1.0a
+'''@date    12/10/2020
+'''********************************************************************************
+
+    #chip lgt8f328p
+
+    '#1
+    'Set the CLOCK Source as AVRTC0 relates to PWM2
+    #define AVRTC0
+
+    '#2
+    'Set the AVR PWM Channel as enabled by defining this constants.  AVRCHAN2 equates OC0B
+    #define AVRCHAN2
+
+    '#3
+    'Set the OC0B PWM pin to output mode.
+    DIR PORTD.5 out
+
+
+    'Main code
+    'Set a PWM frequency of 40khz
+    'variable duty from 0% to 100% when the percentage is represented from 0 to 255 proportionally
+    do
+        'Turn up brightness over 2.5 seconds
+        For Bright = 0 to 255
+            '#4 - Call the method with the correct PWM channel
+            HPWM 2, 40, Bright
+            wait 10 ms
+        next
+        'Turn down brightness over 2.5 seconds
+        For Bright = 255 to 0
+            '#4 - Call the method with the correct PWM channel
+            HPWM 2, 40, Bright
+            wait 10 ms
+        next
+    loop
+
+end

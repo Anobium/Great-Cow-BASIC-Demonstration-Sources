@@ -1,0 +1,152 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+'''  This demonstration shows the read of the ADC as a volt meter!!
+'''
+'''  This shows use of the ADC and scaling the ADC result to control the volt meter.
+'''
+''' -------------------PORTC-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB    NA--A6--A5--A4--A3--A2--A1--A0---
+''' Constants
+'''        ---|ADC|SCL|SDA|L4 |L3 |L2 |L1 |-  where L equates to LED
+'''-----------------------------------------
+'''
+''' Connect the switch via suitable resistors using a standard switch connection.
+''' -------------------PORTE-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB                  --A7--   -ADC-
+''' Constants
+'''
+''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    08/10/2020
+'''********************************************************************************
+
+
+; ----- Configuration
+#chip  LGT8F328P
+#option Explicit
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
+    ; ----- Define GLCD Hardware settings
+    #define GLCD_TYPE GLCD_TYPE_SSD1306
+    #define GLCD_I2C_Address 0x78
+
+    #include <glcd.h>
+
+    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
+    #OPTION Explicit
+
+
+    #DEFINE SWITCH porte.3
+    Dir SWITCH in
+
+    'USART settings for USART1 on the chip which is sent via the USB to the PC
+    #DEFINE USART_BAUD_RATE 9600
+    #DEFINE USART_TX_BLOCKING
+    #DEFINE USART_DELAY OFF
+
+
+  ; ----- Define Hardware settings for hwi2c
+  ' Define I2C settings - CANNOT CHANGE PORTS when using Hardware I2C
+  #define HI2C_BAUD_RATE 400
+  #define HI2C_DATA PORTC.5
+  #define HI2C_CLOCK PORTC.4
+  HI2CMode Master
+
+  ; ----- Main body of program commences here.
+
+  #include <trig2places.h>
+
+
+    'These constants allow you to change the GLCD memory usage.
+    #define GLCD_PROTECTOVERRUN
+'*******************************************************************************************
+
+
+
+    'analogue port selection
+    #define ADCChannelSelected ADC6
+
+    #define ADSpeed LowSpeed
+
+    dim radius,xcentre,ycentre,xend,old_xend,yend,old_yend as byte
+    dim angle,old_angle,adcval as word
+    dim volts as string * 4
+    xcentre=63
+    ycentre=58
+    ;draw dial
+    GLCDCLS
+    box 0,0,127,63
+    for radius=144 to 141
+      dial
+    next radius
+    GLCDDrawChar (5,40,asc("0")):GLCDDrawChar (115,40,asc("5"))
+    radius=120
+    angle=1
+    anglecheck
+    ;main
+    do
+      old_angle=angle
+    ;--- DVM
+      adcval=ReadAD12(ADCChannelSelected)
+
+      angle=scale(adcval, 0, 4095, 0, 127)
+      adcval=scale(adcval, 0, 4095, 0, 500)
+
+      volts=str(adcval)
+      if adcval<10 then
+        volts="0.0"+left(volts,1,1)
+        goto volt_format_done
+      end if
+      if adcval<100 then
+        volts="0."+mid(volts,1,2)
+      else
+        volts=left(volts,1,1)+"."+mid(volts,2,2)
+      end if
+      volt_format_done:
+    ;---
+      anglecheck
+      old_xend = xcentre + radius  * sin (old_angle)/255
+      old_yend = ycentre - radius  * cos (old_angle)/255
+      xend = xcentre + radius  * sin (angle)/255
+      yend = ycentre - radius  * cos (angle)/255
+      if old_angle<>angle then ;-- update screen if volts has changed
+    ;   erase old needle
+        line (xcentre,ycentre,old_xend,old_yend,0)
+    ;   draw V
+        line (55,22,63,38):line (63,38,71,22)
+    ;   print new voltage
+        GLCDPrint (50,10,volts,1) ;print Voltage
+    ;   draw new needle
+        line (xcentre,ycentre,xend,yend,1)
+        wait 20 ms
+      end if
+    loop
+    ;end main
+
+
+    sub plotdial
+      xend = 63 + radius  * sin (angle)/255
+      yend = 58 - radius  * cos (angle)/255
+      pset (xend,yend,1)
+    end sub
+    ;
+    sub dial
+      for angle= 296 to 359
+        plotdial
+      next angle
+    ;
+      for angle= 0 to 63
+        plotdial
+      next angle
+    end sub
+    ;
+    sub anglecheck
+      if angle>127 then
+        angle =angle-127
+      else
+        angle =296+angle
+      end if
+    end sub

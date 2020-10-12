@@ -1,0 +1,54 @@
+'''A demonstration program for GCGB and GCB
+'''--------------------------------------------------------------------------------------------------------------------------------
+''' This program will output a PWM signal using the Great Cow BASIC  PWM for AVR method.
+''' This program uses the Great Cow BASIC  PWM for AVR on PWM Channel OC1A
+'''
+''' This uses a method to support the frequency and duty to be changed as the PWM parameters.
+''' This shows the FOUR things you HAVE to do to enable PWM on a single channele have to use PWM OC1A on this microcontroller as PWM Channel 1 is not available as the Great Cow BASIC library requires to use PWM Channel 1 registers for computational purposes.
+'''
+''' Look in the program for #1, #2, #3 to setup and then #4 to use the PWM method.
+'''
+'''@author  Anobium
+'''@licence GPL
+'''@version 1.0a
+'''@date    12/10/2020
+'''********************************************************************************
+
+
+' This uses a method to support the frequency and duty to be changed as the PWM parameters.
+' This shows the FOUR things you HAVE to do to enable PWM on a single channel
+
+    #chip lgt8f328p
+
+    '#1
+    'Set the CLOCK Source as AVRTCx relates to Great Cow BASIC channel called PWM3
+    #define AVRTC1
+
+    '#2
+    'Set the AVR PWM Channel as enabled by defining this constants equates OC1A
+    #define AVRCHAN3
+
+    '#3
+    'Set the OC1A PWM pin to output mode.
+    DIR PORTB.1 out
+
+
+    'Main code
+    'freq 37khz
+    'variable duty from 0% to 100%
+    do
+        'Turn up brightness over 2.5 seconds
+        For Bright = 0 to 255
+            '#4 - Call the method with the correct PWM channel
+            HPWM 3, 37, Bright
+            wait 10 ms
+        next
+        'Turn down brightness over 2.5 seconds
+        For Bright = 255 to 0
+            '#4 - Call the method with the correct PWM channel
+            HPWM 3, 37, Bright
+            wait 10 ms
+        next
+    loop
+
+end

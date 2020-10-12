@@ -1,0 +1,86 @@
+
+
+    #chip LGT8F328P, 1
+    #option explicit
+
+    #include <LGT8F328P.h>
+
+
+
+    'Pin mappings for SPI
+    #define SPI_DC       DIGITAL_8           ' Data command line
+    #define SPI_CS       DIGITAL_10          ' Chip select line
+    #define SPI_RESET    DIGITAL_9           ' Reset line
+    #define SPI_DI       DIGITAL_12          ' Data in | MISO    - Not used therefore not really required
+    #define SPI_DO       DIGITAL_11          ' Data out | MOSI
+    #define SPI_SCK      DIGITAL_13          ' Clock Line
+
+
+    dir SPI_DC    out
+    dir SPI_CS    out
+    dir SPI_RESET out
+    dir SPI_DO    Out
+    dir SPI_DI    In
+    dir SPI_SCK   Out
+
+        'If DIGITAL_10 is NOT used as the SPI_CS (sometimes called SS) the port must and output or set as input/pulled high with a 10k resistor.
+        'As follows:
+        'If CS is configured as an input, it must be held high to ensure Master SPI operation.
+        'If the CS pin is driven low by peripheral circuitry when the SPI is configured as a Master with the SS pin defined as an input, the
+        'SPI system interprets this as another master selecting the SPI as a slave and starting to send data to it!
+        'If CS is an output SPI communications will commence with no flow control.
+        dir DIGITAL_10 Out
+#define HardwareSPI
+
+        dim outbyte, inbyte as byte
+        outbyte = 0x55
+        #ifdef HardwareSPI
+          SPIMode ( MasterFast, SPI_CPOL_0 + SPI_CPHA_0 )
+        #endif
+
+        wait 2 s
+
+       do
+'        set SPI_CS OFF;  Select line
+'        set SPI_DC OFF;  Send Data if off, or, Data if On
+'        SPITransfer ( outbyte, inbyte )
+        SendData ( outbyte )
+'        set SPI_CS ON;   Deselect Line
+'        set SPI_DC ON
+        wait 10 ms
+       loop
+
+
+sub  SendData( IN SendByte as byte )
+
+
+      Dim TempOut as Byte
+
+      set SPI_CS OFF;
+      set SPI_DC ON;
+
+      #ifdef HardwareSPI
+         SPITransfer  SendByte,  TempOut
+         wait 18 us
+         set SPI_CS ON;
+         exit sub
+      #endif
+
+      #ifndef HardwareSPI
+          repeat 8
+
+            if SendByte.7 = ON then
+              set SPI_DO ON;
+            else
+              set SPI_DO OFF;
+            end if
+            SET SPI_SCK On;
+            rotate SendByte left
+            set SPI_SCK Off;
+
+          end Repeat
+      set SPI_CS ON;
+      #endif
+
+
+end Sub

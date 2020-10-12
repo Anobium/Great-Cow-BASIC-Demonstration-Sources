@@ -1,0 +1,38 @@
+'''A demonstration program for GCGB and GCB
+'''--------------------------------------------------------------------------------------------------------------------------------
+''' This program will generate a PWM signal that is fixed in terms of PWM frequency and Duty.
+''' You can turn  on and off.
+'''
+''' This uses two constants to fix the PWM parameters. in this demonstration they are set to 38khz @ 50% duty
+''' The Fixed Mode PWM method can ONLY uses OC0B port/PortD.5
+''' We have to use PWM Channel 2 on this microcontroller as PWM Channel 1 is not available as the Great Cow BASIC library requires to use PWM Channel 1 registers for computational purposes.
+
+'''@author  Anobium
+'''@licence GPL
+'''@version 1.0a
+'''@date    12/10/2020
+'''********************************************************************************
+
+#chip lgt8f328p
+
+
+    'Set the PWM pin to output mode - this option is fixed to the OC0B PWM channel
+    DIR PORTD.5 out
+
+    'Main code
+    #define PWM_Freq 38      'Frequency of PWM in KHz
+    #define PWM_Duty 50      'Duty cycle of PWM (%)
+
+    do
+
+      PWMOn
+
+      'add lots and lots of user code and the PWM signal will remain until PWMOff
+      wait 30 s                'Wait 30s, could any user code. This wait is purely for the analysis of this demonstration.
+
+      PWMOff
+      wait 1 s                'Wait 1s
+
+    loop
+
+end
