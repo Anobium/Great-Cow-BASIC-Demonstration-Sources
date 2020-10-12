@@ -1,5 +1,9 @@
-    ;ILI9341 sprite demo
-
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+'''  This demonstration shows sprites on the GLCD using an SPI device.
+'''
+'''
+'''
     #chip LGT8F328P
     #option explicit
     #include <glcd.h>
@@ -7,6 +11,7 @@
 
     #define GLCD_TYPE GLCD_TYPE_ILI9341
     #define ILI9341_HardwareSPI
+    #define HWSPIMode MASTERULTRAFAST
 
 
     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI

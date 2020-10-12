@@ -32,13 +32,8 @@
 |240  |Using PWM to generate a variable frequency/duty on OC1A
 |250  |Using PWM to generate a variable frequency/duty on OC1B
 |260  |Using PWM in a variable PWM frequency or duty on many channels
-|===
-
-Completed programs above here....
-
-
-[cols=2, options="autowidth"]
-|===
 |270  |Using an SPI GLCD
-|280  |Show GUID in serial terminal
+|280  |Show GUID in serial terminal using hardware serial
+|280  |Show GUID in serial terminal using software serial
 |===
+
