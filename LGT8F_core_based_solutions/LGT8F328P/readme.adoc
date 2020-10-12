@@ -37,3 +37,8 @@
 |280  |Show GUID in serial terminal using software serial
 |===
 
+
+For the connectivity the following diagram shows to overall connectivity.
+
+image::nano_test_scope_lgt8f328p.jpg[graphic,align="center", 70%]
+
