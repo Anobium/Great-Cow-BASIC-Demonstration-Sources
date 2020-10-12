@@ -40,5 +40,5 @@
 
 For the connectivity the following diagram shows to overall connectivity.
 
-image::nano_test_scope_lgt8f328p.jpg 
+image::nano_test_scope_lgt8f328p.jpg[align="center", 70%]
 
