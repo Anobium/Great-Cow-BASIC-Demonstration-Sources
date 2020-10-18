@@ -33,8 +33,10 @@
 |250  |Using PWM to generate a variable frequency/duty on OC1B
 |260  |Using PWM in a variable PWM frequency or duty on many channels
 |270  |Using an SPI GLCD
-|280  |Show GUID in serial terminal using hardware serial
-|280  |Show GUID in serial terminal using software serial
+|280  |Show GUID on the serial terminal using hardware serial
+|280  |Show GUID on the  serial terminal using software serial
+|300  |Show memory configuration on the serial terminal using hardware serial
+|310  |Showing how hardware and software SPI works
 |===
 
 
@@ -43,5 +45,3 @@ For the connectivity the following diagram shows to overall connectivity.
 image::nano_test_scope_lgt8f328p.jpg[align="center", 70%]
 
 The LEDs are connnected via suitable resistors, the I2C is pulled high to 5v with 4k resisitors, the switch is pulled high with a 10k resistor, the POT is 10k pot, the SPI is connected as per the hardware SPI connections (the software SPI also uses the same ports) and serial is assumed to be the serial hardware port (same assumption for the software serial).
-
-

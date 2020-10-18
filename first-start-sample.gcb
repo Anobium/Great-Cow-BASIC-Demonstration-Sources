@@ -26,6 +26,7 @@
 'Make into a comment to use the AVR chipset
 #CHIP 16f886
 '  #chip mega328p         'Uncomment to simply use the AVR chipset
+'  #chip LGT8F328P        'Uncomment to simply use the LGT chipset
 
 
 ' ----- Main body of program commences here.
