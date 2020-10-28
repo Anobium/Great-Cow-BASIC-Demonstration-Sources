@@ -1,0 +1,42 @@
+'''A most simple sample for GCGB and GCB.
+'''------------------------------------------------------------------------
+'''  This program shows the basics of Voltage reference
+'''
+'''  This sets the reference voltage and then reads ADC6, the shows results on Terminal
+'''
+'''
+'''************************************************************************
+
+' ----- Configuration
+#chip  LGT8F328P
+#option Explicit
+
+
+
+
+    // set analog reference to internal 1.024V
+    #DEFINE AD_REF_SOURCE AD_REF_1024   'this can be  AD_REF_2048, AD_REF_4096, AD_REF_VDD
+
+    'USART settings for USART1
+    #DEFINE USART_BAUD_RATE 9600
+    #DEFINE USART_TX_BLOCKING
+    #DEFINE USART_DELAY OFF
+
+    dim adc_value as word
+
+    dir portd.4 out
+
+    // main code here, to run repeatedly:
+    do
+        // toggle LED
+        portd.4 = !portd.4
+
+        // read ADC channel 6
+        adc_value = readad12( ADC6 )
+
+        //send serial
+        HSerPrint "ADC Channel 6 := "
+        HSerPrint adc_value
+        HSerPrintStringCRLF "mV"
+
+    loop
