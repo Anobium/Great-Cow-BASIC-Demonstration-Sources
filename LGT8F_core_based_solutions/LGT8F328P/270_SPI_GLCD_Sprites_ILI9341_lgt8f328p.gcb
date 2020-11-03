@@ -46,6 +46,9 @@
     #define fu ILI9341_FUCHSIA
     ;backgroung color
     #define bg te
+    #define bg_hi  bg / 256
+    #define bg_lo  bg AND 255
+
 
     GLCDRotate Portrait_Rev
     GLCDCLS bg
@@ -112,18 +115,32 @@
     loop ;end demo
     ;
 
+dim spiinx as byte
     sub sprite ( in sprite_x, in sprite_y, in spritedata_ptr ) ;fills box with sprite data
       SetAddressWindow_ILI9341 ( sprite_x,sprite_y,sprite_x +15,sprite_y +15 )
+
+      set ILI9341_CS OFF
+      set ILI9341_DC ON
+
       for ptr=spritedata_ptr to spritedata_ptr+255
         ReadTable spritedata,ptr,pixel
-        SendWord_ILI9341 pixel
+        FastHWSPITransfer pixel_h
+        FastHWSPITransfer pixel
       next ptr
+      set ILI9341_CS ON
     end sub
     ;
     sub erase_sprite (sprite_x,sprite_y) ;write a box of 0's
       SetAddressWindow_ILI9341 ( sprite_x,sprite_y,sprite_x +15,sprite_y +15 )
-      repeat 256
-        SendWord_ILI9341 bg
+
+      set ILI9341_CS OFF
+      set ILI9341_DC ON
+
+      repeat 128
+        repeat 2
+            FastHWSPITransfer bg_hi
+            FastHWSPITransfer bg_lo
+        end repeat
       end repeat
     end sub
     ;
