@@ -33,11 +33,6 @@
 #chip  LGT8F328P, 16
 #option Explicit
 'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
-
-    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
-    #OPTION Explicit
-
-
     #DEFINE SWITCH porte.3
     Dir SWITCH in
 
@@ -106,8 +101,4 @@
         wait while switch = 1
 
     Loop
-    END
-
-
-
-  ; ----- Support methods.  Subroutines and Functions
+    END  ; ----- Support methods.  Subroutines and Functions

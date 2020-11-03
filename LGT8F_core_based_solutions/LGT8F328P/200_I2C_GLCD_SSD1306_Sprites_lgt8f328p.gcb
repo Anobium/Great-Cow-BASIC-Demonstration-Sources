@@ -36,11 +36,6 @@
     #define GLCD_TYPE GLCD_TYPE_SSD1306
     #define GLCD_I2C_Address 0x78
 
-
-    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
-    #OPTION Explicit
-
-
     #DEFINE SWITCH porte.3
     Dir SWITCH in
 
@@ -151,11 +146,7 @@
 '      'user delay
       wait spritedelay  'so you can see it!
 
-    loop
-
-
-
-  end
+    loop  end
 
 
 Sub GLCDDrawSprite_SSD1306(In GLCDX as byte, In GLCDY as byte, In CharCode )

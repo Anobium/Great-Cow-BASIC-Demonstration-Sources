@@ -34,11 +34,6 @@
     #define GLCD_I2C_Address 0x78
 
     #include <glcd.h>
-
-    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
-    #OPTION Explicit
-
-
     #DEFINE SWITCH porte.3
     Dir SWITCH in
 
@@ -62,11 +57,7 @@
 
     'These constants allow you to change the GLCD memory usage.
     #define GLCD_PROTECTOVERRUN
-'*******************************************************************************************
-
-
-
-    'analogue port selection
+'*******************************************************************************************    'analogue port selection
     #define ADCChannelSelected ADC6
 
     #define ADSpeed LowSpeed

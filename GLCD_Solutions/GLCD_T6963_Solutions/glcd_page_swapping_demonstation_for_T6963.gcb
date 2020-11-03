@@ -58,14 +58,14 @@
 
         wait 3 s
 
-        BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
-        BigPrint ( 0, 20, "Feb 2019")
+        GLCDPrintLargeFont ( 0, 0, "WG24064A-TMI-TZ#")
+        GLCDPrintLargeFont ( 0, 20, "Feb 2019")
         GLCDPrint( 0, 50, "GLCDPAGESIZE = " )
         GLCDDrawString ( 88, 50, str(GLCDPAGESIZE) )
         wait 2 s
 
         GLCDCLSCLS
-        BigPrint ( 0, 0, "Page 0")
+        GLCDPrintLargeFont ( 0, 0, "Page 0")
         box 0, 0, 239, 63
         locate 7,1
         print "GLCD methods used to create page"
@@ -73,7 +73,7 @@
 
         SelectGLCDPage ( GLCDPage1_T6963 )
         GLCDCLSCLS
-        BigPrint ( 0, 0, "Page 1")
+        GLCDPrintLargeFont ( 0, 0, "Page 1")
         box 0, 0, 239, 63
         locate 7,1
         print "GLCD methods used to create page"
@@ -81,7 +81,7 @@
 
         SelectGLCDPage ( GLCDPage2_T6963 )
         GLCDCLSCLS
-        BigPrint ( 0, 0, "Page 2")
+        GLCDPrintLargeFont ( 0, 0, "Page 2")
         box 0, 0, 239, 63
         locate 7,1
         print "GLCD methods used to create page"
@@ -90,21 +90,21 @@
 
 
         SelectGLCDPage ( GLCDPage0_T6963 )
-        BigPrint ( 0, 30, "Recall Page 0")
+        GLCDPrintLargeFont ( 0, 30, "Recall Page 0")
         CLS
         locate 7,1
         print "Recall page by page swapping"
         wait 2 s
 
         SelectGLCDPage ( GLCDPage1_T6963 )
-        BigPrint ( 0, 30, "Recall Page 1")
+        GLCDPrintLargeFont ( 0, 30, "Recall Page 1")
         CLS
         locate 7,1
         print "Recall page by page swapping"
         wait 2 s
 
         SelectGLCDPage ( GLCDPage2_T6963 )
-        BigPrint ( 0, 30, "Recall Page 2")
+        GLCDPrintLargeFont ( 0, 30, "Recall Page 2")
         CLS
         locate 7,1
         print "Recall page by page swapping"

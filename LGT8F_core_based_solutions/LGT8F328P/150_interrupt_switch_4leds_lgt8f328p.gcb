@@ -48,12 +48,7 @@
 ; ----- Configuration
 #chip  LGT8F328P
 #option Explicit
-'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
-
-    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
-    #OPTION Explicit
-
-   'Set constants to refer to the LEDs.
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.   'Set constants to refer to the LEDs.
     #DEFINE LED1 portc.0
     #DEFINE LED2 portc.1
     #DEFINE LED3 portc.2

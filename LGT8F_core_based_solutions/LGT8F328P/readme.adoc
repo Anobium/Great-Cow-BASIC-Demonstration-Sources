@@ -1,8 +1,4 @@
 
-
-
-
-
 [cols=2, options="header,autowidth"]
 |===
 |*Index*|*Description*

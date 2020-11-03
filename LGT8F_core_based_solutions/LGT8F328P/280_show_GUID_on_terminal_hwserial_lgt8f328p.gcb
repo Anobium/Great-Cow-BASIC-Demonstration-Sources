@@ -27,12 +27,7 @@
 ; ----- Configuration
 #chip  LGT8F328P
 #option Explicit
-'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
-
-    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
-    #OPTION Explicit
-
-    'USART settings for USART1 on the chip which is sent via the USB to the PC
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.    'USART settings for USART1 on the chip which is sent via the USB to the PC
     #define USART_BAUD_RATE 9600
     #define USART_TX_BLOCKING
 

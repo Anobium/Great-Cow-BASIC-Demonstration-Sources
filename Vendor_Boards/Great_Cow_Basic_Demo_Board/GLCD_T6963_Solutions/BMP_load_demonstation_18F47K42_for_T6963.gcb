@@ -74,8 +74,8 @@
 'Start of demonstration main program
 
 Wait 3 s
-BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
-BigPrint ( 0, 20, "Feb 2019")
+GLCDPrintLargeFont ( 0, 0, "WG24064A-TMI-TZ#")
+GLCDPrintLargeFont ( 0, 20, "Feb 2019")
 GLCDPrint( 0, 50, "BMP load" )
 Wait 2 s
 
@@ -120,7 +120,7 @@ Do Forever
 
     SelectGLCDPage ( GLCDPage1_T6963 )
     GLCDCLSCLS
-    BigPrint ( 0, 0, "Page 1")
+    GLCDPrintLargeFont ( 0, 0, "Page 1")
     Locate 7,1
     Print "GLCD methods used to create page"
     Wait 2 s

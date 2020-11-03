@@ -190,7 +190,7 @@ sub ShowCase1
         'Revert the font size
         GLCDfntDefaultsize = oldfont
         GLCDForeground = TFT_RED
-        BigPrint_ILI9486L ( 100 , ILI9486L_GLCD_HEIGHT - 60 , "Great Cow Basic" )
+        GLCDPrintLargeFont ( 100 , ILI9486L_GLCD_HEIGHT - 60 , "Great Cow Basic" )
         GLCDForeground = TFT_WHITE
         DO forever
 
@@ -250,7 +250,7 @@ sub ShowCase2
         'Revert the font size
         GLCDfntDefaultsize = oldfont
         GLCDForeground = TFT_RED
-        BigPrint_ILI9486L ( 100 , ILI9486L_GLCD_HEIGHT - 60 , "Great Cow Basic" )
+        GLCDPrintLargeFont ( 100 , ILI9486L_GLCD_HEIGHT - 60 , "Great Cow Basic" )
         GLCDForeground = TFT_WHITE
         DO forever
 

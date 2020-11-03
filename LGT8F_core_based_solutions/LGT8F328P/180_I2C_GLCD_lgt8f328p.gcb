@@ -36,11 +36,6 @@
 
     #include <glcd.h>
     #include <..\converters\anobiumfull.bmp>
-
-    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
-    #OPTION Explicit
-
-
     #DEFINE SWITCH porte.3
     Dir SWITCH in
 
@@ -111,11 +106,7 @@
 
             Firstpass = false                                          ' now this is NOT the first pass
             Charlocx++                                                 ' increment the X pos
-  next
-
-
-
-  wait 2 s
+  next  wait 2 s
   SetContrast_SSD1306 ( 10 )
   wait 2 s
   startscrollright_SSD1306(0x00, 0x0F)

@@ -60,8 +60,8 @@
 
     do Forever
 
-        BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
-        BigPrint ( 0, 20, "Feb 2019")
+        GLCDPrintLargeFont ( 0, 0, "WG24064A-TMI-TZ#")
+        GLCDPrintLargeFont ( 0, 20, "Feb 2019")
         wait 2 s
 
         CLS

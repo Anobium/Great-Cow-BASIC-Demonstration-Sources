@@ -10,10 +10,6 @@
 ' ----- Configuration
 #chip  LGT8F328P
 #option Explicit
-
-
-
-
     // set analog reference to internal 1.024V
     #DEFINE AD_REF_SOURCE AD_REF_1024   'this can be  AD_REF_2048, AD_REF_4096, AD_REF_VDD
 

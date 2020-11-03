@@ -36,11 +36,6 @@
     #define GLCD_TYPE GLCD_TYPE_SSD1306
     #define GLCD_I2C_Address 0x78
 
-
-    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
-    #OPTION Explicit
-
-
    'Set constants to refer to the LEDs.
     #DEFINE LED1 portc.0
     #DEFINE LED2 portc.1
@@ -91,11 +86,7 @@
     dir PortD.3 Out   'OC2B   on D3
     dir PortB.2 Out   'OC1B   on D10
     dir PortB.1 out   'OC1A   on D9
-    dir PortD.5 Out   'OC0B   on D5
-
-
-
-  ; ----- Main body of program commences here.
+    dir PortD.5 Out   'OC0B   on D5  ; ----- Main body of program commences here.
 
 ; ----- Define variables
 
@@ -214,11 +205,7 @@
       'pulse output for scope
       LED5 = !LED5
 
-    loop
-
-
-
-  end
+    loop  end
 
 
 Sub GLCDDrawSprite_SSD1306(In GLCDX as byte, In GLCDY as byte, In CharCode )

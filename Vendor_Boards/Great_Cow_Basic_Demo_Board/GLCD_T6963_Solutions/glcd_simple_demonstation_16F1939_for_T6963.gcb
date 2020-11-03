@@ -74,8 +74,8 @@
 
 Do Forever
 
-    BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
-    BigPrint ( 0, 20, "Feb 2020")
+    GLCDPrintLargeFont ( 0, 0, "WG24064A-TMI-TZ#")
+    GLCDPrintLargeFont ( 0, 20, "Feb 2020")
     Wait 2 s
 
     CLS
@@ -90,8 +90,8 @@ Do Forever
     CLS
     GLCDCLS
 
-    BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
-    BigPrint ( 0, 20, "LCD Capability")
+    GLCDPrintLargeFont ( 0, 0, "WG24064A-TMI-TZ#")
+    GLCDPrintLargeFont ( 0, 20, "LCD Capability")
     Wait 4 s
     CLS
     GLCDCLS
@@ -203,8 +203,8 @@ GLCDTest:
     '#DEFINE GLCD_OLED_FONT
     CLS
     GLCDCLS
-    BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
-    BigPrint ( 0, 20, "GLCD Capability")
+    GLCDPrintLargeFont ( 0, 0, "WG24064A-TMI-TZ#")
+    GLCDPrintLargeFont ( 0, 20, "GLCD Capability")
     Wait 2 s
     GLCDPrint 50, 40, "240 * 64  pixels mode"
 
@@ -291,8 +291,8 @@ GLCDTest:
 
     CLS
     GLCDCLS
-    BigPrint ( 0, 0, "WG24064A-TMI-TZ#")
-    BigPrint ( 0, 40, "Anobium :-)")
+    GLCDPrintLargeFont ( 0, 0, "WG24064A-TMI-TZ#")
+    GLCDPrintLargeFont ( 0, 40, "Anobium :-)")
 
     Wait 5 s
     CLS

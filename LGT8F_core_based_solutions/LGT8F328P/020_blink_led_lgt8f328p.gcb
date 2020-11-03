@@ -16,11 +16,6 @@
 #option Explicit
 'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.
 
-    'This option ensures that all variables are dimensioned in the user program.  See http://gcbasic.sourceforge.net/help/__option_explicit.html
-    #OPTION Explicit
-
-
-
     'Set a constant.  The LED can be activated
     #DEFINE LEDOn  = 1
     'Set a constant.  The LED can be de-activated

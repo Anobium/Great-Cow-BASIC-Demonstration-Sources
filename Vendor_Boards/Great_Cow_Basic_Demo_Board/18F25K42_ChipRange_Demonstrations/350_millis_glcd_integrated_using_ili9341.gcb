@@ -187,7 +187,7 @@ GLCDDrawString ( ILI9341_GLCD_WIDTH - 60, 2 , "July 2015" , ILI9341_WHITE )
 'Revert the font size
 GLCDfntDefaultSize = oldfont
 GLCDForeground = ILI9341_WHITE
-BigPrint_ILI9341 ( 100 , ILI9341_GLCD_HEIGHT - 60 , "Great Cow Basic" )
+GLCDPrintLargeFont ( 100 , ILI9341_GLCD_HEIGHT - 60 , "Great Cow Basic" )
 
 Do Forever
 
