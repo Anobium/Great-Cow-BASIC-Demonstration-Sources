@@ -1,6 +1,6 @@
 '''A demonstration program for GCB
 '''---------------------------------------------------------------------------------
-'''  This demonstration shows sprites on the GLCD using an SPI device.
+'''  This demonstration shows sprites on the GLCD using an SPI device can use hardware or software SPI.
 '''
 '''
 '''
@@ -10,6 +10,7 @@
     #include <LGT8F328P.h>
 
     #define GLCD_TYPE GLCD_TYPE_ILI9341
+    'Comment out ILI9341_HardwareSPI to use software SPI
     #define ILI9341_HardwareSPI
     #define HWSPIMode MASTERULTRAFAST
 
@@ -119,29 +120,48 @@ dim spiinx as byte
     sub sprite ( in sprite_x, in sprite_y, in spritedata_ptr ) ;fills box with sprite data
       SetAddressWindow_ILI9341 ( sprite_x,sprite_y,sprite_x +15,sprite_y +15 )
 
-      set ILI9341_CS OFF
-      set ILI9341_DC ON
+      #IFDEF ILI9341_HardwareSPI
+          set ILI9341_CS OFF
+          set ILI9341_DC ON
 
-      for ptr=spritedata_ptr to spritedata_ptr+255
-        ReadTable spritedata,ptr,pixel
-        FastHWSPITransfer pixel_h
-        FastHWSPITransfer pixel
-      next ptr
-      set ILI9341_CS ON
+          for ptr=spritedata_ptr to spritedata_ptr+255
+            ReadTable spritedata,ptr,pixel
+            FastHWSPITransfer pixel_h
+            FastHWSPITransfer pixel
+          next ptr
+          set ILI9341_CS ON
+      #ENDIF
+
+      #IFNDEF ILI9341_HardwareSPI
+          for ptr=spritedata_ptr to spritedata_ptr+255
+            ReadTable spritedata,ptr,pixel
+            SendWord_ILI9341 pixel
+          next ptr
+      #ENDIF
+
     end sub
     ;
     sub erase_sprite (sprite_x,sprite_y) ;write a box of 0's
       SetAddressWindow_ILI9341 ( sprite_x,sprite_y,sprite_x +15,sprite_y +15 )
 
-      set ILI9341_CS OFF
-      set ILI9341_DC ON
+      #IFDEF ILI9341_HardwareSPI
+          set ILI9341_CS OFF
+          set ILI9341_DC ON
 
-      repeat 128
-        repeat 2
-            FastHWSPITransfer bg_hi
-            FastHWSPITransfer bg_lo
-        end repeat
-      end repeat
+          repeat 128
+            repeat 2
+                FastHWSPITransfer bg_hi
+                FastHWSPITransfer bg_lo
+            end repeat
+          end repeat
+      #ENDIF
+
+      #IFNDEF ILI9341_HardwareSPI
+          repeat 256
+            SendWord_ILI9341 bg
+          end repeat
+      #ENDIF
+
     end sub
     ;
     table spritedata ;sprite 1
