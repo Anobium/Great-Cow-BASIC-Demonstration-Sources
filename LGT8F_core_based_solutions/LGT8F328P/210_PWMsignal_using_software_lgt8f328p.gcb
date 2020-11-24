@@ -14,7 +14,7 @@
 
 
 #chip lgt8f328p
-
+#option Explicit
 
     ; ----- Constants
     'PWM constant. This is a required constant. This could be any portm but this demonstration this port specified.
@@ -33,11 +33,11 @@
 
     ; ----- Main body of program commences here.
       do
-          'freq of 5.7Khz with a chip frequency of 32Mhz
+          'freq of ~12Khz with a chip frequency of 32Mhz
           'duty of 127 equates to 50%
           '100 cycles is a purely arbitrary value as the loop will maintain a relatively constant PWM
           'the PWM signal is transmitted ONLY for the nuber of cylces.
-          PWMOut 1, 127, 100
+          PWMOut 1, 31, 10
 
       loop
 

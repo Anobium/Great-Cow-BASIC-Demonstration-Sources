@@ -1,0 +1,671 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program examines the GLCD devices and shows the registers on a serial port/terminal at 9600 BPS, and, or can determine the type of glcd controller.
+'''
+'''This is a standalone program with no supporting libraries.
+'''
+'''This is an 8-bit for the GLCD controller and supports the mcufriend.com connection options, see below.
+'''
+'''The program has three options, all controlled by constants.
+'''   1. Partial display of registers
+'''   2. Display of all 256 registers
+'''   3. Examine the registers to determine controller type.
+'''
+'''Refer to the datasheet of the specific device is the controller type is not recognised.
+'''
+'''@author     Evan Venn
+'''@licence    GPL
+'''@version    2.00
+'''@date       14/04/19
+'''********************************************************************************
+
+
+'************* ADAPT PROCESS TO SUIT YOUR NEEDS ***********************
+  #chip mega328p, 16
+  #include <uno_mega328p.h >
+
+'  #chip mega2560, 16
+'  #include <mega2560.h >
+
+
+
+'************* ADAPT PROCESS TO SUIT YOUR NEEDS ***********************
+'************* THESE WORK FOR UNO AND MEGA 2560  SHEILD ***************
+    #define GLCD_RD       ANALOG_0          ' read command line
+    #define GLCD_WR       ANALOG_1          ' write command line
+    #define GLCD_RS       ANALOG_2          ' Command/Data line
+    #define GLCD_CS       ANALOG_3          ' Chip select line
+    #define GLCD_RST      ANALOG_4          ' Reset line
+
+    #define GLCD_DB0       DIGITAL_8
+    #define GLCD_DB1       DIGITAL_9
+    #define GLCD_DB2       DIGITAL_2
+    #define GLCD_DB3       DIGITAL_3
+    #define GLCD_DB4       DIGITAL_4
+    #define GLCD_DB5       DIGITAL_5
+    #define GLCD_DB6       DIGITAL_6
+    #define GLCD_DB7       DIGITAL_7
+
+
+'************* ADAPT PROCESS TO SUIT YOUR NEEDS ***********************
+
+      'USART settings
+      #define USART_BAUD_RATE 9600
+      #define USART_TX_BLOCKING
+
+
+      '   Scan a sub-set of registers
+      #define partialScan
+
+      '   or, scan all 256 registers
+      '   #define fullScan
+
+      'Comment out 8bitmode when..... all else has failed
+      #define 8bitMode
+
+
+'************* YOU SHOULD NOT CHANGE BELOW HERE ***********************
+
+      #option explicit
+
+
+      HserPrintLn("Read Registers on GLCD")
+      HserPrintLn("controllers either read as single 16-bit")
+      HserPrintLn("e.g. the ID is at GLCDreadReg(0)")
+      HserPrintLn("or as a sequence of 8-bit values")
+      HserPrintLn("in special locations (first is dummy)")
+      HserPrintLn("")
+      #ifndef 8bitMode
+          HSerPrintLn("Operating in 16-bit addressing mode")
+      #endif
+      #ifdef 8bitMode
+          HSerPrintLn("Operating in 8-bit addressing mode")
+      #endif
+      HserPrintLn("")
+
+      GLCDInit
+      GLCDSetWriteDir
+
+      #ifdef fullScan
+        dim studyreg as byte
+        for studyreg = 0 to 255
+            GLCDreadRegStr(studyreg, 7, "f.k")
+        next
+      #endif
+
+      #ifdef partialScan
+        GLCDreadRegStr(0x00, 2, "ID ILI9320, ILI9325, ILI9335, -G (0x75)...")
+        GLCDreadRegStr(0x04, 4, "Manufacturer ID")
+        GLCDreadRegStr(0x09, 5, "Status Register")
+        GLCDreadRegStr(0x0A, 2, "Get Power Mode")
+        GLCDreadRegStr(0x0C, 2, "Get Pixel Format")
+        GLCDreadRegStr(0x61, 2, "RDID1 -G")
+        GLCDreadRegStr(0x62, 2, "RDID2 -G")
+        GLCDreadRegStr(0x63, 2, "RDID3 -G")
+        GLCDreadRegStr(0x64, 2, "RDID1 -A")
+        GLCDreadRegStr(0x65, 2, "RDID2 -A")
+        GLCDreadRegStr(0x66, 2, "RDID3 -A")
+        GLCDreadRegStr(0x67, 2, "RDID Himax -A")
+        GLCDreadRegStr(0x70, 2, "Panel Himax -A")
+        GLCDreadRegStr(0xA1, 5, "RD_DDB SSD1963")
+        GLCDreadRegStr(0xB0, 2, "RGB Interface Signal Control")
+        GLCDreadRegStr(0xB4, 2, "Inversion Control")
+        GLCDreadRegStr(0xB6, 5, "Display Control")
+        GLCDreadRegStr(0xB7, 2, "Entry Mode Set")
+        GLCDreadRegStr(0xBF, 6, "ILI9481, HX8357-B")
+        GLCDreadRegStr(0xC0, 9, "Panel Control")
+        GLCDreadRegStr(0xC8, 13, "GAMMA")
+        GLCDreadRegStr(0xCC, 2, "Panel Control")
+        GLCDreadRegStr(0xD0, 3, "Power Control")
+        GLCDreadRegStr(0xD2, 5, "NVM Read")
+        GLCDreadRegStr(0xD3, 4, "ILI9341, ILI9488")
+        GLCDreadRegStr(0xDA, 2, "RDID1")
+        GLCDreadRegStr(0xDB, 2, "RDID2")
+        GLCDreadRegStr(0xDC, 2, "RDID3")
+        GLCDreadRegStr(0xE0, 16, "GAMMA-P")
+        GLCDreadRegStr(0xE1, 16, "GAMMA-N")
+        GLCDreadRegStr(0xEF, 6, "ILI9327")
+        GLCDreadRegStr(0xF2, 12, "Adjust Control 2")
+        GLCDreadRegStr(0xF6, 4, "Interface Control")
+      #endif
+
+
+        dim identifier as word
+        dim devicestr as string
+        GLCDInit
+        GLCDSetWriteDir
+
+        HSerPrintLn ("")
+        HSerPrintLN("Examining  : GLCD Device ID ")
+        GLCDreadID ( identifier )'also sets 'devicestr', a global string variable
+        HSerPrint  ("Read       : GLCD Device ID = ")
+        HSerPrint "0x"
+        HSerPrint hex( identifier_h )
+        HSerPrintLn hex( identifier )
+
+
+        if identifier  = 0x9325 then
+          Hserprintln("Controller : GLCD ILI9325")
+        else if (identifier = 0x9328) then
+          Hserprintln("Controller : GLCD ILI9328")
+        else if (identifier = 0x9341) then
+          Hserprintln("Controller : GLCD ILI9341")
+        else if (identifier = 0x8357) then
+          Hserprintln("Controller : GLCD HX8357D")
+        else if identifier <> 0 then
+          Hserprintln("Controller : "+devicestr )
+        else
+          HSerPrintLn("Controller : reg(0x00) returned Unknown GLCD")
+        end if
+
+        HSerPrintLn ("Completed  :")
+        HSerPrintLn ("")
+
+
+Sub GLCDInit
+
+      #define GLCD_RST GLCD_RST
+      #define GLCD_CS GLCD_CS
+      #define GLCD_RS GLCD_RS
+      #define GLCD_WR GLCD_WR
+      #define GLCD_RD GLCD_RD
+
+
+      #define GLCD_DB0 GLCD_DB0
+      #define GLCD_DB1 GLCD_DB1
+      #define GLCD_DB2 GLCD_DB2
+      #define GLCD_DB3 GLCD_DB3
+      #define GLCD_DB4 GLCD_DB4
+      #define GLCD_DB5 GLCD_DB5
+      #define GLCD_DB6 GLCD_DB6
+      #define GLCD_DB7 GLCD_DB7
+
+      'Set pin directions
+      Dir GLCD_RD  Out
+      Dir GLCD_WR  Out
+      Dir GLCD_RS  Out
+      Dir GLCD_CS  Out
+      Dir GLCD_RST Out
+
+      GLCD_RD = 1
+      GLCD_WR = 1
+      GLCD_RS = 1
+      GLCD_CS = 1
+      GLCD_RST = 1
+
+      GlcdReset
+      wait 150 ms
+
+
+End Sub
+
+Sub GLCDSetWriteDir
+
+      dir  GLCD_DB7 OUT
+      dir  GLCD_DB6 OUT
+      dir  GLCD_DB5 OUT
+      dir  GLCD_DB4 OUT
+      dir  GLCD_DB3 OUT
+      dir  GLCD_DB2 OUT
+      dir  GLCD_DB1 OUT
+      dir  GLCD_DB0 OUT
+
+End Sub
+
+
+Sub GLCDSetReadDir
+
+      dir  GLCD_DB7 IN
+      dir  GLCD_DB6 IN
+      dir  GLCD_DB5 IN
+      dir  GLCD_DB4 IN
+      dir  GLCD_DB3 IN
+      dir  GLCD_DB2 IN
+      dir  GLCD_DB1 IN
+      dir  GLCD_DB0 IN
+
+End Sub
+
+Sub GLCDreadRegStr( reg as word, nparams, lnmsg as string )
+
+    dim val8 as byte
+'    GlcdReset
+    GlcdSetWriteDir
+'    GLCDSendCommand(0xB0) ' Command Access Protect
+'    GLCDSendData(0x00)    ' looks wrong
+
+    GLCDSendCommand(reg)
+    HserPrint("reg(0x")
+    HSerPrint hex(reg_h)
+    HSerPrint hex(reg)
+    HserPrint(")")
+    GlcdSetReadDir
+
+    repeat nparams
+        val8 = glcdReadData8
+        HserPrint(" ")
+        HSerPrint hex(val8)
+    end repeat
+
+    glcdSetWriteDir
+    HserSend 9
+    HserPrintLn(lnmsg)
+
+
+End Sub
+
+function GLCDreadReg32( reg as byte ) as long
+
+'    GlcdReset
+    GlcdSetWriteDir
+    GLCDSendCommand(0xB0) ' Command Access Protect
+    GLCDSendData(0x00)    ' looks wrong
+
+    GLCDSendCommand(reg)
+    GlcdSetReadDir
+
+    GLCDreadReg32 = glcdReadData32
+    glcdSetWriteDir
+
+End Function
+
+
+function GLCDreadReg16( reg as byte ) as word
+
+'    GlcdReset
+    GlcdSetWriteDir
+    GLCDSendCommand(0xB0) ' Command Access Protect
+    GLCDSendData(0x00)    ' looks wrong
+
+    GLCDSendCommand(reg)
+    GlcdSetReadDir
+
+    GLCDreadReg16 = glcdReadData16
+    glcdSetWriteDir
+
+End Function
+
+function GLCDreadReg8( reg as byte ) as byte
+
+'    GlcdReset
+    GlcdSetWriteDir
+    GLCDSendCommand(0xB0) ' Command Access Protect
+    GLCDSendData(0x00)    ' looks wrong
+
+    GLCDSendCommand(reg)
+    GlcdSetReadDir
+
+    GLCDreadReg8 = glcdReadData8
+    glcdSetWriteDir
+
+End Function
+
+
+Sub GlcdReset
+
+    'Reset
+    GLCD_RST = 0
+    Wait 150 ms
+    GLCD_RST = 1
+    Wait 150 ms
+
+End Sub
+
+    dim GlcdReadData8 as byte
+function GlcdReadData8 as byte
+
+    glcdSetReadDir
+    GLCD_CS = 0
+    GLCD_RS = 1
+    GLCD_RD = 1
+    GLCD_WR = 1
+
+    GLCD_RD = 0
+    wait 10 us
+    GlcdReadData8.7 = GLCD_DB7
+    GlcdReadData8.6 = GLCD_DB6
+    GlcdReadData8.5 = GLCD_DB5
+    GlcdReadData8.4 = GLCD_DB4
+    GlcdReadData8.3 = GLCD_DB3
+    GlcdReadData8.2 = GLCD_DB2
+    GlcdReadData8.1 = GLCD_DB1
+    GlcdReadData8.0 = GLCD_DB0
+    wait 10 us
+    GLCD_RD = 1
+
+
+End function
+
+    dim GlcdReadData16 as word
+function GlcdReadData16 as word
+
+    glcdSetReadDir
+    GLCD_CS = 0
+    GLCD_RS = 1
+    GLCD_RD = 1
+    GLCD_WR = 1
+
+    GLCD_RD = 0
+    wait 10 us
+    GlcdReadData16.15 = GLCD_DB7
+    GlcdReadData16.14 = GLCD_DB6
+    GlcdReadData16.13 = GLCD_DB5
+    GlcdReadData16.12 = GLCD_DB4
+    GlcdReadData16.11 = GLCD_DB3
+    GlcdReadData16.10 = GLCD_DB2
+    GlcdReadData16.9  = GLCD_DB1
+    GlcdReadData16.8  = GLCD_DB0
+    wait 10 us
+    GLCD_RD = 1
+
+    GLCD_RD = 0
+    wait 10 us
+    GlcdReadData16.7 = GLCD_DB7
+    GlcdReadData16.6 = GLCD_DB6
+    GlcdReadData16.5 = GLCD_DB5
+    GlcdReadData16.4 = GLCD_DB4
+    GlcdReadData16.3 = GLCD_DB3
+    GlcdReadData16.2 = GLCD_DB2
+    GlcdReadData16.1 = GLCD_DB1
+    GlcdReadData16.0 = GLCD_DB0
+    GLCD_RD = 1
+    wait 10 us
+End function
+
+
+
+    dim GlcdReadData32 as long
+function GlcdReadData32 as long
+
+    glcdSetReadDir
+    GLCD_CS = 0
+    GLCD_RS = 1
+    GLCD_RD = 1
+    GLCD_WR = 1
+
+    GLCD_RD = 0
+    wait 10 us
+    GlcdReadData32.31 = GLCD_DB7
+    GlcdReadData32.30 = GLCD_DB6
+    GlcdReadData32.29 = GLCD_DB5
+    GlcdReadData32.28 = GLCD_DB4
+    GlcdReadData32.27 = GLCD_DB3
+    GlcdReadData32.26 = GLCD_DB2
+    GlcdReadData32.25  = GLCD_DB1
+    GlcdReadData32.24  = GLCD_DB0
+    wait 10 us
+    GLCD_RD = 1
+    wait 10 us
+
+    GLCD_RD = 0
+    wait 10 us
+    GlcdReadData32.23 = GLCD_DB7
+    GlcdReadData32.22 = GLCD_DB6
+    GlcdReadData32.21 = GLCD_DB5
+    GlcdReadData32.20 = GLCD_DB4
+    GlcdReadData32.19 = GLCD_DB3
+    GlcdReadData32.18 = GLCD_DB2
+    GlcdReadData32.17 = GLCD_DB1
+    GlcdReadData32.16 = GLCD_DB0
+    wait 10 us
+    GLCD_RD = 1
+    wait 10 us
+
+    GLCD_RD = 0
+    wait 10 us
+    GlcdReadData32.15 = GLCD_DB7
+    GlcdReadData32.14 = GLCD_DB6
+    GlcdReadData32.13 = GLCD_DB5
+    GlcdReadData32.12 = GLCD_DB4
+    GlcdReadData32.11 = GLCD_DB3
+    GlcdReadData32.10 = GLCD_DB2
+    GlcdReadData32.9  = GLCD_DB1
+    GlcdReadData32.8  = GLCD_DB0
+    GLCD_RD = 1
+    wait 10 us
+
+    GLCD_RD = 0
+    wait 10 us
+    GlcdReadData32.7 = GLCD_DB7
+    GlcdReadData32.6 = GLCD_DB6
+    GlcdReadData32.5 = GLCD_DB5
+    GlcdReadData32.4 = GLCD_DB4
+    GlcdReadData32.3 = GLCD_DB3
+    GlcdReadData32.2 = GLCD_DB2
+    GlcdReadData32.1 = GLCD_DB1
+    GlcdReadData32.0 = GLCD_DB0
+    GLCD_RD = 1
+    wait 10 us
+End function
+
+
+sub  GLCDSendCommand( IN SendByte as word )
+
+    glcdSetWriteDir
+    GLCD_CS = 0
+    GLCD_RS = 0
+    GLCD_RD = 1
+
+    #ifndef  8bitMode
+      GLCD_WR = 1
+      GLCD_DB0 = SendByte.0
+      GLCD_DB1 = SendByte.1
+      GLCD_DB2 = SendByte.2
+      GLCD_DB3 = SendByte.3
+      GLCD_DB4 = SendByte.4
+      GLCD_DB5 = SendByte.5
+      GLCD_DB6 = SendByte.6
+      GLCD_DB7 = SendByte.7
+
+      GLCD_WR = 0
+      wait 10 us
+    #endif
+
+    GLCD_WR = 1
+    GLCD_DB0 = SendByte.0
+    GLCD_DB1 = SendByte.1
+    GLCD_DB2 = SendByte.2
+    GLCD_DB3 = SendByte.3
+    GLCD_DB4 = SendByte.4
+    GLCD_DB5 = SendByte.5
+    GLCD_DB6 = SendByte.6
+    GLCD_DB7 = SendByte.7
+
+
+    GLCD_WR  = 0
+    wait 10 us
+    GLCD_WR = 1
+    GLCD_CS = 1
+
+end Sub
+
+'''Send a data byte to the  GLCD
+'''@param SendByte Byte to send
+'''@hide
+sub  GLCDSendData( IN SendByte as word )
+
+    glcdSetWriteDir
+    GLCD_CS = 0
+    GLCD_RS = 1
+    GLCD_RD = 1
+
+    #ifndef  8bitMode
+      GLCD_WR = 1
+      GLCD_DB0 = SendByte.0
+      GLCD_DB1 = SendByte.1
+      GLCD_DB2 = SendByte.2
+      GLCD_DB3 = SendByte.3
+      GLCD_DB4 = SendByte.4
+      GLCD_DB5 = SendByte.5
+      GLCD_DB6 = SendByte.6
+      GLCD_DB7 = SendByte.7
+
+      GLCD_WR = 0
+      wait 10 us
+    #endif
+
+    GLCD_WR = 1
+    GLCD_DB0 = SendByte.0
+    GLCD_DB1 = SendByte.1
+    GLCD_DB2 = SendByte.2
+    GLCD_DB3 = SendByte.3
+    GLCD_DB4 = SendByte.4
+    GLCD_DB5 = SendByte.5
+    GLCD_DB6 = SendByte.6
+    GLCD_DB7 = SendByte.7
+
+
+    GLCD_WR = 0
+    wait 10 us
+    GLCD_WR = 1
+    GLCD_CS = 1
+
+
+end Sub
+
+
+sub HSerPrintLN (In PrintData As String, optional In comport = 1)
+  dim PrintLen, SysPrintTemp as byte
+  'PrintLen = LEN(PrintData$)
+  PrintLen = PrintData(0)
+
+  If PrintLen <> 0 then
+    'Write Data
+    for SysPrintTemp = 1 to PrintLen
+      HSerSend(PrintData(SysPrintTemp),comport )
+      Wait USART_DELAY
+    next
+  End If
+
+  HSerSend(13,comport)
+  Wait USART_DELAY
+  HSerSend(10,comport)
+  Wait USART_DELAY
+
+End Sub
+
+
+
+sub  GLCDreadID ( out DeviceID as word )
+
+ dim regWord as word
+
+ regWord = GLCDreadReg16(0x00)
+
+ if ( regWord = 0x5408) then   'the SPFD5408 fails the 0xD3D3 test.
+      DeviceID = 0x5408
+      devicestr =  "@reg(0x00) 0x5408"
+      exit sub
+ end if
+
+ if ( regWord = 0x5420) then   'the SPFD5420  fails the 0xD3D3 test.
+      DeviceID = 0x5420
+      devicestr =  "@reg(0x00) 0x5420"
+      exit sub
+ end if
+
+ if ( regWord = 0x8989) then   'the SSD1289 is always 8989
+      DeviceID = 0x1289
+      devicestr =  "@reg(0x00) SSD1289"
+      exit sub
+ end if
+
+ if ( GLCDreadReg16(0x67) = 0x4747) then
+      DeviceID = 0x8347
+      devicestr =  "@reg(0x67) -A"
+      exit sub
+ end if
+
+ regWord = GLCDreadReg16(0xBF)
+
+ if ( GLCDreadReg16(0x67) = 0x8357) then   'HX8357B: [xx 01 62 83 57 FF]
+      DeviceID = 0x8357
+      devicestr =  "@reg(0x67) 8357"
+      exit sub
+ end if
+
+ if ( GLCDreadReg16(0x67) = 0x9481) then   'ILI9481: [xx 02 04 94 81 FF]
+      DeviceID = 0x9481
+      devicestr =  "@reg(0x67) ILI9481"
+      exit sub
+ end if
+
+ if ( GLCDreadReg16(0x00) = 0x7575) then
+      DeviceID = 0x7575
+      devicestr =  "@reg(0x00) -G(T)"
+      exit sub
+ end if
+
+ if ( GLCDreadReg16(0x00) = 0x9595) then
+      DeviceID = 0x9595
+      devicestr =  "@reg(0x00) (i)"
+      exit sub
+ end if
+
+
+ if ( GLCDreadReg16(0x04) = 0x8000) then
+      GlcdSetWriteDir
+      GLCDSendCommand(0x03)
+        wait 10 ms
+        GLCDSendData(0xFF)
+        GLCDSendData(0x83)
+        GLCDSendData(0x57)
+        wait 300 ms
+    if ( GLCDreadReg16(0xD0) = 0x9900 ) then
+      DeviceID = 0x8357
+      devicestr =  "@reg(0xD0) HX8357"
+      exit sub
+    end if
+ end if
+
+
+ if ( ( GLCDreadReg16(0xBF) and 0xFF ) = 0x02 ) then
+
+      'read next byte
+      GlcdReadData8
+      'read next word
+      if ( GlcdReadData16 = 0x9481 ) then
+        DeviceID = 0x9481
+        devicestr = "@reg(0xBF) ILI9481"
+        exit sub
+      end if
+ end if
+
+
+
+
+ dim regLong as long
+ regLong = GLCDreadReg32(0xD3)
+
+ if ( ( reglong & 0xFFFF ) =0x9486 ) then
+      DeviceID = 0x9486
+      devicestr = "@reg(0xD3) ILI9486"
+      exit sub
+ end if
+
+ if ( regLong_h = 0x93 |regLong_h = 0x98 |regLong_h = 0x77 |regLong_h = 0x16  ) then  '0x9488, 9340, 9341, 7796
+      DeviceID = 0x9341
+      devicestr = "@reg(0xD3) ILI9341"
+      exit sub
+ end if
+
+ if ( GLCDreadReg8(0x67) = 0x47) then
+      DeviceID = 0x47
+      devicestr =  "@reg(0x67) -A01"
+      exit sub
+ end if
+
+
+
+
+ 'else revert to reg(0x00)
+ GlcdSetWriteDir
+ GLCDSendCommand(0x00)
+ wait 10 ms
+ DeviceID = GLCDreadReg16(0x00)
+ devicestr =  "@reg(0x00) "
+ GLCDReset
+
+
+
+end sub

@@ -2,7 +2,6 @@
 '''---------------------------------------------------------------------------------
 '''  This demonstration shows the impact of the time delay to manage the debouncing of a switch.
 '''  The ADC value creates a delay and LEDs switch between each other when the switch is depressed.
-'''  And, send the values to the serial terminal via the USB interface
 '''
 '''  Press the switch to reverse the direction of the LEDs, increase the ADC value to increase the debounce check.
 '''
@@ -47,30 +46,27 @@
     #DEFINE SWITCH porte.3
     Dir SWITCH in
 
+
+
     'Create the variables and constants we need
     Dim direction As Byte
     Dim mydelay As Word
+
     #DEFINE LED_RIGHT 0
     #DEFINE LED_LEFT  1
+
     'start from the right to left
     direction = LED_RIGHT
     'Set the first LED on
     LED4 = 1
 
-    'USART settings for USART1 on the chip which is sent via the USB to the PC
-    #define USART_BAUD_RATE 9600
-    #define USART_TX_BLOCKING
-    #define USART_DELAY OFF
-
 
     Do
 
-        mydelay = ReadAD( ADC6 )
+         mydelay = ReadAD12( ADC6 )
 
          If  direction = LED_RIGHT  Then
 
-            'Send the direction to the serial terminal
-            HSerPrint ">>"
 
             Set C Off
             Rotate portc Right
@@ -79,34 +75,38 @@
 
           else
 
-            'Send the direction to the serial terminal
-            HSerPrint "<<"
-
             Set C Off
             Rotate portc Left
             If LED4 = 1 Then LED1 = 1
 
           end if
 
-         'Send a tab to the serial terminal
-         HSerSend 9
-         'Send a string to the serial terminal
-         HSerPrint "ADC: "
-         'Send a formatted string to the serial terminal
-         HSerPrint LeftPad( str( myDelay), 3, "0")
-         'Send a CRLF to the serial terminal
-         HSerPrintCRLF
+         'wait for our defined time, and then check the switch is DOWN
+          mydelay = Scale ( mydelay, 0, 4095, 1, 255 )
 
-        'wait for our debounce time, and then check the switch is DOWN
-        If mydelay > 0 Then
-            Wait mydelay ms
-            If check_switch = TRUE Then
-                ' toggle the direction
-                direction = !direction
-            End If
-        End If
+          Wait mydelay ms
+          If check_switch() = TRUE Then
+              ' toggle the direction
+              direction = !direction
+          End If
+
 
    Loop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 'global variable - if button is held down, we don't want to keep on switching directions
 #DEFINE SWITCH_UP   1

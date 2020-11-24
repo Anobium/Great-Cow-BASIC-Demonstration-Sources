@@ -1,0 +1,65 @@
+# Product Review: LCD Module Display With Blue Backlight
+
+*What it is*
+
+An LCD display that is 2-lines X 16-characters white with a blue display with a backlight.
+
+
+image::https://github.com/Anobium/HiLetgo/blob/master/images/LCD1602.jpg[30%,30%]
+
+
+*HiLetgo Product*
+
+The HiLetgo GLCD worked at expected when delivered - soldered the through hole pins to the board, connected up and it worked.
+
+The packaging was a solid carboard box with two LCDs sealed in an anti-static wrap bag.
+
+The HiLetgo 1602 LCDs are a bright and the contrast is excellent.
+
+*Rating*
+
+[red]#Excellent product.{nbsp}{nbsp}Fast and easy to use.{nbsp}{nbsp}Cost effective as you get two LCDs provided#
+
+*Technical Details*
+
+The LCD are 1602 Serial LCD Module Display With Blue Backlight HD44780 Controller.{nbsp}{nbsp}The LCDs are low latency and are therefore fast.
+
+The LCD was connected using a LCD 4-wire bus connection and with LCD Enable and LCD RS connected.
+
+*Test Results*
+
+Tested Great Cow BASIC and Arduino - both tested successfully.
+
+This is the output from the Great Cow BASIC software.
+
+image::https://github.com/Anobium/HiLetgo/blob/master/images/lcdoutput.gif[50%,50%]
+{empty} +
+{empty} +
+{empty} +
+
+*Performance Test Results*
+
+Performance tests where completed using https://www.pjrc.com/teensy/td_libs_LiquidCrystal.html as reference.{nbsp}{nbsp}Programs were created for the Arduino compiler and the Great Cow BASIC compiler.{nbsp}{nbsp}The functionality in the programs provided the same output on the LCD.{nbsp}{nbsp}Code segments are shown below in the picture - then, test results are then show below this picture.
+{empty} +
+{empty} +
+
+image::https://github.com/Anobium/HiLetgo/blob/master/images/LCDCodeUsed.JPG[Code segments]
+
+{empty} +
+{empty} +
+{empty} +
+
+[cols="2", options="header"]
+|===
+|Compiler
+|Performance Results
+
+|Arduino
+|Operation completed between ~4.5ms
+
+|Great Cow BASIC
+|Operation completed between <1ms
+
+|===
+
+v0.9a

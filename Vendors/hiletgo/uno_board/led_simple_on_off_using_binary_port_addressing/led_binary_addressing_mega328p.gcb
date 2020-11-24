@@ -1,0 +1,37 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a demonstration of flashing an LED on PORTB.5 using port binary addressing.
+'''The LED is connected to Portb.5 via appropiate resistors on the HiLetgo UNO board
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    31.03.2019
+'''********************************************************************************
+
+; ----- Configuration
+  #chip mega328p, 16
+
+' #include
+; no solution specifc includes, default includes are always included
+
+
+; ----- Define Hardware settings
+
+  ' this is required to tell the microprocessor the port is an output
+  Dir PORTB.5 Out
+
+; ----- Variables
+' none specified in the example. All byte variables are defined upon use.
+
+; ----- Main body of program commences here.
+
+  'Main routine
+  Start:
+      'Turn one LED on, the other off
+      PORTB = b'00100000'
+      wait 1 sec
+      'Now toggle the LEDs
+      PORTB = b'00000000'
+      wait 1 sec
+      'Jump back to the start of the program
+  goto Start

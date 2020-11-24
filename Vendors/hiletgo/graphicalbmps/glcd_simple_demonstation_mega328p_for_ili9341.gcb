@@ -1,0 +1,68 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a simple GLCD demonstration of the GLCD capabilities.
+'''It is a nice graphical LCD, suitable for a lot of various projects.
+'''This program display a BMP file on the display and some text.
+''':
+''':
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date    03.04.2019
+'''********************************************************************************
+
+  'Chip Settings.
+    #chip mega328p, 16
+    #option explicit
+
+    #include <glcd.h>
+    #include <uno_mega328p.h >
+    #include "samplebmp001.h"    'import the data for the BMP file.
+
+    #define GLCD_TYPE GLCD_TYPE_ILI9341
+
+    'Pin mappings for 8bit bus
+    #define GLCD_RD       ANALOG_0          ' read command line
+    #define GLCD_WR       ANALOG_1          ' write command line
+    #define GLCD_RS       ANALOG_2          ' Command/Data line
+    #define GLCD_CS       ANALOG_3          ' Chip select line
+    #define GLCD_RESET    ANALOG_4          ' Reset line
+
+    #define GLCD_DB0       DIGITAL_8
+    #define GLCD_DB1       DIGITAL_9
+    #define GLCD_DB2       DIGITAL_2
+    #define GLCD_DB3       DIGITAL_3
+    #define GLCD_DB4       DIGITAL_4
+    #define GLCD_DB5       DIGITAL_5
+    #define GLCD_DB6       DIGITAL_6
+    #define GLCD_DB7       DIGITAL_7
+
+
+
+    'main program start here
+    #define DEFAULT_GLCDBACKGROUND TFT_WHITE     'change the default background color to white
+    #define GLCD_OLED_FONT                       'select the OLED fonts
+
+
+    'Use standard methods to display picture and some text.
+    DrawBMP_SSD1289 (30, 40, Image1)
+
+    GLCDfntDefaultsize = 2
+    GLCDPrint  80, 200, "ILI9341", TFT_RED
+    GLCDPrint  5, 230, "UNO AVR Graphical LCD Shield", TFT_RED
+
+    box 2,2, GLCD_WIDTH-3, GLCD_HEIGHT-3, TFT_BLACK
+    box 1,1, GLCD_WIDTH-2, GLCD_HEIGHT-2, TFT_RED
+    box 0,0, GLCD_WIDTH-1, GLCD_HEIGHT-1, TFT_YELLOW
+
+    GLCDfntDefaultsize = 1
+    GLCDPrint 22, 309, "Great Cow BASIC a compiler for Microchip AVR & PIC", TFT_BLACK
+    GLCDPrint  196, 6, "April 2019", TFT_BLACK
+
+    'loop forever
+    do
+    loop
+
+
+
+

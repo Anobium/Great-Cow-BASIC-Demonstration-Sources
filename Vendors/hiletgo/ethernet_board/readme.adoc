@@ -1,0 +1,37 @@
+# Product Review: W5100 Ethernet Shield
+
+*What it is*
+
+The W5100 Ethernet Shield  Expansion shield is for UNO and MEGA2560 board.  It enables connection your local area network and therefore to internet as a client or as a server.
+
+image::../../images/ethernet_board_hitlego.jpg[]
+
+*HiLetgo Product*
+
+The HiLetgo shield worked once I had compiled and upload the Arduino sketch.
+
+The packaging was a solid cardboard box with the shield sealed in an anti-static bag.{nbsp}{nbsp}  This shield does looks very good.  It is fitted with the Wiznet 5100 Ethernet chipset and a Phillips 74xxxxx  - parts are of good quality.  The Ethernet RJ is Hanrun and therefore should last years.
+
+image::../../images/ethernet_board.jpg[]
+
+The connectors came pre-assemble which I like - I have had to solder the connectors in the past.
+
+Tested with Arduino example code and it worked - see picture below with the Arduino IDE, the terminal the Web Browser.
+
+image::../../images/ethernet_ide_et_al.jpg[]
+
+Nice and easy to use and this really should help people get up and running with speed.
+
+The shield is for an Arduino UNO R3 or a MEGA2560.
+
+*Rating*
+
+[red]#Excellent product.{nbsp}{nbsp}Fast and easy to use.{nbsp}{nbsp}Cost effective.#
+
+*Technical Details*
+
+This is a W5100 Ethernet Shield W5100 for Arduino UNO and MEGA2560 board. {nbsp}{nbsp}   Directly plugs into the board with no soldering required.
+
+The Wiznet W5100 Ethernet Chip gives you an easy way to get your microcontroller online with the Arduino official Ethernet Library.  {nbsp}{nbsp}  The library provides network (IP) stack capable of both TCP and UDP.
+
+The shield also has a micro-SD card slot, which can be used to store files for serving over the network. {nbsp}{nbsp}  It is compatible with the Arduino Duemilanove (168 or 328), Uno as well as Mega (1280/2560) and can be accessed using the SD library.

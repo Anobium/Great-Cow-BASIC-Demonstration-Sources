@@ -1,0 +1,134 @@
+'''A demonstration program for GCGB and GCB
+'''This program will test the LCD panel and the buttons of the LCD Keypad Shield.
+'''Requires  LCD Keypad Shield attached to a Arduino UNO.
+'''The LCD Keypad shield is developed for Arduino compatible boards, to provide a user-friendly interface that allows users to go through the menu, make selections etc.
+'''It consists of a 1602 white character blue backlight LCD.
+'''The keypad consists of 5 keys — select, up, right, down and left. To save the digital IO pins, the keypad interface uses only one ADC channel. The key value is read through a 5 stage voltage divider.
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    16 March 2015
+'''********************************************************************************
+
+; ----- Configuration
+  #chip mega328p, 16
+  #option explicit
+  #include <uno_mega328p.h>
+
+; ----- Constants
+  ;Setup LCD Parameters
+  #define LCD_IO 4
+  #define LCD_NO_RW
+  #define LCD_Speed fast
+
+
+  #define LCD_RS         Digital_8
+  #define LCD_Enable     Digital_9
+  #define LCD_DB4        Digital_4
+  #define LCD_DB5        Digital_5
+  #define LCD_DB6        Digital_6
+  #define LCD_DB7        Digital_7
+
+; ----- Main body of program commences here.
+    Do Forever
+        CLS
+        Wait 1 sec
+        PRINT "START TEST"
+        wait 1 sec
+        locate 1,0
+        PRINT "DISPLAY ON"
+        Wait 1 sec
+
+        CLS
+        Locate 0,0
+        Print "Cursor ON"
+        Locate 1,0
+        LCDcursor CursorOn
+        Wait 1 sec
+
+        CLS
+        LCDcursor CursorOFF
+        locate 0,0
+        Print "Cursor OFF"
+        Wait 1 sec
+
+        CLS
+        Locate 0,0
+        Print "FLASH ON"
+        Locate 1,0
+        LCDcursor FLASHON
+        Wait 1 sec
+
+        CLS
+        locate 0,0
+        Print "FLASH OFF"
+        LCDCURSOR FLASHOFF
+        Wait 1 sec
+
+        Locate 0,0
+        Print "CURSR & FLSH ON"
+        locate 1,0
+        LCDCURSOR CURSORON
+        LCDCURSOR FLASHON
+        Wait 1 sec
+
+        Locate 0,0
+        Print "CURSR & FLSH OFF"
+        locate 1,0
+        LCDCURSOR CursorOFF
+        LCDCURSOR FLASHOFF
+        Wait 1 sec
+
+        CLS
+        Locate 0,4
+        PRINT "Flashing"
+        Locate 1,4
+        Print "Display"
+        wait 500 ms
+
+        repeat 10
+            LCDCURSOR LCDOFF
+            wait 100 ms
+            LCDCURSOR LCDON
+            wait 100 ms
+        end repeat
+
+        CLS
+        Locate 0,0
+        Print "DISPLAY OFF"
+        Locate 1,0
+        Print "FOR 2 SEC"
+        Wait 1 SEC
+        LCDCURSOR LCDOFF
+        WAIT 2 s
+
+        CLS
+        Locate 0,0
+        LCDCURSOR LCDON
+
+        'Create an array to store the character until it is copied
+        Dim CharArray(8)
+
+        'Set the array to hold the character
+        'Binary has been used to improve the readability of the code, but is not essential
+        CharArray(1) = b'00011011'
+        CharArray(2) = b'00011011'
+        CharArray(3) = b'00000000'
+        CharArray(4) = b'00000100'
+        CharArray(5) = b'00000000'
+        CharArray(6) = b'00010001'
+        CharArray(7) = b'00010001'
+        CharArray(8) = b'00001110'
+
+        CLS
+        'Copy the character from the array to the LCD
+        LCDCreateChar 0, CharArray()
+        'Draw the custom character
+        LCDWriteChar 0
+        Wait 1 sec
+
+        Locate 1,0
+        Print "END TEST"
+        Wait 1 sec
+
+    loop

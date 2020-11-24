@@ -205,7 +205,9 @@
       'pulse output for scope
       LED5 = !LED5
 
-    loop  end
+    loop
+
+    end
 
 
 Sub GLCDDrawSprite_SSD1306(In GLCDX as byte, In GLCDY as byte, In CharCode )

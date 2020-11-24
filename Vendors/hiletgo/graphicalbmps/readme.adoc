@@ -1,0 +1,5 @@
+The demonstration show how pictures can be shown on the display.
+
+
+image::output.jpg[Output,25%,25%]
+

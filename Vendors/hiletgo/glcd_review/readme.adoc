@@ -1,0 +1,42 @@
+# Product Review: Graphic LCD
+
+*What it is*
+
+The Graphic LCD (GLCD) is 2.4" diagonal LCD TFT Touch Panel display.
+
+image::../../images/GLCD.jpg[]
+
+*HiLetgo Product*
+
+The HiLetgo GLCD worked at expected when delivered.
+
+The packaging was a solid carboard box with the GLCD sealed in an anti-static bag.{nbsp}{nbsp}The required stylis and the USB cable was supplied.{nbsp}{nbsp}The GLCD fitted without issue to the HiLego UNO board (other UNO boards were tested and the GLCD fitter these also).{nbsp}{nbsp}
+
+
+The HiLetgo GLCD is a bright, 4 white-LED backlight color display that used an 8 bit digital interface, plus 4 control lines.  These is laid out on the UNO shield.
+
+
+The UNO uses digital pins 5-9 and analog 0-4. That means you can use the other digital and analogs. Pin 12 is available if not using the micro SD
+5V compatible, use with 3.3V or 5V logic
+
+The shield is for an Arduino UNO R3 or a MEGA2560.
+
+*Rating*
+
+[red]#Excellent product.{nbsp}{nbsp}Fast and easy to use.{nbsp}{nbsp}Cost effective and the best GLCD ILI9341 shield tested.#
+
+*Technical Details*
+The ILI9341 is a 262,144-color single-chip SOC driver for a-TFT liquid crystal display with resolution of 240RGBx320
+dots, comprising a 720-channel source driver, a 320-channel gate driver, 172,800 bytes GRAM for graphic
+display data of 240RGBx320 dots, and power supply circuit.
+
+ILI9341 supports parallel 8 bit data bus interface.{nbsp}{nbsp}  The moving picture area can be specified in internal GRAM by window
+address function.{nbsp} {nbsp}  The specified window area can be updated selectively, so that moving picture can be
+displayed simultaneously independent of still picture area.
+
+
+ILI9341 can operate with 1.65V ~ 3.3V I/O interface voltage and an incorporated voltage follower circuit to
+generate voltage levels for driving an LCD.{nbsp}{nbsp} ILI9341 supports full color, 8-color display mode and sleep mode for
+precise power control by software and these features make the ILI9341 an ideal LCD driver for medium or small
+size portable products such as digital cellular phones, smart phone, MP3 and PMP where long battery life is a
+major concern.

@@ -11,7 +11,11 @@
 '''@date    12/10/2020
 '''*****
 
-    #chip lgt8f328p
+#chip lgt8f328p
+#option Explicit
+
+
+    dim bright as Byte
 
     '#1
     'Set the CLOCK Source as AVRTCx relates to this PWM, see the Help
@@ -33,29 +37,28 @@
     dir PortB.1 out   'OC1A   on D9
     dir PortD.5 Out   'OC0B   on D5
 
-
-    'Main code
-    'freq 30khz
-    'variable duty from 0% to 100%
+    'Main code - a freq of 10khz with a variable duty from 0% to 100%
     do
         'Turn up brightness over 2.5 seconds
         For Bright = 0 to 255
             '#4 - Call the method with the correct PWM channel
-            HPWM 2, 30, Bright
-            HPWM 3, 30, Bright
-            HPWM 4, 30, Bright
-            HPWM 7, 30, Bright
+            HPWM 2, 10, Bright
+            HPWM 3, 10, Bright
+            HPWM 4, 10, Bright
+            HPWM 7, 10, Bright
             wait 10 ms
         next
+
         'Turn down brightness over 2.5 seconds
         For Bright = 255 to 0
             '#4 - Call the method with the correct PWM channel
-            HPWM 2, 30, Bright
-            HPWM 3, 30, Bright
-            HPWM 4, 30, Bright
-            HPWM 7, 30, Bright
+            HPWM 2, 10, Bright
+            HPWM 3, 10, Bright
+            HPWM 4, 10, Bright
+            HPWM 7, 10, Bright
             wait 10 ms
         next
+
     loop
 
 end

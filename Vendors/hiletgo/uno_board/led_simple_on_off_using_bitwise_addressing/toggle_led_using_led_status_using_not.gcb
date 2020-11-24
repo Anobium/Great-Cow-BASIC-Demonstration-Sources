@@ -1,0 +1,41 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program demostrates use of the NOT ( or !) command.  This demonstration will flash the attached LED.
+'''For the LED connection please see the program below.
+''':
+'''This demonstration toggles the LEDs by use of the NOT operation of the LED current status.
+'''The LED is connected to Portb.5 via appropiate resistors on the HiLetgo UNO board
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    31.03.2019
+'''********************************************************************************
+
+  ; ----- Configuration
+  #chip mega328p
+
+
+  ; ----- Constants
+  #define LED Portb.5
+
+
+  ; ----- Define Hardware settings
+  dir LED out
+
+
+  ; ----- Variables
+    ' No Variables specified in this example. All byte variables are defined upon use.
+
+  ; ----- Quick Command Reference:
+  'See header for details
+
+  ; ----- Main body of program commences here.
+
+  Do
+    LED = !LED
+    wait 500 ms
+  Loop
+
+  end
+
+  ; ----- Support methods.  Subroutines and Functions

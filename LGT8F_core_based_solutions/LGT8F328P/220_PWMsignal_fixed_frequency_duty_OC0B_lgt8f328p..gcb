@@ -14,13 +14,14 @@
 '''********************************************************************************
 
 #chip lgt8f328p
+#option Explicit
 
 
     'Set the PWM pin to output mode - this option is fixed to the OC0B PWM channel
     DIR PORTD.5 out
 
     'Main code
-    #define PWM_Freq 38      'Frequency of PWM in KHz
+    #define PWM_Freq 10     'Frequency of PWM in KHz
     #define PWM_Duty 50      'Duty cycle of PWM (%)
 
     do

@@ -1,0 +1,82 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+''' This program will permit the correct placement in EEMEM of data/information.
+'''
+''' Requires Great Cow Basic Compiler v0.98.07 RC31 or greater.  This will NOT generate a HEX using Great Cow Basic GCASM.  Use an altertive linker.
+'''
+''' You can generate the ASM in Great Cow BASIC but YOU MUST link using MPASMX or an alternative to MPASMX
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.0
+'''@date       24/11/2020
+'''********************************************************************************
+#chip 16f628, 4
+#option explicit
+
+'Do not change this section
+#option UserCodeOnly BASPROGRAMSTART:
+'End of do not change section
+
+
+; Data Lookup Tables (data memory)
+#ASMRAW   ORG 0x2100
+#ASMRAW   de  1,2,3
+#ASMRAW   ORG ( 0x2100 + 50 )
+#ASMRAW   de  4,5,6
+#ASMRAW   ORG ( 0x2100 + 100 )
+#ASMRAW   de  7,8,9
+
+
+
+'Do not change this section
+    #ASMRAW   ORG	4
+    #ASMRAW   retfie
+    #ASMRAW   ORG 5
+    BASPROGRAMSTART:
+    ;Call initialisation routines
+      call	INITSYS
+'End of do not change section
+
+
+
+'add your code here.
+
+
+DIR porta.0 out
+
+Do
+
+    porta.0 = !porta.0
+    wait 100 ms
+
+Loop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'end of your code...
+
+'always this at the end of you user program
+BASPROGRAMEND:
+	sleep
+	goto	BASPROGRAMEND
+
+
+
+
+
+

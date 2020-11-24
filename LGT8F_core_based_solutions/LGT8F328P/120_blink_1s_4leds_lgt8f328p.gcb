@@ -24,7 +24,7 @@
 
 
 ; ----- Configuration
-#chip  LGT8F328P
+#chip  LGT8F328P, 1
 #option Explicit
 'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.   'Set constants to refer to the LEDs.
     #DEFINE LED1 portc.0
@@ -39,23 +39,14 @@
     Dir LED4 Out
 
     ' Main program
-    ' include the millis library.  This will set up the ms counter for you.
-    #include <millis.h>
-    #define LEDRate 10      ' Flash rate in mS
+    InitTimer0 Osc, PS_256
+    StartTimer 0
 
-    ' declare working variables
-    Dim CurMs, LstMs as word
-
-    'LstMs is the last Millisecond
-    LstMs = 0
-    CurMs = 0
 
     ' This loop runs over and over forever.
     Do
-      CurMs = millis()
 
-      'If the required Time in ms has elapsed, where we deduct the CurMs - LstMs to get a delta ms, and, then we compate to our desired ms to be exceeded
-      if ( CurMs - LstMs ) >= LEDRate then
+      if ( TOV0 = 1 ) then
 
         ' Toggle LED off
         LED1 = NOT LED1
@@ -63,8 +54,7 @@
         LED3 = NOT LED3
         LED4 = NOT LED4
 
-        ' And Record Toggle Time
-        LstMs = CurMs
+        TOV0 = 1
 
       end if
 

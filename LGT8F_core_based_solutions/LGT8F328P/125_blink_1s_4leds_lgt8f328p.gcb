@@ -2,7 +2,7 @@
 '''---------------------------------------------------------------------------------
 ''' This demonstration simply turns the LED on and off with a wait of 1000 ms.   You can change the wait period, just change the constant.
 '''
-''' This uses the millis() library to setup and expose a function that is the time the chip has been operating (since last reset) in milliseconds ( ms )
+''' This used the millis() library to setup and expose a function that is the running time of the chip in milliseconds ( ms )
 ''' Using millis() hides the complexity of setting up the timer.
 '''
 ''' In this demo we connect four LEDs and flash them.
@@ -24,7 +24,7 @@
 
 
 ; ----- Configuration
-#chip  LGT8F328P
+#chip  LGT8F328P, 1
 #option Explicit
 'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.   'Set constants to refer to the LEDs.
     #DEFINE LED1 portc.0

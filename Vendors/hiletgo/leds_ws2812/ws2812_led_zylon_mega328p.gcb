@@ -1,0 +1,270 @@
+'''A demonstration of Great Cow BASIC supporting the WS2812 LED devices.
+'''
+'''
+'''     Demos:
+'''         Zylon LED chaser.  Cycles through the defined colours, with a fixed delay of between 3ms and 180ms. Colors are automatically changed.
+'''
+'''     Methods of driving the WS2812:
+'''         The program generates the SPI signals to ensure the timing is as fast as possible.
+'''
+''''''
+'''     Configuration:
+'''         WS2812 DOUT is connected to PORTD.2
+'''
+'''
+'''     General commentary:
+'''         The timing of the WS2812 is absolutely critical.  Please review the WS2812 datasheet for the specific timing that are required.
+'''
+'''         The Zylon Chaser demonstration simply writes to the WS2812 (for the number of LEDs) and indexes through the Zylon array partten enabling the select color on each pass through the sequence.
+'''
+'''     This demonstration can be further developed - have fun.  Add a pot to change delay, add colors, add more LEDs
+'''
+'''
+'''************************************************************************
+'''
+'''AVR: mega328p
+'''Compiler: GCB
+'''IDE: GCB@SYN
+'''Board: Xpress Evaluation Board
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.00
+'''@date       03.04.2019
+'''********************************************************************************
+'''
+'----- Configuration
+    'Chip Settings.
+    #chip mega328p, 16
+    #option explicit
+
+
+Setup:
+
+    #include <millis.h>
+
+; ----- Constants
+
+    #define USART_BAUD_RATE 115200
+    #define USART_TX_BLOCKING
+
+    'WS2812 SPECIFIC CONSTANTS
+    #define DOUT PORTd.2
+    Dir     DOUT out
+
+
+; ----- Variables
+
+    Dim CurMs, LstMs as word  ' declare working variables for millis()
+    LstMs = 0
+    CurMs = 0
+
+    Dim Yloop, Pixelcount, Xloop, Xylonelementvalue, Leddisplaystate, Switchstate as Byte
+
+    PixelCount = 12              'Number of WS2812 LEDs
+    ColorofLED = 0              'Color to send to LEDs 6 byte  color address
+    CurrentAddessedLED = 1      'Curent LED being address - between 1 and the PixelCount
+    CurrentLEDColorSequence = 3 'Current LED sequence pointer. Simply points to the array of colors
+    LEDDisplayState = 1         'LEDDisplayState = 0 or 1.  0 = LEDs addressed is sequence 1-2-3-4 etc OR 1 = ALL on 'not' sequential
+
+    dim CurrentAddessedLED, CurrentLEDColorSequence as Byte
+    dim ColortoSend, ColorofLED as long
+
+; ----- Main body of program commences here.
+MainCode:
+
+          WS2812_Init
+
+          ' Set of colors stored in an array for simplicity - they can be addressed with a pointer.
+          dim colorArray( 25)     ' 5 long element in the array = 5 * 5 = 25
+
+          ' Set the values of the array to the colors.  Five colors are defined. You can add more.....1000s more
+          SetLongArrayValueHandler ( colorArray, 0, 0x00FF00 ) 'RED
+          SetLongArrayValueHandler ( colorArray, 1, 0xFFFF00 ) 'yellow
+          SetLongArrayValueHandler ( colorArray, 2, 0xFF0000 ) 'GREEN
+          SetLongArrayValueHandler ( colorArray, 3, 0xFFFFFF ) 'WHITE
+          SetLongArrayValueHandler ( colorArray, 4, 0x0000FF ) 'BLUE
+          SetLongArrayValueHandler ( colorArray, 5, 0x000000 ) 'BLACK
+
+          ' An arry of data for the Zylon....
+
+          dim zylonArrayElements as Byte
+          zylonArrayElements = 6
+          dim zylonArray ( zylonArrayElements * 5  ) as word
+          'The Zylon pattern
+          SetLongArrayValueHandler ( zylonArray,1,  0b000001100000 )
+          SetLongArrayValueHandler ( zylonArray,2,  0b000010010000 )
+          SetLongArrayValueHandler ( zylonArray,3,  0b000100001000 )
+          SetLongArrayValueHandler ( zylonArray,4,  0b001000000100 )
+          SetLongArrayValueHandler ( zylonArray,5,  0b010000000010 )
+          SetLongArrayValueHandler ( zylonArray,6,  0b100000000001 )
+
+          dim WaitTime as byte
+          waittime = 3
+          do
+
+            'This gets the long value of color from the array - CurrentLEDColorSequence is a index into the array
+            ColorofLED = GetLongArrayValueHandler ( ColorArray, CurrentLEDColorSequence )
+
+            'first loop - as we interate through the first loop to get the Zylon display working
+            for yloop = 1 to zylonArrayElements
+
+              Dim zylonState as word
+              zylonState = GetLongArrayValueHandler ( zylonArray, yloop )
+
+              ' second loop - loop sends data to the LEDs
+              for xloop = 0 to PixelCount-1
+
+                      'Set the color or set to black
+                      Dim bitState as byte
+                      bitState = zylonState.11
+                      'rotate the variable for next time
+                      set C off
+                      rotate zylonState left
+
+                      if bitState = 1 then
+                              ColortoSend = ColorofLED
+                      Else
+                          if LEDDisplayState = 1 then
+                              ColortoSend = 0x000000 'black
+                          Else
+                              'This has to reset here... why? As the output function destroys the long value when ROTATING the number.
+                              ColortoSend = ColorofLED
+                          end if
+                      end if
+
+                      'Send the data - either to the CLC or bit banging
+                      WS2812BitBangSendData ( ColortoSend )
+
+              next
+
+              'Increment the LED being addressed
+              CurrentAddessedLED++
+
+              'The minimum delay is 50us. This will SURELY never happen....as the minimum is 3ms
+              'wait delay, get millis and wait until time has passed
+              Do
+                CurMs = millis()
+                if CurMs - LstMs >= WaitTime then  ' required Time has Elapsed
+                  LstMs = CurMs                   ' And Record Toggle Time
+                  exit do
+                end if
+              Loop
+
+            next
+
+
+            'first loop - as we interate through to walk back thru the Zylon pattern
+            for yloop =  zylonArrayElements-1 to 2 step -1
+
+              Dim zylonState as word
+              zylonState = GetLongArrayValueHandler ( zylonArray, yloop )
+
+              ' second loop - loop sends data to the LEDs
+              for xloop = 0 to PixelCount-1
+
+                      'Set the color or set to black
+                      Dim bitState as byte
+                      bitState = zylonState.11
+                      'rotate the variable for next time
+                      set C off
+                      rotate zylonState left
+
+                      if bitState = 1 then
+                              ColortoSend = ColorofLED
+                      Else
+                          if LEDDisplayState = 1 then
+                              ColortoSend = 0x000000 'black
+                          Else
+                              'This has to reset here... why? As the output function destroys the long value when ROTATING the number.
+                              ColortoSend = ColorofLED
+                          end if
+                      end if
+
+                      'Send the data - either to the CLC or bit banging
+                      WS2812BitBangSendData ( ColortoSend )
+
+              next
+
+              'Increment the LED being addressed
+              CurrentAddessedLED++
+
+              'The minimum delay is 50us. This will SURELY never happen....as the minimum is 3ms
+              'wait delay, get millis and wait until time has passed
+              Do
+                CurMs = millis()
+                if CurMs - LstMs >= WaitTime then  ' required Time has Elapsed
+                  LstMs = CurMs                   ' And Record Toggle Time
+                  exit do
+                end if
+              Loop
+
+            next
+
+
+            'Reset the addressed LED
+            CurrentAddessedLED = 1
+
+            'Resequence LEDs the start of the color sequence
+             CurrentLEDColorSequence = ( CurrentLEDColorSequence + 1 ) mod 5
+
+            'Set the wait time
+            WaitTime = WaitTime + 3
+            if WaitTime = 180 then WaitTime = 3
+
+          loop
+
+
+end
+
+; ----- Support methods.  Subroutines and Functions
+
+'Initialise the LED device, timers etc.
+sub WS2812_Init
+
+        SET DOUT On
+        SET DOUT OFF
+        wait 500 us
+
+End Sub
+
+Sub WS2812BitBangSendData ( in ColortoSend as long )
+
+    repeat 24
+      IF ColortoSend.23 ON THEN
+        'High for to 1 bit
+        SET DOUT ON
+      else
+        'High and Low as fast as practical
+        SET DOUT ON
+        SET DOUT OFF
+      END IF
+      ROTATE ColortoSend left
+      'Low for the 1 bit
+      SET DOUT OFF
+    end repeat
+
+End Sub
+
+
+'Returns the long of a color for a specific element
+function GetLongArrayValueHandler ( in AddressArray(),  ElementPointer ) as long
+
+    ElementPointer = ( ElementPointer * 4 ) + ElementPointer
+    GetLongArrayValueHandler = AddressArray(ElementPointer)
+    GetLongArrayValueHandler_H = AddressArray(ElementPointer+1)
+    GetLongArrayValueHandler_U = AddressArray(ElementPointer+2)
+    GetLongArrayValueHandler_E = AddressArray(ElementPointer+3)
+
+end function
+
+'Sets the array element to a specific long value
+Sub SetLongArrayValueHandler ( in AddressArray(), ElementPointer, in ElementValue as Long )
+
+    ElementPointer = ( ElementPointer * 4 ) + ElementPointer
+    AddressArray(ElementPointer)   = ElementValue
+    AddressArray(ElementPointer+1)  = ElementValue_H
+    AddressArray(ElementPointer+2) = ElementValue_U
+    AddressArray(ElementPointer+3) = ElementValue_E
+
+end sub

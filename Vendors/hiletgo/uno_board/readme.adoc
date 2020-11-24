@@ -1,0 +1,34 @@
+# Product Review: UNO Board
+
+*What it is*
+
+HiLetgo UNO R3 ATmega328P CH340 Development Board with a USB Cable, for connectivity, and a straight pin header.
+
+
+image::https://images-na.ssl-images-amazon.com/images/I/51xUHPLC28L._AC_SY400_.jpg[HiLetgo logo]
+
+
+*HiLetgo Product*
+
+The HiLetgo UNO board worked at expected when delivered. Perfectly.
+
+I was surprised by the quality and the layout of the board - the through-hole sockets for inserting DuPont wire is very clever.
+
+The packaging was a solid carboard box with the board sealed in an anti-static bag.{nbsp}{nbsp}The required  USB cable was supplied.{nbsp}{nbsp}The board fitted other shields without issue.{nbsp}{nbsp}
+
+The HiLetgo UNO board is a clean and with the addition of the through-hole sockets this is a good product.
+
+The board uses a CH340 for USB connections and this caused no issues with the computers tested.{nbsp}{nbsp}
+
+
+*Rating*
+
+[red]#Excellent product.{nbsp}{nbsp}Compatible with existing programs.{nbsp}{nbsp}Cost effective and the best UNO boards I have.#
+
+*Technical Details*
+
+Uses the ATmega328P and the CH340 chipset.
+
+A USB cable is provided.
+
+A straight pin header 2.54mm pitch is provided so you can solder the for Dupont connections.

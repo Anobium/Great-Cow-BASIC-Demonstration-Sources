@@ -1,0 +1,174 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+'''  This demonstration shows the impact of the time delay to manage the debouncing of a switch.
+'''  The ADC value creates a delay and LEDs switch between each other when the switch is depressed.
+'''  And, send the values to the serial terminal via the USB interface
+'''
+'''  Press the switch to reverse the direction of the LEDs, increase the ADC value to increase the debounce check.
+'''
+''' -------------------PORTC-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB    NA--A6--A5--A4--A3--A2--A1--A0---
+''' Constants
+'''        ---|ADC|SCL|SDA|L4 |L3 |L2 |L1 |-  where L equates to LED
+'''-----------------------------------------
+'''
+''' Connect the switch via suitable resistors using a standard switch connection.
+''' -------------------PORTE-----------------
+''' Bit#:  -7---6---5---4---3---2---1---0---
+''' PCB                  --A7--   -ADC-
+''' Constants
+''' SWITCH----------------|SW |---|ADC|------
+
+
+''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    08/10/2020
+'''********************************************************************************
+
+
+; ----- Configuration
+#chip  LGT8F328P
+#option Explicit
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.   'Set constants to refer to the LEDs.
+    #DEFINE LED1 portc.0
+    #DEFINE LED2 portc.1
+    #DEFINE LED3 portc.2
+    #DEFINE LED4 portc.3
+
+    'Set LED as an output
+    Dir LED1 Out
+    Dir LED2 Out
+    Dir LED3 Out
+    Dir LED4 Out
+
+    #DEFINE SWITCH porte.3
+    Dir SWITCH in
+
+    'Create the variables and constants we need
+    Dim direction As Byte
+    Dim mydelay As Word
+    #DEFINE LED_RIGHT 0
+    #DEFINE LED_LEFT  1
+    'start from the right to left
+    direction = LED_RIGHT
+    'Set the first LED on
+    LED4 = 1
+
+    'USART settings for USART1 on the chip which is sent via the USB to the PC
+    #define USART_BAUD_RATE 57600
+    #define USART_TX_BLOCKING
+    #define USART_DELAY OFF
+
+
+    Do
+
+        mydelay = ReadAD12( ADC6 )
+
+         If  direction = LED_RIGHT  Then
+
+            'Send the direction to the serial terminal
+            HSerPrint ">>"
+
+            Set C Off
+            Rotate portc Right
+            'When the Carry flag is set to 1 then set the LED4 LED again.  The Carry flag is set when the bit 0 is 1 and PORTC is shifted to the right.
+            If C = 1 Then LED4 = 1
+
+          else
+
+            'Send the direction to the serial terminal
+            HSerPrint "<<"
+
+            Set C Off
+            Rotate portc Left
+            If LED4 = 1 Then LED1 = 1
+
+          end if
+
+         'Send a tab to the serial terminal
+         HSerSend 9
+         'Send a string to the serial terminal
+         HSerPrint "ADC: "
+         'Send a formatted string to the serial terminal
+         HSerPrint LeftPad( str( myDelay), 3, "0")
+         'Send a CRLF to the serial terminal
+         HSerPrintCRLF
+
+        'wait for our defined time, and then check the switch is DOWN
+        mydelay = Scale ( mydelay, 0, 4095, 1, 255 )
+        Wait mydelay ms
+        If check_switch() = TRUE Then
+            ' toggle the direction
+            direction = !direction
+        End If
+
+   Loop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'global variable - if button is held down, we don't want to keep on switching directions
+#DEFINE SWITCH_UP   1
+#DEFINE SWITCH_DOWN 0
+
+Dim previous_state As BIT
+previous_state = SWITCH_UP
+
+Function  check_switch
+    'switch is normally open to 5V ...when pressed, RA3 is connected to GND
+    If (Switch = SWITCH_DOWN) Then
+        'debounce by delaying and checking if switch is still pressed
+        Wait 1 ms
+        If ( (previous_state =  SWITCH_DOWN) & (Switch = SWITCH_DOWN) ) Then
+            ' don't toggle
+            check_switch = FALSE
+            Exit Function
+        Else
+            ' check if still down
+            If (Switch = SWITCH_DOWN) Then
+                previous_state = SWITCH_DOWN
+                ' reverse the LEDs
+                check_switch = TRUE
+                Exit Function
+            Else
+                'switch not properly held down
+                previous_state = SWITCH_UP
+                ' don't reverse
+                check_switch = FALSE
+                Exit Function
+            End If
+        End If
+    Else
+        'switch not pressed
+        previous_state = SWITCH_UP
+        'don't reverse
+        check_switch = FALSE
+        Exit Function
+    End If
+
+End Function

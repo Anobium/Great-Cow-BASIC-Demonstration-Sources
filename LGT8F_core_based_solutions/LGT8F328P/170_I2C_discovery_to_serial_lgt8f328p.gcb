@@ -42,16 +42,16 @@
     #DEFINE USART_DELAY OFF
 
 
-  ; ----- Define Hardware settings for hwi2c
-    ' Define I2C settings - CHANGE PORTS if required for your specific device.
-  ' Define I2C settings
-  #define HI2C_BAUD_RATE 400
-  #define HI2C_DATA PORTC.5
-  #define HI2C_CLOCK PORTC.4
-  'I2C pins need to be input for SSP module when used on Microchip device
-  Dir HI2C_DATA in
-  Dir HI2C_CLOCK in
-  HI2CMode Master
+    ; ----- Define Hardware settings for hwi2c
+      ' Define I2C settings - CHANGE PORTS if required for your specific device.
+    ' Define I2C settings
+    #define HI2C_BAUD_RATE 400
+    #define HI2C_DATA PORTC.5
+    #define HI2C_CLOCK PORTC.4
+    'I2C pins need to be input for SSP module when used on Microchip device
+    Dir HI2C_DATA in
+    Dir HI2C_CLOCK in
+    HI2CMode Master
 
   ; ----- Main body of program commences here.
     ' Now assumes Serial Terminal is operational
@@ -99,6 +99,8 @@
         HSerPrintCRLF 2
 
         wait while switch = 1
+        wait while switch = 0
+
 
     Loop
     END  ; ----- Support methods.  Subroutines and Functions

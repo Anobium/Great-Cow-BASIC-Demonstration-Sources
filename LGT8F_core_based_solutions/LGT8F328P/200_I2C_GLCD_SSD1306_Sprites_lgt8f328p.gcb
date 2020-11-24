@@ -146,7 +146,9 @@
 '      'user delay
       wait spritedelay  'so you can see it!
 
-    loop  end
+    loop
+
+    end
 
 
 Sub GLCDDrawSprite_SSD1306(In GLCDX as byte, In GLCDY as byte, In CharCode )

@@ -4,12 +4,18 @@
 '''
 '''
 '''
+
+
+
+
+
     #chip LGT8F328P
     #option explicit
     #include <glcd.h>
     #include <LGT8F328P.h>
 
     #define GLCD_TYPE GLCD_TYPE_ILI9341
+
     'Comment out ILI9341_HardwareSPI to use software SPI
     #define ILI9341_HardwareSPI
     #define HWSPIMode MASTERULTRAFAST
@@ -17,14 +23,42 @@
 
     'Pin mappings for SPI - this GLCD driver supports Hardware SPI and Software SPI
     #define GLCD_DC       DIGITAL_8           ' Data command line
-    #define GLCD_CS       DIGITAL_10          ' Chip select line
     #define GLCD_RESET    DIGITAL_9           ' Reset line
-    #define GLCD_DI       DIGITAL_12          ' Data in | MISO    - Not used therefore not really required
+    #define GLCD_CS       DIGITAL_10          ' Chip select line
     #define GLCD_DO       DIGITAL_11          ' Data out | MOSI
+    #define GLCD_DI       DIGITAL_12          ' Data in  | MISO    - Not used therefore not really required
     #define GLCD_SCK      DIGITAL_13          ' Clock Line
 
+
+
+'    GLCDfntDefaultSize   = 2
+'    GLCDfntDefaultHeight = 8
+'
+'    GLCDPrintStringLn "Hello "
+'    GLCDPrintStringLn "SPI connectivity"
+'
+'
+'    End
+'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     ;define the frame_refresh
-    #define frame_refresh 5  '1 to 5 is advised
+    #define frame_refresh 1  '1 to 5 is advised
     ;
     ;now rename colours to make it easier to set up sprite data
     #define bk ILI9341_BLACK
@@ -60,7 +94,7 @@
     dim ptr,spritedata_ptr,pixel as word
     ;
     ;demo vars
-    dim temp,frame,frame_count as byte
+    dim temp,frame,frame_count as word
     dim dx(8),dy(8) as word
     dim spy(8),oldspy(8) as word
     dim spx(8),oldspx(8) as word
@@ -108,6 +142,7 @@
       ;
       next temp
       frame_count++ ;when to change spritedata_ptr
+
       if frame_count=frame_refresh then
         frame=!frame
         frame_count=0

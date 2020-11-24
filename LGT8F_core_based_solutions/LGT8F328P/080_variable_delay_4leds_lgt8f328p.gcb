@@ -72,4 +72,5 @@
         Rotate portc Right
         'When the Carry flag is set to 1 then set the LED4 LED again.  The Carry flag is set when the bit 0 is 1 and PORTC is shifted to the right.
         If C = 1 Then LED4 = 1
+
     Loop

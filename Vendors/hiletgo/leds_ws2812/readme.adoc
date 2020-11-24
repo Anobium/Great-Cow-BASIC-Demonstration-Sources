@@ -1,0 +1,59 @@
+# Product Review: 12 Bit WS2812 5050 RGB LED Ring with Integrated Driver Module
+
+*What it is*
+
+An LED full-color light ring of LEDs, full-color modules mounted on robust PCB.
+
+image::../../images/Ring.jpg[20%,20%]
+
+
+*HiLetgo Product*
+
+The HiLetgo Ring worked at expected when delivered - soldered the wires and connnected to 5v, 0V and DI (DataIn)
+
+The packaging was a solid cardboard box with the Ring sealed in an anti-static bag.Each LED Ring is packaged separately.
+
+
+The HiLetgo WS2812 LEDs are a bright and do not get warm - some of the LED Rings do get hot - equates to high current usage.
+
+The shield tested was a the Arduino UNO R3 - I also tested the Ring on a Microchip 16F18855 Xpress board - both worked very well.
+
+*Rating*
+
+[red]#Excellent product.{nbsp}{nbsp}Fast and easy to use.{nbsp}{nbsp}Cost effective as you get two Rings#
+
+*Technical Details*
+
+The WS2812 LED is an intelligent device with reverse polarity protection, power supply reverse polarity intended to prevent damage the MCU.
+
+Built-in signal shaping circuit,any one pixel after receiving the signal through the waveform shaping and then output to ensure line waveform distortion will not accumulate.
+
+Built-in power-on reset and brown-out reset circuit.
+
+Trichromatic color of each pixel can realize 256 highlighted,complete 16777216 colors of all true color display, the scanning frequency is not less than 400Hz / s.
+
+Serial cascade interface, through a signal line to complete the receiving and decoding of data.
+
+Transfer transmission distance between any two points in less than 5 meters without any additional circuitry.
+
+When the refresh rate of 30 frames / sec, cascading number of not less than 1024 points.
+
+Data transmission speeds of up to 800Kbps.
+
+*Test Results*
+
+This is an example output from the software.  This uses the WS2812 LED RING.
+
+Essentially, hook up the Ring to the microcontroller (Ardunio UNO and any other type), compile and program, look at your LED ring and you will see the results on the ring... what could be simplier.
+
+
+Actual pictues and a GIF
+
+image::https://qlvcra.bn.files.1drv.com/y4mEWXC7bPKEoBYKAuV9GysUwJaT2PPnxMGrpONyB0DdEueugptwbAg0mP8oWSjx-H-8IVB9lDbU9gdvEsXBilkphkZjRkQP_p3n3qIBDxfNbW1JPhndMRanopoTm9yMfZLn4GL7aEJwethrh59D41oerwjVR-XtJ8rASU7CrSaF-6RvH0e2KZ_4T_3qasN9Lf8?width=1080&height=1920&cropmode=none[Output,25%,25%]
+
+image::../../images/ZylonChaser.gif[GIF, 25%, 25%]
+
+A video on Youtube:  https://youtu.be/ryn7ZAGN7WY
+
+
+

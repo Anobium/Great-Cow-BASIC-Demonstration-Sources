@@ -26,7 +26,6 @@
 ''' SWITCH----------------|SW |--------------
 '''-----------------------------------------
 '''
-''' This is an interesting demonstration.  Try decreasing the wait to 0 (zero).. then, when only LED works, reduce the frequency and all four react.. why?
 '''
 '''
 
@@ -42,14 +41,11 @@
 #chip  LGT8F328P
 #option Explicit
 'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.   'Set constants to refer to the LEDs.
+
     #DEFINE LED1 portc.0
     #DEFINE LED2 portc.1
     #DEFINE LED3 portc.2
     #DEFINE LED4 portc.3
-
-    #DEFINE SWITCH porte.3
-
-    #DEFINE LEDDELAY  10
 
     'Set LED as an output
     Dir LED1 Out
@@ -57,48 +53,48 @@
     Dir LED3 Out
     Dir LED4 Out
 
+    #DEFINE SWITCH porte.3
+
     'Set Switch as an input
     Dir SWITCH In
 
-    ''' Most programs run in a loop such as this one
-    ' Start here
-
-    Dim lastKeyDown As Byte
+    Dim lastKeyDown As Bit
 
     'Debouncing a switch
     Do Forever
-        Wait 10 ms
 
-        If  keyPressed( lastKeyDown ) = TRUE Then
+        'push button pressed
+        If  keyPressed() = TRUE Then
+            LED1 = 1: LED2 = 1: LED3 = 1: LED4 = 1
+        Else
 
-            'push button pressed
-            LED1 = !LED1
-            LED2 = !LED2
-            LED3 = !LED3
-            LED4 = !LED4
-
+            LED1 = 0: LED2 = 0: LED3 = 0: LED4 = 0
         End If
 
     Loop
 
+' Debounce button or Debounce switch
+Function keyPressed()
 
-Function  keyPressed ( In lastKeyDown )
+    dim ButtonCounter as byte
+    #DEFINE BUTTONCOUNTMAX 5
+    #DEFINE DOWN 0
 
-    Dim actKeyDown As Byte
+    keyPressed  = FALSE
 
-    If ( !SWITCH ) Then
+    If SWITCH = DOWN Then
 
-        actKeyDown = TRUE
+        ButtonCounter = 0
 
-    Else
+        Do While SWITCH = DOWN
+            wait 5 ms
+            ButtonCounter++
+            If ButtonCounter = BUTTONCOUNTMAX then
+                keyPressed  = true
+                exit function
+            end if
+        Loop
 
-        actKeyDown = FALSE
+    end if
 
-    End If
-
-    If (actKeyDown <> lastKeyDown) Then
-        lastKeyDown = actKeyDown
-        keyPressed =  actKeyDown
-    Else
-        keyPressed = FALSE
-    End IfEnd Function
+End Function

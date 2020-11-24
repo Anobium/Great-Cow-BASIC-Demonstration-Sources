@@ -1,0 +1,144 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    10/11/2020
+'''********************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+; ----- Configuration
+#chip  LGT8F328P, 32
+#option explicit
+'Great Cow BASIC simplifies the configuration by setting the frequency and the configuration for you.   'Set constants to refer to the LEDs.
+    #DEFINE LED1 portc.0
+    #DEFINE LED2 portc.1
+    #DEFINE LED3 portc.2
+    #DEFINE LED4 portc.3
+
+    #DEFINE SWITCH porte.3
+
+    #DEFINE LEDDELAY  10
+
+    'Set LED as an output
+    Dir LED1 Out
+    Dir LED2 Out
+    Dir LED3 Out
+    Dir LED4 Out
+
+    Set LED1 off
+    Set LED2 off
+    Set LED3 off
+    Set LED4 off
+
+    'Set Switch as an input
+    Dir SWITCH In
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+; ----- Main body of program commences here.
+
+;----- Variables
+  Dim LEDSpeed, LEDPower, PWMCounter as Byte
+
+  ;Call the initialisation routine
+  InitLEDControl
+
+  Do
+      ;Increase LED to full over 2.5 seconds
+      For LEDPower = 0 to 100
+          LEDSpeed = LEDPower
+          Wait 25 ms
+      Next
+      ;Hold LEDPower
+      Wait 1 s
+      ;Decrease LED to zero over 2.5 seconds
+      For LEDPower = 100 to 0 step - 1
+          LEDSpeed = LEDPower
+          Wait 25 ms
+      Next
+      ;Hold LEDPower
+      Wait 1 s
+  Loop
+  end
+
+  ;Setup routine
+  Sub InitLEDControl
+
+      'Clear variables
+      LEDSpeed = 0
+      PWMCounter = 0
+
+      ;Add a handler for the interrupt
+      On Interrupt Timer0Overflow Call PWMHandler
+
+      ;Set up the timer
+      InitTimer0 Osc, PS_1
+      StartTimer 0
+
+  End Sub
+
+
+
+
+
+
+
+
+
+
+  ;This will be called when Timer 0 overflows
+  Sub PWMHandler
+      If LEDSpeed > PWMCounter Then
+          Set LED1 on
+          Set LED2 on
+          Set LED3 on
+          Set LED4 on
+      Else
+          Set LED1 off
+          Set LED2 off
+          Set LED3 off
+          Set LED4 off
+      End If
+      PWMCounter += 1
+      If PWMCounter = 100 Then PWMCounter = 0
+  End Sub
+
+  end
+
+
+
+

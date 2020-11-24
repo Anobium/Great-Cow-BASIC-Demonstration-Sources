@@ -11,8 +11,10 @@
 '''@date    12/10/2020
 '''*****
 
-    #chip lgt8f328p
+#chip lgt8f328p
+#option Explicit
 
+    Dim Bright as Byte
     '#1
     'Set the CLOCK Source as AVRTCx relates to this PWM, see the Help
     #define AVRTC0     'relates timer to PWM2

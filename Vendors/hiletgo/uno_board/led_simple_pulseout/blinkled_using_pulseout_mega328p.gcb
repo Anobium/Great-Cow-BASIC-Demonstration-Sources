@@ -1,0 +1,30 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program blink one LED on PORTB, bit 5  using the PulseOut command.
+'''The LED is connected to Portb.5 via appropiate resistors on the HiLetgo UNO board
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0a
+'''@date    31.03.2019
+'''********************************************************************************
+
+; ----- Configuration
+
+  #chip mega328p, 16
+
+; ----- Define Hardware settings
+ ' none specified in the example.
+
+
+; ----- Variables
+' none specified in the example. All byte variables are defined upon use.
+
+; ----- Main body of program commences here.
+  Do Forever
+
+     'Pulse pin portb.1 (Change this if you change the chip)
+     PulseOut portb.5, 500 ms
+
+     'Then wait after the pin goes off
+     Wait 500 ms
+  Loop

@@ -14,7 +14,10 @@
 '''@date    12/10/2020
 '''********************************************************************************
 
-    #chip lgt8f328p
+#chip lgt8f328p, 2
+#option Explicit
+
+    dim Bright as Byte
 
     '#1
     'Set the CLOCK Source as AVRTC0 relates to PWM2
@@ -28,23 +31,24 @@
     'Set the OC0B PWM pin to output mode.
     DIR PORTD.5 out
 
-
     'Main code
-    'Set a PWM frequency of 40khz
+    'Set a PWM frequency of 10khz
     'variable duty from 0% to 100% when the percentage is represented from 0 to 255 proportionally
     do
         'Turn up brightness over 2.5 seconds
         For Bright = 0 to 255
             '#4 - Call the method with the correct PWM channel
-            HPWM 2, 40, Bright
+            HPWM 2, 5, Bright
             wait 10 ms
         next
+        wait 3 s
         'Turn down brightness over 2.5 seconds
         For Bright = 255 to 0
             '#4 - Call the method with the correct PWM channel
-            HPWM 2, 40, Bright
+            HPWM 2, 5, Bright
             wait 10 ms
         next
+        wait 3 s
     loop
 
 end
