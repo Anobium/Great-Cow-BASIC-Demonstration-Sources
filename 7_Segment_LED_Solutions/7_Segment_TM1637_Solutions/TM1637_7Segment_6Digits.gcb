@@ -1,0 +1,123 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program will show the functionality of the TM1637_6d.h library.
+'''The TM1637 module is connected to PortD.2 CLK and PortD.3 DIO
+'''@author  Friderik Back
+'''@licence GPL
+'''@version 1.0
+'''@date    22.11.2020
+'''********************************************************************************
+
+; ----- Configuration
+'
+
+
+
+#chip mega328p,16
+#include <TM1637_6d.h>
+#option Explicit
+
+
+#define TM1637_CLK PortD.2  'Arduino Digital_2
+#define TM1637_DIO PortD.3 'Arduino Digital_3
+
+Dim points, TM_point as byte
+Dim bright, TM_Bright as byte
+
+'---- main program --------
+    Do
+        TMWrite6Dig (16, 16, 16, 16, 16, 16, 0, 0) 'clear display
+        wait 1 s
+        TMWrite6Dig (17, 16, 17, 16, 17, 16, 10,0) '- - - '
+        wait 2 s
+
+        TM_Bright = 10
+        ' Letters Fade in
+        For TM_Bright = 8 to 15
+            TMWriteChar (0 , "6")
+            TMWriteChar (1 , "d")
+            TMWriteChar (2 , "i")
+            TMWriteChar (3 , "g")
+            TMWriteChar (4 , "i")
+            TMWriteChar (5 , "t")
+
+            wait 500 ms
+        Next TM_Bright
+
+         'Fade out demo
+         For TM_Bright = 15 to 7 step -1
+            TMWriteChar (0 , "d")
+            TMWriteChar (1 , "e")
+            TMWriteChar (2 , "m")
+            TMWriteChar (3 , "o", 1)
+            TMWriteChar (4 , " ", 1)
+            TMWriteChar (5 , " ", 1)
+            wait 500 ms
+        Next TM_Bright
+
+        TMWrite6Dig (1, 2, 3, 4, 5, 6, 10, 255) '123456 + all decimal points
+        wait 2 s
+
+            TMWriteChar (0 , "A")
+            TMWriteChar (1 , "L")
+            TMWriteChar (2 , "L")
+            TMWriteChar (3 , "S")
+            TMWriteChar (4 , "E")
+            TMWriteChar (5 , "G")
+            wait 2 s
+            TMWrite6Dig (16, 16, 16, 16, 16, 16, 0, 0) 'clear display
+            wait 1 s
+            'All segments Fade in test
+            For bright = 8 to 15
+              TMWrite6Dig(8,8,8,8,8,8,bright,255) 'All segments test
+              wait 500 ms
+            Next bright
+            TMWrite6Dig (16, 16, 16, 16, 16, 16, 0, 0) 'clear display
+            wait 1 s
+
+            ' Show decimal points
+            TM_Bright = 10
+            TMWriteChar (0 , "P")
+            TMWriteChar (1 , "o")
+            TMWriteChar (2 , "i")
+            TMWriteChar (3 , "n")
+            TMWriteChar (4 , "t")
+            TMWriteChar (5 , "s")
+            wait 2 s
+            For points = 0 to 255
+            TMWrite6Dig (16, 16, 16, 16, 16, 16, 10, points) 'only decimal point(s)
+            wait 50 ms
+            Next points
+            TMWrite6Dig (16, 16, 16, 16, 16, 16, 0, 0) 'clear display
+            wait 1 s
+
+
+
+                  TM_Bright = 10
+          TMWriteChar (0 , "C")
+          TMWriteChar (1 , "o")
+          TMWriteChar (2 , "m")
+          TMWriteChar (3 , "a")
+          TMWriteChar (4 , "n")
+          TMWriteChar (5 , "d")
+          wait 2 s
+          TMhex(254)'0x00FE
+          wait 2 s
+          TMhex(0xABCD)
+          wait 2 s
+          TM_Point = 0b01010000 ' digital point on digits 2&4
+          TMdec(221120)
+          wait 2 s
+          TM_Point = 0 'or 0b00000000 NO digital points
+          TMdec(1,0)'000001
+          wait 2 s
+          TMdec(100000,1)'100000
+          wait 2 s
+          TM_Point = 16
+          TMdec(123)'   1.23
+          wait 2 s
+          TMWrite6Dig(17,1,2,7,18,12,10,32) '-12.7°C
+          wait 2 s
+          TMWrite6Dig(16,9,3,4,18,15,10,32)' 93,4°F
+          wait 2 s
+    Loop
