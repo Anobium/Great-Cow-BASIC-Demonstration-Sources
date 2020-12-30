@@ -1,0 +1,147 @@
+'''
+'''  This demonstration shows the impact of the time delay to manage the debouncing of a switch.
+'''  The ADC value creates a delay and LEDs switch between each other when the switch is depressed.
+'''
+'''
+'''  Press the switch to reverse the direction of the LEDs, increase the ADC value to increase the debounce check.
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    09.07.2020
+' ----- Configuration
+
+'Chip Settings.
+#CHIP 18F16Q41
+#OPTION Explicit
+
+
+
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:   -------------ADC-RST--------------
+''-----------------------------------------
+''
+
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -----------LED--LED-LED LED-SW---
+''-----------------------------------------
+''
+
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDPORT LATC
+
+
+Dir     RC1         Out
+Dir     RC2         Out
+Dir     RC3         Out
+Dir     RC4         Out
+
+#DEFINE POTENTIOMETER PORTA.4
+Dir     POTENTIOMETER In
+#DEFINE SWITCHIN      PORTC.0
+Dir     SWITCHIN      In
+
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+#DEFINE DOWN        0
+#DEFINE UP          1
+
+
+Dim direction As Byte
+Dim mydelay, leds  As Byte
+#DEFINE LED_RIGHT 0
+#DEFINE LED_LEFT  1
+
+'start from the right to left
+direction = LED_RIGHT
+
+'Initialise the value
+leds = 8
+
+Do
+
+    'Turn the LEDS off so we can see them Flash
+    RC1 = 0
+    RC2 = 0
+
+    'Get a value for the debounce period (the time)
+    mydelay = ReadAD( AN4 )
+
+    'Set the LEDs
+    If  direction = LED_RIGHT  Then
+
+        RC1 = 1
+        RC2 = 0
+
+    Else
+
+        RC1 = 0
+        RC2 = 1
+
+    End If
+
+    'wait for our debounce time, and then check the switch is DOWN
+    If mydelay > 1 Then
+        Wait mydelay ms
+        If check_switch = TRUE Then
+            ' toggle the direction
+            direction = !direction
+        End If
+    End If
+
+
+Loop
+
+
+
+'global variable - if button is held down, we don't want to keep on SWITCHINg directions
+#DEFINE SWITCH_UP   1
+#DEFINE SWITCH_DOWN 0
+
+Dim previous_state As BIT
+previous_state = SWITCH_UP
+
+Function  check_switch
+    'switch is normally open to 5V ...when pressed, RA3 is connected to GND
+    If (SWITCHIN = SWITCH_DOWN) Then
+        'debounce by delaying and checking if switch is still pressed
+        Wait 1 ms
+        If ( (previous_state =  SWITCH_DOWN) & (SWITCHIN = SWITCH_DOWN) ) Then
+            ' don't toggle
+            check_switch = FALSE
+            Exit Function
+        Else
+            ' check if still down
+            If (SWITCHIN = SWITCH_DOWN) Then
+                previous_state = SWITCH_DOWN
+                ' reverse the LEDs
+                check_switch = TRUE
+                Exit Function
+            Else
+                'switch not properly held down
+                previous_state = SWITCH_UP
+                ' don't reverse
+                check_switch = FALSE
+                Exit Function
+            End If
+        End If
+    Else
+        'switch not pressed
+        previous_state = SWITCH_UP
+        'don't reverse
+        check_switch = FALSE
+        Exit Function
+    End If
+
+End Function

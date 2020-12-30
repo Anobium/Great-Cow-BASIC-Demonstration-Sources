@@ -1,0 +1,136 @@
+'''
+''' This shows how to read the A2D converter and display the a proportioanal value on the LEDs.
+''' The pot on the board varies the voltage coming in on the microcontroller.
+'''
+''' Rotate the POT to see the LEDs change.
+'''
+''' The A2D is referenced to the same Vdd as the device, which
+''' is nominally is 5V.  The A2D returns the ratio of the voltage
+''' on Pin RA0 to 5V.  The A2D has a resolution of 8 bits, with 255
+''' representing 5V and 0 representing 0V.
+'''
+'''
+''' Rotate the potentiometer to change the LEDs displayed.
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    09.07.2020
+' ----- Configuration
+
+'Chip Settings.
+#CHIP 18F16Q41
+#OPTION Explicit
+
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:   -------------ADC------------------
+''-----------------------------------------
+''
+
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -----------LED--LED-LED LED -----
+''-----------------------------------------
+''
+
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDPORT LATC
+
+#DEFINE POTENTIOMETER RA4
+
+Dir     RC1         Out
+Dir     RC2         Out
+Dir     RC3         Out
+Dir     RC4         Out
+
+'This is the PORTA.4 port
+Dir     POTENTIOMETER In
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+  Dim adcVal As Byte
+
+  Do
+
+      adcVal =  ReadAD ( AN4 )
+
+      Select Case adcVal
+
+          Case 0 to 49
+
+              RC1 = 0
+              RC2 = 0
+              RC3 = 0
+              RC4 = 0
+
+          Case 50 to 99
+              RC1 = 1
+              RC2 = 0
+              RC3 = 0
+              RC4 = 0
+
+          Case 100 to 149
+              RC1 = 1
+              RC2 = 1
+              RC3 = 0
+              RC4 = 0
+
+          Case 150 to 200
+              RC1 = 1
+              RC2 = 1
+              RC3 = 1
+              RC4 = 0
+
+          Case Else
+              RC1 = 1
+              RC2 = 1
+              RC3 = 1
+              RC4 = 1
+
+      End Select
+
+
+'  Or, another way
+'
+'      If adcVal < 49 then
+'              RC1 = 0
+'              RC2 = 0
+'              RC3 = 0
+'              RC4 = 0
+'
+'      else if adcVal > 49 and adcVal < 100 then
+'              RC1 = 1
+'              RC2 = 0
+'              RC3 = 0
+'              RC4 = 0
+'
+'      else if adcVal > 100 and adcVal < 150 then
+'              RC1 = 1
+'              RC2 = 1
+'              RC3 = 0
+'              RC4 = 0
+'
+'      else if adcVal > 150 and adcVal < 200 then
+'              RC1 = 1
+'              RC2 = 1
+'              RC3 = 1
+'              RC4 = 0
+'
+'      else if adcVal > 200 then
+'              RC1 = 1
+'              RC2 = 1
+'              RC3 = 1
+'              RC4 = 1
+'      End if
+
+      wait 100 ms
+  Loop

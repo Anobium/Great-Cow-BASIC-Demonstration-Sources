@@ -1,0 +1,119 @@
+'''
+'''  This demonstration flashes an LED to show the use of a Timer 0 overflow event
+'''
+'''  Timer0 is a counter implemented in the processor. It may be used to count instruction
+'''  cycles or external events, that occur at or below the instruction cycle rate.
+'''  In thE pic, Timer0 can be used as either an 8-bit or 16-bit counter, or timer. The
+'''  enhanced mid-range core implements only an 8-bit counter.
+'''  This lesson configures Timer0 to count instruction cycles and to set a flag when it rolls
+'''  over. This frees up the processor to do meaningful work rather than wasting instruction
+'''  cycles in a timing loop.
+'''  Using a counter provides a convenient method of measuring time or delay loops as it
+'''  allows the processor to work on other tasks rather than counting instruction cycles.
+'''
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    09.07.2020
+' ----- Configuration
+
+'Chip Settings.
+#CHIP 18F16Q41
+#OPTION Explicit
+
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:   -------------ADC-RST--------------
+''-----------------------------------------
+''
+
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ----TX-----LED--LED-LED LED-SW---
+''-----------------------------------------
+
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDPORT LATC
+
+Dir     RC1         Out
+Dir     RC2         Out
+Dir     RC3         Out
+Dir     RC4         Out
+
+#DEFINE POTENTIOMETER PORTA.4
+Dir     POTENTIOMETER In
+#DEFINE SWITCHIN      PORTC.0
+Dir     SWITCHIN      In
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+Dim TIMEOUT As Byte
+
+
+'   Initialise the timer.
+'   Firstly tell the compiler to use a 16bit timer for this demonstration
+#DEFINE TMR0_16BIT
+
+'     For this we need the following:
+'       Prescaler with the FOSC/4 with no post scaler
+'           1:64
+InitTimer0 Osc, PRE0_64 + TMR0_FOSC4 ,  POST0_1
+
+'Every 1 sec.  0x0bdc is calculated value using a tool like Mr E. Timer Helper
+SetTimer ( 0 , 0x0bdc  )
+
+'   Set the type of event
+On Interrupt Timer0Overflow Call blink
+
+'   Start the Timer - you need to start this Timer0!
+StartTimer 0
+
+
+'Set the initial LED states - change to suit your configuration - same as previous demonstrations
+#DEFINE LEDSTATEMACRO RC1 = 0: RC2 = 0: RC3 = 0: RC4 = 1
+'You may need change to the LEDMASK to suit your port/configuration.  We use a macro as re reuse this statement more that once.
+#DEFINE LEDMASK 0B00011110
+LEDSTATEMACRO
+
+Do Forever
+
+    If TimeOut = 1 Then
+
+
+        'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
+        Set C Off
+        ' and shift the contents of LEDState
+        Rotate LEDPORT Right
+        ' If the LEDState.0is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
+        If LEDPORT.0 = 1 Then
+            'Set the initial LED states
+            LEDSTATEMACRO
+            'Mask off the other bits
+            LEDPORT = LEDPORT AND LEDMASK
+        End If
+
+
+        TimeOut= 0
+        ' Set timer to 1 second - there is some processing time to be included here... so, your scope will show you the exact period.
+        SetTimer ( 0, 0x0bdc )
+
+    End If
+
+
+Loop
+
+
+Sub blink
+    TimeOut = 1
+    'Clear the Timer0 overflow event - this is a added for clarity. Great Cow BASIC automatically clears the event flag for you
+    TMR0IF = 0
+End Sub
