@@ -1,23 +1,18 @@
 
 '''A demonstration program for GCGB and GCB.
 '''--------------------------------------------------------------------------------------------------------------------------------
-'''This program is a simple GLCD demonstration of the ILI9341 GLCD capabilities.
-'''It is a nice graphical LCD, suitable for a lot of various projects.
-'''This program draws lines, boxes, Ellipses and prints strings and numbers.
-'''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
-''':
-'''This has been tested using the hardware SPI option.
+'''This program is a simple GLCD demonstration of the timer capabilities using hthe millis function.
 ''':
 ''':
 '''@author  EvanV
 '''@licence GPL
 '''@version 1.0
-'''@date    09.07.2020
+'''@date    31.12.2020
 '''********************************************************************************
 
 'Chip Settings
 #CHIP 18F16Q41
-#CONFIG MCLRE=On
+#option Explicit
 
 
 '' -------------------PORTA----------------
@@ -57,7 +52,7 @@ Dir     SWITCHIN      In
 
 #include <millis.h>       ' Include the Library
 
-        #define LED RC1       ' Define the LED Pin - Digital Pin 2
+        #define LED RC1       ' Define the LED Pin
         #define LEDRate 1000     ' Flash rate in mS
 
         Dim CurMs, LstMs as word  ' declare working variables

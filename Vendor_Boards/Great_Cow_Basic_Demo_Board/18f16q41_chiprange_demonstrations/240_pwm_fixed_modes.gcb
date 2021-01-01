@@ -1,14 +1,14 @@
 '''
 ''' This program will enable a 76 Khz PWM signal, with a duty cycle
-''' of 80%. It will emit the signal for 10 seconds, then stop.
+''' of 50%. It will emit the signal for 10 seconds, then stop.
 '''     #define PWM_Freq 76    'Set frequency in KHz
-'''     #define PWM_Duty 80    'Set duty cycle to 80 %
+'''     #define PWM_Duty 50    'Set duty cycle to 80 %
 
 '''
 '''@author     EvanV
 '''@licence    GPL
 '''@version    1.01
-'''@date       09.07.2020
+'''@date       31.12.2020
 '''********************************************************************************
 #CHIP 18F16Q41, 16
 
