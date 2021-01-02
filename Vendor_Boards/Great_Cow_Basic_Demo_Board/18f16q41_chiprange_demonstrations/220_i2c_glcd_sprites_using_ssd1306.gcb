@@ -47,7 +47,7 @@
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:   -------------ADC-RST--------------
+'' IO:   ---------------------SW------ADC--
 ''-----------------------------------------
 ''
 
@@ -59,21 +59,22 @@
 
 '' ------------------PORTC-----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ----TX-----LED--LED-LED LED-SW---
+'' IO:    ----TX---------LED--LED-LED LED--
 ''-----------------------------------------
+
 
 
 'Define constants to make things easier. We can reuse these at any time.
 #DEFINE LEDPORT LATC
 
+Dir     RC0         Out
 Dir     RC1         Out
 Dir     RC2         Out
 Dir     RC3         Out
-Dir     RC4         Out
 
-#DEFINE POTENTIOMETER PORTA.4
+#DEFINE POTENTIOMETER PORTA.0
 Dir     POTENTIOMETER In
-#DEFINE SWITCHIN      PORTC.0
+#DEFINE SWITCHIN      PORTA.2
 Dir     SWITCHIN      In
 
 'Setup Serial port
@@ -108,7 +109,7 @@ Dir HI2C_CLOCK Out
 'Draw initial screen
 Box 0,0,127,63
 GLCDPrint ( 1, 36, "Great Cow BASIC")
-GLCDPrint ( 1, 46, "GLCD Library 2020")
+GLCDPrint ( 1, 46, "GLCD Library 2021")
 GLCDPrint ( 1, 54, "Sprite Support")
 Wait 1 s
 GLCDCLS

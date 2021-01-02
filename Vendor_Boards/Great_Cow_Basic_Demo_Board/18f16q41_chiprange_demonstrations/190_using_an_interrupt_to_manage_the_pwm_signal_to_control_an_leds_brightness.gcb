@@ -30,7 +30,7 @@
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:   -------------ADC-RST--------------
+'' IO:   ---------------------SW------ADC--
 ''-----------------------------------------
 ''
 
@@ -42,7 +42,7 @@
 
 '' ------------------PORTC-----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ----TX-----LED--LED-LED LED-SW---
+'' IO:    ----TX---------LED--LED-LED LED--
 ''-----------------------------------------
 
 '*****************************************************************************************************
@@ -51,7 +51,7 @@
 Dim speed, MotorSpeed, PWMCounter As Byte
 
 'We are pretending the motor is connected to Portb.1, via a suitable motor control device.
-#DEFINE MOTOR PORTC.1
+#DEFINE MOTOR PORTC.0
 Dir MOTOR Out
 
 'Call the initialisation routine

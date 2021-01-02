@@ -33,12 +33,12 @@
 
 '' ------------------PORTC-----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ------------------------LED------
+'' IO:    ----------------------------LED--
 ''-----------------------------------------
 ''
 
 'Define constants to make things easier. We can reuse a constant at any time.
-#DEFINE LEDD1 portc.1
+#DEFINE LEDD1 PORTA.2
 
 '*****************************************************************************************************
 'Main program commences here.. everything before this is setup for the board.

@@ -5,7 +5,7 @@
 '''  can be accurately programmed since the user has control on how the
 '''  time delays are executed.
 '''
-'''  The LED is attached to portc.1 via a suitable resistor to 0v.  Another LED  is also attached to portc.1 via a suitable resistor to 0v.
+'''  The LED is attached to PORTA.2 via a suitable resistor to 0v.  Another LED  is also attached to PORTA.2 via a suitable resistor to 0v.
 '''
 '''  We set an LED, you can try setting the other LEDs..  do not forget those appropiate resistors
 '''
@@ -34,7 +34,7 @@
 
 '' ------------------PORTC-----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ------------------------LED------
+'' IO:    ----------------------------LED--
 ''-----------------------------------------
 ''
 
@@ -42,17 +42,17 @@
 'Main program commences here.. everything before this is setup for the board.
 
 
-Dir portc.1 Out
+Dir PORTA.2 Out
 
 Do
     'wait for 1 second
     Wait 1 s
     'Set the port bit
-    portc.1 = 0
+    PORTA.2 = 0
     'wait for 1 second
     Wait 1 s
     'Set the port bit
-    portc.1 = 1
+    PORTA.2 = 1
 
 
 Loop

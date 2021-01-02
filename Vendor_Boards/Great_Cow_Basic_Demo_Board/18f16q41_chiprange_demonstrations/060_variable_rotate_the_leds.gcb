@@ -24,7 +24,7 @@
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:   -------------ADC------------------
+'' IO:   -----------------------------ADC--
 ''-----------------------------------------
 ''
 
@@ -36,7 +36,7 @@
 
 '' ------------------PORTC-----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    -----------LED--LED-LED LED -----
+'' IO:    ---------------LED--LED-LED-LED--
 ''-----------------------------------------
 ''
 
@@ -44,20 +44,20 @@
 'Define constants to make things easier. We can reuse these at any time.
 #DEFINE LEDPORT LATC
 
+Dir     RC0         Out
 Dir     RC1         Out
 Dir     RC2         Out
 Dir     RC3         Out
-Dir     RC4         Out
 
-#DEFINE POTENTIOMETER PORTA.4
+#DEFINE POTENTIOMETER PORTA.0
 Dir     POTENTIOMETER In
 
 '*****************************************************************************************************
 'Main program commences here.. everything before this is setup for the board.
 'Set the initial LED states - change to suit your configuration
-#DEFINE LEDSTATEMACRO RC1 = 0: RC2 = 0: RC3 = 0: RC4 = 1
+#DEFINE LEDSTATEMACRO RC0 = 0: RC1 = 0: RC2 = 0: RC3 = 1
 'You may need change to the LEDMASK to suit your port/configuration.  We use a macro as re reuse this statement more that once.
-#DEFINE LEDMASK 0B00011110
+#DEFINE LEDMASK 0B00001111
 
 LEDSTATEMACRO
 Wait 1 s
@@ -68,16 +68,18 @@ Dim ADCVal As Word
 
 Do
 
-    ADCVal = ReadAD12 ( AN4 )
+    ADCVal = ReadAD12 ( AN0 )
     'Wait for the number of milliseconds
-    Wait ADCVal ms
+    IF ADCVal  <> 0 then
+      Wait ADCVal ms
+    End If
 
     'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
     Set C Off
     ' and shift the contents of LEDState
     Rotate LEDPORT Right
     ' If the LEDState.0is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
-    If LEDPORT.0 = 1 Then
+    If C = 1 Then
         'Set the initial LED states
         LEDSTATEMACRO
         'Mask off the other bits

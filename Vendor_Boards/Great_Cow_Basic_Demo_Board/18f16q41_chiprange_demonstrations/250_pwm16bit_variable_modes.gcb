@@ -25,7 +25,7 @@
     PWMIN0PPS = 0x15;   //RC5->PWM1_16BIT:PWMIN0;
     RC3PPS = 0x0A;   //RC3->PWM1_16BIT:PWM11;
     RC1PPS = 0x0A;   //RC1->PWM1_16BIT:PWM11;
-    RC4PPS = 0x0A;   //RC4->PWM1_16BIT:PWM11;
+    RC0PPS = 0x0A;   //RC0->PWM1_16BIT:PWM11;
     RC2PPS = 0x0A;   //RC2->PWM1_16BIT:PWM11;
 
 
@@ -34,7 +34,7 @@
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:   -------------ADC-RST--------------
+'' IO:   ---------------------SW------ADC--
 ''-----------------------------------------
 ''
 
@@ -46,26 +46,29 @@
 
 '' ------------------PORTC-----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ----TX-----LED--LED-LED LED-SW---
+'' IO:    ----TX---------LED--LED-LED LED--
 ''-----------------------------------------
+
+
 
 
 'Define constants to make things easier. We can reuse these at any time.
 #DEFINE LEDPORT LATC
 
-
+Dir     RC0         Out
 Dir     RC1         Out
 Dir     RC2         Out
 Dir     RC3         Out
-Dir     RC4         Out
 
-#DEFINE POTENTIOMETER PORTA.4
+#DEFINE POTENTIOMETER PORTA.0
 Dir     POTENTIOMETER In
-#DEFINE SWITCHIN      PORTC.0
+#DEFINE SWITCHIN      PORTA.2
 Dir     SWITCHIN      In
+
 'analogue port selection
-#DEFINE ADCChannelSelected AN4
+#DEFINE ADCChannelSelected AN0
 #DEFINE ADSpeed LowSpeed
+
 
 
 ' ------ Start of main Program to provide 250Hz at 50% for 16Khz chip frequency
@@ -134,8 +137,8 @@ Dir     SWITCHIN      In
     //PWMEN enabled; PWMLD disabled; PWMERSPOL disabled; PWMERSNOW disabled;
     PWM1CON = 0x80;
 
-
     Do
+
     Loop
 
     End

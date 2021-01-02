@@ -48,33 +48,32 @@
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:   -------------ADC-RST--------------
+'' IO:   ---------------------SW------ADC--
 ''-----------------------------------------
 ''
 
 '' -------------------PORTB----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---------------------------------
+'' IO:    ----SCL-----SDA------------------
 ''-----------------------------------------
 ''
 
 '' ------------------PORTC-----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ----TX-----LED--LED-LED LED-SW---
+'' IO:    ----TX---------LED--LED-LED LED--
 ''-----------------------------------------
-
 
 'Define constants to make things easier. We can reuse these at any time.
 #DEFINE LEDPORT LATC
 
+Dir     RC0         Out
 Dir     RC1         Out
 Dir     RC2         Out
 Dir     RC3         Out
-Dir     RC4         Out
 
-#DEFINE POTENTIOMETER PORTA.4
+#DEFINE POTENTIOMETER PORTA.0
 Dir     POTENTIOMETER In
-#DEFINE SWITCHIN      PORTC.0
+#DEFINE SWITCHIN      PORTA.2
 Dir     SWITCHIN      In
 
 'Setup Serial port
@@ -130,7 +129,7 @@ Dir PORTB.0 In
 #ENDIF
 
 GLCDPrint 0, 0,   "Great Cow BASIC"
-GLCDPrint (0, 16, "Anobium 2020")
+GLCDPrint (0, 16, "Anobium 2021")
 GLCDPrint (76, 16, GLCD_WIDTH )
 GLCDPrint (96, 16, "*" )
 GLCDPrint (104, 16, GLCD_HEIGHT )
@@ -172,7 +171,7 @@ Do Forever
 
         ' Prepare a string
         outString = Str( CCount )
-        adcval = ReadAD ( AN4 )
+        adcval = ReadAD ( AN0 )
 
         ' Prepare the static components of the screen
         #IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE

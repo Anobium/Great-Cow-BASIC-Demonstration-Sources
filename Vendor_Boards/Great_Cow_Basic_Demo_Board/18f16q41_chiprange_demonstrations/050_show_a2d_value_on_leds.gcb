@@ -25,7 +25,7 @@
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:   -------------ADC------------------
+'' IO:   -----------------------------ADC--
 ''-----------------------------------------
 ''
 
@@ -37,19 +37,19 @@
 
 '' ------------------PORTC-----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    -----------LED--LED-LED LED -----
+'' IO:    ---------------LED--LED-LED-LED--
 ''-----------------------------------------
 ''
 
 'Define constants to make things easier. We can reuse these at any time.
 #DEFINE LEDPORT LATC
 
-#DEFINE POTENTIOMETER RA4
+#DEFINE POTENTIOMETER RA0
 
+Dir     RC0         Out
 Dir     RC1         Out
 Dir     RC2         Out
 Dir     RC3         Out
-Dir     RC4         Out
 
 'This is the PORTA.4 port
 Dir     POTENTIOMETER In
@@ -61,40 +61,40 @@ Dir     POTENTIOMETER In
 
   Do
 
-      adcVal =  ReadAD ( AN4 )
+      adcVal =  ReadAD ( AN0 )
 
       Select Case adcVal
 
           Case 0 to 49
 
+              RC0 = 0
               RC1 = 0
               RC2 = 0
               RC3 = 0
-              RC4 = 0
 
           Case 50 to 99
+              RC0 = 1
+              RC1 = 0
+              RC2 = 0
+              RC3 = 0
+
+          Case 100 to 149
+              RC0 = 1
               RC1 = 1
               RC2 = 0
               RC3 = 0
-              RC4 = 0
 
-          Case 100 to 149
+          Case 150 to 200
+              RC0 = 1
               RC1 = 1
               RC2 = 1
               RC3 = 0
-              RC4 = 0
-
-          Case 150 to 200
-              RC1 = 1
-              RC2 = 1
-              RC3 = 1
-              RC4 = 0
 
           Case Else
+              RC0 = 1
               RC1 = 1
               RC2 = 1
               RC3 = 1
-              RC4 = 1
 
       End Select
 

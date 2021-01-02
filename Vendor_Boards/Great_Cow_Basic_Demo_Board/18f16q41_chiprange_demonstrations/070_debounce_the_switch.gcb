@@ -21,7 +21,7 @@
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:   -------------ADC------------------
+'' IO:   ---------------------SW------ADC--
 ''-----------------------------------------
 ''
 
@@ -33,7 +33,7 @@
 
 '' ------------------PORTC-----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    -----------LED--LED-LED LED-SW---
+'' IO:    ---------------LED--LED-LED LED--
 ''-----------------------------------------
 ''
 
@@ -43,14 +43,14 @@
 #DEFINE LEDPORT LATC
 
 
+Dir     RC0         Out
 Dir     RC1         Out
 Dir     RC2         Out
 Dir     RC3         Out
-Dir     RC4         Out
 
-#DEFINE POTENTIOMETER PORTA.4
+#DEFINE POTENTIOMETER PORTA.0
 Dir     POTENTIOMETER In
-#DEFINE SWITCHIN      PORTC.0
+#DEFINE SWITCHIN      PORTA.2
 Dir     SWITCHIN      In
 
 '*****************************************************************************************************
@@ -67,7 +67,7 @@ Do Forever
     If  keyPressed( lastKeyDown ) = TRUE Then
 
         'push button pressed
-        RC1 = !RC1
+        RC = !RC0
 
     End If
 

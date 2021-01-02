@@ -20,7 +20,7 @@
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:   -------------ADC-RST--------------
+'' IO:   ---------------------SW------ADC--
 ''-----------------------------------------
 ''
 
@@ -32,22 +32,21 @@
 
 '' ------------------PORTC-----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    -----------LED--LED-LED LED-SW---
+'' IO:    ---------------LED--LED-LED LED--
 ''-----------------------------------------
 ''
 
 'Define constants to make things easier. We can reuse these at any time.
 #DEFINE LEDPORT LATC
 
-
+Dir     RC0         Out
 Dir     RC1         Out
 Dir     RC2         Out
 Dir     RC3         Out
-Dir     RC4         Out
 
-#DEFINE POTENTIOMETER PORTA.4
+#DEFINE POTENTIOMETER PORTA.0
 Dir     POTENTIOMETER In
-#DEFINE SWITCHIN      PORTC.0
+#DEFINE SWITCHIN      PORTA.2
 Dir     SWITCHIN      In
 
 
@@ -59,41 +58,61 @@ Dir     SWITCHIN      In
 
 
 Dim direction As Byte
-Dim mydelay, leds  As Byte
+Dim ADCVal, leds  As Byte
 #DEFINE LED_RIGHT 0
 #DEFINE LED_LEFT  1
 
 'start from the right to left
 direction = LED_RIGHT
 
-'Initialise the value
-leds = 8
+'Set the initial LED states - change to suit your configuration
+#DEFINE LEDSTATEMACRO RC0 = 0: RC1 = 0: RC2 = 0: RC3 = 1
+'You may need change to the LEDMASK to suit your port/configuration.  We use a macro as re reuse this statement more that once.
+#DEFINE LEDMASK 0B00001111
+
+LEDSTATEMACRO
+
 
 Do
 
-    'Turn the LEDS off so we can see them Flash
-    RC1 = 0
-    RC2 = 0
-
     'Get a value for the debounce period (the time)
-    mydelay = ReadAD( AN4 )
+    ADCVal = ReadAD( AN0 )
+
 
     'Set the LEDs
     If  direction = LED_RIGHT  Then
-
-        RC1 = 1
-        RC2 = 0
+        LEDPORT = LEDPORT AND LEDMASK
+        'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
+        Set C Off
+        ' and shift the contents of LEDState
+        Rotate LEDPORT Right
+        ' If the LEDState.0is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
+        If C = 1 Then
+            'Set the initial LED states
+            LEDSTATEMACRO
+            'Mask off the other bits
+            LEDPORT = LEDPORT AND LEDMASK
+        End If
 
     Else
-
-        RC1 = 0
-        RC2 = 1
+        LEDPORT = LEDPORT AND LEDMASK
+        'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
+        Set C Off
+        ' and shift the contents of LEDState
+        Rotate LEDPORT Left
+        ' If the LEDState.0is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
+        If RC4 = 1 Then
+            'Mask off the other bits
+            LEDPORT = LEDPORT AND LEDMASK
+            'Set the initial LED states
+            RC0 = 1
+        End If
 
     End If
 
     'wait for our debounce time, and then check the switch is DOWN
-    If mydelay > 1 Then
-        Wait mydelay ms
+    If ADCVal > 1 Then
+        Wait ADCVal ms
         If check_switch = TRUE Then
             ' toggle the direction
             direction = !direction

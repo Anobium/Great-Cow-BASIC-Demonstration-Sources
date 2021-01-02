@@ -41,11 +41,9 @@
     End Sub
     'Template comment at the end of the config file
 
-
-
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:   -------------ADC-RST--------------
+'' IO:   ---------------------SW------ADC--
 ''-----------------------------------------
 ''
 
@@ -57,21 +55,20 @@
 
 '' ------------------PORTC-----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ----TX-----LED--LED-LED LED-SW---
+'' IO:    ---------------LED--LED-LED LED--
 ''-----------------------------------------
-''
 
 'Define constants to make things easier. We can reuse these at any time.
 #DEFINE LEDPORT LATC
 
+Dir     RC0         Out
 Dir     RC1         Out
 Dir     RC2         Out
 Dir     RC3         Out
-Dir     RC4         Out
 
-#DEFINE POTENTIOMETER PORTA.4
+#DEFINE POTENTIOMETER PORTA.0
 Dir     POTENTIOMETER In
-#DEFINE SWITCHIN      PORTC.0
+#DEFINE SWITCHIN      PORTA.2
 Dir     SWITCHIN      In
 
 'USART settings - setup the serial port - connects to PortC.6 via PPS
@@ -82,17 +79,19 @@ Dir     SWITCHIN      In
 '*****************************************************************************************************
 'Main program commences here.. everything before this is setup for the board.
 
-#DEFINE DOWN        0
-#DEFINE UP          1
-
-
-Dim DIRECTION As Byte
-Dim mydelay  As Byte
+Dim direction As Byte
+Dim mydelay, leds  As Byte
 #DEFINE LED_RIGHT 0
 #DEFINE LED_LEFT  1
 
 'start from the right to left
 direction = LED_RIGHT
+
+'Set the initial LED states - change to suit your configuration
+#DEFINE LEDSTATEMACRO RC0 = 0: RC1 = 0: RC2 = 0: RC3 = 1
+#DEFINE LEDMASK = 0x1111000
+leds = 0b10000
+
 
 
 HSerPrintCRLF
@@ -105,33 +104,47 @@ HSerPrintCRLF
 
 Do
 
-    'Turn the LEDS off so we can see them Flash
-    RC1 = 0
-    RC2 = 0
-
     'Get a value for the ADC port
-    mydelay = ReadAD( AN4 )
+    mydelay = ReadAD( AN0 )
+
+    mydelay = scale( mydelay, 0, 220, 1, 100 )
 
     'Show state
     If direction = LED_RIGHT Then
-        HSerPrint ">> "
+        HSerPrint ">>R"
     Else
-        HSerPrint "<< "
+        HSerPrint "<<L "
     End If
-
+    HSerSend 9
     HSerPrint mydelay
+    HSerSend 9
+    HSerPrint leds
     HSerPrintCRLF
 
     'Set the LEDs
     If  direction = LED_RIGHT  Then
-
-        RC1 = 1
-        RC2 = 0
+        'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
+        Set C Off
+        ' and shift the contents of LEDState
+        Rotate leds Right
+        ' If the LEDState.0is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
+        If C = 1 Then
+            leds = 16
+        End if
+        LEDPORT = ( LEDPORT and LEDMASK ) or leds
 
     Else
+        'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
+        Set C Off
+        ' and shift the contents of LEDState
+        Rotate leds Left
+        ' If the LEDState.0is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
+        If leds = 32 Then
+            'Mask off the other bits
+            leds = 1
+        End If
+        LEDPORT = ( LEDPORT and LEDMASK ) or leds
 
-        RC1 = 0
-        RC2 = 1
 
     End If
 

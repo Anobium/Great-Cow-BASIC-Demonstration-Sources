@@ -17,7 +17,7 @@
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---------------------------------
+'' IO:   ---------------------SW------ADC--
 ''-----------------------------------------
 ''
 
@@ -29,22 +29,28 @@
 
 '' ------------------PORTC-----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ------------------------LED------
+'' IO:    ----TX---------LED--LED-LED LED--
 ''-----------------------------------------
-''
+
+
+
 
 'Define constants to make things easier. We can reuse these at any time.
 #DEFINE LEDPORT LATC
 
+Dir     RC0         Out
 Dir     RC1         Out
 Dir     RC2         Out
 Dir     RC3         Out
-Dir     RC4         Out
 
-#DEFINE POTENTIOMETER PORTA.4
+#DEFINE POTENTIOMETER PORTA.0
 Dir     POTENTIOMETER In
-#DEFINE SWITCHIN      PORTC.0
+#DEFINE SWITCHIN      PORTA.2
 Dir     SWITCHIN      In
+
+'analogue port selection
+#DEFINE ADCChannelSelected AN0
+#DEFINE ADSpeed LowSpeed
 
 '*****************************************************************************************************
 'Main program commences here.. everything before this is setup for the board.
