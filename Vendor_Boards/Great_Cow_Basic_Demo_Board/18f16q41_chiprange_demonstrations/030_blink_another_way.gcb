@@ -38,7 +38,7 @@
 ''
 
 'Define constants to make things easier. We can reuse a constant at any time.
-#DEFINE LEDD1 PORTA.2
+#DEFINE LEDD1 PORTC.0
 
 '*****************************************************************************************************
 'Main program commences here.. everything before this is setup for the board.
