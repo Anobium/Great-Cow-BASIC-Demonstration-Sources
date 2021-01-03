@@ -91,9 +91,6 @@ Dir     SWITCHIN      In
 Dir HI2C_DATA Out
 Dir HI2C_CLOCK Out
 
-'For this solution we can set the TSCL period to Zero as the Stop condition must be held for TSCL after Stop transition
-'    #define HI2CITSCLWaitPeriod 0
-
 '*****************************************************************************************************
 'Main program commences here.. everything before this is setup for the board.
 
@@ -138,8 +135,6 @@ Do
             Else
                 HSerPrint "--"
             End If
-
-
 
         Else
             HSerPrint "! "

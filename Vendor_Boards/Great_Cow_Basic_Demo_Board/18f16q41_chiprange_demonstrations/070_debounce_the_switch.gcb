@@ -67,7 +67,7 @@ Do Forever
     If  keyPressed( lastKeyDown ) = TRUE Then
 
         'push button pressed
-        RC = !RC0
+        RC0 = !RC0
 
     End If
 
