@@ -55,8 +55,6 @@ Dir     RC3         Out
 
 #DEFINE POTENTIOMETER PORTA.0
 Dir     POTENTIOMETER In
-#DEFINE SWITCHIN      PORTA.2
-Dir     SWITCHIN      In
 
 #DEFINE RSTButton     PORTA.3
 Dir     RSTButton     In  'this is set automatically - so, you cannot set as an output
@@ -64,35 +62,28 @@ Dir     RSTButton     In  'this is set automatically - so, you cannot set as an 
 '*****************************************************************************************************
 'Main program commences here.. everything before this is setup for the board.
 
-Dim lastKeyDown As Byte
 
-Do Forever
-    Wait 10 ms
-
-    'This line is normally HIGH, so, we have to test when the line goes low.
-    If  SWITCHIN = 0 Then
-
-        'push button pressed
-        RC1 = 1
-
-    Else
-
-        RC1 = 0
-
-    End If
+    'Flash an LED to show a reset has happened
+    Repeat 10
+        RC1 = !RC1
+        wait 100 ms
+    End Repeat
 
 
-    'The reset line is always HIGH, so, we have to test when the line goes low.
-    If  RSTButton = 0 Then
+    Do Forever
+        Wait 10 ms
 
-        'push button pressed
-        RC2 = 1
+        'The reset line is always HIGH, so, we have to test when the line goes low.
+        If  RSTButton = 0 Then
 
-    Else
+            'push button pressed
+            RC2 = 1
 
-        RC2 = 0
+        Else
 
-    End If
+            RC2 = 0
+
+        End If
 
 
-Loop
+    Loop

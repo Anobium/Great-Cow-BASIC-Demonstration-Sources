@@ -21,7 +21,7 @@
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:   ---------------------SW------ADC--
+'' IO:   -----------------SW----------ADC--
 ''-----------------------------------------
 ''
 
@@ -50,49 +50,62 @@ Dir     RC3         Out
 
 #DEFINE POTENTIOMETER PORTA.0
 Dir     POTENTIOMETER In
-#DEFINE SWITCHIN      PORTA.2
+
+
+#DEFINE SWITCHIN      PORTA.3
 Dir     SWITCHIN      In
+#DEFINE DOWN          0
 
 '*****************************************************************************************************
 'Main program commences here.. everything before this is setup for the board.
 
-Dim lastKeyDown As Byte
 
 'Debouncing a switch
 
-Do Forever
-    Wait 10 ms
+    Do Forever
+        Wait 10 ms
 
-    'keyPressed is a Function that returns the state
-    If  keyPressed( lastKeyDown ) = TRUE Then
+        'keyPressed is a Function that returns the state
+        If  funcKeyPressed() = TRUE Then
 
-        'push button pressed
-        RC0 = !RC0
+            'push button pressed
+            RC0 = !RC0
+            RC1 = !RC1
+            RC2 = !RC2
+            RC3 = !RC3
 
-    End If
+        End If
 
-Loop
+    Loop
 
 
-Function  keyPressed ( In lastKeyDown )
 
-    Dim actKeyDown As Byte
+Function  funcKeyPressed
 
-    If ( !SWITCHIN ) Then
+    Dim CurrentSwitchState As Byte
+    Dim LastSwitchState As Byte
 
-        actKeyDown = TRUE
+    wait 1 ms
+
+    If ( SWITCHIN = DOWN ) Then
+
+        CurrentSwitchState = TRUE
 
     Else
 
-        actKeyDown = FALSE
+        CurrentSwitchState = FALSE
 
     End If
 
-    If (actKeyDown <> lastKeyDown) Then
-        lastKeyDown = actKeyDown
-        keyPressed =  actKeyDown
+    If (CurrentSwitchState <> LastSwitchState) Then
+
+        LastSwitchState = CurrentSwitchState
+        funcKeyPressed =  CurrentSwitchState
+
     Else
-        keyPressed = FALSE
+
+        funcKeyPressed = FALSE
+
     End If
 
 

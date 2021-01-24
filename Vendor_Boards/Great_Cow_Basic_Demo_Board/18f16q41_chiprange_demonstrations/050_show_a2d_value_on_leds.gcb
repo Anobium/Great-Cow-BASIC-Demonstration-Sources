@@ -51,7 +51,7 @@ Dir     RC1         Out
 Dir     RC2         Out
 Dir     RC3         Out
 
-'This is the PORTA.4 port
+'This is the PORTA.0 port
 Dir     POTENTIOMETER In
 
 '*****************************************************************************************************

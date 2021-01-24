@@ -18,7 +18,7 @@
 ' ----- Configuration
 
 'Chip Settings.
-#CHIP 18F16Q41
+#CHIP 18F16Q41, 8
 #OPTION Explicit
 
 
@@ -62,32 +62,54 @@ Dir     POTENTIOMETER In
 LEDSTATEMACRO
 Wait 1 s
 
-'we have change to a larger variable to hold the range of 0 to 1023
+'we have change to a larger variable to hold the range of 0 to 4095
 Dim ADCVal As Word
 
 
-Do
+  Do
 
-    ADCVal = ReadAD12 ( AN0 )
-    'Wait for the number of milliseconds
-    IF ADCVal  <> 0 then
+      ADCVal = ReadAD12 ( AN0 )
+
+      ADCVal = Scale ( ADCVal, 0, 4095, 2, 100 )
+
+      'Wait for the number of milliseconds
       Wait ADCVal ms
-    End If
 
-    'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
-    Set C Off
-    ' and shift the contents of LEDState
-    Rotate LEDPORT Right
-    ' If the LEDState.0is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
-    If C = 1 Then
-        'Set the initial LED states
-        LEDSTATEMACRO
-        'Mask off the other bits
-        LEDPORT = LEDPORT AND LEDMASK
-    End If
+      'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
+      Set C Off
+      ' and shift the contents of LEDState
+      Rotate LEDPORT Right
+      ' If the LEDState.0is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
+      If C = 1 Then
+          'Set the initial LED states
+          LEDSTATEMACRO
+          'Mask off the other bits
+          LEDPORT = LEDPORT AND LEDMASK
+      End If
 
 
-Loop
+  Loop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ''' GCB Optimisation file

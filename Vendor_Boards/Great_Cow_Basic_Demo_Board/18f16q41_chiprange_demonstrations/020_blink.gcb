@@ -7,7 +7,7 @@
 '''
 '''  The LED is attached to PORTC.0 via a suitable resistor to 0v.  Another LED  is also attached to PORTC.0 via a suitable resistor to 0v.
 '''
-'''  We set an LED, you can try setting the other LEDs..  do not forget those appropiate resistors
+'''  We set an LED, you can try setting the other LEDs. Do not forget those appropiate resistors
 '''
 '''************************************************************************
 '''@author  EvanV
