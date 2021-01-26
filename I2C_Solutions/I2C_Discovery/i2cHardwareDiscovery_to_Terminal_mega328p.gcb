@@ -1,52 +1,23 @@
 '''A demonstration program for GCGB and GCB.
 '''--------------------------------------------------------------------------------------------------------------------------------
 '''This program searches for I2C devices and display their adresses to the attached PC terminal.
-'''This program uses the hardware implementation of I2C and TWI for the Microchip and ATMEL microprocessors.  The microprocessor must have a suitable I2C or TWI module.
+'''This program uses the hardware implementation of I2C and TWI for the Microchip and ATMEL microprocessors.
+'''The microprocessor must have a suitable I2C or TWI module.
 '''The hardware serial connections are shown in the program.
-'''@author  TheoL plus works of EvanV
+'''@author  Haroen, TheoL plus works of EvanV
 '''@licence GPL
-'''@version 1.2a
-'''@date    25.01.2021
+'''@version 1.3a
+'''@date    26.01.2021
 '''********************************************************************************
 '''
 '''
 /*
 
-Example Serial display show the addresses of 0x78 and 0x79
 
-Show Hardware I2C Bus
-
-     00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
-00:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-10:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-20:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-30:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-40:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-50:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-60:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-70:  -- -- -- -- -- -- -- -- 78 79 -- -- -- -- -- --
-80:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-90:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-A0:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-B0:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-C0:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-D0:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-E0:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-F0:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-
-End of Search
-
-
-
-If you get this... then, check you connnections - you have NOT connected anything, or, you are missing the pullup resistors.
-
-
-    Show Hardware I2C Bus
-
-         00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
-    00:
-
-If you get this...NOTHING... but -- and you have the I2C data and clock connected... you may have them connected to the incorrect port.
+This upgraded code with function comments should give a I2C discovery status, but the options 0 and 2 freezes the terminal and only sometimes work:
+    0=NON_FOUND: Incorrect I2C ports selected!
+    1=SUCCESFUL
+    2=ERROR: Missing PullUp resistors or Check your connnections!
 
 
     Show Hardware I2C Bus
@@ -70,12 +41,44 @@ If you get this...NOTHING... but -- and you have the I2C data and clock connecte
     F0:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
     End of Search
+------------------------------------------------------------------------------------
+
+Example Serial display show the addresses of 0x78 and 0x79
+
+    Show Hardware I2C Bus
+
+         00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    00:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    10:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    20:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    30:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    40:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    50:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    60:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    70:  -- -- -- -- -- -- -- -- 78 79 -- -- -- -- -- --
+    80:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    90:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    A0:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    B0:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    C0:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    D0:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    E0:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    F0:  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+End of Search
+------------------------------------------------------------------------------------
+
+If you get this... then, check your connnections - you have NOT connected anything, or, you are missing the pullup resistors.
 
 
+    Show Hardware I2C Bus
 
+         00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    00:
+
+
+------------------------------------------------------------------------------------
 */
-
-
 
 ; ----- Configuration
 #chip mega328p,16
@@ -87,12 +90,11 @@ If you get this...NOTHING... but -- and you have the I2C data and clock connecte
     #DEFINE USART_TX_BLOCKING
     #DEFINE USART_DELAY 0
 
-
     ; ----- Define Hardware settings for hwi2c
     ; Define I2C settings
     #define HI2C_BAUD_RATE 100
-    #define HI2C_DATA PORTC.4
-    #define HI2C_CLOCK PORTC.5
+    #define HI2C_DATA PORTC.4   'William Roth: It should be sufficient to simply use "#Define HI2C Data", gcb doesn't need "PORTC.4".  Anobium: However, the two constants(HI2C_DATA&CLOCK) are used for documentation and should be retained.
+    #define HI2C_CLOCK PORTC.5  'William Roth: "#Define HI2C_Clock" does nothing at all except use up space.                           Anobium: However, the two constants(HI2C_DATA&CLOCK) are used for documentation and should be retained.
     'I2C pins need to be input for SSP module when used on Microchip device
     Dir HI2C_DATA in
     Dir HI2C_CLOCK in
@@ -100,51 +102,62 @@ If you get this...NOTHING... but -- and you have the I2C data and clock connecte
 
   ; ----- Main body of program commences here.
     ' Now assumes Serial Terminal is operational
-    dim DeviceID as byte
+    Dim DeviceID as byte
     Dim DisplayNewLine as Byte
+    Dim I2CsearchStatus as Byte               'Pseudo-boolean variable(0=NonFound_Incorrect I2C ports selected, 1=Found, 2=Error_Missing PullUp resistors or Check your connnections).
 
     Do
         HSerPrintCRLF 2
         HSerPrint "Show Hardware I2C Bus"
         HSerPrintCRLF 2
-
         HSerPrint "     "
         for DeviceID = 0 to 15
-          HSerPrint hex(deviceID)
+          HSerPrint hex(deviceID)             'First row: "00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F".
           HSerPrint " "
         next
         for DeviceID = 0 to 255
           DisplayNewLine = DeviceID % 16
           if DisplayNewLine = 0 Then
             HSerPrintCRLF
-            HserPrint hex(DeviceID)
+            HserPrint hex(DeviceID)           'First column: "00" t/m "F0".
             HSerPrint ": "
           end if
           HSerPrint " "
           HI2CStart
-          if HI2CWaitMSSPTimeout <> True then
-
-            HI2CSend ( deviceID )
-
+          if HI2CWaitMSSPTimeout <> True then 'I2C timeout?
+            HI2CSend (DeviceID)               'Found I2Caddress.
             if HI2CAckPollState = false then
-              HSerPrint   hex(deviceID)
-              HI2CSend ( 0)
+              I2CsearchStatus=1               'Found something! But can also be "Error_Missing PullUp resistors or Check your connnections".
+              HSerPrint hex(DeviceID)       'Display found I2Caddress in table.
+              HI2CSend (0)
             Else
               HSerPrint "--"
             end if
-
-
+          Else
+            'Check and Save for "Error_Missing PullUp resistors or Check your connnections"!
+            I2CsearchStatus=2
+            HSerPrintCRLF
+            hserprint "ERROR: Missing PullUp resistors or Check your connnections!"
+            HSerPrintCRLF
           end if
           HI2CStop
-
-        next
-
+        Next
         HSerPrintCRLF 2
-        HSerPrint   "End of Search"
+        HSerPrint   "End of Search"           'Search end.
         HSerPrintCRLF 2
-
-        wait 3 s
-
-
+        Select Case I2CsearchStatus           'Analyse I2C search.
+          Case 0
+            hserprint "NON_FOUND: Incorrect I2C ports selected!"
+            HSerPrintCRLF
+          Case 1
+            hserprint "SUCCESFUL"
+            HSerPrintCRLF
+          Case 2
+            hserprint "ERROR: Missing PullUp resistors or Check your connnections!"
+            HSerPrintCRLF
+        End Select
+        HSerPrintCRLF 2
+        I2CsearchStatus=0                     'Reset variable.
+        Wait 3 s
     Loop
-    END  ; ----- Support methods.  Subroutines and Functions
+END
