@@ -16,8 +16,11 @@
 ' ----- Configuration
 
 'Chip Settings.
-#CHIP 18F16Q41
+#CHIP 18f16Q41
 #Option Explicit
+
+
+
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
@@ -39,6 +42,7 @@
 
 'Define constants to make things easier. We can reuse a constant at any time.
 #DEFINE LEDD1 PORTC.0
+'#OPTION Volatile LEDD1
 
 '*****************************************************************************************************
 'Main program commences here.. everything before this is setup for the board.

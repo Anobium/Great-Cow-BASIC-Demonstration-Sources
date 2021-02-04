@@ -22,10 +22,13 @@
 'Chip Settings.
 #CHIP 18F16Q41
 #OPTION Explicit
+'#include "picas.h"
+
+
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:   ---------------------SW------ADC--
+'' IO:   -----------------SW----------ADC--
 ''-----------------------------------------
 ''
 
@@ -50,7 +53,7 @@ Dir     RC3         Out
 
 #DEFINE POTENTIOMETER PORTA.0
 Dir     POTENTIOMETER In
-#DEFINE SWITCHIN      PORTA.2
+#DEFINE SWITCHIN      PORTA.3
 Dir     SWITCHIN      In
 
 '*****************************************************************************************************

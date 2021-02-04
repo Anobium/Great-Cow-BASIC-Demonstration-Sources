@@ -42,17 +42,16 @@
 'Main program commences here.. everything before this is setup for the board.
 
 
-Dir PORTC.0 Out
+    Dir PORTC.0 Out
 
-Do
-    'wait for 1 second
-    Wait 1 s
-    'Set the port bit
-    PORTC.0 = 0
-    'wait for 1 second
-    Wait 1 s
-    'Set the port bit
-    PORTC.0 = 1
+    Do
+        'wait for 1 second
+        Wait 1 s
+        'Set the port bit
+        PORTC.0 = 0
+        'wait for 1 second
+        Wait 1 s
+        'Set the port bit
+        PORTC.0 = 1
 
-
-Loop
+    Loop

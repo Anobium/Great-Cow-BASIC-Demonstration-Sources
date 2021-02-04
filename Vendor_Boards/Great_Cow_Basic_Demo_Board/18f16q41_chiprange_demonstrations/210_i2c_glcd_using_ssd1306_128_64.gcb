@@ -35,15 +35,15 @@
     Sub InitPPS
 
             'Module: I2C1
-            I2C1SDAPPS = 0x0C;   //RB4->I2C1:SDA1;
-            RB6PPS = 0x21;   //RB6->I2C1:SCL1;
-            RB4PPS = 0x22;   //RB4->I2C1:SDA1;
-            I2C1SCLPPS = 0x0E;   //RB6->I2C1:SCL1;
-
+            RB6PPS = 0x0021    'SCL1 > RB6
+            I2C1SCLPPS = 0x000E    'RB6 > SCL1 (bi-directional)
+            RB4PPS = 0x0022    'SDA1 > RB4
+            I2C1SDAPPS = 0x000C    'RB4 > SDA1 (bi-directional)
             'Module: UART pin directions
             Dir PORTC.6 Out    ' Make TX1 pin an output
             'Module: UART1
             RC6PPS = 0x0010    'TX1 > RC6
+
 
     End Sub
     'Template comment at the end of the config file
@@ -123,8 +123,9 @@ byteNumber = 0
 
 GLCDPrint 0, 0,   "Great Cow BASIC"
 GLCDPrint (0, 16, "Anobium 2021")
-GLCDPrint (0, 32, "Portability Demo")
+GLCDPrint (0, 32, "GLCD Portability Demo")
 GLCDPrint (0, 48, ChipNameStr )
+
 
 
 Wait 3 s
@@ -132,15 +133,15 @@ GLCDCLS
 
 ' Prepare the static components of the screen
 ' Print some text
-GLCDPrint ( 0,   0, "PrintStr")
+GLCDPrint ( 2,   1, "PrintStr")
 ' Print some more text
-GLCDPrint ( 64,  0, "@")
+GLCDPrint ( 64,  1, "@")
 ' Print chip speed
-GLCDPrint ( 72,  0, ChipMHz)
+GLCDPrint ( 72,  1, ChipMHz)
 ' Print some text
-GLCDPrint ( 86, 0, "Mhz")
+GLCDPrint ( 86, 1, "Mhz")
 ' Draw some text
-GLCDDrawString( 0,8,"DrawStr")
+GLCDDrawString( 2,9,"DrawStr")
 ' Draw a box
 Box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1
 ' Draw a box
@@ -150,47 +151,47 @@ Circle (44,41,15)
 ' Draw a line
 Line 64,31,0,31
 
-Do Forever
+    Do Forever
 
-    For CCount = 31 To 127
+        For CCount = 31 To 127
 
-        ' Print a HEX string
-        GLCDPrint ( 64 ,  36,  Hex(longNumber_E ) )
-        ' Print a HEX string
-        GLCDPrint ( 76 ,  36,  Hex(longNumber_U ) )
-        ' Print a HEX string
-        GLCDPrint ( 88 ,  36,  Hex(longNumber_H ) )
-        ' Print a HEX string
-        GLCDPrint ( 100 ,  36, Hex(longNumber   ) )
-        ' Print a HEX string
-        GLCDPrint ( 112 ,  36, "h" )
-
-
-        ' Print a padded string
-        GLCDPrint ( 64 ,  44, Pad(Str(wordNumber), 5 ) )
-        ' Print a padded string
-        GLCDPrint ( 64 ,  52, Pad(Str(byteNumber), 3 ) )
+            ' Print a HEX string
+            GLCDPrint ( 64 ,  36,  Hex(longNumber_E ) )
+            ' Print a HEX string
+            GLCDPrint ( 76 ,  36,  Hex(longNumber_U ) )
+            ' Print a HEX string
+            GLCDPrint ( 88 ,  36,  Hex(longNumber_H ) )
+            ' Print a HEX string
+            GLCDPrint ( 100 ,  36, Hex(longNumber   ) )
+            ' Print a HEX string
+            GLCDPrint ( 112 ,  36, "h" )
 
 
-        ' Draw a Box
-        Box (46,9,56,19)
-        ' Draw a character
-        GLCDDrawChar(48, 10, CCount )
-        ' Prepare a string
-        outString = Str( CCount )
-        ' Draw a string
-        GLCDDrawString(64, 9, Pad(outString,3) )
+            ' Print a padded string
+            GLCDPrint ( 64 ,  44, Pad(Str(wordNumber), 5 ) )
+            ' Print a padded string
+            GLCDPrint ( 64 ,  52, Pad(Str(byteNumber), 3 ) )
 
-        ' Draw a filled box
-        FilledBox 3,43,11,51, wordNumber
 
-        ' Draw a filled box
-        FilledCircle( 44,41,9, longNumber XOR 1)
-        ' Draw a line
-        Line 0,63,64,31
+            ' Draw a Box
+            Box (46,9,56,19)
+            ' Draw a character
+            GLCDDrawChar(48, 10, CCount )
+            ' Prepare a string
+            outString = Str( CCount )
+            ' Draw a string
+            GLCDDrawString(64, 9, Pad(outString,3) )
 
-        ' Do some simple maths
-        longNumber = longNumber + 7 : wordNumber = wordNumber + 3 : byteNumber++
-    Next
-Loop
+            ' Draw a filled box
+            FilledBox 3,43,11,51, wordNumber
+
+            ' Draw a filled box
+            FilledCircle( 44,41,9, longNumber XOR 1)
+            ' Draw a line
+            Line 0,63,64,31
+
+            ' Do some simple maths
+            longNumber = longNumber + 7 : wordNumber = wordNumber + 3 : byteNumber++
+        Next
+    Loop
 End

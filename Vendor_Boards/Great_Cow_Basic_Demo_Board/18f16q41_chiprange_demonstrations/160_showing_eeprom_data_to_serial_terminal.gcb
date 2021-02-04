@@ -46,7 +46,7 @@
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:   ---------------------SW------ADC--
+'' IO:   -----------------SW----------ADC--
 ''-----------------------------------------
 ''
 
@@ -58,7 +58,7 @@
 
 '' ------------------PORTC-----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---------------LED--LED-LED LED--
+'' IO:    ----TX---------LED--LED-LED LED--
 ''-----------------------------------------
 
 'Define constants to make things easier. We can reuse these at any time.
@@ -71,33 +71,29 @@ Dir     RC3         Out
 
 #DEFINE POTENTIOMETER PORTA.0
 Dir     POTENTIOMETER In
-#DEFINE SWITCHIN      PORTA.2
+#DEFINE SWITCHIN      PORTA.3
 Dir     SWITCHIN      In
+#DEFINE DOWN          0
 
 'Setup Serial port
 #DEFINE USART_BAUD_RATE 9600
 #DEFINE USART_TX_BLOCKING
-
+#DEFINE USART_DELAY 0
 
 '*****************************************************************************************************
 'Main program commences here.. everything before this is setup for the board.
-' Now assumes Serial Terminal is operational
-
-Wait 3 s
+'Now assumes Serial Terminal is operational
 
 Dim DisplayNewLine, Outdata, Indata  As Byte
 Dim EEPromAddress as Word
 Do Forever
 
     HSerPrintCRLF
-    HSerPrint "EEPROM Test and Show EEProm Results"
+    HSerPrint "EEPROM Test and Show Results "
     HSerPrintCRLF 2
 
-    Set RC1 Off
-    Set RC2 Off
+    HSerPrint "    "
 
-
-    HSerPrint "     "
     For EEPromAddress = 0 To 15
         HSerPrint Hex(EEPromAddress)
         HSerPrint " "
@@ -107,18 +103,20 @@ Do Forever
         DisplayNewLine = EEPromAddress % 16
         If DisplayNewLine = 0 Then
             HSerPrintCRLF
+            HSerPrint right(Hex(EEPromAddress_H),1)
             HSerPrint Hex(EEPromAddress)
             HSerPrint ": "
         End If
         HSerPrint " "
 
-        Outdata = Random
+        'Outdata = Random
         'Outdata = 0x55    'If you DON'T believe put your own value here!
-        'Outdata = 255 - EEPromAddress    'If you DON'T believe put your own value here!
+        Outdata = 255 - EEPromAddress    'If you DON'T believe put your own value here!
 
         'Writes
         EPWrite ( EEPromAddress, Outdata )
         'Reads
+        Indata = 0
         EPRead  ( EEPromAddress, Indata )
 
         If Outdata = Indata Then
@@ -132,9 +130,8 @@ Do Forever
     HSerPrintCRLF 2
     HSerPrint   "End of EEProm Program and Display"
     HSerPrintCRLF 2
-    Set RC2 On
-    Set RC1 On
 
-    Wait While SwitchIn = Off
+
+    Wait While SwitchIn <> DOWN
 Loop
 End

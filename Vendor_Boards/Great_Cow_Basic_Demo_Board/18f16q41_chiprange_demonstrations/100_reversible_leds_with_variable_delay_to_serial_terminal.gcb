@@ -41,6 +41,7 @@
     End Sub
     'Template comment at the end of the config file
 
+
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
 '' IO:   ---------------------SW------ADC--
@@ -55,7 +56,7 @@
 
 '' ------------------PORTC-----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---------------LED--LED-LED LED--
+'' IO:    ----TX1--------LED--LED-LED LED--
 ''-----------------------------------------
 
 'Define constants to make things easier. We can reuse these at any time.
@@ -68,7 +69,7 @@ Dir     RC3         Out
 
 #DEFINE POTENTIOMETER PORTA.0
 Dir     POTENTIOMETER In
-#DEFINE SWITCHIN      PORTA.2
+#DEFINE SWITCHIN      PORTA.3
 Dir     SWITCHIN      In
 
 'USART settings - setup the serial port - connects to PortC.6 via PPS
@@ -94,31 +95,33 @@ leds = 0b10000
 
 
 
+wait 2 s
+
 HSerPrintCRLF
-HSerPrint "Great Cow BASIC 2020 "
+HSerPrint "Great Cow BASIC 2021 "
 HSerPrint ChipNameStr
 HSerPrint " at "
 HSerPrint ChipMHz
 HSerPrint "mHz"
 HSerPrintCRLF
 
+wait 4 s
+
 Do
 
     'Get a value for the ADC port
     mydelay = ReadAD( AN0 )
 
-    mydelay = scale( mydelay, 0, 220, 1, 100 )
+    mydelay = scale( mydelay, 0, 220, 25, 200 )
 
     'Show state
     If direction = LED_RIGHT Then
-        HSerPrint ">>R"
+        HSerPrint ">R"
     Else
-        HSerPrint "<<L "
+        HSerPrint "<L "
     End If
     HSerSend 9
     HSerPrint mydelay
-    HSerSend 9
-    HSerPrint leds
     HSerPrintCRLF
 
     'Set the LEDs

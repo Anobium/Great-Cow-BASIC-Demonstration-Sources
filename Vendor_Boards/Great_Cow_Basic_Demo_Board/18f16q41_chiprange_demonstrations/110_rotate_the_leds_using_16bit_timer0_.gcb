@@ -25,12 +25,12 @@
 
 
 'Chip Settings.
-#CHIP 18F16Q41
+#CHIP 18F16Q41, 16
 #OPTION Explicit
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:   ---------------------SW------ADC--
+'' IO:   -----------------SW----------ADC--
 ''-----------------------------------------
 ''
 
@@ -56,7 +56,7 @@ Dir     RC3         Out
 
 #DEFINE POTENTIOMETER PORTA.0
 Dir     POTENTIOMETER In
-#DEFINE SWITCHIN      PORTA.2
+#DEFINE SWITCHIN      PORTA.3
 Dir     SWITCHIN      In
 
 
@@ -75,7 +75,7 @@ InitTimer0 Osc, PRE0_64 + TMR0_FOSC4 ,  POST0_1
 StartTimer 0
 
 'Every 1 sec.  0x0bdc is calculated value using a tool like Mr E. Timer Helper
-SetTimer ( 0 , 0x0bdc  )
+SetTimer ( 0 , 3036  )
 
 
 'Set the initial LED states - change to suit your configuration - same as previous demonstrations
@@ -85,27 +85,27 @@ SetTimer ( 0 , 0x0bdc  )
 LEDSTATEMACRO
 
 Do
-    'Wait for the Timer0 event
-    Wait While TMR0IF = 0
 
-    ' Clearing Timer 0 flag will reset event
-    TMR0IF = 0
+       'wait for the event
+       Wait While TMR0IF = 0
+
+      ' Clearing Timer 0 flag will reset event
+      TMR0IF = 0
+
+      'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
+      Set C Off
+      ' and shift the contents of LEDState
+      Rotate LEDPORT Right
+      ' If C = 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
+      If C = 1 Then
+          'Set the initial LED states
+          LEDSTATEMACRO
+          'Mask off the other bits
+          LEDPORT = LEDPORT AND LEDMASK
+      End If
 
 
-    'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
-    Set C Off
-    ' and shift the contents of LEDState
-    Rotate LEDPORT Right
-    ' If C = 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
-    If C = 1 Then
-        'Set the initial LED states
-        LEDSTATEMACRO
-        'Mask off the other bits
-        LEDPORT = LEDPORT AND LEDMASK
-    End If
-
-
-    'Set timer 0 to 1s before the next event occurs.  This value as close as you can get to 1s
-    SetTimer ( 0 , 0x0bdc )
+      'Set timer 0 to 1s before the next event occurs.  This value as close as you can get to 1s
+      SetTimer ( 0 , 3036 )
 
 Loop

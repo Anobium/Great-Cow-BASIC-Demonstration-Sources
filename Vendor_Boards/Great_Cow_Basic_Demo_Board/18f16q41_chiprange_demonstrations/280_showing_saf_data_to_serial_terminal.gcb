@@ -72,10 +72,11 @@
             RC6PPS = 0x0010    'TX1 > RC6
 
     End Sub
-    'Template comment at the end of the config file
+
+
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:   ---------------------SW------ADC--
+'' IO:   -----------------SW----------ADC--
 ''-----------------------------------------
 ''
 
@@ -91,9 +92,11 @@
 ''-----------------------------------------
 
 
+
 'Setup Serial port
 #DEFINE USART_BAUD_RATE 9600
 #DEFINE USART_TX_BLOCKING
+
 
 
 
@@ -135,7 +138,7 @@
         Hserprint "0x"+hex(MyBuffer(index))
          Hsersend 32 'space
     Next
-    SAFWriteBlock (0, MyBuffer,numbytes)
+    SAFWriteBlock (0, MyBuffer, numbytes)
     'Clear the buffer
     For IndexWord = 0 to SAF_ROWSIZE_BYTES-1
       MyBuffer(IndexWord) = 0xFF

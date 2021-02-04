@@ -43,7 +43,7 @@
 
             'Module: CCP1
             RC0PPS = 0x0009    'CCP1 > RC0
-            CCP1PPS = 0x0010    'RC4 > CCP1 (bi-directional)
+            CCP1PPS = 0x0010    'RC0 > CCP1 (bi-directional)
             RC1PPS = 0x0009    'CCP1 > RC1
             CCP1PPS = 0x0011    'RC1 > CCP1 (bi-directional)
             RC2PPS = 0x0009    'CCP1 > RC2
@@ -51,13 +51,13 @@
             RC3PPS = 0x0009    'CCP1 > RC3
             CCP1PPS = 0x0013    'RC3 > CCP1 (bi-directional)
 
-
     End Sub
     'Template comment at the end of the config file
 
+
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:   ---------------------SW------ADC--
+'' IO:   -----------------SW----------ADC--
 ''-----------------------------------------
 ''
 
@@ -83,21 +83,54 @@ Dir     RC3         Out
 
 #DEFINE POTENTIOMETER PORTA.0
 Dir     POTENTIOMETER In
-#DEFINE SWITCHIN      PORTA.2
+#DEFINE SWITCHIN      PORTA.3
 Dir     SWITCHIN      In
 
 '*****************************************************************************************************
 'Main program commences here.. everything before this is setup for the board.
 
-'Using ADC value to the CCP/PWM
+Dim ADCVal, MaxVal as byte
+
+'Using ADC value to set the CCP/PWM
 Do
 
     'HPWM CCPchannel, frequency, duty cycle
-    HPWM 1, 40, ReadAD( AN0 )
-    Wait 100 ms
+    ADCVal = ReadAD( AN0 )
 
+    ADCVal = Scale ( ADCVal, 0 , 210, 0, 255 )
+
+    Wait 10 ms
+
+    HPWM ( 1, 20, ADCVal )
 
 Loop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 'Code optimisation - to reduce code size - this needs to match out program. So, look for the TRUEs

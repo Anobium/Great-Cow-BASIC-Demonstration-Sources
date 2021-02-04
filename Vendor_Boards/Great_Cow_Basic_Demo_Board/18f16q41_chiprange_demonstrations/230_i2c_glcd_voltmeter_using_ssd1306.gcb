@@ -128,11 +128,14 @@ GLCDDrawChar (5,40,Asc("0")):GLCDDrawChar (115,40,Asc("5"))
 radius=120
 angle=1
 anglecheck
-'main
+
 Do
     old_angle=angle
     '--- DVM
     adcval=ReadAD(ADCChannelSelected)
+
+
+    adcval = scale( adcval, 0, 210, 0, 196 )
     angle=adcval/2
     '
     adcval=adcval*100

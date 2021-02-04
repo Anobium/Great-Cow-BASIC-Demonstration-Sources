@@ -21,9 +21,8 @@
 ' ----- Configuration
 
 'Chip Settings.
-#CHIP 18F16Q41
+#CHIP 18F16Q41, 16
 #OPTION Explicit
-
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
@@ -71,8 +70,8 @@ InitTimer0 Osc, PRE0_256 + TMR0_FOSC4 ,  POST0_1
 '   Start the Timer
 StartTimer 0
 
-'Every 100 msec, we will count 100 to make 1 second
-SetTimer ( 0 , 0xB1  )
+'Every 10 msec, we will count 100 to make 1 second
+SetTimer ( 0 , 0x9C  )
 
 'we will use this to count the number of times the event happens
 Dim TimerCounter As Byte
@@ -86,35 +85,35 @@ TimerCounter = 0
 LEDSTATEMACRO
 
 
-Do
-    'wait for the event
-    Wait While TMR0IF = 0
-    ' Clearing Timer flag will reset event
-    TMR0IF = 0
+    Do
+        'wait for the event
+        Wait While TMR0IF = 0
+        ' Clearing Timer flag will reset event
+        TMR0IF = 0
 
-    TimerCounter = TimerCounter + 1
+        TimerCounter = TimerCounter + 1
 
-    'When at 100 we are at 1 s
-    If TimerCounter = 100 Then
+        'When at 100 we are at 1 s
+        If TimerCounter = 100 Then
 
-        'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
-        Set C Off
-        ' and shift the contents of LEDState
-        Rotate LEDPORT Right
-        ' If C = to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
-        If C = 1 Then
-            'Set the initial LED states
-            LEDSTATEMACRO
-            'Mask off the other bits
-            LEDPORT = LEDPORT AND LEDMASK
+            'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
+            Set C Off
+            ' and shift the contents of LEDState
+            Rotate LEDPORT Right
+            ' If C = to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
+            If C = 1 Then
+                'Set the initial LED states
+                LEDSTATEMACRO
+                'Mask off the other bits
+                LEDPORT = LEDPORT AND LEDMASK
+            End If
+
+            'restart our event counter
+            TimerCounter = 0
+
         End If
 
-        'restart our event counter
-        TimerCounter = 0
+        ' Set the Timer start value
+        SetTimer ( 0 , 0x9C  )
 
-    End If
-
-    ' Set the Timer start value
-    SetTimer ( 0 , 0xB1  )
-
-Loop
+    Loop

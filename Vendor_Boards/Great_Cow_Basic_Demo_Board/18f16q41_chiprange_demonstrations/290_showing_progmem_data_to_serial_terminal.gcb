@@ -31,29 +31,24 @@
     End Sub
     'Template comment at the end of the config file
 
+
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---------------------------------
+'' IO:   -----------------SW----------ADC--
 ''-----------------------------------------
 ''
 
 '' -------------------PORTB----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    --------IN-LED--LED-LED LED -----
+'' IO:    ---------------------------------
 ''-----------------------------------------
 ''
 
 '' ------------------PORTC-----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ----TX---------------------------
+'' IO:    ----TX---------LED--LED-LED LED--
 ''-----------------------------------------
-''
 
-'' ------------------PORTE-----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ----------------RST--------------
-''-----------------------------------------
-''
 
 
 'Setup Serial port
@@ -65,42 +60,67 @@
 'Main program commences here.. everything before this is setup for the board.
 ' Now assumes Serial Terminal is operational
 
-Dim  PFMAddress as long
-Dim  DataWord as word
+  Dim  PFMAddress as long
+  Dim  DataWord as word
 
-wait 1 s
-HSerPrintCRLF 2
+  wait 1 s
+  HSerPrintCRLF 2
 
-HSerPrint "Read Address"
-HSerSend 9
-HSerPrint "Received"
-HSerPrintCRLF
 
-'We are sending words, so we send the PFMAddress address every two bytes (a word).
-for PFMAddress = 0x0 to 0xF step 2
-    'Write the value of the PFMAddress to the PFM - this just masks off the high byte (0xFF00)
-    DataWord = (PFMAddress and 0x00FF)
+  'PFMReadWord
 
-    'Display the value
-    HSerPrint "0x"
-    HSerPrint hex(PFMAddress_h)
-    HSerPrint hex(PFMAddress)
-    HSerSend 9
-    HSerSend 9
 
-    'Read the value of the PFMAddress to the PFM
-    'PFMRead  ( PFMAddress, DataWord )
-    DataWord = PFMReadWord  ( PFMAddress)
+  'We are reading words, so we send the PFMAddress address every two bytes (a word).
+  for PFMAddress = 0x0000 to 0x001F - 2 step 2
 
-    'Display the received value
-    HSerPrint "0x"
-    HSerPrint hex(DataWord_h)
-    HSerPrint hex(DataWord)
-    HSerPrintCRLF
+      'Display the value
+      HSerPrint "0x"
+      HSerPrint hex(PFMAddress_h)
+      HSerPrint hex(PFMAddress)
+      HSerSend 9
+      HSerSend 9
 
-Next
-HSerPrintCRLF
+      'Read the value of the PFMAddress to the PFM
+      'PFMRead  ( PFMAddress, DataWord )
+      DataWord = PFMReadWord  ( PFMAddress)
+
+      'Display the received value
+      HSerPrint "0x"
+      HSerPrint hex(DataWord_h)
+      HSerPrint hex(DataWord)
+      HSerPrintCRLF
+
+  Next
+  HSerPrintCRLF
+
+  'PFMWrite
+  PFMWrite ( 0x00FFF0, 0x55 )
+  PFMWrite ( 0x00FFFE, 0x1234 )
+
+  'We are reading words, so we send the PFMAddress address every two bytes (a word).
+  for PFMAddress = 0xFFF0 to 0xFFFF - 2 step 2
+
+      'Display the value
+      HSerPrint "0x"
+      HSerPrint hex(PFMAddress_h)
+      HSerPrint hex(PFMAddress)
+      HSerSend 9
+      HSerSend 9
+
+      'Read the value of the PFMAddress to the PFM
+      'PFMRead  ( PFMAddress, DataWord )
+      DataWord = PFMReadWord  ( PFMAddress)
+
+      'Display the received value
+      HSerPrint "0x"
+      HSerPrint hex(DataWord_h)
+      HSerPrint hex(DataWord)
+      HSerPrintCRLF
+
+  Next
+  HSerPrintCRLF
 
 do
 loop
+
 

@@ -32,11 +32,10 @@
     Sub InitPPS
 
             'Module: I2C1
-            I2C1SDAPPS = 0x0C;   //RB4->I2C1:SDA1;
-            RB6PPS = 0x21;   //RB6->I2C1:SCL1;
-            RB4PPS = 0x22;   //RB4->I2C1:SDA1;
-            I2C1SCLPPS = 0x0E;   //RB6->I2C1:SCL1;
-
+            RB6PPS = 0x0021    'SCL1 > RB6
+            I2C1SCLPPS = 0x000E    'RB6 > SCL1 (bi-directional)
+            RB4PPS = 0x0022    'SDA1 > RB4
+            I2C1SDAPPS = 0x000C    'RB4 > SDA1 (bi-directional)
             'Module: UART pin directions
             Dir PORTC.6 Out    ' Make TX1 pin an output
             'Module: UART1
@@ -48,13 +47,13 @@
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:   ---------------------SW------ADC--
+'' IO:   -----------------SW----------ADC--
 ''-----------------------------------------
 ''
 
 '' -------------------PORTB----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ---------------------------------
+'' IO:    ----SCL-----SDA------------------
 ''-----------------------------------------
 ''
 
@@ -75,12 +74,14 @@ Dir     RC3         Out
 
 #DEFINE POTENTIOMETER PORTA.0
 Dir     POTENTIOMETER In
-#DEFINE SWITCHIN      PORTA.2
+#DEFINE SWITCHIN      PORTA.3
 Dir     SWITCHIN      In
 
 'Setup Serial port
 #DEFINE USART_BAUD_RATE 9600
 #DEFINE USART_TX_BLOCKING
+#DEFINE USART_DELAY 0
+
 
 
 ' Define I2C settings
@@ -145,8 +146,9 @@ Do
     HSerPrintCRLF 2
     HSerPrint   "End of Search"
     HSerPrintCRLF 2
-    Wait 1 s
-    Wait While SwitchIn = Off
+
+    Wait While SwitchIn = On
 Loop
 
 ' ----- Support methods.  Subroutines and Functions
+
