@@ -1,0 +1,32 @@
+
+
+
+#CHIP 18F16Q41, 4
+#OPTION Explicit
+
+Dim Display, Delay1, Delay2 as byte
+
+
+Start:
+
+  CLRF TRISC
+  MOVLW 0x08
+  MOVWF Display
+
+MainLoop:
+  MOVF Display,w    ;Copy the display to the LEDs
+  MOVWF PORTC
+
+OndelayLoop:        ;Delay .197S
+  DECFSZ Delay1,f
+  GOTO OndelayLoop
+
+  DECFSZ Delay2,f
+  GOTO OndelayLoop
+
+  BCF STATUS,C      ;ensure the carry bit is clear
+  RRF Display,f     ;Rotate Display right
+  BTFSC STATUS,C    ;Did the bit rotate into the carry?
+  BSF Display,3     ;yes, put it into bit 3.
+
+GOTO MainLoop
