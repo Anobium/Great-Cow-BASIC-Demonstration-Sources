@@ -92,7 +92,7 @@ Do Forever
     HSerPrint "EEPROM Test and Show Results "
     HSerPrintCRLF 2
 
-    HSerPrint "    "
+    HSerPrint "      "
 
     For EEPromAddress = 0 To 15
         HSerPrint Hex(EEPromAddress)
@@ -109,9 +109,9 @@ Do Forever
         End If
         HSerPrint " "
 
-        'Outdata = Random
+        Outdata = Random
         'Outdata = 0x55    'If you DON'T believe put your own value here!
-        Outdata = 255 - EEPromAddress    'If you DON'T believe put your own value here!
+        'Outdata = 255 - EEPromAddress    'If you DON'T believe put your own value here!
 
         'Writes
         EPWrite ( EEPromAddress, Outdata )
