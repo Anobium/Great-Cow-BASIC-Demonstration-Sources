@@ -101,7 +101,7 @@ Dim DISPLAYNEWLINE As Byte
 Do
 
     HSerPrintCRLF
-    HSerPrint "Hardware I2C "
+    HSerPrint "Hardware I2C"
     HSerPrintCRLF 2
 
     ' Now assumes Serial Terminal is operational
@@ -151,4 +151,3 @@ Do
 Loop
 
 ' ----- Support methods.  Subroutines and Functions
-

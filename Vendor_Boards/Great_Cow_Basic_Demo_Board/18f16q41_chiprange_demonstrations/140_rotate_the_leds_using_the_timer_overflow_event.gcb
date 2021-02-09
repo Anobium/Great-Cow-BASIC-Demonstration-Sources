@@ -22,7 +22,6 @@
 'Chip Settings.
 #CHIP 18F16Q41
 #OPTION Explicit
-'#include "picas.h"
 
 
 

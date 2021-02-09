@@ -20,7 +20,7 @@
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:   ---------------------SW------ADC--
+'' IO:   -----------------SW----------ADC--
 ''-----------------------------------------
 ''
 
@@ -46,7 +46,7 @@ Dir     RC3         Out
 
 #DEFINE POTENTIOMETER PORTA.0
 Dir     POTENTIOMETER In
-#DEFINE SWITCHIN      PORTA.2
+#DEFINE SWITCHIN      PORTA.3
 Dir     SWITCHIN      In
 
 '*****************************************************************************************************
@@ -55,7 +55,7 @@ Dir     SWITCHIN      In
 Dim SWState as BIT
 
 'Setup an Interrupt event when switch goes negative.
-IOCAN2 = 1
+IOCAN3 = 1
 On Interrupt PORTChange  Call InterruptHandler
 
 'Loop forever
@@ -70,7 +70,7 @@ Sub InterruptHandler
         'Is this our event?
 
         'We must clear the flag in software
-        IOCAF2  = 0
+        IOCAF3  = 0
 
         'Save the state
         SWState = RC2
