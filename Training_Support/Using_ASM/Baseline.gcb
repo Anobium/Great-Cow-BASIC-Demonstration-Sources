@@ -1,0 +1,10 @@
+#chip  18F16Q41
+
+Dir PortC.0 out
+
+Do
+
+  PortC.0 = !PortC.0
+  wait 100 ms
+
+Loop

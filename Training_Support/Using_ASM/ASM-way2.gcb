@@ -1,0 +1,59 @@
+'''
+'''  This lesson will introduce bit-oriented NOT operations to change the state for LEDs.
+'''
+'''  LEDs change at a rate of 1.0s, the bit are set ON or equal to 1 when the LED is turned on!
+'''
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    31.12.2020
+' ----- Configuration
+
+'Chip Settings.
+#CHIP 18F16Q41, 64
+#OPTION Explicit
+
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------LED--LED-LED-LED--
+''-----------------------------------------
+''
+
+'Define a constant to make things easier. We can reuse these at any time.
+
+Dir  LATC Out
+Dim  Display as Byte
+     Display = 8
+
+
+Do
+    LATC = Display
+
+    'Wait for milliseconds
+    Wait 197 ms
+
+    'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
+    Set C Off
+    ' and shift the contents of LEDState
+    Rotate Display Right
+    ' If the C ( the Caryy Flag) = 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
+    If C = 1 Then
+        'Set the initial LED states
+        Display.3 = 1
+    End If
+
+Loop
