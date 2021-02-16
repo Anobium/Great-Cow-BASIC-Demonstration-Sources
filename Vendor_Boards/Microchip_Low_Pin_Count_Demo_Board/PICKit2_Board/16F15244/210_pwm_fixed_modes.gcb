@@ -1,0 +1,96 @@
+'''
+''' This program will enable a 76 Khz PWM signal, with a duty cycle
+''' of 50%. It will emit the signal for 10 seconds, then stop.
+'''     #define PWM_Freq 76    'Set frequency in KHz
+'''     #define PWM_Duty 50    'Set duty cycle to 80 %
+
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.01
+'''@date       31.12.2020
+'''********************************************************************************
+#CHIP 16F15244, 16
+#OPTION Explicit
+
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:   -----------------SW----------ADC--
+''-----------------------------------------
+''
+
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ----TX---------LED--LED-LED LED--
+''-----------------------------------------
+
+
+
+
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDPORT LATC
+
+Dir     RC0         Out
+Dir     RC1         Out
+Dir     RC2         Out
+Dir     RC3         Out
+
+#DEFINE POTENTIOMETER PORTA.0
+Dir     POTENTIOMETER In
+#DEFINE SWITCHIN      PORTA.3
+Dir     SWITCHIN      In
+
+
+'' ------ Start of main Program to provide
+
+  #define PWM_Out1 RC0
+
+  Do
+    'Generate software PWM - 50% duty for 7 pulse
+    PWMOut 1, 127, 7
+    wait 100 ms
+  Loop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    'This program will enable a 1 Khz PWM signal, with a duty cycle
+    'of 90%.
+    #define PWM_Freq 1    'Set frequency in KHz
+    #define PWM_Duty 50   'Set duty cycle to 50 %
+
+    'Default to CCP/PWM1
+    PWMOn
+
+    Do
+    Loop
+
+    End

@@ -1,0 +1,57 @@
+'''
+'''******************************************************************
+'''
+'''  One way to create a delay is to spend time decrementing a value. In Great Cow BASIC the timing
+'''  can be accurately programmed since the user has control on how the
+'''  time delays are executed.
+'''
+'''  The LED is attached to PORTC.0 via a suitable resistor to 0v.  Another LED  is also attached to PORTC.0 via a suitable resistor to 0v.
+'''
+'''  We set an LED, you can try setting the other LEDs. Do not forget those appropiate resistors
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    31.12.2020
+' ----- Configuration
+
+'Chip Settings.
+#CHIP 16F15244
+#Option Explicit
+
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ----------------------------LED--
+''-----------------------------------------
+''
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+
+    Dir PORTC.0 Out
+
+    Do
+        'wait for 1 second
+        Wait 1 s
+        'Set the port bit
+        PORTC.0 = 0
+        'wait for 1 second
+        Wait 1 s
+        'Set the port bit
+        PORTC.0 = 1
+
+    Loop

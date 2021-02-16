@@ -1,0 +1,81 @@
+
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a simple GLCD demonstration of the timer capabilities using hthe millis function.
+''':
+''':
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.0
+'''@date    31.12.2020
+'''********************************************************************************
+
+'Chip Settings
+#CHIP 16F15244
+#option Explicit
+
+
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:   ---------------------SW------ADC--
+''-----------------------------------------
+''
+
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ----TX---------LED--LED-LED LED--
+''-----------------------------------------
+
+
+
+
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDPORT LATC
+
+Dir     RC0         Out
+Dir     RC1         Out
+Dir     RC2         Out
+Dir     RC3         Out
+
+#DEFINE POTENTIOMETER PORTA.0
+Dir     POTENTIOMETER In
+#DEFINE SWITCHIN      PORTA.2
+Dir     SWITCHIN      In
+
+'analogue port selection
+#DEFINE ADCChannelSelected AN0
+#DEFINE ADSpeed LowSpeed
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+
+#include <millis.h>       ' Include the Library
+
+        #define LED RC1       ' Define the LED Pin
+        #define LEDRate 1000     ' Flash rate in mS
+
+        Dim CurMs, LstMs as word  ' declare working variables
+        ' Main                    ' This loop runs over and over forever.
+        LstMs = 0
+        CurMs = 0
+
+        ' Main                    ' This loop runs over and over forever.
+        Do
+          CurMs = millis()
+
+          if CurMs - LstMs >= LEDRate then  ' required Time has Elapsed
+
+            LED = !LED                      ' So Toggle state of LED
+            LstMs = CurMs                   ' And Record Toggle Time
+          end if
+          IntOn
+        Loop
+
+END
