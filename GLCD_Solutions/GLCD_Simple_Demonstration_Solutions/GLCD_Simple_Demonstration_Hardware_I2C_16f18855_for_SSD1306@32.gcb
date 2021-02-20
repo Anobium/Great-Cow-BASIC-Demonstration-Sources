@@ -1,0 +1,180 @@
+'''
+'''******************************************************************
+'''
+'''
+'''
+'''  PIC: 16F18855
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''  Date: 13.3.2016
+'''
+
+
+' ----- Configuration
+    'Chip Settings.
+    #chip 16f18855,32
+    #option explicit
+
+
+    #include <lowlevel\hwi2c.h>
+
+
+    'Set the PPS of the PWM and the RS232 ports.
+    'Set the PPS for this solution.
+  #startup InitPPS, 85
+
+  Sub InitPPS
+    UNLOCKPPS
+
+      SSP1CLKPPS = 0x14     'RC3->MSSP1:SCL1;
+      SSP1DATPPS = 0x13     'RC4->MSSP1:SDA1;
+      RC3PPS = 0x15         'RC3->MSSP1:SCL1;
+      RC4PPS = 0x14         'RC4->MSSP1:SDA1;
+
+      LOCKPPS
+  End sub
+
+    #define SWITCH_DOWN         0
+    #define SWITCH_UP           1
+
+    #define SWITCH      PORTA.5
+
+    #define USART_BAUD_RATE 19200
+    #define USART_TX_BLOCKING
+    #define sync SYNC_TX1STA
+
+; ----- Define Hardware settings for hwi2c
+    ' Define I2C settings - CHANGE PORTS if required for your specific device.
+    #define hi2c_BAUD_RATE 400
+    #define hi2c_DATA PORTC.3
+    #define hi2c_CLOCK PORTC.4
+    'Initialise I2C Master
+    'I2C pins need to be input for SSP2 module
+    Dir hi2c_DATA in
+    Dir hi2c_CLOCK in
+
+    hi2cMode Master
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+#INCLUDE <glcd.h>
+#DEFINE GLCD_TYPE GLCD_TYPE_SSD1306
+#DEFINE GLCD_I2C_Address 0x78
+
+' ----- Define variables
+
+'These constants allow you to change the GLCD memory usage.
+'We have set this demonstration to use only 128bytes of RAM for GLCD operations.
+#DEFINE GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+#DEFINE GLCD_TYPE_SSD1306_CHARACTER_MODE_ONLY
+#DEFINE IGNORE_GLCD_TYPE_SSD1306_LOW_MEMORY_WARNINGS
+#DEFINE GLCD_PROTECTOVERRUN
+
+Dim BYTENUMBER, CCOUNT As Byte
+
+CCount = 0
+Dim longNumber As Long
+' max value = 4294967290
+longNumber = 0
+Dim wordNumber, adcval, ldrval As Word
+Dim outstring As String
+wordNumber = 0
+byteNumber = 0
+
+' ----- Main program
+
+#IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+    GLCD_Open_PageTransaction 0,7
+#ENDIF
+
+GLCDPrint 0, 0,   "Great Cow BASIC"
+GLCDPrint (0, 16, "Anobium 2021")
+GLCDPrint (76, 16, GLCD_WIDTH )
+GLCDPrint (96, 16, "*" )
+GLCDPrint (104, 16, GLCD_HEIGHT )
+
+
+#IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+    GLCD_Close_PageTransaction
+#ENDIF
+
+Wait 3 s
+GLCDCLS
+
+#IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+    GLCD_Open_PageTransaction 0, 7
+#ENDIF
+
+GLCDPrint 0, 0,   "Version 0.98.07"
+
+
+#IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+    GLCDPrint (0, 16, "LM GLCD MODE")
+    GLCDPrint (0, 32, "GLCD_Buffer=128 bytes" )
+#ENDIF
+
+#IFNDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+    GLCDPrint (0, 16, "FULL GLCD MODE")
+#ENDIF
+
+
+#IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+    GLCD_Close_PageTransaction
+#ENDIF
+
+Wait 3 s
+GLCDCLS
+
+GLCDLoop
+
+End
+Sub GLCDLoop
+
+  Do Forever
+
+    For CCount = 31 To 127
+
+        ' Prepare the static components of the screen
+        #IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+            GLCD_Open_PageTransaction 0,7
+        #ENDIF
+
+         ' Print some text
+        GLCDPrint ( 1,   1, "PrintStr")
+        ' Print some more text
+        GLCDPrint ( 64,  1, "@")
+        ' Print chip speed
+        GLCDPrint ( 72,  1, ChipMHz)
+        ' Print some text
+        GLCDPrint ( 86, 1, "Mhz")
+        ' Draw some text
+        GLCDDrawString( 1,11,"DrawStr")
+
+        ' Draw a box
+        Box 0,0,GLCD_WIDTH-1, GLCD_HEIGHT-1
+        ' Draw a box
+        Box GLCD_WIDTH-5, GLCD_HEIGHT-5,GLCD_WIDTH-1, GLCD_HEIGHT-1
+        ' Draw a circle
+        Circle( 44,24,5)
+        ' Draw a line
+        Line 0,GLCD_HEIGHT-1,44,19
+
+        ' Draw a Box
+        Box (3,24,6,27)
+
+        ' Draw a string
+        GLCDDrawString(44, 11, CHR(CCount)+"="+Pad(outString,3) )
+
+        #IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
+            GLCD_Close_PageTransaction
+        #ENDIF
+
+        longNumber = longNumber + 7
+
+
+    Next
+  Loop
+
+End Sub
