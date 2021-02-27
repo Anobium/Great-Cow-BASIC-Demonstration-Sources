@@ -37,7 +37,7 @@
 ' ********************** Setup the GLCD ************************************************
 
     #INCLUDE <glcd.h>
-    #define GLCD_TYPE     GLCD_ST7789_240_240
+    #define GLCD_TYPE     GLCD_TYPE_ST7789_240_240
 
 
     'This is a PPS chip, so, need to make the DO/SDO & SCK match the PPS assignments
