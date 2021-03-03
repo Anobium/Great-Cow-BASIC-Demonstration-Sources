@@ -45,7 +45,7 @@
     #DEFINE GLCD_SCK    portC.3
 
     'Additinal pin assignments for GLCD
-    #DEFINE GLCD_DC     portA.4
+    #DEFINE GLCD_DC     portA.3
     #DEFINE GLCD_RESET  portA.1
     'It is optional on the ST7789 to set the GLCD_CS... therefore, here but commented out
     '#DEFINE GLCD_CS     porte.0

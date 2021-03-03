@@ -6,7 +6,7 @@
 '''This program draws lines, boxes, circles and prints strings and numbers.
 '''The ST7789 controller a  graphical OLED, suitable for a lot of various projects.  The ST7789 is typically a 3v3 device - please check the datasheet before uing 5v0
 '''The display has an active display surface of 1.5 inches , and a 240*240 pixel resolution.
-'''The display is easy to interface, using a SPI type of communication.   The SPI uses SPI mode 2 and therefore the GLCD may not interoprate with other SPI devices.
+'''The display is easy to interface, using a SPI type of communication.   The SPI uses SPI mode 3 and therefore the GLCD may not interoprate with other SPI devices.
 '''
 '''The GLCD is connected to the microprocessor as shown in the hardware section of this code.
 '''
@@ -16,42 +16,27 @@
 '''@date    27.3.21
 '''********************************************************************************
 
-#chip 16F15376
+
+#chip 18F25k80
 #option Explicit
 
-    #startup InitPPS, 85
-
-    Sub InitPPS
-        #ifdef ST7789_HardwareSPI
-
-            'This #ifdef is added to enable easy change from hardware SPI (using PPS) to software PPS that just uses the port assignments shown below.
-
-            SSP1CLKPPS = 0x1    //RC3->MSSP1:SCK1
-            RC3PPS = 0x15       //RC3->MSSP1:SCK1
-            RC5PPS = 0x16       //RC5->MSSP1:SDO1
-            SSP1DATPPS = 0x14   //RC4->MSSP1:SDI1
-
-        #endif
-    End Sub
 
 ' ********************** Setup the GLCD ************************************************
+#INCLUDE <glcd.h>
+#define GLCD_TYPE GLCD_TYPE_ST7789_240_240
 
-    #INCLUDE <glcd.h>
-    #define GLCD_TYPE     GLCD_TYPE_ST7789_240_240
+'This is a PPS chip, so, need to make the DO/SDO & SCK match the PPS assignments
+#DEFINE GLCD_DO portc.5
+#DEFINE GLCD_SCK portc.3
+'Additinal pin assignments for GLCD
+#DEFINE GLCD_DC     portA.3
+#DEFINE GLCD_RESET  portA.1
+'It is optional on the ST7789 to set the GLCD_CS... therefore, here but commented out
+'#DEFINE GLCD_CS porte.0
+'Uncomment out the next line... enable or disable the PPS!!!
+#DEFINE ST7789_HardwareSPI ' remove/comment out if you want to use software SPI.0
+#DEFINE HWSPIMode MasterFast
 
-
-    'This is a PPS chip, so, need to make the DO/SDO & SCK match the PPS assignments
-    #DEFINE GLCD_DO     portC.5
-    #DEFINE GLCD_SCK    portC.3
-
-    'Additinal pin assignments for GLCD
-    #DEFINE GLCD_DC     portA.3
-    #DEFINE GLCD_RESET  portA.1
-    'It is optional on the ST7789 to set the GLCD_CS... therefore, here but commented out
-    '#DEFINE GLCD_CS     porte.0
-
-    'Uncomment out the next line... enable or disable the PPS!!!
-    #DEFINE ST7789_HardwareSPI    ' remove/comment out if you want to use software SPI.0
 
 ' ********************** DEMO REALLY STARTS HERE ************************************************
 
@@ -367,3 +352,6 @@ Macro myFastHWSPITransfer( In SPITxData )
   #endif
 
 End Macro
+
+
+
