@@ -1,0 +1,129 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program shows how to create and use table strings.
+'''
+'''The example menu system is shown on a serial terminal.
+'''
+'''The method to show the menu strings looks up the pointer address stored in an array and the length of the menu string from a second array.
+'''The method calculates the correct element in the arrays to obtain the StrStart and StrEnd variables then the correct table string is returned using these variables.
+'''The interesting insight into this method...the initialTables methods examines the table of strings, indexing on \0 to update the arrays.
+'''
+'''The method is fast but does require a microcontroller to have suffient memory for the arrays.
+'''
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.00
+'''@date       19/03/2021
+'''********************************************************************************
+
+
+#chip 16f88
+
+#define USART_BAUD_RATE 9600
+#define USART_TX_BLOCKING '< wait for tx done
+#Define TblStrNum 20      '< num of strings
+
+#option explicit
+
+Dim PtrTblLen as Byte     '        "
+Dim Result as String
+Dim Result0 as String     '< for bug in older compiler <= V0.098.00
+Dim StrNum as Byte        '< num of string in table
+Dim StrIndex as Word      '< String to get
+Dim _Index as Byte
+Dim Lp1 as Word           '< loops
+Dim Item as Byte          '< byte from table
+Dim StrStart as Word
+Dim StrEnd as Word
+
+'Arrays for the indexies
+Dim MenuPointer( TblStrNum ) as Word  'Each element is a pointer to table address - needs to be a word as the pointer can be greater that 255
+Dim MenuLength( TblStrNum ) as Byte  'Each element is the length of a specific string
+
+
+
+
+    InitialiseTables
+'---------------------------
+
+    ShowMenuItems
+'   Wait 1500 ms   '<Comment for sim
+
+End
+'---------------------------
+
+
+Sub ShowMenuItems
+
+          For _Index = 1 to TblStrNum
+            GetTableString  ( _Index )
+            HSerPrint leftpad( str(_Index ), 2 ," ") +  ")"
+            HSerPrint Result
+            HserPrintCRLF
+          Next
+          HserPrintCRLF
+          HserPrint "----------------"
+          HserPrintCRLF
+
+End Sub
+
+
+Sub GetTableString  ( _Index )
+          Result = ""
+          StrEnd =   MenuLength ( _Index )
+          StrStart = MenuPointer ( _Index )
+          ' Some debug, can be removed
+          '                  HSerPrint StrStart
+          '                  HSerPrint ","
+          '                  HSerPrint StrEnd
+          '                  HSerPrintCRLF
+          For Lp1 = StrStart to StrStart + StrEnd
+             ReadTable MnuTxt1, Lp1, Item  '< Readtable data item
+             Result0 = Result + Chr(Item)
+             Result = Result0
+          Next
+
+End Sub
+
+Sub InitialiseTables
+
+
+          Dim TableSize as word
+          ReadTable MnuTxt1, 0, TableSize
+          StrIndex = 0
+          StrStart = 1
+
+          For Lp1 = 1 to  TableSize
+              ReadTable MnuTxt1, Lp1, StrEnd
+              If StrEnd = 0 then
+                  StrIndex =  StrIndex + 1
+                  'load the arrays
+                  MenuPointer ( StrIndex ) = StrStart
+                  MenuLength ( StrIndex ) = Lp1-StrStart-1
+                  StrStart = Lp1+1
+                  ' Some debug, can be removed
+                  '                  HSerPrint MenuPointer ( StrIndex )
+                  '                  HSerPrint ","
+                  '                  HSerPrint MenuLength ( StrIndex )
+                  '                  HSerPrintCRLF
+              End if
+          Next
+
+End sub
+
+
+
+
+
+
+    '==========  TABLES ===============
+
+    Table  MnuTxt1  ' Sub1 Menu
+       'These are csv string lINES (use with modified Preprocessor.bi (Sub TableString))
+       "Menu Item \"1\"\0", "Menu Item 2\0", "Menu Item 3\0", "Menu Item 4\0", "Menu Item 5\0"  ' SUB1
+       "Config1 Item 1\0", "Config1 Item 2\0", "Config1 Item 3\0", "Config1 Item 4\0"           ' SUB2
+       "DataLog Item 1\0", "DataLog Item 2\0", "DataLog Item 3\0"                               ' SUB3
+       "Diag Item 1\0", "Diag Item 2\0", "Diag Item 3\0", "Diag Item 4\0"                       ' SUB4
+       "Help Item 1\0", "Help Item 2\0", "Help Item 3\0" , "Help Item 4\0"                      'SUB5
+    End Table
