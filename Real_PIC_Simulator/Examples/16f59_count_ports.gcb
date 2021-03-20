@@ -17,12 +17,14 @@ dir portd out
 dir porte out
 
 do Forever
-  for bits = 0 to 255
+  bits = 0
+  repeat 255
     porta = bits
     portb = porta
     portc = portb
     portd = portc
     porte = portd
     wait 100 ms
-  next
+    bits ++
+  end repeat
 Loop

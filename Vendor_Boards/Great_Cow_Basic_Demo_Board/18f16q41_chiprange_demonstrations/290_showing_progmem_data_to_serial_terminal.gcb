@@ -71,7 +71,7 @@
 
 
   'We are reading words, so we send the PFMAddress address every two bytes (a word).
-  for PFMAddress = 0x0000 to 0x001F - 2 step 2
+  for PFMAddress = 0x0000 to 0x001F - 2 step 2  #IGNOREWARNING
 
       'Display the value
       HSerPrint "0x"
@@ -98,7 +98,7 @@
   PFMWrite ( 0x00FFFC, 0x1234 )
 
   'We are reading words, so we send the PFMAddress address every two bytes (a word).
-  for PFMAddress = 0xFFF0 to 0xFFFF - 2 step 2
+  for PFMAddress = 0xFFF0 to 0xFFFF - 2 step 2 #IGNOREWARNING
 
       'Display the value
       HSerPrint "0x"

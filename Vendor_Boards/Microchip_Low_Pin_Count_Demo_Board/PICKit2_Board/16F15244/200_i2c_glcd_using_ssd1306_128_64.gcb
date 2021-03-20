@@ -195,9 +195,6 @@ Sub GLCDLoop
         ' Draw a Box
         Box (3,24,6,27)
 
-        ' Draw a string
-        GLCDDrawString(44, 11, CHR(CCount)+"="+Pad(outString,3) )
-
         #IFDEF GLCD_TYPE_SSD1306_LOWMEMORY_GLCD_MODE
             GLCD_Close_PageTransaction
         #ENDIF

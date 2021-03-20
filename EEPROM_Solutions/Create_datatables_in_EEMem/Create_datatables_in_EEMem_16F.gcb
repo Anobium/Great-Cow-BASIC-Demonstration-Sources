@@ -11,6 +11,7 @@
 '''@version    1.0
 '''@date       24/11/2020
 '''********************************************************************************
+"#Skiptest
 #chip 16f628, 4
 #option explicit
 
@@ -30,12 +31,12 @@
 
 
 'Do not change this section
-    #ASMRAW   ORG	4
+    #ASMRAW   ORG 4
     #ASMRAW   retfie
     #ASMRAW   ORG 5
     BASPROGRAMSTART:
     ;Call initialisation routines
-      call	INITSYS
+      call  INITSYS
 'End of do not change section
 
 
@@ -72,9 +73,8 @@ Loop
 
 'always this at the end of you user program
 BASPROGRAMEND:
-	sleep
-	goto	BASPROGRAMEND
-
+  sleep
+  goto  BASPROGRAMEND
 
 
 

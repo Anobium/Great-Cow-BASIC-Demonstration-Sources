@@ -3,10 +3,10 @@
 '''This program shows the trigonometric values to three decimal places shows TANgetSINe and COSine.
 '''
 '''
-'''@author 		EvanV based on works of ThomasH
-'''@licence		GPL
-'''@version		1.0a
-'''@date   		01.04.2015
+'''@author    EvanV based on works of ThomasH
+'''@licence   GPL
+'''@version   1.0a
+'''@date      01.04.2015
 '''********************************************************************************
 
 ; ----- Configuration
@@ -39,7 +39,7 @@
 
 ; ----- Main body of program commences here.
 
-  for ii = -720 to 720            ;arguments from -720 to 720
+  for ii = -720 to 720 #IGNOREWARNING  ;arguments from -720 to 720
     cls
     print "sin("                  ;print the label
     print ii                      ;and the argument

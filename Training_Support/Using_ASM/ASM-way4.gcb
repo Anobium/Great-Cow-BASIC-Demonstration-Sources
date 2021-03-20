@@ -3,6 +3,7 @@
 
 #CHIP 18F16Q41, 4
 #OPTION Explicit
+#Skiptest
 
 #ASMRAW #define Display 1280
 #ASMRAW #define Delay1  1281

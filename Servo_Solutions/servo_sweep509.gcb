@@ -21,25 +21,36 @@
 
             'Rotate servo
             '(Gradually change pulse length from 650 to 2250 us)
-            For PulseTime = 65 to 225
+
+            PulseTime = 65
+
+            repeat 160
 
                       'Send the right length pulse
                       PulseOut GPIO.2, PulseTime 10us
 
                       'After sending pulse, wait a bit before sending the next one
                       Wait 6 ms
-            Next
+
+                      'increment PulseTime
+                      PulseTime = PulseTime + 1
+
+            end repeat
 
             'Then rotate it back
             '(Gradually change pulse length from 2250 to 650 us)
-            For PulseTime = 225 to 65
+            repeat 160
 
                       'Send the right length pulse
                       PulseOut GPIO.2, PulseTime 10us
 
                       'After sending pulse, wait a bit before sending the next one
                       Wait 6 ms
-            Next
+
+                      'decrement PulseTime
+                      PulseTime = PulseTime - 1
+
+            end repeat
   Loop
 
   end

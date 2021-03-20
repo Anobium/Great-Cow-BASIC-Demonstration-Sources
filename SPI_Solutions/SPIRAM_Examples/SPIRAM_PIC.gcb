@@ -81,7 +81,7 @@
     Dim errorcount as long
     errorcount = 0
     dim EPD_Ind_raw as long
-    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
+    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1  #IGNOREWARNING
       SRAMWrite ( [long]EPD_Ind_raw, EPD_Ind_raw and 255 )
       if SRAMRead (  [long]EPD_Ind_raw ) <> ( EPD_Ind_raw and 255 ) then
           errorcount++
@@ -99,7 +99,7 @@
     HSerPrint "Reading..."
     HSerPrintCRLF
     errorcount = 0
-    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
+    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1  #IGNOREWARNING
       'choose one....
       'SRAMRead (  EPD_Ind_raw, spirambyteread )
     'or, as a function
@@ -120,12 +120,12 @@
 
     HSerPrint "Rewriting to 0x00 ..."
     HSerPrintCRLF
-    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
+    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1  #IGNOREWARNING
       SRAMWrite ( [long]EPD_Ind_raw, 0 )
     Next
 
     errorcount = 0
-    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
+    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1  #IGNOREWARNING
       SRAMRead (  [long]EPD_Ind_raw, spirambyteread )
       if spirambyteread <> 0 then
           errorcount++

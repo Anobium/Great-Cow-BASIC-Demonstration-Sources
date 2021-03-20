@@ -69,7 +69,7 @@
 
 
   'We are reading words, so we send the ProgMemAddress address every two bytes (a word).
-  for ProgMemAddress = 0x0000 to 0x001F
+  for ProgMemAddress = 0x0000 to 0x001F #IGNOREWARNING
 
       'Display the value
       HSerPrint "0x"
@@ -95,7 +95,7 @@
   ProgramWrite ( 0x0FFC, 0x1234 )
 
   'We are reading words, so we send the ProgMemAddress address every two bytes (a word).
-  for ProgMemAddress = 0x0FF0 to 0x0FFF
+  for ProgMemAddress = 0x0FF0 to 0x0FFF #IGNOREWARNING
 
       'Display the value
       HSerPrint "0x"

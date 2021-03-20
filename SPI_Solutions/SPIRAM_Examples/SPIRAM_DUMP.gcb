@@ -47,7 +47,7 @@
     counter = 0
     HSerPrint "Reading..."
     HSerPrintCRLF
-    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1
+    For EPD_Ind_raw=0 to SPISRAM_CAPACITY - 1 #IGNOREWARNING
       'choose one....
       'SRAMRead (  EPD_Ind_raw, spirambyteread )
     'or, as a function
