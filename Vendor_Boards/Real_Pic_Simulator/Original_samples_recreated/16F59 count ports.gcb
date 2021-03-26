@@ -7,22 +7,24 @@
 '''@date    10.12.2018
 '''********************************************************************************
 
-'Set chip model required:
-#CHIP 16f59, 20
+;Set chip model required:
+#chip 16f59, 20
 
-Dir porta Out
-Dir portb Out
-Dir portc Out
-Dir portd Out
-Dir porte Out
+#define USELEGACYFORNEXT
 
-Do Forever
-    For bits = 0 To 255
-        porta = bits
-        portb = porta
-        portc = portb
-        portd = portc
-        porte = portd
-        Wait 100 ms
-    Next
+dir porta out
+dir portb out
+dir portc out
+dir portd out
+dir porte out
+
+do Forever
+  for bits = 0 to 255
+    porta = bits
+    portb = porta
+    portc = portb
+    portd = portc
+    porte = portd
+    wait 100 ms
+  next
 Loop

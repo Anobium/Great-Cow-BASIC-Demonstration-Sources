@@ -10,6 +10,8 @@
 ;Set chip model required:
 #chip 16f59, 20
 
+#define USELEGACYFORNEXT
+
 dir porta out
 dir portb out
 dir portc out
@@ -17,14 +19,12 @@ dir portd out
 dir porte out
 
 do Forever
-  bits = 0
-  repeat 255
+  for bits = 0 to 255
     porta = bits
     portb = porta
     portc = portb
     portd = portc
     porte = portd
     wait 100 ms
-    bits ++
-  end repeat
+  next
 Loop

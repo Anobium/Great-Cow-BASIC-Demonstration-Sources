@@ -12,18 +12,20 @@
 '''@licence GPL
 '''@version 1.2
 '''@date    2/22/2017
+'''@version 1.3
+'''@date    3/26/2021 'revise pins to how they appear on module
 
 'Chip model
 #chip mega328p, 16
 #include <glcd.h>
 
-'Defines for a 7 pin SPI module
+'Defines for a 7 pin 4wire SPI module
 'RES pin is pulsed low in glcd_SSD1306.h for proper startup
-#define MOSI_SSD1306 PortB.1
-#define SCK_SSD1306 PortB.2
-#define DC_SSD1306 PortB.3
-#define CS_SSD1306 PortB.4
-#define RES_SSD1306 PortB.5
+#define SCK_SSD1306 PortB.5
+#define MOSI_SSD1306 PortB.3
+#define RES_SSD1306 PortB.4
+#define DC_SSD1306 PortB.1
+#define CS_SSD1306 PortB.2
 
 ; ----- Define GLCD Hardware settings
 #define GLCD_TYPE GLCD_TYPE_SSD1306
@@ -36,27 +38,17 @@ wordnumber = 62535
 dim bytenumber as Byte
 bytenumber =255
 
-#define led PortB.0
-dir led out
-
-
 Do
-     SET led ON
-     wait 1 s
-     SET led OFF
-
-    GLCDCLS
-    GLCDPrint (30, 0, "Hello World!")
-    Circle (18,24,10)
-    FilledCircle (48,24,10)
-    Box (70,14,90,34)
-    FilledBox (106,14,126,34)
-    GLCDDrawString (32,35,"Draw String")
-    GLCDPrint (0,46,longnumber)
-    GLCDPrint (94,46,wordnumber)
-    GLCDPrint (52,55,bytenumber)
-    Line (0,40,127,63)
-    Line (0,63,127,40)
-    wait 3 s
-
+  GLCDPrint (30, 0, "Hello World!")
+  Circle (18,24,10)
+  FilledCircle (48,24,10)
+  Box (70,14,90,34)
+  FilledBox (106,14,126,34)
+  GLCDDrawString (32,35,"Draw String")
+  GLCDPrint (0,46,longnumber)
+  GLCDPrint (94,46,wordnumber)
+  GLCDPrint (52,55,bytenumber)
+  Line (0,40,127,63)
+  Line (0,63,127,40)
+  wait 3 s
 Loop
