@@ -1,0 +1,103 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program shows how to create and use table strings.
+'''
+'''The example menu system is shown on a serial terminal.
+'''
+'''The method to show the menu strings show the menu string by using a table of pointers ( StrTblPtr1) the table must be generated and updates when changes to the menu string occur.
+'''If the _index variable matches the StrIndex variables then the correct table string is returned.
+'''The interesting insight into this method...fast and low memory but the table of pointers must be updated/correct.
+'''
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.00
+'''@date       19/03/2021
+'''********************************************************************************
+
+; ----- Configuration
+
+#chip 16F88
+
+#define USART_BAUD_RATE 9600
+#define USART_TX_BLOCKING '< wait for tx done
+#Define TblStrNum 20      '< num of strings
+
+#option explicit
+Dim MnuTblLen as Word     '< length of table
+Dim PtrTblLen as Byte     '        "
+Dim Result as String
+Dim Result0 as String     '< for bug in older compiler <= V0.098.00
+Dim StrNum as Byte        '< num of string in table
+Dim StrIndex as Word      '< String to get
+Dim _Index as Byte
+Dim Lp1 as Word           '< loops
+Dim Item as Byte          '< byte from table
+Dim StrStart as Word
+Dim StrEnd as Word
+
+
+
+    InitialiseTables
+'---------------------------
+
+    ShowMenuItems
+'    Wait 1500 ms   '<Comment for sim
+End
+'---------------------------
+
+
+Sub ShowMenuItems
+
+          For _Index = 1 to TblStrNum
+            GetTableString  ( _Index )
+            HSerPrint Result
+            HserPrintCRLF
+          Next
+          HserPrintCRLF
+          HserPrint "----------------"
+          HserPrintCRLF
+'          Wait 5 ms   '<Comment for sim
+End Sub
+
+
+Sub GetTableString  ( _Index ) 'get string from table (using STR pointer Table)
+          Result = ""
+          StrIndex = _Index
+          ReadTable StrTblPtr1, StrIndex, StrStart  '< String start
+          ReadTable StrTblPtr1, StrIndex + 1, StrEnd  '< String End
+          For Lp1 = StrStart to StrEnd - 1
+             ReadTable MnuTxt1, Lp1, Item  '< Readtable data item
+             Result0 = Result + Chr(Item)
+             Result = Result0
+          Next
+End Sub
+
+
+Sub InitialiseTables
+     ' Get Table(s) size
+     ReadTable MnuTxt1, 0, MnuTblLen
+     ReadTable StrTblPtr1, 0, PtrTblLen
+End Sub
+
+
+    '==========  TABLES ===============
+
+    Table StrTblPtr1   ' String Pointer table (build in Ext. tool or manual)
+       'Contains the start value for each string + end of last string
+       1, 12, 23, 34, 45, 56, 69, 82, 95, 108
+       121, 134, 147, 157, 167, 177, 187, 197
+       207, 217, 227
+    End Table
+
+    Table  MnuTxt1  ' Sub1 Menu
+       'These are csv string lINES (use with modified Preprocessor.bi (Sub TableString))
+       "Menu Item 1", "Menu Item 2", "Menu Item 3", "Menu Item 4", "Menu Item 5"' SUB1
+       "Config1 Itm 1", "Config1 Itm 2", "Config1 Itm 3", "Config1 Itm 4"       ' SUB2
+       "DataLog Itm 1", "DataLog Itm 2", "DataLog Itm 3"                        ' SUB3
+       "Diag Itm 1", "Diag Itm 2", "Diag Itm 3", "Diag Itm 4"                   ' SUB4
+       "Help Itm 1", "Help Itm 2", "Help Itm 3", "Help Itm 4"                   ' SUB5
+    End Table
+
+
+
