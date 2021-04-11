@@ -58,7 +58,7 @@
 
   #define GLCD_OLED_FONT                                       'enable the OLED font set
   GLCDfntDefaultsize = 1                                       'select the OLED font 1
-  GLCDPrint ( 2,   1, "My Smiley Face      #")                         'Print # as the smiley face
+  GLCDPrint ( 2,   1, "My Smiley Face      #")                 'Print # as the smiley face
 
   end
 
