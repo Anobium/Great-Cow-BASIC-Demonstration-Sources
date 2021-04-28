@@ -1,0 +1,107 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program programs show how control the chiming of the hour of a clock.
+'''
+'''The primary source of time information is a 30ms once-per-second pulse from a quartz clock module.
+'''The program shows how to enable the external interrupt and the interrupt flag reset so that the program will recognize the once-per-second interrupt and increment the counter even during the chiming, which takes several seconds.
+'''
+'''@author     BillR
+'''@licence    GPL
+'''@version    1.00
+'''@date       28/4/2021
+'''********************************************************************************
+
+; ----- Configuration
+#Chip 18F46K80,16
+#Option Explicit
+
+
+
+' **** Set these as desired **********
+
+    'Set Chime Output Pin
+    #define ChimePulse PortD.1
+
+    ' Can be from 0 to ~975 ms
+    #Define chimePulse_duration 500 ms
+'**************************************
+
+    'variables
+    Dim chime_flag
+    Dim Number_of_Chimes
+    Dim Seconds
+    Dim Minutes
+    Dim Hours
+    Dim  int_occurred
+
+    Dir ChimePulse OUT
+    Wait 200 ms
+
+'*****'Add a clock setup routine here***************
+' These start settings will activate the chime in 10 seconds
+' when time reaches 12:00:000
+' should Chime 12 times.
+
+    seconds = 50
+    minutes = 59
+    hours = 11
+'*************************************
+
+    'Clear variables to 0
+    Number_of_Chimes = 0
+    Chime_Flag = 0
+    int_occurred = 0
+
+    'Change as needed
+    ON Interrupt ExtInt0 Call ISR1  'On THIS CHHIP Portb.0 (Pin 33) rising edge edge
+
+    Main_Control_Loop:
+    Do
+
+       if int_occurred = 1 then 'update the clock
+
+          Int_occurred = 0   ' clear the flag
+          seconds++          'increment seconds
+
+          If seconds > 59 then
+            minutes++       'increment minutes
+            seconds = 0     'Sec rollover to 0
+          End if
+
+          If Minutes > 59 then
+             hours++        ' increment hours
+             minutes = 0    ' minutes rollover to 0
+             chime_Flag = 1 ' hours changed so set chime flag
+             Number_of_Chimes = hours 'set the number of chimes
+          End if
+
+          If hours > 12 then ' rollover to 1 for 12 hr clock
+              Hours = 1
+          End if
+
+          If Chime_Flag = 1 then 'Test for chime flag
+
+              IF number_of_chimes <> 0 then
+
+                'Chime every 2 seconds for current "hour" times
+                if seconds % 2 =  0 then ' "%" is modulo divide
+
+                   Pulseout Chimepulse, ChimePulse_Duration
+
+                   number_of_Chimes--   '(decremnt by 1)
+
+                   if number_of_chimes = 0 then
+                    Chime_Flag = 0
+                   End if
+
+                end if
+             End if
+          END IF
+       End if
+
+    loop
+
+'Just set the flag here. Thats it all Folks
+    Sub  ISR1
+       int_occurred = 1
+    End Sub
