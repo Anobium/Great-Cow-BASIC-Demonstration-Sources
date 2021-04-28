@@ -71,12 +71,14 @@
           If Minutes > 59 then
              hours++        ' increment hours
              minutes = 0    ' minutes rollover to 0
+          
+             If hours > 12 then ' rollover to 1 for 12 hr clock
+                 Hours = 1
+             End if
+          
              chime_Flag = 1 ' hours changed so set chime flag
-             Number_of_Chimes = hours 'set the number of chimes
-          End if
-
-          If hours > 12 then ' rollover to 1 for 12 hr clock
-              Hours = 1
+             Number_of_Chimes = hours 'set the number of chimes  
+          
           End if
 
           If Chime_Flag = 1 then 'Test for chime flag
