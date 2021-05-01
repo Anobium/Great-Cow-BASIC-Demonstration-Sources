@@ -1,0 +1,28 @@
+'''A demonstration program for GCGB and GCB.
+'''-------------------------------------------------------------------
+'''This program demonstrates writing analog values to the HEF memory
+'''of an EEPROM-less microcontroller.functions as a simple datalogger
+'''@author  HackInBlack
+'''@licence GPL
+'''@version v1
+'''@date 25.4.2021
+'''*******************************************************************
+
+#chip 16F1703
+#config osc = int
+
+
+'Set the IO pin directions
+Dir PORTA.0 In
+Dir PORTC.0 Out
+
+'Loop to take readings until the HEF is full
+For CurrentAddress = 0 to 127
+
+    'Take a reading and log it
+    HEFWrite CurrentAddress, ReadAD(AN0)
+    PORTC.0 = !PORTC.0 'toggle LED 'heartbeat'
+    'a short wait before getting another reading
+    Wait 2 S
+
+Next

@@ -1,0 +1,47 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program blink one LED on PORTA (bit 2)  using the Toggle command.
+'''The LED must be attached via appropriate resistor.
+'''
+'''@author  HiB
+'''@licence GPL
+'''@version 1.1
+'''@date    28-4-2021
+'''********************************************************************************
+
+; ----- Configuration
+
+  #chip 12F1572,4
+  #option explicit
+; #config                                     ; no config. assumes defaults
+
+; #include                                    ; no solution specifc includes, default includes are always included
+
+
+; ----- Define Hardware settings
+ dir  PORTA out
+
+
+; ----- Variables
+  Dim DESTBIT as Byte
+
+; ----- Main body of program commences here.
+  Do Forever
+
+     ' toggle the bit
+     Toggle @PORTA, 1
+
+     'Then wait after the pin goes off
+     Wait 500 ms
+     Toggle @PORTA, 2
+     Wait 500 ms
+  Loop
+
+
+; ----- Support methods.  Subroutines and Functions
+
+' You can toggle any number of pins by addressing the bits using this method
+' Toggle PORT, BIT
+Sub Toggle ( In DestPort As word, In DestBit )
+      Poke DestPort, Peek(DestPort) xor DestBit
+End sub
