@@ -1,0 +1,34 @@
+#INCLUDE ONCE “vbcompat.bi”
+DIM transmit AS STRING 
+DIM comport AS STRING
+DIM A AS DOUBLE
+DIM x = 0 AS INTEGER
+
+INPUT “Comport to use? (e.g. /dev/ttyUSB0)”, comport 
+OPEN COM comport ; ":1200,n,8,1" AS #1
+
+IF err <> 0 THEN
+    PRINT "Error opening comport.”
+    END 1
+END IF
+
+OPEN “~/serialdata.raw” FOR INPUT ENCODING “ASCII” As #2
+
+DO
+	INPUT #1, transmit                 'get result
+	PRINT “Empfangen / Received: [“; transmit; ”]”
+	transmit = TRIM(transmit)
+	IF LEFT(transmit, 1) = “#” AND RIGHT(transmit,1) = “#” THEN
+    		transmit = TRIM(MID(transmit, 2, LEN(transmit) - 2))
+		a = NOW
+		PRINT #2, FORMAT(a, “dd.mm.yyyy, hh:mm:ss”) ; “;” ; transmit
+		x = x + 1
+		PRINT “  Geschrieben / Written: [“; transmit; “]”
+	ELSE
+		PRINT “Unerkannt? / Unrecognised?“
+	END IF
+	SLEEP 2
+LOOP UNTIL inkey$ = chr$(27) or x = 50    ‘quit on ESC, or after 50 datasets.
+
+CLOSE #1, #2
+END 0

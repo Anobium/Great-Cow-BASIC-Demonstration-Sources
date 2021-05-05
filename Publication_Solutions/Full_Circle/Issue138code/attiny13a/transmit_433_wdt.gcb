@@ -1,0 +1,54 @@
+#CHIP tiny13a, 1.2
+#OPTION Explicit
+#INCLUDE <SoftSerial.h>       'include the library. This is required.
+#DEFINE ADSpeed MediumSpeed
+
+'Config Serial UART:
+#DEFINE SER1_BAUD 1200        'baudrate must be defined
+#DEFINE SER1_TXPORT PORTB     'I/O port (without .bit) must be defined
+#DEFINE SER1_TXPIN 1          'portbit  must be defined
+DIR PortB.4 IN
+DIM LDR AS BYTE
+
+SET PortB.0 = 1
+SET PortB.2 = 1
+SET PortB.3 = 1               ‘enable int. pullup @unused PINs, good practice
+
+'enable WDT: reset
+  INTOFF                      'turn off the interrupts - good practice to do so
+  wdr                         'asm inline, reset the watchdog timer
+  WDTCR.WDCE = 1
+  WDTCR.WDE = 1
+  WDTCR.WDP0 = 1
+  WDTCR.WDP1 = 0
+  WDTCR.WDP2 = 0
+  WDTCR.WDP3 = 1              'Setting WDP0-3 to 1-0-0-1 set the reset to 8 s
+  INTON                       're-enable the interrupts
+
+'Main program
+DO
+  LDR = READAD(ADC2)
+  'preparation of the UART:
+
+  REPEAT 3                    'resend LDR-value 3 times
+  '---preamble start---
+    Ser1Print "#"
+    WAIT 12 MS
+  '---payload data---
+    Ser1Print LDR             'send the value from the LDR
+    WAIT 12 MS
+  '---postamble start---
+    Ser1Print "#"
+    WAIT 12 MS
+  '---new line---
+  Ser1Print  chr(13)          'new line in terminal
+  Ser1Print  chr(10)          'line feed in terminal
+  WAIT 12 MS
+  END REPEAT
+
+  PRR = 0b00000011            'PRTIM0 and PRADC = 1 == no Timer and ADC off
+  MCUCR = 0b00110000          'SE-sleep enable, SM[1-0] sleep mode selection
+  sleep                       'go to sleep mode: powerdown
+
+  Ser1Print "Goodnight"       'test: should never been send, due to sleep and reset
+LOOP

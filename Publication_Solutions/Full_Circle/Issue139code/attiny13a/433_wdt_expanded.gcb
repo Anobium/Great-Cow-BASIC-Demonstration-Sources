@@ -1,0 +1,84 @@
+#CHIP tiny13a, 1.2
+#OPTION Explicit
+
+'Config Serial UART:
+#INCLUDE <softserial.h>     'include the library. This is required.
+#DEFINE SER1_BAUD 1200      'baudrate must be defined
+#DEFINE SER1_TXPORT PORTB   'I/O port (without .bit) must be defined
+#DEFINE SER1_TXPIN 1        'portbit  must be defined
+
+'Config ADC, LED-PIN
+#DEFINE ADSpeed MediumSpeed
+#DEFINE LED PinB.2
+#DEFINE TOGGLE PortB.2
+#DEFINE SWITCH PortB.0
+                          '8s WDT x MAX_NUM = time before the main program is really executed
+#DEFINE MAX_NUM 1         'set to 225 to do something every 30 min, debug set to 1 (8s WDT)
+watchdog_off              'deactivate the watchdog, good practice
+
+'Set PIN Directions
+DIR TOGGLE OUT
+DIR SWITCH OUT
+DIR PortB.3 IN
+DIR PortB.4 IN
+
+'Set Variables
+DIM TIMEOUT AS BYTE
+
+LED = 0
+SWITCH = 0
+TIMEOUT = MAX_NUM       'set timer intervall - while the mcu mostly sleeps
+ON INTERRUPT WDT CALL wdt_wakeup
+
+'Main program
+DO
+  wdt_sleep
+  TIMEOUT -= 1
+  IF TIMEOUT = 0 THEN
+    REPEAT 3                            'resend LDR-value 3 times
+      Ser1Send 23                       '# - ASCII: 23
+      Ser1Print READAD(ADC2, true)      'send the value from the LDR
+      Ser1Send 59                       '; - ASCII: 59
+      SWITCH = !SWITCH
+      Ser1Print READAD(ADC3, true)
+      SWITCH = !SWITCH
+      Ser1Send 23
+      Ser1Send 13
+      Ser1Send 10                       'line feed in terminal
+      LED = !LED
+    END REPEAT
+    TIMEOUT = MAX_NUM
+  END IF
+LOOP
+
+SUB watchdog_off
+    INToff
+    wdr
+    MCUSR = 0b00000000
+    WDTCR = 0b00011000      'timed sequence to switch the WDT off
+    WDTCR = 0b00000000
+    INTon
+END SUB
+
+SUB watchdog_on
+    INToff
+    wdr
+    'WDT-Prescaler value = 8 s, WDT set to Interrupt (WDTIE) not reset
+    WDTCR=0b00011000
+    WDTCR=0b01111001
+    INTon
+END SUB
+
+SUB wdt_sleep
+    PRR = 0b0000011 'Timer0 and ADC off
+    DIDR0 = 0b00111111 'digital inputs off
+    watchdog_on
+    MCUCR=0b00110000 'sleep enable and mode poweroff
+    sleep
+END SUB
+
+SUB wdt_wakeup
+    MCUCR = 0b00000000 'sleep-enable off
+    PRR = 0b00000000 'Timer0 and ADC on
+    watchdog_off
+END SUB
