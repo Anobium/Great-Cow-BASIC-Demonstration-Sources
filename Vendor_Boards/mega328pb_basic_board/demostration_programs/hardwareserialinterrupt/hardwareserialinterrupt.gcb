@@ -1,0 +1,138 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows how to use hardware serial to receive and toggle the LED
+'''
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    18/06/2021
+'''********************************************************************************
+
+/*
+
+*/
+
+
+#chip  MEGA328PB, 20
+#option Explicit
+
+
+  #Define SWITCH  portb.7
+  #Define LED     portB.5
+
+  'Set Internal Pullup for SWITCH port
+  SWITCH = 1
+  'Set direction of Switch
+  Dir SWITCH in
+
+  'Use Volatile to ensure the compiler does not try to optimize the code
+  #option Volatile LED
+  'Set direction of LED
+  Dir LED out
+  LED = 0
+
+  'USART settings for USART1
+  #define USART_BAUD_RATE 9600
+  #define USART_TX_BLOCKING
+
+  ; End of board specific configuration
+
+; ----- Variables
+   Dim StringLenByte, RecByte As Byte
+   Dim STxDataByte alias Serdata  'Alias the table data direct to the variable used by the library to send the data to the port
+
+
+; ----- Main body of program commences here.
+
+  // Issue a start message
+  StartMessage
+
+  // USART Receive Completed interrupt call
+  On Interrupt UsartRX1Ready call ISR
+
+  // Loop forever, do nothing. Interrupts handle everything now.
+  // See the ISR() interrupt handler below for the actions taken when
+  // the interrupt is triggered.
+  // USART Receive Complete interrupt stuff
+  Do
+  Loop
+
+// Handler for the USART Receive Complete interrupt.
+Sub ISR
+
+  Dim Serdata
+  // Read input from USART, and
+  // Turn components on/off based on bits in the received byte.
+  // Whatever we get from the user, push that into PORTA. The 8 bits
+  // in the byte map perfectly with the 8 bits in PORTA. Components
+  // connected with the PORTA pins (if any) should turn on/off based on
+  // how the bits in the cmd byte were set.
+
+  // Get and return received data from buffer using a sub to reduce code size. Using the variable Serdat aalso reduces the RAM used.
+  SerData = UDR0
+  LED = !LED
+
+
+  //Optionally, return the value back to the terminal
+  HSerSend Serdata
+
+End Sub
+
+
+Sub StartMessage
+
+    Wait 3 s
+
+    HserSend 1
+    HserSend 1
+    HserSend 10
+    HserSend 13
+    HserSend 10
+    HserSend 13
+    for RecByte = 1 to 31
+     ReadTable Strings, RecByte, STxDataByte
+     HserSend STxDataByte
+    next
+    HserSend 10
+    HserSend 13
+
+
+    for RecByte = 1 to 28
+     ReadTable String2, RecByte, STxDataByte
+     HserSend STxDataByte
+    next
+    HserSend 10
+    HserSend 13
+
+    for RecByte = 1 to 75
+     ReadTable String3, RecByte, STxDataByte
+     HserSend STxDataByte
+    next
+    HserSend 10
+    HserSend 13
+
+    for RecByte = 1 to 65
+     ReadTable String4, RecByte, STxDataByte
+     HserSend STxDataByte
+    next
+    HserSend 10
+    HserSend 13
+
+    table Strings  'Welcome to Great Cow BASIC 2021
+    87,101,108,99,111,109,101,32,116,111,32,71,114,101,97,116,32,67,111,119,32,66,65,83,73,67,32,50,48,50,49
+    end table
+
+    table String2   'This is using Harware Serial
+    84,104,105,115,32,105,115,32,117,115,105,110,103,32,72,97,114,119,97,114,101,32,83,101,114,105,97,108,0
+    end table
+
+    table String3
+    "This program uses 6 bytes of precious RAM on this MEGA328PB microcontroller"
+    end table
+
+    table String4   'Send single byte messages to set or clear the LED
+    "Send single byte messages to set or clear the LED"
+    end table
+
+End Sub

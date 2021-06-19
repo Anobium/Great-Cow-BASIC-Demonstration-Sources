@@ -1,0 +1,62 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows how to read the ADC, and then to set PWM duty% - the 10K pot is attached to AN4/Pin18/PortC.4
+'''
+''' Change TCCR0B to change the frequency.  OCR0B controls the DUTY
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    21/06/2021
+'''********************************************************************************
+
+/*
+*/
+
+; ----- Configuration
+#chip  MEGA328PB
+#option Explicit
+
+
+  #Define LED  portb.1
+
+  #define MAXADCVALUERETURN 250
+
+  'Use Volatile to ensure the compiler does not try to optimize the code
+  #option Volatile LED
+  'Set direction of LED
+  Dir LED out
+
+  '#1
+  'Set the CLOCK Source as AVRTCx relates to PWM3
+  #define AVRTC1
+
+  '#2
+  'Set the AVR PWM Channel as enabled by defining this constants equates OC1A
+  #define AVRCHAN3
+
+  '#3
+  'Set the PWM pin to output mode.
+  DIR PORTB.1 out
+
+
+  'Main code
+  'freq 40khz
+  'variable duty from 0% to 100% based on ADC
+  Dim adcTemp, oldadcValue as byte
+  ' Main loop
+  Do Forever
+
+    adcTemp =  ReadAD( AN4 )
+
+    if adcTemp <> 0 then
+
+        HPWM 3, 40, adcTemp
+
+    else
+
+        HPWM 3, 0, adcTemp
+
+    end if
+
+  Loop

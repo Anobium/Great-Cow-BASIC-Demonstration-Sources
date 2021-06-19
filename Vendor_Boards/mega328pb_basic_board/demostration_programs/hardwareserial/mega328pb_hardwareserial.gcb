@@ -1,0 +1,114 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows how to use hardware serial.
+'''
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    18/06/2021
+'''********************************************************************************
+
+/*
+
+*/
+
+
+
+#chip  MEGA328PB, 20
+#option Explicit
+
+
+  #Define SWITCH  portb.7
+  #Define LED     portb.5
+
+  'Set Internal Pullup for SWITCH port
+  SWITCH = 1
+  'Set direction of Switch
+  Dir SWITCH in
+
+  'Use Volatile to ensure the compiler does not try to optimize the code
+  #option Volatile LED
+  'Set direction of LED
+  Dir LED out
+
+  'USART settings for USART1
+  #define USART_BAUD_RATE 9600
+  #define USART_TX_BLOCKING
+
+
+  ; End of board specific configuration
+
+; ----- Variables
+    Dim StringLenByte, RecByte As Byte
+    Dim STxDataByte alias Serdata  'Alias the table data direct to the variable used by the library to send the data to the port
+
+; ----- Main body of program commences here.
+
+    wait 3 s      'To give you time to connect the terminal
+
+    HserSend 1
+    HserSend 1
+    HserSend 10
+    HserSend 13
+    HserSend 10
+    HserSend 13
+    for RecByte = 1 to 31
+     ReadTable Strings, RecByte, STxDataByte
+     HserSend STxDataByte
+    next
+    HserSend 10
+    HserSend 13
+
+
+    for RecByte = 1 to 28
+     ReadTable String2, RecByte, STxDataByte
+     HserSend STxDataByte
+    next
+    HserSend 10
+    HserSend 13
+
+    'read the string table until nul character
+    RecByte = 1
+    Do
+     ReadTable String3, RecByte, STxDataByte
+     If STxDataByte = 0 then exit do
+     HserSend STxDataByte
+     RecByte++
+    loop
+    HserSend 10
+    HserSend 13
+
+' or
+'    dim var as string * 8
+'    var = "Hello t"
+'    HSerPrint var
+'    var="his is "
+'    HSerPrint var
+'    var = "a string"
+'    HSerPrint var
+'    wait 10 ms
+' or
+'    Enable to show constraint
+'     HSerPrint "Hello this is a string"
+
+    Do
+
+        wait 100 ms
+        HSerSend 0x2E  'send a FullStop character
+        LED = ! LED
+
+    Loop
+
+
+    table Strings  'Welcome to Great Cow BASIC 2020
+    87,101,108,99,111,109,101,32,116,111,32,71,114,101,97,116,32,67,111,119,32,66,65,83,73,67,32,50,48,50,49
+    end table
+
+    table String2   'This is using Harware Serial
+    "This is using Harware Serial"
+    end table
+
+    table String3
+    "This program uses 3 bytes of precious RAM on this microcontroller"
+    end table

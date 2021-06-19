@@ -1,0 +1,47 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a one second pulse on an LED using PulseOut
+'''
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.00
+'''@date       17/06/2021
+'''********************************************************************************
+
+/*
+
+*/
+
+; ----- Configuration
+#chip  MEGA328PB, 20
+#option Explicit
+
+
+    #Define LED     PORTB.5
+
+    'Use Volatile to ensure the compiler does not try to optimize the code
+    #option Volatile LED
+    'Set direction of LED
+    Dir LED out
+
+; ----- Include library
+
+; ----- Constants
+     ' 1 second, ie 0.5Hz at a chip frequency of 1mhz
+    #define myDelay 1 s
+
+
+; ----- Variables
+    'None
+' Main
+' This loop runs over and over forever.
+
+
+    Do
+        PulseOut LED, myDelay
+        wait myDelay
+
+    Loop
+
+END

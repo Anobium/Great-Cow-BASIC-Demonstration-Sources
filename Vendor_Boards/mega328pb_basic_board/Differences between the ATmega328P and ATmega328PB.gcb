@@ -1,0 +1,10 @@
+Differences between the ATmega328P and ATmega328PB
+Compared to the ATmega328P (and ATmega328), the ATmega328PB microcontroller offers a number of improvements, including:
+• Two additional GPIO pins: PE0 and PE1
+• Two pins that were previously analog inputs only (ADC6 and ADC7) can now also be used as digital inputs and outputs: PE2 and PE3
+• Two additional 16-bit Timer/Counters: TC3 and TC4 (for a total of two 8-bit timers and three 16-bit timers)
+• Three additional PWM output pins
+• A second USART (TTL serial port)
+• A second TWI (Two-Wire Serial Interface, I²C-compatible)
+• A second SPI (Serial Peripheral Interface)
+• A peripheral touch controller (PTC) for adding capacitive touch buttons, sliders, and wheels

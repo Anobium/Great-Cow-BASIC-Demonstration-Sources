@@ -1,0 +1,90 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows how use WDT to generate delays.
+'''
+''' This method reduces power consumption during the operation, however, uses more PROGMEM than the Great Cow BASIC `wait` instruction.
+'''
+''' This will only work in the fuse WDT is enabled.
+'''
+''' This shows ( in the asm ) how the Interrupt() vectors are hooked by the defintion of the Interrupt subroutine.
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    18/06/2021
+'''********************************************************************************
+
+/*
+
+*/
+
+; ----- Configuration
+#chip  MEGA328PB, 20
+#option Explicit
+
+
+    #Define SWITCH  portb.7
+    #Define LED     portb.5
+
+    'Set Internal Pullup for SWITCH port
+    SWITCH = 1
+    'Set direction of Switch
+    Dir SWITCH in
+
+    'Use Volatile to ensure the compiler does not try to optimize the code
+    #option Volatile LED
+    'Set direction of LED
+    Dir LED out
+
+
+; ----- Variables
+  'None
+
+; ----- Main body of program commences here.
+
+
+    Do
+
+        LED = !LED
+        'Use Watchdog for time delay; n=0 is ~40ms; n=6 is ~1.151secs ; n=9 is 9.25secs.  Max value is 9
+        WDDelay ( 6 )
+
+    Loop
+
+
+
+End
+
+
+' ----- Subs
+
+'Use Watchdog for time delay; n=0 is ~19ms; n=6 is ~1.151secs ; n=9 is 9.25secs
+sub WDDelay ( in WDtimerDelay )
+
+  'Adapt WDtimerDelay to set the prescaler bits
+  if WDtimerDelay > 9 then WDtimerDelay = 9
+  WDtimerDelay.5 = WDtimerDelay.3  'move the .3 to the WPD3 bit (the .5 bit)
+  WDtimerDelay.3 = 0                  'clear .3 after the move
+  WDtimerDelay.WDE = 1                'set the WDE bit
+
+  SM1=1                               'Set SM1 to permit use of sleep
+  WDR                                 'Reset Watchdog Timer
+  WDCE = 1                            'Start timed sequence
+  WDE = 1
+                                      '-- Got four cycles to set the new values from here
+                                      'search the datasheet for 'Got four cycles to set the new values from here' to see explanation
+  WDTCSR = WDtimerDelay               '-- Finished setting new values, used 2 cycles in setting the prescaler (time-out) value
+
+  ' Turn on global interrupt
+  INTON
+  SE = 1                              'Sleep_enable
+  SLEEP                               'Sleep cpu
+
+end sub
+
+sub Interrupt
+    'Handle Watchdog event
+    If WDIE = 1 then
+      WDIE = 0
+    End if
+end sub

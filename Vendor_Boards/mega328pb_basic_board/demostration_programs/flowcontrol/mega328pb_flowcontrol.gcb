@@ -1,0 +1,60 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows logic test board.
+'''
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    17/07/2021
+'''********************************************************************************
+
+/*
+
+*/
+
+
+; ----- Configuration
+#chip  MEGA328PB, 20
+#option Explicit
+
+
+  #DEFINE LED     PORTB.5
+
+  'Use Volatile to ensure the compiler does not try to optimize the code
+  #option Volatile LED
+  'Set direction of LED
+  Dir LED out
+
+
+; ----- Variables
+  'See inline
+
+; ----- Main body of program commences here.
+
+    Do
+      'Turn on LED
+      Gosub TestSub1
+
+      'Turn on LED
+      Goto TestMethod2
+      main:
+
+      PulseOut LED, 1 s
+      wait 1 s
+
+    Loop
+
+
+
+End
+
+Sub TestSub1
+  Dir LED out
+  LED = !LED
+End Sub
+
+TestMethod2:
+  Dir LED out
+  LED = !LED
+goto main

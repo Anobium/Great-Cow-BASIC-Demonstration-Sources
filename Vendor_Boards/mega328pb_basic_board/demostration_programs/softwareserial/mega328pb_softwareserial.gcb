@@ -1,0 +1,90 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows how to use software serial.
+'''
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    18/06/2021
+'''********************************************************************************
+
+/*
+
+*/
+
+
+#chip  MEGA328PB, 20
+#option Explicit
+
+
+  #Define SWITCH  portb.7
+  #Define LED     portb.5
+
+  'Set Internal Pullup for SWITCH port
+  SWITCH = 1
+  'Set direction of Switch
+  Dir SWITCH in
+
+  'Use Volatile to ensure the compiler does not try to optimize the code
+  #option Volatile LED
+  'Set direction of LED
+  Dir LED out
+
+  ; End of board specific configuration
+
+  #include <softserial.h>
+  ; ----- Config Serial UART :
+  #define SER1_BAUD 9600     ; baudrate must be defined - this was intended to be 9600 but the internal clock is SO bad.. I had to adjust the BPS to 9500
+  #define SER1_DATABITS 8    ; databits optional (default = 8)
+  #define SER1_STOPBITS 1    ; stopbits optional (default = 1)
+  #define SER1_INVERT Off    ; inverted polarity optional (default = Off)
+  ; Config I/O ports for transmitting:
+  #define SER1_TXPORT PORTD  ; I/O port (without .bit) must be defined
+  #define SER1_TXPIN 1       ; portbit  must be defined
+
+
+; ----- Variables
+    Dim StringLenByte, RecByte  As Byte
+
+; ----- Main body of program commences here.
+
+    wait 3 s      'To give you time to connect the terminal
+
+    Ser1Send 1
+    Ser1Send 10   'new line in Terminal
+    Ser1Send 13
+    Ser1Send 10   'new line in Terminal
+    Ser1Send 13
+
+    for RecByte = 1 to 31
+     ReadTable Strings, RecByte, STxDataByte
+     Ser1Send STxDataByte
+    next
+    Ser1Send 10   'new line in Terminal
+    Ser1Send 13
+
+    for RecByte = 1 to 29
+     ReadTable String2, RecByte, STxDataByte
+     Ser1Send STxDataByte
+    next
+    Ser1Send 10   'new line in Terminal
+    Ser1Send 13
+
+    REM - enable to show constraint     HSerPrint "Hello this is a string"
+
+    table Strings
+    87,101,108,99,111,109,101,32,116,111,32,71,114,101,97,116,32,67,111,119,32,66,65,83,73,67,32,50,48,50,49
+    end table
+
+    table String2
+    "This is using Software Serial"
+    end table
+
+    Do
+
+        wait 100 ms
+        Ser1Send "."
+        LED = ! LED
+
+    Loop

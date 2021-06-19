@@ -1,0 +1,66 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a one second pulse on the LED using an interrupt
+'''
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.00
+'''@date       17/06/2021
+'''********************************************************************************
+
+/*
+
+*/
+
+
+; ----- Configuration
+#chip  MEGA328PB, 20
+#option Explicit
+
+
+    #Define LED     PORTB.5
+
+    'Use Volatile to ensure the compiler does not try to optimize the code
+    #option Volatile LED
+    'Set direction of LED
+    Dir LED out
+
+; ----- Include library
+    'None
+
+; ----- Constants
+    //TIMER0 PRESCALER = 1024; PRELOAD = 194; ACTUAL INTERRUPT TIME = 9.984 MS
+    #DEFINE MYISRDELAY 194
+    #DEFINE MYDELAY    100   '1000ms / 10ms - 100
+
+; ----- Define Hardware settings
+
+    Dim isrcount as byte
+    isrcount = 0
+
+    'Set the defaults.. so all the LEDs flash together initially.
+    LED = 1
+
+; ----- Variables
+    'Load the registers to toogle OCR0A - for different frequencies you need to recalc the 'TCCR0B' mask and the 'MYISRDELAY' constant
+    OCR0A =     MYISRDELAY
+    COM0A0 = 1  : WGM00 = 0             ' Toggle OC0A, CTC mode
+    WGM01  = 1  : TCCR0B = TCCR0B  OR 5 ' CTC mode, use OCR0A  /1024
+
+
+  ' This loop runs over and over forever.
+    On Interrupt Timer0Match1 call ISR
+
+    Do
+    Loop
+
+END
+
+' ----- Subs
+
+Sub ISR
+    'Count to meet the requirement
+    If isrcount = 0 then LED = !LED
+    isrcount = ( isrcount + 1 ) % MYDELAY
+End Sub

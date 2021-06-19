@@ -1,0 +1,69 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows how to set the PWM in fixed frequency and duty AND remap the PWM to the LED
+'''
+''' Change TCCR0B to change the frequency.  OCR0AL controls the DUTY
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    18/06/2021
+'''********************************************************************************
+
+/*
+
+*/
+
+; ----- Configuration
+#chip  MEGA328PB
+#option Explicit
+
+
+  #Define SWITCH  portb.7
+  #Define LED     portd.6
+
+  'Set Internal Pullup for SWITCH port
+  SWITCH = 1
+  'Set direction of Switch
+  Dir SWITCH in
+
+  'Use Volatile to ensure the compiler does not try to optimize the code
+  #option Volatile LED
+  'Set direction of LED
+  Dir LED out
+
+  '#1
+  'Set the CLOCK Source as AVRTCx relates to PWM3
+  #define AVRTC1
+
+  '#2
+  'Set the AVR PWM Channel as enabled by defining this constants equates OC1A
+  #define AVRCHAN3
+
+  '#3
+  'Set the PWM pin to output mode.
+  DIR PORTB.1 out
+
+
+  'Main code
+  'freq 40khz
+  'variable duty from 0% to 100%
+
+  Dim Bright as byte
+
+  do
+      'Turn up brightness over 2.5 seconds
+      For Bright = 0 to 255
+          '#4 - Call the method with the correct PWM channel
+          HPWM 3, 40, Bright
+          wait 10 ms
+      next
+      'Turn down brightness over 2.5 seconds
+      For Bright = 255 to 0
+          '#4 - Call the method with the correct PWM channel
+          HPWM 3, 40, Bright
+          wait 10 ms
+      next
+  loop
+
+  end

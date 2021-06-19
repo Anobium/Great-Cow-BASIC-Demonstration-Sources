@@ -1,0 +1,37 @@
+'''A demonstration program for GCB
+'''---------------------------------------------------------------------------------
+''' This program shows how to set the PWM in fixed frequency on OCOB = portD.5.  You will need a scope on OCOB to see the signal.
+'''
+''' Change the constants to change the PWM parameters
+'''
+'''@author  Evan Venn
+'''@licence GPL
+'''@version 1.0
+'''@date    17/06/2021
+'''********************************************************************************
+
+/*
+
+*/
+
+
+#chip  MEGA328PB, 20
+#option Explicit
+
+  #Define PWMSIGNAL     portD.5
+
+  'Set direction of PWMSIGNAL
+  Dir PWMSIGNAL out
+
+  'define PWM_Freq in kHz and define PWM_Duty in %
+  #define PWM_Freq 38
+  #define PWM_Duty 50
+
+  do
+
+      PWMOn
+      wait 5 s
+      PWMOff
+      wait 1 s
+
+  loop
