@@ -1,0 +1,111 @@
+menu.version=Version
+
+a-star328PB.name=Pololu A-Star 328PB
+a-star328PB.upload.tool=avrdudecustom
+a-star328PB.upload.protocol=arduino
+a-star328PB.upload.mcu=atmega328pb
+a-star328PB.upload.maximum_size=32256
+a-star328PB.upload.maximum_data_size=2048
+
+a-star328PB.bootloader.tool=avrdudecustom
+a-star328PB.bootloader.low_fuses=0xFF
+a-star328PB.bootloader.high_fuses=0xDE
+a-star328PB.bootloader.unlock_bits=0xFF
+a-star328PB.bootloader.lock_bits=0xCF
+
+a-star328PB.build.mcu=atmega328p
+a-star328PB.build.board=AVR_A_STAR_328PB
+a-star328PB.build.extra_flags=-include "{runtime.platform.path}/variants/a-star328pb/io_328pb.h"
+a-star328PB.build.core=arduino:arduino
+a-star328PB.build.variant=a-star328pb
+
+##############################################################
+
+a-star328PB.menu.version.16mhz=5V, 16MHz
+a-star328PB.menu.version.16mhz.upload.speed=115200
+a-star328PB.menu.version.16mhz.bootloader.extended_fuses=0xF4
+a-star328PB.menu.version.16mhz.bootloader.file=optiboot/optiboot_atmega328pb_16mhz.hex
+a-star328PB.menu.version.16mhz.build.f_cpu=16000000L
+
+##############################################################
+
+a-star328PB.menu.version.20mhz=5V, 20MHz
+a-star328PB.menu.version.20mhz.upload.speed=115200
+a-star328PB.menu.version.20mhz.bootloader.extended_fuses=0xF4
+a-star328PB.menu.version.20mhz.bootloader.file=optiboot/optiboot_atmega328pb_20mhz.hex
+a-star328PB.menu.version.20mhz.build.f_cpu=20000000L
+
+##############################################################
+
+a-star328PB.menu.version.8mhz=3.3V, 8MHz
+a-star328PB.menu.version.8mhz.upload.speed=57600
+a-star328PB.menu.version.8mhz.bootloader.extended_fuses=0xF5
+a-star328PB.menu.version.8mhz.bootloader.file=optiboot/optiboot_atmega328pb_8mhz.hex
+a-star328PB.menu.version.8mhz.build.f_cpu=8000000L
+
+##############################################################
+
+a-star328PB.menu.version.12mhz=3.3V, 12MHz
+a-star328PB.menu.version.12mhz.upload.speed=115200
+a-star328PB.menu.version.12mhz.bootloader.extended_fuses=0xF5
+a-star328PB.menu.version.12mhz.bootloader.file=optiboot/optiboot_atmega328pb_12mhz.hex
+a-star328PB.menu.version.12mhz.build.f_cpu=12000000L
+
+##############################################################
+
+a-star32U4.name=Pololu A-Star 32U4
+a-star32U4.vid.0=0x1ffb
+a-star32U4.pid.0=0x0101
+a-star32U4.vid.1=0x1ffb
+a-star32U4.pid.1=0x2300
+a-star32U4.upload.tool=arduino:avrdude
+a-star32U4.upload.protocol=avr109
+a-star32U4.upload.maximum_size=28672
+a-star32U4.upload.maximum_data_size=2560
+a-star32U4.upload.speed=57600
+a-star32U4.upload.disable_flushing=true
+a-star32U4.upload.use_1200bps_touch=true
+a-star32U4.upload.wait_for_upload_port=true
+
+a-star32U4.bootloader.tool=arduino:avrdude
+a-star32U4.bootloader.low_fuses=0xff
+a-star32U4.bootloader.high_fuses=0xd0
+a-star32U4.bootloader.extended_fuses=0xc8
+a-star32U4.bootloader.file=caterina/Caterina-A-Star.hex
+a-star32U4.bootloader.unlock_bits=0xFF
+a-star32U4.bootloader.lock_bits=0xEF
+
+a-star32U4.build.mcu=atmega32u4
+a-star32U4.build.f_cpu=16000000L
+a-star32U4.build.vid=0x1ffb
+a-star32U4.build.pid=0x2300
+a-star32U4.build.usb_product="Pololu A-Star 32U4"
+a-star32U4.build.usb_manufacturer="Pololu Corporation"
+a-star32U4.build.board=AVR_A_STAR_32U4
+a-star32U4.build.core=arduino:arduino
+a-star32U4.build.variant=arduino:leonardo
+a-star32U4.build.extra_flags={build.usb_flags}
+
+##############################################################
+
+#a-star32U4bp.name=Pololu A-Star 32U4 (bootloader port)
+#a-star32U4bp.vid.0=0x1ffb
+#a-star32U4bp.pid.0=0x0101
+#a-star32U4bp.vid.1=0x1ffb
+#a-star32U4bp.pid.1=0x2300
+#a-star32U4bp.upload.tool=arduino:avrdude
+#a-star32U4bp.upload.protocol=avr109
+#a-star32U4bp.upload.maximum_size=28672
+#a-star32U4bp.upload.maximum_data_size=2560
+#a-star32U4bp.upload.speed=57600
+#a-star32U4bp.upload.disable_flushing=true
+#a-star32U4bp.build.mcu=atmega32u4
+#a-star32U4bp.build.f_cpu=16000000L
+#a-star32U4bp.build.vid=0x1ffb
+#a-star32U4bp.build.pid=0x2300
+#a-star32U4bp.build.usb_product="Pololu A-Star 32U4"
+#a-star32U4bp.build.usb_manufacturer="Pololu Corporation"
+#a-star32U4bp.build.board=AVR_A_STAR_32U4
+#a-star32U4bp.build.core=arduino:arduino
+#a-star32U4bp.build.variant=arduino:leonardo
+#a-star32U4bp.build.extra_flags={build.usb_flags}

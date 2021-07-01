@@ -1,12 +1,12 @@
 '''A demonstration program for GCGB and GCB.
 '''--------------------------------------------------------------------------------------------------------------------------------
-'''This program
+'''This program simpple flickers the LED to simulate a candle.
 '''
 '''
 '''@author
 '''@licence GPL
 '''@version
-'''@date    31.01.2015
+'''@date    20/06/2021
 '''********************************************************************************
 
 ; ----- Configuration
@@ -21,19 +21,28 @@
         #DEFINE PWM_Out1 portb.5
 
         'Dimension a byte variable
-        Dim xx, duty, randomparam As Byte
+        Dim tablelookupaddress, dutyvalue, randomparamstart, randomparamend  As Byte
 
         do
+
+
           do
+             randomparamend = Random
+             'ensure randomparam is greater than 10 and less then the maximum number of parameters
+          loop while randomparamend < 10 or randomparamend > 60
 
-             randomparam = Random
+          do
+             randomparamstart = Random
+             randomparamstart = scale ( randomparamstart , 0, 255, 0, 60 )
+             'ensure randomparam is less then end value
+          loop while randomparamstart > randomparamend
 
-          'ensure randomparam is greater than 10 and less then the maximum number of parameters
-          loop while randomparam < 10 or randomparam > 60
 
-          for xx = 0 to randomparam
-            readtable flicker, xx, duty
-            PWMOut 1, duty, 150
+          for tablelookupaddress =  randomstart to randomparamend
+
+            readtable candleflicker, tablelookupaddress, dutyvalue
+            PWMOut 1, dutyvalue, 150    '150 is just the number of pulse per dutyvalue - try other values :-)
+
           next
 
         loop
@@ -42,7 +51,7 @@
 End
 
 
-table flicker
+table candleflicker
   10, 10, 20, 30, 30, 30, 40, 50, 60, 70, 80, 70, 70
   60, 60, 50, 50, 50, 60, 70, 80, 90, 100
   120,140,160,240,250,100,150,250,250,140
