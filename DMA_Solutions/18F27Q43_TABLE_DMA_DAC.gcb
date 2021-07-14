@@ -19,7 +19,7 @@
 
 'Load table
       Dim TableLoad, WaveTableSize as word
-      TableLoad = 0
+      TableLoad = 0                                           'The address to return the size of the table
       readtable Wave, TableLoad, WaveTableSize                'Need to read table to ensure compiler load into PROGMEM
 
     '  OE DACOUT1 Enabled and DACOUT2 Disabled; DAC1EN enabled; NSS VSS; PSS VDD;
