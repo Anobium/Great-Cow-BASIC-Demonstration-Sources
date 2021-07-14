@@ -28,7 +28,7 @@
 
 'Timer changes the frequency of the wave form
     InitTimer0 Osc, PRE0_1 + TMR0_FOSC4 ,  POST0_1
-    ' 60hz
+    ' approx 60hz.  Use OSCTUNE to improve the signal frequency
     ' InitTimer0 Osc, PRE0_64 + TMR0_FOSC4 ,  POST0_8
     SetTimer 0, 1   'a value of ZERO will not generated the Interrupt!!
     StartTimer 0
