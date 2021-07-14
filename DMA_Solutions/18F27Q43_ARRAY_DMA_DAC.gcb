@@ -32,7 +32,7 @@ Dim iloop as word
     '  OE DACOUT1 Enabled and DACOUT2 Disabled; DAC1EN enabled; NSS VSS; PSS VDD;
     DAC1CON = 0xA0
 
-'Prove table is loaded
+'Prove table is loaded.. the frequency is slow.....
     repeat 1000
 
         for iLoop = 0 to WaveArraySize - 1                              'Fill the ram array from the table
