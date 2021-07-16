@@ -76,7 +76,8 @@ Dim iloop as word
      DMAnDSZH = 0x00
      DMAnDSZL = 0x01
     ' Destination start address
-     DMAnDSA = @DAC1DATL
+     Dim DMAnDS as word ALIAS  DMAnDSAH, DMAnDSAL
+     DMAnDS = @DAC1DATL
   ' Start trigger source. Refer the datasheet for the correct code
      DMAnSIRQ = 0x1F
      DMAnAIRQ = 0x00
