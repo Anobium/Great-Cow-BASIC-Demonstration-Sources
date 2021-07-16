@@ -85,7 +85,7 @@
 
     do                                                        ' Sweep NCO thru audible range
       for NCOFrqq = 20 to 25000
-        NCOFreqCount = NCOFrqq                                ' Sets the registers.  Try a value of 250. This gives a frequency of 60Hz.
+        NCOFreqCount = NCOFrqq                                ' Sets the registers.  Try a value of 250. This gives a frequency of 60Hz.  Then, adjust OSCTUNE = OSCTUNE +/-  1 | 2 | 3 etc to get as close to 60Hz
         wait 500 us
       next
     loop
