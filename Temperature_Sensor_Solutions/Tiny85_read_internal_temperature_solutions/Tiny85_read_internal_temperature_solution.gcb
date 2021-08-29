@@ -1,0 +1,35 @@
+#CHIP tiny85, 8
+#OPTION Explicit
+#include <softserial.h> 'include the library. this is required.
+#DEFINE ADSpeed MediumSpeed
+
+'Config Serial UART:
+#DEFINE SER1_BAUD 9600          'baudrate must be defined
+#DEFINE SER1_TXPORT PORTB       'I/O port (without .bit) must be defined
+#DEFINE SER1_TXPIN 2            'portbit  must be defined
+
+
+/*
+17.12 of te datasheet
+The temperature measurement is based on an on-chip temperature sensor that is coupled to a single ended ADC4
+channel. Selecting the ADC4 channel by writing the MUX[3:0] bits in ADMUX register to “1111” enables the temperature sensor. The internal 1.1V reference must also be selected for the ADC reference source in the
+temperature sensor measurement. When the temperature sensor is enabled, the ADC converter can be used in
+single conversion mode to measure the voltage over the temperature sensor.
+The measured voltage has a linear relationship to the temperature as described in Table 17-2 The sensitivity is
+approximately 1 LSB / ?C and the accuracy depends on the method of user calibration. Typically, the measurement
+accuracy after a single temperature calibration is ±10?C, assuming calibration at room temperature. Better
+accuracies are achieved by using two temperature points for calibration.
+*/
+
+#define ADREADPREREADCOMMAND ADMUX = ( ADMUX and 0X20 ) or 0X8F: wait 100 ms
+
+'Main program
+
+  dim IntTemp as Word
+  DO
+      IntTemp = READAD10(ADC4)
+      Ser1Print IntTemp
+      Ser1Send 10   'send line feed to terminal
+      Ser1Send 13   'send new line to terminal
+      WAIT 1 S
+  LOOP
