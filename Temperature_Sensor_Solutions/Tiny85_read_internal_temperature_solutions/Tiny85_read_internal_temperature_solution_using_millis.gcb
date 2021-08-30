@@ -1,0 +1,92 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program shows how to change the READAD method to read an internal temperature sensor.
+'''
+'''The program sets a configuration constant that instructs the compiler to call a user defined macro.
+'''
+'''
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.00
+'''@date       30/08/2021
+'''********************************************************************************
+
+; ----- Configuration
+#CHIP tiny85, 16
+#OPTION Explicit
+#include <softserial.h> 'include the library. this is required.
+#DEFINE ADSpeed MediumSpeed
+
+'Config Serial UART:
+#DEFINE SER1_BAUD 9600          'baudrate must be defined
+#DEFINE SER1_TXPORT PORTB       'I/O port (without .bit) must be defined
+#DEFINE SER1_TXPIN 2            'portbit  must be defined
+
+
+#DEFINE ADREADPREREADCOMMAND ATTINY85ReadInternalTemperatureSensor
+
+Macro ATTINY85ReadInternalTemperatureSensor
+/*
+17.12 of the datasheet
+The temperature measurement is based on an on-chip temperature sensor that is coupled to a single ended ADC4
+channel. Selecting the ADC4 channel by writing the MUX[3:0] bits in ADMUX register to “1111” enables the temperature sensor. The internal 1.1V reference must also be selected for the ADC reference source in the
+temperature sensor measurement. When the temperature sensor is enabled, the ADC converter can be used in
+single conversion mode to measure the voltage over the temperature sensor.
+The measured voltage has a linear relationship to the temperature as described in Table 17-2 The sensitivity is
+approximately 1 LSB / C and the accuracy depends on the method of user calibration. Typically, the measurement
+accuracy after a single temperature calibration is ±10C, assuming calibration at room temperature. Better
+accuracies are achieved by using two temperature points for calibration.
+*/
+  IF ADReadPort=4 then
+      'Set MUX to 0b1111 and set 1v1 in reference leaving other bits as-is
+      ADMUX = ( ADMUX and 0X20 ) or 0X8F
+      wait 100 ms
+  End if
+
+End Macro
+
+
+#include <millis.h>       ' Include the Library
+
+'Main program
+
+  Ser1Send 10   'send line feed to terminal
+  Ser1Send 13   'send new line to terminal
+  Ser1Print "Tiny 85 temperature sensor measurement"
+  Ser1Send 10   'send line feed to terminal
+  Ser1Send 13   'send new line to terminal
+
+  dim IntTemp as Word
+  dim RealTemp as Integer
+
+
+  #define ReadPeriod 1000
+
+  Dim CurMs, LstMs as word  ' declare working variables
+  ' Main                    ' This loop runs over and over forever.
+  LstMs = 0
+  CurMs = 0
+
+  ' Main                    ' This loop runs over and over forever.
+  Do
+
+    CurMs = millis()
+
+    if CurMs - LstMs >= ReadPeriod then  ' required Time has Elapsed
+
+      IntTemp = READAD10(ADC4)
+
+      'Use scale to calibrate the temperature sensor measurement.  This is specific to a single chip - you must calibrate.
+      RealTemp=scale( IntTemp, 237, 320, -20, 40 )
+
+      Ser1Print IntTemp
+      Ser1Send 9
+      Ser1Print StrInteger(RealTemp)
+      Ser1Send 10   'send line feed to terminal
+      Ser1Send 13   'send new line to terminal
+
+      LstMs = CurMs                   ' And Record Toggle Time
+    end if
+
+  Loop
