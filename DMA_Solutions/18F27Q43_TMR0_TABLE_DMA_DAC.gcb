@@ -43,7 +43,7 @@
   ' Source registers
     ' Source size - use an alias to ease use
      Dim DMAnSSize as Word alias  DMAnSSZH, DMAnSSZL
-    ' Source address using @
+    ' Source table size
      DMAnSSize = WaveTableSize
 
     ' Source start address

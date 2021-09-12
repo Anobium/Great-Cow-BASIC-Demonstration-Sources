@@ -1,0 +1,126 @@
+''''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program sends a table of data to the serial port using DMA
+'''
+'''The DMA configuration therefore uses SourceMemoryRegion (SMR) = Program Flash and the source data is the table called SerialData.
+'''Once the DMA operation has completed once the DMA operation is stopped bu the Interrupt.
+'''
+'''
+'''@author     EvanV
+'''@licence    GPL
+'''@version    1.00
+'''@date       12/09/2021
+'''********************************************************************************
+
+; ----- Configuration
+#chip 18F27Q43
+#CONFIG MCLRE = OFF, PR1WAY=OFF
+#option Explicit
+
+
+'Load table
+      Dim TableLoad, TableSize as word
+      TableLoad = 0
+      readtable SerialData, TableLoad, TableSize                    'Need to read table to ensure compiler load into PROGMEM
+
+'Print some data - note the PPS and USART are set at the bottom @ 115200 BPS
+'      HSerPrintCRLF 2
+'      HserPrint "Start of Program - size: "
+'      HSerPrint TableSize
+'      HSerPrintCRLF
+'
+'If you have NO HSerPrint or other HSerXXXXXX command you need to add the USART init method
+       INITUSART
+
+
+'Setup DMA
+
+    ' Select DMA1 by setting DMASELECT register to 0x00
+     DMASELECT = 0x00
+     ' DMODE unchanged; DSTP not cleared; SMR Program Flash; SMODE incremented; SSTP not cleared;
+     DMAnCON1 = 0x0A
+
+  ' Source registers
+    ' Source size - use an alias to ease use
+     Dim DMAnSSize as Word alias  DMAnSSZH, DMAnSSZL
+    ' Source table size
+     DMAnSSize = TableSize
+
+    ' Source start address
+     Dim addressdummy as byte
+     Dim DMAnSS as long ALIAS addressdummy, DMAnSSAU, DMAnSSAH, DMAnSSAL
+     DMAnSS = @TableSerialData+1    'Need to add 1 to table address as the first address is the table size.
+
+  ' Destination registers
+    ' Destination size
+     DMAnDSZH = 0x00
+     DMAnDSZL = 0x01
+
+    ' Destination start address
+    Dim DMAnDSAAddress as word ALIAS DMAnDSAH,DMAnDSAL  ' use an alias as the DMAnDSA address can be a WORD
+    DMAnDSAAddress = @U1TXB
+
+  ' Start trigger source. Refer the datasheet for the correct code, select UXT1 to push the complete table out
+     DMAnSIRQ = 0x21
+  ' Abort trigger source. Refer the datasheet for the correct code
+     DMAnAIRQ = 0x00
+
+   'Start DMA
+     PRLOCK = 0x55  '  This sequence
+     PRLOCK = 0xAA  '  is mandatory
+     PRLOCK.PRLOCKED = 1  '  for DMA operation
+     ' Enable the DMA & the trigger to start DMA transfer
+     DMAnCON0 = 0xC0
+
+     'Upon completion of the DMA transder call the ISR to prevent the next transfer
+     On Interrupt DMA1SourceCountInterrupt  Call ISR
+
+     'Flash the LED
+     Do
+
+        PulseOut portb.0, 100 ms
+        wait 100 ms
+
+     Loop
+
+End
+
+Sub  ISR
+  'If this ISR is called then the DMA Transfer is complete
+  DMAnSIRQ = 0x00
+
+End Sub
+
+Table SerialData as byte
+"\r\n"
+"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut quam mauris. Ut porttitor venenatis ante, tincidunt porta ex dignissim id. Nulla facilisi. Quisque semper mattis vestibulum. Praesent maximus neque nec diam molestie mattis. Ut dictum placerat ligula, quis aliquam magna tempus ac. Donec egestas pharetra dolor, at egestas ipsum scelerisque nec. Suspendisse rhoncus, dui quis tempus dapibus, ipsum orci accumsan odio, ut rhoncus nulla metus sit amet nisl. Suspendisse potenti. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Proin malesuada ligula sit amet lorem lobortis pharetra. Aenean vel sagittis diam. Nullam in nunc nisi. Nam convallis lectus at nulla dapibus sollicitudin. Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur et cursus turpis.\r\n\r\n"
+"Quisque nec faucibus velit. Etiam in arcu gravida, molestie magna ut, suscipit justo. Integer accumsan quam ut tempus dapibus. Pellentesque sed ultricies purus, non cursus nulla. Proin eget gravida augue, at gravida neque. Aenean in erat nisi. Suspendisse eget convallis nisi. Praesent venenatis, orci eu elementum auctor, nibh odio auctor nulla, vitae cursus ex massa eget justo. Praesent ultricies porttitor ex, at suscipit mi gravida vitae.\r\n\r\n"
+"Nam pulvinar congue neque, ac hendrerit metus facilisis quis. Integer quis ipsum vel libero convallis vehicula eget et tellus. Phasellus gravida, mauris ac placerat egestas, lectus augue tempor ligula, at suscipit nunc magna in est. Nulla semper efficitur quam sed viverra. Pellentesque ut lobortis enim. Nam sit amet velit et urna interdum dignissim. Donec quis lacus convallis, ultricies tellus id, mollis turpis.\r\n\r\n"
+"Donec posuere ullamcorper sapien et consectetur. Vestibulum suscipit, dolor at tempor malesuada, sapien eros ullamcorper justo, eget mattis nunc dui quis turpis. Sed euismod placerat ligula quis dapibus. Donec feugiat nibh a orci aliquet egestas. Donec sit amet ligula sed ligula euismod tempus. Proin blandit consequat felis sit amet euismod. Praesent ultrices commodo nisl, nec imperdiet turpis.\r\n\r\n"
+"Aliquam a ullamcorper purus. Sed porttitor nisl non lobortis vulputate. Morbi lacinia varius consectetur. Etiam cursus enim sit amet finibus rhoncus. Fusce dui purus, pulvinar sit amet felis quis, malesuada varius justo. Donec accumsan a ante et dictum. Nunc non iaculis nisi, eget condimentum ante. Sed at metus mauris. Sed dapibus pretium pulvinar. Proin at erat magna. In hac habitasse platea dictumst. Morbi ut placerat mauris, non feugiat sem.\r\n\r\n"
+"Fusce a blandit turpis. Integer vulputate, lectus nec dictum interdum, augue nisl malesuada sem, in gravida sapien libero sed mauris. Nunc facilisis tincidunt dolor, et rhoncus lacus efficitur eu. Ut vel sollicitudin metus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In hac habitasse platea dictumst. In placerat lacus ut erat rhoncus, ac vestibulum mi molestie. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec fringilla maximus sem quis vehicula. Sed finibus scelerisque ex, in convallis nisl. Aenean placerat pharetra nibh, non sollicitudin tortor aliquet ac. Proin suscipit semper cursus. Curabitur egestas, diam et commodo lobortis, tortor ipsum varius tellus, nec imperdiet odio diam non purus. Pellentesque efficitur congue nisi, sed pretium libero tincidunt id. Etiam elementum odio orci, tristique ornare.\r\n"
+End Table
+
+
+    'Generated by PIC PPS Tool for Great Cow Basic
+    'PPS Tool version: 0.0.6.1
+    'PinManager data: v1.79.0
+    'Generated for 18f27q43
+    '
+    'Template comment at the start of the config file
+    '
+    #startup InitPPS, 85
+    #define PPSToolPart 18f27q43
+
+    Sub InitPPS
+            'Module: UART pin directions
+            Dir PORTC.6 Out    ' Make TX1 pin an output
+            'Module: UART1
+            RC6PPS = 0x0020    'TX1 > RC6
+
+    End Sub
+    'Template comment at the end of the config file
+    'USART settings for USART1
+    #define USART_BAUD_RATE 115200
+    #define USART_TX_BLOCKING
+    #define USART_DELAY OFF
