@@ -15,7 +15,10 @@ Windows 7 pro x86 secureboot disabled, os service pack 1 build 6.1.7601
 
 # Requires:
 .Net Framework 3.0 (most probably, you already have)
+
 User admin privileges
+
+---------------------------------------------------------------
 
 Fully automated without Secure Boot (just allow the driver installation), if secure boot enabled, you will
 be carried to select a boot option to disable driver signature enforcement and then the setup will continue.
