@@ -1,0 +1,12 @@
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\Unsigned\Unsigned\bin\Release\Unsigned.exe
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\Unsigned\Unsigned\bin\Release\Unsigned.pdb
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\Unsigned\Unsigned\obj\Release\Unsigned.csproj.AssemblyReference.cache
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\Unsigned\Unsigned\obj\Release\Unsigned.csproj.CoreCompileInputs.cache
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\Unsigned\Unsigned\obj\Release\Unsigned.exe
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\Unsigned\Unsigned\obj\Release\Unsigned.pdb
+\\serverone\DevSRC\Kontronik\USB Driver\Installer - copia\Unsigned\Unsigned\bin\Release\Unsigned.exe
+\\serverone\DevSRC\Kontronik\USB Driver\Installer - copia\Unsigned\Unsigned\bin\Release\Unsigned.pdb
+\\serverone\DevSRC\Kontronik\USB Driver\Installer - copia\Unsigned\Unsigned\obj\Release\Unsigned.csproj.AssemblyReference.cache
+\\serverone\DevSRC\Kontronik\USB Driver\Installer - copia\Unsigned\Unsigned\obj\Release\Unsigned.csproj.CoreCompileInputs.cache
+\\serverone\DevSRC\Kontronik\USB Driver\Installer - copia\Unsigned\Unsigned\obj\Release\Unsigned.exe
+\\serverone\DevSRC\Kontronik\USB Driver\Installer - copia\Unsigned\Unsigned\obj\Release\Unsigned.pdb
