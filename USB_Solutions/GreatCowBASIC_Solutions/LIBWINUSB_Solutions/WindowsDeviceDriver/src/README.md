@@ -29,5 +29,5 @@ reverts to normal mode for the next reboot, install the driver, deletes the cont
 installation. written in c# .netF 3.0
 
 
-#Change log.
+# Change log.
 1.  First release.
