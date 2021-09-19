@@ -1,0 +1,6 @@
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\Unsigned\Unsigned\bin\Debug\Unsigned.exe
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\Unsigned\Unsigned\bin\Debug\Unsigned.pdb
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\Unsigned\Unsigned\obj\Debug\Unsigned.csproj.AssemblyReference.cache
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\Unsigned\Unsigned\obj\Debug\Unsigned.csproj.CoreCompileInputs.cache
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\Unsigned\Unsigned\obj\Debug\Unsigned.exe
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\Unsigned\Unsigned\obj\Debug\Unsigned.pdb

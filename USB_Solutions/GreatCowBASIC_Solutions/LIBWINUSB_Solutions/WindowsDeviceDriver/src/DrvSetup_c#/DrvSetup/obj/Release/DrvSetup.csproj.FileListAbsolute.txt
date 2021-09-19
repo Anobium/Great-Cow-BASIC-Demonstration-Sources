@@ -1,0 +1,12 @@
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\DrvSetup\DrvSetup\bin\Release\DrvSetup.exe
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\DrvSetup\DrvSetup\bin\Release\DrvSetup.pdb
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\DrvSetup\DrvSetup\obj\Release\DrvSetup.csproj.AssemblyReference.cache
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\DrvSetup\DrvSetup\obj\Release\DrvSetup.csproj.CoreCompileInputs.cache
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\DrvSetup\DrvSetup\obj\Release\DrvSetup.exe
+\\serverone\DevSRC\Kontronik\USB Driver\Installer\DrvSetup\DrvSetup\obj\Release\DrvSetup.pdb
+\\serverone\DevSRC\Kontronik\USB Driver\Installer - copia\DrvSetup\DrvSetup\bin\Release\DrvSetup.exe
+\\serverone\DevSRC\Kontronik\USB Driver\Installer - copia\DrvSetup\DrvSetup\bin\Release\DrvSetup.pdb
+\\serverone\DevSRC\Kontronik\USB Driver\Installer - copia\DrvSetup\DrvSetup\obj\Release\DrvSetup.csproj.AssemblyReference.cache
+\\serverone\DevSRC\Kontronik\USB Driver\Installer - copia\DrvSetup\DrvSetup\obj\Release\DrvSetup.csproj.CoreCompileInputs.cache
+\\serverone\DevSRC\Kontronik\USB Driver\Installer - copia\DrvSetup\DrvSetup\obj\Release\DrvSetup.exe
+\\serverone\DevSRC\Kontronik\USB Driver\Installer - copia\DrvSetup\DrvSetup\obj\Release\DrvSetup.pdb
