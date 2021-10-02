@@ -38,7 +38,7 @@
           loop while randomparamstart > randomparamend
 
 
-          for tablelookupaddress =  randomstart to randomparamend
+          for tablelookupaddress =  randomparamstart to randomparamend
 
             readtable candleflicker, tablelookupaddress, dutyvalue
             PWMOut 1, dutyvalue, 150    '150 is just the number of pulse per dutyvalue - try other values :-)
