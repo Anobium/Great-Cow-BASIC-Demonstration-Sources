@@ -1,0 +1,150 @@
+''' A demonstration program for GCGB and GCB.
+'''
+'''  This demonstration examines the I2C/TWI devices attached and displays then devices discovered on a serial terminal using the primary I2C module.
+'''
+'''   You need four LEDs connnect to portc.0, portc.1, portc.2 and portc.3 connected via suitable resistors.
+'''  You will to connect I2C/TWI devices to portc.2 and portc.4 for the data and clock lines respectively.  The two lines are need to be pull high by suitable resistors supply voltage.
+'''   You will also need to connect a serial Terminal to portc.4.  Using PUTTY.EXE for an excellent terminal program.  Also, you msy need to connect the microcontroller via a TTL converter.
+'''  You will a switch connect to porta.1.  The needs to be connected the supply voltage via a 1-k pullup resistor.
+'''  ************************************************************************************************************************************************************************************
+'''
+'''
+'''  PIC: 16f18326
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''
+'''@author   EvanV
+'''@licence  GPL
+'''@version  1.0
+'''@date     29.07.2016
+
+
+' ----- Configuration
+'Chip Settings.
+#CHIP 16f18326,32
+#OPTION Explicit
+
+
+'Set the PPS of the PWM and the RS232 ports.
+'Set the PPS for this solution.
+#STARTUP InitPPS, 85
+
+Sub InitPPS
+    UNLOCKPPS
+    'Pin RC5 source is an input for RX
+    RXPPS  = 0x15
+    'Pin RC4 source is TX/CK
+    RC4PPS = 0x14
+
+    'RA2->MSSP:SDA;
+    RA2PPS = 0x0019
+    'RA2->MSSP:SDA;
+    SSP1DATPPS = 0x0002
+    'RA4->MSSP:SCL;
+    SSP1CLKPPS = 0x0004
+    'RA4->MSSP:SCL;
+    RA4PPS = 0x0018
+    LOCKPPS
+End Sub
+
+#DEFINE SWITCH_DOWN         1
+#DEFINE SWITCH_UP           0
+
+
+
+'' -------------------LATC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' LED:   ---------------|D5 |D4 |D3 |D2 |-
+''-----------------------------------------
+''
+#DEFINE LEDD2  PORTC.0
+#DEFINE LEDD3  PORTC.1
+#DEFINE LEDD4  PORTC.2
+#DEFINE LEDD5  PORTC.3
+#DEFINE LEDBANK portc
+#DEFINE SWITCH      PORTA.1
+
+Dir     LEDD2 Out
+Dir     LEDD3 Out
+Dir     LEDD4 Out
+Dir     LEDD5 Out
+Dir      SWITCH In
+
+#DEFINE USART_BAUD_RATE 19200
+#DEFINE USART_TX_BLOCKING
+
+
+' ----- Define Hardware settings for HWI2C
+' Define I2C settings - CHANGE PORTS if required for your specific device.
+#DEFINE HI2C_BAUD_RATE 400
+#DEFINE HI2C_DATA PORTA.2
+#DEFINE HI2C_CLOCK PORTA.4
+'Initialise I2C Master
+'I2C pins need to be input for SSP module
+Dir HI2C_DATA In
+Dir HI2C_CLOCK In
+'MASTER Second Port
+HI2CMode Master
+
+' ----- Main body of program commences here.
+' Now assumes Serial Terminal is operational
+Dim DeviceID As Byte
+Dim DISPLAYNEWLINE As Byte
+
+HSerPrintCRLF
+HSerPrint "Hardware I2C "
+HSerPrintCRLF 2
+
+Do Forever
+    Set LEDD2 Off
+    Set LEDD3 Off
+    Set LEDD4 Off
+    Set LEDD5 Off
+
+    HSerPrint "     "
+    For DeviceID = 0 To 15
+        HSerPrint Hex(deviceID)
+        HSerPrint " "
+    Next
+
+    For DeviceID = 0 To 255
+        DisplayNewLine = DeviceID % 16
+        If DisplayNewLine = 0 Then
+            HSerPrintCRLF
+            HSerPrint Hex(DeviceID)
+            HSerPrint ": "
+        End If
+        HSerPrint " "
+        HI2CStart
+        If HI2CWaitMSSPTimeout <> TRUE Then
+
+            HI2CSend ( deviceID )
+
+            If HI2CAckpollState = FALSE Then
+                HSerPrint   Hex(deviceID)
+            Else
+                HSerPrint "--"
+            End If
+            HI2CSend ( 0)
+
+        End If
+        HI2CStop
+
+    Next
+
+    HSerPrintCRLF 2
+    HSerPrint   "End of Search - Press button to repeat test"
+    HSerPrintCRLF 2
+    Set LEDD2 On
+    Set LEDD3 On
+    Set LEDD4 On
+    Set LEDD5 On
+
+    Wait While switch = SWITCH_UP
+Loop
+End
+
+
+
+' ----- Support methods.  Subroutines and Functions

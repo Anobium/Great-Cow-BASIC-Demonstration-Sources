@@ -1,0 +1,147 @@
+''' A demonstration program for GCGB and GCB.
+'''
+'''  This demonstration examines the I2C/TWI devices attached and displays then devices discovered on a serial terminal using the primary I2C module.
+'''
+'''   You need four LEDs connnect to PORTC.0, PORTC.1, PORTC.2 and PORTC.3 connected via suitable resistors.
+'''  You will to connect I2C/TWI devices to PORTC.2 and PORTC.4 for the data and clock lines respectively.  The two lines are need to be pull high by suitable resistors supply voltage.
+'''   You will also need to connect a serial Terminal to PORTC.4.  Using PUTTY.EXE for an excellent terminal program.  Also, you msy need to connect the microcontroller via a TTL converter.
+'''  You will a switch connect to porta.1.  The needs to be connected the supply voltage via a 1-k pullup resistor.
+'''  ************************************************************************************************************************************************************************************
+'''
+'''
+'''  PIC: 16f15355
+'''  Compiler: GCB
+'''  IDE: GCB@SYN
+'''
+'''
+'''@author   EvanV
+'''@licence  GPL
+'''@version  1.0
+'''@date     04.12.2016
+
+
+' ----- Configuration
+    'Chip Settings.
+    #chip 16f15355,32
+    #option explicit
+
+
+
+
+    'Set the PPS of the PWM and the RS232 ports.
+    'Set the PPS for this solution.
+  #startup InitPPS, 85
+
+  Sub InitPPS
+    UNLOCKPPS
+      RX1DTPPS = 0x15     'RC5->EUSART1:RX1;
+      RC4PPS = 0x0F     'RC4->EUSART1:TX1;K
+
+      SSP1CLKPPS = 0x09      'RB1->MSSP1:SCL1;
+      SSP1DATPPS = 0x0A      'RB2->MSSP1:SDA1;
+      RB1PPS = 0x15      'RB1->MSSP1:SCL1;
+      RB2PPS = 0x16      'RB2->MSSP1:SDA1;
+
+      LOCKPPS
+  End sub
+
+    #define SWITCH_DOWN         1
+    #define SWITCH_UP           0
+
+
+
+  '' -------------------LATC-----------------
+    '' Bit#:  -7---6---5---4---3---2---1---0---
+    '' LED:   ---------------|D5 |D4 |D3 |D2 |-
+    ''-----------------------------------------
+    ''
+    #define LEDD2  PORTC.0
+    #define LEDD3  PORTC.1
+    #define LEDD4  PORTC.2
+    #define LEDD5  PORTC.3
+    #define LEDBANK PORTC
+    #define SWITCH      PORTA.1
+
+    Dir     LEDD2 OUT
+    Dir     LEDD3 OUT
+    Dir     LEDD4 OUT
+    Dir     LEDD5 OUT
+    Dir      SWITCH IN
+
+    #define USART_BAUD_RATE 19200
+    #define USART_TX_BLOCKING
+
+
+; ----- Define Hardware settings for HWI2C
+    ' Define I2C settings - CHANGE PORTS if required for your specific device.
+    #define HI2C_BAUD_RATE 400
+    #define HI2C_DATA PORTB.2
+    #define HI2C_CLOCK PORTB.1
+    'Initialise I2C Master
+    'I2C pins need to be input for SSP module
+    Dir HI2C_DATA in
+    Dir HI2C_CLOCK in
+    'MASTER Second Port
+    HI2CMode Master
+
+; ----- Main body of program commences here.
+  ' Now assumes Serial Terminal is operational
+  dim DeviceID as byte
+  Dim DISPLAYNEWLINE as Byte
+
+  HSerPrintCRLF
+  HSerPrint "Hardware I2C "
+  HSerPrintCRLF 2
+
+  Do Forever
+        Set LEDD2 off
+        Set LEDD3 off
+        Set LEDD4 off
+        Set LEDD5 off
+
+        HSerPrint "     "
+        for DeviceID = 0 to 15
+          HSerPrint hex(deviceID)
+          HSerPrint " "
+        next
+
+        for DeviceID = 0 to 255
+          DisplayNewLine = DeviceID % 16
+          if DisplayNewLine = 0 Then
+            HSerPrintCRLF
+            HserPrint hex(DeviceID)
+            HSerPrint ": "
+          end if
+          HSerPrint " "
+          HI2CStart
+          if HI2CWaitMSSPTimeout <> True then
+
+            HI2CSend ( deviceID )
+
+            if HI2CAckPollState = false then
+              HSerPrint   hex(deviceID)
+            Else
+              HSerPrint "--"
+            end if
+            HI2CSend ( 0)
+
+          end if
+          HI2CStop
+
+        next
+
+        HSerPrintCRLF 2
+        HSerPrint   "End of Search - Press button to repeat test"
+        HSerPrintCRLF 2
+        Set LEDD2 on
+        Set LEDD3 on
+        Set LEDD4 on
+        Set LEDD5 on
+
+        wait while switch = SWITCH_UP
+  Loop
+  END
+
+
+
+; ----- Support methods.  Subroutines and Functions
