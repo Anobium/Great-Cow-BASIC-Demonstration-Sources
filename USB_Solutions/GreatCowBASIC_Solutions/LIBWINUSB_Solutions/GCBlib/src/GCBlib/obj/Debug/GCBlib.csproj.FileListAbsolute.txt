@@ -1,0 +1,8 @@
+C:\Users\ing.mier\Desktop\DevSRClocal\GCBlib\src\GCBlib\..bin\Debug\GCBlib.dll
+C:\Users\ing.mier\Desktop\DevSRClocal\GCBlib\src\GCBlib\..bin\Debug\GCBlib.pdb
+C:\Users\ing.mier\Desktop\DevSRClocal\GCBlib\src\GCBlib\obj\Debug\GCBlib.csproj.AssemblyReference.cache
+C:\Users\ing.mier\Desktop\DevSRClocal\GCBlib\src\GCBlib\obj\Debug\GCBlib.csproj.CoreCompileInputs.cache
+C:\Users\ing.mier\Desktop\DevSRClocal\GCBlib\src\GCBlib\obj\Debug\GCBlib.dll
+C:\Users\ing.mier\Desktop\DevSRClocal\GCBlib\src\GCBlib\obj\Debug\GCBlib.pdb
+C:\Users\ing.mier\Desktop\DevSRClocal\GCBlib\src\bin\Debug\GCBlib.dll
+C:\Users\ing.mier\Desktop\DevSRClocal\GCBlib\src\bin\Debug\GCBlib.pdb

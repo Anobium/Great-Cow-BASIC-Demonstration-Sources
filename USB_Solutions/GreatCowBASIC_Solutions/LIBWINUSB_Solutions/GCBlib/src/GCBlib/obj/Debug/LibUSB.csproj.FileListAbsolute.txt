@@ -1,0 +1,6 @@
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\LibWinUsb\obj\Debug\LibUSB.csproj.CoreCompileInputs.cache
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\LibWinUsb\bin\Debug\GCBlib.dll
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\LibWinUsb\bin\Debug\GCBlib.pdb
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\LibWinUsb\obj\Debug\GCBlib.dll
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\LibWinUsb\obj\Debug\GCBlib.pdb
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\LibWinUsb\obj\Debug\LibUSB.csproj.AssemblyReference.cache
