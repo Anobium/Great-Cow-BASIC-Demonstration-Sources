@@ -1,0 +1,13 @@
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\bin\Release\GCBlib.xml
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\bin\Release\GCBlib.dll
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\bin\Release\GCBlib.pdb
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\GCBlib\obj\Release\GCBlib.csproj.AssemblyReference.cache
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\GCBlib\obj\Release\GCBlib.csproj.CoreCompileInputs.cache
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\GCBlib\obj\Release\GCBlib.dll
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\GCBlib\obj\Release\GCBlib.pdb
+C:\Users\ing.mier\Desktop\DevSRClocal\GCBlib\src\bin\Release\GCBlib.dll
+C:\Users\ing.mier\Desktop\DevSRClocal\GCBlib\src\bin\Release\GCBlib.pdb
+C:\Users\ing.mier\Desktop\DevSRClocal\GCBlib\src\GCBlib\obj\Release\GCBlib.csproj.AssemblyReference.cache
+C:\Users\ing.mier\Desktop\DevSRClocal\GCBlib\src\GCBlib\obj\Release\GCBlib.csproj.CoreCompileInputs.cache
+C:\Users\ing.mier\Desktop\DevSRClocal\GCBlib\src\GCBlib\obj\Release\GCBlib.dll
+C:\Users\ing.mier\Desktop\DevSRClocal\GCBlib\src\GCBlib\obj\Release\GCBlib.pdb

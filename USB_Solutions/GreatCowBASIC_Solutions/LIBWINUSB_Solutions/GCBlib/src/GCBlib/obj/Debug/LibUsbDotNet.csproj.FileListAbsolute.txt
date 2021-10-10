@@ -1,0 +1,12 @@
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\stage\LibWinUsb\bin\Debug\LibUsbDotNet.dll
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\stage\LibWinUsb\bin\Debug\LibUsbDotNet.pdb
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\stage\LibWinUsb\obj\Debug\LibUsbDotNet.csproj.AssemblyReference.cache
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\stage\LibWinUsb\obj\Debug\LibUsbDotNet.csproj.CoreCompileInputs.cache
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\stage\LibWinUsb\obj\Debug\LibUsbDotNet.dll
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\stage\LibWinUsb\obj\Debug\LibUsbDotNet.pdb
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\LibWinUsb\bin\Debug\LibUsbDotNet.dll
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\LibWinUsb\bin\Debug\LibUsbDotNet.pdb
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\LibWinUsb\obj\Debug\LibUsbDotNet.csproj.AssemblyReference.cache
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\LibWinUsb\obj\Debug\LibUsbDotNet.csproj.CoreCompileInputs.cache
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\LibWinUsb\obj\Debug\LibUsbDotNet.dll
+C:\Users\ing.mier\Desktop\DevSRClocal\External Repos\LibUsbDotNet\src\LibWinUsb\obj\Debug\LibUsbDotNet.pdb
