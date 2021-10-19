@@ -1,0 +1,210 @@
+'''A program  for GCGB and GCB the demonsations......
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program send and receive CAN Bus standard frames whit the status of two buttons, one pot and one byte count.
+'''Uses interrupts, mask and filters; also it respond to commands and can go to sleep and wake up by CAN commands.
+'''
+'''@author     Angel Mier
+'''@licence    GPL
+'''@version    1.0
+'''@date       10/19/2021
+'''********************************************************************************
+
+; ----- Configuration
+  #include <CanBus.h>
+  #chip 18F4550, 48
+
+  #option explicit
+
+; ----- Constants
+
+
+; ----- Define Hardware settings
+
+  '''CanBus
+  '#define CanBus_HardwareSPI
+  #define CanBus_DI       PORTB.0          ' Data in | MISO
+  #define CanBus_DO       PORTB.3          ' Data out | MOSI
+  #define CanBus_SCK      PORTB.1          ' Clock Line  sck
+
+  #define CanBus_INT      PORTB.2          ' Interrupt command line
+  #define CanBus_CS       PORTC.0          ' Chip select line
+
+  #define CanBus_BitRate 100
+
+
+
+  'port leds, switchs and pot
+  dir portd out
+  portd = b'10000000'
+  #define Switch0 portb.4
+  #define Switch1 portb.5
+  dir switch0 in
+  dir switch1 in
+  #define ADSpeed LowSpeed
+  #define Pot1  AN0
+  dir porta.0 in
+
+
+; ----- Variables.
+  dim id as Long
+  dim ext as BIT
+  dim rtr as BIT
+  dim dl as Byte
+  dim rx0 as bit
+  dim filhit as Byte
+  dim controller_status as Byte
+  dim slp as BIT
+  dim ReadingAn as bit
+
+  dim delaycount as Long
+  dim potval as Byte
+  dim buttonstat as Byte
+  dim incbyte as Byte
+
+  incbyte = 0
+  delaycount = 0
+  slp = 0
+  ReadingAn = 0
+
+
+; ----- Interrupts.
+  'CAN Bus Interrupt
+  'PORTb.2 --- INT2
+  INTEDG2=0
+  INT2IE=1
+  on Interrupt ExtInt2 call CANinterrupt
+
+
+; ----- Main body of program.
+
+
+  CanBus_NormalMode
+
+  CanBus_SetInterrupts 1,0
+
+  CanBus_SetMask 0,0,0x700
+
+  CanBus_SetFilter 0,0,0x700
+  CanBus_SetFilter 1,0,0x700
+
+  controller_status = 1
+
+
+  sendstat
+
+
+
+
+  Do
+    if slp = 1 then
+      gotosleep
+    end if
+
+    if ButtStat.0 <> Switch0 then
+      Sendstat
+    end if
+
+    if ButtStat.1 <> Switch1 then
+      Sendstat
+    end if
+
+
+
+    delaycount += 1
+    if delaycount > 100000 then
+      delaycount = 0
+      ReadingAn = 1
+      if potval <> ReadAD(AN0,true) then
+        Sendstat
+      end if
+      ReadingAn = 0
+      Rotate portd Right Simple
+      if incbyte < 255 then
+        incbyte += 1
+      else
+        incbyte = 0
+      end if
+      sendstat
+    end if
+
+
+    if CanBus_INT = 0 Then
+      CANinterrupt
+    end if
+
+  Loop
+
+  end
+
+
+
+
+
+; ----- Subroutines.
+sub CANinterrupt
+  if CanBus_INT = 0 Then
+    if ReadingAn = 0 Then
+      CanBus_ReadMessage 0, ext, id, rtr, dl, filhit
+      CanCommands
+      INT2IF = 0
+      if CanBus_INT = 0 Then
+        CANinterrupt
+      end if
+      CanBus_ClrAllInt
+    end if
+  end if
+end Sub
+
+
+sub CanCommands
+
+  select Case ID
+    case 0x708
+      if rtr = 1 then
+        sendstat
+      end if
+
+
+    case 0x710
+      if rtr = 1 then
+        slp = 1
+      end if
+
+    case 0x711
+      if rtr = 1 then
+        slp = 0
+        controller_status = 1
+        CanBus_SendMessage (0,0,0x711,0,1,controller_status)
+      end if
+
+
+    case else
+
+  end Select
+
+end sub
+
+
+
+sub gotosleep
+  controller_status = 128
+  CanBus_SendMessage (0,0,0x710,0,1,controller_status)
+  sleep
+
+end sub
+
+Sub SendStat
+  buttstat = 0
+  buttstat.0 = Switch0
+  buttstat.1 = Switch1
+  ReadingAn = 1
+  potval = ReadAD(AN0,true)
+  ReadingAn = 0
+  CanBus_SendMessage (0,0,0x708,0,4,potval,portd,buttstat,incbyte,controller_status)
+end sub
+
+; ----- Lookup Tables.
+
+
+
+end

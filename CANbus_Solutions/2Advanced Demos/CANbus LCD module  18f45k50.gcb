@@ -1,0 +1,227 @@
+'''A program  for GCGB and GCB the demonsations......
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program send and receive CAN Bus standard frames and shows data on an LCD display.
+'''Uses interrupts, mask and filters; also it respond to commands and can go to sleep and wake up by CAN commands.
+'''
+'''@author     Angel Mier
+'''@licence    GPL
+'''@version    1.0
+'''@date       10/19/2021
+'''********************************************************************************
+
+; ----- Configuration
+  #include <CanBus.h>
+  #chip 18F45k50, 48
+
+  #option explicit
+
+; ----- Constants
+
+
+; ----- Define Hardware settings
+
+  '''I2C by Hardware
+  #define HI2C_BAUD_RATE 400
+  #define HI2C_DATA PORTB.0
+  #define HI2C_CLOCK PORTB.1
+  Dir HI2C_DATA in
+  Dir HI2C_CLOCK in
+
+  HI2CMode Master
+
+  '''LCD
+  #define LCD_IO 10
+  #define LCD_I2C_Address_1 0x4E '0x7E
+  #define LCD_SPEED OPTIMAL
+  #define LCD_WIDTH 16
+  #define LCD_Backlight_On_State  1
+  #define LCD_Backlight_Off_State 0
+
+
+   '''CanBus
+  '#define CanBus_HardwareSPI
+   #define CanBus_DI       PORTE.0          ' Data in | MISO
+   #define CanBus_DO       PORTE.1          ' Data out | MOSI
+   #define CanBus_SCK      PORTE.2          ' Clock Line  sck
+
+   #define CanBus_INT      PORTB.2          ' Interrupt command line
+   #define CanBus_CS       PORTB.3          ' Chip select line
+
+   #define CanBus_BitRate 100
+
+; ----- Variables.
+  dim id as Long
+  dim ext as BIT
+  dim rtr as BIT
+  dim dl as Byte
+  dim rx0 as bit
+  dim filhit as Byte
+  dim controller_status as Byte
+  dim dat as Byte
+  dim slp as BIT
+  dim ReadingAn as bit
+
+  dim potval as Byte
+  dim prt as Byte
+  dim buttstat as byte
+  dim buttstat2 as BIT
+  dim incbyte as Byte
+  ReadingAn = 0
+  potval = 0
+  prt = 0
+  buttstat = 0
+  buttstat2 = 0
+  incbyte = 0
+  slp = 0
+
+
+; ----- Interrupts.
+  'CAN Bus Interrupt
+  'PORTb.2 --- INT2
+  INTEDG2=0
+  INT2IE=1
+  on Interrupt ExtInt2 call CANinterrupt
+
+
+; ----- Main body of program.
+
+
+  CanBus_NormalMode
+
+  CanBus_SetInterrupts 1,0
+
+  CanBus_SetMask 0,0,0x700
+
+  CanBus_SetFilter 0,0,0x700
+  CanBus_SetFilter 1,0,0x400
+
+  controller_status = 1
+
+
+
+
+  LCDBacklight(off)
+
+  cls
+
+
+  controller_status = 1
+  CanBus_SendMessage (0,0,0x700,0,1,controller_status)
+
+
+
+
+  Do
+    if slp = 1 then
+      gotosleep
+    end if
+
+    updatelcd
+    wait 10 ms
+
+    if CanBus_INT = 0 Then
+      CANinterrupt
+    end if
+
+  Loop
+
+  end
+
+
+
+
+
+; ----- Subroutines.
+sub CANinterrupt
+  if CanBus_INT = 0 Then
+    if ReadingAn = 0 Then
+      CanBus_ReadMessage 0, ext, id, rtr, dl, filhit
+      CanCommands
+      INT2IF = 0
+      if CanBus_INT = 0 Then
+        CANinterrupt
+      end if
+      CanBus_ClrAllInt
+    end if
+  end if
+end Sub
+
+
+sub CanCommands
+
+  select Case ID
+    case 0x700
+      if rtr = 1 then
+        CanBus_SendMessage (0,0,0x700,0,1,controller_status)
+      end if
+
+    case 0x708
+      if rtr = 0 then
+        potval = CanBus_ReadBuffer(1)
+        prt = CanBus_ReadBuffer(2)
+        buttstat = CanBus_ReadBuffer(3)
+        incbyte = CanBus_ReadBuffer(4)
+      end if
+
+    case 0x400
+      if rtr = 0 then
+        buttstat2 = CanBus_ReadBuffer(1).0
+      end if
+
+    case 0x706
+      if rtr = 1 then
+        slp = 1
+      end if
+
+    case 0x707
+      if rtr = 1 then
+        slp = 0
+        controller_status = 1
+        CanBus_SendMessage (0,0,0x707,0,1,controller_status)
+      end if
+
+
+    case else
+
+  end Select
+
+end sub
+
+sub updatelcd
+  cls
+  print "Pot:"
+  print potval
+  print " Btn:"
+  print buttstat.0
+  print buttstat.1
+  print buttstat2
+  locate 1,0
+  print "D"
+  print prt.0
+  print prt.1
+  print prt.2
+  print prt.3
+  print prt.4
+  print prt.5
+  print prt.6
+  print prt.7
+  print " "
+  print incbyte
+end Sub
+
+sub gotosleep
+  controller_status = 128
+  CanBus_SendMessage (0,0,0x706,0,1,controller_status)
+  LCDBacklight off
+  cls
+  sleep
+
+end sub
+
+
+
+; ----- Lookup Tables.
+
+
+
+end

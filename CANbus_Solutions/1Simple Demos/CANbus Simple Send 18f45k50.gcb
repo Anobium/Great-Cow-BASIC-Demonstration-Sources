@@ -1,0 +1,76 @@
+'''A program  for GCGB and GCB the demonsations......
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program sends a CAN Bus standard frame whit the status of one button in it simpliest way.
+'''
+'''@author     Angel Mier
+'''@licence    GPL
+'''@version    1.0
+'''@date       10/07/2021
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 18F45k50, 48
+  #include <CanBus.h>
+
+  #option explicit
+
+; ----- Constants
+
+
+; ----- Define Hardware settings
+   // CanBus
+  #define CanBus_HardwareSPI   'Just because we can, we are going to use Hardware SPI this time, coment for sft.
+  #define CanBus_DI       PORTB.0          ' Data in | MISO
+  #define CanBus_DO       PORTB.3          ' Data out | MOSI
+  #define CanBus_SCK      PORTB.1          ' Clock Line  sck
+
+  #define CanBus_INT      PORTB.2          ' Interrupt command line
+  #define CanBus_CS       PORTB.4          ' Chip select line
+
+  #define CanBus_BitRate 100  'bit rate in kbps, Options: 5,10,20,31,33,40,50,80,100,125,200,250,1000
+
+
+  #define Button PORTa.2  'Our most precious button
+  dir Button in
+
+  ; ----- Variables
+  dim Buffern as Byte
+  dim ForceExt as BIT
+  dim ID as Long
+  dim RTR as BIT
+  dim DLC as Byte
+  dim ButtonStatus as BIT
+; ----- Quick Command Reference:
+
+
+; ----- Main body of program commences here.
+'Variable details
+  Buffern  = 0     'we will use the TX0 Bufer, we have 3
+  ID       = 0x400 'Our Frame ID will be  1024 (you can enter it in decimal or hex) its a Standard id and the library will detect it accordingly
+  ForceExt = 0     'we can force to send a lower value as an extended id (29 bits instead of 11 for standard) in this case we are going to use a standard id
+  RTR      = 0     'we arent asking for data so we dont going to use a Remote Request Frame
+  DLC      = 1     'how many bytes of data we will send? the CAN bus v2.0 standard allows a maximum of 8 bytes in a frame
+
+'change to normal mode
+  CanBus_NormalMode
+
+'lets inform of our actual status.
+  ButtonStatus = Button
+  CanBus_SendMessage (Buffern,ForceExt,ID,RTR,DLC,ButtonStatus)
+
+
+  Do
+
+    'our button has been tampered? :-)
+    if ButtonStatus <> Button then
+    ButtonStatus = Button
+    'lets send our frame trouhg the bus and be a happy module
+    CanBus_SendMessage (Buffern,ForceExt,ID,RTR,DLC,ButtonStatus)
+    end if
+
+    'rince and repeat...
+  Loop
+
+  end
+
+; ----- Support methods.  Subroutines and Functions

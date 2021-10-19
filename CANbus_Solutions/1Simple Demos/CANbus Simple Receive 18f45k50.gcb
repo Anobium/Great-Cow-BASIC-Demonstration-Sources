@@ -1,0 +1,86 @@
+'''A program  for GCGB and GCB the demonsations......
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program reads a CAN Bus standard frame whit the status of one button and turns a led.
+'''
+'''@author     Angel Mier
+'''@licence    GPL
+'''@version    1.0
+'''@date       10/07/2021
+'''********************************************************************************
+
+; ----- Configuration
+  #chip 18F45k50, 48
+  #include <CanBus.h>
+
+  #option explicit
+
+; ----- Constants
+
+
+; ----- Define Hardware settings
+   // CanBus
+' #define CanBus_HardwareSPI       //Disable Coment for Hardware SPI, change pins accordingly
+  #define CanBus_DI       PORTE.0          ' Data in | MISO
+  #define CanBus_DO       PORTE.1          ' Data out | MOSI
+  #define CanBus_SCK      PORTE.2          ' Clock Line  sck
+
+  #define CanBus_INT      PORTB.2          ' Interrupt command line
+  #define CanBus_CS       PORTB.3          ' Chip select line
+
+  #define CanBus_BitRate 100  'bit rate in kbps, Options: 5,10,20,31,33,40,50,80,100,125,200,250,1000
+
+
+  #define Led PORTa.1  'a happy led
+  dir Led out
+  Led = 0
+
+; ----- Variables
+  dim Buffern as Byte
+  dim Ext as BIT
+  dim RTR as BIT
+  dim DLC as Byte
+  dim ID as Long
+  dim ExpectedID as Long
+  dim Rx0Full as BIT
+; ----- Quick Command Reference:
+
+
+; ----- Main body of program commences here.
+'Variable details
+  Buffern    = 0     'we will use the RX0 Bufer, we have 2
+  ExpectedID = 0x400 'Our expected Frame ID will be  1024 (you can enter it in decimal or hex)
+  'ID                  What ID we receive?
+  'Ext                 do we receive an extended ID?
+  'RTR                 do we receive a Remote Request Frame?
+  'DLC                 how many bytes of data we receive?
+  'Rx0Full             did the mail arrive?
+
+'change to normal mode
+  CanBus_NormalMode
+
+
+  Do
+
+    'read the Rx0 buffer status
+    CanBus_GetBufferSatus Rx0Full
+
+    if Rx0Full = 1 then
+      'lets read the frame!
+      CanBus_ReadMessage Buffern, Ext, ID, RTR, DLC
+
+      'WARNING: in this example we are filtering the data whit the microcontroler and wasting resources, the library have the capability to do mask and message filtering on the CAN controller
+      '         and get interrupts whitout any sacrificies; But this is a simple Hello world program.
+
+      'is our frame the one expected?
+      if ID = ExpectedID then
+        'lets command that led.
+        Led = Not CanBus_ReadBuffer(1).0 'we are reading a BYTE and only want the first bit (maybe some one send us another number), I'm using "Not" because my button relaxed state is 1
+      end if
+    end if
+
+  'rince and repeat...
+  Loop
+
+  end
+
+; ----- Support methods.  Subroutines and Functions
