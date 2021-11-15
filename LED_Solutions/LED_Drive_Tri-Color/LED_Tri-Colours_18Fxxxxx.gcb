@@ -65,7 +65,7 @@
 
     CurMs = millis()
 
-    if CurMs - LstMs >= LEDRate then  ' required Time has Elapsed
+    if CurMs - LstMs >= LEDRate then  ' required Time has Elapsed, increate the CaseCounter
 
       LstMs = CurMs                   ' And Record Toggle Time
       CaseCounter++
@@ -73,6 +73,8 @@
       If CaseCounter = 12 then CaseCounter = 0
 
     else
+
+      'Show the current color
 
       Select Case CaseCounter
 
@@ -111,14 +113,12 @@
 
 sub ShowColour(RL, GL, BL)
 
-   Rltemp = RL + RL
-
    for PulseLoop = 1 to FlashRate
       SET RED ON
       SET GREEN ON
       SET BLUE ON
       for Level = 1 to 200
-         if Level > Rltemp then
+         if Level > RL then
             SET RED OFF
          end if
          if Level > GL then
