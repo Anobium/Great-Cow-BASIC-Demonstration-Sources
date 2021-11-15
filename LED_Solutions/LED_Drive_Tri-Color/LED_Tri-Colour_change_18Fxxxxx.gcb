@@ -1,0 +1,87 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a demonstration of controling a color of Tri-colour LED based upon the value of the loop variable
+'''The LED is connected to Portb.1,2 and 3 via a suitable resistor .
+'''@author  EvanV plus works of HughC
+'''@licence GPL
+'''@version 1.0a
+'''@date    31.11.2021
+'''********************************************************************************
+
+; ----- CONFIGURATION
+  #CHIP 18F25K50
+  #OPTION EXPLICIT
+
+
+; ----- Define Hardware settings
+  'LED port directions
+  DIR RED   OUT
+  DIR GREEN OUT
+  DIR BLUE  OUT
+
+
+; ----- Constants
+
+  #DEFINE RED   PORTB.1
+  #DEFINE GREEN PORTB.2
+  #DEFINE BLUE  PORTB.3
+
+; ----- Variables
+  Dim White, Redlevel, Greenlevel, Bluelevel, Flashrate, Pulseloop, Level, Rltemp as Byte
+
+
+
+; ----- Main body of program commences here.
+  'Intro message
+
+
+  Do Forever
+      For RedLevel = 1 to 200
+          ShowColour Smooth(RedLevel), 1, 1
+      next
+      For GreenLevel = 1 to 200
+          ShowColour 1, Smooth(GreenLevel), 1
+      next
+      For BlueLevel = 1 to 200
+          ShowColour 1, 1, Smooth(BlueLevel)
+      next
+      For White = 1 to 200
+          ShowColour Smooth(White),Smooth(White),Smooth(White)
+      next
+
+  Loop
+  end
+
+; ----- Support methods.  Subroutines and Functions
+
+
+sub ShowColour(RL, GL, BL)
+   RLTemp = RL+RL
+   ' You can use 0 [zero], or ADC0 or ANO they are mapped to the correct analog port.
+   FlashRate = ReadAD( 0 )
+   for PulseLoop = 1 to FlashRate
+      set red on
+      set green on
+      set blue on
+      for Level = 1 to 200
+         if Level > RLTemp then
+            set red off
+         end if
+         if Level > GL then
+            set green off
+         end if
+         if Level > BL then
+            set blue off
+         end if
+      next
+   next
+end sub
+
+function Smooth(temp)
+   if temp < 100 then
+      Smooth = temp
+   end if
+   if temp >= 100 then
+      Smooth = 200-temp
+   end if
+end function

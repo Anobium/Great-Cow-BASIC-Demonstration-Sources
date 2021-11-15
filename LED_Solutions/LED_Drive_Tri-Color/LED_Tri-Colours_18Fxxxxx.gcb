@@ -1,0 +1,144 @@
+'''A demonstration program for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program is a demonstration of controlling a color of Tri-colour LED based upon  time of 1 s
+'''The LED is connected to Portb.1,2 and 3 via a suitable resistor .
+'''@author  EvanV plus works of HughC
+'''@licence GPL
+'''@version 1.0a
+'''@date    31.11.2021
+'''********************************************************************************
+
+; ----- CONFIGURATION
+  #CHIP 18F25K50
+  #OPTION EXPLICIT
+
+  #INCLUDE <MILLIS.H>         ' INCLUDE THE LIBRARY
+  #DEFINE LEDRATE             1000
+  #DEFINE TMRVALUEMILLIS      68 'Tweak the clock....  68 is the baseline value
+
+
+; ----- Define Hardware settings
+  'LED port directions
+  DIR RED   OUT
+  DIR GREEN OUT
+  DIR BLUE  OUT
+
+
+; ----- Constants
+
+  #DEFINE RED   PORTB.1
+  #DEFINE GREEN PORTB.2
+  #DEFINE BLUE  PORTB.3
+
+; ----- Variables
+  Dim White, Redlevel, Greenlevel, Bluelevel, Flashrate, Pulseloop, Level, Rltemp, CaseCounter as Byte
+  FlashRate = 10
+
+  Dim CurMs, LstMs as word  ' declare working variables
+  LstMs = 0
+  CurMs = 0
+
+; ----- Main body of program commences here.
+  'Intro message
+
+  #DEFINE   LED_RED              255,  0,    0
+  #DEFINE   LED_ROSE             255,  0,  128
+  #DEFINE   LED_MAGNETA          255,  0,  255
+  #DEFINE   LED_VIOLET           128,  0,  255
+
+  #DEFINE   LED_BLUE             0,    0,  255
+  #DEFINE   LED_AZURE            0,   128, 255
+  #DEFINE   LED_CYAN             0,   255, 255
+  #DEFINE   LED_SPRINGGREEN      0,   255, 128
+
+  #DEFINE   LED_GREEN            0,   255,   0
+  #DEFINE   LED_CHARTREUSE       128, 255,   0
+  #DEFINE   LED_YELLOW           255, 255,   0
+  #DEFINE   LED_ORANGE           255, 128,   0
+
+  #DEFINE   LED_WHITE              0,   0,   0
+  #DEFINE   LED_BLACK            255, 255, 255
+
+
+  CaseCounter = 0
+  Do
+
+    CurMs = millis()
+
+    if CurMs - LstMs >= LEDRate then  ' required Time has Elapsed
+
+      LstMs = CurMs                   ' And Record Toggle Time
+      CaseCounter++
+
+      If CaseCounter = 12 then CaseCounter = 0
+
+    else
+
+      Select Case CaseCounter
+
+        Case 0
+          ShowColour LED_RED
+        Case 1
+          ShowColour LED_ROSE
+        Case 2
+          ShowColour LED_MAGNETA
+        Case 3
+          ShowColour LED_VIOLET
+
+        Case 4
+          ShowColour LED_BLUE
+        Case 5
+          ShowColour LED_AZURE
+        Case 6
+          ShowColour LED_CYAN
+        Case 7
+          ShowColour LED_SPRINGGREEN
+
+        Case 8
+          ShowColour LED_GREEN
+        Case 9
+          ShowColour LED_CHARTREUSE
+        Case 10
+          ShowColour LED_YELLOW
+        Case 11
+          ShowColour LED_ORANGE
+
+      End Select
+
+    end if
+
+  Loop
+
+sub ShowColour(RL, GL, BL)
+
+   Rltemp = RL + RL
+
+   for PulseLoop = 1 to FlashRate
+      SET RED ON
+      SET GREEN ON
+      SET BLUE ON
+      for Level = 1 to 200
+         if Level > Rltemp then
+            SET RED OFF
+         end if
+         if Level > GL then
+            SET GREEN OFF
+         end if
+         if Level > BL then
+            SET BLUE OFF
+         end if
+      next
+   next
+
+end sub
+
+function Smooth(temp)
+
+   if temp < 100 then
+      Smooth = temp
+   end if
+   if temp >= 100 then
+      Smooth = 200-temp
+   end if
+
+end function
