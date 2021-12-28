@@ -17,7 +17,7 @@
 #chip  MEGA328PB
 #option Explicit
 
-    #Define SWITCH  portB.7
+    #Define SWITCH  portC.2
     #DEFINE LED     PORTB.5
 
     'Use Volatile to ensure the compiler does not try to optimize the code

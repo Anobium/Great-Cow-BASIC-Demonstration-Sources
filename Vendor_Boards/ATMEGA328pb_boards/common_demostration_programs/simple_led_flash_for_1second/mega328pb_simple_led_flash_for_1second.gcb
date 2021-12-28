@@ -40,7 +40,7 @@
 
     Do
         LED = !LED
-'        wait MYDELAY s
+        wait MYDELAY s
     Loop
 
 END
