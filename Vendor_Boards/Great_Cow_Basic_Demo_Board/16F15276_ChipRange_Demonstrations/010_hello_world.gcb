@@ -1,0 +1,32 @@
+'''
+''' The  most simple sample for GCGB and GCB.
+'''
+''' This simply set an LEDs on.  The LED is attached to portC.0 via a suitable resistor to 0v.
+'''
+'''
+'''************************************************************************
+'''
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    31.12.2021
+' ----- Configuration
+
+'Chip Settings.
+#CHIP 16F15276
+#Option Explicit
+
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+
+    'Set the a port as an output, we will use only one BIT to connect to the LED
+    Dir PORTC.0 Out
+
+    'Set one bit of the port on.
+    ' You can try set portC.0 - the other LED, remember you will need a resistor!
+      PORTC.0 = 1
+
+    'End
+    End
