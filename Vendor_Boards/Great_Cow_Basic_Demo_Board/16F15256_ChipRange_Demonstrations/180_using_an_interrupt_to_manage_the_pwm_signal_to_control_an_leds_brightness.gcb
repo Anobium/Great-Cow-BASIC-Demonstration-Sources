@@ -1,0 +1,103 @@
+'''
+''' This demonstration will show how you can control a motor using a PWM signal.
+'''
+''' Pulse-Width Modulation (PWM) is a scheme that provides power to a load by switching
+''' quickly between fully on and fully off states. The PWM signal resembles a square wave
+''' where the high portion of the signal is considered the on state and the low portion of
+''' the signal is considered the off state. The high portion, also known as the pulse width,
+''' can vary in time and is defined in steps. A longer, high on time will illuminate the LED
+''' brighter. The frequency or period of the PWM does not change.
+'''
+''' This program demostrates a method where the number of steps applied,
+''' which lengthens the pulse width are calculated in an Interrupt routine.
+''' The PWM period defined as the duration of one complete cycle or the total
+''' amount of on and off time combined is based on a simple counter.
+'''
+''' The demo varies the PWM to the LED.  We are pretending the motor is connected to PortC.1, via a suitable motor control device.
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    31.12.2021
+' ----- Configuration
+
+'Chip Settings.
+#CHIP 16F15256
+#OPTION Explicit
+
+
+
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:   ---------------------SW------ADC--
+''-----------------------------------------
+''
+
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ----TX---------LED--LED-LED LED--
+''-----------------------------------------
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+Dim speed, MotorSpeed, PWMCounter As Byte
+
+'We are pretending the motor is connected to Portb.1, via a suitable motor control device.
+#DEFINE MOTOR PORTC.0
+Dir MOTOR Out
+
+'Call the initialisation routine
+InitMotorControl
+
+'Main routine
+Do
+    'Increase speed to full over 2.5 seconds
+    For Speed = 0 To 100
+        MotorSpeed = Speed
+        Wait 25 ms
+    Next
+    'Hold speed
+    Wait 1 s
+    'Decrease speed to zero over 2.5 seconds
+    For Speed = 100 To 0
+        MotorSpeed = Speed
+        Wait 25 ms
+    Next
+    'Hold speed
+    Wait 1 s
+Loop
+
+'Setup routine
+Sub InitMotorControl
+    'Clear variables
+    MotorSpeed = 0
+    PWMCounter = 0
+
+    'Add a handler for the interrupt
+    On Interrupt Timer0Overflow Call PWMHandler
+    InitTimer0 Osc, PRE0_1 + TMR0_FOSC4 ,  POST0_1
+    StartTimer 0
+
+End Sub
+
+'PWM sub
+'This will be called when Timer 0 overflows
+Sub PWMHandler
+
+    If MotorSpeed > PWMCounter Then
+        Set MOTOR On
+    Else
+        Set MOTOR Off
+    End If
+    PWMCounter += 1
+    If PWMCounter = 100 Then PWMCounter = 0
+
+End Sub

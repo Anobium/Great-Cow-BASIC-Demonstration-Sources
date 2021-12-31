@@ -1,0 +1,85 @@
+'''
+''' This demonstration will provide code for raising an event when a port changes.
+''' The port that is being set then inspected in PORTA.2. Why? Because we have the switch on that port.
+'''
+''' When the event happens the LED is toggled.  The LED will toggle when the Signal value is 0.
+'''
+''' This does not have a proper debounce check, you can add one.
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    31.12.2021
+' ----- Configuration
+
+'Chip Settings.
+'Chip Settings.
+#CHIP 16F15256
+#OPTION Explicit
+
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:   -----------------SW----------ADC--
+''-----------------------------------------
+''
+
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------LED--LED-LED LED--
+''-----------------------------------------
+
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDPORT LATC
+
+
+Dir     RC0         Out
+Dir     RC1         Out
+Dir     RC2         Out
+Dir     RC3         Out
+
+#DEFINE POTENTIOMETER PORTA.0
+Dir     POTENTIOMETER In
+#DEFINE SWITCHIN      PORTA.3
+Dir     SWITCHIN      In
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+Dim SWState as BIT
+
+'Setup an Interrupt event when switch goes negative.
+IOCAN3 = 1
+On Interrupt PORTChange  Call InterruptHandler
+
+'Loop forever
+Do
+
+Loop
+
+
+Sub InterruptHandler
+
+    If IOCIF = 1 Then
+        'Is this our event?
+
+        'We must clear the flag in software
+        IOCAF3  = 0
+
+        'Save the state
+        SWState = RC2
+        'Toggle the LED
+        RC1 = !RC1
+        'a little delay
+        wait 100 us
+        Wait while SWITCHIN = SWState
+
+    End If
+
+End Sub
