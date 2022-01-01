@@ -1,0 +1,108 @@
+'''
+''' This demonstration uses the master reset as an input.  This WILL ONLY work when you do not use Low Voltage Programming (LVP).
+'''
+''' The code will inspect the switch status, but should overcome most of the noise from a switch.
+''' Some switches are worse than others.
+'''
+''' When the switch is held down, one LED will be lit.
+''' This time we are using the RESET button as an input switch.
+'''
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    01.01.2022
+
+
+'Chip Settings.
+#CHIP 18F27Q84
+#OPTION Explicit
+'This Configuration change does not have Low Voltage Programming Mode enabled, as the MCLR pin cannot be used as an input when using  LVP=on
+
+'The will enable the reset switch to be an input.  This will NOT reset the chip now but the reset becomes a switch input but ONLY when LVP=off
+#CONFIG MCLRE=INTMCLR    'Options are INTMCLR and EXTMCLR
+                         'EXTMCLR is MCLR Enable bit->If LVP = 0, MCLR pin is MCLR; If LVP = 1, RE3 pin function is MCLR
+
+
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    --------IN-LED--LED-LED LED -----
+''-----------------------------------------
+''
+
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'' ------------------PORTE-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ----------------RST--------------
+''-----------------------------------------
+''
+
+
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.2
+#DEFINE LEDD3 PORTB.3
+#DEFINE LEDD4 PORTB.4
+#DEFINE LEDPORT LATB
+
+
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+Dir     LEDD3         Out
+Dir     LEDD4         Out
+
+#DEFINE POTENTIOMETER PORTA.0
+Dir     POTENTIOMETER In
+#DEFINE SWITCHIN      PORTB.5
+Dir     SWITCHIN      In
+
+#DEFINE RSTButton     PORTE.3
+Dir     RSTButton     In  'this is set automatically - so, you cannot set as an output
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+Dim lastKeyDown As Byte
+
+Do Forever
+    Wait 10 ms
+
+    'This line is normally HIGH, so, we have to test when the line goes low.
+    If  SWITCHIN = 0 Then
+
+        'push button pressed
+        LEDD1 = 1
+
+    Else
+
+        LEDD1 = 0
+
+    End If
+
+
+    'The reset line is always HIGH, so, we have to test when the line goes low.
+    If  RSTButton = 0 Then
+
+        'push button pressed
+        LEDD2 = 1
+
+    Else
+
+        LEDD2 = 0
+
+    End If
+
+
+Loop

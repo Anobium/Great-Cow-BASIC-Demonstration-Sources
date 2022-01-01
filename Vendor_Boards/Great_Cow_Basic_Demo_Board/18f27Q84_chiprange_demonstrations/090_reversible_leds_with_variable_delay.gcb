@@ -1,0 +1,169 @@
+'''
+'''  This demonstration shows the impact of the time delay to manage the debouncing of a switch.
+'''  The ADC value creates a delay and LEDs switch between each other when the switch is depressed.
+'''
+'''
+'''  Press the switch to reverse the direction of the LEDs, increase the ADC value to increase the debounce check.
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    01.01.2022
+' ----- Configuration
+
+'Chip Settings.
+#CHIP 18F27Q84
+#OPTION Explicit
+'This Configuration change is needed to enable programming in Low Voltage Programming Mode
+
+
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    --------IN-LED--LED-LED LED -----
+''-----------------------------------------
+''
+
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'' ------------------PORTE-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ----------------RST--------------
+''-----------------------------------------
+''
+
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.2
+#DEFINE LEDD3 PORTB.3
+#DEFINE LEDD4 PORTB.4
+#DEFINE LEDPORT LATB
+
+
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+Dir     LEDD3         Out
+Dir     LEDD4         Out
+
+#DEFINE POTENTIOMETER PORTA.0
+Dir     POTENTIOMETER In
+#DEFINE SWITCHIN      PORTB.5
+Dir     SWITCHIN      In
+
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+#DEFINE DOWN        0
+#DEFINE UP          1
+
+
+Dim direction As Byte
+Dim mydelay, leds  As Byte
+#DEFINE LED_RIGHT 0
+#DEFINE LED_LEFT  1
+'start from the right to left
+direction = LED_RIGHT
+
+'Set the initial LED states - change to suit your configuration
+#DEFINE LEDSTATEMACRO RC0 = 0: RC1 = 0: RC2 = 0: RC3 = 1
+#DEFINE LEDMASK = 0x1111000
+leds = 0b10000
+
+Do
+
+    'Get a value for the ADC port
+    mydelay = ReadAD( AN0 )
+
+    mydelay = scale( mydelay, 0, 220, 1, 200 )
+
+    'Set the LEDs
+    If  direction = LED_RIGHT  Then
+        'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
+        Set C Off
+        ' and shift the contents of LEDState
+        Rotate leds Right
+        ' If the LEDState.0is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
+        If C = 1 Then
+            leds = 16
+        End if
+        LEDPORT = ( LEDPORT and LEDMASK ) or leds
+
+    Else
+        'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
+        Set C Off
+        ' and shift the contents of LEDState
+        Rotate leds Left
+        ' If the LEDState.0is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
+        If leds = 32 Then
+            'Mask off the other bits
+            leds = 1
+        End If
+        LEDPORT = ( LEDPORT and LEDMASK ) or leds
+
+
+    End If
+
+    'wait, and then check the switch is DOWN
+
+      Wait mydelay ms
+      If check_switch = TRUE Then
+          ' toggle the direction
+          direction = !direction
+      End If
+
+
+Loop
+
+
+
+'global variable - if button is held down, we don't want to keep on switching directions
+#DEFINE SWITCH_UP   1
+#DEFINE SWITCH_DOWN 0
+
+Dim previous_state As BIT
+previous_state = SWITCH_UP
+
+Function  check_switch
+    'switch is normally open to 5V ...when pressed, RA3 is connected to GND
+    If (SwitchIn = SWITCH_DOWN) Then
+        'debounce by delaying and checking if switch is still pressed
+        Wait 1 ms
+        If ( (previous_state =  SWITCH_DOWN) & (SwitchIn = SWITCH_DOWN) ) Then
+            ' don't toggle
+            check_switch = FALSE
+            Exit Function
+        Else
+            ' check if still down
+            If (SwitchIn = SWITCH_DOWN) Then
+                previous_state = SWITCH_DOWN
+                ' reverse the LEDs
+                check_switch = TRUE
+                Exit Function
+            Else
+                'switch not properly held down
+                previous_state = SWITCH_UP
+                ' don't reverse
+                check_switch = FALSE
+                Exit Function
+            End If
+        End If
+    Else
+        'switch not pressed
+        previous_state = SWITCH_UP
+        'don't reverse
+        check_switch = FALSE
+        Exit Function
+    End If
+
+End Function

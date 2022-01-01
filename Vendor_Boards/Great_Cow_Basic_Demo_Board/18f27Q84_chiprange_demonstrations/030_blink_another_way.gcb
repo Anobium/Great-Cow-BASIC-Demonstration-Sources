@@ -16,7 +16,7 @@
 ' ----- Configuration
 
 'Chip Settings.
-#CHIP 18F27Q84, 1
+#CHIP 18F27Q84
 'This Configuration may need changing to enable programming in Low Voltage Programming Mode
 
 '' -------------------PORTA----------------
