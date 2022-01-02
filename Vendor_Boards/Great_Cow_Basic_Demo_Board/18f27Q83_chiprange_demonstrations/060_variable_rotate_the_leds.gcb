@@ -1,0 +1,192 @@
+'''
+''' This shows how to read the ADC converter and display the
+''' a proportional delay value by changing/inverting the LEDs state.
+''' The pot on the board varies the voltage coming in from the ADC.
+'''
+''' The ADC is referenced to the same Vdd as the device, which
+''' is nominally is 5V.  The ADC returns the ratio of the voltage
+''' on Pin RA0 to 5V.  The ADC has a resolution of 12 bits, with 4095
+''' representing 5V and 0 representing 0V.
+'''
+''' Rotate the potentiometer to change the LEDs displayed.
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    03/01/2022
+' ----- Configuration
+
+'Chip Settings.
+#CHIP 18F27Q83
+#OPTION Explicit
+'This Configuration change is needed to enable programming in Low Voltage Programming Mode
+
+
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ----------------------------ADC--
+''-----------------------------------------
+''
+
+'' -------------------PORTB----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -----------LED--LED-LED LED -----
+''-----------------------------------------
+''
+
+'' ------------------PORTC-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDD1 PORTB.1
+#DEFINE LEDD2 PORTB.2
+#DEFINE LEDD3 PORTB.3
+#DEFINE LEDD4 PORTB.4
+#DEFINE LEDPORT LATB
+
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+Dir     LEDD3         Out
+Dir     LEDD4         Out
+
+#DEFINE POTENTIOMETER PORTA.0
+Dir     POTENTIOMETER In
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+'Set the initial LED states - change to suit your configuration
+#DEFINE LEDSTATEMACRO LEDD1 = 0: LEDD2 = 0: LEDD3 = 0: LEDD4 = 1
+'You may need change to the LEDMASK to suit your port/configuration.  We use a macro as re reuse this statement more that once.
+#DEFINE LEDMASK 0B00011110
+
+LEDSTATEMACRO
+Wait 1 s
+
+'we have change to a larger variable to hold the range of 0 to 1023
+Dim ADCVal As Word
+
+
+Do
+
+    ADCVal = ReadAD12 ( AN0 )
+
+    'Wait for the number of milliseconds
+    Wait ADCVal ms
+
+    'Rotate the LEDs.  We are only interested in the four LEDs so we mask the other bits.
+    Set C Off
+    ' and shift the contents of LEDState
+    Rotate LEDPORT Right
+    ' If the LEDState.0is equal to 1 then the sequence has completed, then set the initial state again, the same operation as the starting LED.
+    If LEDPORT.0 = 1 Then
+        'Set the initial LED states
+        LEDSTATEMACRO
+        'Mask off the other bits
+        LEDPORT = LEDPORT AND LEDMASK
+    End If
+
+
+Loop
+
+
+''' GCB Optimisation file
+
+'Optmise PWM.h
+    #define USE_HPWMCCP1 FALSE
+    #define USE_HPWMCCP2 FALSE
+    #define USE_HPWMCCP3 FALSE
+    #define USE_HPWMCCP4 FALSE
+    #define USE_HPWMCCP5 FALSE
+
+    #define USE_HPWM1 FALSE
+    #define USE_HPWM2 FALSE
+    #define USE_HPWM3 FALSE
+    #define USE_HPWM4 FALSE
+    #define USE_HPWM5 FALSE
+    #define USE_HPWM6 FALSE
+    #define USE_HPWM7 FALSE
+    #define USE_HPWM8 FALSE
+
+    #define USE_HPWM_TIMER2 FALSE
+    #define USE_HPWM_TIMER4 FALSE
+    #define USE_HPWM_TIMER6 FALSE
+
+'Optimise A-d.h
+  'Standard family chips
+    #define USE_AD0 TRUE
+    #define USE_AD1 FALSE
+    #define USE_AD2 FALSE
+    #define USE_AD2 FALSE
+    #define USE_AD3 FALSE
+    #define USE_AD4 FALSE
+    #define USE_AD5 FALSE
+    #define USE_AD6 FALSE
+    #define USE_AD7 FALSE
+    #define USE_AD8 FALSE
+    #define USE_AD9 FALSE
+    #define USE_AD10 FALSE
+    #define USE_AD11 FALSE
+    #define USE_AD12 FALSE
+    #define USE_AD13 FALSE
+    #define USE_AD14 FALSE
+    #define USE_AD15 FALSE
+    #define USE_AD16 FALSE
+    #define USE_AD17 FALSE
+    #define USE_AD18 FALSE
+    #define USE_AD19 FALSE
+    #define USE_AD20 FALSE
+    #define USE_AD21 FALSE
+    #define USE_AD22 FALSE
+    #define USE_AD23 FALSE
+    #define USE_AD24 FALSE
+    #define USE_AD25 FALSE
+    #define USE_AD26 FALSE
+    #define USE_AD27 FALSE
+    #define USE_AD28 FALSE
+    #define USE_AD29 FALSE
+    #define USE_AD30 FALSE
+    #define USE_AD31 FALSE
+    #define USE_AD32 FALSE
+    #define USE_AD33 FALSE
+    #define USE_AD34 FALSE
+
+    'Family of chips based on 16f1688x with ADCON3 register
+    #define USE_ADA0 FALSE
+    #define USE_ADA1 FALSE
+    #define USE_ADA2 FALSE
+    #define USE_ADA3 FALSE
+    #define USE_ADA4 FALSE
+    #define USE_ADA5 FALSE
+    #define USE_ADA6 FALSE
+    #define USE_ADA7 FALSE
+    #define USE_ADB0 FALSE
+    #define USE_ADB1 FALSE
+    #define USE_ADB2 FALSE
+    #define USE_ADB3 FALSE
+    #define USE_ADB4 FALSE
+    #define USE_ADB5 FALSE
+    #define USE_ADB6 FALSE
+    #define USE_ADB7 FALSE
+    #define USE_ADC0 FALSE
+    #define USE_ADC1 FALSE
+    #define USE_ADC2 FALSE
+    #define USE_ADC3 FALSE
+    #define USE_ADC4 FALSE
+    #define USE_ADC5 FALSE
+    #define USE_ADC6 FALSE
+    #define USE_ADC7 FALSE
+    #define USE_ADD0 FALSE
+    #define USE_ADD1 FALSE
+    #define USE_ADD2 FALSE
+    #define USE_ADD3 FALSE
+    #define USE_ADD4 FALSE
+    #define USE_ADD5 FALSE
+    #define USE_ADD6 FALSE
+    #define USE_ADD7 FALSE
+    #define USE_ADE0 FALSE
+    #define USE_ADE1 FALSE
+    #define USE_ADE2 FALSE
