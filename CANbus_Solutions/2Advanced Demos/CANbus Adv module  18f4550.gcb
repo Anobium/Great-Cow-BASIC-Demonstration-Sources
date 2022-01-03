@@ -58,7 +58,7 @@
 
   dim delaycount as Long
   dim potval as Byte
-  dim buttonstat as Byte
+  dim buttstat as Byte
   dim incbyte as Byte
 
   incbyte = 0
