@@ -1,5 +1,5 @@
 '''
-'''  This demonstration shows the PORGMEM on the Serial Terminal.
+'''  This demonstration shows the PROGMEM on the Serial Terminal.
 '''
 ''' This shows code for writing and reading values onto the PROGMEM or PFM.
 '''

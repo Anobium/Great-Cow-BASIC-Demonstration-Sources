@@ -2,7 +2,7 @@
 '''  This demonstration produces a variable speed rotating LED display that is proportional to the ADC value.
 '''  The ADC value and LED rotate speed are  proportional to each other.
 '''
-'''  The demonstration also introduces the PERIPHERAL PIN SELECT (PPS) MODULE.  We have created the Serial PPS settings for you on Port C.6 and CCP/PWM on two LEDS
+'''  The demonstration also introduces the PERIPHERAL PIN SELECT (PPS) MODULE.  We have created the Serial PPS settings for you on the port specified below and CCP/PWM on the LED(s).
 '''
 '''  Rotate the POT to see the LEDs shift faster, and press the switch to reverse the direction of the LEDs.
 '''

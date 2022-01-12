@@ -2,9 +2,9 @@
 '''  This demonstration shows the I2C devices attached the microcontroller, this program support the Microchip I2C module.
 '''
 '''  I2C device required a data bus and a clock bus, devices also required an input voltage and 0v.
-'''   I2C data bus is connected to PortC.4
-'''   I2C clock bus is connected to PortC.3
-'''   Serial output is connected, as previously, to PortC.6
+'''   I2C data bus is connected to port shown below.
+'''   I2C clock bus is connected to port shown below.
+'''   Serial output is connected, as previously, to port shown below.
 '''
 '''  Connect your IC2 devices and see the results on the serial terminal.
 '''

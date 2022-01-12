@@ -4,7 +4,7 @@
 '''
 '''  LED blinks at a rate of approximately 1.0 seconds, we use CONSTANTS to refer to the LED port.
 '''
-'''  The LED is attached to portb.1 via a suitable resistor to 0v.
+'''  The LED is attached to portb shown below via a suitable resistor to 0v.
 '''
 '''  We set one of the LEDs, you can try setting the other LED..  do not forget those appropiate resistors
 '''

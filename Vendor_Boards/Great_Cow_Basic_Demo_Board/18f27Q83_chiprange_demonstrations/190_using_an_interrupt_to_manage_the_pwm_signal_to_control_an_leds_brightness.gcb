@@ -13,7 +13,7 @@
 ''' The PWM period defined as the duration of one complete cycle or the total
 ''' amount of on and off time combined is based on a simple counter.
 '''
-''' The demo varies the PWM to the LED.  We are pretending the motor is connected to Portb.1, via a suitable motor control device.
+''' The demo varies the PWM to the LED.  We are pretending the motor is connected to Port shown below, via a suitable motor control device.
 '''
 '''************************************************************************
 '''@author  EvanV

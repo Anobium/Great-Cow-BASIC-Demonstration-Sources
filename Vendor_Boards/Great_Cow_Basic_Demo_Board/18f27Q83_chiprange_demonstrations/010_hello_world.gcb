@@ -1,7 +1,7 @@
 '''
 ''' The  most simple sample for GCGB and GCB.
 '''
-''' This simply set an LEDs on.  The LED is attached to portb.1 via a suitable resistor to 0v.
+''' This simply set an LEDs on.  The LED is attached to the port specified below via a suitable resistor to 0v.
 '''
 '''
 '''************************************************************************

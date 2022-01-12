@@ -5,7 +5,7 @@
 '''  can be accurately programmed since the user has control on how the
 '''  time delays are executed.
 '''
-'''  The LED is attached to portb.1 via a suitable resistor to 0v.  Another LED  is also attached to porta.1 via a suitable resistor to 0v.
+'''  The LED is attached to port shown below via a suitable resistor to 0v.  Another LED  is also attached to porta.1 via a suitable resistor to 0v.
 '''
 '''  We set an LED, you can try setting the other LEDs..  do not forget those appropiate resistors
 '''
