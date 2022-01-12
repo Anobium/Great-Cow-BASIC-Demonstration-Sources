@@ -1,0 +1,54 @@
+'''
+'''  One way to create a delay is to spend time decrementing to a value, but Great Cow BASIC  has timers built in.
+'''  The demonstration will use a Great Cow BASIC method to toggle the LED using CONSTANTS rather than the port address.
+'''
+'''  LED blinks at a rate of approximately 1.0 seconds, we use CONSTANTS to refer to the LED port.
+'''
+'''  The LED is attached to portC.1 via a suitable resistor to 0v.
+'''
+'''  We set one of the LEDs, you can try setting the other LED..  do not forget those appropiate resistors
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    15/01/2022
+' ----- Configuration
+
+'Chip Settings.
+#CHIP 18F16Q40
+'This Configuration may need changing to enable programming in Low Voltage Programming Mode
+
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+'' ------------------PORTB-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ---------------------------------
+''-----------------------------------------
+''
+'' -------------------PORTC----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ------------------------LED------
+''-----------------------------------------
+''
+
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDD1 PORTC.1
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+'Use a constant
+Dir LEDD1 Out
+
+Do
+
+    'wait for 1 second which is 1000 ms
+    Wait 1000 ms
+    'Set the port bit to NOT value from previous state but using the ! as an alternative to NOT
+    LEDD1 = !LEDD1
+
+Loop

@@ -17,55 +17,46 @@
 '''@author  EvanV
 '''@licence GPL
 '''@version 1.01
-'''@date    03/01/2022
+'''@date    01/01/2022
 ' ----- Configuration
 
 'Chip Settings.
-#CHIP 18F27Q83, 16
-#OPTION Explicit
+#CHIP 18F16Q40, 16
+#OPTION EXPLICIT
 'This Configuration change is needed to enable programming in Low Voltage Programming Mode
 
 
 '' -------------------PORTA----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ----------------SW---------------
+''-----------------------------------------
+''
+'' ------------------PORTB-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
 '' IO:    ---------------------------------
 ''-----------------------------------------
 ''
-
-'' -------------------PORTB----------------
+'' -------------------PORTC----------------
 '' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    --------IN-LED--LED-LED LED -----
-''-----------------------------------------
-''
-
-'' ------------------PORTC-----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ----TX---------------------------
-''-----------------------------------------
-''
-
-'' ------------------PORTE-----------------
-'' Bit#:  -7---6---5---4---3---2---1---0---
-'' IO:    ----------------RST--------------
+'' IO:    -----TX-SW-LED--LED-LED LED-ADC--
 ''-----------------------------------------
 ''
 
 'Define constants to make things easier. We can reuse these at any time.
-#DEFINE LEDD1 PORTB.1
-#DEFINE LEDD2 PORTB.2
-#DEFINE LEDD3 PORTB.3
-#DEFINE LEDD4 PORTB.4
-#DEFINE LEDPORT LATB
-
+#DEFINE LEDD1 PORTC.1
+#DEFINE LEDD2 PORTC.2
+#DEFINE LEDD3 PORTC.3
+#DEFINE LEDD4 PORTC.4
+#DEFINE LEDPORT LATC
 
 Dir     LEDD1         Out
 Dir     LEDD2         Out
 Dir     LEDD3         Out
 Dir     LEDD4         Out
 
-#DEFINE POTENTIOMETER PORTA.0
+#DEFINE POTENTIOMETER PORTC.0
 Dir     POTENTIOMETER In
-#DEFINE SWITCHIN      PORTB.5
+#DEFINE SWITCHIN      PORTC.5
 Dir     SWITCHIN      In
 
 '*****************************************************************************************************

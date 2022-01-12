@@ -1,0 +1,87 @@
+'''
+''' This demonstration will provide code for raising an event when a port changes.
+''' The port that is being set then inspected in port with the switch attached. Why? Because we have the switch on that port.
+'''
+''' When the event happens the LED is toggled.  The LED will toggle when the Signal value is 0.
+'''
+''' This does not have a debounce check, you can add one.
+'''
+'''************************************************************************
+'''@author  EvanV
+'''@licence GPL
+'''@version 1.01
+'''@date    02/01/2022
+' ----- Configuration
+
+'Chip Settings.
+'Chip Settings.
+#CHIP 18F16Q40
+#OPTION EXPLICIT
+
+
+
+
+'' -------------------PORTA----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ----------------SW---------------
+''-----------------------------------------
+''
+'' ------------------PORTB-----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    ----SCL-----SDA------------------
+''-----------------------------------------
+''
+'' -------------------PORTC----------------
+'' Bit#:  -7---6---5---4---3---2---1---0---
+'' IO:    -----TX-SW-LED--LED-LED LED-ADC--
+''-----------------------------------------
+''
+
+'Define constants to make things easier. We can reuse these at any time.
+#DEFINE LEDD1 PORTC.1
+#DEFINE LEDD2 PORTC.2
+#DEFINE LEDD3 PORTC.3
+#DEFINE LEDD4 PORTC.4
+#DEFINE LEDPORT LATC
+
+Dir     LEDD1         Out
+Dir     LEDD2         Out
+Dir     LEDD3         Out
+Dir     LEDD4         Out
+
+#DEFINE POTENTIOMETER PORTC.0
+Dir     POTENTIOMETER In
+#DEFINE SWITCHIN      PORTC.5
+Dir     SWITCHIN      In
+
+
+'*****************************************************************************************************
+'Main program commences here.. everything before this is setup for the board.
+
+
+
+'Setup an Interrupt event when portb.5 goes negative.
+IOCCN5 = 1
+On Interrupt PORTChange  Call InterruptHandler
+
+'Loop forever
+Do
+
+Loop
+
+
+Sub InterruptHandler
+
+    If IOCIF = 1 Then
+        'Is this our event?
+
+        'We must clear the flag in software
+        IOCCF5  = 0
+
+        'Toogle the LED
+        LEDD1 = !LEDD1
+
+
+    End If
+
+End Sub

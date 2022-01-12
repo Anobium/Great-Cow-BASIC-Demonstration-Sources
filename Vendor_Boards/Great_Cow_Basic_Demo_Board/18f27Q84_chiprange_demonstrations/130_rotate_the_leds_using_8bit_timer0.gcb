@@ -87,10 +87,6 @@ StartTimer 0
 'Every 100 msec, we will count 100 to make 1 second
 SetTimer ( 0 , 0xB1  )
 
-'Set the LED states
-LEDD1 = 0
-LEDD2 = 1
-
 'we will use this to count the number of times the event happens
 Dim TimerCounter As Byte
 TimerCounter = 0
