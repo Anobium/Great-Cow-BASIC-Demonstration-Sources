@@ -16,7 +16,7 @@
 
 ; ----- Define Hardware settings
       #Define USART_BAUD_RATE 9600    '}
-      #Define USART_TX_BLOCKING       ' } Setup Serial
+      #Define USART_TX_BLOCKING       '} Setup Serial
       #Define USART_DELAY OFF         '}
 
 
@@ -50,7 +50,7 @@
           End If
 
            HSerPrint ReadAD12(AN0)          '}
-                        HSerSend 13         ' } Analog Read AN0 and print to serial
+                        HSerSend 13         '} Analog Read AN0 and print to serial
                         HSerSend 10         '}  every 500 ms
           Wait 500 ms
       Loop
