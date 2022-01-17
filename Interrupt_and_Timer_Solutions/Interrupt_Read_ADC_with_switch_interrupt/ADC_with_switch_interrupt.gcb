@@ -58,8 +58,8 @@
 
 
 
-        sub Switchhandler
-            If SwitchIn = 0 and SwitchPressed = 0 Then
-                SwitchPressed = 1
-            End if
-        End Sub
+      sub Switchhandler
+          If SwitchIn = 0 and SwitchPressed = 0 Then
+              SwitchPressed = 1
+          End if
+      End Sub
