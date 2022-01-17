@@ -14,7 +14,7 @@
 '''
 ''' This demonstation shows a how the changing PWM values can dim the LED
 '''
-''' This demonstration uses CCP3. This is logically connect to Portb.5 and therefore the RC2
+''' This demonstration uses CCP/PWM. This is logically connect to  the ports shown below.
 '''
 '''
 '''************************************************************************

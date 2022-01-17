@@ -14,7 +14,7 @@
 '''
 ''' This demonstation shows a how the changing PWM values can dim the LED
 '''
-''' This demonstration uses CCP3. This is logically connect to the Port specified below using PPS and therefore the LED(s)
+''' This demonstration uses CCP/PWM. This is logically connected to the Port specified below using PPS and therefore the LED(s)
 '''
 '''
 '''************************************************************************

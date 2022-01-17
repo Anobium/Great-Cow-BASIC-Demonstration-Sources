@@ -1,6 +1,6 @@
 '''
 ''' This demonstration will provide code for raising an event when a port changes.
-''' The port that is being set then inspected in portb.5. Why? Because we have the switch on that port.
+''' The port that is being set then inspected on a specific  port. Why? Because we have the switch on that port.
 '''
 ''' When the event happens the LED is toggled.  The LED will toggle when the Signal value is 0.
 '''
