@@ -4,7 +4,7 @@
 '''The program shows the setup of the external interrupt, the interrupt handler and the method to ensure the capture of a single switch event.
 '''
 '''
-'''@author     Evan R.Venn
+'''@author     Nathan and Evan
 '''@licence    GPL
 '''@version    1.00
 '''@date       17/01/2022
