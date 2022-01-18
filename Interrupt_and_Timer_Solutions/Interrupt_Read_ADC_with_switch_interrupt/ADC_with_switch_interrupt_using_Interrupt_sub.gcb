@@ -1,0 +1,64 @@
+'''A program  for GCGB and GCB.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''This program to show an external interrupt being raised while reading the ADC every time period.
+'''The program shows the setup of the external interrupt, the interrupt handler and the method to ensure the capture of a single switch event.
+'''This method shows the use of the Interrupt sub routine which also requires the enabling of the source event bit.
+'''
+'''@author     Nathan and Evan
+'''@licence    GPL
+'''@version    1.00
+'''@date       17/01/2022
+'''********************************************************************************
+
+; ----- Configuration
+#Chip 18f2458
+#OPTION EXPLICIT
+
+; ----- Define Hardware settings
+      #Define USART_BAUD_RATE 9600    '}
+      #Define USART_TX_BLOCKING       '} Setup Serial
+      #Define USART_DELAY OFF         '}
+
+
+      Dir PortA.0 in              '}  Set AN0 as Input (Potentiometer)
+      Dir PortB.0 in              '}  Set INT0 as Input
+
+      #DEFINE SwitchIn PortB.0
+
+; ----- Interrupt setup.
+
+          INT0 = 1                  '}  Enable INT0 on PortB.0
+          INTEDG0 = 0               '}  Set INT0 to failing edge
+          INT0IE = 1                '}  Enable the Interrupt
+
+; ----- Variables
+
+      Dim SwitchPressed as Bit
+      SwitchPressed = 0
+
+
+; ----- Main body of program commences here.
+
+      Do
+          If SwitchPressed = 1 and SwitchIn = 0 Then  'prevents debounce
+
+              HSerPrint "Switch Pressed"
+                      HSerSend 13
+                      HSerSend 10                         '} when button is pressed,
+              SwitchPressed = 0
+          End If
+
+           HSerPrint ReadAD12(AN0)          '}
+                        HSerSend 13         '} Analog Read AN0 and print to serial
+                        HSerSend 10         '}  every 500 ms
+          Wait 500 ms
+      Loop
+
+      sub Interrupt
+        If INT0IF = 1 then        '} the Interrupt we are interested in?
+          If SwitchIn = 0 and SwitchPressed = 0 Then
+              SwitchPressed = 1
+          End if
+          INT0IF = 0              '} clear the Interrupt
+        End if
+      End Sub
