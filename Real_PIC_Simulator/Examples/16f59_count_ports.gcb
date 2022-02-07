@@ -9,6 +9,7 @@
 
 ;Set chip model required:
 #chip 16f59, 20
+#option explicit
 
 #define USELEGACYFORNEXT
 

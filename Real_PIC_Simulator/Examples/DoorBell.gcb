@@ -8,6 +8,7 @@
 
 ;Set chip model required:
     #chip 12f675
+    #option explicit
     #include <songplay.h>
     #define SoundOut GPIO.0
 

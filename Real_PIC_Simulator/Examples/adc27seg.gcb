@@ -8,6 +8,7 @@
 
 ;Set chip model required:
 #chip 16F688, 20
+#option explicit
 
     'support for Common Anode
     #define 7Seg_CommonAnode
