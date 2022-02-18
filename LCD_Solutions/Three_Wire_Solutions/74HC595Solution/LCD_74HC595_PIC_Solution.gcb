@@ -1,0 +1,141 @@
+/*
+A program for Great Cow BASIC that provides support for a LCD via a 74HC595
+
+The solution is fast as the connect from the 74HC595 is an 8bit serial interface.
+
+The program multiplexing the Data and RS lines to control the LCD and deliver the data for display.
+
+This looks like an SPI protcol but this is not.
+
+An overview of the solution:
+
+- 8 bit i/f - no nibble twiddling
+- The 74HC595 is 'flushed' every transfer, so no resetting required
+- The 74HC595 pinout compliments the lcd 16pin connector - which means a veroboard is easy to use
+- The interface is reduced from 6 i/o pins to 3i/i pins, two of these pins can be used by other (software) spi devices
+- The interface lines are DRS(data+RS), CLK and ENL.
+- The ENL(enable+latch) pulse appears at the end of the package transfer and on it is +ve edge latches in the RS value, also 8 bits of data are latched on the o/p of the 74HC595
+- On the -ve edge that data is latched into the lcd.
+
+Tested as follow:
+
+HBB-ExtendedTest.gcb  11-02-22  WOK !   SREG_C (avr)
+Hiland Barebones board with 328P DIP + UNO Bootloader
+Serial -> COM4 @ 115,200 -- RHSback
+
+*/
+
+'==============================
+#chip 12F1840,32              '
+#option explicit              'MCLRE = OFF'  RA3 = Digital Input only
+#define USELEGACYFORNEXT      '
+'==============================
+'  Setup PIC DDR's   1 = IN, 0 = OUT
+'              76543210       '
+Dir PortA    0b101000       ' 3,5=in's -- 0,1,2,4=out's
+'==============================
+#Define ENL RA0               '(GN) --> 595pin12 & LCDpin6 (Enable)
+#Define CLK RA1               '(YEL)--> 595pin11
+#Define DRS RA2               '(BL) --> 595pin14 & LCDpin4 (RS)
+                              '--> 595pin10 = +5v , 595pin13 = GND
+'===============================
+#define LCD_IO 0              'Setup LCD I/F
+#define LCD_NO_RW             '
+#define LCDWriteByte  MySendToLCD '
+#define LCD_WIDTH 16          '
+'------------------------------
+Dim MyLcdByte, temp  as Byte  'Mode 0 variables
+Dim LCD_RS as BIT             '
+'-----
+Dim Header1 as string (16)    'test variables
+Dim Header2 as string (16)    '
+Dim Header3 as string (16)    '
+Dim Header4 as string (16)    '
+'==============================
+ Header1 = "Hello World 2022" '
+ Header2 = "A1b2C3d4_!@#$%^&" '
+ Header3 = "1234567->ABCDEFG" '
+ Header4 = "abcdefghijklmnop" '
+'==============================
+  LCDINIT                     'Initialise LCD
+'==============================
+Do Forever                    'Program Start
+'  Print "U"                  'Used for CRO Tests
+'Loop                         'ENL pulse rate = 49uSec on CRO
+'================================
+  CLS : PRINT Header1         'Print string1
+  locate 1,0 : PRINT Header2  'Print string2
+   wait 1200 ms               'Wait 1.2 seconds
+'-----
+  CLS : wait 1200 ms          '
+  Print  Header1              'Print string1
+  Locate 1,0 : Print Header2  'Print string2
+   wait 1200 mS               'Wait 1.2 seconds
+'-----
+  Locate 0,0                  '
+  Print "                "    'Clear Line2
+  locate 1,0                  '
+  wait 1200 mS                'Wait 1.2 seconds
+  Print "                "    'Clear Line1
+  wait 1200 mS                'Wait 1.2 seconds
+'-----
+  Locate 0,4 : PRINT "Flashing" '
+  Locate 1,4 : Print "Display"'
+   wait 1000 ms               '
+'-----
+  repeat 3                    '
+  LCDCURSOR LCDOFF : wait 800 ms
+  LCDCURSOR LCDON : wait 800 ms
+   end repeat                 '
+'-----
+  CLS : Print "DISPLAY OFF" '
+  Locate 1,0 : Print "FOR 2 SEC" '
+  Wait 2 SEC : LCDCURSOR LCDOFF '
+'-----
+  CLS : Locate 0,0 : LCDCURSOR LCDON '
+'-----
+  CLS : wait 1200 ms          '
+  Print  Header3              'Print string3
+  Locate 1,0 : Print Header4  'Print string4
+   wait 1200 mS               'Wait 1.2 seconds
+'-----
+  CLS : wait 800 ms           '
+  Print "END TEST"            '
+   wait 2 s                   '
+'-----
+loop                          '
+'==============================
+'==============================
+Sub LCDINIT                   'Initialise LCD
+  Wait 200 mS                 '
+  LCD_RS = 0                  'Setup for Commands
+  MySendToLCD(48) : wait 5 mS '
+  MySendToLCD(48) : wait 2 mS '
+  MySendToLCD(48) : wait 2 mS '8bit MODE HERE.
+'--------------------------------
+  MySendToLCD(56)             'Function 8bit/2line/5x8
+  MySendToLCD(8)              'Display Off/Restore Cursor Off/Blink Off
+  MySendToLCD(1)              'Clear Display
+  Wait 5 mS                   'Pause 5 mSec
+  MySendToLCD(6)              'Entry Mode /Inc Cursor/No Disp Shift
+  MySendToLCD(12)             'Display On/Cursor Off/Blink Off
+End Sub                       '
+'==============================Main shift sub !!
+Sub  MySendToLCD(MyLCDByte)   'Shift out 8 bits serially to 595
+  PortA = 0b000000            'All outputs Low
+  Status.C = 0                '
+  temp = MyLCDByte            'Preserve MyLCDByte
+    Repeat 8                  '
+      Let DRS = temp.7        '
+      PulseOut CLK, 1 uS      '1.1 uSec-Measured on Tektronix2225 CRO
+      Rotate temp Left Simple 'Uses Status.C
+    End Repeat                '
+'-----
+  DRS = LCD_RS : Wait 6 uS :  'setup RS & Settling Time
+'-----
+  PulseOut ENL, 6 uS          '7uS pulse-Measured on Tektronix2225 CRO
+'-----
+End Sub                       '
+'==============================
+end                           '
+'==============================

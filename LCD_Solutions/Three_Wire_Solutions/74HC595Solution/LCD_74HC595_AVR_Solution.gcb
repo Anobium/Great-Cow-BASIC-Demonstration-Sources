@@ -1,0 +1,170 @@
+/*
+A program for Great Cow BASIC that provides support for a LCD via a 74HC595
+
+The solution is fast as the connect from the 74HC595 is an 8bit serial interface.
+
+The program multiplexing the Data and RS lines to control the LCD and deliver the data for display.
+
+This looks like an SPI protcol but this is not.
+
+An overview of the solution:
+
+- 8 bit i/f - no nibble twiddling
+- The 74HC595 is 'flushed' every transfer, so no resetting required
+- The 74HC595 pinout compliments the lcd 16pin connector - which means a veroboard is easy to use
+- The interface is reduced from 6 i/o pins to 3i/i pins, two of these pins can be used by other (software) spi devices
+- The interface lines are DRS(data+RS), CLK and ENL.
+- The ENL(enable+latch) pulse appears at the end of the package transfer and on it is +ve edge latches in the RS value, also 8 bits of data are latched on the o/p of the 74HC595
+- On the -ve edge that data is latched into the lcd.
+
+Tested as follow:
+
+HBB-ExtendedTest.gcb  11-02-22  WOK !   SREG_C (avr)
+Hiland Barebones board with 328P DIP + UNO Bootloader
+Serial -> COM4 @ 115,200 -- RHSback
+
+*/
+
+
+#chip mega328p,16             '
+#include <Uno_mega328p.h>     '
+#Define USELEGACYFORNEXT      '
+#option explicit              '
+
+'=============================
+'SETUP DDR's, For AVR--->  0 = inputs, 1 = outputs
+'              76543210
+Dir  PortB     0b111111       'all outputs
+Dir  PortC     0b001111       '0,1,2,3 = outputs, 4,5 = Inputs
+Dir  PortD   0b11110010       'All outputs ex PD.0 .2 .3
+'=============================
+#Define ENL DIGITAL_10        'D10--> 595p12 & LCDp6 (Enable)
+#Define DRS DIGITAL_11        'D11--> 595p14 & LCDp4 (RS)
+#Define CLK DIGITAL_13        'D13--> 595p11
+'                              '595p10,16 -> +5v, 595p8,13 -> GND
+'=============================Variables
+#define LCD_IO 0              'Setup LCD Interface
+#define LCD_NO_RW             '
+#define LCDWriteByte  MySendToLCD '
+#define LCD_WIDTH 16          '
+'==============================
+Dim MyLcdByte as Byte         '
+Dim LCD_RS as BIT             '
+'-----
+Dim temp, ii, DAT595 as Byte  '
+Dim Header1 as string(16)     '
+Dim YPOS, XPOS as Byte        '
+'-----
+Dim Header1 as string (16)    'test variables
+Dim Header2 as string (16)    '
+Dim Header3 as string (16)    '
+Dim Header4 as string (16)    '
+'==============================
+ Header1 = "Hello World 2022" '
+ Header2 = "A1b2C3d4_!@#$%^&" '
+ Header3 = "1234567->ABCDEFG" '
+ Header4 = "abcdefghijklmnop" '
+'==============================
+ LCDINIT                      'Initialise LCD
+   wait 500 ms                '
+'==============================
+Do Forever                    '
+     CLS : PRINT "   START TEST   " 'L1
+     locate 1,0 : PRINT "  DISPLAY ON  " '
+       wait 3 s                   '
+      locate 0,0                  '
+    '------------------------------
+      For ypos = 0 to 1           '
+        For xpos = 0 to 16        '
+          locate ypos, xpos       '
+          print ">"                   '
+          print ""                    ' flush HSerPrint buffer
+          '-----
+          wait 15 ms              'adjust for lcd write speed
+       next                       '
+     next                         '
+    '================================
+      CLS : PRINT Header1         'Print string1
+      locate 1,0 : PRINT Header2  'Print string2
+       wait 1300 ms               'Wait 1.2 seconds
+      '-----
+      CLS : wait 1300 ms          '
+      Print  Header1              'Print string1
+      Locate 1,0 : Print Header2  'Print string2
+      wait 1300 mS               'Wait 1.2 seconds
+      '-----
+      Locate 0,0                  '
+      Print "                "    'Clear Line1
+      locate 1,0                  '
+      wait 1300 mS                'Wait 1.2 seconds
+      Print "                "    'Clear Line2
+      wait 1300 mS                'Wait 1.2 seconds
+    '-----
+      Locate 0,4 : PRINT "Flashing" '
+      Locate 1,4 : Print "Display"'
+      wait 1300 ms               '
+    '-----
+      repeat 1                    '
+        LCDCURSOR LCDOFF : wait 800 ms
+        LCDCURSOR LCDON : wait 800 ms
+      end repeat                 '
+    '-----
+      CLS : Print "DISPLAY OFF"   '
+      Locate 1,0 : Print "FOR 2 SEC" '
+      Wait 2 s : LCDCURSOR LCDOFF '
+    '-----
+      CLS : Locate 0,0 : LCDCURSOR LCDON '
+    '-----
+      CLS : wait 1300 ms          '
+      Print  Header3              'Print string3
+      Locate 1,0 : Print Header4  'Print string4
+      wait 1300 mS               'Wait 1.2 seconds
+    '-----
+      Locate 0,0                  '
+      Print "                "    'Clear Line1
+      locate 1,0                  '
+      wait 1300 mS                'Wait 1.2 seconds
+      Print "                "    'Clear Line2
+      wait 1300 mS                'Wait 1.2 seconds
+    '-----
+      CLS : Locate 0,0            'L1
+      LCDCURSOR LCDON             '
+      Print "A Need for Speed"    '
+      Locate 1,0                  'L2
+      Print "  END of TEST   "    '
+      wait 3 s                '
+Loop                         '
+'==============================
+END                         '
+'==============================
+Sub LCDINIT                   'Initialise LCD
+    Wait 200 mS                 '
+    LCD_RS = 0                  'Setup for Commands
+    MySendToLCD(0x30) : wait 5 mS'
+    MySendToLCD(0x30) : wait 2 mS'
+    MySendToLCD(0x30) : wait 2 mS'8bit MODE HERE.
+  '------------------------------
+    MySendToLCD(0x38)           'Function 8bit/2line/5x8
+    MySendToLCD(0x08)           'Display Off/Restore Cursor Off/Blink Off
+    MySendToLCD(0x01)           'Clear Display
+    Wait 5 mS                   'Pause 5 mSec
+    MySendToLCD(0x06)           'Entry Mode /Inc Cursor/No Disp Shift
+    MySendToLCD(0x0C)           'Display On/Cursor Off/Blink Off
+End Sub                       '
+'==============================Main shift sub
+Sub  MySendToLCD(MyLCDByte)   'Shift out 8 bits serially to 595
+    PortB = 0                   'ENL,DRS,CLK start from zero
+    SREG_C = 0                  'AVR equivalent of Status.C
+    DAT595 = MyLCDByte          'Preserve MyLCDByte
+      Repeat 8                  '
+        Let DRS = DAT595.7      '
+        PulseOut CLK, 1 uS      '
+      Rotate DAT595 Left Simple 'Uses SREG_C
+      End Repeat                '
+    '-----
+    DRS = LCD_RS : Wait 6 uS    'setup RS
+    '-----
+    PulseOut ENL, 6 uS          '8uS LCD+595 Enable+Latch pulse
+    '-----
+End Sub                       '
+'==============================
