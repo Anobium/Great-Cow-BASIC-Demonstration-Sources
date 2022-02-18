@@ -38,7 +38,7 @@
             wait 10 ms
         next
         'Turn down brightness over the range
-        For Bright = 255 to 1
+        For Bright = 255 to 1 Step -1
             HPWM 4, 40, Bright, 6               'timer 6
             wait 10 ms
         next

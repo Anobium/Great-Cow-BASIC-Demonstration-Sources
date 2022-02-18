@@ -53,12 +53,11 @@
         next
 
         'Turn down brightness over the range
-        For Bright = 1023 to 0
+        For Bright = 1023 to 0 Step -1
             'Update the duty only
             HPWMUpdate ( 3, Bright  )
             wait 1 ms
         next
 
     loop
-
 

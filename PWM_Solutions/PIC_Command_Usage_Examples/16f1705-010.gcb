@@ -43,10 +43,9 @@
         next
 
         'Turn up brightness over the range
-        For Bright = 255 to 0  'send a byte value to the 8bit method which is 0-255
+        For Bright = 255 to 0 Step -1  'send a byte value to the 8bit method which is 0-255
             HPWM 3, 40, Bright, 2, 255  'force an 8bit resolution
             wait 10 ms
         next
 
     loop
-

@@ -42,7 +42,7 @@
         wait 1 s
 
         'Turn down brightness over the range
-        For Bright = 255 to 0
+        For Bright = 255 to 0 Step -1
             HPWM 4, 40, Bright, 2         'this is Byte range - yes, we support 0 to 255
             wait 10 ms
         next

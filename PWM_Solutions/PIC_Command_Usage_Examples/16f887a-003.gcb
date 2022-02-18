@@ -14,7 +14,7 @@
             wait 10 ms
         next
         'Turn down brightness over 2.5 seconds
-        For Bright = 255 to 1
+        For Bright = 255 to 1 Step -1
             HPWM 1, 40, Bright
             wait 10 ms
         next

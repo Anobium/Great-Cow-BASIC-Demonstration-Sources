@@ -41,7 +41,7 @@
             wait 10 ms
         next
         'Turn down brightness over 2.5 seconds
-        For Bright = 255 to 0
+        For Bright = 255 to 0 Step -1
             '#4 - Call the method with the correct PWM channel
             HPWM 3, 40, Bright
             wait 10 ms

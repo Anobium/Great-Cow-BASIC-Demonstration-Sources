@@ -40,7 +40,7 @@
             wait 10 ms
         next
         'Turn down brightness over 2.5 seconds
-        For Bright = 255 to 1
+        For Bright = 255 to 1 Step -1
             HPWM 4, 60, Bright, 4
             wait 10 ms
         next
@@ -56,7 +56,7 @@
           RB5PPS = 0x000E    'PWM3OUT > RB5
 
 
-        For Bright = 255 to 1
+        For Bright = 255 to 1 Step -1
             HPWM 3, 100 , Bright, 2
             wait 10 ms
         next
@@ -65,7 +65,7 @@
             wait 10 ms
         next
         'Turn down brightness over 2.5 seconds
-        For Bright = 255 to 1
+        For Bright = 255 to 1 Step -1
             HPWM 3, 140, Bright, 6
             wait 10 ms
         next
