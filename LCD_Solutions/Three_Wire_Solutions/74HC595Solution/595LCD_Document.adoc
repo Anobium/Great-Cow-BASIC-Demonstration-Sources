@@ -1,0 +1,64 @@
+
+== 595LCD Documentation
+
+Written by Geoffrey Younger, Feb 2022
+
+I started this project with two aims in mind
+
+1. Learn to use a higher level language.
+2. Create something that might be of some value to forum members.
+
+You see, I come from the land of assembler where it is winter most of the time.&#160;&#160;
+Trying to modify, test and maintain assembler code is a  p-a-i-n.&#160;&#160;
+Hence my need to learn a higher language.&#160;&#160;
+ Having experience in lcd interfacing, it seemed a natural choice to something
+in that area.&#160;&#160;
+So I started this project in July 2018 using a Picaxe 14M2, and completed the initial phase in Dec'18. I then spent some time porting the software to GCB and
+finalised v1 in Dec 2019. &#160;&#160;
+It was posted on Great Cow BASIC forum in April 2020. &#160;&#160;
+
+Most of the 595->lcd drivers I had seen to date were convoluted and or involved nibble
+twiddling and slowish.&#160;&#160;
+I knew deep down that the 595 could do much better - it had good specs, with a max clock frequency of about 24MHz.&#160;&#160;
+You can use it with either 8 or 9 clock pulses&#160;&#160;-&#160;&#160;I chose 9 as I needed time for 'multiplexing with data integrity'.&#160;&#160;
+The ENL pulse is the 9th pulse.&#160;&#160;
+Using 8 bit data transfer is fast, efficient and the old data in the 595 gets 'flushed' every time.&#160;&#160;
+On the pinout side it's a match made in heaven - 7 of the 16 pins line up perfectly.
+
+I used a very small loop ( Do : Print "U" : Loop ) to check for speed and data integrity.&#160;&#160;
+This is the result.
+
+1. The ENL pulse rate (for the loop test ) is about 49 uSec which gives more than
+   20,000 characters/sec.
+2. I used the uppercase 'U' because it has a hex code of 55 or binary 01010101. This a
+   solid test for the DRS line as the data changes every clock pulse.
+3. The minimum RS setup time (TAS) wrt ENable is only 50 to 100 nanoseconds - depending
+   on controller used, clock freq (usually 270KHz) etc.&#160;&#160;I have allowed about 7 uSec delay
+   between RS and Enable which is 70 times what is required, so there could be more speed
+   available ! This could be achieved by shortening the DRS setup delay -> ENL pulsewidth.
+4. One of the keys to unlocking the 'print' command was DRS = LCD_RS. This now seems to
+   integrate with lcd.h seamlessly. &#160;&#160;(In the 14M2 I created a flag bit ->  RSflag = bit16
+   which essentially does the same thing.)
+
+So just to recap -
+
+1. 8 bit i/f - no nibble twiddling, just load and go. The 595 is 'flushed' every transfer,
+   so no resetting required.
+2. The 595 pinout compliments the lcd 16pin connector - made for veroboard.
+3. The normal 4bit i/f is reduced from 6 i/o pins to 3, two of these pins (DRS & CLK)
+   can be used by other spi devices. The i/o lines are DRS(Data+RS, unlike cricket, this
+   DRS works !), CLK(clock) and ENL(ENable+latch).
+4. The ENL pulse appears at the end of the transfer and on it's +ve edge latches in the
+   RS value, and 8 bits of data are latched on the o/p of the 595.
+   On the -ve edge, that data is latched into the lcd. &#160;&#160;Please refer to the Timing diagram.
+
+I have used this lcd interface &#160;&#160;-&#160;&#160; successfully &#160;&#160;- &#160;&#160;on the following microcontrollers.
+
+PIC – 1840, 1825, 1827, 690, 1455, 18855 Xpress & DIP, all at 32MHz. 18F14K22 at 64MHz
+AVR – Uno, Nano, Hiland Barebones Kit (328P DIP), LGT8F, all at 16MHz. (= 64MHz for PIC)
+
+Note. &#160;&#160;That the upper limit for the 595 clock is around 24MHz, so using this with the
+LGT8F at high frequencies is problematic.
+
+The Great Cow BASIC program works in I/O mode 0, has some interesting subs and drives a
+character LCD with only 3 pins in an easy to understand and efficient manner.
